@@ -369,19 +369,7 @@ static NSInteger mCurrentSearchState = kTitle;
         }
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-            /*
-            NSLog(@"%s Landscape", __FUNCTION__);            
-            // Add search bar as title view to navigation bar
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 32.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 32.0)];
-            searchBarView.autoresizingMask = 0;
-            searchField.delegate = self;
-            [searchBarView addSubview:searchField];
-            self.navigationItem.titleView = searchBarView;         
-            */
-            
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {            
             screenWidth = self.view.bounds.size.width;
             screenHeight = self.view.bounds.size.height;
             // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44);
@@ -406,22 +394,7 @@ static NSInteger mCurrentSearchState = kTitle;
             [self hideTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 0;
-        } else {
-         
-            // Add search bar as title view to navigation bar
-            /*
-            NSLog(@"%s Portrait", __FUNCTION__);
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
-            searchBarView.autoresizingMask = 0;
-            searchField.delegate = self;
-            [searchBarView addSubview:searchField];
-            self.navigationItem.titleView = searchBarView;
-            */
-            
-            // [self adjustHeightOfTableview];
-            
+        } else {                    
             screenWidth = self.view.bounds.size.width;
             screenHeight = self.view.bounds.size.height;
             // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44-49);
@@ -493,19 +466,6 @@ static NSInteger mCurrentSearchState = kTitle;
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
         } else {
             //
-            /*
-            myTabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, screenHeight-49, screenWidth, 49)];
-            // myTabBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [self.view addSubview:myTabBar];
-            UITabBarItem *itemAips = [[UITabBarItem alloc] initWithTitle:@"AIPS" image:[UIImage imageNamed:@"10-medical.png"] tag:0];
-            UITabBarItem *itemFavs = [[UITabBarItem alloc] initWithTitle:@"Favorites" image:[UIImage imageNamed:@"28-star.png"] tag:1];
-            NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
-            [tabBarItems addObject:itemAips];
-            [tabBarItems addObject:itemFavs];
-            myTabBar.items = tabBarItems;
-            myTabBar.delegate = self; 
-             */
-            //
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
             self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
             
@@ -524,22 +484,7 @@ static NSInteger mCurrentSearchState = kTitle;
         [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
     else if (mUsedDatabase == kFavorites)
         [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
-
-    /*
-    gettimeofday(&beg_tv, nil);
-    
-    gettimeofday(&end_tv, nil);
-    double time_diff = end_tv.tv_sec + end_tv.tv_usec*0.000001 - beg_tv.tv_sec - beg_tv.tv_usec*0.000001;
-    NSLog(@"%s %f", __FUNCTION__, time_diff);
-    */
 }
-
-/*
-- (void) viewDidAppear:(BOOL)animated
-{   // - (void) viewDelayedAppear:
-    [self performSelector:@selector(viewDelayedAppear) withObject:nil afterDelay:2.0f];
-}
-*/
 
 - (void) viewDidAppear:(BOOL)animated
 {
@@ -561,26 +506,6 @@ static NSInteger mCurrentSearchState = kTitle;
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-            // Important!
-            // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44);
-            /*
-            if (screenHeight<500)
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone;
-            else {
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
-                self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Landscape_iPhone_Retina;
-            }
-            */
-            
-            // shifted to viewwillappear
-            /*
-            [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
-            [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
-            [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
-            [[[myToolBar items] objectAtIndex:6] setTitle:FULL_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
-            [[[myToolBar items] objectAtIndex:10] setTitle:FULL_TOOLBAR_THERAPY];
-            */
             // must go in viewdidappear
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
             
@@ -589,38 +514,7 @@ static NSInteger mCurrentSearchState = kTitle;
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 0;
 
-        } else {
-            // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44-49);
-            /*
-            myTabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, screenHeight-49, screenWidth, 49)];          
-            [self.view addSubview:myTabBar];
-            UITabBarItem *itemAips = [[UITabBarItem alloc] initWithTitle:@"AIPS" image:[UIImage imageNamed:@"10-medical.png"] tag:0];
-            UITabBarItem *itemFavs = [[UITabBarItem alloc] initWithTitle:@"Favorites" image:[UIImage imageNamed:@"28-star.png"] tag:1];
-            NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
-            [tabBarItems addObject:itemAips];
-            [tabBarItems addObject:itemFavs];
-            myTabBar.items = tabBarItems;
-            myTabBar.delegate = self;
-            if (mUsedDatabase == kAips)
-                [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
-            else if (mUsedDatabase == kFavorites)
-                [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
-            */
-            /*
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-            self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
-            */
-            
-            // shifted to viewwillappear
-            /*
-            [[[myToolBar items] objectAtIndex:0] setTitle:SHORT_TOOLBAR_TITLE];
-            [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
-            [[[myToolBar items] objectAtIndex:4] setTitle:SHORT_TOOLBAR_ATCCODE];
-            [[[myToolBar items] objectAtIndex:6] setTitle:SHORT_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
-            [[[myToolBar items] objectAtIndex:10] setTitle:SHORT_TOOLBAR_THERAPY];
-            */
-            
+        } else {            
             // Hides tab bar
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
             
@@ -658,11 +552,8 @@ static NSInteger mCurrentSearchState = kTitle;
     logoButton.frame = CGRectMake(0, 0, 32, 32);
     [logoButton addTarget:self action:@selector(myIconPressMethod:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *app_icon = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
-    /*
-    UIBarButtonItem *app_icon = [[UIBarButtonItem alloc] initWithCustomView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"desitin_icon_32x32.png"]]];
-    */
+
     self.navigationItem.leftBarButtonItem = app_icon;
-    
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         // Add search bar as title view to navigation bar
@@ -1019,24 +910,6 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-/*
-- (void) addTitle: (NSString *)title andPackInfo: (NSString *)packinfo andMedId: (long)medId
-{
-    if (![title isEqual:[NSNull null]])
-        [titleData addObject:title];
-    else
-        [titleData addObject:@"k.A."];
-    if (![packinfo isEqual:[NSNull null]]) {
-        if ([packinfo length]>0)
-            [subTitleData addObject:packinfo];    // [m packinfo]
-        else
-            [subTitleData addObject:@"k.A."];
-    } else
-        [subTitleData addObject:@"k.A."];
-    [medIdArray addObject:[NSNumber numberWithLong:medId]];
-}
-*/
-
 - (void) addTitle: (NSString *)title andAuthor: (NSString *)author andMedId: (long)medId
 {
     DataObject *m = [[DataObject alloc] init];
@@ -1056,24 +929,6 @@ static NSInteger mCurrentSearchState = kTitle;
     
     [medi addObject:m];
 }
-
-/*
-- (void) addTitle: (NSString *)title andAuthor: (NSString *)author andMedId: (long)medId
-{
-    if (![title isEqual:[NSNull null]])
-        [titleData addObject:title];
-    else
-        [titleData addObject:@"k.A."];       
-    if (![author isEqual:[NSNull null]]) {
-        if ([author length]>0)
-            [subTitleData addObject:author];        // [m auth]
-        else
-            [subTitleData addObject:@"k.A."];
-    } else
-        [subTitleData addObject:@"k.A."];
-    [medIdArray addObject:[NSNumber numberWithLong:medId]];
-}
-*/
 
 - (void) addTitle: (NSString *)title andAtcCode: (NSString *)atccode andAtcClass: (NSString *)atcclass andMedId: (long)medId
 {
@@ -1110,39 +965,6 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-/*
-- (void) addTitle: (NSString *)title andAtcCode: (NSString *)atccode andAtcClass: (NSString *)atcclass andMedId: (long)medId
-{
-    if (![title isEqual:[NSNull null]])
-        [titleData addObject:title];
-    else
-        [titleData addObject:@"k.A."];        
-    NSArray *m_atc = [atccode componentsSeparatedByString:@";"];
-    NSArray *m_class = [atcclass componentsSeparatedByString:@";"];
-    NSMutableString *m_atccode_str = nil;
-    NSMutableString *m_atcclass_str = nil;
-    if ([m_atc count] > 1) {
-        if (![[m_atc objectAtIndex:0] isEqual:nil])
-            m_atccode_str = [NSMutableString stringWithString:[m_atc objectAtIndex:0]];
-        if (![[m_atc objectAtIndex:1] isEqual:nil])
-            m_atcclass_str = [NSMutableString stringWithString:[m_atc objectAtIndex:1]];
-    }
-    NSMutableString *m_atcclass = nil;
-    if ([m_class count] == 2)
-        m_atcclass = [NSMutableString stringWithString:[m_class objectAtIndex:0]];
-    else if ([m_class count] == 3)
-        m_atcclass = [NSMutableString stringWithString:[m_class objectAtIndex:1]];
-    if ([m_atccode_str isEqual:[NSNull null]])
-        [m_atccode_str setString:@"k.A."];
-    if ([m_atcclass_str isEqual:[NSNull null]])
-        [m_atcclass_str setString:@"k.A."];
-    if ([m_atcclass isEqual:[NSNull null]])
-        [m_atcclass setString:@"k.A."];
-    [subTitleData addObject:[NSString stringWithFormat:@"%@ - %@\n%@", m_atccode_str, m_atcclass_str, m_atcclass]]; // [m atccode] [m atcclass]
-    [medIdArray addObject:[NSNumber numberWithLong:medId]];
-}
-*/
-
 - (void) addTitle: (NSString *)title andRegnrs: (NSString *)regnrs andAuthor: (NSString *)author andMedId: (long)medId
 {
     DataObject *m = [[DataObject alloc] init];
@@ -1163,30 +985,15 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-/*
-- (void) addTitle: (NSString *)title andRegnrs: (NSString *)regnrs andAuthor: (NSString *)author andMedId: (long)medId
-{
-    if (![title isEqual:[NSNull null]])
-        [titleData addObject:title];
-    else
-        [titleData addObject:@"k.A."];
-    NSMutableString *m_regnrs = [NSMutableString stringWithString:regnrs];
-    NSMutableString *m_auth = [NSMutableString stringWithString:author];
-    if ([m_regnrs isEqual:[NSNull null]])
-        [m_regnrs setString:@"k.A."];
-    if ([m_auth isEqual:[NSNull null]])
-        [m_auth setString:@"k.A."];
-    [subTitleData addObject:[NSString stringWithFormat:@"%@ - %@", m_regnrs, m_auth]];      // [m regnrs] - [m auth]
-    [medIdArray addObject:[NSNumber numberWithLong:medId]];
-}
- */
-
 - (void) addSubstances: (NSString *)substances andTitle: (NSString *)title andAuthor: (NSString *)author andMedId: (long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
-    if (![substances isEqual:[NSNull null]])
-        m.title = substances;     // [m substances]
+    if (![substances isEqual:[NSNull null]]) {
+        // Unicode for character 'alpha' = &#593;
+        substances = [substances stringByReplacingOccurrencesOfString:@"&alpha;" withString:@"ɑ"];
+        m.title = substances;
+    }
     else
         m.title = @"k.A.";
     NSMutableString *m_title = [NSMutableString stringWithString:title];
@@ -1200,24 +1007,6 @@ static NSInteger mCurrentSearchState = kTitle;
     
     [medi addObject:m];
 }
-
-/*
-- (void) addSubstances: (NSString *)substances andTitle: (NSString *)title andAuthor: (NSString *)author andMedId: (long)medId
-{
-    if (![substances isEqual:[NSNull null]])
-        [titleData addObject:substances];     // [m substances]
-    else
-        [titleData addObject:@"k.A."];
-    NSMutableString *m_title = [NSMutableString stringWithString:title];
-    NSMutableString *m_auth = [NSMutableString stringWithString:author];
-    if ([m_title isEqual:[NSNull null]])
-        [m_title setString:@"k.A."];
-    if ([m_auth isEqual:[NSNull null]])
-        [m_auth setString:@"k.A."];
-    [subTitleData addObject:[NSString stringWithFormat:@"%@ - %@", m_title, m_auth]];       // [m title] - [m auth]
-    [medIdArray addObject:[NSNumber numberWithLong:medId]];
-}
- */
 
 - (void) addTitle: (NSString *)title andApplications: (NSString *)applications andMedId: (long)medId
 {
@@ -1248,36 +1037,10 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-/*
-- (void) addTitle: (NSString *)title andApplications: (NSString *)applications andMedId: (long)medId
-{
-    if (![title isEqual:[NSNull null]])
-        [titleData addObject:title];
-    else
-        [titleData addObject:@"k.A."];
-    if (![applications isEqual:[NSNull null]]) {
-        if ([applications length]>0)
-            [subTitleData addObject:applications]; // [m application]
-        else
-            [subTitleData addObject:@"k.A."];
-    } else
-        [subTitleData addObject:@"k.A."];
-    [medIdArray addObject:[NSNumber numberWithLong:medId]];
-}
- */
-
 - (void) updateTableView
 {
     if (searchResults) {
-        
-        /*
-        if (titleData != nil)
-            [titleData removeAllObjects];
-        if (subTitleData != nil)
-            [subTitleData removeAllObjects];
-        if (medIdArray != nil)
-            [medIdArray removeAllObjects];
-        */
+
         if (medi != nil)
             [medi removeAllObjects];
         
@@ -1587,28 +1350,6 @@ static NSInteger mCurrentSearchState = kTitle;
     [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 
     report_memory();
-    
-    /*
-    // TODO!!!
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        // revealController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        // revealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
-     
-        // At this point we simply set the front view controller of our revealController to the next revealController
-        [revealController setFrontViewController:secondViewNavigationController animated:YES];
-
-        // Show SecondViewController! (UIWebView)
-        [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
-    }
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        // revealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-        // revealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
-        
-        [revealController setFrontViewController:secondViewNavigationController animated:YES];
-        // Show SecondViewController! (UIWebView)
-        [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
-    }
-    */
 }
 
 #define PADDING_IPAD 50.0f
