@@ -1,1 +1,6 @@
 language: objective-c
+notifications:
+ email:
+    recipients:
+      - cybrmx@gmail.com
+      - zdavatz@ywesee.com
