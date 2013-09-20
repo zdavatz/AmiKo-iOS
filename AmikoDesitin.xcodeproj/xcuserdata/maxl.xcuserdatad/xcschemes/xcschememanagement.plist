@@ -9,10 +9,25 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>CoMedDesitin.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>D5A6F23617B1692F00EAB24B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D5F6BB3417E8C4AD00DCBD16</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D5F6BB4E17E8C87500DCBD16</key>
 		<dict>
 			<key>primary</key>
 			<true/>

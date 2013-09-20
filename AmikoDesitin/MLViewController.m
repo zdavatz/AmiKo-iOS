@@ -39,6 +39,16 @@
 #import <mach/mach.h>
 #import <sys/time.h>
 
+#if defined (AMIKO_DESITIN)
+static NSString *APP_NAME = @"AmiKoDesitin";
+#elif defined (COMED_DESITIN)
+static NSString *APP_NAME = @"CoMedDesitin";
+#elif defined (AMIKO_IOS)
+static NSString *APP_NAME = @"AmiKoiOS";
+#elif defined (COMED_IOS)
+static NSString *APP_NAME = @"CoMediOS";
+#endif
+
 enum {
     kAips=0, kHospital=1, kFavorites=2
 };
@@ -46,6 +56,10 @@ enum {
 enum {
     kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kSubstances=8, kTherapy=10
 };
+
+static NSString *SEARCH_STRING = @"Suche";
+static NSString *FACHINFO_STRING = @"Fachinformation";
+static NSString *TREFFER_STRING = @"Treffer";
 
 static NSString *FULL_TOOLBAR_TITLE = @"Präparat";
 static NSString *FULL_TOOLBAR_AUTHOR = @"Inhaber";
@@ -139,59 +153,59 @@ static NSInteger mCurrentSearchState = kTitle;
         [searchField setText:@""];
         if ([btn.title isEqualToString:FULL_TOOLBAR_TITLE]) {
             [myTextField setText:FULL_TOOLBAR_TITLE];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_TITLE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
             [mBarButtonItemName setString:FULL_TOOLBAR_TITLE];
             mCurrentSearchState = kTitle;
         } else if ([btn.title isEqualToString:FULL_TOOLBAR_AUTHOR]) {
             [myTextField setText:FULL_TOOLBAR_AUTHOR];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_AUTHOR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_AUTHOR]];
             [mBarButtonItemName setString:FULL_TOOLBAR_AUTHOR];
             mCurrentSearchState = kAuthor;
         } else if ([btn.title isEqualToString:FULL_TOOLBAR_ATCCODE]) {
             [myTextField setText:FULL_TOOLBAR_ATCCODE];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_ATCCODE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_ATCCODE]];
             [mBarButtonItemName setString:FULL_TOOLBAR_ATCCODE];
             mCurrentSearchState = kAtcCode;
         } else if ([btn.title isEqualToString:FULL_TOOLBAR_REGNR]) {
             [myTextField setText:FULL_TOOLBAR_REGNR];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_REGNR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
             [mBarButtonItemName setString:FULL_TOOLBAR_REGNR];
             mCurrentSearchState = kRegNr;
         } else if ([btn.title isEqualToString:FULL_TOOLBAR_SUBSTANCES]) {
             [myTextField setText:FULL_TOOLBAR_SUBSTANCES];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_SUBSTANCES]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_SUBSTANCES]];
             [mBarButtonItemName setString:FULL_TOOLBAR_SUBSTANCES];
             mCurrentSearchState = kSubstances;
         } else if ([btn.title isEqualToString:FULL_TOOLBAR_THERAPY]) {
             [myTextField setText:FULL_TOOLBAR_THERAPY];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_THERAPY]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
             [mBarButtonItemName setString:FULL_TOOLBAR_THERAPY];
             mCurrentSearchState = kTherapy;
         }
     } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [searchField setText:@""];
         if ([btn.title isEqualToString:SHORT_TOOLBAR_TITLE]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_TITLE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
             [mBarButtonItemName setString:FULL_TOOLBAR_TITLE];
             mCurrentSearchState = kTitle;
         } else if ([btn.title isEqualToString:SHORT_TOOLBAR_AUTHOR]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_AUTHOR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_AUTHOR]];
             [mBarButtonItemName setString:FULL_TOOLBAR_AUTHOR];
             mCurrentSearchState = kAuthor;
         } else if ([btn.title isEqualToString:SHORT_TOOLBAR_ATCCODE]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_ATCCODE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_ATCCODE]];
             [mBarButtonItemName setString:FULL_TOOLBAR_ATCCODE];
             mCurrentSearchState = kAtcCode;
         } else if ([btn.title isEqualToString:SHORT_TOOLBAR_REGNR]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_REGNR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
             [mBarButtonItemName setString:FULL_TOOLBAR_REGNR];
             mCurrentSearchState = kRegNr;
         } else if ([btn.title isEqualToString:SHORT_TOOLBAR_SUBSTANCES]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_SUBSTANCES]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_SUBSTANCES]];
             [mBarButtonItemName setString:FULL_TOOLBAR_SUBSTANCES];
             mCurrentSearchState = kSubstances;
         } else if ([btn.title isEqualToString:SHORT_TOOLBAR_THERAPY]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_THERAPY]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
             [mBarButtonItemName setString:FULL_TOOLBAR_THERAPY];
             mCurrentSearchState = kTherapy;
         }
@@ -239,7 +253,80 @@ static NSInteger mCurrentSearchState = kTitle;
     secondView = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
     secondViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
     
+    if ([[self appLanguage] isEqualToString:@"de"]) {
+        SEARCH_STRING = @"Suche";
+        FACHINFO_STRING = @"Fachinformation";
+        TREFFER_STRING = @"Treffer";
+        //
+        FULL_TOOLBAR_TITLE = @"Präparat";
+        FULL_TOOLBAR_AUTHOR = @"Inhaber";
+        FULL_TOOLBAR_ATCCODE = @"ATC Code";
+        FULL_TOOLBAR_REGNR = @"Reg. Nr.";
+        FULL_TOOLBAR_SUBSTANCES = @"Wirkstoff";
+        FULL_TOOLBAR_THERAPY = @"Therapie";
+        //
+        SHORT_TOOLBAR_TITLE = @"Prä";
+        SHORT_TOOLBAR_AUTHOR = @"Inh";
+        SHORT_TOOLBAR_ATCCODE = @"Atc";
+        SHORT_TOOLBAR_REGNR = @"Reg";
+        SHORT_TOOLBAR_SUBSTANCES = @"Wirk";
+        SHORT_TOOLBAR_THERAPY = @"Ther";
+    } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+        SEARCH_STRING = @"Recherche";
+        FACHINFO_STRING = @"Notice Infopro";
+        TREFFER_STRING = @"Réponse(s)";
+        //
+        FULL_TOOLBAR_TITLE = @"Préparation";
+        FULL_TOOLBAR_AUTHOR = @"Titulaire";
+        FULL_TOOLBAR_ATCCODE = @"Code ATC";
+        FULL_TOOLBAR_REGNR = @"No d'autor";
+        FULL_TOOLBAR_SUBSTANCES = @"Principe";
+        FULL_TOOLBAR_THERAPY = @"Thérapie";
+        //
+        SHORT_TOOLBAR_TITLE = @"Pré";
+        SHORT_TOOLBAR_AUTHOR = @"Tit";
+        SHORT_TOOLBAR_ATCCODE = @"Atc";
+        SHORT_TOOLBAR_REGNR = @"Aut";
+        SHORT_TOOLBAR_SUBSTANCES = @"Prin";
+        SHORT_TOOLBAR_THERAPY = @"Thér";
+    }
+    
     return self;
+}
+
+- (NSString *) appOwner
+{
+    if ([APP_NAME isEqualToString:@"AmiKoDesitin"]
+        || [APP_NAME isEqualToString:@"CoMedDesitin"])
+        return @"desitin";
+    else if ([APP_NAME isEqualToString:@"AmiKoiOS"]
+             || [APP_NAME isEqualToString:@"CoMediOS"])
+        return @"ywesee";
+    return nil;
+}
+
+- (NSString *) appLanguage
+{
+    if ([APP_NAME isEqualToString:@"AmiKoiOS"]
+        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+        return @"de";
+    else if ([APP_NAME isEqualToString:@"CoMediOS"]
+             || [APP_NAME isEqualToString:@"CoMedDesitin"])
+        return @"fr";
+    
+    return nil;
+}
+
+- (NSString *) notSpecified
+{
+    if ([APP_NAME isEqualToString:@"AmiKoiOS"]
+        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+        return @"k.A.";
+    else if ([APP_NAME isEqualToString:@"CoMediOS"]
+             || [APP_NAME isEqualToString:@"CoMedDesitin"])
+        return @"n.s.";
+    
+    return nil;
 }
 
 - (void) resetBarButtonItems
@@ -252,7 +339,7 @@ static NSInteger mCurrentSearchState = kTitle;
     else
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor darkGrayColor]];
     [searchField setText:@""];
-    [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_TITLE]];
+    [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
     mCurrentSearchState = kTitle;
 }
 
@@ -270,22 +357,22 @@ static NSInteger mCurrentSearchState = kTitle;
     switch(searchState)
     {
         case kTitle:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_TITLE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
             break;
         case kAuthor:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_AUTHOR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_AUTHOR]];
             break;
         case kAtcCode:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_ATCCODE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_ATCCODE]];
             break;
         case kRegNr:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_REGNR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
             break;
         case kSubstances:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_SUBSTANCES]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_SUBSTANCES]];
             break;
         case kTherapy:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche %@", FULL_TOOLBAR_THERAPY]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
             break;
     }
     mCurrentSearchState = searchState;
@@ -349,7 +436,9 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
+#endif
     
     screenWidth = self.view.bounds.size.width;
     screenHeight = self.view.bounds.size.height;
@@ -358,8 +447,10 @@ static NSInteger mCurrentSearchState = kTitle;
 }
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{    
+{
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
+#endif
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
@@ -422,14 +513,18 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (void) viewWillDisappear:(BOOL)animated
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);    
+#endif
     
     [super viewWillDisappear:animated];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);    
+#endif
     
     [super viewWillAppear:animated];
     
@@ -444,6 +539,13 @@ static NSInteger mCurrentSearchState = kTitle;
         } else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
+        
+        [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
+        [[[myToolBar items] objectAtIndex:1] setTitle:FULL_TOOLBAR_AUTHOR];
+        [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_ATCCODE];
+        [[[myToolBar items] objectAtIndex:3] setTitle:FULL_TOOLBAR_REGNR];
+        [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_SUBSTANCES];
+        [[[myToolBar items] objectAtIndex:5] setTitle:FULL_TOOLBAR_THERAPY];
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
@@ -488,7 +590,9 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (void) viewDidAppear:(BOOL)animated
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);    
+#endif
     
     [super viewDidAppear:animated];
     
@@ -530,20 +634,24 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (void)viewDidUnload
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
+#endif
     
     [super viewDidUnload];
 }
 
 - (void) viewDidLoad
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
+#endif
     
     [super viewDidLoad];
     
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.title = NSLocalizedString(@"AmiKo", nil);
+    self.title = NSLocalizedString(APP_NAME, nil);
     
     // Add icon
     // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"28-star-ye.png"]];
@@ -576,9 +684,12 @@ static NSInteger mCurrentSearchState = kTitle;
     
     mDb = [[MLDBAdapter alloc] init];
     [mDb openDatabase];
+
+#ifdef DEBUG
     NSLog(@"Number of Records = %ld", (long)[mDb getNumRecords]);
     // NSLog(@"%@", NSLocalizedString(@"Paste", @""));
-        
+#endif
+    
     // Load favorites
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     NSArray *urls = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
@@ -616,7 +727,11 @@ static NSInteger mCurrentSearchState = kTitle;
     }
     
     // Load style sheet from file
-    NSString *amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
+    NSString *amikoReportFile = nil;
+    if ([[self appLanguage] isEqualToString:@"de"])
+        amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
+    else if ([[self appLanguage] isEqualToString:@"fr"])
+        amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_fr" ofType:@"html"];
     NSError *error = nil;
     NSString *amikoReport = [NSString stringWithContentsOfFile:amikoReportFile encoding:NSASCIIStringEncoding error:&error];
 
@@ -746,13 +861,17 @@ static NSInteger mCurrentSearchState = kTitle;
 - (void) switchTabBarItem: (UITabBarItem *)item
 {
     static bool inProgress = false;
-    
-    NSLog(@"%s", __FUNCTION__);       
+
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     
     switch (item.tag) {
         case 0:
         {
+#ifdef DEBUG
             NSLog(@"TabBar - Aips Database");
+#endif
             mUsedDatabase = kAips;
             // Reset searchfield
             [self resetBarButtonItems];
@@ -772,7 +891,7 @@ static NSInteger mCurrentSearchState = kTitle;
                         [scopeSelf updateTableView];
                         [myTableView reloadData];
                         [searchField resignFirstResponder];
-                        [myTextField setText:[NSString stringWithFormat:@"%d Treffer in %dms", [searchResults count], timeForSearch_ms]];
+                        [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
                         inProgress = false;
                     });
                     //}
@@ -783,7 +902,9 @@ static NSInteger mCurrentSearchState = kTitle;
         case 1:
         {
             if (mUsedDatabase!=kFavorites) {
+#ifdef DEBUG
                 NSLog(@"TabBar - Favorite Database");
+#endif
                 mUsedDatabase = kFavorites;
                 // Reset searchfield
                 [self resetBarButtonItems];
@@ -804,7 +925,7 @@ static NSInteger mCurrentSearchState = kTitle;
                             [scopeSelf updateTableView];
                             [myTableView reloadData];
                             [searchField resignFirstResponder];
-                            [myTextField setText:[NSString stringWithFormat:@"%d Treffer in %dms", [searchResults count], timeForSearch_ms]];
+                            [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
                             inProgress = false;
                         });
                         //}
@@ -877,7 +998,7 @@ static NSInteger mCurrentSearchState = kTitle;
                     [searchField resignFirstResponder];
                 [scopeSelf updateTableView];
                 [myTableView reloadData];
-                [myTextField setText:[NSString stringWithFormat:@"%d Treffer in %dms", [searchResults count], timeForSearch_ms]];
+                [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
                 inProgress = false;
             });
         }
@@ -897,14 +1018,14 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = @"k.A.";
+        m.title = [self notSpecified];// @"k.A.";
     if (![packinfo isEqual:[NSNull null]]) {
         if ([packinfo length]>0)
             m.subTitle = packinfo;
         else
-            m.subTitle = @"k.A.";
+            m.subTitle = [self notSpecified];// @"k.A.";
     } else
-        m.subTitle = @"k.A.";
+        m.subTitle = [self notSpecified];// @"k.A.";
     m.medId = medId;
     
     [medi addObject:m];
@@ -917,14 +1038,14 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = @"k.A.";
+        m.title = [self notSpecified];// @"k.A.";
     if (![author isEqual:[NSNull null]]) {
         if ([author length]>0)
             m.subTitle = author;
         else
-            m.subTitle = @"k.A.";
+            m.subTitle = [self notSpecified];// @"k.A.";
     } else
-        m.subTitle = @"k.A.";
+        m.subTitle = [self notSpecified];// @"k.A.";
     m.medId = medId;
     
     [medi addObject:m];
@@ -937,7 +1058,7 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = @"k.A.";
+        m.title = [self notSpecified];// @"k.A.";
     NSArray *m_atc = [atccode componentsSeparatedByString:@";"];
     NSArray *m_class = [atcclass componentsSeparatedByString:@";"];
     NSMutableString *m_atccode_str = nil;
@@ -954,11 +1075,11 @@ static NSInteger mCurrentSearchState = kTitle;
     else if ([m_class count] == 3)
         m_atcclass = [NSMutableString stringWithString:[m_class objectAtIndex:1]];
     if ([m_atccode_str isEqual:[NSNull null]])
-        [m_atccode_str setString:@"k.A."];
+        [m_atccode_str setString:[self notSpecified]];
     if ([m_atcclass_str isEqual:[NSNull null]])
-        [m_atcclass_str setString:@"k.A."];
+        [m_atcclass_str setString:[self notSpecified]];
     if ([m_atcclass isEqual:[NSNull null]])
-        [m_atcclass setString:@"k.A."];
+        [m_atcclass setString:[self notSpecified]];
     m.subTitle = [NSString stringWithFormat:@"%@ - %@\n%@", m_atccode_str, m_atcclass_str, m_atcclass];
     m.medId = medId;
     
@@ -972,13 +1093,13 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = @"k.A.";
+        m.title = [self notSpecified]; // @"k.A.";;
     NSMutableString *m_regnrs = [NSMutableString stringWithString:regnrs];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_regnrs isEqual:[NSNull null]])
-        [m_regnrs setString:@"k.A."];
+        [m_regnrs setString:[self notSpecified]];
     if ([m_auth isEqual:[NSNull null]])
-        [m_auth setString:@"k.A."];
+        [m_auth setString:[self notSpecified]];
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_regnrs, m_auth];
     m.medId = medId;
     
@@ -995,13 +1116,13 @@ static NSInteger mCurrentSearchState = kTitle;
         m.title = substances;
     }
     else
-        m.title = @"k.A.";
+        m.title = [self notSpecified]; // @"k.A.";
     NSMutableString *m_title = [NSMutableString stringWithString:title];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_title isEqual:[NSNull null]])
-        [m_title setString:@"k.A."];
+        [m_title setString:[self notSpecified]];
     if ([m_auth isEqual:[NSNull null]])
-        [m_auth setString:@"k.A."];
+        [m_auth setString:[self notSpecified]];
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_title, m_auth];
     m.medId = medId;
     
@@ -1015,7 +1136,7 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = @"k.A.";
+        m.title = [self notSpecified]; // @"k.A.";
     NSArray *m_applications = [applications componentsSeparatedByString:@";"];
     NSMutableString *m_swissmedic = nil;
     NSMutableString *m_bag = nil;
@@ -1028,9 +1149,9 @@ static NSInteger mCurrentSearchState = kTitle;
         }
     }
     if ([m_swissmedic isEqual:[NSNull null]])
-        [m_swissmedic setString:@"k.A."];
+        [m_swissmedic setString:[self notSpecified]];
     if ([m_bag isEqual:[NSNull null]])
-        [m_bag setString:@"k.A."];
+        [m_bag setString:[self notSpecified]];
     m.subTitle = [NSString stringWithFormat:@"%@\n%@", m_swissmedic, m_bag];
     m.medId = medId;
     
@@ -1177,7 +1298,9 @@ static NSInteger mCurrentSearchState = kTitle;
  */
 - (BOOL) textFieldShouldReturn: (UITextField *)textField
 {
+#ifdef DEBUG
     NSLog(@"You entered %@", self.myTextField.text);
+#endif
     [myTextField resignFirstResponder];
     
     return YES;
@@ -1186,8 +1309,9 @@ static NSInteger mCurrentSearchState = kTitle;
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     int count = [myTextField.text length];
+#ifdef DEBUG
     NSLog(@"Number of characters = %d", count);
-    
+#endif
     return YES;
 }
 
@@ -1312,7 +1436,7 @@ static NSInteger mCurrentSearchState = kTitle;
         [secondView removeFromParentViewController];
         secondView = nil;
     }
-    secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:@"Fachinformation" andParam:2];
+    secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:FACHINFO_STRING andParam:2];
     secondView.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, med.contentStr];
     
     // Extract section ids

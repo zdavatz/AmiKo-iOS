@@ -44,8 +44,10 @@
 
 - (void) dealloc
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
-
+#endif
+    
     htmlAnchor = nil;    
     self.searchField = nil;
     self.htmlStr = nil;
@@ -184,8 +186,10 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
+
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
+#endif
     
     self.title = NSLocalizedString(mTitle, nil);
     // Do any additional setup after loading the view from its nib.

@@ -54,3 +54,4 @@ const int RightViewRevealWidth_Portrait_iPhone = 180;
 const int RearViewRevealWidth_Landscape_iPhone = 420;           // 420 + 60 = 480 x 2 = 960
 const int RearViewRevealWidth_Landscape_iPhone_Retina = 508;    // 508 + 60 = 568 x 2 = 1136
 const int RearViewRevealOverdraw_Landscape_iPhone_Retina = 60;
+

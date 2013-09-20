@@ -83,9 +83,13 @@ static NSString *FULL_TABLE = nil;
 
 - (void) openDatabase
 {
+#ifdef AMIKO_DESITIN
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
-    
     mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
+#elif COMED_DESITIN
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
+    mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
+#endif
 }
 
 - (void) closeDatabase

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
+		D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */; };
+		D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6917ECC1D6003BF272 /* ComedDesitin-568h@2x.png */; };
+		D52A0D6C17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6B17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png */; };
+		D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6D17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png */; };
+		D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6F17ECC243003BF272 /* ComedDesitin-Landscape~ipad.png */; };
+		D52A0D7217ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D7117ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png */; };
 		D533DA9D17B2D05F00199C38 /* desitin_icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DA9C17B2D05F00199C38 /* desitin_icon_57x57.png */; };
 		D533DA9F17B2D07600199C38 /* desitin_icon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DA9E17B2D07600199C38 /* desitin_icon_114x114.png */; };
 		D533DAA317B2D2AE00199C38 /* desitin_icon_32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAA217B2D2AE00199C38 /* desitin_icon_32x32.png */; };
@@ -23,13 +30,6 @@
 		D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */; };
 		D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8617B7D8370002E2CF /* Default-Portrait~ipad.png */; };
 		D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8817B7D8580002E2CF /* Default-Landscape~ipad.png */; };
-		D565DA9117B7EA9D0002E2CF /* desitin_launch_320x480.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8A17B7EA9C0002E2CF /* desitin_launch_320x480.png */; };
-		D565DA9217B7EA9D0002E2CF /* desitin_launch_640x960.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8B17B7EA9C0002E2CF /* desitin_launch_640x960.png */; };
-		D565DA9317B7EA9D0002E2CF /* desitin_launch_640x1136.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8C17B7EA9C0002E2CF /* desitin_launch_640x1136.png */; };
-		D565DA9417B7EA9D0002E2CF /* desitin_launch_768x1004.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8D17B7EA9C0002E2CF /* desitin_launch_768x1004.png */; };
-		D565DA9517B7EA9D0002E2CF /* desitin_launch_1024x768.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8E17B7EA9C0002E2CF /* desitin_launch_1024x768.png */; };
-		D565DA9617B7EA9D0002E2CF /* desitin_launch_1536x2008.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */; };
-		D565DA9717B7EA9D0002E2CF /* desitin_launch_2048x1496.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA9017B7EA9C0002E2CF /* desitin_launch_2048x1496.png */; };
 		D5A6F23B17B1692F00EAB24B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23A17B1692F00EAB24B /* UIKit.framework */; };
 		D5A6F23D17B1692F00EAB24B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23C17B1692F00EAB24B /* Foundation.framework */; };
 		D5A6F23F17B1692F00EAB24B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23E17B1692F00EAB24B /* CoreGraphics.framework */; };
@@ -68,9 +68,75 @@
 		D5A6F2AF17B16F3600EAB24B /* app_icon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */; };
 		D5A6F2B117B16FFD00EAB24B /* app_icon_32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */; };
 		D5A6F2B317B171C900EAB24B /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B217B171C900EAB24B /* MLViewController.xib */; };
+		D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
+		D5F6BB5017E8C87500DCBD16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24617B1692F00EAB24B /* main.m */; };
+		D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */; };
+		D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */; };
+		D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */; };
+		D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28A17B16C0200EAB24B /* MLDataStore.m */; };
+		D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */; };
+		D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29017B16C1D00EAB24B /* MLMedication.m */; };
+		D5F6BB5717E8C87500DCBD16 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29217B16C1D00EAB24B /* MLMenuViewController.m */; };
+		D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */; };
+		D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */; };
+		D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */; };
+		D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */; };
+		D5F6BB5C17E8C87500DCBD16 /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
+		D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D565DA8217B7B48D0002E2CF /* MLConstants.m */; };
+		D5F6BB5F17E8C87500DCBD16 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F26617B16A2300EAB24B /* libsqlite3.0.dylib */; };
+		D5F6BB6017E8C87500DCBD16 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23A17B1692F00EAB24B /* UIKit.framework */; };
+		D5F6BB6117E8C87500DCBD16 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23C17B1692F00EAB24B /* Foundation.framework */; };
+		D5F6BB6217E8C87500DCBD16 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23E17B1692F00EAB24B /* CoreGraphics.framework */; };
+		D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F24317B1692F00EAB24B /* InfoPlist.strings */; };
+		D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26C17B16A7700EAB24B /* reveal-icon.png */; };
+		D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */; };
+		D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27117B16AA400EAB24B /* 28-star-gy.png */; };
+		D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27217B16AA400EAB24B /* 28-star-ye.png */; };
+		D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */; };
+		D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */; };
+		D5F6BB6B17E8C87500DCBD16 /* 10-medical.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27417B16AA400EAB24B /* 10-medical.png */; };
+		D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */; };
+		D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */; };
+		D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */; };
+		D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B217B171C900EAB24B /* MLViewController.xib */; };
+		D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */; };
+		D5F6BB7117E8C87500DCBD16 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28117B16B6000EAB24B /* MLMenuViewController.xib */; };
+		D5F6BB7217E8C87500DCBD16 /* MLMenuViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28217B16B6000EAB24B /* MLMenuViewController~iphone.xib */; };
+		D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A417B16E4400EAB24B /* 28-star.png */; };
+		D5F6BB7417E8C87500DCBD16 /* 28-star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A517B16E4400EAB24B /* 28-star@2x.png */; };
+		D5F6BB7517E8C87500DCBD16 /* app_icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A817B16EF700EAB24B /* app_icon_57x57.png */; };
+		D5F6BB7617E8C87500DCBD16 /* app_icon_72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2AA17B16F2300EAB24B /* app_icon_72x72.png */; };
+		D5F6BB7717E8C87500DCBD16 /* app_icon_144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2AC17B16F2900EAB24B /* app_icon_144x144.png */; };
+		D5F6BB7817E8C87500DCBD16 /* app_icon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */; };
+		D5F6BB7917E8C87500DCBD16 /* app_icon_32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */; };
+		D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DA9C17B2D05F00199C38 /* desitin_icon_57x57.png */; };
+		D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DA9E17B2D07600199C38 /* desitin_icon_114x114.png */; };
+		D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAA217B2D2AE00199C38 /* desitin_icon_32x32.png */; };
+		D5F6BB7D17E8C87500DCBD16 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAA517B434B600199C38 /* Default.png */; };
+		D5F6BB7E17E8C87500DCBD16 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAA717B434EA00199C38 /* Default-Landscape@2x~ipad.png */; };
+		D5F6BB7F17E8C87500DCBD16 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAA917B434FF00199C38 /* Default-Portrait@2x~ipad.png */; };
+		D5F6BB8017E8C87500DCBD16 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAB17B4351700199C38 /* Default@2x.png */; };
+		D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAD17B435E300199C38 /* desitin_icon_72x72.png */; };
+		D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */; };
+		D5F6BB8317E8C87500DCBD16 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */; };
+		D5F6BB8417E8C87500DCBD16 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8617B7D8370002E2CF /* Default-Portrait~ipad.png */; };
+		D5F6BB8517E8C87500DCBD16 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8817B7D8580002E2CF /* Default-Landscape~ipad.png */; };
+		D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */ = {isa = PBXBuildFile; fileRef = D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */; };
+		D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
+		D5F6BB9017E8C87500DCBD16 /* amiko_db_full_idx_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2317E7868400DCBD16 /* amiko_db_full_idx_fr.db */; };
+		D5F6BB9B17E8CC2500DCBD16 /* AmikoDesitin-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F24217B1692F00EAB24B /* AmikoDesitin-Info.plist */; };
+		D5F6BB9C17E8CD8B00DCBD16 /* CoMedDesitin-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
+		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
+		D52A0D6917ECC1D6003BF272 /* ComedDesitin-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-568h@2x.png"; path = "../ComedDesitin-568h@2x.png"; sourceTree = "<group>"; };
+		D52A0D6B17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-Portrait~ipad.png"; path = "../ComedDesitin-Portrait~ipad.png"; sourceTree = "<group>"; };
+		D52A0D6D17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-Portrait@2x~ipad.png"; path = "../ComedDesitin-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
+		D52A0D6F17ECC243003BF272 /* ComedDesitin-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-Landscape~ipad.png"; path = "../ComedDesitin-Landscape~ipad.png"; sourceTree = "<group>"; };
+		D52A0D7117ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-Landscape@2x~ipad.png"; path = "../ComedDesitin-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		D52A0D7317ECC31A003BF272 /* comed_des_launch_1024x748.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1024x748.png; sourceTree = "<group>"; };
 		D533DA9C17B2D05F00199C38 /* desitin_icon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_57x57.png; sourceTree = "<group>"; };
 		D533DA9E17B2D07600199C38 /* desitin_icon_114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_114x114.png; sourceTree = "<group>"; };
 		D533DAA217B2D2AE00199C38 /* desitin_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_32x32.png; sourceTree = "<group>"; };
@@ -146,6 +212,17 @@
 		D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_114x114.png; sourceTree = "<group>"; };
 		D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_32x32.png; sourceTree = "<group>"; };
 		D5A6F2B217B171C900EAB24B /* MLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLViewController.xib; sourceTree = "<group>"; };
+		D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_fr.html; sourceTree = "<group>"; };
+		D5F6BB2317E7868400DCBD16 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
+		D5F6BB9417E8C87500DCBD16 /* CoMedDesitin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoMedDesitin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CoMedDesitin-Info.plist"; sourceTree = "<group>"; };
+		D5F6BB9D17EB816600DCBD16 /* comed_des_launch_320x480.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_320x480.png; sourceTree = "<group>"; };
+		D5F6BB9E17EB816700DCBD16 /* comed_des_launch_640x960.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_640x960.png; sourceTree = "<group>"; };
+		D5F6BB9F17EB816700DCBD16 /* comed_des_launch_640x1136.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_640x1136.png; sourceTree = "<group>"; };
+		D5F6BBA017EB816800DCBD16 /* comed_des_launch_768x1004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_768x1004.png; sourceTree = "<group>"; };
+		D5F6BBA117EB816800DCBD16 /* comed_des_launch_1536x2008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1536x2008.png; sourceTree = "<group>"; };
+		D5F6BBA217EB816900DCBD16 /* comed_des_launch_2048x1496.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_2048x1496.png; sourceTree = "<group>"; };
+		D5F6BBA917EB81C500DCBD16 /* comed_des_launch_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1024x768.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +237,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5F6BB5E17E8C87500DCBD16 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5F6BB5F17E8C87500DCBD16 /* libsqlite3.0.dylib in Frameworks */,
+				D5F6BB6017E8C87500DCBD16 /* UIKit.framework in Frameworks */,
+				D5F6BB6117E8C87500DCBD16 /* Foundation.framework in Frameworks */,
+				D5F6BB6217E8C87500DCBD16 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -170,17 +258,11 @@
 				D533DA9E17B2D07600199C38 /* desitin_icon_114x114.png */,
 				D533DA9C17B2D05F00199C38 /* desitin_icon_57x57.png */,
 				D533DAAD17B435E300199C38 /* desitin_icon_72x72.png */,
-				D565DA8A17B7EA9C0002E2CF /* desitin_launch_320x480.png */,
-				D565DA8B17B7EA9C0002E2CF /* desitin_launch_640x960.png */,
-				D565DA8C17B7EA9C0002E2CF /* desitin_launch_640x1136.png */,
-				D565DA8D17B7EA9C0002E2CF /* desitin_launch_768x1004.png */,
-				D565DA8E17B7EA9C0002E2CF /* desitin_launch_1024x768.png */,
-				D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */,
-				D565DA9017B7EA9C0002E2CF /* desitin_launch_2048x1496.png */,
 				D5A6F2AC17B16F2900EAB24B /* app_icon_144x144.png */,
 				D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */,
 				D5A6F2AA17B16F2300EAB24B /* app_icon_72x72.png */,
 				D5A6F2A817B16EF700EAB24B /* app_icon_57x57.png */,
+				D5F6BBAB17EB8BC200DCBD16 /* LaunchImages */,
 				D5A6F24017B1692F00EAB24B /* AmikoDesitin */,
 				D5A6F23917B1692F00EAB24B /* Frameworks */,
 				D5A6F23817B1692F00EAB24B /* Products */,
@@ -191,6 +273,7 @@
 			isa = PBXGroup;
 			children = (
 				D5A6F23717B1692F00EAB24B /* AmiKoDesitin.app */,
+				D5F6BB9417E8C87500DCBD16 /* CoMedDesitin.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,9 +309,10 @@
 			isa = PBXGroup;
 			children = (
 				D5A6F24217B1692F00EAB24B /* AmikoDesitin-Info.plist */,
+				D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */,
+				D5A6F24817B1692F00EAB24B /* AmikoDesitin-Prefix.pch */,
 				D5A6F24317B1692F00EAB24B /* InfoPlist.strings */,
 				D5A6F24617B1692F00EAB24B /* main.m */,
-				D5A6F24817B1692F00EAB24B /* AmikoDesitin-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -236,13 +320,20 @@
 		D5A6F26017B169B000EAB24B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */,
+				D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */,
+				D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */,
+				D52A0D6917ECC1D6003BF272 /* ComedDesitin-568h@2x.png */,
+				D52A0D6F17ECC243003BF272 /* ComedDesitin-Landscape~ipad.png */,
+				D52A0D7117ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png */,
+				D52A0D6B17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png */,
+				D52A0D6D17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png */,
 				D533DAA517B434B600199C38 /* Default.png */,
+				D533DAAB17B4351700199C38 /* Default@2x.png */,
+				D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */,
 				D565DA8817B7D8580002E2CF /* Default-Landscape~ipad.png */,
+				D533DAA717B434EA00199C38 /* Default-Landscape@2x~ipad.png */,
 				D565DA8617B7D8370002E2CF /* Default-Portrait~ipad.png */,
 				D533DAA917B434FF00199C38 /* Default-Portrait@2x~ipad.png */,
-				D533DAA717B434EA00199C38 /* Default-Landscape@2x~ipad.png */,
-				D533DAAB17B4351700199C38 /* Default@2x.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -260,12 +351,12 @@
 				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
 				D5A6F29817B16C3A00EAB24B /* MLSecondViewController.h */,
 				D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */,
+				D5A6F29117B16C1D00EAB24B /* MLMenuViewController.h */,
+				D5A6F29217B16C1D00EAB24B /* MLMenuViewController.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
 				D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */,
 				D5A6F28F17B16C1D00EAB24B /* MLMedication.h */,
 				D5A6F29017B16C1D00EAB24B /* MLMedication.m */,
-				D5A6F29117B16C1D00EAB24B /* MLMenuViewController.h */,
-				D5A6F29217B16C1D00EAB24B /* MLMenuViewController.m */,
 				D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */,
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
 				D5A6F28917B16C0200EAB24B /* MLDataStore.h */,
@@ -287,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				D53E026D17C7BE6900CC29E3 /* amiko_db_full_idx_de.db */,
+				D5F6BB2317E7868400DCBD16 /* amiko_db_full_idx_fr.db */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -294,6 +386,7 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */,
 				D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */,
 				D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */,
 				D533DAA217B2D2AE00199C38 /* desitin_icon_32x32.png */,
@@ -324,6 +417,28 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		D5F6BBAB17EB8BC200DCBD16 /* LaunchImages */ = {
+			isa = PBXGroup;
+			children = (
+				D565DA8A17B7EA9C0002E2CF /* desitin_launch_320x480.png */,
+				D565DA8B17B7EA9C0002E2CF /* desitin_launch_640x960.png */,
+				D565DA8C17B7EA9C0002E2CF /* desitin_launch_640x1136.png */,
+				D565DA8D17B7EA9C0002E2CF /* desitin_launch_768x1004.png */,
+				D565DA8E17B7EA9C0002E2CF /* desitin_launch_1024x768.png */,
+				D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */,
+				D565DA9017B7EA9C0002E2CF /* desitin_launch_2048x1496.png */,
+				D5F6BB9D17EB816600DCBD16 /* comed_des_launch_320x480.png */,
+				D5F6BB9E17EB816700DCBD16 /* comed_des_launch_640x960.png */,
+				D5F6BB9F17EB816700DCBD16 /* comed_des_launch_640x1136.png */,
+				D52A0D7317ECC31A003BF272 /* comed_des_launch_1024x748.png */,
+				D5F6BBA917EB81C500DCBD16 /* comed_des_launch_1024x768.png */,
+				D5F6BBA017EB816800DCBD16 /* comed_des_launch_768x1004.png */,
+				D5F6BBA117EB816800DCBD16 /* comed_des_launch_1536x2008.png */,
+				D5F6BBA217EB816900DCBD16 /* comed_des_launch_2048x1496.png */,
+			);
+			name = LaunchImages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -342,6 +457,23 @@
 			name = AmiKoDesitin;
 			productName = AmikoDesitin;
 			productReference = D5A6F23717B1692F00EAB24B /* AmiKoDesitin.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D5F6BB4E17E8C87500DCBD16 /* CoMedDesitin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5F6BB9117E8C87500DCBD16 /* Build configuration list for PBXNativeTarget "CoMedDesitin" */;
+			buildPhases = (
+				D5F6BB4F17E8C87500DCBD16 /* Sources */,
+				D5F6BB5E17E8C87500DCBD16 /* Frameworks */,
+				D5F6BB6317E8C87500DCBD16 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoMedDesitin;
+			productName = AmikoDesitin;
+			productReference = D5F6BB9417E8C87500DCBD16 /* CoMedDesitin.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -367,6 +499,7 @@
 			projectRoot = "";
 			targets = (
 				D5A6F23617B1692F00EAB24B /* AmiKoDesitin */,
+				D5F6BB4E17E8C87500DCBD16 /* CoMedDesitin */,
 			);
 		};
 /* End PBXProject section */
@@ -410,15 +543,62 @@
 				D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */,
 				D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */,
 				D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */,
-				D565DA9117B7EA9D0002E2CF /* desitin_launch_320x480.png in Resources */,
-				D565DA9217B7EA9D0002E2CF /* desitin_launch_640x960.png in Resources */,
-				D565DA9317B7EA9D0002E2CF /* desitin_launch_640x1136.png in Resources */,
-				D565DA9417B7EA9D0002E2CF /* desitin_launch_768x1004.png in Resources */,
-				D565DA9517B7EA9D0002E2CF /* desitin_launch_1024x768.png in Resources */,
-				D565DA9617B7EA9D0002E2CF /* desitin_launch_1536x2008.png in Resources */,
-				D565DA9717B7EA9D0002E2CF /* desitin_launch_2048x1496.png in Resources */,
 				D53E026E17C7BE6900CC29E3 /* amiko_db_full_idx_de.db in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
+				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
+				D5F6BB9B17E8CC2500DCBD16 /* AmikoDesitin-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5F6BB6317E8C87500DCBD16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5F6BB9C17E8CD8B00DCBD16 /* CoMedDesitin-Info.plist in Resources */,
+				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
+				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
+				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,
+				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
+				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
+				D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */,
+				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
+				D5F6BB6B17E8C87500DCBD16 /* 10-medical.png in Resources */,
+				D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */,
+				D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */,
+				D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */,
+				D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */,
+				D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */,
+				D5F6BB7117E8C87500DCBD16 /* MLMenuViewController.xib in Resources */,
+				D5F6BB7217E8C87500DCBD16 /* MLMenuViewController~iphone.xib in Resources */,
+				D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */,
+				D5F6BB7417E8C87500DCBD16 /* 28-star@2x.png in Resources */,
+				D5F6BB7517E8C87500DCBD16 /* app_icon_57x57.png in Resources */,
+				D5F6BB7617E8C87500DCBD16 /* app_icon_72x72.png in Resources */,
+				D5F6BB7717E8C87500DCBD16 /* app_icon_144x144.png in Resources */,
+				D5F6BB7817E8C87500DCBD16 /* app_icon_114x114.png in Resources */,
+				D5F6BB7917E8C87500DCBD16 /* app_icon_32x32.png in Resources */,
+				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
+				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
+				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
+				D5F6BB7D17E8C87500DCBD16 /* Default.png in Resources */,
+				D5F6BB7E17E8C87500DCBD16 /* Default-Landscape@2x~ipad.png in Resources */,
+				D5F6BB7F17E8C87500DCBD16 /* Default-Portrait@2x~ipad.png in Resources */,
+				D5F6BB8017E8C87500DCBD16 /* Default@2x.png in Resources */,
+				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
+				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
+				D5F6BB8317E8C87500DCBD16 /* Default-568h@2x.png in Resources */,
+				D5F6BB8417E8C87500DCBD16 /* Default-Portrait~ipad.png in Resources */,
+				D5F6BB8517E8C87500DCBD16 /* Default-Landscape~ipad.png in Resources */,
+				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
+				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
+				D5F6BB9017E8C87500DCBD16 /* amiko_db_full_idx_fr.db in Resources */,
+				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
+				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
+				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
+				D52A0D6C17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png in Resources */,
+				D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */,
+				D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */,
+				D52A0D7217ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +623,27 @@
 				D5A6F2A217B16C4B00EAB24B /* MLSQLiteDatabase.m in Sources */,
 				D5A6F2A317B16C4B00EAB24B /* MLViewController.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5F6BB4F17E8C87500DCBD16 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
+				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
+				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
+				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
+				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
+				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
+				D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */,
+				D5F6BB5717E8C87500DCBD16 /* MLMenuViewController.m in Sources */,
+				D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */,
+				D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */,
+				D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */,
+				D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */,
+				D5F6BB5C17E8C87500DCBD16 /* MLViewController.m in Sources */,
+				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +688,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -511,6 +713,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -523,6 +726,11 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					AMIKO_DESITIN,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -534,8 +742,37 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = AMIKO_DESITIN;
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		D5F6BB9217E8C87500DCBD16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					COMED_DESITIN,
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
+				PRODUCT_NAME = CoMedDesitin;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		D5F6BB9317E8C87500DCBD16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = COMED_DESITIN;
+				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
+				PRODUCT_NAME = CoMedDesitin;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -557,6 +794,15 @@
 			buildConfigurations = (
 				D5A6F25E17B1692F00EAB24B /* Debug */,
 				D5A6F25F17B1692F00EAB24B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5F6BB9117E8C87500DCBD16 /* Build configuration list for PBXNativeTarget "CoMedDesitin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5F6BB9217E8C87500DCBD16 /* Debug */,
+				D5F6BB9317E8C87500DCBD16 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
