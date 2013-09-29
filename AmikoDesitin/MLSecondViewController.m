@@ -134,6 +134,11 @@
             //
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
         }
+        // Note: iOS7
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            searchField.translucent = NO;
+        }
     }
 }
 
@@ -180,6 +185,15 @@
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
             self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;            
         }
+    }
+    
+    // Note: iOS7
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        
+        searchField.tintColor = [UIColor blueColor]; // Text color
+        searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+        searchField.translucent = NO;
     }
 }
 

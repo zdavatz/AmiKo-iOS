@@ -291,6 +291,11 @@ static NSInteger mCurrentSearchState = kTitle;
         SHORT_TOOLBAR_THERAPY = @"Thér";
     }
     
+    // Note: iOS7
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    
     return self;
 }
 
@@ -420,7 +425,7 @@ static NSInteger mCurrentSearchState = kTitle;
 }
 
 - (void) hideTabBarWithAnimation: (BOOL)withAnimation
-{
+{    
     if (withAnimation == NO) {
         [myTabBar setHidden:YES];
     } else {
@@ -432,6 +437,15 @@ static NSInteger mCurrentSearchState = kTitle;
         
         [UIView commitAnimations];
     }
+}
+
+- (void) setToolbarItemsFontSize
+{
+    UIFont *tabBarFont = [UIFont systemFontOfSize:14];
+    NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         tabBarFont, UITextAttributeFont, nil];
+    for (int i=0; i<11; i+=2)
+        [[myToolBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -460,7 +474,12 @@ static NSInteger mCurrentSearchState = kTitle;
         }
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {            
+        
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            [self setToolbarItemsFontSize];
+        }
+        
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
             screenWidth = self.view.bounds.size.width;
             screenHeight = self.view.bounds.size.height;
             // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44);
@@ -471,6 +490,7 @@ static NSInteger mCurrentSearchState = kTitle;
                 self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
                 self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Landscape_iPhone_Retina;
             }
+            
             [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
             [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
@@ -532,7 +552,7 @@ static NSInteger mCurrentSearchState = kTitle;
     
     screenWidth = self.view.bounds.size.width;
     screenHeight = self.view.bounds.size.height;
-    
+        
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
@@ -548,6 +568,11 @@ static NSInteger mCurrentSearchState = kTitle;
         [[[myToolBar items] objectAtIndex:5] setTitle:FULL_TOOLBAR_THERAPY];
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            [self setToolbarItemsFontSize];
+        }
+                
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
  
             screenHeight = self.view.bounds.size.width;
@@ -662,11 +687,26 @@ static NSInteger mCurrentSearchState = kTitle;
     UIBarButtonItem *app_icon = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
 
     self.navigationItem.leftBarButtonItem = app_icon;
+
+    // Background color of navigation bar
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        // self.navigationController.navigationBar.backgroundColor = [UIColor greenColor];
+    }
     
+    // Add search bar as title view to navigation bar
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        // Add search bar as title view to navigation bar
-        searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-        searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        // Note: iOS7
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            searchField.tintColor = [UIColor blueColor]; // Text color
+            searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            searchField.translucent = NO;
+        } else {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        }
+        
         UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
         // searchBarView.autoresizingMask = 0;
         searchField.delegate = self;
@@ -745,9 +785,14 @@ static NSInteger mCurrentSearchState = kTitle;
     }
     
     secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:@"About" andParam:1];
-    UIFont *font = [UIFont fontWithName:@"Arial" size:15];
-    secondView.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        UIFont *font = [UIFont fontWithName:@"Arial" size:14];
+        secondView.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
+    } else {
+        UIFont *font = [UIFont fontWithName:@"Arial" size:15];
+        secondView.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
+    }
     // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
     [rightViewController addObserver:secondView
                           forKeyPath:@"javaScript"
@@ -1347,7 +1392,8 @@ static NSInteger mCurrentSearchState = kTitle;
     MLSimpleTableCell *cell = (MLSimpleTableCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
    
     if (cell == nil) {
-        cell = [[MLSimpleTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
+        cell = [[MLSimpleTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                        reuseIdentifier:simpleTableIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
     
@@ -1487,21 +1533,55 @@ static NSInteger mCurrentSearchState = kTitle;
     
     float frameWidth = self.myTableView.frame.size.width;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
-        subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)];
-        retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25f;
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (frameWidth>500) {
-            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.5*PADDING_IPHONE, CGFLOAT_MAX)];
-        } else {
-            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)];
+    // Could be done better...
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
+            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)];
+            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25f;
+        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            if (frameWidth>500) {
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
+            } else {
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.6*PADDING_IPHONE, CGFLOAT_MAX)];
+            }
+            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.6f;
         }
-        retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4f;
+    } else {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
+            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)];
+            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25f;
+        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            if (frameWidth>500) {
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.5*PADDING_IPHONE, CGFLOAT_MAX)];
+            } else {
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)];
+            }
+            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4f;
+        }
     }
     return retVal;
+}
+
+- (CGSize) text:(NSString*)text sizeWithFont:(UIFont*)font constrainedToSize:(CGSize)size
+{
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+        
+        CGRect frame = [text boundingRectWithSize:size
+                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                       attributes:attributesDictionary
+                                          context:nil];
+        
+        return frame.size;
+    } else {
+        return [text sizeWithFont:font constrainedToSize:size];
+    }
 }
 
 - (void) didReceiveMemoryWarning
@@ -1510,14 +1590,12 @@ static NSInteger mCurrentSearchState = kTitle;
     // Dispose of any resources that can be recreated.
 }
 
-void report_memory(void) {
+void report_memory(void)
+{
     struct task_basic_info info;
     mach_msg_type_number_t size = sizeof(info);
-    kern_return_t kerr = task_info(mach_task_self(),
-                                   TASK_BASIC_INFO,
-                                   (task_info_t)&info,
-                                   &size);
-    if( kerr == KERN_SUCCESS ) {
+    kern_return_t kerr = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&info, &size);
+    if (kerr == KERN_SUCCESS) {
         NSLog(@"Memory in use (in bytes): %u", info.resident_size);
     } else {
         NSLog(@"Error with task_info(): %s", mach_error_string(kerr));

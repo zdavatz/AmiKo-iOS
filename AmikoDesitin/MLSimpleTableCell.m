@@ -43,7 +43,12 @@
     // - change x position
     // imageViewFrame.origin.x = contentViewBound.size.width - imageViewFrame.size.width;
     // - assign the new frame
-    self.imageView.frame = CGRectMake(12, 4, 22, 22);//imageViewFrame;
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        self.imageView.frame = CGRectMake(12, 4, 22, 22);
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    }
+    else
+        self.imageView.frame = CGRectMake(12, 4, 22, 22);//imageViewFrame;
 }
 
 #pragma mark - Property methods

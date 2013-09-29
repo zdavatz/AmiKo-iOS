@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D463A28D-2021-4C2D-8745-BB1A293760A6</string>
+	<key>IDESourceControlProjectName</key>
+	<string>AmikoDesitin</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>BB767D72-21AF-43E4-892E-85D86CC97BE5</key>
+		<string>https://github.com/zdavatz/AmiKo-iPhone.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>AmikoDesitin.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>BB767D72-21AF-43E4-892E-85D86CC97BE5</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/zdavatz/AmiKo-iPhone.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>BB767D72-21AF-43E4-892E-85D86CC97BE5</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BB767D72-21AF-43E4-892E-85D86CC97BE5</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AmikoDesitin</string>
+		</dict>
+	</array>
+</dict>
+</plist>

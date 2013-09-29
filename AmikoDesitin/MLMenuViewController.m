@@ -68,6 +68,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
         }
     }
     
+    
     return self;
 }
 
@@ -76,6 +77,11 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     [super viewDidLoad];
 
     self.title = NSLocalizedString(@"Kapitel", nil);
+    
+    // Note: iOS7
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
     // NSLog(@"# %s", __FUNCTION__);
     
@@ -126,7 +132,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
         [subLabel setFont:[UIFont systemFontOfSize:14]];
     }
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)]; 
+        subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)];
         [subLabel setFont:[UIFont systemFontOfSize:12]];
     }
     subLabel.textAlignment = NSTextAlignmentRight;
