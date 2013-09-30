@@ -116,9 +116,10 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         self.window.clipsToBounds =YES;
         // self.window.frame = CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height-20);
         
-        // [self.window setTintColor:[UIColor blueColor]];
+        [self.window setTintColor:[UIColor orangeColor]];
         
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName,
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIFont systemFontOfSize:14], NSFontAttributeName,
                                     [UIColor whiteColor], NSForegroundColorAttributeName, nil];
         
         [[UINavigationBar appearance] setTitleTextAttributes:attributes];

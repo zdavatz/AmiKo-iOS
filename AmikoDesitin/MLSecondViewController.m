@@ -103,6 +103,10 @@
         } else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            searchField.barTintColor = [UIColor lightGrayColor];
+            searchField.translucent = NO;
+        }
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
@@ -134,7 +138,6 @@
             //
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
         }
-        // Note: iOS7
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             searchField.translucent = NO;
@@ -153,6 +156,11 @@
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
         } else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
+        }
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+            searchField.barTintColor = [UIColor lightGrayColor];
+            searchField.translucent = NO;
         }
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -185,15 +193,11 @@
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
             self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;            
         }
-    }
-    
-    // Note: iOS7
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-        
-        // searchField.tintColor = [UIColor blueColor]; // Text color
-        searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-        searchField.translucent = NO;
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+            searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            searchField.translucent = NO;
+        }
     }
 }
 
@@ -238,6 +242,12 @@
         self.searchField.delegate = self;
         [searchBarView addSubview:self.searchField];
         self.navigationItem.titleView = searchBarView;
+    }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            searchField.barTintColor = [UIColor lightGrayColor];
+            searchField.translucent = NO;
+        }
     }
     
     self.webView.delegate = self;

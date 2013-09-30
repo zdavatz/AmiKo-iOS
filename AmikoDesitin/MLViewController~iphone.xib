@@ -62,6 +62,7 @@
                             </connections>
                         </barButtonItem>
                     </items>
+                    <color key="tintColor" red="0.94901960784313721" green="0.43608727986784118" blue="0.09373670883791034" alpha="1" colorSpace="calibratedRGB"/>
                 </toolbar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="41">
                     <rect key="frame" x="0.0" y="44" width="320" height="411"/>

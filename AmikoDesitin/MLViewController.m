@@ -416,7 +416,7 @@ static NSInteger mCurrentSearchState = kTitle;
     } else {
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDelegate:nil];
-        [UIView setAnimationDuration:0.75];
+        [UIView setAnimationDuration:1.25];
         
         if (IOS_NEWER_OR_EQUAL_TO_7)
             [self setTabbarItemFont];
@@ -433,7 +433,7 @@ static NSInteger mCurrentSearchState = kTitle;
     } else {
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDelegate:nil];
-        [UIView setAnimationDuration:0.75];
+        [UIView setAnimationDuration:0.25];
         
         [myTabBar setAlpha:0.0];
         
@@ -534,16 +534,16 @@ static NSInteger mCurrentSearchState = kTitle;
             [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
             [[[myToolBar items] objectAtIndex:10] setTitle:SHORT_TOOLBAR_THERAPY];
             
-            // Display status and navigation bar
+            // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
             if (IOS_NEWER_OR_EQUAL_TO_7)
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
             
-            // Displays tab bar
+            // Displays tab bar (bottom)
             [self showTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 49;
-        }
+        }   
     }
 }
 
@@ -719,7 +719,7 @@ static NSInteger mCurrentSearchState = kTitle;
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            searchField.tintColor = [UIColor blueColor]; // Text color
+            // searchField.tintColor = [UIColor blueColor]; // Text color
             searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             searchField.translucent = NO;
         } else {
@@ -733,7 +733,13 @@ static NSInteger mCurrentSearchState = kTitle;
         [searchBarView addSubview:searchField];
         self.navigationItem.titleView = searchBarView;
     }
-    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            searchField.barTintColor = [UIColor lightGrayColor];
+            searchField.translucent = NO;
+        }
+    }
+        
     mBarButtonItemName = [[NSMutableString alloc] initWithString:FULL_TOOLBAR_TITLE];
     
     // Add long press gesture recognizer to tableview
