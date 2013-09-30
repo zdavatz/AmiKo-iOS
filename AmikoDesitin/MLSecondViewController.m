@@ -191,7 +191,7 @@
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
         
-        searchField.tintColor = [UIColor blueColor]; // Text color
+        // searchField.tintColor = [UIColor blueColor]; // Text color
         searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
         searchField.translucent = NO;
     }

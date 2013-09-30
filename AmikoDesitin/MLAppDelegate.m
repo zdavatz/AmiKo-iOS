@@ -123,7 +123,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         
         [[UINavigationBar appearance] setTitleTextAttributes:attributes];
         
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }
     
     [self.window makeKeyAndVisible];

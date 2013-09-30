@@ -418,6 +418,8 @@ static NSInteger mCurrentSearchState = kTitle;
         [UIView setAnimationDelegate:nil];
         [UIView setAnimationDuration:0.75];
         
+        if (IOS_NEWER_OR_EQUAL_TO_7)
+            [self setTabbarItemFont];
         [myTabBar setAlpha:1.0];
         
         [UIView commitAnimations];
@@ -437,6 +439,16 @@ static NSInteger mCurrentSearchState = kTitle;
         
         [UIView commitAnimations];
     }
+}
+
+- (void) setTabbarItemFont
+{
+    UIFont *tabBarFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSValue valueWithUIOffset:UIOffsetMake(0,0)], UITextAttributeTextShadowOffset,
+                                         tabBarFont, UITextAttributeFont, nil];
+    for (int i=0; i<2; i++)
+        [[myTabBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
 - (void) setToolbarItemsFontSize
@@ -498,8 +510,10 @@ static NSInteger mCurrentSearchState = kTitle;
             [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
             [[[myToolBar items] objectAtIndex:10] setTitle:FULL_TOOLBAR_THERAPY];
             
-            // Hides navigation bar
+            // Hide status bar and navigation bar
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
+            if (IOS_NEWER_OR_EQUAL_TO_7)
+                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
             
             // Hides tab bar
             [self hideTabBarWithAnimation:YES];
@@ -520,8 +534,10 @@ static NSInteger mCurrentSearchState = kTitle;
             [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
             [[[myToolBar items] objectAtIndex:10] setTitle:SHORT_TOOLBAR_THERAPY];
             
-            // Displays navigation bar
+            // Display status and navigation bar
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
+            if (IOS_NEWER_OR_EQUAL_TO_7)
+                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
             
             // Displays tab bar
             [self showTabBarWithAnimation:YES];
@@ -642,8 +658,12 @@ static NSInteger mCurrentSearchState = kTitle;
             [self hideTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 0;
+            
+            // Hides status bar
+            if (IOS_NEWER_OR_EQUAL_TO_7)
+                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
-        } else {            
+        } else {
             // Hides tab bar
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
             
