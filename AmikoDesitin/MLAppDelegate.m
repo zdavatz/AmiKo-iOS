@@ -116,7 +116,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         self.window.clipsToBounds =YES;
         // self.window.frame = CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height-20);
         
-        [self.window setTintColor:[UIColor orangeColor]];
+        // [self.window setTintColor:[UIColor orangeColor]];
+        [self.window setTintColor:MAIN_TINT_COLOR];
         
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [UIFont systemFontOfSize:14], NSFontAttributeName,

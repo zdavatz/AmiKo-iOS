@@ -210,12 +210,20 @@ static NSInteger mCurrentSearchState = kTitle;
             mCurrentSearchState = kTherapy;
         }
     }
-    
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        for (UIBarButtonItem *b in [myToolBar items]) {
-            [b setTintColor:nil];   // Default color
-            if (b==btn)
-                [b setTintColor:[UIColor lightGrayColor]];
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            for (UIBarButtonItem *b in [myToolBar items]) {
+                [b setTintColor:[UIColor lightGrayColor]];   // Default color
+                if (b==btn)
+                    [b setTintColor:MAIN_TINT_COLOR];
+            }
+        } else {
+            for (UIBarButtonItem *b in [myToolBar items]) {
+                [b setTintColor:nil];   // Default color
+                if (b==btn)
+                    [b setTintColor:[UIColor lightGrayColor]];
+            }
         }
     } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         for (UIBarButtonItem *b in [myToolBar items]) {
@@ -337,10 +345,13 @@ static NSInteger mCurrentSearchState = kTitle;
 - (void) resetBarButtonItems
 {
     for (UIBarButtonItem *b in [myToolBar items]) {
-        [b setTintColor:nil];   // Default color
+       [b setTintColor:nil];   // Default color
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
+        if (IOS_NEWER_OR_EQUAL_TO_7)
+            [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
+        else
+            [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
     else
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor darkGrayColor]];
     [searchField setText:@""];
@@ -354,8 +365,12 @@ static NSInteger mCurrentSearchState = kTitle;
     for (UIBarButtonItem *b in [myToolBar items]) {
         [b setTintColor:nil];   // Default color
     }
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        [[[myToolBar items] objectAtIndex:searchState] setTintColor:[UIColor lightGrayColor]];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        if (IOS_NEWER_OR_EQUAL_TO_7)
+            [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
+        else
+            [[[myToolBar items] objectAtIndex:searchState] setTintColor:[UIColor lightGrayColor]];
+    }
     else
         [[[myToolBar items] objectAtIndex:searchState/2] setTintColor:[UIColor darkGrayColor]];
     [searchField setText:@""];

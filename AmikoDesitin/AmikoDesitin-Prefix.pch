@@ -14,3 +14,6 @@
 #endif
 
 #define IOS_NEWER_OR_EQUAL_TO_7 ( [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0 )
+#define DESITIN_TINT_COLOR ( [UIColor colorWithRed:242/255.0 green:198/255.0 blue:59/255.0 alpha:1.0] )
+#define YWESEE_TINT_COLOR ( [UIColor orangeColor] )
+#define MAIN_TINT_COLOR DESITIN_TINT_COLOR
