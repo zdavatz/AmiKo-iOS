@@ -211,25 +211,17 @@ static NSInteger mCurrentSearchState = kTitle;
         }
     }
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
-            for (UIBarButtonItem *b in [myToolBar items]) {
-                [b setTintColor:[UIColor lightGrayColor]];   // Default color
-                if (b==btn)
-                    [b setTintColor:MAIN_TINT_COLOR];
-            }
-        } else {
-            for (UIBarButtonItem *b in [myToolBar items]) {
-                [b setTintColor:nil];   // Default color
-                if (b==btn)
-                    [b setTintColor:[UIColor lightGrayColor]];
-            }
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        for (UIBarButtonItem *b in [myToolBar items]) {
+            [b setTintColor:[UIColor lightGrayColor]];   // Default color
+            if (b==btn)
+                [b setTintColor:MAIN_TINT_COLOR];
         }
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    } else {
         for (UIBarButtonItem *b in [myToolBar items]) {
             [b setTintColor:nil];   // Default color
             if (b==btn)
-                [b setTintColor:[UIColor darkGrayColor]];
+                [b setTintColor:[UIColor lightGrayColor]];
         }
     }
 
@@ -306,7 +298,6 @@ static NSInteger mCurrentSearchState = kTitle;
     
     return self;
 }
-
 - (NSString *) appOwner
 {
     if ([APP_NAME isEqualToString:@"AmiKoDesitin"]
@@ -344,16 +335,18 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (void) resetBarButtonItems
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    
     for (UIBarButtonItem *b in [myToolBar items]) {
-       [b setTintColor:nil];   // Default color
+       [b setTintColor:[UIColor lightGrayColor]];   // Default color
     }
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        if (IOS_NEWER_OR_EQUAL_TO_7)
-            [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
-        else
-            [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
+    if (IOS_NEWER_OR_EQUAL_TO_7)
+        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
     else
-        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor darkGrayColor]];
+        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
+
     [searchField setText:@""];
     [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
     mCurrentSearchState = kTitle;
@@ -363,16 +356,16 @@ static NSInteger mCurrentSearchState = kTitle;
 {
     // kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kSubstances=8, kTherapy=10    
     for (UIBarButtonItem *b in [myToolBar items]) {
-        [b setTintColor:nil];   // Default color
+        [b setTintColor:[UIColor lightGrayColor]];   // Default color
     }
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (IOS_NEWER_OR_EQUAL_TO_7)
-            [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
-        else
-            [[[myToolBar items] objectAtIndex:searchState] setTintColor:[UIColor lightGrayColor]];
-    }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        searchState /= 2;
+    
+    if (IOS_NEWER_OR_EQUAL_TO_7)
+        [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
     else
-        [[[myToolBar items] objectAtIndex:searchState/2] setTintColor:[UIColor darkGrayColor]];
+        [[[myToolBar items] objectAtIndex:searchState] setTintColor:[UIColor lightGrayColor]];
+
     [searchField setText:@""];
     switch(searchState)
     {
@@ -551,9 +544,9 @@ static NSInteger mCurrentSearchState = kTitle;
             
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-            if (IOS_NEWER_OR_EQUAL_TO_7)
+            if (IOS_NEWER_OR_EQUAL_TO_7) {
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-            
+            }
             // Displays tab bar (bottom)
             [self showTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
@@ -725,7 +718,11 @@ static NSInteger mCurrentSearchState = kTitle;
 
     // Background color of navigation bar
     if (IOS_NEWER_OR_EQUAL_TO_7) {
-        // self.navigationController.navigationBar.backgroundColor = [UIColor greenColor];
+        self.navigationController.navigationBar.backgroundColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
+        [myTabBar setTintColor:MAIN_TINT_COLOR];
+        [myTabBar setTranslucent:YES];
+        // self.navigationController.navigationBar.translucent = NO;
+        // self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
     }
     
     // Add search bar as title view to navigation bar
@@ -1578,17 +1575,17 @@ static NSInteger mCurrentSearchState = kTitle;
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
-            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)];
+            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(frameWidth - 1.6*PADDING_IPAD, CGFLOAT_MAX)];
             retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25f;
         } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             if (frameWidth>500) {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)];
             } else {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.6*PADDING_IPHONE, CGFLOAT_MAX)];
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)];
             }
-            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.6f;
+            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4f;
         }
     } else {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

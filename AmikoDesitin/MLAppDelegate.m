@@ -112,19 +112,18 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     // Note: iOS7 - sets the global TINT color!!
     if (IOS_NEWER_OR_EQUAL_TO_7) {
-        [application setStatusBarStyle:UIStatusBarStyleLightContent];
+        [application setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
         self.window.clipsToBounds =YES;
         // self.window.frame = CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height-20);
         
-        // [self.window setTintColor:[UIColor orangeColor]];
+        // Text and tabbar button colors
         [self.window setTintColor:MAIN_TINT_COLOR];
         
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [UIFont systemFontOfSize:14], NSFontAttributeName,
                                     [UIColor whiteColor], NSForegroundColorAttributeName, nil];
-        
         [[UINavigationBar appearance] setTitleTextAttributes:attributes];
-        
+     
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }
     

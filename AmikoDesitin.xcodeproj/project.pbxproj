@@ -505,6 +505,9 @@
 					D5A6F23617B1692F00EAB24B = {
 						DevelopmentTeam = 4B37356EGR;
 					};
+					D5F6BB4E17E8C87500DCBD16 = {
+						DevelopmentTeam = 4B37356EGR;
+					};
 				};
 			};
 			buildConfigurationList = D5A6F23217B1692F00EAB24B /* Build configuration list for PBXProject "AmikoDesitin" */;
@@ -783,6 +786,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-CoMedDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -801,6 +805,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-CoMedDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = COMED_DESITIN;
