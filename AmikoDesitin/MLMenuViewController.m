@@ -68,7 +68,6 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
         }
     }
     
-    
     return self;
 }
 

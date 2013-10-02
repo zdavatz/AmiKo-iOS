@@ -87,7 +87,7 @@
                         <tabBarItem tag="1" systemItem="favorites" id="466"/>
                     </items>
                     <color key="tintColor" red="0.94901960780000005" green="0.77465540129999999" blue="0.2309191005" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="barTintColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    <color key="barTintColor" red="0.95714530109489049" green="0.95777258211678828" blue="0.95680314781021902" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="473"/>
                     </connections>
