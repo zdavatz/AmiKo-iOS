@@ -63,7 +63,7 @@
 
     mNumRevealButtons = numRevealButtons;
     mTitle = title;
-    
+
     return self;
 }
 
@@ -72,7 +72,7 @@
     self = [super init];
 
     htmlStr = [[NSString alloc] initWithString:html];
-    
+
     return self;
 }
 

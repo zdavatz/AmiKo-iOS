@@ -68,7 +68,14 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
         }
     }
     
+    // [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
     return self;
+}
+
+- (void) dealloc
+{
+    //
 }
 
 - (void) viewDidLoad
@@ -80,7 +87,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     // Note: iOS7
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
-        // myMenuView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
+        myMenuView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }
     
     // NSLog(@"# %s", __FUNCTION__);
@@ -98,6 +105,11 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL) prefersStatusBarHidden
+{
+    return YES;
+}
+
 #pragma mark - Table view data source
 
 /** UITableViewDataSource
@@ -105,7 +117,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
 - (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection: (NSInteger)section
 {
     // Return the number of rows in the section.
-    return ([mSectionTitles count]-1);
+    return ([mSectionTitles count]);
 }
 
 #pragma mark - Table view delegate
@@ -127,7 +139,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
         /** Use subview */
         UILabel *subLabel = nil;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,44)];
+            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,36)];
             [subLabel setFont:[UIFont systemFontOfSize:14]];
         }
         else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {

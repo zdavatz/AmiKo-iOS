@@ -26,7 +26,6 @@
 		D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */; };
 		D53E026E17C7BE6900CC29E3 /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D53E026D17C7BE6900CC29E3 /* amiko_db_full_idx_de.db */; };
 		D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */ = {isa = PBXBuildFile; fileRef = D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */; };
-		D551D53717F16DE2000EC52A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
 		D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53817F22A58000EC52A /* desitin_icon_76x76.png */; };
 		D551D53C17F22A58000EC52A /* desitin_icon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53817F22A58000EC52A /* desitin_icon_76x76.png */; };
 		D551D53D17F22A58000EC52A /* desitin_icon_152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53917F22A58000EC52A /* desitin_icon_152x152.png */; };
@@ -75,6 +74,9 @@
 		D5A6F2AF17B16F3600EAB24B /* app_icon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */; };
 		D5A6F2B117B16FFD00EAB24B /* app_icon_32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */; };
 		D5A6F2B317B171C900EAB24B /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B217B171C900EAB24B /* MLViewController.xib */; };
+		D5B75BEC17FF53F5008ECDBB /* comed_des_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */; };
+		D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
+		D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
 		D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
 		D5F6BB5017E8C87500DCBD16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24617B1692F00EAB24B /* main.m */; };
 		D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */; };
@@ -216,6 +218,7 @@
 		D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_114x114.png; sourceTree = "<group>"; };
 		D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_32x32.png; sourceTree = "<group>"; };
 		D5A6F2B217B171C900EAB24B /* MLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLViewController.xib; sourceTree = "<group>"; };
+		D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_2048x1536.png; sourceTree = "<group>"; };
 		D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_fr.html; sourceTree = "<group>"; };
 		D5F6BB2317E7868400DCBD16 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
 		D5F6BB9417E8C87500DCBD16 /* CoMedDesitin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoMedDesitin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -451,6 +454,7 @@
 				D5F6BBA017EB816800DCBD16 /* comed_des_launch_768x1004.png */,
 				D5F6BBA117EB816800DCBD16 /* comed_des_launch_1536x2008.png */,
 				D5F6BBA217EB816900DCBD16 /* comed_des_launch_2048x1496.png */,
+				D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */,
 			);
 			name = LaunchImages;
 			sourceTree = "<group>";
@@ -536,13 +540,13 @@
 				D5A6F24517B1692F00EAB24B /* InfoPlist.strings in Resources */,
 				D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */,
 				D5A6F27017B16A7700EAB24B /* amiko_stylesheet.css in Resources */,
-				D551D53717F16DE2000EC52A /* Images.xcassets in Resources */,
 				D5A6F27617B16AA400EAB24B /* 28-star-gy.png in Resources */,
 				D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */,
 				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
+				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */,
 				D5A6F28417B16B6000EAB24B /* MLSecondViewController~iphone.xib in Resources */,
@@ -606,6 +610,7 @@
 				D5F6BB7617E8C87500DCBD16 /* app_icon_72x72.png in Resources */,
 				D5F6BB7717E8C87500DCBD16 /* app_icon_144x144.png in Resources */,
 				D5F6BB7817E8C87500DCBD16 /* app_icon_114x114.png in Resources */,
+				D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */,
 				D5F6BB7917E8C87500DCBD16 /* app_icon_32x32.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
@@ -616,6 +621,7 @@
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
 				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
 				D5F6BB9017E8C87500DCBD16 /* amiko_db_full_idx_fr.db in Resources */,
+				D5B75BEC17FF53F5008ECDBB /* comed_des_launch_2048x1536.png in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,

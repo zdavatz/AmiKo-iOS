@@ -22,6 +22,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
+      "filename" : "desitin_launch_768x1024.png",
       "scale" : "1x"
     },
     {
@@ -29,7 +30,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
-      "filename" : "Default-Landscape~ipad.png",
+      "filename" : "desitin_launch_1024x768.png",
       "scale" : "1x"
     },
     {
@@ -37,6 +38,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
+      "filename" : "desitin_launch_1536x2048.png",
       "scale" : "2x"
     },
     {
@@ -44,6 +46,7 @@
       "idiom" : "ipad",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
+      "filename" : "desitin_launch_2048x1536.png",
       "scale" : "2x"
     },
     {
@@ -79,7 +82,7 @@
       "orientation" : "landscape",
       "idiom" : "ipad",
       "extent" : "to-status-bar",
-      "filename" : "Default-Landscape~ipad-1.png",
+      "filename" : "desitin_launch_1024x748.png",
       "scale" : "1x"
     },
     {
