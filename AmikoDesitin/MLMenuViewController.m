@@ -80,6 +80,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     // Note: iOS7
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
+        // myMenuView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     }
     
     // NSLog(@"# %s", __FUNCTION__);
@@ -104,7 +105,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
 - (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection: (NSInteger)section
 {
     // Return the number of rows in the section.
-    return ([mSectionTitles count] - 1);
+    return ([mSectionTitles count]-1);
 }
 
 #pragma mark - Table view delegate
@@ -117,24 +118,30 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if (cell == nil) {
+    if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
                                       reuseIdentifier:cellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        // cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.textAlignment = NSTextAlignmentRight;
-    }
 
-    /** Use subview */
-    UILabel *subLabel = nil;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,44)];
-        [subLabel setFont:[UIFont systemFontOfSize:14]];
+        /** Use subview */
+        UILabel *subLabel = nil;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,44)];
+            [subLabel setFont:[UIFont systemFontOfSize:14]];
+        }
+        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)];
+            [subLabel setFont:[UIFont systemFontOfSize:12]];
+        }
+        subLabel.textAlignment = NSTextAlignmentRight;
+        
+        // subLabel.text = [mSectionTitles objectAtIndex:indexPath.row];
+        subLabel.tag = 123; // Constant which uniquely defines the label
+        [cell.contentView addSubview:subLabel];
     }
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)];
-        [subLabel setFont:[UIFont systemFontOfSize:12]];
-    }
-    subLabel.textAlignment = NSTextAlignmentRight;
+    
+    UILabel *label = (UILabel *)[cell.contentView viewWithTag:123];
     
     // Use short form if possible, i.e. more than 5 letters match!
     for (int i=0; i<20; i++) {
@@ -146,10 +153,8 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
             }
         }
     }
-    
-    subLabel.text = [mSectionTitles objectAtIndex:indexPath.row];
-    [cell.contentView addSubview:subLabel];
-    
+    label.text =[mSectionTitles objectAtIndex:indexPath.row];
+
     return cell;
 }
 

@@ -49,6 +49,4 @@
 - (IBAction) searchAction: (id)sender;
 - (IBAction) onToolBarButtonPressed: (id)sender;
 
-// - (void) updateTableView: (NSArray *)results;
-
 @end
