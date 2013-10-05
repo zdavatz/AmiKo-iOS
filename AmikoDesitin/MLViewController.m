@@ -705,6 +705,10 @@ static NSInteger mCurrentSearchState = kTitle;
     // Do any additional setup after loading the view, typically from a nib.
     
     self.title = NSLocalizedString(APP_NAME, nil);
+    // Sets color and font and whatever else of the navigation bar
+    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                          [UIColor lightGrayColor], UITextAttributeTextColor,
+                                                          nil]];
     
     // Add icon
     // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"28-star-ye.png"]];
@@ -721,6 +725,7 @@ static NSInteger mCurrentSearchState = kTitle;
         self.navigationController.navigationBar.backgroundColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
         [myTabBar setTintColor:MAIN_TINT_COLOR];
         [myTabBar setTranslucent:YES];
+
         // self.navigationController.navigationBar.translucent = NO;
         // self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
     }
@@ -1495,8 +1500,8 @@ static NSInteger mCurrentSearchState = kTitle;
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:gesture.view.tag inSection:0];
     NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
 
-    // Update TableView
-    [myTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    // Update TableView --> slow implementation?
+    [myTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationMiddle];// UITableViewRowAnimationNone];
 }
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath

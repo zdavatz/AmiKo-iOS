@@ -111,7 +111,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
             // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 32.0)];
+            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
             self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 32.0)];
             searchBarView.autoresizingMask = 0;
@@ -125,6 +125,9 @@
                 self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
                 self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
             }
+            // Hides status bar
+            if (IOS_NEWER_OR_EQUAL_TO_7)
+                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         }
         else {
             // Add search bar as title view to navigation bar
@@ -137,6 +140,9 @@
             self.navigationItem.titleView = searchBarView;
             //
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
+            // Shows status bar
+            if (IOS_NEWER_OR_EQUAL_TO_7)
+                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         }
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
@@ -179,6 +185,9 @@
             else {
                 self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
             }
+            // Hides status bar
+            if (IOS_NEWER_OR_EQUAL_TO_7)
+                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         }
         else {
             // Add search bar as title view to navigation bar

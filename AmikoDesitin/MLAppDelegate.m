@@ -112,7 +112,13 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     // Note: iOS7 - sets the global TINT color!!
     if (IOS_NEWER_OR_EQUAL_TO_7) {
-        [application setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+        [application setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];  // WHITE
+        // [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+        // [application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];    // BLACK
+        
+        // Changes background color of navigation bar!
+        // [[UINavigationBar appearance] setBarTintColor:MAIN_TINT_COLOR];
+                
         self.window.clipsToBounds =YES;
         // self.window.frame = CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height-20);
         
