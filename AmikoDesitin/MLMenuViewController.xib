@@ -17,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="36" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3">
-                    <rect key="frame" x="0.0" y="80" width="768" height="880"/>
+                    <rect key="frame" x="0.0" y="80" width="768" height="944"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -30,7 +30,7 @@
             <constraints>
                 <constraint firstItem="3" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="51"/>
                 <constraint firstItem="3" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="52"/>
-                <constraint firstAttribute="bottom" secondItem="3" secondAttribute="bottom" constant="64" id="DYF-nw-77T"/>
+                <constraint firstAttribute="bottom" secondItem="3" secondAttribute="bottom" id="DYF-nw-77T"/>
                 <constraint firstItem="3" firstAttribute="top" secondItem="1" secondAttribute="top" constant="80" id="VpZ-Pj-hYz"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

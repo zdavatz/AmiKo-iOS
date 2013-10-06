@@ -32,7 +32,7 @@
 
 static NSString *SectionTitle_DE[] = {@"Zusammensetzung", @"Galenische Form", @"Indikationen", @"Dosierung/Anwendung", @"Kontraindikationen", @"Vorsichtsmassnahmen", @"Interaktionen", @"Schwangerschaft", @"Fahrtüchtigkeit", @"Unerwünschte Wirk.", @"Überdosierung", @"Eig./Wirkung", @"Kinetik", @"Präklinik", @"Sonstige Hinweise", @"Zulassungsnummer", @"Packungen", @"Inhaberin", @"Stand der Information", nil};
 
-static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Indications", @"Posologie", @"Contre-indic.", @"Prècautions", @"Interactions", @"Grossesse/All.", @"Conduite", @"Effets indèsir.",	@"Surdosage", @"Propriètes/Effets", @"Cinètique", @"Prèclinique", @"Remarques", @"Prèsentation", @"Titulaire", @"Mise à jour"};
+static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Indications", @"Posologie", @"Contre-indications", @"Précautions", @"Interactions", @"Grossesse/All.", @"Conduite", @"Effets indèsir.", @"Surdosage", @"Propriètes/Effets", @"Cinètique", @"Prèclinique", @"Remarques", @"Prèsentation", @"Titulaire", @"Mise à jour"};
 
 
 @implementation MLMenuViewController
@@ -40,6 +40,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     // iVars
     NSMutableArray *mSectionTitles;
     NSMutableArray *mSectionIds;
+    NSString *mAppLanguage;
 }
 
 @synthesize myMenuView;
@@ -52,7 +53,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     return self;
 }
 
-- (id) initWithMenu: (NSArray *)sectionTitles andSectionIds: (NSArray *)sectionIds
+- (id) initWithMenu: (NSArray *)sectionTitles sectionIds: (NSArray *)sectionIds andLanguage:(NSString *)appLanguage
 {
     self = [super init];
     
@@ -66,6 +67,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
         for (NSString *identifier in sectionIds) {
             [mSectionIds addObject:identifier];
         }
+        mAppLanguage = appLanguage;
     }
     
     // [[UIApplication sharedApplication] setStatusBarHidden:YES];
@@ -156,12 +158,24 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galènique", @"Ind
     UILabel *label = (UILabel *)[cell.contentView viewWithTag:123];
     
     // Use short form if possible, i.e. more than 5 letters match!
-    for (int i=0; i<20; i++) {
-        NSString *originalString = mSectionTitles[indexPath.row];
-        NSString *compareString = SectionTitle_DE[i];
-        if (originalString!=nil && compareString!=nil) {
-            if ([originalString rangeOfString:compareString].location != NSNotFound) {
-                mSectionTitles[indexPath.row] = SectionTitle_DE[i];
+    if ([mAppLanguage isEqualToString:@"de"]) {
+        for (int i=0; i<20; i++) {
+            NSString *originalString = [mSectionTitles[indexPath.row] lowercaseString];
+            NSString *compareString = [SectionTitle_DE[i] lowercaseString];
+            if (originalString!=nil && compareString!=nil) {
+                if ([originalString rangeOfString:compareString].location != NSNotFound) {
+                    mSectionTitles[indexPath.row] = SectionTitle_DE[i];
+                }
+            }
+        }
+    } else if ([mAppLanguage isEqualToString:@"fr"]) {
+        for (int i=0; i<20; i++) {
+            NSString *originalString = [mSectionTitles[indexPath.row] lowercaseString];
+            NSString *compareString = [SectionTitle_FR[i] lowercaseString];
+            if (originalString!=nil && compareString!=nil) {
+                if ([originalString rangeOfString:compareString].location != NSNotFound) {
+                    mSectionTitles[indexPath.row] = SectionTitle_FR[i];
+                }
             }
         }
     }

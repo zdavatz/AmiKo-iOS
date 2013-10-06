@@ -1536,7 +1536,10 @@ static NSInteger mCurrentSearchState = kTitle;
         [secondView removeFromParentViewController];
         secondView = nil;
     }
-    secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:FACHINFO_STRING andParam:2];
+    secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
+                                                          bundle:nil
+                                                           title:FACHINFO_STRING
+                                                        andParam:2];
     secondView.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, med.contentStr];
     
     // Extract section ids
@@ -1548,7 +1551,9 @@ static NSInteger mCurrentSearchState = kTitle;
         [rightViewController removeFromParentViewController];
         rightViewController = nil;
     }
-    rightViewController = [[MLMenuViewController alloc] initWithMenu:listofSectionTitles andSectionIds:listofSectionIds];
+    rightViewController = [[MLMenuViewController alloc] initWithMenu:listofSectionTitles
+                                                          sectionIds:listofSectionIds
+                                                         andLanguage:[self appLanguage]];
     
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     revealController = self.revealViewController;

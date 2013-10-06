@@ -32,6 +32,6 @@
 @property (nonatomic, copy) NSString *javaScript;
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withMenu:(NSArray *)sectionTitles;
-- (id) initWithMenu:(NSArray *)sectionTitles andSectionIds:(NSArray *)sectionIds;
+- (id) initWithMenu:(NSArray *)sectionTitles sectionIds:(NSArray *)sectionIds andLanguage:(NSString *)appLanguage;
 
 @end
