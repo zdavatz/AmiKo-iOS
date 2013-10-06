@@ -1478,8 +1478,19 @@ static NSInteger mCurrentSearchState = kTitle;
     cell.detailTextLabel.numberOfLines = 0; // 0: there's no maximum
     cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
     // cell.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    cell.detailTextLabel.textColor = [UIColor grayColor];
+    // cell.detailTextLabel.textColor = [UIColor grayColor];
     // [cell.detailTextLabel sizeToFit];
+    
+    // Set colors
+    if ([cell.detailTextLabel.text rangeOfString:@", O]"].location == NSNotFound) {
+        if ([cell.detailTextLabel.text rangeOfString:@", G]"].location == NSNotFound) {
+            cell.detailTextLabel.textColor = [UIColor grayColor];   // Default color
+        } else {
+            cell.detailTextLabel.textColor = [UIColor colorWithRed:0.0 green:0.8 blue:0.2 alpha:1.0];   // Generika
+        }
+    } else {
+        cell.detailTextLabel.textColor = [UIColor redColor];    // Original
+    }
     
     return cell;
 }
@@ -1576,55 +1587,60 @@ static NSInteger mCurrentSearchState = kTitle;
     
     float frameWidth = self.myTableView.frame.size.width;
     
-    // Could be done better...
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
-            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(frameWidth - 1.6*PADDING_IPAD, CGFLOAT_MAX)];
-            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25f;
+            textSize = [self tableText:text sizeWithFont:[UIFont boldSystemFontOfSize:16.0]
+                     constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
+            subTextSize = [self tableText:subText sizeWithFont:[UIFont boldSystemFontOfSize:14.0]
+                        constrainedToSize:CGSizeMake(frameWidth - 1.6*PADDING_IPAD, CGFLOAT_MAX)];
+            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25;
         } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            if (frameWidth>500) {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)];
-            } else {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)];
-            }
-            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4f;
+            textSize = [self tableText:text sizeWithFont:[UIFont boldSystemFontOfSize:13.0]
+                     constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
+            subTextSize = [self tableText:subText sizeWithFont:[UIFont boldSystemFontOfSize:12]
+                        constrainedToSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)];
+            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4;
         }
     } else {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
-            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)];
-            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25f;
+            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0]
+                        constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
+            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0]
+                              constrainedToSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)];
+            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25;
         } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            if (frameWidth>500) {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.5*PADDING_IPHONE, CGFLOAT_MAX)];
+            if (frameWidth > 500) {
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0]
+                            constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0]
+                                  constrainedToSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)];
             } else {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0f] constrainedToSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)];
+                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0]
+                            constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
+                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0]
+                                  constrainedToSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)];
             }
-            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4f;
+            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4;
         }
     }
     return retVal;
 }
 
-- (CGSize) text:(NSString*)text sizeWithFont:(UIFont*)font constrainedToSize:(CGSize)size
+- (CGSize) tableText:(NSString*)text sizeWithFont:(UIFont*)font constrainedToSize:(CGSize)size
 {
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
-        NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
-        
-        CGRect frame = [text boundingRectWithSize:size
-                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                       attributes:attributesDictionary
-                                          context:nil];
-        
-        return frame.size;
-    } else {
-        return [text sizeWithFont:font constrainedToSize:size];
-    }
+    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    
+    CGRect frame = [text boundingRectWithSize:size
+                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                   attributes:attributesDictionary
+                                      context:nil];
+    
+    /*
+    textSize = [text sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13]}];
+    subTextSize = [subText sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:12]}];
+    */
+    
+    return frame.size;
 }
 
 - (void) didReceiveMemoryWarning
