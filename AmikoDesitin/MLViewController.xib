@@ -65,7 +65,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="68"/>
                         <barButtonItem style="plain" id="37">
                             <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="36">
-                                <rect key="frame" x="572" y="7" width="180" height="30"/>
+                                <rect key="frame" x="552" y="7" width="200" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
