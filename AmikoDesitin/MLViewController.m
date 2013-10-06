@@ -122,6 +122,8 @@ static NSInteger mCurrentSearchState = kTitle;
     
     float screenWidth;
     float screenHeight;
+    
+    int mNumCurrSearchResults;
     int timeForSearch_ms;
     
     struct timeval beg_tv;
@@ -138,12 +140,12 @@ static NSInteger mCurrentSearchState = kTitle;
  */
 #pragma mark Instance functions
 
-- (IBAction) searchAction: (id)sender
+- (IBAction) searchAction:(id)sender
 {
     // Do something
 }
 
-- (IBAction) onToolBarButtonPressed: (id)sender
+- (IBAction) onToolBarButtonPressed:(id)sender
 {  
     UIBarButtonItem *btn = (UIBarButtonItem *)sender;
 
@@ -422,19 +424,20 @@ static NSInteger mCurrentSearchState = kTitle;
     if (withAnimation == NO) {
         [myTabBar setHidden:NO];
     } else {
+        if (IOS_NEWER_OR_EQUAL_TO_7)
+            [self setTabbarItemFont];
+        
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDelegate:nil];
         [UIView setAnimationDuration:1.25];
         
-        if (IOS_NEWER_OR_EQUAL_TO_7)
-            [self setTabbarItemFont];
         [myTabBar setAlpha:1.0];
         
         [UIView commitAnimations];
     }
 }
 
-- (void) hideTabBarWithAnimation: (BOOL)withAnimation
+- (void) hideTabBarWithAnimation:(BOOL)withAnimation
 {    
     if (withAnimation == NO) {
         [myTabBar setHidden:YES];
@@ -453,8 +456,12 @@ static NSInteger mCurrentSearchState = kTitle;
 {
     UIFont *tabBarFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSValue valueWithUIOffset:UIOffsetMake(0,0)], UITextAttributeTextShadowOffset,
+                                         // [NSValue valueWithUIOffset:UIOffsetMake(0,0)], UITextAttributeTextShadowOffset,
+                                         // [UIColor blackColor], NSForegroundColorAttributeName,
                                          tabBarFont, UITextAttributeFont, nil];
+    
+    // [[UITabBarItem appearance] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
+    
     for (int i=0; i<2; i++)
         [[myTabBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
@@ -464,8 +471,38 @@ static NSInteger mCurrentSearchState = kTitle;
     UIFont *tabBarFont = [UIFont systemFontOfSize:14];
     NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                          tabBarFont, UITextAttributeFont, nil];
+    
     for (int i=0; i<11; i+=2)
         [[myToolBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
+}
+
+- (void) startActivityIndicator
+{
+#ifdef DEBUG
+    NSLog(@"Start activity indicator");
+#endif
+    mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
+    mActivityIndicator.frame = CGRectIntegral(mActivityIndicator.frame);
+    mActivityIndicator.color = [UIColor whiteColor];
+    mActivityIndicator.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.8];
+    [mActivityIndicator layer].cornerRadius = 8.0f;
+    CGRect f = mActivityIndicator.bounds;
+    f.size.width += 10;
+    f.size.height += 10;
+    mActivityIndicator.bounds = f;
+    
+    [self.view addSubview:mActivityIndicator];
+    [mActivityIndicator startAnimating];
+}
+
+- (void) stopActivityIndicator
+{
+#ifdef DEBUG
+    NSLog(@"Stop activity indicator");
+#endif
+    [mActivityIndicator stopAnimating];
+    [mActivityIndicator removeFromSuperview];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -922,7 +959,8 @@ static NSInteger mCurrentSearchState = kTitle;
     NSTimeInterval execTime = [endTime timeIntervalSinceDate:startTime];
     
     timeForSearch_ms = (int)(1000*execTime+0.5);
-    NSLog(@"%d Treffer in %dms", [searchRes count], timeForSearch_ms);
+    mNumCurrSearchResults = [searchRes count];
+    NSLog(@"%d Treffer in %dms", mNumCurrSearchResults, timeForSearch_ms);
 
     return searchRes;
 }
@@ -940,10 +978,17 @@ static NSInteger mCurrentSearchState = kTitle;
     
     NSDate *endTime = [NSDate date];
     NSTimeInterval execTime = [endTime timeIntervalSinceDate:startTime];
-    
-    NSLog(@"%d Favoriten in %dms", [medList count], (int)(1000*execTime+0.5));
+    mNumCurrSearchResults = [medList count];
+    NSLog(@"%d Favoriten in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
     
     return medList;
+}
+
+- (void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    [self startActivityIndicator];
+    
+    [self performSelector:@selector(switchTabBarItem:) withObject:item afterDelay:0.01];
 }
 
 - (void) switchTabBarItem: (UITabBarItem *)item
@@ -1035,26 +1080,7 @@ static NSInteger mCurrentSearchState = kTitle;
     }
 }
 
-- (void) tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{    
-    mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
-    mActivityIndicator.frame = CGRectIntegral(mActivityIndicator.frame);
-    mActivityIndicator.color = [UIColor whiteColor];
-    mActivityIndicator.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.8];
-    [mActivityIndicator layer].cornerRadius = 8.0f;
-    CGRect f = mActivityIndicator.bounds;
-    f.size.width += 10;
-    f.size.height += 10;
-    mActivityIndicator.bounds = f;
-    
-    [self.view addSubview:mActivityIndicator];
-    [mActivityIndicator startAnimating];
-    
-    [self performSelector:@selector(switchTabBarItem:) withObject:item afterDelay:0.01];
-}
-
-- (void) searchBar: (UISearchBar *)searchBar textDidChange:(NSString *)searchText
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     static bool inProgress = false;
 
@@ -1119,7 +1145,7 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-- (void) addTitle: (NSString *)title andAuthor: (NSString *)author andMedId: (long)medId
+- (void) addTitle:(NSString *)title andAuthor:(NSString *)author andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1139,7 +1165,7 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-- (void) addTitle: (NSString *)title andAtcCode: (NSString *)atccode andAtcClass: (NSString *)atcclass andMedId: (long)medId
+- (void) addTitle:(NSString *)title andAtcCode:(NSString *)atccode andAtcClass:(NSString *)atcclass andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1174,7 +1200,7 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-- (void) addTitle: (NSString *)title andRegnrs: (NSString *)regnrs andAuthor: (NSString *)author andMedId: (long)medId
+- (void) addTitle: (NSString *)title andRegnrs:(NSString *)regnrs andAuthor:(NSString *)author andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1194,7 +1220,7 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-- (void) addSubstances: (NSString *)substances andTitle: (NSString *)title andAuthor: (NSString *)author andMedId: (long)medId
+- (void) addSubstances:(NSString *)substances andTitle:(NSString *)title andAuthor:(NSString *)author andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1217,7 +1243,7 @@ static NSInteger mCurrentSearchState = kTitle;
     [medi addObject:m];
 }
 
-- (void) addTitle: (NSString *)title andApplications: (NSString *)applications andMedId: (long)medId
+- (void) addTitle:(NSString *)title andApplications:(NSString *)applications andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1378,13 +1404,12 @@ static NSInteger mCurrentSearchState = kTitle;
         }
     }
     
-    [mActivityIndicator stopAnimating];
-    [mActivityIndicator removeFromSuperview];
+    [self stopActivityIndicator];
 }
 
 /** Dismisses the keyboard, resigns text field's active state
  */
-- (BOOL) textFieldShouldReturn: (UITextField *)textField
+- (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
 #ifdef DEBUG
     NSLog(@"You entered %@", self.myTextField.text);
@@ -1396,9 +1421,8 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    int count = [myTextField.text length];
 #ifdef DEBUG
-    NSLog(@"Number of characters = %d", count);
+    NSLog(@"Number of characters = %d", [myTextField.text length]);
 #endif
     return YES;
 }
@@ -1410,7 +1434,7 @@ static NSInteger mCurrentSearchState = kTitle;
 
 /** UITableViewDataSource
  */
-- (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection: (NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // How many rows in the table?
     if (mUsedDatabase == kAips)
@@ -1425,7 +1449,7 @@ static NSInteger mCurrentSearchState = kTitle;
 
 /** UITableViewDelegate
  */
-- (UITableViewCell *) tableView: (UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 { 
     // What to display in row n?
     // static NSString *simpleTableIdentifier = @"SimpleTableItem";
@@ -1495,8 +1519,11 @@ static NSInteger mCurrentSearchState = kTitle;
     return cell;
 }
 
-- (void) myTapMethod: (id)sender
+- (void) myTapMethod:(id)sender
 {
+    if (mNumCurrSearchResults>500)
+        [self startActivityIndicator];
+    
     UITapGestureRecognizer *gesture = (UITapGestureRecognizer *)sender;
     NSString *medRegnrs = [NSString stringWithString:[favoriteKeyData objectAtIndex:gesture.view.tag]];
     
@@ -1508,14 +1535,42 @@ static NSInteger mCurrentSearchState = kTitle;
     favoriteData = [MLDataStore initWithFavMedsSet:favoriteMedsSet];
     [self saveData];
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:gesture.view.tag inSection:0];
-    NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
-
-    // Update TableView --> slow implementation?
-    [myTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationMiddle];// UITableViewRowAnimationNone];
+    [self performSelector:@selector(starCellItemWithIndex:) withObject:gesture afterDelay:0.01];
 }
 
-- (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
+- (void) starCellItemWithIndex:(UITapGestureRecognizer *)gesture
+{
+    // Update TableView --> slow implementation?
+    /*
+     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:gesture.view.tag inSection:0];
+     NSArray *indexPaths = [[NSArray alloc] initWithObjects:indexPath, nil];
+     [myTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationMiddle];// UITableViewRowAnimationNone];
+     
+     [myTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]] withRowAnimation:UITableViewRowAnimationMiddle];
+     */
+    
+    static bool inProgress = false;
+    
+    MLViewController* __weak weakSelf = self;
+    
+    dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.starCellItem", nil);
+    dispatch_async(search_queue, ^(void) {
+        MLViewController* scopeSelf = weakSelf;
+        if (!inProgress) {
+            inProgress = true;
+            // Update tableview
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [myTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:gesture.view.tag inSection:0]]
+                                   withRowAnimation:UITableViewRowAnimationMiddle];
+                inProgress = false;
+                if (mNumCurrSearchResults>500)
+                    [scopeSelf stopActivityIndicator];
+            });
+        }
+    });
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     long mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
     
@@ -1578,12 +1633,14 @@ static NSInteger mCurrentSearchState = kTitle;
     // Show SecondViewController! (UIWebView)
     [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 
+#ifdef DEBUG
     report_memory();
+#endif
 }
 
 #define PADDING_IPAD 50.0f
 #define PADDING_IPHONE 40.0f
-- (CGFloat) tableView: (UITableView *)tableView heightForRowAtIndexPath: (NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *text = [medi[indexPath.row] title]; // [titleData objectAtIndex:indexPath.row];
     NSString *subText = [medi[indexPath.row] subTitle]; // [subTitleData objectAtIndex:indexPath.row];
