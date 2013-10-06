@@ -1640,6 +1640,13 @@ static NSInteger mCurrentSearchState = kTitle;
                                    attributes:attributesDictionary
                                       context:nil];
     
+    /* SLOWER implementation
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: font}];
+
+    CGRect frame = [attributedText boundingRectWithSize:size
+                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                      context:nil];
+    */
     /*
     textSize = [text sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13]}];
     subTextSize = [subText sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:12]}];
