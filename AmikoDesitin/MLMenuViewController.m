@@ -30,9 +30,9 @@
     // Stuff goes here, e.g. method declarations
 @end
 
-static NSString *SectionTitle_DE[] = {@"Zusammensetzung", @"Galenische Form", @"Indikationen", @"Dosierung/Anwendung", @"Kontraindikationen", @"Vorsichtsmassnahmen", @"Interaktionen", @"Schwangerschaft", @"Fahrtüchtigkeit", @"Unerwünschte Wirk.", @"Überdosierung", @"Eig./Wirkung", @"Kinetik", @"Präklinik", @"Sonstige Hinweise", @"Zulassungsnummer", @"Packungen", @"Inhaberin", @"Stand der Information", nil};
+static NSString *SectionTitle_DE[] = {@"Zusammensetzung", @"Galenische Form", @"Kontraindikationen", @"Indikationen", @"Dosierung/Anwendung", @"Vorsichtsmassnahmen", @"Interaktionen", @"Schwangerschaft", @"Fahrtüchtigkeit", @"Unerwünschte Wirk.", @"Überdosierung", @"Eig./Wirkung", @"Kinetik", @"Präklinik", @"Sonstige Hinweise", @"Zulassungsnummer", @"Packungen", @"Inhaberin", @"Stand der Information", nil};
 
-static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Indications", @"Posologie", @"Contre-indications", @"Précautions", @"Interactions", @"Grossesse/All.", @"Conduite", @"Effets indèsir.", @"Surdosage", @"Propriètes/Effets", @"Cinètique", @"Prèclinique", @"Remarques", @"Prèsentation", @"Titulaire", @"Mise à jour"};
+static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Contre-indications", @"Indications", @"Posologie", @"Précautions", @"Interactions", @"Grossesse/All.", @"Conduite", @"Effets indésir.", @"Surdosage", @"Propriétés/Effets", @"Cinétique", @"Préclinique", @"Remarques", @"Présentation", @"Titulaire", @"Mise à jour"};
 
 
 @implementation MLMenuViewController
@@ -165,6 +165,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Ind
             if (originalString!=nil && compareString!=nil) {
                 if ([originalString rangeOfString:compareString].location != NSNotFound) {
                     mSectionTitles[indexPath.row] = SectionTitle_DE[i];
+                    break;
                 }
             }
         }
@@ -175,12 +176,15 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Ind
             if (originalString!=nil && compareString!=nil) {
                 if ([originalString rangeOfString:compareString].location != NSNotFound) {
                     mSectionTitles[indexPath.row] = SectionTitle_FR[i];
+                    break;
                 }
             }
         }
     }
-    label.text =[mSectionTitles objectAtIndex:indexPath.row];
-
+    label.text = mSectionTitles[indexPath.row];
+    if ([label.text length]>23)
+        label.text = [label.text substringToIndex:23];
+    
     return cell;
 }
 
