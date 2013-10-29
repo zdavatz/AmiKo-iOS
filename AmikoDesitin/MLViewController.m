@@ -1089,6 +1089,9 @@ static NSInteger mCurrentSearchState = kTitle;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         minSearchChars = 0;
     
+    if (mCurrentSearchState == kTherapy)
+        minSearchChars = 1;
+    
     // Causes searchResults to be released if there are no strong references to it.
     searchResults = [NSArray array];
 
