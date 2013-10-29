@@ -853,7 +853,7 @@ static NSInteger mCurrentSearchState = kTitle;
     else if ([[self appLanguage] isEqualToString:@"fr"])
         amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_fr" ofType:@"html"];
     NSError *error = nil;
-    NSString *amikoReport = [NSString stringWithContentsOfFile:amikoReportFile encoding:NSASCIIStringEncoding error:&error];
+    NSString *amikoReport = [NSString stringWithContentsOfFile:amikoReportFile encoding:NSUTF8StringEncoding error:&error];
 
     NSLog(@"Error: %@", error);    
     if (amikoReport==nil)
