@@ -128,6 +128,8 @@ static NSInteger mCurrentSearchState = kTitle;
     
     struct timeval beg_tv;
     struct timeval end_tv;
+    
+    BOOL runningActivityIndicator;
 }
 
 @synthesize searchField;
@@ -297,6 +299,8 @@ static NSInteger mCurrentSearchState = kTitle;
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+    
+    runningActivityIndicator = NO;
     
     return self;
 }
@@ -481,19 +485,22 @@ static NSInteger mCurrentSearchState = kTitle;
 #ifdef DEBUG
     NSLog(@"Start activity indicator");
 #endif
-    mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
-    mActivityIndicator.frame = CGRectIntegral(mActivityIndicator.frame);
-    mActivityIndicator.color = [UIColor whiteColor];
-    mActivityIndicator.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.8];
-    [mActivityIndicator layer].cornerRadius = 8.0f;
-    CGRect f = mActivityIndicator.bounds;
-    f.size.width += 10;
-    f.size.height += 10;
-    mActivityIndicator.bounds = f;
+    if (runningActivityIndicator==NO) {
+        mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
+        mActivityIndicator.frame = CGRectIntegral(mActivityIndicator.frame);
+        mActivityIndicator.color = [UIColor whiteColor];
+        mActivityIndicator.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.8];
+        [mActivityIndicator layer].cornerRadius = 8.0f;
+        CGRect f = mActivityIndicator.bounds;
+        f.size.width += 10;
+        f.size.height += 10;
+        mActivityIndicator.bounds = f;
     
-    [self.view addSubview:mActivityIndicator];
-    [mActivityIndicator startAnimating];
+        [self.view addSubview:mActivityIndicator];
+        [mActivityIndicator startAnimating];
+        runningActivityIndicator = YES;
+    }
 }
 
 - (void) stopActivityIndicator
@@ -503,6 +510,7 @@ static NSInteger mCurrentSearchState = kTitle;
 #endif
     [mActivityIndicator stopAnimating];
     [mActivityIndicator removeFromSuperview];
+    runningActivityIndicator = NO;
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -1096,6 +1104,8 @@ static NSInteger mCurrentSearchState = kTitle;
     searchResults = [NSArray array];
 
     MLViewController* __weak weakSelf = self;
+    
+    [self startActivityIndicator];
     
     dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);    
     dispatch_async(search_queue, ^(void) {
