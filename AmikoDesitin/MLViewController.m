@@ -1093,10 +1093,8 @@ static NSInteger mCurrentSearchState = kTitle;
     static bool inProgress = false;
 
     int minSearchChars = 0;
-    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         minSearchChars = 0;
-    
     if (mCurrentSearchState == kTherapy)
         minSearchChars = 1;
     
@@ -1110,6 +1108,7 @@ static NSInteger mCurrentSearchState = kTitle;
     dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);    
     dispatch_async(search_queue, ^(void) {
         MLViewController* scopeSelf = weakSelf;
+        while (inProgress);
         if (!inProgress) {
             inProgress = true;
             if ([searchText length] > minSearchChars) {
@@ -1119,7 +1118,7 @@ static NSInteger mCurrentSearchState = kTitle;
                     searchResults = [weakSelf retrieveAllFavorites];
                 }
             }
-     
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (mUsedDatabase == kFavorites && [searchText length] <= minSearchChars)
                     [searchField resignFirstResponder];
