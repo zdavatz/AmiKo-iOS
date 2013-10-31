@@ -130,6 +130,8 @@ static NSInteger mCurrentSearchState = kTitle;
     struct timeval end_tv;
     
     BOOL runningActivityIndicator;
+    
+    dispatch_queue_t mSearchQueue;
 }
 
 @synthesize searchField;
@@ -302,6 +304,8 @@ static NSInteger mCurrentSearchState = kTitle;
     
     runningActivityIndicator = NO;
     
+    mSearchQueue = dispatch_queue_create("com.ywesee.searchdb", nil);
+
     return self;
 }
 - (NSString *) appOwner
@@ -1105,12 +1109,15 @@ static NSInteger mCurrentSearchState = kTitle;
     
     [self startActivityIndicator];
     
-    dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
-    
-    double delayInSeconds = 0.2;
+    // Introduces a delay before starting new thread
+    /*
+    double delayInSeconds = 0.1;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, search_queue, ^(void){       
-    // dispatch_async(search_queue, ^(void) {
+    */
+    // Creates a serial dispatch queue (tasks are completed in FIFO order)
+    // dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
+    // dispatch_after(popTime, mSearchQueue, ^(void){
+    dispatch_async(mSearchQueue, ^(void) {
         MLViewController* scopeSelf = weakSelf;
         while (inProgress);
         if (!inProgress) {
