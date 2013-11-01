@@ -1094,7 +1094,7 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    static bool inProgress = false;
+    static volatile bool inProgress = false;
 
     int minSearchChars = 0;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -1119,9 +1119,13 @@ static NSInteger mCurrentSearchState = kTitle;
     // dispatch_after(popTime, mSearchQueue, ^(void){
     dispatch_async(mSearchQueue, ^(void) {
         MLViewController* scopeSelf = weakSelf;
-        while (inProgress);
+        while (inProgress) {
+            [NSThread sleepForTimeInterval:0.01];   // Wait 10ms
+        }
         if (!inProgress) {
-            inProgress = true;
+            @synchronized(self) {
+                inProgress = true;
+            }
             if ([searchText length] > minSearchChars) {
                 searchResults = [scopeSelf searchAipsDatabaseWith:searchText];
             } else {
@@ -1129,14 +1133,15 @@ static NSInteger mCurrentSearchState = kTitle;
                     searchResults = [weakSelf retrieveAllFavorites];
                 }
             }
-
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (mUsedDatabase == kFavorites && [searchText length] <= minSearchChars)
                     [searchField resignFirstResponder];
                 [scopeSelf updateTableView];
                 [myTableView reloadData];
                 [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
-                inProgress = false;
+                @synchronized(self) {
+                    inProgress = false;
+                }
             });
         }
     });
