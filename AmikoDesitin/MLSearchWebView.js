@@ -37,6 +37,13 @@ function MyApp_HighlightAllOccurencesOfStringForElement(element,keyword) {
 
 // the main entry point to start the search
 function MyApp_HighlightAllOccurencesOfString(keyword) {
+    // var speech = new SpeechSynthesisUtterance();
+    // speech.text = keyword;
+    // speech.volume = 1; // 0 to 1
+    // speech.rate = 1; // 0.1 to 9
+    // speech.pitch = 1; // 0 to 2, 1=normal
+    // speech.lang = "en-US";
+    // speechSynthesis.speak(speech);
     MyApp_RemoveAllHighlights();
     MyApp_HighlightAllOccurencesOfStringForElement(document.body, keyword.toLowerCase());
     document.getElementsByClassName("MyAppHighlight")[0].scrollIntoView(true);

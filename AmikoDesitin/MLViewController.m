@@ -853,7 +853,7 @@ static NSInteger mCurrentSearchState = kTitle;
 }
 
 - (IBAction) myIconPressMethod:(id)sender
-{  
+{
     if (rightViewController != nil && secondView != nil) {
         [rightViewController removeObserver:secondView forKeyPath:@"javaScript"];
     }
@@ -1616,9 +1616,10 @@ static NSInteger mCurrentSearchState = kTitle;
         amikoCss = [NSString stringWithString:med.styleStr];
     
     if (secondView!=nil) {
-        [secondView removeFromParentViewController];
+        // [secondView removeFromParentViewController];
         secondView = nil;
     }
+    
     secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                           bundle:nil
                                                            title:FACHINFO_STRING
@@ -1648,17 +1649,16 @@ static NSInteger mCurrentSearchState = kTitle;
                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                              context:@"javaScriptChanged"];
     
+    // UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
+    
     if (secondViewNavigationController!=nil) {
         [secondViewNavigationController removeFromParentViewController];
         secondViewNavigationController = nil;
     }
     secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
-    
-    // UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
-    
-    [revealController setFrontViewController:secondViewNavigationController animated:YES];
-    
+
     // Show SecondViewController! (UIWebView)
+    [revealController setFrontViewController:secondViewNavigationController animated:YES];
     [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 
 #ifdef DEBUG

@@ -47,14 +47,14 @@
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
-    
+
     htmlAnchor = nil;    
-    self.searchField = nil;
-    self.htmlStr = nil;
+    searchField = nil;
+    htmlStr = nil;
     
-    self.webView.delegate = nil;
+    webView.delegate = nil;
+    webView = nil;
     [webView removeFromSuperview];
-    self.webView = nil;
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons
