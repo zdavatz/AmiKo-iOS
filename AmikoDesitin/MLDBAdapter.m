@@ -93,9 +93,38 @@ static NSString *FULL_TABLE = nil;
 #endif
 }
 
+- (BOOL) openDatabase: (NSString *)dbName
+{
+    // A. Check first users documents folder
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    // Get documents directory
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDir = [paths lastObject];
+    NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:@"db"];
+    // Check if database exists
+    if (filePath!=nil) {
+        if ([fileManager fileExistsAtPath:filePath]) {
+            mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
+            NSLog(@"Database found in documents folder - %@", filePath);
+            return TRUE;
+        }
+    }
+    
+    // B. If no database is available, check if db is in app bundle
+    filePath = [[NSBundle mainBundle] pathForResource:dbName ofType:@"db"];
+    if (filePath!=nil ) {
+        mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
+        NSLog(@"Database found in app bundle - %@", filePath);
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 - (void) closeDatabase
 {
-    [mySqliteDb close];
+    if (mySqliteDb)
+        [mySqliteDb close];
 }
 
 - (NSInteger) getNumRecords

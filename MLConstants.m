@@ -23,6 +23,23 @@
 
 #import "MLConstants.h"
 
+#if defined (AMIKO_DESITIN)
+NSString* const APP_NAME = @"AmiKoDesitin";
+NSString* const APP_ID = @"708142753";
+#elif defined (COMED_DESITIN)
+NSString* const APP_NAME = @"CoMedDesitin";
+NSString* const APP_ID = @"710472327";
+#elif defined (AMIKO)
+NSString* const APP_NAME = @"iAmiKo";
+NSString* const APP_ID = @"710472327";
+#elif defined (COMED)
+NSString* const APP_NAME = @"iCoMed";
+NSString* const APP_ID = @"710472327";
+#else
+NSString* const APP_NAME = @"iAmiKo";
+NSString* const APP_ID = @"708142753";
+#endif
+
 /** iPad
     Non-Retina : 768 x 1024
     Retina     : 1536 x 2048
@@ -32,12 +49,12 @@ const int RearViewFullWidth_Portrait_iPad = 768;
 const int RearViewFullWidth_Landscape_iPad = 1024;
 
 // Portrait
-const int RearViewRevealWidth_Portrait_iPad = 648;              // 768 - 120 = 648
-const int RearViewRevealOverdraw_Portrait_iPad = 120;
-const int RightViewRevealWidth_Portrait_iPad = 180;
+const int RearViewRevealWidth_Portrait_iPad = 560;              // 768 - 208 = 560
+const int RearViewRevealOverdraw_Portrait_iPad = 208;
+const int RightViewRevealWidth_Portrait_iPad = 208;
 
 // Landscape
-const int RearViewRevealWidth_Landscape_iPad = 904;             // 1024 - 120 = 904
+const int RearViewRevealWidth_Landscape_iPad = 816;             // 1024 - 208 = 816
 
 /** iPhone
     Non-Retina : 320 x 480

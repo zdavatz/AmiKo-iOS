@@ -1,8 +1,8 @@
-/*
+/* 
  
  Copyright (c) 2013 Max Lungarella <cybrmx@gmail.com>
  
- Created on 24/06/2013.
+ Created on 11/08/2013.
  
  This file is part of AMiKoDesitin.
  
@@ -15,7 +15,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  
@@ -23,12 +23,15 @@
 
 #import <UIKit/UIKit.h>
 
-@class SWRevealViewController;
+@interface MLTitleViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+    IBOutlet UITableView *myMenuView;
+    NSString *javaScript;
+}
 
-@interface MLAppDelegate : UIResponder <UIApplicationDelegate>
+@property (nonatomic, retain) IBOutlet UITableView *myMenuView;
+@property (nonatomic, copy) NSString *javaScript;
 
-@property (strong, nonatomic) IBOutlet UIWindow *window;
-@property (retain, nonatomic) UINavigationController *navController;
-@property (strong, nonatomic) SWRevealViewController *revealViewController;
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withMenu:(NSArray *)sectionTitles;
+- (id) initWithMenu:(NSArray *)sectionTitles sectionIds:(NSArray *)sectionIds andLanguage:(NSString *)appLanguage;
 
 @end

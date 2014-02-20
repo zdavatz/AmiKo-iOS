@@ -221,6 +221,7 @@
     self.title = NSLocalizedString(mTitle, nil);
     // Do any additional setup after loading the view from its nib.
 
+    // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];

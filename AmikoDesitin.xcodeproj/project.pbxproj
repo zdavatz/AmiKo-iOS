@@ -32,10 +32,45 @@
 		D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53917F22A58000EC52A /* desitin_icon_152x152.png */; };
 		D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53A17F22A58000EC52A /* desitin_icon_120x120.png */; };
 		D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53A17F22A58000EC52A /* desitin_icon_120x120.png */; };
+		D554573E18B3E82C003299E0 /* 1024-share.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573C18B3E82C003299E0 /* 1024-share.png */; };
+		D554573F18B3E82C003299E0 /* 1024-share.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573C18B3E82C003299E0 /* 1024-share.png */; };
+		D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573D18B3E82C003299E0 /* 1024-share@2x.png */; };
+		D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573D18B3E82C003299E0 /* 1024-share@2x.png */; };
+		D554574418B3E847003299E0 /* 1100-list-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574218B3E847003299E0 /* 1100-list-2.png */; };
+		D554574518B3E847003299E0 /* 1100-list-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574218B3E847003299E0 /* 1100-list-2.png */; };
+		D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574318B3E847003299E0 /* 1100-list-2@2x.png */; };
+		D554574718B3E847003299E0 /* 1100-list-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574318B3E847003299E0 /* 1100-list-2@2x.png */; };
+		D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574818B3E85D003299E0 /* 939-download-rectangle.png */; };
+		D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574818B3E85D003299E0 /* 939-download-rectangle.png */; };
+		D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */; };
+		D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */; };
+		D554575018B3E86B003299E0 /* 970-medal.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574E18B3E86B003299E0 /* 970-medal.png */; };
+		D554575118B3E86B003299E0 /* 970-medal.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574E18B3E86B003299E0 /* 970-medal.png */; };
+		D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574F18B3E86B003299E0 /* 970-medal@2x.png */; };
+		D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574F18B3E86B003299E0 /* 970-medal@2x.png */; };
+		D554575618B3E87D003299E0 /* 905-chat-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575418B3E87D003299E0 /* 905-chat-2.png */; };
+		D554575718B3E87D003299E0 /* 905-chat-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575418B3E87D003299E0 /* 905-chat-2.png */; };
+		D554575818B3E87D003299E0 /* 905-chat-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575518B3E87D003299E0 /* 905-chat-2@2x.png */; };
+		D554575918B3E87D003299E0 /* 905-chat-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575518B3E87D003299E0 /* 905-chat-2@2x.png */; };
 		D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D565DA8217B7B48D0002E2CF /* MLConstants.m */; };
 		D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */; };
 		D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8617B7D8370002E2CF /* Default-Portrait~ipad.png */; };
 		D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8817B7D8580002E2CF /* Default-Landscape~ipad.png */; };
+		D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
+		D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
+		D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4E18B5207200F56BC5 /* ioapi.c */; };
+		D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4E18B5207200F56BC5 /* ioapi.c */; };
+		D5A31F5818B5207200F56BC5 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5018B5207200F56BC5 /* mztools.c */; };
+		D5A31F5918B5207200F56BC5 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5018B5207200F56BC5 /* mztools.c */; };
+		D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5218B5207200F56BC5 /* unzip.c */; };
+		D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5218B5207200F56BC5 /* unzip.c */; };
+		D5A31F5C18B5207200F56BC5 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5418B5207200F56BC5 /* zip.c */; };
+		D5A31F5D18B5207200F56BC5 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5418B5207200F56BC5 /* zip.c */; };
+		D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5F18B5207A00F56BC5 /* SSZipArchive.m */; };
+		D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F5F18B5207A00F56BC5 /* SSZipArchive.m */; };
+		D5A31F6318B5263500F56BC5 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A31F6218B5263500F56BC5 /* libz.1.2.5.dylib */; };
+		D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */; };
+		D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */; };
 		D5A6F23B17B1692F00EAB24B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23A17B1692F00EAB24B /* UIKit.framework */; };
 		D5A6F23D17B1692F00EAB24B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23C17B1692F00EAB24B /* Foundation.framework */; };
 		D5A6F23F17B1692F00EAB24B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23E17B1692F00EAB24B /* CoreGraphics.framework */; };
@@ -55,12 +90,12 @@
 		D5A6F27D17B16B5800EAB24B /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */; };
 		D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */; };
 		D5A6F28417B16B6000EAB24B /* MLSecondViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */; };
-		D5A6F28517B16B6000EAB24B /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28117B16B6000EAB24B /* MLMenuViewController.xib */; };
-		D5A6F28617B16B6000EAB24B /* MLMenuViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28217B16B6000EAB24B /* MLMenuViewController~iphone.xib */; };
+		D5A6F28517B16B6000EAB24B /* MLTitleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */; };
+		D5A6F28617B16B6000EAB24B /* MLTitleViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */; };
 		D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28A17B16C0200EAB24B /* MLDataStore.m */; };
 		D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */; };
 		D5A6F29317B16C1D00EAB24B /* MLMedication.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29017B16C1D00EAB24B /* MLMedication.m */; };
-		D5A6F29417B16C1D00EAB24B /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29217B16C1D00EAB24B /* MLMenuViewController.m */; };
+		D5A6F29417B16C1D00EAB24B /* MLTitleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29217B16C1D00EAB24B /* MLTitleViewController.m */; };
 		D5A6F29717B16C2F00EAB24B /* MLSearchWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */; };
 		D5A6F29A17B16C3A00EAB24B /* MLSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */; };
 		D5A6F2A117B16C4B00EAB24B /* MLSimpleTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */; };
@@ -85,7 +120,7 @@
 		D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28A17B16C0200EAB24B /* MLDataStore.m */; };
 		D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */; };
 		D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29017B16C1D00EAB24B /* MLMedication.m */; };
-		D5F6BB5717E8C87500DCBD16 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29217B16C1D00EAB24B /* MLMenuViewController.m */; };
+		D5F6BB5717E8C87500DCBD16 /* MLTitleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29217B16C1D00EAB24B /* MLTitleViewController.m */; };
 		D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */; };
 		D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */; };
 		D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */; };
@@ -109,8 +144,8 @@
 		D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */; };
 		D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B217B171C900EAB24B /* MLViewController.xib */; };
 		D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */; };
-		D5F6BB7117E8C87500DCBD16 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28117B16B6000EAB24B /* MLMenuViewController.xib */; };
-		D5F6BB7217E8C87500DCBD16 /* MLMenuViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28217B16B6000EAB24B /* MLMenuViewController~iphone.xib */; };
+		D5F6BB7117E8C87500DCBD16 /* MLTitleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */; };
+		D5F6BB7217E8C87500DCBD16 /* MLTitleViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */; };
 		D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A417B16E4400EAB24B /* 28-star.png */; };
 		D5F6BB7417E8C87500DCBD16 /* 28-star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A517B16E4400EAB24B /* 28-star@2x.png */; };
 		D5F6BB7517E8C87500DCBD16 /* app_icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A817B16EF700EAB24B /* app_icon_57x57.png */; };
@@ -126,8 +161,19 @@
 		D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */ = {isa = PBXBuildFile; fileRef = D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */; };
 		D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
 		D5F6BB9017E8C87500DCBD16 /* amiko_db_full_idx_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2317E7868400DCBD16 /* amiko_db_full_idx_fr.db */; };
-		D5F6BB9B17E8CC2500DCBD16 /* AmikoDesitin-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F24217B1692F00EAB24B /* AmikoDesitin-Info.plist */; };
-		D5F6BB9C17E8CD8B00DCBD16 /* CoMedDesitin-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */; };
+		D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
+		D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
+		D5FFE17818A96BA0002D6159 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
+		D5FFE17918A96BA0002D6159 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
+		D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE1AF18B1021B002D6159 /* IonIcons.m */; };
+		D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE1AF18B1021B002D6159 /* IonIcons.m */; };
+		D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B018B1021B002D6159 /* ionicons.ttf */; };
+		D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B018B1021B002D6159 /* ionicons.ttf */; };
+		D5FFE1B718B1021B002D6159 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B118B1021B002D6159 /* LICENSE */; };
+		D5FFE1B818B1021B002D6159 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B118B1021B002D6159 /* LICENSE */; };
+		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
+		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
+		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -154,6 +200,16 @@
 		D551D53817F22A58000EC52A /* desitin_icon_76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_76x76.png; sourceTree = "<group>"; };
 		D551D53917F22A58000EC52A /* desitin_icon_152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_152x152.png; sourceTree = "<group>"; };
 		D551D53A17F22A58000EC52A /* desitin_icon_120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_120x120.png; sourceTree = "<group>"; };
+		D554573C18B3E82C003299E0 /* 1024-share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1024-share.png"; sourceTree = "<group>"; };
+		D554573D18B3E82C003299E0 /* 1024-share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1024-share@2x.png"; sourceTree = "<group>"; };
+		D554574218B3E847003299E0 /* 1100-list-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1100-list-2.png"; sourceTree = "<group>"; };
+		D554574318B3E847003299E0 /* 1100-list-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1100-list-2@2x.png"; sourceTree = "<group>"; };
+		D554574818B3E85D003299E0 /* 939-download-rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "939-download-rectangle.png"; sourceTree = "<group>"; };
+		D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "939-download-rectangle@2x.png"; sourceTree = "<group>"; };
+		D554574E18B3E86B003299E0 /* 970-medal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "970-medal.png"; sourceTree = "<group>"; };
+		D554574F18B3E86B003299E0 /* 970-medal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "970-medal@2x.png"; sourceTree = "<group>"; };
+		D554575418B3E87D003299E0 /* 905-chat-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "905-chat-2.png"; sourceTree = "<group>"; };
+		D554575518B3E87D003299E0 /* 905-chat-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "905-chat-2@2x.png"; sourceTree = "<group>"; };
 		D565DA8117B7B48D0002E2CF /* MLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = ../MLConstants.h; sourceTree = "<group>"; };
 		D565DA8217B7B48D0002E2CF /* MLConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLConstants.m; path = ../MLConstants.m; sourceTree = "<group>"; };
 		D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -166,6 +222,22 @@
 		D565DA8E17B7EA9C0002E2CF /* desitin_launch_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_1024x768.png; sourceTree = "<group>"; };
 		D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_1536x2008.png; sourceTree = "<group>"; };
 		D565DA9017B7EA9C0002E2CF /* desitin_launch_2048x1496.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_2048x1496.png; sourceTree = "<group>"; };
+		D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLCustomURLConnection.h; sourceTree = "<group>"; };
+		D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLCustomURLConnection.m; sourceTree = "<group>"; };
+		D5A31F4D18B5207200F56BC5 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		D5A31F4E18B5207200F56BC5 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		D5A31F4F18B5207200F56BC5 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		D5A31F5018B5207200F56BC5 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		D5A31F5118B5207200F56BC5 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		D5A31F5218B5207200F56BC5 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		D5A31F5318B5207200F56BC5 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		D5A31F5418B5207200F56BC5 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		D5A31F5518B5207200F56BC5 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		D5A31F5E18B5207A00F56BC5 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		D5A31F5F18B5207A00F56BC5 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		D5A31F6218B5263500F56BC5 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		D5A31F6F18B52D3E00F56BC5 /* MLProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLProgressViewController.h; sourceTree = "<group>"; };
+		D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLProgressViewController.m; sourceTree = "<group>"; };
 		D5A6F23717B1692F00EAB24B /* AmiKoDesitin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmiKoDesitin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5A6F23A17B1692F00EAB24B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D5A6F23C17B1692F00EAB24B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -190,16 +262,16 @@
 		D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MLViewController~iphone.xib"; sourceTree = "<group>"; };
 		D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLSecondViewController.xib; sourceTree = "<group>"; };
 		D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MLSecondViewController~iphone.xib"; sourceTree = "<group>"; };
-		D5A6F28117B16B6000EAB24B /* MLMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLMenuViewController.xib; sourceTree = "<group>"; };
-		D5A6F28217B16B6000EAB24B /* MLMenuViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MLMenuViewController~iphone.xib"; sourceTree = "<group>"; };
+		D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLTitleViewController.xib; sourceTree = "<group>"; };
+		D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MLTitleViewController~iphone.xib"; sourceTree = "<group>"; };
 		D5A6F28917B16C0200EAB24B /* MLDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLDataStore.h; sourceTree = "<group>"; };
 		D5A6F28A17B16C0200EAB24B /* MLDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLDataStore.m; sourceTree = "<group>"; };
 		D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLDBAdapter.h; sourceTree = "<group>"; };
 		D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLDBAdapter.m; sourceTree = "<group>"; };
 		D5A6F28F17B16C1D00EAB24B /* MLMedication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMedication.h; sourceTree = "<group>"; };
 		D5A6F29017B16C1D00EAB24B /* MLMedication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLMedication.m; sourceTree = "<group>"; };
-		D5A6F29117B16C1D00EAB24B /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMenuViewController.h; sourceTree = "<group>"; };
-		D5A6F29217B16C1D00EAB24B /* MLMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLMenuViewController.m; sourceTree = "<group>"; };
+		D5A6F29117B16C1D00EAB24B /* MLTitleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLTitleViewController.h; sourceTree = "<group>"; };
+		D5A6F29217B16C1D00EAB24B /* MLTitleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLTitleViewController.m; sourceTree = "<group>"; };
 		D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLSearchWebView.h; sourceTree = "<group>"; };
 		D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLSearchWebView.m; sourceTree = "<group>"; };
 		D5A6F29817B16C3A00EAB24B /* MLSecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLSecondViewController.h; sourceTree = "<group>"; };
@@ -230,6 +302,16 @@
 		D5F6BBA117EB816800DCBD16 /* comed_des_launch_1536x2008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1536x2008.png; sourceTree = "<group>"; };
 		D5F6BBA217EB816900DCBD16 /* comed_des_launch_2048x1496.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_2048x1496.png; sourceTree = "<group>"; };
 		D5F6BBA917EB81C500DCBD16 /* comed_des_launch_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1024x768.png; sourceTree = "<group>"; };
+		D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLMenuViewController.xib; sourceTree = "<group>"; };
+		D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMenuViewController.h; sourceTree = "<group>"; };
+		D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLMenuViewController.m; sourceTree = "<group>"; };
+		D5FFE1AD18B1021B002D6159 /* ionicons-codes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ionicons-codes.h"; sourceTree = "<group>"; };
+		D5FFE1AE18B1021B002D6159 /* IonIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IonIcons.h; sourceTree = "<group>"; };
+		D5FFE1AF18B1021B002D6159 /* IonIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IonIcons.m; sourceTree = "<group>"; };
+		D5FFE1B018B1021B002D6159 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ionicons.ttf; sourceTree = "<group>"; };
+		D5FFE1B118B1021B002D6159 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		D5FFE1B218B1021B002D6159 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +319,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A31F6318B5263500F56BC5 /* libz.1.2.5.dylib in Frameworks */,
+				D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */,
 				D5A6F26717B16A2300EAB24B /* libsqlite3.0.dylib in Frameworks */,
 				D5A6F23B17B1692F00EAB24B /* UIKit.framework in Frameworks */,
 				D5A6F23D17B1692F00EAB24B /* Foundation.framework in Frameworks */,
@@ -276,6 +360,32 @@
 			name = AppIcons;
 			sourceTree = "<group>";
 		};
+		D5A31F4B18B5205E00F56BC5 /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				D5A31F5E18B5207A00F56BC5 /* SSZipArchive.h */,
+				D5A31F5F18B5207A00F56BC5 /* SSZipArchive.m */,
+				D5A31F4C18B5207200F56BC5 /* minizip */,
+			);
+			name = SSZipArchive;
+			sourceTree = "<group>";
+		};
+		D5A31F4C18B5207200F56BC5 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				D5A31F4D18B5207200F56BC5 /* crypt.h */,
+				D5A31F4E18B5207200F56BC5 /* ioapi.c */,
+				D5A31F4F18B5207200F56BC5 /* ioapi.h */,
+				D5A31F5018B5207200F56BC5 /* mztools.c */,
+				D5A31F5118B5207200F56BC5 /* mztools.h */,
+				D5A31F5218B5207200F56BC5 /* unzip.c */,
+				D5A31F5318B5207200F56BC5 /* unzip.h */,
+				D5A31F5418B5207200F56BC5 /* zip.c */,
+				D5A31F5518B5207200F56BC5 /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
 		D5A6F22E17B1692F00EAB24B = {
 			isa = PBXGroup;
 			children = (
@@ -301,6 +411,8 @@
 			isa = PBXGroup;
 			children = (
 				D5A6F26617B16A2300EAB24B /* libsqlite3.0.dylib */,
+				D5A31F6218B5263500F56BC5 /* libz.1.2.5.dylib */,
+				D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */,
 				D5A6F23A17B1692F00EAB24B /* UIKit.framework */,
 				D5A6F23C17B1692F00EAB24B /* Foundation.framework */,
 				D5A6F23E17B1692F00EAB24B /* CoreGraphics.framework */,
@@ -370,8 +482,8 @@
 				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
 				D5A6F29817B16C3A00EAB24B /* MLSecondViewController.h */,
 				D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */,
-				D5A6F29117B16C1D00EAB24B /* MLMenuViewController.h */,
-				D5A6F29217B16C1D00EAB24B /* MLMenuViewController.m */,
+				D5A6F29117B16C1D00EAB24B /* MLTitleViewController.h */,
+				D5A6F29217B16C1D00EAB24B /* MLTitleViewController.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
 				D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */,
 				D5A6F28F17B16C1D00EAB24B /* MLMedication.h */,
@@ -380,6 +492,12 @@
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
 				D5A6F28917B16C0200EAB24B /* MLDataStore.h */,
 				D5A6F28A17B16C0200EAB24B /* MLDataStore.m */,
+				D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */,
+				D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */,
+				D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */,
+				D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */,
+				D5A31F6F18B52D3E00F56BC5 /* MLProgressViewController.h */,
+				D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -387,8 +505,9 @@
 		D5A6F26217B169CD00EAB24B /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				D5A6F26817B16A5900EAB24B /* SWRevealViewController.h */,
-				D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */,
+				D5A31F4B18B5205E00F56BC5 /* SSZipArchive */,
+				D5FFE1AC18B1021B002D6159 /* ionicons */,
+				D5FFE19E18B0FF99002D6159 /* SWRevealViewController */,
 			);
 			name = Libs;
 			sourceTree = "<group>";
@@ -405,6 +524,16 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D554575418B3E87D003299E0 /* 905-chat-2.png */,
+				D554575518B3E87D003299E0 /* 905-chat-2@2x.png */,
+				D554574E18B3E86B003299E0 /* 970-medal.png */,
+				D554574F18B3E86B003299E0 /* 970-medal@2x.png */,
+				D554574818B3E85D003299E0 /* 939-download-rectangle.png */,
+				D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */,
+				D554574218B3E847003299E0 /* 1100-list-2.png */,
+				D554574318B3E847003299E0 /* 1100-list-2@2x.png */,
+				D554573C18B3E82C003299E0 /* 1024-share.png */,
+				D554573D18B3E82C003299E0 /* 1024-share@2x.png */,
 				D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */,
 				D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */,
 				D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */,
@@ -430,8 +559,9 @@
 				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
 				D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */,
 				D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */,
-				D5A6F28117B16B6000EAB24B /* MLMenuViewController.xib */,
-				D5A6F28217B16B6000EAB24B /* MLMenuViewController~iphone.xib */,
+				D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */,
+				D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */,
+				D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -457,6 +587,28 @@
 				D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */,
 			);
 			name = LaunchImages;
+			sourceTree = "<group>";
+		};
+		D5FFE19E18B0FF99002D6159 /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */,
+				D5A6F26817B16A5900EAB24B /* SWRevealViewController.h */,
+			);
+			name = SWRevealViewController;
+			sourceTree = "<group>";
+		};
+		D5FFE1AC18B1021B002D6159 /* ionicons */ = {
+			isa = PBXGroup;
+			children = (
+				D5FFE1AD18B1021B002D6159 /* ionicons-codes.h */,
+				D5FFE1AE18B1021B002D6159 /* IonIcons.h */,
+				D5FFE1AF18B1021B002D6159 /* IonIcons.m */,
+				D5FFE1B018B1021B002D6159 /* ionicons.ttf */,
+				D5FFE1B118B1021B002D6159 /* LICENSE */,
+				D5FFE1B218B1021B002D6159 /* README.md */,
+			);
+			path = ionicons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -503,7 +655,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = ML;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Ywesee GmbH";
 				TargetAttributes = {
 					D5A6F23617B1692F00EAB24B = {
@@ -548,12 +700,16 @@
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
+				D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */,
 				D5A6F28417B16B6000EAB24B /* MLSecondViewController~iphone.xib in Resources */,
 				D5A6F2B317B171C900EAB24B /* MLViewController.xib in Resources */,
 				D5A6F27D17B16B5800EAB24B /* MLViewController~iphone.xib in Resources */,
-				D5A6F28517B16B6000EAB24B /* MLMenuViewController.xib in Resources */,
-				D5A6F28617B16B6000EAB24B /* MLMenuViewController~iphone.xib in Resources */,
+				D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
+				D5A6F28517B16B6000EAB24B /* MLTitleViewController.xib in Resources */,
+				D554575618B3E87D003299E0 /* 905-chat-2.png in Resources */,
+				D554575018B3E86B003299E0 /* 970-medal.png in Resources */,
+				D5A6F28617B16B6000EAB24B /* MLTitleViewController~iphone.xib in Resources */,
 				D5A6F2A617B16E4400EAB24B /* 28-star.png in Resources */,
 				D5A6F2A717B16E4400EAB24B /* 28-star@2x.png in Resources */,
 				D5A6F2A917B16EF700EAB24B /* app_icon_57x57.png in Resources */,
@@ -561,24 +717,33 @@
 				D5A6F2AD17B16F2900EAB24B /* app_icon_144x144.png in Resources */,
 				D5A6F2AF17B16F3600EAB24B /* app_icon_114x114.png in Resources */,
 				D551D53D17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
+				D554574418B3E847003299E0 /* 1100-list-2.png in Resources */,
+				D554575818B3E87D003299E0 /* 905-chat-2@2x.png in Resources */,
 				D5A6F2B117B16FFD00EAB24B /* app_icon_32x32.png in Resources */,
 				D533DA9D17B2D05F00199C38 /* desitin_icon_57x57.png in Resources */,
 				D533DA9F17B2D07600199C38 /* desitin_icon_114x114.png in Resources */,
 				D533DAA317B2D2AE00199C38 /* desitin_icon_32x32.png in Resources */,
 				D533DAA617B434B600199C38 /* Default.png in Resources */,
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
+				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
+				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
+				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D533DAAA17B434FF00199C38 /* Default-Portrait@2x~ipad.png in Resources */,
 				D533DAAC17B4351700199C38 /* Default@2x.png in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
+				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
+				D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */,
 				D533DAAE17B435E300199C38 /* desitin_icon_72x72.png in Resources */,
 				D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */,
 				D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */,
 				D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */,
 				D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */,
 				D53E026E17C7BE6900CC29E3 /* amiko_db_full_idx_de.db in Resources */,
+				D5FFE1B718B1021B002D6159 /* LICENSE in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
-				D5F6BB9B17E8CC2500DCBD16 /* AmikoDesitin-Info.plist in Resources */,
+				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
+				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,45 +751,58 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5F6BB9C17E8CD8B00DCBD16 /* CoMedDesitin-Info.plist in Resources */,
+				D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
 				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
+				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */,
+				D5FFE1B818B1021B002D6159 /* LICENSE in Resources */,
 				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
 				D5F6BB6B17E8C87500DCBD16 /* 10-medical.png in Resources */,
 				D551D53C17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */,
+				D554575118B3E86B003299E0 /* 970-medal.png in Resources */,
 				D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */,
+				D554574518B3E847003299E0 /* 1100-list-2.png in Resources */,
 				D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */,
 				D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */,
 				D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */,
-				D5F6BB7117E8C87500DCBD16 /* MLMenuViewController.xib in Resources */,
-				D5F6BB7217E8C87500DCBD16 /* MLMenuViewController~iphone.xib in Resources */,
+				D5F6BB7117E8C87500DCBD16 /* MLTitleViewController.xib in Resources */,
+				D5F6BB7217E8C87500DCBD16 /* MLTitleViewController~iphone.xib in Resources */,
 				D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */,
 				D5F6BB7417E8C87500DCBD16 /* 28-star@2x.png in Resources */,
 				D5F6BB7517E8C87500DCBD16 /* app_icon_57x57.png in Resources */,
+				D554573F18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5F6BB7617E8C87500DCBD16 /* app_icon_72x72.png in Resources */,
 				D5F6BB7717E8C87500DCBD16 /* app_icon_144x144.png in Resources */,
 				D5F6BB7817E8C87500DCBD16 /* app_icon_114x114.png in Resources */,
 				D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */,
 				D5F6BB7917E8C87500DCBD16 /* app_icon_32x32.png in Resources */,
+				D554575918B3E87D003299E0 /* 905-chat-2@2x.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
+				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
+				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
+				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
 				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
 				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
 				D5F6BB9017E8C87500DCBD16 /* amiko_db_full_idx_fr.db in Resources */,
+				D554574718B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D5B75BEC17FF53F5008ECDBB /* comed_des_launch_2048x1536.png in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
+				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
+				D5FFE1BA18B1021B002D6159 /* README.md in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
+				D554575718B3E87D003299E0 /* 905-chat-2.png in Resources */,
 				D52A0D6C17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png in Resources */,
 				D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */,
 				D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */,
@@ -639,19 +817,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
+				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
+				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
+				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
+				D5FFE17818A96BA0002D6159 /* MLMenuViewController.m in Sources */,
+				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
 				D5A6F29317B16C1D00EAB24B /* MLMedication.m in Sources */,
-				D5A6F29417B16C1D00EAB24B /* MLMenuViewController.m in Sources */,
+				D5A6F29417B16C1D00EAB24B /* MLTitleViewController.m in Sources */,
 				D5A6F29717B16C2F00EAB24B /* MLSearchWebView.m in Sources */,
 				D5A6F29A17B16C3A00EAB24B /* MLSecondViewController.m in Sources */,
 				D5A6F2A117B16C4B00EAB24B /* MLSimpleTableCell.m in Sources */,
 				D5A6F2A217B16C4B00EAB24B /* MLSQLiteDatabase.m in Sources */,
 				D5A6F2A317B16C4B00EAB24B /* MLViewController.m in Sources */,
+				D5A31F5C18B5207200F56BC5 /* zip.c in Sources */,
+				D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */,
+				D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -660,19 +847,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */,
 				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
+				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
+				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
+				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
+				D5FFE17918A96BA0002D6159 /* MLMenuViewController.m in Sources */,
+				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
 				D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */,
-				D5F6BB5717E8C87500DCBD16 /* MLMenuViewController.m in Sources */,
+				D5F6BB5717E8C87500DCBD16 /* MLTitleViewController.m in Sources */,
 				D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */,
 				D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */,
 				D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */,
 				D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */,
 				D5F6BB5C17E8C87500DCBD16 /* MLViewController.m in Sources */,
+				D5A31F5D18B5207200F56BC5 /* zip.c in Sources */,
+				D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */,
+				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

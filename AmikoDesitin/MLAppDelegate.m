@@ -27,6 +27,7 @@
 #import "SWRevealViewController.h"
 #import "MLViewController.h"
 #import "MLSecondViewController.h"
+#import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
@@ -68,47 +69,45 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height);
     
-    MLSecondViewController *frontViewController = [[MLSecondViewController alloc] init];
-    MLViewController *rearViewController = [[MLViewController alloc] init];
-    MLMenuViewController *rightViewController = [[MLMenuViewController alloc] init];
+    MLViewController *mainViewController = [[MLViewController alloc] init];
+    UINavigationController *mainViewNavigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
+    UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
     
-    UINavigationController *frontNavigationController = [[UINavigationController alloc]
-                                                         initWithRootViewController:frontViewController];
-    UINavigationController *rearNavigationController = [[UINavigationController alloc]
-                                                        initWithRootViewController:rearViewController];
+    SWRevealViewController *mainRevealController = [[SWRevealViewController alloc]
+                                                initWithRearViewController:mainViewNavigationController
+                                                frontViewController:secondViewNavigationController];
     
-    SWRevealViewController *revealController = [[SWRevealViewController alloc]
-                                                initWithRearViewController:rearNavigationController
-                                                frontViewController:frontNavigationController];
-    revealController.rightViewController = rightViewController;
+    MLTitleViewController *titleViewController = [[MLTitleViewController alloc] init];    
+    mainRevealController.rightViewController = titleViewController;
     
-    revealController.delegate = self;
+    mainRevealController.delegate = self;
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-            revealController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
+            mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
         } else {
-            revealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
+            mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
-        revealController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPad;
-        revealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
+        mainRevealController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPad;
+        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
 
-        self.revealViewController = revealController;
-        [revealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
+        self.revealViewController = mainRevealController;
+        [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
 
         self.window.rootViewController = self.revealViewController;
     } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        revealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-        revealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
+        mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
+        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
         
-        self.revealViewController = revealController;
-        [revealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
+        self.revealViewController = mainRevealController;
+        [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
         
         self.window.rootViewController = self.revealViewController; 
     }
-    revealController.bounceBackOnOverdraw = YES;
+    mainRevealController.bounceBackOnOverdraw = YES;
     
     // Note: iOS7 - sets the global TINT color!!
     if (IOS_NEWER_OR_EQUAL_TO_7) {

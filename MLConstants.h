@@ -23,6 +23,23 @@
 
 #import <Foundation/Foundation.h>
 
+#if defined (AMIKO_DESITIN)
+extern NSString* const APP_NAME;
+extern NSString* const APP_ID;
+#elif defined (COMED_DESITIN)
+extern NSString* const APP_NAME;
+extern NSString* const APP_ID;
+#elif defined (AMIKO)
+extern NSString* const APP_NAME;
+extern NSString* const APP_ID;
+#elif defined (COMED)
+extern NSString* const APP_NAME;
+extern NSString* const APP_ID;
+#else
+extern NSString* const APP_NAME;
+extern NSString* const APP_ID;
+#endif
+
 extern const int RearViewFullWidth_Portrait_iPad;
 extern const int RearViewFullWidth_Landscape_iPad;
 

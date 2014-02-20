@@ -26,7 +26,9 @@
 #import "MLConstants.h"
 
 #import "MLSecondViewController.h"
+#import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+
 #import "MLDBAdapter.h"
 #import "MLMedication.h"
 #import "MLSimpleTableCell.h"
@@ -38,16 +40,6 @@
 
 #import <mach/mach.h>
 #import <sys/time.h>
-
-#if defined (AMIKO_DESITIN)
-static NSString *APP_NAME = @"AmiKoDesitin";
-#elif defined (COMED_DESITIN)
-static NSString *APP_NAME = @"CoMedDesitin";
-#elif defined (AMIKO_IOS)
-static NSString *APP_NAME = @"AmiKoiOS";
-#elif defined (COMED_IOS)
-static NSString *APP_NAME = @"CoMediOS";
-#endif
 
 enum {
     kAips=0, kHospital=1, kFavorites=2
@@ -112,11 +104,14 @@ static NSInteger mCurrentSearchState = kTitle;
    
     __block NSArray *searchResults;
     
-    SWRevealViewController *revealController;
-    UINavigationController *secondViewNavigationController;
+    SWRevealViewController *mainRevealController;
     
-    MLSecondViewController *secondView;
-    MLMenuViewController *rightViewController;
+    MLSecondViewController *secondViewController;
+    MLTitleViewController *titleViewController;
+    MLMenuViewController *menuViewController;
+
+    UINavigationController *secondViewNavigationController;
+    UINavigationController *menuViewNavigationController;
     
     UIActivityIndicatorView *mActivityIndicator;
     
@@ -256,8 +251,11 @@ static NSInteger mCurrentSearchState = kTitle;
     // Used by tableview
     medIdArray = [NSMutableArray array];
     
-    secondView = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
+    secondViewController = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
     secondViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
+    
+    menuViewController = nil;
+    menuViewNavigationController = nil;
     
     if ([[self appLanguage] isEqualToString:@"de"]) {
         SEARCH_STRING = @"Suche";
@@ -305,6 +303,18 @@ static NSInteger mCurrentSearchState = kTitle;
     runningActivityIndicator = NO;
     
     mSearchQueue = dispatch_queue_create("com.ywesee.searchdb", nil);
+    
+    // Register observer to notify successful download of new database
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(finishedDownloading:)
+                                                 name:@"MLDidFinishLoading"
+                                               object:nil];
+    
+    // Register observer to notify absence of file on pillbox server
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(finishedDownloading:)
+                                                 name:@"MLStatusCode404"
+                                               object:nil];
 
     return self;
 }
@@ -313,18 +323,18 @@ static NSInteger mCurrentSearchState = kTitle;
     if ([APP_NAME isEqualToString:@"AmiKoDesitin"]
         || [APP_NAME isEqualToString:@"CoMedDesitin"])
         return @"desitin";
-    else if ([APP_NAME isEqualToString:@"AmiKoiOS"]
-             || [APP_NAME isEqualToString:@"CoMediOS"])
+    else if ([APP_NAME isEqualToString:@"iAmiKo"]
+             || [APP_NAME isEqualToString:@"iCoMed"])
         return @"ywesee";
     return nil;
 }
 
 - (NSString *) appLanguage
 {
-    if ([APP_NAME isEqualToString:@"AmiKoiOS"]
+    if ([APP_NAME isEqualToString:@"iAmiKo"]
         || [APP_NAME isEqualToString:@"AmiKoDesitin"])
         return @"de";
-    else if ([APP_NAME isEqualToString:@"CoMediOS"]
+    else if ([APP_NAME isEqualToString:@"iCoMed"]
              || [APP_NAME isEqualToString:@"CoMedDesitin"])
         return @"fr";
     
@@ -333,14 +343,82 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (NSString *) notSpecified
 {
-    if ([APP_NAME isEqualToString:@"AmiKoiOS"]
+    if ([APP_NAME isEqualToString:@"iAmiKo"]
         || [APP_NAME isEqualToString:@"AmiKoDesitin"])
         return @"k.A.";
-    else if ([APP_NAME isEqualToString:@"CoMediOS"]
+    else if ([APP_NAME isEqualToString:@"iCoMed"]
              || [APP_NAME isEqualToString:@"CoMedDesitin"])
         return @"n.s.";
     
     return nil;
+}
+
+- (void) finishedDownloading:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"MLDidFinishLoading"]) {
+        NSLog(@"Finished downloading");
+        if (mDb!=nil) {
+            // Close database
+            [mDb closeDatabase];
+            // Re-open database
+            [self openSQLiteDatabase];
+            // Reload table
+            [self resetDataInTableView];
+            // Display friendly message
+            long numSearchRes = [searchResults count];
+            if ([[self appLanguage] isEqualToString:@"de"]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AIPS Datenbank aktualisiert!"
+                                                                message:[NSString stringWithFormat:@"Die Datenbank enthält %ld Fachinfos.", numSearchRes]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Banque des donnees AIPS mises à jour!"
+                                                                message:[NSString stringWithFormat:@"La banque des données contien %ld notices infopro.", numSearchRes]
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+            }
+        }
+    } else if ([[notification name] isEqualToString:@"MLStatusCode404"]) {
+        NSLog(@"Status Code 404");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Datenbank kann nicht aktualisiert werden!"
+                                                        message:@"Blubber"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (void) openSQLiteDatabase
+{
+    mDb = [[MLDBAdapter alloc] init];
+    if ([[self appLanguage] isEqualToString:@"de"]) {
+        if (![mDb openDatabase:@"amiko_db_full_idx_de"]) {
+            NSLog(@"No German database!");
+            mDb = nil;
+        }
+    } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+        if (![mDb openDatabase:@"amiko_db_full_idx_fr"]) {
+            NSLog(@"No French database!");
+            mDb = nil;
+        }
+    }
+}
+
+- (void) resetDataInTableView
+{
+    // Reset search state
+    mCurrentSearchState = kTitle;
+    
+    searchResults = [self searchAipsDatabaseWith:@""];
+    if (searchResults) {
+        [self updateTableView];
+        [self.myTableView reloadData];
+   }
 }
 
 - (void) resetBarButtonItems
@@ -759,16 +837,44 @@ static NSInteger mCurrentSearchState = kTitle;
                                                           [UIColor lightGrayColor], UITextAttributeTextColor,
                                                           nil]];
     
-    // Add icon
-    // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"28-star-ye.png"]];
+    // Add icon (top center)
+    // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon_32x32.png"]];
+
     UIButton *logoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0, 0, 32, 32);
-    [logoButton addTarget:self action:@selector(myIconPressMethod:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *app_icon = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
+    [logoButton addTarget:self action:@selector(myShowMenuMethod:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *appIconItem = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
 
-    self.navigationItem.leftBarButtonItem = app_icon;
-
+    self.navigationItem.leftBarButtonItem = appIconItem;
+    
+    /*
+     // Initialize menu view controllers
+    */
+    if (menuViewController!=nil) {
+        [menuViewController removeFromParentViewController];
+        menuViewController = nil;
+    }
+    menuViewController = [[MLMenuViewController alloc] initWithNibName:@"MLMenuViewController" bundle:nil parent:self];
+    
+    if (menuViewNavigationController!=nil) {
+        [menuViewNavigationController removeFromParentViewController];
+        menuViewNavigationController = nil;
+    }
+    menuViewNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+    /*
+     //
+    */
+    
+    /**
+    UIBarButtonItem *revealMenuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                                                       style:UIBarButtonItemStyleBordered
+                                                                      target:self
+                                                                      action:@selector(myShowMenuMethod:)];
+    
+    self.navigationItem.rightBarButtonItem = revealMenuItem;
+    */
+    
     // Background color of navigation bar
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         self.navigationController.navigationBar.backgroundColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
@@ -814,12 +920,15 @@ static NSInteger mCurrentSearchState = kTitle;
     mLongPressRecognizer.delegate = self;
     [self.myTableView addGestureRecognizer:mLongPressRecognizer];
     
+    /*
     mDb = [[MLDBAdapter alloc] init];
     [mDb openDatabase];
+    */
+    // Open database
+    [self openSQLiteDatabase];
 
 #ifdef DEBUG
     NSLog(@"Number of Records = %ld", (long)[mDb getNumRecords]);
-    // NSLog(@"%@", NSLocalizedString(@"Paste", @""));
 #endif
     
     // Load favorites
@@ -852,41 +961,69 @@ static NSInteger mCurrentSearchState = kTitle;
     mCurrentSearchState = kTitle;
 }
 
-- (IBAction) myIconPressMethod:(id)sender
+- (void) myShowMenuMethod:(id)sender
 {
-    if (rightViewController != nil && secondView != nil) {
-        [rightViewController removeObserver:secondView forKeyPath:@"javaScript"];
+    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad) {
+        mainRevealController = self.revealViewController;
+        [mainRevealController setFrontViewController:menuViewNavigationController];
+        [mainRevealController setFrontViewPosition:FrontViewPositionRight animated:YES];
+    } else {
+        [menuViewController showMenu:self];
     }
+}
+
+- (void) myIconPressMethod:(id)sender
+{
+    // A. Check first users documents folder
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    // Get documents directory
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDir = [paths lastObject];
     
     // Load style sheet from file
     NSString *amikoReportFile = nil;
-    if ([[self appLanguage] isEqualToString:@"de"])
-        amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
-    else if ([[self appLanguage] isEqualToString:@"fr"])
-        amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_fr" ofType:@"html"];
+    
+    if ([[self appLanguage] isEqualToString:@"de"]) {
+        NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_de"] stringByAppendingPathExtension:@"html"];
+        if ([fileManager fileExistsAtPath:filePath])
+            amikoReportFile = filePath;
+        else
+            amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
+    } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+        NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_fr"] stringByAppendingPathExtension:@"html"];
+        if ([fileManager fileExistsAtPath:filePath])
+            amikoReportFile = filePath;
+        else
+            amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_fr" ofType:@"html"];
+    }
+
     NSError *error = nil;
     NSString *amikoReport = [NSString stringWithContentsOfFile:amikoReportFile encoding:NSUTF8StringEncoding error:&error];
 
-    NSLog(@"Error: %@", error);    
     if (amikoReport==nil)
         amikoReport = @"";
-    
-    if (secondView!=nil) {
-        [secondView removeFromParentViewController];
-        secondView = nil;
+
+    if (titleViewController!=nil && secondViewController!=nil) {
+        [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
     }
     
-    secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:@"About" andParam:1];
+    if (secondViewController!=nil) {
+        [secondViewController removeFromParentViewController];
+        secondViewController = nil;
+    }
+    
+    secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:@"About" andParam:1];
     
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         UIFont *font = [UIFont fontWithName:@"Arial" size:14];
-        secondView.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
+        secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     } else {
         UIFont *font = [UIFont fontWithName:@"Arial" size:15];
-        secondView.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
+        secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     }
-    // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
-    [rightViewController addObserver:secondView
+    // Class MLSecondViewController is now registered as an observer of class MLTitleViewController
+    [titleViewController addObserver:secondViewController
                           forKeyPath:@"javaScript"
                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                              context:@"javaScriptChanged"];
@@ -895,12 +1032,12 @@ static NSInteger mCurrentSearchState = kTitle;
         [secondViewNavigationController removeFromParentViewController];
         secondViewNavigationController = nil;
     }
-    secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
+    secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
     
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
-    revealController = self.revealViewController;
-    [revealController setFrontViewController:secondViewNavigationController animated:YES];
-    [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    mainRevealController = self.revealViewController;
+    [mainRevealController setFrontViewController:secondViewNavigationController animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
     
     report_memory();
 }
@@ -1602,8 +1739,8 @@ static NSInteger mCurrentSearchState = kTitle;
 {
     long mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
     
-    if (rightViewController != nil && secondView != nil) {
-        [rightViewController removeObserver:secondView forKeyPath:@"javaScript"];
+    if (titleViewController!=nil && secondViewController!=nil) {
+        [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
     }
     MLMedication *med = [mDb searchId:mId];
     
@@ -1615,36 +1752,36 @@ static NSInteger mCurrentSearchState = kTitle;
     else
         amikoCss = [NSString stringWithString:med.styleStr];
     
-    if (secondView!=nil) {
+    if (secondViewController!=nil) {
         // [secondView removeFromParentViewController];
-        secondView = nil;
+        secondViewController = nil;
     }
     
-    secondView = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
+    secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                           bundle:nil
                                                            title:FACHINFO_STRING
                                                         andParam:2];
-    secondView.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, med.contentStr];
+    secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, med.contentStr];
     
     // Extract section ids
     NSArray *listofSectionIds = [med.sectionIds componentsSeparatedByString:@","];
     // Extract section titles
     NSArray *listofSectionTitles = [med.sectionTitles componentsSeparatedByString:@";"];
     
-    if (rightViewController!=nil) {
-        [rightViewController removeFromParentViewController];
-        rightViewController = nil;
+    if (titleViewController!=nil) {
+        [titleViewController removeFromParentViewController];
+        titleViewController = nil;
     }
-    rightViewController = [[MLMenuViewController alloc] initWithMenu:listofSectionTitles
+    titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
                                                           sectionIds:listofSectionIds
                                                          andLanguage:[self appLanguage]];
     
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
-    revealController = self.revealViewController;
-    revealController.rightViewController = rightViewController;
+    mainRevealController = self.revealViewController;
+    mainRevealController.rightViewController = titleViewController;
     
     // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
-    [rightViewController addObserver:secondView
+    [titleViewController addObserver:secondViewController
                           forKeyPath:@"javaScript"
                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                              context:@"javaScriptChanged"];
@@ -1655,11 +1792,11 @@ static NSInteger mCurrentSearchState = kTitle;
         [secondViewNavigationController removeFromParentViewController];
         secondViewNavigationController = nil;
     }
-    secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
+    secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
     // Show SecondViewController! (UIWebView)
-    [revealController setFrontViewController:secondViewNavigationController animated:YES];
-    [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    [mainRevealController setFrontViewController:secondViewNavigationController animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 
 #ifdef DEBUG
     report_memory();

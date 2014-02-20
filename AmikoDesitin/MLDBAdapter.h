@@ -27,6 +27,7 @@
 @interface MLDBAdapter : NSObject
 
 - (void) openDatabase;
+- (BOOL) openDatabase: (NSString *)dbName;
 - (void) closeDatabase;
 - (NSInteger) getNumRecords;
 - (MLMedication *) searchId: (long)rowId;
