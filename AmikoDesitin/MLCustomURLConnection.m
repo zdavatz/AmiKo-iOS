@@ -9,11 +9,10 @@
 #import "MLCustomURLConnection.h"
 #import "MLProgressViewController.h"
 
-#import "SSZipArchive.h"
-
 @implementation MLCustomURLConnection
 {
     MLProgressViewController *myProgressView;
+    UIAlertView *myAlertView;
     NSURLConnection *myConnection;
     NSFileHandle *mFile;        // writes directly to disk
     // NSMutableData *mData;    // caches in memory
@@ -62,7 +61,7 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
     mFile = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
 }
 
-#pragma mark Delegate methods
+#pragma mark - NSURLConnectionDataDelegate
 
 // delegate calls just so let us know when it's working or when it isn't
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
@@ -104,7 +103,6 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
         [myProgressView updateWith:mTotDownloadedBytes andWith:mTotExpectedBytes];
 }
 
-
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection
 {
     // Release stuff
@@ -117,7 +115,16 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MLStatusCode404" object:self];
         return;
     }
-    // Unzip database
+
+    if (mModal) {
+        // Remove progress view
+        [myProgressView remove];
+        [self unzipDatabase];
+    }
+}
+
+- (void) unzipDatabase
+{
     if ([[mFileName pathExtension] isEqualToString:@"zip"])  {
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:mFileName];
@@ -129,15 +136,21 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
         if (filePath!=nil) {
             // NSLog(@"Filepath = %@", filePath);
             NSString *output = [documentsDirectory stringByAppendingPathComponent:@"."];
-            [myProgressView setMessage:@"Unzipping..."];
             // NSLog(@"Output = %@", output);
-            [SSZipArchive unzipFileAtPath:zipFilePath toDestination:output];
-            // Remove progress view
-            [myProgressView remove];
+            BOOL unzipped = [SSZipArchive unzipFileAtPath:zipFilePath toDestination:output delegate:self];
             // Unzip data success, post notification
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"MLDidFinishLoading" object:self];
+            if (unzipped == YES) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"MLDidFinishLoading" object:self];
+            }
         }
     }
+}
+
+#pragma mark - SSZipArchiveDelegate
+
+- (void) zipArchiveWillUnzipFileAtIndex:(NSInteger)fileIndex totalFiles:(NSInteger)totalFiles archivePath:(NSString *)archivePath fileInfo:(unz_file_info)fileInfo
+{
+    NSLog(@"Unzipping: %d of %d", fileIndex, totalFiles);
 }
 
 @end

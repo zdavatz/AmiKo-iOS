@@ -1128,6 +1128,7 @@ static NSInteger mCurrentSearchState = kTitle;
     NSDate *endTime = [NSDate date];
     NSTimeInterval execTime = [endTime timeIntervalSinceDate:startTime];
     mNumCurrSearchResults = [medList count];
+    
     NSLog(@"%d Favoriten in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
     
     return medList;

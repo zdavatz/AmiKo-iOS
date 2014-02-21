@@ -86,9 +86,8 @@
     }    
 }
 
-#pragma mark Delegate methods
+#pragma mark - UIGestureRecognizerDelegate
 
-// UIGestureRecognizerDelegate
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
@@ -108,7 +107,7 @@
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Report", @"Update", @"Share", @"Rate", @"Feedback", nil];
+                                              otherButtonTitles:@"Feedback", @"Share", @"Rate", @"Report", @"Update", nil];
     mMenuActionSheet.tag = 1;
     
     [mMenuActionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
@@ -121,19 +120,19 @@
         case 1: {
             switch (buttonIndex) {
                 case 0:
-                    [self showReport:@"Report"];
+                    [self sendFeedback:@"Feedback"];
                     break;
                 case 1:
-                    [self startUpdate:@"Update"];
+                    [self shareApp:@"Share"];
                     break;
                 case 2:
-                    NSLog(@"Share");
+                    [self rateApp:@"Rate"];
                     break;
                 case 3:
-                    NSLog(@"Rate");
+                    [self showReport:@"Report"];
                     break;
                 case 4:
-                    NSLog(@"Feedback");
+                    [self startUpdate:@"Update"];
                     break;
                 default:
                     break;
@@ -145,9 +144,81 @@
     }
 }
 
+- (void) sendEmailTo:(NSString *)recipient withSubject:(NSString *)subject andBody:(NSString *)body
+{
+    if ([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+        mailer.mailComposeDelegate = self;
+        // Subject
+        [mailer setSubject:subject];
+        // Recipient
+        if (![recipient isEqualToString:@""]) {
+            NSArray *toRecipients = [NSArray arrayWithObjects:recipient, nil];
+            [mailer setToRecipients:toRecipients];
+        }
+        // Attach screenshot...
+        // UIImage *screenShot = [UIImage imageNamed:@"Default.png"];
+        UIGraphicsBeginImageContextWithOptions(mParentViewController.view.bounds.size, NO, [UIScreen mainScreen].scale);
+        [mParentViewController.view drawViewHierarchyInRect:mParentViewController.view.bounds afterScreenUpdates:YES];
+        UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        NSData *imageData = UIImagePNGRepresentation(screenShot);
+        [mailer addAttachmentData:imageData mimeType:@"image/png" fileName:@"Images"];
+        if (![body isEqualToString:@""]) {
+            [mailer setMessageBody:body isHTML:YES];
+        }
+        [self presentViewController:mailer animated:YES completion:nil];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure"
+                                                        message:@"Your device does not support the composer sheet"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
+    }
+
+}
+
+- (IBAction) sendFeedback:(id)sender
+{
+    NSLog(@"Send feedback");
+    
+    [self sendEmailTo:@"zdavatz@ywesee.com" withSubject:[NSString stringWithFormat:@"%@ Feedback", APP_NAME] andBody:@""];
+}
+
+- (IBAction) shareApp:(id)sender
+{
+    NSLog(@"Share app");
+    
+    NSString* subject = [NSString stringWithFormat:@"%@", APP_NAME];
+    NSString* body = nil;
+    if ([APP_NAME isEqualToString:@"iAmiKo"] || [APP_NAME isEqualToString:@"AmiKoDesitin"]) {
+        body = [NSString stringWithFormat:@"%@: Schweizer Arzneimittelkompendium<br /><br />"
+                "Get it now: <a href=https://itunes.apple.com/us/app/amiko/id%@?mt=8>https://itunes.apple.com/us/app/amiko/id%@?mt=8</a>"
+                "<br /><br />Enjoy!<br />", APP_NAME, APP_ID, APP_ID];
+    } else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"]) {
+        body = [NSString stringWithFormat:@"%@: Compendium des Médicaments Suisse<br /><br />"
+                "Get it now: <a href=https://itunes.apple.com/us/app/amiko/id%@?mt=8>https://itunes.apple.com/us/app/amiko/id%@?mt=8</a>"
+                "<br /><br />Enjoy!<br />", APP_NAME, APP_ID, APP_ID];
+    }
+    
+    [self sendEmailTo:@"" withSubject:subject andBody:body];
+}
+
+- (IBAction) rateApp:(id)sender
+{
+    NSLog(@"Rate app");
+
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?mt=8", APP_ID]]];
+}
+
 - (IBAction) showReport:(id)sender
 {
-    NSLog(@"Report");
+    NSLog(@"Show report");
+    
     if (mParentViewController!=nil) {
         [mParentViewController myIconPressMethod:self];
     }
@@ -155,7 +226,8 @@
 
 - (IBAction) startUpdate:(id)sender
 {
-    NSLog(@"Update");
+    NSLog(@"Start update");
+    
     MLCustomURLConnection *reportConn = [[MLCustomURLConnection alloc] init];
     MLCustomURLConnection *dbConn = [[MLCustomURLConnection alloc] init];
 
@@ -170,19 +242,27 @@
     }
 }
 
-- (IBAction) shareApp:(id)sender
-{
-    NSLog(@"Share");
-}
+#pragma mark - MFMailComposeViewControllerDelegate
 
-- (IBAction) rateApp:(id)sender
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    NSLog(@"Rate");
-}
+    [self dismissViewControllerAnimated:NO completion:nil];
 
-- (IBAction) sendFeedback:(id)sender
-{
-    NSLog(@"Feedback");
+    NSString* message = nil;
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            message = @"No mail sent at user request.";
+            break;
+        case MFMailComposeResultSaved:
+            message = @"Draft saved";
+            break;
+        case MFMailComposeResultSent:
+            message = @"Mail sent";
+            break;
+        case MFMailComposeResultFailed:
+            message = @"Error";
+    }
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, message);
 }
 
 - (void) didReceiveMemoryWarning

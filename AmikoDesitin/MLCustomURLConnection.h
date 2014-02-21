@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MLCustomURLConnection : NSURLConnection <NSURLConnectionDataDelegate>
+#import "SSZipArchive.h"
+
+@interface MLCustomURLConnection : NSURLConnection <NSURLConnectionDataDelegate, SSZipArchiveDelegate>
 
 - (void) downloadFileWithName:(NSString *)file andModal:(bool)modal;
 

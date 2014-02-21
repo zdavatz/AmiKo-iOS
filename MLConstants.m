@@ -25,19 +25,19 @@
 
 #if defined (AMIKO_DESITIN)
 NSString* const APP_NAME = @"AmiKoDesitin";
-NSString* const APP_ID = @"708142753";
+NSString* const APP_ID = @"687642725";
 #elif defined (COMED_DESITIN)
 NSString* const APP_NAME = @"CoMedDesitin";
-NSString* const APP_ID = @"710472327";
+NSString* const APP_ID = @"712891884";
 #elif defined (AMIKO)
 NSString* const APP_NAME = @"iAmiKo";
-NSString* const APP_ID = @"710472327";
+NSString* const APP_ID = @"687642725";
 #elif defined (COMED)
 NSString* const APP_NAME = @"iCoMed";
-NSString* const APP_ID = @"710472327";
+NSString* const APP_ID = @"712891884";
 #else
 NSString* const APP_NAME = @"iAmiKo";
-NSString* const APP_ID = @"708142753";
+NSString* const APP_ID = @"687642725";
 #endif
 
 /** iPad

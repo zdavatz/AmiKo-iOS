@@ -53,15 +53,27 @@
 
 - (void) updateWith:(int)downloadedBytes andWith:(int)expectedBytes;
 {
-    float progress = (float)downloadedBytes/expectedBytes;
-    [mAlertView setMessage:[NSString stringWithFormat:@"%d%% (%dkb out of %dkb)",
-                            (int)(100*progress), downloadedBytes/1000, expectedBytes/1000]];
+    float progress = 100*(float)downloadedBytes/expectedBytes;
+    if (progress<99) {
+        [mAlertView setMessage:[NSString stringWithFormat:@"%d%% (%dkb out of %dkb)",
+                                (int)(progress), downloadedBytes/1000, expectedBytes/1000]];
+    } else {
+        [mAlertView setMessage:[NSString stringWithFormat:@"Unzipping..."]];
+    }
     if (mProgressBar!=nil)
-        mProgressBar.progress = progress;
+        mProgressBar.progress = progress/100.0f;
 }
 
 - (void) remove
 {
+    /*
+    for (UIWindow* window in [UIApplication sharedApplication].windows) {
+        NSArray* subviews = window.subviews;
+        if ([subviews count] > 0)
+            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
+                [(UIAlertView *)[subviews objectAtIndex:0] dismissWithClickedButtonIndex:[(UIAlertView *)[subviews objectAtIndex:0] cancelButtonIndex] animated:NO];
+    }
+    */
     [mAlertView dismissWithClickedButtonIndex:-1 animated:NO];
     // Alternative in case the previous line causes a crash!
     // [mAlertView removeFromSuperview];
@@ -72,9 +84,8 @@
     [mAlertView setTitle:@"Update cancelled!"];
 }
 
-/*
- UIAlertViewDelegate implements
- */
+#pragma mark - UIAlertViewDelegate
+
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
 	if (buttonIndex == alertView.cancelButtonIndex) {

@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 #import "MLViewController.h"
 
-@interface MLMenuViewController : UIViewController <UIActionSheetDelegate, UIGestureRecognizerDelegate>
+@interface MLMenuViewController : UIViewController <UIActionSheetDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate>
 
 - (IBAction) showReport:(id)sender;
 - (IBAction) startUpdate:(id)sender;
