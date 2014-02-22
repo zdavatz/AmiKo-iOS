@@ -61,6 +61,7 @@
 		D59E895918B7C0E100185094 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A31F6218B5263500F56BC5 /* libz.1.2.5.dylib */; };
 		D59E895B18B7E7CB00185094 /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */; };
+		D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */; };
 		D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
 		D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
 		D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4E18B5207200F56BC5 /* ioapi.c */; };
@@ -224,10 +225,10 @@
 		D565DA8D17B7EA9C0002E2CF /* desitin_launch_768x1004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_768x1004.png; sourceTree = "<group>"; };
 		D565DA8E17B7EA9C0002E2CF /* desitin_launch_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_1024x768.png; sourceTree = "<group>"; };
 		D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_1536x2008.png; sourceTree = "<group>"; };
-		D565DA9017B7EA9C0002E2CF /* desitin_launch_2048x1496.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_2048x1496.png; sourceTree = "<group>"; };
 		D59E895518B7C0C100185094 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_de.db; sourceTree = "<group>"; };
 		D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
+		D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = desitin_launch_2048x1536.png; path = "AmikoDesitin/Images.xcassets/LaunchImage-AmiKoDesitin.launchimage/desitin_launch_2048x1536.png"; sourceTree = "<group>"; };
 		D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLCustomURLConnection.h; sourceTree = "<group>"; };
 		D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLCustomURLConnection.m; sourceTree = "<group>"; };
 		D5A31F4D18B5207200F56BC5 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
@@ -305,7 +306,6 @@
 		D5F6BB9F17EB816700DCBD16 /* comed_des_launch_640x1136.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_640x1136.png; sourceTree = "<group>"; };
 		D5F6BBA017EB816800DCBD16 /* comed_des_launch_768x1004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_768x1004.png; sourceTree = "<group>"; };
 		D5F6BBA117EB816800DCBD16 /* comed_des_launch_1536x2008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1536x2008.png; sourceTree = "<group>"; };
-		D5F6BBA217EB816900DCBD16 /* comed_des_launch_2048x1496.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_2048x1496.png; sourceTree = "<group>"; };
 		D5F6BBA917EB81C500DCBD16 /* comed_des_launch_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1024x768.png; sourceTree = "<group>"; };
 		D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLMenuViewController.xib; sourceTree = "<group>"; };
 		D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMenuViewController.h; sourceTree = "<group>"; };
@@ -579,13 +579,13 @@
 		D5F6BBAB17EB8BC200DCBD16 /* LaunchImages */ = {
 			isa = PBXGroup;
 			children = (
+				D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */,
 				D565DA8A17B7EA9C0002E2CF /* desitin_launch_320x480.png */,
 				D565DA8B17B7EA9C0002E2CF /* desitin_launch_640x960.png */,
 				D565DA8C17B7EA9C0002E2CF /* desitin_launch_640x1136.png */,
 				D565DA8D17B7EA9C0002E2CF /* desitin_launch_768x1004.png */,
 				D565DA8E17B7EA9C0002E2CF /* desitin_launch_1024x768.png */,
 				D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */,
-				D565DA9017B7EA9C0002E2CF /* desitin_launch_2048x1496.png */,
 				D5F6BB9D17EB816600DCBD16 /* comed_des_launch_320x480.png */,
 				D5F6BB9E17EB816700DCBD16 /* comed_des_launch_640x960.png */,
 				D5F6BB9F17EB816700DCBD16 /* comed_des_launch_640x1136.png */,
@@ -593,7 +593,6 @@
 				D5F6BBA917EB81C500DCBD16 /* comed_des_launch_1024x768.png */,
 				D5F6BBA017EB816800DCBD16 /* comed_des_launch_768x1004.png */,
 				D5F6BBA117EB816800DCBD16 /* comed_des_launch_1536x2008.png */,
-				D5F6BBA217EB816900DCBD16 /* comed_des_launch_2048x1496.png */,
 				D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */,
 			);
 			name = LaunchImages;
@@ -752,6 +751,7 @@
 				D5FFE1B718B1021B002D6159 /* LICENSE in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
+				D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */,
 				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 			);
