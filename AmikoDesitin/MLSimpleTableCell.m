@@ -45,14 +45,14 @@
     // - assign the new frame
     if (IOS_NEWER_OR_EQUAL_TO_7) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            self.imageView.frame = CGRectMake(16, 4, 22, 22);
+            self.imageView.frame = CGRectMake(12, 4, 28, 28);
         else {
-            self.imageView.frame = CGRectMake(12, 4, 22, 22);
-            self.textLabel.frame = CGRectMake(self.textLabel.frame.origin.x - 8.0,
+            self.imageView.frame = CGRectMake(10, 4, 24, 24);
+            self.textLabel.frame = CGRectMake(self.textLabel.frame.origin.x - 10.0,
                                               self.textLabel.frame.origin.y,
                                               self.textLabel.frame.size.width,
                                               self.textLabel.frame.size.height);
-            self.detailTextLabel.frame = CGRectMake(self.detailTextLabel.frame.origin.x - 8.0,
+            self.detailTextLabel.frame = CGRectMake(self.detailTextLabel.frame.origin.x - 10.0,
                                                     self.detailTextLabel.frame.origin.y,
                                                     self.detailTextLabel.frame.size.width,
                                                     self.detailTextLabel.frame.size.height);

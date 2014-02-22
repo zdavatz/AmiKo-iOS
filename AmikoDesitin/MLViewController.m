@@ -1823,7 +1823,7 @@ static NSInteger mCurrentSearchState = kTitle;
                      constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
             subTextSize = [self tableText:subText sizeWithFont:[UIFont boldSystemFontOfSize:12]
                         constrainedToSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)];
-            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4;
+            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.3;
         }
     } else {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
