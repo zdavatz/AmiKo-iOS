@@ -1,10 +1,26 @@
-//
-//  MLMainMenuViewController.m
-//  AmikoDesitin
-//
-//  Created by Max on 10/02/2014.
-//  Copyright (c) 2014 Ywesee GmbH. All rights reserved.
-//
+/*
+ 
+ Copyright (c) 2014 Max Lungarella <cybrmx@gmail.com>
+ 
+ Created on 14/02/2014.
+ 
+ This file is part of AMiKoDesitin.
+ 
+ AmiKoDesitin is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ 
+ ------------------------------------------------------------------------ */
+
 
 #import "MLMenuViewController.h"
 #import "MLConstants.h"
@@ -146,10 +162,12 @@
 
 - (void) sendEmailTo:(NSString *)recipient withSubject:(NSString *)subject andBody:(NSString *)body
 {
-    if ([MFMailComposeViewController canSendMail])
-    {
+    // Check if device is configured to send email
+    if ([MFMailComposeViewController canSendMail]) {
+        // Init mail view controller
         MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
         mailer.mailComposeDelegate = self;
+        
         // Subject
         [mailer setSubject:subject];
         // Recipient
@@ -164,16 +182,17 @@
         UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         NSData *imageData = UIImagePNGRepresentation(screenShot);
+        
         [mailer addAttachmentData:imageData mimeType:@"image/png" fileName:@"Images"];
         if (![body isEqualToString:@""]) {
             [mailer setMessageBody:body isHTML:YES];
         }
-        [self presentViewController:mailer animated:YES completion:nil];
-    }
-    else
-    {
+        // It's important to use the presenting root view controller...
+        UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+        [presentingController presentViewController:mailer animated:YES completion:nil];
+    } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure"
-                                                        message:@"Your device does not support the composer sheet"
+                                                        message:@"Your device is not configured to send emails."
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles: nil];
@@ -184,14 +203,18 @@
 
 - (IBAction) sendFeedback:(id)sender
 {
+#ifdef DEBUG
     NSLog(@"Send feedback");
+#endif
     
     [self sendEmailTo:@"zdavatz@ywesee.com" withSubject:[NSString stringWithFormat:@"%@ Feedback", APP_NAME] andBody:@""];
 }
 
 - (IBAction) shareApp:(id)sender
 {
+#ifdef DEBUG
     NSLog(@"Share app");
+#endif
     
     NSString* subject = [NSString stringWithFormat:@"%@", APP_NAME];
     NSString* body = nil;
@@ -210,14 +233,18 @@
 
 - (IBAction) rateApp:(id)sender
 {
+#ifdef DEBUG
     NSLog(@"Rate app");
-
+#endif
+    
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?mt=8", APP_ID]]];
 }
 
 - (IBAction) showReport:(id)sender
 {
+#ifdef DEBUG
     NSLog(@"Show report");
+#endif
     
     if (mParentViewController!=nil) {
         [mParentViewController myIconPressMethod:self];
@@ -226,7 +253,9 @@
 
 - (IBAction) startUpdate:(id)sender
 {
+#ifdef DEBUG
     NSLog(@"Start update");
+#endif
     
     MLCustomURLConnection *reportConn = [[MLCustomURLConnection alloc] init];
     MLCustomURLConnection *dbConn = [[MLCustomURLConnection alloc] init];
@@ -244,9 +273,10 @@
 
 #pragma mark - MFMailComposeViewControllerDelegate
 
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [presentingController dismissViewControllerAnimated:YES completion:nil];
 
     NSString* message = nil;
     switch (result) {
@@ -262,7 +292,9 @@
         case MFMailComposeResultFailed:
             message = @"Error";
     }
+#ifdef DEBUG
     NSLog(@"%s %@", __PRETTY_FUNCTION__, message);
+#endif
 }
 
 - (void) didReceiveMemoryWarning
