@@ -267,8 +267,8 @@
         [self.webView loadHTMLString:self.htmlStr baseURL:mainBundleURL];
     }
     
-    // PanGestureRecognizer goes here 
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];    
+    // PanGestureRecognizer goes here
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
 
 - (void) viewDidAppear: (BOOL)animated

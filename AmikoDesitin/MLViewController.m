@@ -1015,9 +1015,9 @@ static NSInteger mCurrentSearchState = kTitle;
     if (amikoReport==nil)
         amikoReport = @"";
 
-    if (titleViewController!=nil && secondViewController!=nil) {
-        [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
-    }
+    // Rightviewcontroller is not needed, nil it!
+    mainRevealController = self.revealViewController;
+    mainRevealController.rightViewController = nil;
     
     if (secondViewController!=nil) {
         [secondViewController removeFromParentViewController];
@@ -1033,12 +1033,7 @@ static NSInteger mCurrentSearchState = kTitle;
         UIFont *font = [UIFont fontWithName:@"Arial" size:15];
         secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     }
-    // Class MLSecondViewController is now registered as an observer of class MLTitleViewController
-    [titleViewController addObserver:secondViewController
-                          forKeyPath:@"javaScript"
-                             options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-                             context:@"javaScriptChanged"];
-    
+
     if (secondViewNavigationController!=nil) {
         [secondViewNavigationController removeFromParentViewController];
         secondViewNavigationController = nil;
