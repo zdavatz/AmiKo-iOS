@@ -49,6 +49,6 @@
 - (IBAction) searchAction: (id)sender;
 - (IBAction) onToolBarButtonPressed: (id)sender;
 
-- (void) myIconPressMethod:(id)sender;
+- (void) showReport:(id)sender;
 
 @end

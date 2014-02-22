@@ -23,6 +23,7 @@
 
 #import "MLDBAdapter.h"
 #import "MLSQLiteDatabase.h"
+#import "MLConstants.h"
 
 enum {
     kMedId = 0, kTitle, kAuth, kAtcCode, kSubstances, kRegnrs, kAtcClass, kTherapy, kApplication, kIndications, kCustomerId, kPackInfo, kAddInfo, kIdsStr, kSectionsStr, kContentStr, kStyleStr
@@ -84,23 +85,28 @@ static NSString *FULL_TABLE = nil;
 
 - (void) openDatabase
 {
-#ifdef AMIKO_DESITIN
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
+    NSString *filePath = nil;
+
+    if ([APP_NAME isEqualToString:@"iAmiKo"] || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
+    else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"])
+        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
+    else
+       filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
+
     mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
-#elif COMED_DESITIN
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
-    mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
-#endif
 }
 
 - (BOOL) openDatabase: (NSString *)dbName
 {
-    // A. Check first users documents folder
+    // Check first users documents folder
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    
     // Get documents directory
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDir = [paths lastObject];
     NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:@"db"];
+    
     // Check if database exists
     if (filePath!=nil) {
         if ([fileManager fileExistsAtPath:filePath]) {

@@ -840,6 +840,7 @@ static NSInteger mCurrentSearchState = kTitle;
     // Add icon (top center)
     // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon_32x32.png"]];
 
+    // Add desitin icon
     UIButton *logoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0, 0, 32, 32);
@@ -848,9 +849,7 @@ static NSInteger mCurrentSearchState = kTitle;
 
     self.navigationItem.leftBarButtonItem = appIconItem;
     
-    /*
-     // Initialize menu view controllers
-    */
+    // Initialize menu view controllers
     if (menuViewController!=nil) {
         [menuViewController removeFromParentViewController];
         menuViewController = nil;
@@ -862,11 +861,8 @@ static NSInteger mCurrentSearchState = kTitle;
         menuViewNavigationController = nil;
     }
     menuViewNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+
     /*
-     //
-    */
-    
-    /**
     UIBarButtonItem *revealMenuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                                                        style:UIBarButtonItemStyleBordered
                                                                       target:self
@@ -969,11 +965,26 @@ static NSInteger mCurrentSearchState = kTitle;
         [mainRevealController setFrontViewController:menuViewNavigationController];
         [mainRevealController setFrontViewPosition:FrontViewPositionRight animated:YES];
     } else {
-        [menuViewController showMenu:self];
+        [menuViewController showMenu];
     }
 }
 
-- (void) myIconPressMethod:(id)sender
+- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
+{
+    CGPoint p = [gesture locationInView:self.myTableView];
+    
+    NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
+    
+    if( mCurrentSearchState == kAtcCode) {
+        if (indexPath != nil) {
+            NSString *medSubTitle = [NSString stringWithString:[medi[indexPath.row] subTitle]];
+            NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
+            [searchField setText:mAtc[0]];
+        }
+    }
+}
+
+- (void) showReport:(id)sender
 {
     // A. Check first users documents folder
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -1040,21 +1051,6 @@ static NSInteger mCurrentSearchState = kTitle;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
     
     report_memory();
-}
-
-- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
-{
-    CGPoint p = [gesture locationInView:self.myTableView];
-    
-    NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
-
-    if( mCurrentSearchState == kAtcCode) {
-        if (indexPath != nil) {
-            NSString *medSubTitle = [NSString stringWithString:[medi[indexPath.row] subTitle]];
-            NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
-            [searchField setText:mAtc[0]];
-        }
-    }
 }
 
 - (void) genSearchResultsWith:(NSString *)searchQuery

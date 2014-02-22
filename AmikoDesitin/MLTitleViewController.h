@@ -23,7 +23,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLTitleViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface MLTitleViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+{
     IBOutlet UITableView *myMenuView;
     NSString *javaScript;
 }

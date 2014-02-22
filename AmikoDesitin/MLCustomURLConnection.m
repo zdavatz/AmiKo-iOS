@@ -82,7 +82,9 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
 // delegate calls just so let us know when it's working or when it isn't
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+#ifdef DEBIG
     NSLog(@"Download failed with an error: %@, %@", error, [error description]);
+#endif
     // Release stuff
     myConnection = nil;
     if (mFile)
@@ -95,7 +97,9 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
     mStatusCode = [((NSHTTPURLResponse *)response) statusCode];
     
     mTotExpectedBytes = [response expectedContentLength];
+#ifdef DEBUG
     NSLog(@"Expected content length = %ld bytes", mTotExpectedBytes);
+#endif
     mTotDownloadedBytes = 0;
 }
 

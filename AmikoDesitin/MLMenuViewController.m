@@ -46,7 +46,7 @@
     mParentViewController = parentViewController;
     
     if (self) {
-        // To stuff...
+        // Do stuff...
     }
     
     return self;
@@ -102,6 +102,12 @@
     }    
 }
 
+- (void) handleSingleTap:(UITapGestureRecognizer*)gesture
+{
+    SWRevealViewController *revealController = [self revealViewController];
+    [revealController revealToggle:self];
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -109,26 +115,7 @@
     return YES;
 }
 
-- (void) handleSingleTap:(UITapGestureRecognizer*)gesture
-{
-    SWRevealViewController *revealController = [self revealViewController];
-    [revealController revealToggle:self];
-}
-
-- (void) showMenu:(MLViewController*)parentViewController
-{
-    mParentViewController = parentViewController;
-    
-    mMenuActionSheet = [[UIActionSheet alloc] initWithTitle:@"Select menu option"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Feedback", @"Share", @"Rate", @"Report", @"Update", nil];
-    mMenuActionSheet.tag = 1;
-    
-    [mMenuActionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
-    [mMenuActionSheet showInView:[parentViewController view]];
-}
+#pragma mark - UIActionSheetDelegate
 
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
@@ -158,6 +145,21 @@
         default:
             break;
     }
+}
+
+- (void) showMenu
+{
+    mMenuActionSheet = [[UIActionSheet alloc] initWithTitle:@"Select menu option"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                     destructiveButtonTitle:nil
+                                          otherButtonTitles:@"Feedback", @"Share", @"Rate", @"Report", @"Update", nil];
+    mMenuActionSheet.tag = 1;
+    
+    [mMenuActionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
+    
+    if (mParentViewController!=nil)
+        [mMenuActionSheet showInView:[mParentViewController view]];
 }
 
 - (void) sendEmailTo:(NSString *)recipient withSubject:(NSString *)subject andBody:(NSString *)body
@@ -247,7 +249,7 @@
 #endif
     
     if (mParentViewController!=nil) {
-        [mParentViewController myIconPressMethod:self];
+        [mParentViewController showReport:self];
     }
 }
 

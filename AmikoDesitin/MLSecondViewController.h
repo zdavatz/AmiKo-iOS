@@ -23,7 +23,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLSecondViewController : UIViewController <UISearchBarDelegate, UIWebViewDelegate> {
+@interface MLSecondViewController : UIViewController <UISearchBarDelegate, UIWebViewDelegate>
+{
     UISearchBar *searchField;
     UIWebView *webView;
     NSString *htmlStr;

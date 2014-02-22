@@ -49,6 +49,7 @@
         
         UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 30)];
         [v addSubview:mProgressBar];
+        // Little trick
         [mAlertView setValue:v forKey:@"accessoryView"];
         mProgressBar.progress = 0.0;
     }
@@ -70,6 +71,10 @@
 - (void) updateWith:(int)downloadedBytes andWith:(int)expectedBytes;
 {
     float progress = 100*(float)downloadedBytes/expectedBytes;
+    /*
+     Given the blocking nature of the update mechanism we use a little trick here.
+     We change the message before the unzipping does start.
+    */
     if (progress<99) {
         [mAlertView setMessage:[NSString stringWithFormat:@"%d%% (%dkb out of %dkb)",
                                 (int)(progress), downloadedBytes/1000, expectedBytes/1000]];
