@@ -35,11 +35,18 @@
 @implementation MLSecondViewController
 {
     int mNumRevealButtons;
+    int mTotalHighlights;
+    int mCurrentHightlight;
+    float mFramePosA;
+    float mFramePosB;
+    BOOL mIsFindPanelVisible;
     NSString *mTitle;
 }
 
 @synthesize searchField;
 @synthesize webView;
+@synthesize findCounter;
+@synthesize findPanel;
 @synthesize htmlStr;
 
 - (void) dealloc
@@ -63,7 +70,9 @@
 
     mNumRevealButtons = numRevealButtons;
     mTitle = title;
-
+    
+    mIsFindPanelVisible = YES;
+    
     return self;
 }
 
@@ -72,13 +81,35 @@
     self = [super init];
 
     htmlStr = [[NSString alloc] initWithString:html];
-
+    
     return self;
+}
+
+- (IBAction) moveToNextHighlight:(id)sender
+{
+    if (mTotalHighlights>1) {
+        mCurrentHightlight += 1;
+        if (mCurrentHightlight>=mTotalHighlights)
+            mCurrentHightlight = 0;
+        [self.webView nextHighlight:mCurrentHightlight];
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+    }
+}
+
+- (IBAction) moveToPrevHighlight:(id)sender
+{
+    if (mTotalHighlights>1) {
+        mCurrentHightlight -= 1;
+        if (mCurrentHightlight<0)
+            mCurrentHightlight = mTotalHighlights-1;
+        [self.webView nextHighlight:mCurrentHightlight];
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+    }
 }
 
 /** This is the observing class
 */
-- (void) observeValueForKeyPath: (NSString *)keyPath ofObject: (id)object change: (NSDictionary *)change context:(void *)context
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // [self addObserver:self forKeyPath:@"javaScript" options:0 context:@"javaScriptChanged"];
     if ([keyPath isEqualToString:@"javaScript"]) {
@@ -90,7 +121,7 @@
     }
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation: (UIInterfaceOrientation)interfaceOrientation
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
@@ -151,7 +182,7 @@
     }
 }
 
-- (void) viewWillAppear: (BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -271,10 +302,16 @@
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
 
-- (void) viewDidAppear: (BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.webView reload];
+
+    [self.findPanel setHidden:YES];
+    [self.findCounter setHidden:YES];
+    
+    mFramePosA = self.findPanel.frame.origin.y;
+    mFramePosB = self.findPanel.frame.origin.y - 200;
 }
 
 - (void) viewDidUnload
@@ -282,7 +319,7 @@
     self.webView = nil;
 }
 
-- (void) searchBarSearchButtonClicked: (UISearchBar *)searchBar
+- (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
 }
@@ -290,13 +327,55 @@
 - (void) searchBar: (UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     if ([searchText length] > 2) {
-        [self.webView highlightAllOccurencesOfString:searchText];
+        mTotalHighlights = [self.webView highlightAllOccurencesOfString:searchText];        
+        mCurrentHightlight = 0;
+        if (mTotalHighlights>1) {
+            [self.webView nextHighlight:mCurrentHightlight];
+            [self showFindPanel:YES];
+            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+        } else {
+            [self showFindPanel:NO];
+        }
     }
-    else
+    else {
         [self.webView removeAllHighlights];
+        [self showFindPanel:NO];
+    }
 }
 
-- (void) webViewDidFinishLoad: (UIWebView *)webView
+- (void) showFindPanel:(BOOL)visible
+{
+    if (visible!=mIsFindPanelVisible) {
+        
+        mIsFindPanelVisible = visible;
+        
+        CGRect newFrame = self.findPanel.frame;
+        
+        if (visible) {
+            // newFrame.origin.x = x - 200;
+            newFrame.origin.y = mFramePosA;
+        } else {
+            // newFrame.origin.x = x + 200;
+            newFrame.origin.y = mFramePosB;
+        }
+        
+        [UIView animateWithDuration:0.5f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.findPanel.frame = newFrame;
+        } completion:^(BOOL finished){
+            if (visible==NO) {
+                [self.findPanel setHidden:YES];
+            }
+        }];
+        if (visible==YES) {
+            [self.findPanel setHidden:NO];
+            [self.findCounter setHidden:NO];
+        } else {
+            [self.findCounter setHidden:YES];
+        }
+    }
+}
+
+- (void) webViewDidFinishLoad:(UIWebView *)webView
 {
     // Check this out!
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -311,6 +390,9 @@
     
     self.webView.scalesPageToFit = YES;
     self.webView.scrollView.zoomScale = 3.0;
+    
+    // Hide find panel (webview is the superview of the panel)
+    [self showFindPanel:NO];
 }
 
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType

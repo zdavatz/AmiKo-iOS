@@ -26,7 +26,9 @@
 // Defines a category!
 @interface UIWebView (MLSearchWebView)
 
-- (NSInteger) highlightAllOccurencesOfString: (NSString*)str;
+- (NSInteger) highlightAllOccurencesOfString:(NSString*)str;
+- (void) moveToStart;
+- (void) nextHighlight:(int)index;
 - (void) removeAllHighlights;
 
 @end

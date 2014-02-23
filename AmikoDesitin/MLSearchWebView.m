@@ -40,9 +40,22 @@
     
     // Access variable defined in Javascript code
     NSString *result = [self stringByEvaluatingJavaScriptFromString:@"MyApp_SearchResultCount"];
-    
+       
     // Return
     return [result integerValue];
+}
+
+- (void) moveToStart
+{
+    [self nextHighlight:0];
+}
+
+- (void) nextHighlight:(int)index
+{
+    if (index<0)
+        index = 0;
+    NSString *scrollPosition = [NSString stringWithFormat:@"MyArr[%d].scrollIntoView()", index];
+    [self stringByEvaluatingJavaScriptFromString:scrollPosition];
 }
 
 - (void) removeAllHighlights

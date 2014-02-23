@@ -27,6 +27,8 @@
 {
     UISearchBar *searchField;
     UIWebView *webView;
+    UILabel *findCounter;
+    UIView *findPanel;
     NSString *htmlStr;
     NSString *htmlAnchor;
 }
@@ -34,7 +36,12 @@
 // Note: "strong" is a replacement for retain, it comes with ARC
 @property (nonatomic, retain) IBOutlet UISearchBar *searchField;
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, retain) IBOutlet UILabel *findCounter;
+@property (nonatomic, retain) IBOutlet UIView *findPanel;
 @property (nonatomic, copy) NSString *htmlStr;
+
+- (IBAction) moveToNextHighlight:(id)sender;
+- (IBAction) moveToPrevHighlight:(id)sender;
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons;
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withString:(NSString *)html;

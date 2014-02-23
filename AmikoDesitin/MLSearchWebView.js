@@ -1,6 +1,9 @@
 // We're using a global variable to store the number of occurrences
 var MyApp_SearchResultCount = 0;
 
+// Global array that stores span elements
+var MyArr = new Array();
+
 // helper function, recursively searches in elements and their child nodes
 function MyApp_HighlightAllOccurencesOfStringForElement(element,keyword) {
     if (element) {
@@ -17,6 +20,9 @@ function MyApp_HighlightAllOccurencesOfStringForElement(element,keyword) {
                 span.setAttribute("class","MyAppHighlight");
                 span.style.backgroundColor="yellow";
                 span.style.color="black";
+                // Add to array
+                MyArr.push(span);
+                // 
                 text = document.createTextNode(value.substr(idx+keyword.length));
                 element.deleteData(idx, value.length - idx);
                 var next = element.nextSibling;
