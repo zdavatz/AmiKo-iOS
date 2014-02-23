@@ -23,8 +23,9 @@
 
 #import "MLSecondViewController.h"
 
-#import "MLConstants.h"
+#import <QuartzCore/QuartzCore.h>
 
+#import "MLConstants.h"
 #import "SWRevealViewController.h"
 #import "MLSearchWebView.h"
 
@@ -68,6 +69,9 @@
 {
     self = [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 
+    // Hack for "bug" in iOS 7.0
+    self.searchField.text = @" ";
+    
     mNumRevealButtons = numRevealButtons;
     mTitle = title;
     
@@ -80,6 +84,9 @@
 {
     self = [super init];
 
+    // Hack for "bug" in iOS 7.0
+    self.searchField.text = @" ";
+        
     htmlStr = [[NSString alloc] initWithString:html];
     
     return self;
@@ -88,22 +95,22 @@
 - (IBAction) moveToNextHighlight:(id)sender
 {
     if (mTotalHighlights>1) {
-        mCurrentHightlight += 1;
-        if (mCurrentHightlight>=mTotalHighlights)
-            mCurrentHightlight = 0;
+        mCurrentHightlight -= 1;
+        if (mCurrentHightlight<0)
+            mCurrentHightlight = mTotalHighlights-1;
         [self.webView nextHighlight:mCurrentHightlight];
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mTotalHighlights-mCurrentHightlight, mTotalHighlights]];
     }
 }
 
 - (IBAction) moveToPrevHighlight:(id)sender
 {
     if (mTotalHighlights>1) {
-        mCurrentHightlight -= 1;
-        if (mCurrentHightlight<0)
-            mCurrentHightlight = mTotalHighlights-1;
+        mCurrentHightlight += 1;
+        if (mCurrentHightlight>=mTotalHighlights)
+            mCurrentHightlight = 0;
         [self.webView nextHighlight:mCurrentHightlight];
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mTotalHighlights-mCurrentHightlight, mTotalHighlights]];
     }
 }
 
@@ -307,6 +314,8 @@
     [super viewDidAppear:animated];
     [self.webView reload];
 
+    self.findPanel.layer.cornerRadius = 6.0f;
+    
     [self.findPanel setHidden:YES];
     [self.findCounter setHidden:YES];
     
@@ -327,10 +336,10 @@
 - (void) searchBar: (UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     if ([searchText length] > 2) {
-        mTotalHighlights = [self.webView highlightAllOccurencesOfString:searchText];        
+        mTotalHighlights = [self.webView highlightAllOccurencesOfString:searchText];
         mCurrentHightlight = 0;
         if (mTotalHighlights>1) {
-            [self.webView nextHighlight:mCurrentHightlight];
+            [self.webView nextHighlight:mTotalHighlights-1];
             [self showFindPanel:YES];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
         } else {
