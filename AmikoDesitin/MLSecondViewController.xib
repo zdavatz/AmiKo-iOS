@@ -48,7 +48,7 @@
                     <nil key="highlightedColor"/>
                     <size key="shadowOffset" width="0.0" height="0.0"/>
                 </label>
-                <view alpha="0.84999999999999987" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hXM-rZ-0y1">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hXM-rZ-0y1">
                     <rect key="frame" x="612" y="56" width="140" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
