@@ -26,6 +26,10 @@
 
 @interface MLDBAdapter : NSObject
 
+- (BOOL) openInteractionsCsvFile: (NSString *)name;
+- (void) closeInteractionsCsvFile;
+- (NSInteger) getNumInteractions;
+- (NSString *) getInteractionHtmlBetween:(NSString *)atc1 and:(NSString *)atc2;
 - (void) openDatabase;
 - (BOOL) openDatabase: (NSString *)dbName;
 - (void) closeDatabase;

@@ -28,9 +28,14 @@
 #import "MLConstants.h"
 #import "SWRevealViewController.h"
 #import "MLSearchWebView.h"
+#import "MLMedication.h"
+#import "MLMenuViewController.h"
+
+#import "WebViewJavascriptBridge.h"
 
 // Class extension
 @interface MLSecondViewController ()
+@property WebViewJavascriptBridge *jsBridge;
 @end
 
 @implementation MLSecondViewController
@@ -49,6 +54,8 @@
 @synthesize findCounter;
 @synthesize findPanel;
 @synthesize htmlStr;
+@synthesize medBasket;
+@synthesize titleViewController;
 
 - (void) dealloc
 {
@@ -59,18 +66,18 @@
     htmlAnchor = nil;    
     searchField = nil;
     htmlStr = nil;
+    medBasket = nil;
     
-    webView.delegate = nil;
-    webView = nil;
-    [webView removeFromSuperview];
+    self.webView.delegate = nil;
+    self.webView = nil;
+    [self.webView removeFromSuperview];
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons
 {
     self = [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 
-    // Hack for "bug" in iOS 7.0
-    self.searchField.text = @" ";
+    [self resetSearchField];
     
     mNumRevealButtons = numRevealButtons;
     mTitle = title;
@@ -84,9 +91,8 @@
 {
     self = [super init];
 
-    // Hack for "bug" in iOS 7.0
-    self.searchField.text = @" ";
-        
+    [self resetSearchField];
+
     htmlStr = [[NSString alloc] initWithString:html];
     
     return self;
@@ -114,6 +120,24 @@
     }
 }
 
+- (void) resetSearchField
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [searchField setText:@""];
+    if ([self.htmlStr isEqualToString:@"Interactions"]) {
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Interaktionen"]];
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche d'interactions"]];
+    } else {
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Fachinfo"]];
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de notice infopro"]];
+    }
+}
+
 /** This is the observing class
 */
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -126,6 +150,149 @@
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void) viewDidLoad
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [super viewDidLoad];
+    
+    self.title = NSLocalizedString(mTitle, nil);
+    // Do any additional setup after loading the view from its nib.
+    
+    // SWRevealViewController extends UIViewController!
+    SWRevealViewController *revealController = [self revealViewController];
+    
+    [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
+    
+    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                                                         style:UIBarButtonItemStyleBordered
+                                                                        target:revealController
+                                                                        action:@selector(revealToggle:)];
+    self.navigationItem.leftBarButtonItem = revealButtonItem;
+    
+    if( mNumRevealButtons==2 ) {
+        UIBarButtonItem *rightRevealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                                                                  style:UIBarButtonItemStyleBordered
+                                                                                 target:revealController
+                                                                                 action:@selector(rightRevealToggle:)];
+        self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+    }
+    
+    // PanGestureRecognizer goes here ... could be also placed in the other Views but this is the main view!
+    // [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        // Add search bar as title view to navigation bar
+        self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
+        self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
+        searchBarView.autoresizingMask = 0;
+        self.searchField.delegate = self;
+        [searchBarView addSubview:self.searchField];
+        self.navigationItem.titleView = searchBarView;
+    }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            searchField.barStyle = UIBarStyleBlackOpaque;
+            searchField.barTintColor = [UIColor lightGrayColor];
+            searchField.translucent = YES;
+        }
+    }
+    
+    // PanGestureRecognizer goes here
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+}
+
+- (void) viewDidUnload
+{
+    self.webView = nil;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [super viewWillAppear:animated];
+    
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
+        } else {
+            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
+        }
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+            searchField.barTintColor = [UIColor lightGrayColor];
+            searchField.translucent = NO;
+        }
+    }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+            // Add search bar as title view to navigation bar
+            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 32.0)];
+            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 32.0)];
+            searchBarView.autoresizingMask = 0;
+            self.searchField.delegate = self;
+            [searchBarView addSubview:searchField];
+            self.navigationItem.titleView = searchBarView;
+            //
+            if (self.view.bounds.size.height<500)
+                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone;
+            else {
+                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
+            }
+            // Hides status bar
+            if (IOS_NEWER_OR_EQUAL_TO_7)
+                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+        }
+        else {
+            // Add search bar as title view to navigation bar
+            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
+            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
+            searchBarView.autoresizingMask = 0;
+            self.searchField.delegate = self;
+            [searchBarView addSubview:searchField];
+            self.navigationItem.titleView = searchBarView;
+            //
+            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
+            self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;            
+        }
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:0.0];
+            searchField.translucent = NO;
+        }
+    }
+    
+    
+    [self resetSearchField];
+    
+    if (self.htmlStr!=nil) {
+        [self updateWebView];
+    }
+    
+    // Create objc - js bridge
+    [self createJSBridge];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.webView reload];
+
+    self.findPanel.layer.cornerRadius = 6.0f;
+    
+    [self.findPanel setHidden:YES];
+    [self.findCounter setHidden:YES];
+    
+    mFramePosA = self.findPanel.frame.origin.y;
+    mFramePosB = self.findPanel.frame.origin.y - 200;
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -183,149 +350,330 @@
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         }
         if (IOS_NEWER_OR_EQUAL_TO_7) {
-            searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:0.0];
             searchField.translucent = NO;
         }
     }
 }
 
-- (void) viewWillAppear:(BOOL)animated
+/**
+ The following function intercepts messages sent from javascript to objective C and acts
+ acts as a bridge between JS and ObjC
+ */
+- (void) createJSBridge
 {
-    [super viewWillAppear:animated];
+    if (_jsBridge)
+        return;
     
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    [WebViewJavascriptBridge enableLogging];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
+    // @maxl: note the webviewdelegate parameter. if it's not passed, no way to get the webview delegates to work!
+    // _jsBridge = [WebViewJavascriptBridge bridgeForWebView:self.webView handler:^(id msg, WVJBResponseCallback responseCallback) {
+    _jsBridge = [WebViewJavascriptBridge bridgeForWebView:self.webView webViewDelegate:self handler:^(id msg, WVJBResponseCallback responseCallback) {
+        if ([msg isEqualToString:@"notify_interaction"]) {
+            // NSLog(@"Notify interaction");
+            [self sendEmailTo:@"zdavatz@ywesee.com" withSubject:[NSString stringWithFormat:@"%@: Unbekannte Interaktionen", APP_NAME]];
+             return;
+        } else if ([msg isEqualToString:@"delete_all"]) {
+            // NSLog(@"Delete all");
+            [medBasket removeAllObjects];
         } else {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
+            // NSLog(@"Delete number %@", msg);
+            [medBasket removeObjectForKey:msg];
         }
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-            searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.translucent = NO;
+        [self updateInteractionBasketView];
+    }];
+}
+
+- (void) sendEmailTo:(NSString *)recipient withSubject:(NSString *)subject
+{
+    // Check if device is configured to send email
+    if ([MFMailComposeViewController canSendMail]) {
+        // Init mail view controller
+        MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+        mailer.mailComposeDelegate = self;
+        
+        // Subject
+        [mailer setSubject:subject];
+        // Recipient
+        if (![recipient isEqualToString:@""]) {
+            NSArray *toRecipients = [NSArray arrayWithObjects:recipient, nil];
+            [mailer setToRecipients:toRecipients];
         }
+        // Attach screenshot...
+        // UIImage *screenShot = [UIImage imageNamed:@"Default.png"];
+        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, NO, [UIScreen mainScreen].scale);
+        [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:YES];
+        UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        NSData *imageData = UIImagePNGRepresentation(screenShot);
+        
+        [mailer addAttachmentData:imageData mimeType:@"image/png" fileName:@"Images"];
+
+        // It's important to use the presenting root view controller...
+        UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+        [presentingController presentViewController:mailer animated:YES completion:nil];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure"
+                                                        message:@"Your device is not configured to send emails."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles: nil];
+        [alert show];
     }
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-            // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 32.0)];
-            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 32.0)];
-            searchBarView.autoresizingMask = 0;
-            self.searchField.delegate = self;
-            [searchBarView addSubview:searchField];
-            self.navigationItem.titleView = searchBarView;
-            //
-            if (self.view.bounds.size.height<500)
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone;
-            else {
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
+}
+
+- (void) updateInteractionBasketView
+{
+    // TODO --> OPTIMIZE!! Pre-load the following files!
+    
+    // Load style sheet from file
+    NSString *interactionsCssPath = [[NSBundle mainBundle] pathForResource:@"interactions_css" ofType:@"css"];
+    NSString *interactionsCss = [NSString stringWithContentsOfFile:interactionsCssPath encoding:NSUTF8StringEncoding error:nil];
+    
+    // Load javascript from file
+    NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"deleterow" ofType:@"js"];
+    NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath encoding:NSUTF8StringEncoding error:nil];
+    
+    // Generate main interaction table
+    NSString *html = [NSString stringWithFormat:@"<html><head><meta charset=\"utf-8\" />"];
+    html = [html stringByAppendingFormat:@"<script type=\"text/javascript\">%@</script><style type=\"text/css\">%@</style></head><body><div id=\"interactions\">%@<br><br>%@<br>%@</body></div></html>",
+            jscriptStr,
+            interactionsCss,
+            [self medBasketHtml],
+            [self interactionsHtml],
+            [self footNoteHtml]];
+    
+    self.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", interactionsCss, html];
+    
+    [self updateWebView];
+}
+
+- (void) updateWebView
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    if ([self.htmlStr isEqualToString:@"Interactions"])
+        [self updateInteractionBasketView];
+
+    NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+    // Loads html directly into webview
+    [self.webView loadHTMLString:self.htmlStr baseURL:mainBundleURL];
+    /*
+     [self.webView stopLoading];
+     [self.webView reload];
+     */
+}
+
+/**
+ Create interaction basket html string
+ */
+- (NSString *) medBasketHtml
+{
+    // basket_html_str + delete_all_button_str + "<br><br>" + top_note_html_str
+    int medCnt = 0;
+    NSString *medBasketStr = @"";
+    if ([[MLConstants appLanguage] isEqualToString:@"de"])
+        medBasketStr = [medBasketStr stringByAppendingString:@"<div id=\"Medikamentenkorb\"><fieldset><legend>Medikamentenkorb</legend></fieldset></div><table id=\"InterTable\" width=\"100%25\">"];
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+        medBasketStr = [medBasketStr stringByAppendingString:@"<div id=\"Medikamentenkorb\"><fieldset><legend>Panier des Médicaments</legend></fieldset></div><table id=\"InterTable\" width=\"100%25\">"];
+    
+    // Check if there are meds in the "Medikamentenkorb"
+    if ([medBasket count]>0) {
+        // First sort them alphabetically
+        NSArray *sortedNames = [[medBasket allKeys] sortedArrayUsingSelector: @selector(compare:)];
+        // Loop through all meds
+        for (NSString *name in sortedNames) {
+            MLMedication *med = [medBasket valueForKey:name];
+            NSArray *m_code = [[med atccode] componentsSeparatedByString:@";"];
+            NSString *atc_code = @"k.A.";
+            NSString *active_ingredient = @"k.A";
+            if ([m_code count]>1) {
+                atc_code = [m_code objectAtIndex:0];
+                active_ingredient = [m_code objectAtIndex:1];
             }
-            // Hides status bar
-            if (IOS_NEWER_OR_EQUAL_TO_7)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+            // Increment med counter
+            medCnt++;
+            // Update medication basket
+            medBasketStr = [medBasketStr stringByAppendingFormat:@"<tr>"
+                            @"<td>%d</td>"
+                            @"<td>%@</td>"
+                            @"<td>%@</td>"
+                            @"<td>%@</td>"
+                            @"<td align=\"right\"><input type=\"image\" src=\"217-trash.png\" onclick=\"deleteRow('Single','InterTable',this)\" />"
+                            @"</tr>", medCnt, name, atc_code, active_ingredient];
         }
-        else {
-            // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
-            searchBarView.autoresizingMask = 0;
-            self.searchField.delegate = self;
-            [searchBarView addSubview:searchField];
-            self.navigationItem.titleView = searchBarView;
-            //
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-            self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;            
-        }
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-            searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-            searchField.translucent = NO;
-        }
+        // Add delete all button
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            medBasketStr = [medBasketStr stringByAppendingString:@"</table><div id=\"Delete_all\"><input type=\"button\" value=\"Korb leeren\" onclick=\"deleteRow('Delete_all','InterTable',this)\" /></div>"];
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            medBasketStr = [medBasketStr stringByAppendingString:@"</table><div id=\"Delete_all\"><input type=\"button\" value=\"Tout supprimer\" onclick=\"deleteRow('Delete_all','InterTable',this)\" /></div>"];
+    } else {
+        // Medikamentenkorb is empty
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            medBasketStr = @"<div>Ihr Medikamentenkorb ist leer.<br><br></div>";
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            medBasketStr = @"<div>Votre panier des médicaments est vide.<br><br></div>";
     }
+    
+    return medBasketStr;
 }
 
-- (void) viewDidLoad
+- (NSString *) topNoteHtml
 {
-    [super viewDidLoad];
-
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
+    NSString *topNote = @"";
     
-    self.title = NSLocalizedString(mTitle, nil);
-    // Do any additional setup after loading the view from its nib.
-
-    // SWRevealViewController extends UIViewController!
-    SWRevealViewController *revealController = [self revealViewController];
-    
-    [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
-    
-    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                         style:UIBarButtonItemStyleBordered
-                                                                        target:revealController
-                                                                        action:@selector(revealToggle:)];
-    self.navigationItem.leftBarButtonItem = revealButtonItem;
-    
-    if( mNumRevealButtons==2 ) {
-        UIBarButtonItem *rightRevealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                                  style:UIBarButtonItemStyleBordered
-                                                                                 target:revealController
-                                                                                 action:@selector(rightRevealToggle:)];
-        self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+    if ([medBasket count]>1) {
+        // Add note to indicate that there are no interactions
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            topNote = @"<fieldset><legend>Bekannte Interaktionen</legend></fieldset><p>Werden keine Interaktionen angezeigt, sind z.Z. keine Interaktionen bekannt.</p>";
+        else  if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            topNote = @"<fieldset><legend>Interactions Connues</legend></fieldset><p>Werden keine Interaktionen angezeigt, sind z.Z. keine Interaktionen bekannt.</p>";
     }
     
-    // PanGestureRecognizer goes here ... could be also placed in the other Views but this is the main view!
-    // [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
+    return topNote;
+}
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        // Add search bar as title view to navigation bar
-        self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-        self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
-        searchBarView.autoresizingMask = 0;
-        self.searchField.delegate = self;
-        [searchBarView addSubview:self.searchField];
-        self.navigationItem.titleView = searchBarView;
+/**
+ Create html displaying interactions between drugs
+ */
+- (NSString *) interactionsHtml
+{
+    NSMutableString *interactionStr = [[NSMutableString alloc] initWithString:@""];
+    NSMutableArray *sectionIds = [[NSMutableArray alloc] initWithObjects:@"Medikamentenkorb", nil];
+    NSMutableArray *sectionTitles = nil;
+    
+    if ([medBasket count]>0) {
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            sectionTitles = [[NSMutableArray alloc] initWithObjects:@"Medikamentenkorb", nil];
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            sectionTitles = [[NSMutableArray alloc] initWithObjects:@"Panier des médicaments", nil];
     }
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
-            searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.translucent = NO;
+    
+    // Check if there are meds in the "Medikamentenkorb"
+    if ([medBasket count]>1) {
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            [interactionStr appendString:@"<fieldset><legend>Bekannte Interaktionen</legend></fieldset>"];
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            [interactionStr appendString:@"<fieldset><legend>Interactions Connues</legend></fieldset>"];
+        // First sort them alphabetically
+        NSArray *sortedNames = [[medBasket allKeys] sortedArrayUsingSelector: @selector(compare:)];
+        // Big loop
+        for (NSString *name1 in sortedNames) {
+            for (NSString *name2 in sortedNames) {
+                if (![name1 isEqualToString:name2]) {
+                    // Extract meds by names from interaction basket
+                    MLMedication *med1 = [medBasket valueForKey:name1];
+                    MLMedication *med2 = [medBasket valueForKey:name2];
+                    // Get ATC codes from interaction db
+                    NSArray *m_code1 = [[med1 atccode] componentsSeparatedByString:@";"];
+                    NSArray *m_code2 = [[med2 atccode] componentsSeparatedByString:@";"];
+                    NSArray *atc1 = nil;
+                    NSArray *atc2 = nil;
+                    if ([m_code1 count]>1)
+                        atc1 = [[m_code1 objectAtIndex:0] componentsSeparatedByString:@","];
+                    if ([m_code2 count]>1)
+                        atc2 = [[m_code2 objectAtIndex:0] componentsSeparatedByString:@","];
+                    
+                    NSString *atc_code1 = @"";
+                    NSString *atc_code2 = @"";
+                    if (atc1!=nil && [atc1 count]>0) {
+                        for (atc_code1 in atc1) {
+                            if (atc2!=nil && [atc2 count]>0) {
+                                for (atc_code2 in atc2) {
+                                    NSString *html = [self.dbAdapter getInteractionHtmlBetween:atc_code1 and:atc_code2];
+                                    if (html!=nil) {
+                                        // Replace all occurrences of atc codes by med names apart from the FIRST one!
+                                        NSRange range1 = [html rangeOfString:atc_code1 options:NSBackwardsSearch];
+                                        html = [html stringByReplacingCharactersInRange:range1 withString:name1];
+                                        NSRange range2 = [html rangeOfString:atc_code2 options:NSBackwardsSearch];
+                                        html = [html stringByReplacingCharactersInRange:range2 withString:name2];
+                                        // Concatenate strings
+                                        [interactionStr appendString:html];
+                                        // Add to title and anchor lists
+                                        [sectionTitles addObject:[NSString stringWithFormat:@"%@ \u2192 %@", name1, name2]];
+                                        [sectionIds addObject:[NSString stringWithFormat:@"%@-%@", atc_code1, atc_code2]];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ([sectionTitles count]<2) {
+            if ([[MLConstants appLanguage] isEqualToString:@"de"])
+                [interactionStr appendString:@"<p class=\"paragraph0\">Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten bekannt.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Interaktion melden\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
+            else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+                [interactionStr appendString:@"<p class=\"paragraph0\">Jusqu’ici il n’y pas d’interaction connue entre les médicaments.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Signaler une interaction\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
+        } else if ([sectionTitles count]>2) {
+            [interactionStr appendString:@"<br>"];
         }
     }
     
-    self.webView.delegate = self;
-
-    if (self.htmlStr != nil) {
-        NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-        [self.webView loadHTMLString:self.htmlStr baseURL:mainBundleURL];
+    if ([medBasket count]>0) {
+        [sectionIds addObject:@"Farblegende"];
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            [sectionTitles addObject:@"Farblegende"];
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            [sectionTitles addObject:@"Légende des couleurs"];
     }
     
-    // PanGestureRecognizer goes here
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    if (titleViewController!=nil) {
+        [titleViewController setSectionTitles:[NSArray arrayWithArray:sectionTitles]
+                                       andIds:[NSArray arrayWithArray:sectionIds]];
+    }
+    
+    return interactionStr;
 }
 
-- (void) viewDidAppear:(BOOL)animated
+- (NSString *) footNoteHtml
 {
-    [super viewDidAppear:animated];
-    [self.webView reload];
-
-    self.findPanel.layer.cornerRadius = 6.0f;
+    /*
+     Risikoklassen
+     -------------
+     A: Keine Massnahmen notwendig (grün)
+     B: Vorsichtsmassnahmen empfohlen (gelb)
+     C: Regelmässige Überwachung (orange)
+     D: Kombination vermeiden (pinky)
+     X: Kontraindiziert (hellrot)
+     0: Keine Angaben (grau)
+     */
+    if ([medBasket count]>0) {
+        if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+            NSString *legend = {
+                @"<fieldset><legend>Fussnoten</legend></fieldset>"
+                @"<p class=\"footnote\">1. Farblegende: </p>"
+                @"<table id=\"Farblegende\" style=\"background-color:#ffffff;\" cellpadding=\"3px\" width=\"100%25\">"
+                @"  <tr bgcolor=\"#caff70\"><td align=\"center\">A</td><td>Keine Massnahmen notwendig</td></tr>"
+                @"  <tr bgcolor=\"#ffec8b\"><td align=\"center\">B</td><td>Vorsichtsmassnahmen empfohlen</td></tr>"
+                @"  <tr bgcolor=\"#ffb90f\"><td align=\"center\">C</td><td>Regelmässige Überwachung</td></tr>"
+                @"  <tr bgcolor=\"#ff82ab\"><td align=\"center\">D</td><td>Kombination vermeiden</td></tr>"
+                @"  <tr bgcolor=\"#ff6a6a\"><td align=\"center\">X</td><td>Kontraindiziert</td></tr>"
+                @"</table>"
+                @"<p class=\"footnote\">2. Datenquelle: Public Domain Daten von EPha.ch.</p>"
+                @"<p class=\"footnote\">3. Unterstützt durch:  IBSA Institut Biochimique SA.</p>"
+            };
+            return legend;
+        } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+            NSString *legend = {
+                @"<fieldset><legend>Notes</legend></fieldset>"
+                @"<p class=\"footnote\">1. Légende des couleurs: </p>"
+                @"<table id=\"Farblegende\" style=\"background-color:#ffffff;\" cellpadding=\"3px\" width=\"100%25\">"
+                @"  <tr bgcolor=\"#caff70\"><td align=\"center\">A</td><td>Aucune mesure nécessaire</td></tr>"
+                @"  <tr bgcolor=\"#ffec8b\"><td align=\"center\">B</td><td>Mesures de précaution sont recommandées</td></tr>"
+                @"  <tr bgcolor=\"#ffb90f\"><td align=\"center\">C</td><td>Doit être régulièrement surveillée</td></tr>"
+                @"  <tr bgcolor=\"#ff82ab\"><td align=\"center\">D</td><td>Eviter la combinaison</td></tr>"
+                @"  <tr bgcolor=\"#ff6a6a\"><td align=\"center\">X</td><td>Contre-indiquée</td></tr>"
+                @"</table>"
+                @"<p class=\"footnote\">2. Source des données : données du domaine publique de EPha.ch.</p>"
+                @"<p class=\"footnote\">3. Soutenu par : IBSA Institut Biochimique SA.</p>"
+            };
+            return legend;
+        }
+    }
     
-    [self.findPanel setHidden:YES];
-    [self.findCounter setHidden:YES];
-    
-    mFramePosA = self.findPanel.frame.origin.y;
-    mFramePosB = self.findPanel.frame.origin.y - 200;
-}
-
-- (void) viewDidUnload
-{
-    self.webView = nil;
+    return @"";
 }
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -333,7 +681,7 @@
     [searchBar resignFirstResponder];
 }
 
-- (void) searchBar: (UISearchBar *)searchBar textDidChange:(NSString *)searchText
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     if ([searchText length] > 2) {
         mTotalHighlights = [self.webView highlightAllOccurencesOfString:searchText];
@@ -384,6 +732,22 @@
     }
 }
 
+#pragma mark UIWebView delegate methods
+
+- (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        return NO;
+    }
+
+    return YES;
+}
+
+- (void) webViewDidStartLoad:(UIWebView *)webView {
+    // NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 - (void) webViewDidFinishLoad:(UIWebView *)webView
 {
     // Check this out!
@@ -397,21 +761,37 @@
     // int height =
     [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] intValue];
     
-    self.webView.scalesPageToFit = YES;
+    self.webView.scalesPageToFit = NO;  // YES
     self.webView.scrollView.zoomScale = 3.0;
     
     // Hide find panel (webview is the superview of the panel)
     [self showFindPanel:NO];
 }
 
-- (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-        [[UIApplication sharedApplication] openURL:[request URL]];
-        return NO;
+    UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [presentingController dismissViewControllerAnimated:YES completion:nil];
+    
+    NSString* message = nil;
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            message = @"No mail sent at user request.";
+            break;
+        case MFMailComposeResultSaved:
+            message = @"Draft saved";
+            break;
+        case MFMailComposeResultSent:
+            message = @"Mail sent";
+            break;
+        case MFMailComposeResultFailed:
+            message = @"Error";
     }
-    return YES;
 }
+
+#pragma mark helper functions
 
 - (void) didReceiveMemoryWarning
 {

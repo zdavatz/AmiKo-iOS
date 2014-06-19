@@ -72,3 +72,41 @@ const int RearViewRevealWidth_Landscape_iPhone = 420;           // 420 + 60 = 48
 const int RearViewRevealWidth_Landscape_iPhone_Retina = 508;    // 508 + 60 = 568 x 2 = 1136
 const int RearViewRevealOverdraw_Landscape_iPhone_Retina = 60;
 
+@implementation MLConstants
+
++ (NSString *) appOwner
+{
+    if ([APP_NAME isEqualToString:@"AmiKoDesitin"]
+        || [APP_NAME isEqualToString:@"CoMedDesitin"])
+        return @"desitin";
+    else if ([APP_NAME isEqualToString:@"iAmiKo"]
+             || [APP_NAME isEqualToString:@"iCoMed"])
+        return @"ywesee";
+    return nil;
+}
+
++ (NSString *) appLanguage
+{
+    if ([APP_NAME isEqualToString:@"iAmiKo"]
+        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+        return @"de";
+    else if ([APP_NAME isEqualToString:@"iCoMed"]
+             || [APP_NAME isEqualToString:@"CoMedDesitin"])
+        return @"fr";
+    
+    return nil;
+}
+
++ (NSString *) notSpecified
+{
+    if ([APP_NAME isEqualToString:@"iAmiKo"]
+        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+        return @"k.A.";
+    else if ([APP_NAME isEqualToString:@"iCoMed"]
+             || [APP_NAME isEqualToString:@"CoMedDesitin"])
+        return @"n.s.";
+    
+    return nil;
+}
+
+@end

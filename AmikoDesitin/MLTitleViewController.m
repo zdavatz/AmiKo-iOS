@@ -59,7 +59,6 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
     
     if (self) {
         mSectionTitles = [[NSMutableArray alloc] init];
-        // Load abbreviations for section titles
         for (NSString *title in sectionTitles) {
             [mSectionTitles addObject:title];
         }
@@ -73,6 +72,18 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
     // [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     return self;
+}
+
+- (void) setSectionTitles:(NSArray *)titles andIds:(NSArray *)ids
+{
+    mSectionTitles = [[NSMutableArray alloc] init];
+    for (NSString *title in titles) {
+        [mSectionTitles addObject:title];
+    }
+    mSectionIds = [[NSMutableArray alloc] init];
+    for (NSString *identifier in ids) {
+        [mSectionIds addObject:identifier];
+    }
 }
 
 - (void) dealloc

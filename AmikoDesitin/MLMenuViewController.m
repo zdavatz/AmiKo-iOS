@@ -200,7 +200,6 @@
                                               otherButtonTitles: nil];
         [alert show];
     }
-
 }
 
 - (IBAction) sendFeedback:(id)sender
@@ -261,15 +260,16 @@
     
     MLCustomURLConnection *reportConn = [[MLCustomURLConnection alloc] init];
     MLCustomURLConnection *dbConn = [[MLCustomURLConnection alloc] init];
+    MLCustomURLConnection *interConn = [[MLCustomURLConnection alloc] init];
 
     if ([APP_NAME isEqualToString:@"iAmiKo"] || [APP_NAME isEqualToString:@"AmiKoDesitin"]) {
         [reportConn downloadFileWithName:@"amiko_report_de.html" andModal:NO];
+        [interConn downloadFileWithName:@"drug_interactions_csv_de.zip" andModal:NO];
         [dbConn downloadFileWithName:@"amiko_db_full_idx_de.zip" andModal:YES];
     } else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"]) {
         [reportConn downloadFileWithName:@"amiko_report_fr.html" andModal:NO];
+        [interConn downloadFileWithName:@"drug_interactions_csv_fr.zip" andModal:NO];
         [dbConn downloadFileWithName:@"amiko_db_full_idx_fr.zip" andModal:YES];
-    } else {
-        // Do nothing
     }
 }
 

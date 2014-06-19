@@ -55,20 +55,22 @@ static NSString *TREFFER_STRING = @"Treffer";
 
 static NSString *FULL_TOOLBAR_TITLE = @"Präparat";
 static NSString *FULL_TOOLBAR_AUTHOR = @"Inhaber";
-static NSString *FULL_TOOLBAR_ATCCODE = @"ATC Code";
+static NSString *FULL_TOOLBAR_ATCCODE = @"Wirkstoff/ATC";
 static NSString *FULL_TOOLBAR_REGNR = @"Reg. Nr.";
 static NSString *FULL_TOOLBAR_SUBSTANCES = @"Wirkstoff";
 static NSString *FULL_TOOLBAR_THERAPY = @"Therapie";
 
 static NSString *SHORT_TOOLBAR_TITLE = @"Prä";
 static NSString *SHORT_TOOLBAR_AUTHOR = @"Inh";
-static NSString *SHORT_TOOLBAR_ATCCODE = @"Atc";
+static NSString *SHORT_TOOLBAR_ATCCODE = @"Wirk/Atc";
 static NSString *SHORT_TOOLBAR_REGNR = @"Reg";
 static NSString *SHORT_TOOLBAR_SUBSTANCES = @"Wirk";
 static NSString *SHORT_TOOLBAR_THERAPY = @"Ther";
 
 static NSInteger mUsedDatabase = kAips;
 static NSInteger mCurrentSearchState = kTitle;
+
+static BOOL mSearchInteractions = false;
 
 @interface DataObject : NSObject
 
@@ -97,11 +99,14 @@ static NSInteger mCurrentSearchState = kTitle;
     NSMutableArray *medIdArray;
     
     MLDBAdapter *mDb;
+    MLMedication *mMed;
     NSMutableString *mBarButtonItemName;
     NSMutableSet *favoriteMedsSet;
     NSMutableArray *items;
     MLDataStore *favoriteData;
    
+    NSMutableDictionary *mMedBasket;
+    
     __block NSArray *searchResults;
     
     SWRevealViewController *mainRevealController;
@@ -118,6 +123,7 @@ static NSInteger mCurrentSearchState = kTitle;
     float screenWidth;
     float screenHeight;
     
+    NSIndexPath *mCurrentIndexPath;
     int mNumCurrSearchResults;
     int timeForSearch_ms;
     
@@ -257,39 +263,39 @@ static NSInteger mCurrentSearchState = kTitle;
     menuViewController = nil;
     menuViewNavigationController = nil;
     
-    if ([[self appLanguage] isEqualToString:@"de"]) {
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         SEARCH_STRING = @"Suche";
         FACHINFO_STRING = @"Fachinformation";
         TREFFER_STRING = @"Treffer";
         //
         FULL_TOOLBAR_TITLE = @"Präparat";
         FULL_TOOLBAR_AUTHOR = @"Inhaber";
-        FULL_TOOLBAR_ATCCODE = @"ATC Code";
+        FULL_TOOLBAR_ATCCODE = @"Wirkstoff/ATC";
         FULL_TOOLBAR_REGNR = @"Reg. Nr.";
         FULL_TOOLBAR_SUBSTANCES = @"Wirkstoff";
         FULL_TOOLBAR_THERAPY = @"Therapie";
         //
         SHORT_TOOLBAR_TITLE = @"Prä";
         SHORT_TOOLBAR_AUTHOR = @"Inh";
-        SHORT_TOOLBAR_ATCCODE = @"Atc";
+        SHORT_TOOLBAR_ATCCODE = @"Wirk/Atc";
         SHORT_TOOLBAR_REGNR = @"Reg";
         SHORT_TOOLBAR_SUBSTANCES = @"Wirk";
         SHORT_TOOLBAR_THERAPY = @"Ther";
-    } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         SEARCH_STRING = @"Recherche";
         FACHINFO_STRING = @"Notice Infopro";
         TREFFER_STRING = @"Réponse(s)";
         //
         FULL_TOOLBAR_TITLE = @"Préparation";
         FULL_TOOLBAR_AUTHOR = @"Titulaire";
-        FULL_TOOLBAR_ATCCODE = @"Code ATC";
+        FULL_TOOLBAR_ATCCODE = @"Principe/ATC";
         FULL_TOOLBAR_REGNR = @"No d'autor";
         FULL_TOOLBAR_SUBSTANCES = @"Principe";
         FULL_TOOLBAR_THERAPY = @"Thérapie";
         //
         SHORT_TOOLBAR_TITLE = @"Pré";
         SHORT_TOOLBAR_AUTHOR = @"Tit";
-        SHORT_TOOLBAR_ATCCODE = @"Atc";
+        SHORT_TOOLBAR_ATCCODE = @"Prin/Atc";
         SHORT_TOOLBAR_REGNR = @"Aut";
         SHORT_TOOLBAR_SUBSTANCES = @"Prin";
         SHORT_TOOLBAR_THERAPY = @"Thér";
@@ -318,64 +324,45 @@ static NSInteger mCurrentSearchState = kTitle;
 
     return self;
 }
-- (NSString *) appOwner
-{
-    if ([APP_NAME isEqualToString:@"AmiKoDesitin"]
-        || [APP_NAME isEqualToString:@"CoMedDesitin"])
-        return @"desitin";
-    else if ([APP_NAME isEqualToString:@"iAmiKo"]
-             || [APP_NAME isEqualToString:@"iCoMed"])
-        return @"ywesee";
-    return nil;
-}
-
-- (NSString *) appLanguage
-{
-    if ([APP_NAME isEqualToString:@"iAmiKo"]
-        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
-        return @"de";
-    else if ([APP_NAME isEqualToString:@"iCoMed"]
-             || [APP_NAME isEqualToString:@"CoMedDesitin"])
-        return @"fr";
-    
-    return nil;
-}
-
-- (NSString *) notSpecified
-{
-    if ([APP_NAME isEqualToString:@"iAmiKo"]
-        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
-        return @"k.A.";
-    else if ([APP_NAME isEqualToString:@"iCoMed"]
-             || [APP_NAME isEqualToString:@"CoMedDesitin"])
-        return @"n.s.";
-    
-    return nil;
-}
 
 - (void) finishedDownloading:(NSNotification *)notification
 {
+    static int fileCnt = 0;
+    
     if ([[notification name] isEqualToString:@"MLDidFinishLoading"]) {
-        NSLog(@"Finished downloading");
-        if (mDb!=nil) {
-            // Close database
+        fileCnt++;
+        if (fileCnt==1)
+            NSLog(@"Finished downloading first file");
+        else if (fileCnt==2)
+            NSLog(@"Finished downloading second file");
+        if (mDb!=nil && fileCnt==2) {
+            // Reset file counter
+            fileCnt=0;
+            // Close sqlite database
             [mDb closeDatabase];
-            // Re-open database
+            // Re-open sqlite database
             [self openSQLiteDatabase];
+            // Close interaction database
+            [mDb closeInteractionsCsvFile];
+            // Re-open interaction database
+            [self openInteractionsCsvFile];
             // Reload table
             [self resetDataInTableView];
+            
             // Display friendly message
             long numSearchRes = [searchResults count];
-            if ([[self appLanguage] isEqualToString:@"de"]) {
+            int numInteractions = (int)[mDb getNumInteractions];
+            
+            if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AIPS Datenbank aktualisiert!"
-                                                                message:[NSString stringWithFormat:@"Die Datenbank enthält %ld Fachinfos.", numSearchRes]
+                                                                message:[NSString stringWithFormat:@"Die Datenbank enthält %ld Fachinfos \nund %d Interaktionen.", numSearchRes, numInteractions]
                                                                delegate:nil
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
                 [alert show];
-            } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+            } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Banque des donnees AIPS mises à jour!"
-                                                                message:[NSString stringWithFormat:@"La banque des données contien %ld notices infopro.", numSearchRes]
+                                                                message:[NSString stringWithFormat:@"La banque des données contien %ld notices infopro \net %d interactions.", numSearchRes, numInteractions]
                                                                delegate:nil
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
@@ -393,15 +380,28 @@ static NSInteger mCurrentSearchState = kTitle;
     }
 }
 
+- (void) openInteractionsCsvFile
+{
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+        if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_de"]) {
+            NSLog(@"No German drug interactions file!");
+        }
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+        if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_fr"]) {
+            NSLog(@"No French drug interactions file!");
+        }
+    }
+}
+
 - (void) openSQLiteDatabase
 {
     mDb = [[MLDBAdapter alloc] init];
-    if ([[self appLanguage] isEqualToString:@"de"]) {
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         if (![mDb openDatabase:@"amiko_db_full_idx_de"]) {
             NSLog(@"No German database!");
             mDb = nil;
         }
-    } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         if (![mDb openDatabase:@"amiko_db_full_idx_fr"]) {
             NSLog(@"No French database!");
             mDb = nil;
@@ -558,7 +558,7 @@ static NSInteger mCurrentSearchState = kTitle;
     NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                          tabBarFont, UITextAttributeFont, nil];
     
-    for (int i=0; i<11; i+=2)
+    for (int i=0; i<9; i+=2)    // 17.06.2014 -> used to be '11'
         [[myToolBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
@@ -642,8 +642,8 @@ static NSInteger mCurrentSearchState = kTitle;
             [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:FULL_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
-            [[[myToolBar items] objectAtIndex:10] setTitle:FULL_TOOLBAR_THERAPY];
+            // [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
+            [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_THERAPY];
             
             // Hide status bar and navigation bar
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
@@ -666,8 +666,8 @@ static NSInteger mCurrentSearchState = kTitle;
             [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:SHORT_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:SHORT_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
-            [[[myToolBar items] objectAtIndex:10] setTitle:SHORT_TOOLBAR_THERAPY];
+            // [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
+            [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_THERAPY];
             
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
@@ -715,8 +715,8 @@ static NSInteger mCurrentSearchState = kTitle;
         [[[myToolBar items] objectAtIndex:1] setTitle:FULL_TOOLBAR_AUTHOR];
         [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_ATCCODE];
         [[[myToolBar items] objectAtIndex:3] setTitle:FULL_TOOLBAR_REGNR];
-        [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_SUBSTANCES];
-        [[[myToolBar items] objectAtIndex:5] setTitle:FULL_TOOLBAR_THERAPY];
+        // [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_SUBSTANCES];
+        [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_THERAPY];
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
@@ -738,8 +738,8 @@ static NSInteger mCurrentSearchState = kTitle;
             [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:FULL_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
-            [[[myToolBar items] objectAtIndex:10] setTitle:FULL_TOOLBAR_THERAPY];
+            // [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
+            [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_THERAPY];
                         
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
         } else {
@@ -751,17 +751,20 @@ static NSInteger mCurrentSearchState = kTitle;
             [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:SHORT_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:SHORT_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
-            [[[myToolBar items] objectAtIndex:10] setTitle:SHORT_TOOLBAR_THERAPY];
+            // [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
+            [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_THERAPY];
             
             // [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
         }
     }
-    
-    if (mUsedDatabase == kAips)
-        [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
-    else if (mUsedDatabase == kFavorites)
-        [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
+    if (mSearchInteractions==false) {
+        if (mUsedDatabase == kAips)
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
+        else if (mUsedDatabase == kFavorites)
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
+    } else {
+        [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -812,7 +815,7 @@ static NSInteger mCurrentSearchState = kTitle;
     [self setBarButtonItemsWith:mCurrentSearchState];
 }
 
-- (void)viewDidUnload
+- (void) viewDidUnload
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
@@ -877,6 +880,14 @@ static NSInteger mCurrentSearchState = kTitle;
         [myTabBar setTintColor:MAIN_TINT_COLOR];
         [myTabBar setTranslucent:YES];
 
+        // Sets tabbar selected images
+        UITabBarItem *tabBarItem0 = [myTabBar.items objectAtIndex:0];
+        UIImage* selectedImage = [[UIImage imageNamed:@"907-plus-rounded-square-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        tabBarItem0.selectedImage = selectedImage;
+        UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:2];
+        selectedImage = [[UIImage imageNamed:@"938-connections-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        tabBarItem2.selectedImage = selectedImage;
+        
         // self.navigationController.navigationBar.translucent = NO;
         // self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
     }
@@ -888,7 +899,7 @@ static NSInteger mCurrentSearchState = kTitle;
             searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             // searchField.tintColor = [UIColor blueColor]; // Text color
-            searchField.barTintColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:0.0];
             searchField.translucent = NO;
         } else {
             searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
@@ -916,16 +927,20 @@ static NSInteger mCurrentSearchState = kTitle;
     mLongPressRecognizer.delegate = self;
     [self.myTableView addGestureRecognizer:mLongPressRecognizer];
     
-    /*
-    mDb = [[MLDBAdapter alloc] init];
-    [mDb openDatabase];
-    */
-    // Open database
+    // Open sqlite database
     [self openSQLiteDatabase];
-
 #ifdef DEBUG
     NSLog(@"Number of Records = %ld", (long)[mDb getNumRecords]);
 #endif
+
+    // Open drug interactions csv file
+    [self openInteractionsCsvFile];
+#ifdef DEBUG
+    NSLog(@"Number of records in interaction file = %lu", (unsigned long)[mDb getNumInteractions]);
+#endif
+
+    // Init medication basket
+    mMedBasket = [[NSMutableDictionary alloc] init];
     
     // Load favorites
     NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -995,13 +1010,13 @@ static NSInteger mCurrentSearchState = kTitle;
     // Load style sheet from file
     NSString *amikoReportFile = nil;
     
-    if ([[self appLanguage] isEqualToString:@"de"]) {
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_de"] stringByAppendingPathExtension:@"html"];
         if ([fileManager fileExistsAtPath:filePath])
             amikoReportFile = filePath;
         else
             amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
-    } else if ([[self appLanguage] isEqualToString:@"fr"]) {
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_fr"] stringByAppendingPathExtension:@"html"];
         if ([fileManager fileExistsAtPath:filePath])
             amikoReportFile = filePath;
@@ -1147,6 +1162,7 @@ static NSInteger mCurrentSearchState = kTitle;
             NSLog(@"TabBar - Aips Database");
 #endif
             mUsedDatabase = kAips;
+            mSearchInteractions = false;
             // Reset searchfield
             [self resetBarButtonItems];
             //
@@ -1180,6 +1196,7 @@ static NSInteger mCurrentSearchState = kTitle;
                 NSLog(@"TabBar - Favorite Database");
 #endif
                 mUsedDatabase = kFavorites;
+                mSearchInteractions = false;
                 // Reset searchfield
                 [self resetBarButtonItems];
                 //
@@ -1209,8 +1226,15 @@ static NSInteger mCurrentSearchState = kTitle;
             break;
         }
         case 2:
-            NSLog(@"TabBar - Settings");
-            // TODO
+#ifdef DEBUG
+            NSLog(@"TabBar - Interactions");
+#endif
+            mUsedDatabase = kAips;
+            mSearchInteractions = true;
+            [self stopActivityIndicator];
+            [self setBarButtonItemsWith:kTitle];
+            // Switch view
+            [self switchToDrugInteractionView];
             break;
         case 3:
             NSLog(@"TabBar - Developer Info");
@@ -1289,14 +1313,14 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [self notSpecified];// @"k.A.";
+        m.title = [MLConstants notSpecified];// @"k.A.";
     if (![packinfo isEqual:[NSNull null]]) {
         if ([packinfo length]>0)
             m.subTitle = packinfo;
         else
-            m.subTitle = [self notSpecified];// @"k.A.";
+            m.subTitle = [MLConstants notSpecified];// @"k.A.";
     } else
-        m.subTitle = [self notSpecified];// @"k.A.";
+        m.subTitle = [MLConstants notSpecified];// @"k.A.";
     m.medId = medId;
     
     [medi addObject:m];
@@ -1309,14 +1333,14 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [self notSpecified];// @"k.A.";
+        m.title = [MLConstants notSpecified];// @"k.A.";
     if (![author isEqual:[NSNull null]]) {
         if ([author length]>0)
             m.subTitle = author;
         else
-            m.subTitle = [self notSpecified];// @"k.A.";
+            m.subTitle = [MLConstants notSpecified];// @"k.A.";
     } else
-        m.subTitle = [self notSpecified];// @"k.A.";
+        m.subTitle = [MLConstants notSpecified];// @"k.A.";
     m.medId = medId;
     
     [medi addObject:m];
@@ -1329,7 +1353,7 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [self notSpecified];// @"k.A.";
+        m.title = [MLConstants notSpecified];// @"k.A.";
     NSArray *m_atc = [atccode componentsSeparatedByString:@";"];
     NSArray *m_class = [atcclass componentsSeparatedByString:@";"];
     NSMutableString *m_atccode_str = nil;
@@ -1340,37 +1364,45 @@ static NSInteger mCurrentSearchState = kTitle;
         if (![[m_atc objectAtIndex:1] isEqual:nil])
             m_atcclass_str = [NSMutableString stringWithString:[m_atc objectAtIndex:1]];
     }
-    NSMutableString *m_atcclass = nil;
-    if ([m_class count] == 2)
-        m_atcclass = [NSMutableString stringWithString:[m_class objectAtIndex:0]];
-    else if ([m_class count] == 3)
-        m_atcclass = [NSMutableString stringWithString:[m_class objectAtIndex:1]];
     if ([m_atccode_str isEqual:[NSNull null]])
-        [m_atccode_str setString:[self notSpecified]];
+        [m_atccode_str setString:[MLConstants notSpecified]];
     if ([m_atcclass_str isEqual:[NSNull null]])
-        [m_atcclass_str setString:[self notSpecified]];
-    if ([m_atcclass isEqual:[NSNull null]])
-        [m_atcclass setString:[self notSpecified]];
-    m.subTitle = [NSString stringWithFormat:@"%@ - %@\n%@", m_atccode_str, m_atcclass_str, m_atcclass];
+        [m_atcclass_str setString:[MLConstants notSpecified]];
+    
+    NSMutableString *m_atcclass = nil;
+    if ([m_class count] == 2) {  // *** Ver.<1.2
+        m_atcclass = [NSMutableString stringWithString:[m_class objectAtIndex:1]];
+        if ([m_atcclass isEqual:[NSNull null]])
+            [m_atcclass setString:[MLConstants notSpecified]];
+        m.subTitle = [NSString stringWithFormat:@"%@ - %@\n%@", m_atccode_str, m_atcclass_str, m_atcclass];
+    } else if ([m_class count] == 3) {  // *** Ver.>=1.2
+        NSArray *m_atc_class_l4_and_l5 = [m_class[2] componentsSeparatedByString:@"#"];
+        int n = (int)[m_atc_class_l4_and_l5 count];
+        if (n>1)
+            m_atcclass = [NSMutableString stringWithString:[m_atc_class_l4_and_l5 objectAtIndex:n-2]];
+        if ([m_atcclass isEqual:[NSNull null]])
+            [m_atcclass setString:[MLConstants notSpecified]];
+        m.subTitle = [NSString stringWithFormat:@"%@ - %@\n%@\n%@", m_atccode_str, m_atcclass_str, m_atcclass, m_class[1]];
+    }
     m.medId = medId;
     
     [medi addObject:m];
 }
 
-- (void) addTitle: (NSString *)title andRegnrs:(NSString *)regnrs andAuthor:(NSString *)author andMedId:(long)medId
+- (void) addTitle:(NSString *)title andRegnrs:(NSString *)regnrs andAuthor:(NSString *)author andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [self notSpecified]; // @"k.A.";;
+        m.title = [MLConstants notSpecified]; // @"k.A.";;
     NSMutableString *m_regnrs = [NSMutableString stringWithString:regnrs];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_regnrs isEqual:[NSNull null]])
-        [m_regnrs setString:[self notSpecified]];
+        [m_regnrs setString:[MLConstants notSpecified]];
     if ([m_auth isEqual:[NSNull null]])
-        [m_auth setString:[self notSpecified]];
+        [m_auth setString:[MLConstants notSpecified]];
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_regnrs, m_auth];
     m.medId = medId;
     
@@ -1387,13 +1419,13 @@ static NSInteger mCurrentSearchState = kTitle;
         m.title = substances;
     }
     else
-        m.title = [self notSpecified]; // @"k.A.";
+        m.title = [MLConstants notSpecified]; // @"k.A.";
     NSMutableString *m_title = [NSMutableString stringWithString:title];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_title isEqual:[NSNull null]])
-        [m_title setString:[self notSpecified]];
+        [m_title setString:[MLConstants notSpecified]];
     if ([m_auth isEqual:[NSNull null]])
-        [m_auth setString:[self notSpecified]];
+        [m_auth setString:[MLConstants notSpecified]];
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_title, m_auth];
     m.medId = medId;
     
@@ -1407,7 +1439,7 @@ static NSInteger mCurrentSearchState = kTitle;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [self notSpecified]; // @"k.A.";
+        m.title = [MLConstants notSpecified]; // @"k.A.";
     NSArray *m_applications = [applications componentsSeparatedByString:@";"];
     NSMutableString *m_swissmedic = nil;
     NSMutableString *m_bag = nil;
@@ -1420,9 +1452,9 @@ static NSInteger mCurrentSearchState = kTitle;
         }
     }
     if ([m_swissmedic isEqual:[NSNull null]])
-        [m_swissmedic setString:[self notSpecified]];
+        [m_swissmedic setString:[MLConstants notSpecified]];
     if ([m_bag isEqual:[NSNull null]])
-        [m_bag setString:[self notSpecified]];
+        [m_bag setString:[MLConstants notSpecified]];
     m.subTitle = [NSString stringWithFormat:@"%@\n%@", m_swissmedic, m_bag];
     m.medId = medId;
     
@@ -1589,6 +1621,30 @@ static NSInteger mCurrentSearchState = kTitle;
     // TODO
 }
 
+- (void) switchToDrugInteractionView
+{
+    if (mCurrentIndexPath!=nil)
+        [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
+}
+
+/**
+ Add med in the buffer to the interaction basket
+ */
+- (void) pushToMedBasket
+{
+    if (mMed!=nil) {
+        NSString *title = [mMed title];
+        title = [title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if ([title length]>30) {
+            title = [title substringToIndex:30];
+            title = [title stringByAppendingString:@"..."];
+        }
+        
+        // Add med to medication basket
+        [mMedBasket setObject:mMed forKey:title];
+    }
+}
+
 /** UITableViewDataSource
  */
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -1604,8 +1660,8 @@ static NSInteger mCurrentSearchState = kTitle;
         return 0;
 }
 
-/** UITableViewDelegate
- */
+#pragma mark UITableView delegate methods
+
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 { 
     // What to display in row n?
@@ -1729,20 +1785,14 @@ static NSInteger mCurrentSearchState = kTitle;
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    mCurrentIndexPath = indexPath;
+    
     long mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
+    mMed = [mDb searchId:mId];
     
     if (titleViewController!=nil && secondViewController!=nil) {
         [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
     }
-    MLMedication *med = [mDb searchId:mId];
-    
-    // Load style sheet from file
-    NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
-    NSString *amikoCss = nil;
-    if (amikoCssPath)
-        amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
-    else
-        amikoCss = [NSString stringWithString:med.styleStr];
     
     if (secondViewController!=nil) {
         // [secondView removeFromParentViewController];
@@ -1750,24 +1800,55 @@ static NSInteger mCurrentSearchState = kTitle;
     }
     
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
-                                                          bundle:nil
-                                                           title:FACHINFO_STRING
-                                                        andParam:2];
-    secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, med.contentStr];
+                                                                    bundle:nil
+                                                                     title:FACHINFO_STRING
+                                                                  andParam:2];
     
-    // Extract section ids
-    NSArray *listofSectionIds = [med.sectionIds componentsSeparatedByString:@","];
-    // Extract section titles
-    NSArray *listofSectionTitles = [med.sectionTitles componentsSeparatedByString:@";"];
+    if (mSearchInteractions==false) {
+
+        // Load style sheet from file
+        NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
+        NSString *amikoCss = nil;
+        if (amikoCssPath)
+            amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
+        else
+            amikoCss = [NSString stringWithString:mMed.styleStr];
+ 
+        secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, mMed.contentStr];
+        // Extract section ids
+        NSArray *listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+        // Extract section titles
+        NSArray *listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
     
-    if (titleViewController!=nil) {
-        [titleViewController removeFromParentViewController];
-        titleViewController = nil;
-    }
-    titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
+        if (titleViewController!=nil) {
+            [titleViewController removeFromParentViewController];
+            titleViewController = nil;
+        }
+        titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
                                                           sectionIds:listofSectionIds
-                                                         andLanguage:[self appLanguage]];
-    
+                                                         andLanguage:[MLConstants appLanguage]];
+    } else {
+        [self pushToMedBasket];
+        
+        // Extract section ids
+        NSArray *listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+        // Extract section titles
+        NSArray *listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
+        
+        if (titleViewController!=nil) {
+            [titleViewController removeFromParentViewController];
+            titleViewController = nil;
+        }
+        titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
+                                                               sectionIds:listofSectionIds
+                                                              andLanguage:[MLConstants appLanguage]];
+        
+        // Update medication basket
+        secondViewController.dbAdapter = mDb;
+        secondViewController.titleViewController = titleViewController;
+        secondViewController.medBasket = mMedBasket;
+        secondViewController.htmlStr = @"Interactions";
+    }
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
     mainRevealController.rightViewController = titleViewController;
@@ -1868,6 +1949,8 @@ static NSInteger mCurrentSearchState = kTitle;
     
     return frame.size;
 }
+
+#pragma mark helper functions
 
 - (void) didReceiveMemoryWarning
 {

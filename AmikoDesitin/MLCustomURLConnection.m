@@ -43,16 +43,17 @@
 static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
 
 - (void) downloadFileWithName:(NSString *)fileName andModal:(bool)modal
-{    
-    NSLog(@"%s", __FUNCTION__);
-    
+{
+#ifdef DEBUG
+    NSLog(@"Downloading file %@", fileName);
+#endif
+
     mModal = modal;
     mFileName = fileName;
     
     if (modal) {
-        if (!myProgressView) {
+        if (!myProgressView)
             myProgressView = [[MLProgressViewController alloc] init];
-        }
         [myProgressView start];
     }
     
@@ -139,8 +140,9 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
     if (mModal) {
         // Remove progress view
         [myProgressView remove];
-        [self unzipDatabase];
-    }
+     }
+    
+     [self unzipDatabase];
 }
 
 - (void) unzipDatabase
@@ -148,20 +150,25 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
     if ([[mFileName pathExtension] isEqualToString:@"zip"])  {
         NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:mFileName];
+        
         NSString *filePath;
         if ([mFileName isEqualToString:@"amiko_db_full_idx_de.zip"] || [mFileName isEqualToString:@"amiko_db_full_idx_zr_de.zip"])
             filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
         if ([mFileName isEqualToString:@"amiko_db_full_idx_fr.zip"] || [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"])
             filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
+        if ([mFileName isEqualToString:@"drug_interactions_csv_de.zip"])
+            filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_de" ofType:@"csv"];
+        if ([mFileName isEqualToString:@"drug_interactions_csv_fr.zip"])
+            filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_fr" ofType:@"csv"];
+        
         if (filePath!=nil) {
             // NSLog(@"Filepath = %@", filePath);
             NSString *output = [documentsDirectory stringByAppendingPathComponent:@"."];
             // NSLog(@"Output = %@", output);
             BOOL unzipped = [SSZipArchive unzipFileAtPath:zipFilePath toDestination:output delegate:self];
             // Unzip data success, post notification
-            if (unzipped == YES) {
+            if (unzipped == YES)
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MLDidFinishLoading" object:self];
-            }
         }
     }
 }
@@ -170,7 +177,7 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
 
 - (void) zipArchiveWillUnzipFileAtIndex:(NSInteger)fileIndex totalFiles:(NSInteger)totalFiles archivePath:(NSString *)archivePath fileInfo:(unz_file_info)fileInfo
 {
-    NSLog(@"Unzipping: %d of %d", fileIndex, totalFiles);
+    NSLog(@"Unzipping: %d of %d", fileIndex+1, totalFiles);
 }
 
 @end

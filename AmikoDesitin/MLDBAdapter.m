@@ -58,6 +58,7 @@ static NSString *FULL_TABLE = nil;
 @implementation MLDBAdapter
 {
     MLSQLiteDatabase *mySqliteDb;
+    NSMutableDictionary *myDrugInteractionMap;
 }
 
 /** Class functions
@@ -66,8 +67,7 @@ static NSString *FULL_TABLE = nil;
 
 + (void) initialize
 {
-    if (self == [MLDBAdapter class])
-    {
+    if (self == [MLDBAdapter class]) {
         if (SHORT_TABLE == nil) {
             SHORT_TABLE = [[NSString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
                            KEY_ROWID, KEY_TITLE, KEY_AUTH, KEY_ATCCODE, KEY_SUBSTANCES, KEY_REGNRS, KEY_ATCCLASS, KEY_THERAPY, KEY_APPLICATION, KEY_INDICATIONS, KEY_CUSTOMER_ID, KEY_PACK_INFO];
@@ -82,6 +82,91 @@ static NSString *FULL_TABLE = nil;
 /** Instance functions
  */
 #pragma mark Instance functions
+
+- (void) listDirectoriesAtPath:(NSString*)dir
+{
+    // List files in directory
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray *fileList = [manager contentsOfDirectoryAtPath:dir error:nil];
+    for (NSString *s in fileList){
+        NSLog(@"%@",s);
+    }
+}
+
+- (BOOL) openInteractionsCsvFile:(NSString *)name
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDir = [paths lastObject];
+
+    // [self listDirectoriesAtPath:documentsDir];
+    
+    // ** A. Check first users documents folder
+    NSString *filePath = [[documentsDir stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"csv"];
+    // Check if database exists
+    if (filePath!=nil) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:filePath]) {
+            NSLog(@"Drug interactions csv found documents folder - %@", filePath);
+            return [self readDrugInteractionMap:filePath];
+        }
+    }
+    
+    // ** B. If no database is available, check if db is in app bundle
+    filePath = [[NSBundle mainBundle] pathForResource:name ofType:@"csv"];
+    if (filePath!=nil ) {
+        NSLog(@"Drug interactions csv found in app bundle - %@", filePath);
+        // Read drug interactions csv line after line
+        return [self readDrugInteractionMap:filePath];
+    }
+    
+    return FALSE;
+}
+
+- (void) closeInteractionsCsvFile
+{
+    if ([myDrugInteractionMap count]>0) {
+        [myDrugInteractionMap removeAllObjects];
+    }
+}
+
+- (BOOL) readDrugInteractionMap:(NSString *)filePath
+{
+    // Read drug interactions csv line after line
+    NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    NSArray *rows = [content componentsSeparatedByString:@"\n"];
+    myDrugInteractionMap = [[NSMutableDictionary alloc] init];
+    /*
+     token[0]: ATC-Code1
+     token[1]: ATC-Code2
+     token[2]: Html
+     */
+    for (NSString *s in rows) {
+        if (![s isEqualToString:@""]) {
+            NSArray *token = [s componentsSeparatedByString:@"||"];
+            NSString *key = [NSString stringWithFormat:@"%@-%@", token[0], token[1]];
+            [myDrugInteractionMap setObject:token[2] forKey:key];
+        }
+    }
+    return TRUE;
+}
+
+- (NSInteger) getNumInteractions
+{
+    if (myDrugInteractionMap!=nil)
+        return [myDrugInteractionMap count];
+    
+    return 0;
+}
+
+- (NSString *) getInteractionHtmlBetween:(NSString *)atc1 and:(NSString *)atc2
+{
+    if ([myDrugInteractionMap count]>0) {
+        NSString *key = [NSString stringWithFormat:@"%@-%@", atc1, atc2];
+        return [myDrugInteractionMap valueForKey:key];
+    }
+    return @"";
+}
+
 
 - (void) openDatabase
 {
@@ -164,8 +249,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchTitle: (NSString *)title
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%'",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_TITLE, title];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%' limit %d",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_TITLE, title, SQLITE_LIMIT];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -175,8 +260,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchAuthor: (NSString *)author
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%'",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_AUTH, author];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%' limit %d",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_AUTH, author, SQLITE_LIMIT];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -186,8 +271,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchATCCode: (NSString *)atccode
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%%@%%' or %@ like '%%;%@%%'",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCLASS, atccode, KEY_ATCCLASS, atccode];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%%@%%' or %@ like '%%;%%%@%%' limit %d",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCLASS, atccode, KEY_ATCCLASS, atccode, SQLITE_LIMIT];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -197,8 +282,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchIngredients: (NSString *)ingredients
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%%-%@%%'",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%%-%@%%' limit %d",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients, SQLITE_LIMIT];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -208,8 +293,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchRegNr: (NSString *)regnr
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%'",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_REGNRS, regnr, KEY_REGNRS, regnr];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' limit %d",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_REGNRS, regnr, KEY_REGNRS, regnr, SQLITE_LIMIT];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -219,8 +304,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchTherapy: (NSString *)therapy
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%'",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_THERAPY, therapy, KEY_THERAPY, therapy, KEY_THERAPY, therapy];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%' limit %d",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_THERAPY, therapy, KEY_THERAPY, therapy, KEY_THERAPY, therapy, SQLITE_LIMIT];
     NSArray *results = [mySqliteDb performQuery:query];
 
     return [self extractShortMedInfoFrom:results];
@@ -230,8 +315,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchApplication: (NSString *)application
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%%;%@%%'",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_INDICATIONS, application, KEY_INDICATIONS, application];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%%;%@%%' limit %d",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_INDICATIONS, application, KEY_INDICATIONS, application, SQLITE_LIMIT];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];

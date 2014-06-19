@@ -60,3 +60,10 @@ extern const int RightViewRevealWidth_Portrait_iPhone;
 extern const int RearViewRevealWidth_Landscape_iPhone;
 extern const int RearViewRevealWidth_Landscape_iPhone_Retina;
 extern const int RearViewRevealOverdraw_Landscape_iPhone_Retina;
+
+
+@interface MLConstants : NSObject
++ (NSString *) appOwner;
++ (NSString *) appLanguage;
++ (NSString *) notSpecified;
+@end

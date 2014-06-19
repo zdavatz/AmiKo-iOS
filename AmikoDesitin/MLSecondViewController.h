@@ -23,7 +23,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLSecondViewController : UIViewController <UISearchBarDelegate, UIWebViewDelegate>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+#import "MLDBAdapter.h"
+#import "MLTitleViewController.h"
+
+@interface MLSecondViewController : UIViewController <UISearchBarDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate>
 {
     UISearchBar *searchField;
     UIWebView *webView;
@@ -39,6 +45,9 @@
 @property (nonatomic, retain) IBOutlet UILabel *findCounter;
 @property (nonatomic, retain) IBOutlet UIView *findPanel;
 @property (nonatomic, copy) NSString *htmlStr;
+@property (nonatomic, weak) MLDBAdapter *dbAdapter;
+@property (nonatomic, weak) NSMutableDictionary *medBasket;
+@property (nonatomic, weak) MLTitleViewController *titleViewController;
 
 - (IBAction) moveToNextHighlight:(id)sender;
 - (IBAction) moveToPrevHighlight:(id)sender;

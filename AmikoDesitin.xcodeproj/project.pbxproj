@@ -62,6 +62,38 @@
 		D59E895B18B7E7CB00185094 /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */; };
 		D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */; };
+		D5A2250B1945EA830078FEFF /* drug_interactions_csv_de.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5A2250A1945EA830078FEFF /* drug_interactions_csv_de.csv */; };
+		D5A2250D1945EA890078FEFF /* drug_interactions_csv_fr.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */; };
+		D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A225141945FC7D0078FEFF /* 938-connections@2x.png */; };
+		D5A225161945FC7D0078FEFF /* 938-connections@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A225141945FC7D0078FEFF /* 938-connections@2x.png */; };
+		D5A225181945FC880078FEFF /* 938-connections.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A225171945FC880078FEFF /* 938-connections.png */; };
+		D5A225191945FC880078FEFF /* 938-connections.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A225171945FC880078FEFF /* 938-connections.png */; };
+		D5A2251B19461C390078FEFF /* 907-plus-rounded-square.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2251A19461C390078FEFF /* 907-plus-rounded-square.png */; };
+		D5A2251C19461C390078FEFF /* 907-plus-rounded-square.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2251A19461C390078FEFF /* 907-plus-rounded-square.png */; };
+		D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2251D19461C420078FEFF /* 907-plus-rounded-square@2x.png */; };
+		D5A2251F19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2251D19461C420078FEFF /* 907-plus-rounded-square@2x.png */; };
+		D5A2252219461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252019461CF60078FEFF /* 907-plus-rounded-square-selected.png */; };
+		D5A2252319461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252019461CF60078FEFF /* 907-plus-rounded-square-selected.png */; };
+		D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252119461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png */; };
+		D5A2252519461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252119461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png */; };
+		D5A2252819461D200078FEFF /* 938-connections-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252619461D200078FEFF /* 938-connections-selected.png */; };
+		D5A2252919461D200078FEFF /* 938-connections-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252619461D200078FEFF /* 938-connections-selected.png */; };
+		D5A2252A19461D200078FEFF /* 938-connections-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252719461D200078FEFF /* 938-connections-selected@2x.png */; };
+		D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252719461D200078FEFF /* 938-connections-selected@2x.png */; };
+		D5A2252D19461D750078FEFF /* interactions_css.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252C19461D750078FEFF /* interactions_css.css */; };
+		D5A2252E19461D750078FEFF /* interactions_css.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252C19461D750078FEFF /* interactions_css.css */; };
+		D5A2253319461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */; };
+		D5A2253419461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */; };
+		D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */; };
+		D5A2253619461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */; };
+		D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22537194A3A400078FEFF /* 218-trash2.png */; };
+		D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22537194A3A400078FEFF /* 218-trash2.png */; };
+		D5A2253B194A3A400078FEFF /* 217-trash.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22538194A3A400078FEFF /* 217-trash.png */; };
+		D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22538194A3A400078FEFF /* 217-trash.png */; };
+		D5A2253E194A435B0078FEFF /* deleterow.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
+		D5A2253F194A435B0078FEFF /* deleterow.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
+		D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
+		D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
 		D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
 		D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
 		D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4E18B5207200F56BC5 /* ioapi.c */; };
@@ -229,6 +261,23 @@
 		D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_de.db; sourceTree = "<group>"; };
 		D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
 		D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = desitin_launch_2048x1536.png; path = "AmikoDesitin/Images.xcassets/LaunchImage-AmiKoDesitin.launchimage/desitin_launch_2048x1536.png"; sourceTree = "<group>"; };
+		D5A2250A1945EA830078FEFF /* drug_interactions_csv_de.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = drug_interactions_csv_de.csv; sourceTree = "<group>"; };
+		D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = drug_interactions_csv_fr.csv; sourceTree = "<group>"; };
+		D5A225141945FC7D0078FEFF /* 938-connections@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "938-connections@2x.png"; sourceTree = "<group>"; };
+		D5A225171945FC880078FEFF /* 938-connections.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "938-connections.png"; sourceTree = "<group>"; };
+		D5A2251A19461C390078FEFF /* 907-plus-rounded-square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "907-plus-rounded-square.png"; sourceTree = "<group>"; };
+		D5A2251D19461C420078FEFF /* 907-plus-rounded-square@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "907-plus-rounded-square@2x.png"; sourceTree = "<group>"; };
+		D5A2252019461CF60078FEFF /* 907-plus-rounded-square-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "907-plus-rounded-square-selected.png"; sourceTree = "<group>"; };
+		D5A2252119461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "907-plus-rounded-square-selected@2x.png"; sourceTree = "<group>"; };
+		D5A2252619461D200078FEFF /* 938-connections-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "938-connections-selected.png"; sourceTree = "<group>"; };
+		D5A2252719461D200078FEFF /* 938-connections-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "938-connections-selected@2x.png"; sourceTree = "<group>"; };
+		D5A2252C19461D750078FEFF /* interactions_css.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = interactions_css.css; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.css; };
+		D5A2253019461D8D0078FEFF /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
+		D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
+		D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		D5A22537194A3A400078FEFF /* 218-trash2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "218-trash2.png"; sourceTree = "<group>"; };
+		D5A22538194A3A400078FEFF /* 217-trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "217-trash.png"; sourceTree = "<group>"; };
+		D5A2253D194A435B0078FEFF /* deleterow.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = deleterow.js; sourceTree = "<group>"; };
 		D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLCustomURLConnection.h; sourceTree = "<group>"; };
 		D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLCustomURLConnection.m; sourceTree = "<group>"; };
 		D5A31F4D18B5207200F56BC5 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
@@ -260,7 +309,7 @@
 		D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MLSearchWebView.js; sourceTree = "<group>"; };
 		D5A6F26C17B16A7700EAB24B /* reveal-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon.png"; sourceTree = "<group>"; };
-		D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = amiko_stylesheet.css; sourceTree = "<group>"; };
+		D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = amiko_stylesheet.css; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.css; };
 		D5A6F27117B16AA400EAB24B /* 28-star-gy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star-gy.png"; sourceTree = "<group>"; };
 		D5A6F27217B16AA400EAB24B /* 28-star-ye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star-ye.png"; sourceTree = "<group>"; };
 		D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon@2x.png"; sourceTree = "<group>"; };
@@ -367,6 +416,16 @@
 				D5A6F2A817B16EF700EAB24B /* app_icon_57x57.png */,
 			);
 			name = AppIcons;
+			sourceTree = "<group>";
+		};
+		D5A2252F19461D8D0078FEFF /* WebViewJavascriptBridge */ = {
+			isa = PBXGroup;
+			children = (
+				D5A2253019461D8D0078FEFF /* WebViewJavascriptBridge.h */,
+				D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */,
+				D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */,
+			);
+			path = WebViewJavascriptBridge;
 			sourceTree = "<group>";
 		};
 		D5A31F4B18B5205E00F56BC5 /* SSZipArchive */ = {
@@ -515,6 +574,7 @@
 		D5A6F26217B169CD00EAB24B /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				D5A2252F19461D8D0078FEFF /* WebViewJavascriptBridge */,
 				D5A31F4B18B5205E00F56BC5 /* SSZipArchive */,
 				D5FFE1AC18B1021B002D6159 /* ionicons */,
 				D5FFE19E18B0FF99002D6159 /* SWRevealViewController */,
@@ -525,6 +585,8 @@
 		D5A6F26317B169E300EAB24B /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */,
+				D5A2250A1945EA830078FEFF /* drug_interactions_csv_de.csv */,
 				D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */,
 				D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */,
 			);
@@ -534,6 +596,19 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5A22537194A3A400078FEFF /* 218-trash2.png */,
+				D5A22538194A3A400078FEFF /* 217-trash.png */,
+				D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */,
+				D5A2252C19461D750078FEFF /* interactions_css.css */,
+				D5A225171945FC880078FEFF /* 938-connections.png */,
+				D5A2253D194A435B0078FEFF /* deleterow.js */,
+				D5A225141945FC7D0078FEFF /* 938-connections@2x.png */,
+				D5A2252619461D200078FEFF /* 938-connections-selected.png */,
+				D5A2252719461D200078FEFF /* 938-connections-selected@2x.png */,
+				D5A2251A19461C390078FEFF /* 907-plus-rounded-square.png */,
+				D5A2251D19461C420078FEFF /* 907-plus-rounded-square@2x.png */,
+				D5A2252019461CF60078FEFF /* 907-plus-rounded-square-selected.png */,
+				D5A2252119461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png */,
 				D554575418B3E87D003299E0 /* 905-chat-2.png */,
 				D554575518B3E87D003299E0 /* 905-chat-2@2x.png */,
 				D554574E18B3E86B003299E0 /* 970-medal.png */,
@@ -553,11 +628,10 @@
 				D5A6F2A517B16E4400EAB24B /* 28-star@2x.png */,
 				D5A6F27117B16AA400EAB24B /* 28-star-gy.png */,
 				D5A6F27217B16AA400EAB24B /* 28-star-ye.png */,
-				D5A6F26C17B16A7700EAB24B /* reveal-icon.png */,
 				D5A6F27417B16AA400EAB24B /* 10-medical.png */,
-				D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */,
 				D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */,
-				D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */,
+				D5A6F26C17B16A7700EAB24B /* reveal-icon.png */,
+				D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -698,6 +772,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */,
 				D5A6F24517B1692F00EAB24B /* InfoPlist.strings in Resources */,
 				D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */,
 				D5A6F27017B16A7700EAB24B /* amiko_stylesheet.css in Resources */,
@@ -706,6 +781,7 @@
 				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
+				D5A225181945FC880078FEFF /* 938-connections.png in Resources */,
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
@@ -717,7 +793,12 @@
 				D5A6F27D17B16B5800EAB24B /* MLViewController~iphone.xib in Resources */,
 				D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5A6F28517B16B6000EAB24B /* MLTitleViewController.xib in Resources */,
+				D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				D554575618B3E87D003299E0 /* 905-chat-2.png in Resources */,
+				D5A2253319461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */,
+				D5A2252219461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
+				D5A2250B1945EA830078FEFF /* drug_interactions_csv_de.csv in Resources */,
+				D5A2252D19461D750078FEFF /* interactions_css.css in Resources */,
 				D554575018B3E86B003299E0 /* 970-medal.png in Resources */,
 				D5A6F28617B16B6000EAB24B /* MLTitleViewController~iphone.xib in Resources */,
 				D5A6F2A617B16E4400EAB24B /* 28-star.png in Resources */,
@@ -731,29 +812,36 @@
 				D554575818B3E87D003299E0 /* 905-chat-2@2x.png in Resources */,
 				D5A6F2B117B16FFD00EAB24B /* app_icon_32x32.png in Resources */,
 				D533DA9D17B2D05F00199C38 /* desitin_icon_57x57.png in Resources */,
+				D5A2252A19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
+				D5A2253B194A3A400078FEFF /* 217-trash.png in Resources */,
 				D533DA9F17B2D07600199C38 /* desitin_icon_114x114.png in Resources */,
 				D533DAA317B2D2AE00199C38 /* desitin_icon_32x32.png in Resources */,
 				D533DAA617B434B600199C38 /* Default.png in Resources */,
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
+				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
 				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D533DAAA17B434FF00199C38 /* Default-Portrait@2x~ipad.png in Resources */,
+				D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */,
 				D533DAAC17B4351700199C38 /* Default@2x.png in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */,
 				D533DAAE17B435E300199C38 /* desitin_icon_72x72.png in Resources */,
+				D5A2251B19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */,
 				D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */,
 				D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */,
 				D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */,
 				D5FFE1B718B1021B002D6159 /* LICENSE in Resources */,
+				D5A2252819461D200078FEFF /* 938-connections-selected.png in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
 				D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */,
 				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
+				D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -761,6 +849,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */,
 				D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
@@ -769,6 +858,7 @@
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
+				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */,
 				D5FFE1B818B1021B002D6159 /* LICENSE in Resources */,
 				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
@@ -780,9 +870,14 @@
 				D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */,
 				D554574518B3E847003299E0 /* 1100-list-2.png in Resources */,
 				D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */,
+				D5A225161945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */,
+				D5A2253419461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */,
+				D5A2252319461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
 				D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */,
+				D5A2252E19461D750078FEFF /* interactions_css.css in Resources */,
 				D5F6BB7117E8C87500DCBD16 /* MLTitleViewController.xib in Resources */,
+				D5A2250D1945EA890078FEFF /* drug_interactions_csv_fr.csv in Resources */,
 				D5F6BB7217E8C87500DCBD16 /* MLTitleViewController~iphone.xib in Resources */,
 				D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */,
 				D5F6BB7417E8C87500DCBD16 /* 28-star@2x.png in Resources */,
@@ -794,29 +889,36 @@
 				D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */,
 				D5F6BB7917E8C87500DCBD16 /* app_icon_32x32.png in Resources */,
 				D554575918B3E87D003299E0 /* 905-chat-2@2x.png in Resources */,
+				D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
+				D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
+				D5A2251F19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
+				D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */,
 				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
 				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
 				D554574718B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D5B75BEC17FF53F5008ECDBB /* comed_des_launch_2048x1536.png in Resources */,
+				D5A2251C19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
 				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
 				D5FFE1BA18B1021B002D6159 /* README.md in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
+				D5A2252919461D200078FEFF /* 938-connections-selected.png in Resources */,
 				D554575718B3E87D003299E0 /* 905-chat-2.png in Resources */,
 				D52A0D6C17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png in Resources */,
 				D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */,
 				D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */,
 				D52A0D7217ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png in Resources */,
+				D5A2252519461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,6 +930,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
+				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
@@ -839,6 +942,7 @@
 				D5FFE17818A96BA0002D6159 /* MLMenuViewController.m in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
+				D5A2253E194A435B0078FEFF /* deleterow.js in Sources */,
 				D5A6F29317B16C1D00EAB24B /* MLMedication.m in Sources */,
 				D5A6F29417B16C1D00EAB24B /* MLTitleViewController.m in Sources */,
 				D5A6F29717B16C2F00EAB24B /* MLSearchWebView.m in Sources */,
@@ -858,6 +962,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */,
+				D5A2253619461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
 				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
@@ -869,6 +974,7 @@
 				D5FFE17918A96BA0002D6159 /* MLMenuViewController.m in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
+				D5A2253F194A435B0078FEFF /* deleterow.js in Sources */,
 				D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */,
 				D5F6BB5717E8C87500DCBD16 /* MLTitleViewController.m in Sources */,
 				D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */,

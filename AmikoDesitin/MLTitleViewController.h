@@ -35,4 +35,6 @@
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withMenu:(NSArray *)sectionTitles;
 - (id) initWithMenu:(NSArray *)sectionTitles sectionIds:(NSArray *)sectionIds andLanguage:(NSString *)appLanguage;
 
+- (void) setSectionTitles:(NSArray *)titles andIds:(NSArray *)ids;
+
 @end
