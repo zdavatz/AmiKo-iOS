@@ -603,7 +603,7 @@
         }
         if ([sectionTitles count]<2) {
             if ([[MLConstants appLanguage] isEqualToString:@"de"])
-                [interactionStr appendString:@"<p class=\"paragraph0\">Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten in unseren Daten vorhanden.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Interaktion melden\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
+                [interactionStr appendString:@"<p class=\"paragraph0\">Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten in der EPha.ch-Datenbank vorhanden. Weitere Informationen finden Sie in der Fachinformation.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Interaktion melden\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
             else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
                 [interactionStr appendString:@"<p class=\"paragraph0\">Jusqu’ici il n’y pas d’interaction connue entre les médicaments.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Signaler une interaction\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
         } else if ([sectionTitles count]>2) {
