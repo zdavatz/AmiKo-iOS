@@ -1165,6 +1165,7 @@ static BOOL mSearchInteractions = false;
             mSearchInteractions = false;
             // Reset searchfield
             [self resetBarButtonItems];
+            mCurrentIndexPath = nil;            
             //
             MLViewController* __weak weakSelf = self;
             //
@@ -1199,6 +1200,7 @@ static BOOL mSearchInteractions = false;
                 mSearchInteractions = false;
                 // Reset searchfield
                 [self resetBarButtonItems];
+                mCurrentIndexPath = nil;
                 //
                 MLViewController* __weak weakSelf = self;
                 //
@@ -1623,8 +1625,8 @@ static BOOL mSearchInteractions = false;
 
 - (void) switchToDrugInteractionView
 {
-    if (mCurrentIndexPath!=nil)
-        [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
+    // if (mCurrentIndexPath!=nil)
+    [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
 }
 
 /**
@@ -1786,9 +1788,13 @@ static BOOL mSearchInteractions = false;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     mCurrentIndexPath = indexPath;
+
+    long mId = -1;
     
-    long mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
-    mMed = [mDb searchId:mId];
+    if (mCurrentIndexPath!=nil) {
+        mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
+        mMed = [mDb searchId:mId];
+    }
     
     if (titleViewController!=nil && secondViewController!=nil) {
         [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
@@ -1805,7 +1811,6 @@ static BOOL mSearchInteractions = false;
                                                                   andParam:2];
     
     if (mSearchInteractions==false) {
-
         // Load style sheet from file
         NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
         NSString *amikoCss = nil;
@@ -1828,24 +1833,26 @@ static BOOL mSearchInteractions = false;
                                                           sectionIds:listofSectionIds
                                                          andLanguage:[MLConstants appLanguage]];
     } else {
-        [self pushToMedBasket];
+        if (mId>-1) {
+            [self pushToMedBasket];
         
-        // Extract section ids
-        NSArray *listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
-        // Extract section titles
-        NSArray *listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
+            // Extract section ids
+            NSArray *listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+            // Extract section titles
+            NSArray *listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
         
-        if (titleViewController!=nil) {
-            [titleViewController removeFromParentViewController];
-            titleViewController = nil;
-        }
-        titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
+            if (titleViewController!=nil) {
+                [titleViewController removeFromParentViewController];
+                titleViewController = nil;
+            }
+            titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
                                                                sectionIds:listofSectionIds
                                                               andLanguage:[MLConstants appLanguage]];
         
-        // Update medication basket
-        secondViewController.dbAdapter = mDb;
-        secondViewController.titleViewController = titleViewController;
+            // Update medication basket
+            secondViewController.dbAdapter = mDb;
+            secondViewController.titleViewController = titleViewController;
+        }
         secondViewController.medBasket = mMedBasket;
         secondViewController.htmlStr = @"Interactions";
     }

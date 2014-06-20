@@ -249,8 +249,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchTitle: (NSString *)title
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%' limit %d",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_TITLE, title, SQLITE_LIMIT];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%'",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_TITLE, title];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -260,8 +260,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchAuthor: (NSString *)author
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%' limit %d",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_AUTH, author, SQLITE_LIMIT];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@%%'",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_AUTH, author];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -271,8 +271,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchATCCode: (NSString *)atccode
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%%@%%' or %@ like '%%;%%%@%%' limit %d",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCLASS, atccode, KEY_ATCCLASS, atccode, SQLITE_LIMIT];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%%@%%' or %@ like '%%;%%%@%%'",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCODE, atccode, KEY_ATCCLASS, atccode, KEY_ATCCLASS, atccode];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -282,8 +282,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchIngredients: (NSString *)ingredients
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%%-%@%%' limit %d",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients, SQLITE_LIMIT];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%%-%@%%'",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients, KEY_SUBSTANCES, ingredients];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -293,8 +293,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchRegNr: (NSString *)regnr
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' limit %d",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_REGNRS, regnr, KEY_REGNRS, regnr, SQLITE_LIMIT];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%'",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_REGNRS, regnr, KEY_REGNRS, regnr];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
@@ -304,8 +304,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchTherapy: (NSString *)therapy
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%' limit %d",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_THERAPY, therapy, KEY_THERAPY, therapy, KEY_THERAPY, therapy, SQLITE_LIMIT];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%'",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_THERAPY, therapy, KEY_THERAPY, therapy, KEY_THERAPY, therapy];
     NSArray *results = [mySqliteDb performQuery:query];
 
     return [self extractShortMedInfoFrom:results];
@@ -315,8 +315,8 @@ static NSString *FULL_TABLE = nil;
  */
 - (NSArray *) searchApplication: (NSString *)application
 {
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%%;%@%%' limit %d",
-                       SHORT_TABLE, DATABASE_TABLE, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_INDICATIONS, application, KEY_INDICATIONS, application, SQLITE_LIMIT];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%' or %@ like '%% %@%%' or %@ like '%%;%@%%' or %@ like '%@%%' or %@ like '%%;%@%%'",
+                       SHORT_TABLE, DATABASE_TABLE, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_APPLICATION, application, KEY_INDICATIONS, application, KEY_INDICATIONS, application];
     NSArray *results = [mySqliteDb performQuery:query];
     
     return [self extractShortMedInfoFrom:results];
