@@ -968,7 +968,7 @@ static BOOL mSearchInteractions = false;
     favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favoriteData.favMedsSet];
     
     // Set default database
-    mUsedDatabase = kNone;
+    mUsedDatabase = kAips;
    
     // Set current search state
     mCurrentSearchState = kTitle;
