@@ -103,7 +103,6 @@
 
 - (IBAction) moveToNextHighlight:(id)sender
 {
-    // NSLog(@"%s", __PRETTY_FUNCTION__);
     if (mTotalHighlights>1) {
         mCurrentHightlight -= 1;
         if (mCurrentHightlight<0)
@@ -115,7 +114,6 @@
 
 - (IBAction) moveToPrevHighlight:(id)sender
 {
-    // NSLog(@"%s", __PRETTY_FUNCTION__);
     if (mTotalHighlights>1) {
         mCurrentHightlight += 1;
         if (mCurrentHightlight>=mTotalHighlights)
@@ -170,7 +168,9 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    // NSLog(@"%s", __PRETTY_FUNCTION__);
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
     
     [super viewWillAppear:animated];
     
@@ -251,9 +251,30 @@
     [self createJSBridge];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
+    [super viewDidAppear:animated];
+    
+    [self.webView reload];
+    
+    self.findPanel.layer.cornerRadius = 6.0f;
+    
+    [self.findPanel setHidden:YES];
+    [self.findCounter setHidden:YES];
+    
+    mFramePosA = self.findPanel.frame.origin.y;
+    mFramePosB = self.findPanel.frame.origin.y - 200;
+}
+
 - (void) viewDidLoad
 {
-    // NSLog(@"%s", __PRETTY_FUNCTION__);
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
     
     [super viewDidLoad];
     
@@ -314,7 +335,7 @@
 /**
  Removes keyboard on iPhones
  */
-- (void)handleSingleTap:(UITapGestureRecognizer *) sender
+- (void) handleSingleTap:(UITapGestureRecognizer *)sender
 {
     [searchField resignFirstResponder];
 }
@@ -322,20 +343,6 @@
 - (void) viewDidUnload
 {
     self.webView = nil;
-}
-
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.webView reload];
-
-    self.findPanel.layer.cornerRadius = 6.0f;
-    
-    [self.findPanel setHidden:YES];
-    [self.findCounter setHidden:YES];
-    
-    mFramePosA = self.findPanel.frame.origin.y;
-    mFramePosB = self.findPanel.frame.origin.y - 200;
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -346,11 +353,11 @@
 - (void) willRotateToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        } else {
+        else
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
-        }
+        
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField.barTintColor = [UIColor lightGrayColor];
             searchField.translucent = NO;

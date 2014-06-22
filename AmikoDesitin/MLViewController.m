@@ -564,10 +564,10 @@ static BOOL mSearchInteractions = false;
 
 - (void) startActivityIndicator
 {
-#ifdef DEBUG
-    NSLog(@"Start activity indicator");
-#endif
     if (runningActivityIndicator==NO) {
+#ifdef DEBUG
+        NSLog(@"Start activity indicator");
+#endif
         mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
         mActivityIndicator.frame = CGRectIntegral(mActivityIndicator.frame);
@@ -772,7 +772,7 @@ static BOOL mSearchInteractions = false;
 - (void) viewDidAppear:(BOOL)animated
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 #endif
     
     [super viewDidAppear:animated];
@@ -1154,7 +1154,7 @@ static BOOL mSearchInteractions = false;
     static bool inProgress = false;
 
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s: %d", __FUNCTION__, item.tag);
 #endif
     
     switch (item.tag) {
@@ -1165,9 +1165,7 @@ static BOOL mSearchInteractions = false;
 #endif
             mUsedDatabase = kAips;
             mSearchInteractions = false;
-            // Reset searchfield
-            [self resetBarButtonItems];
-            mCurrentIndexPath = nil;            
+            mCurrentIndexPath = nil;
             //
             MLViewController* __weak weakSelf = self;
             //
@@ -1187,6 +1185,8 @@ static BOOL mSearchInteractions = false;
                         [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
                         inProgress = false;
                     });
+                    // Reset searchfield
+                    [self resetBarButtonItems];
                     //}
                 }
             });
@@ -1200,8 +1200,6 @@ static BOOL mSearchInteractions = false;
 #endif
                 mUsedDatabase = kFavorites;
                 mSearchInteractions = false;
-                // Reset searchfield
-                [self resetBarButtonItems];
                 mCurrentIndexPath = nil;
                 //
                 MLViewController* __weak weakSelf = self;
@@ -1223,6 +1221,8 @@ static BOOL mSearchInteractions = false;
                             [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
                             inProgress = false;
                         });
+                        // Reset searchfield
+                        [self resetBarButtonItems];
                         //}
                     }
                 });
@@ -1806,7 +1806,6 @@ static BOOL mSearchInteractions = false;
         // [secondView removeFromParentViewController];
         secondViewController = nil;
     }
-    
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                                     bundle:nil
                                                                      title:FACHINFO_STRING
