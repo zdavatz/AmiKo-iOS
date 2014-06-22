@@ -302,6 +302,21 @@
     
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        UIGestureRecognizer *tapper = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                              action:@selector(handleSingleTap:)];
+        tapper.cancelsTouchesInView = NO;
+        [self.view addGestureRecognizer:tapper];
+    }
+}
+
+/**
+ Removes keyboard on iPhones
+ */
+- (void)handleSingleTap:(UITapGestureRecognizer *) sender
+{
+    [searchField resignFirstResponder];
 }
 
 - (void) viewDidUnload
