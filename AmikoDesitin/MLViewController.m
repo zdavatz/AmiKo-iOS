@@ -42,7 +42,7 @@
 #import <sys/time.h>
 
 enum {
-    kAips=0, kHospital=1, kFavorites=2
+    kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kNone=100
 };
 
 enum {
@@ -67,7 +67,7 @@ static NSString *SHORT_TOOLBAR_REGNR = @"Reg";
 static NSString *SHORT_TOOLBAR_SUBSTANCES = @"Wirk";
 static NSString *SHORT_TOOLBAR_THERAPY = @"Ther";
 
-static NSInteger mUsedDatabase = kAips;
+static NSInteger mUsedDatabase = kNone;
 static NSInteger mCurrentSearchState = kTitle;
 
 static BOOL mSearchInteractions = false;
@@ -762,6 +762,8 @@ static BOOL mSearchInteractions = false;
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
         else if (mUsedDatabase == kFavorites)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
+        else if (mUsedDatabase == kNone)
+            [myTabBar setSelectedItem:nil]; // Clears all cells
     } else {
         [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
     }
@@ -966,7 +968,7 @@ static BOOL mSearchInteractions = false;
     favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favoriteData.favMedsSet];
     
     // Set default database
-    mUsedDatabase = kAips;
+    mUsedDatabase = kNone;
    
     // Set current search state
     mCurrentSearchState = kTitle;

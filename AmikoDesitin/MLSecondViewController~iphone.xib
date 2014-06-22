@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MLSecondViewController">
             <connections>
+                <outlet property="findPanel" destination="Kha-Ea-cqs" id="ni4-Rw-dky"/>
                 <outlet property="view" destination="1" id="14"/>
                 <outlet property="webView" destination="3" id="13"/>
             </connections>
@@ -25,6 +26,39 @@
                         <outlet property="delegate" destination="-1" id="12"/>
                     </connections>
                 </webView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kha-Ea-cqs">
+                    <rect key="frame" x="184" y="16" width="120" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="msi-gB-bT0">
+                            <rect key="frame" x="60" y="0.0" width="60" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Next">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="moveToNextHighlight:" destination="-2" eventType="touchUpInside" id="XU6-TN-s3t"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pCE-RA-1DZ">
+                            <rect key="frame" x="0.0" y="0.0" width="60" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Prev">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="moveToPrevHighlight:" destination="-2" eventType="touchUpInside" id="jAY-UT-2RJ"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="120" id="I36-z8-Tx3"/>
+                        <constraint firstAttribute="height" constant="30" id="zBJ-IT-JE3"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -32,6 +66,8 @@
                 <constraint firstItem="3" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="9"/>
                 <constraint firstItem="3" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="10"/>
                 <constraint firstItem="3" firstAttribute="top" secondItem="1" secondAttribute="top" id="11"/>
+                <constraint firstAttribute="trailing" secondItem="Kha-Ea-cqs" secondAttribute="trailing" constant="16" id="4ux-we-04Y"/>
+                <constraint firstItem="Kha-Ea-cqs" firstAttribute="top" secondItem="1" secondAttribute="top" constant="16" id="t0q-Vm-vE6"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

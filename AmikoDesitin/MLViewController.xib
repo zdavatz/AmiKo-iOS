@@ -85,7 +85,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <items>
-                        <tabBarItem title="AIPS" image="10-medical.png" id="72"/>
+                        <tabBarItem title="AIPS" image="907-plus-rounded-square.png" id="72"/>
                         <tabBarItem tag="1" systemItem="favorites" id="71"/>
                         <tabBarItem tag="2" title="Interactions" image="938-connections.png" id="IFm-jM-mZk"/>
                     </items>
@@ -115,7 +115,7 @@
         </view>
     </objects>
     <resources>
-        <image name="10-medical.png" width="22" height="22"/>
+        <image name="907-plus-rounded-square.png" width="28" height="28"/>
         <image name="938-connections.png" width="28" height="28"/>
     </resources>
 </document>
