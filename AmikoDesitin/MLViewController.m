@@ -409,6 +409,15 @@ static BOOL mSearchInteractions = false;
     }
 }
 
+- (void) clearDataInTableView
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    [medi removeAllObjects];
+    [self.myTableView reloadData];
+}
+
 - (void) resetDataInTableView
 {
     // Reset search state
@@ -1152,59 +1161,23 @@ static BOOL mSearchInteractions = false;
 - (void) switchTabBarItem: (UITabBarItem *)item
 {
     static bool inProgress = false;
-
-#ifdef DEBUG
-    NSLog(@"%s: %d", __FUNCTION__, item.tag);
-#endif
     
     switch (item.tag) {
         case 0:
         {
 #ifdef DEBUG
-            NSLog(@"TabBar - Aips Database");
+            NSLog(@"TabBar - Aips Database - %d", mUsedDatabase);
 #endif
-            mUsedDatabase = kAips;
-            mSearchInteractions = false;
-            mCurrentIndexPath = nil;
-            //
-            MLViewController* __weak weakSelf = self;
-            //
-            dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
-            dispatch_async(search_queue, ^(void) {
-                MLViewController* scopeSelf = weakSelf;
-                if (!inProgress) {
-                    inProgress = true;
-                    mCurrentSearchState = kTitle;
-                    // @synchronized(searchResults) {
-                    searchResults = [scopeSelf searchAipsDatabaseWith:@""];
-                    // Update tableview
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [scopeSelf updateTableView];
-                        [myTableView reloadData];
-                        [searchField resignFirstResponder];
-                        [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
-                        inProgress = false;
-                    });
-                    // Reset searchfield
-                    [self resetBarButtonItems];
-                    //}
-                }
-            });
-            break;
-        }
-        case 1:
-        {
-            if (mUsedDatabase!=kFavorites) {
-#ifdef DEBUG
-                NSLog(@"TabBar - Favorite Database");
-#endif
-                mUsedDatabase = kFavorites;
+            if (mUsedDatabase==kFavorites || mSearchInteractions==true) {
+                mUsedDatabase = kAips;
                 mSearchInteractions = false;
                 mCurrentIndexPath = nil;
+                [self stopActivityIndicator];
+                [self clearDataInTableView];
+            } else {
                 //
                 MLViewController* __weak weakSelf = self;
                 //
-                // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
                 dispatch_async(search_queue, ^(void) {
                     MLViewController* scopeSelf = weakSelf;
@@ -1212,7 +1185,7 @@ static BOOL mSearchInteractions = false;
                         inProgress = true;
                         mCurrentSearchState = kTitle;
                         // @synchronized(searchResults) {
-                        searchResults = [scopeSelf retrieveAllFavorites];
+                        searchResults = [scopeSelf searchAipsDatabaseWith:@""];
                         // Update tableview
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [scopeSelf updateTableView];
@@ -1227,6 +1200,41 @@ static BOOL mSearchInteractions = false;
                     }
                 });
             }
+            break;
+        }
+        case 1:
+        {
+#ifdef DEBUG
+            NSLog(@"TabBar - Favorite Database");
+#endif
+            mUsedDatabase = kFavorites;
+            mSearchInteractions = false;
+            mCurrentIndexPath = nil;
+            //
+            MLViewController* __weak weakSelf = self;
+            //
+            // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
+            dispatch_async(search_queue, ^(void) {
+                MLViewController* scopeSelf = weakSelf;
+                if (!inProgress) {
+                    inProgress = true;
+                    mCurrentSearchState = kTitle;
+                    // @synchronized(searchResults) {
+                    searchResults = [scopeSelf retrieveAllFavorites];
+                    // Update tableview
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [scopeSelf updateTableView];
+                        [myTableView reloadData];
+                        [searchField resignFirstResponder];
+                        [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
+                        inProgress = false;
+                    });
+                    // Reset searchfield
+                    [self resetBarButtonItems];
+                    //}
+                }
+            });
             break;
         }
         case 2:
