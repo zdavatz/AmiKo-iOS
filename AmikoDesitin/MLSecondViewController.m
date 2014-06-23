@@ -227,7 +227,7 @@
             self.findCounter = [self findCounterAtPos:140.0 andSize:44.0];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
-
+            
             self.navigationItem.titleView = searchBarView;
             //
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
@@ -375,7 +375,8 @@
             
             // For iPhones add findCounter manually
             self.findCounter = [self findCounterAtPos:240.0 andSize:32.0];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];            
+            if (mTotalHighlights>0)
+                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
@@ -401,7 +402,8 @@
             
             // For iPhones add findCounter manually
             self.findCounter = [self findCounterAtPos:140.0 andSize:44.0];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+            if (mTotalHighlights>0)
+                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
@@ -759,9 +761,9 @@
         } else {
             [self showFindPanel:NO];
         }
-    }
-    else {
+    } else {
         [self.webView removeAllHighlights];
+        mTotalHighlights = 0;
         [self showFindPanel:NO];
     }
 }
@@ -789,6 +791,7 @@
                 [self.findPanel setHidden:YES];
             }
         }];
+        
         if (visible==YES) {
             [self.findPanel setHidden:NO];
             [self.findCounter setHidden:NO];

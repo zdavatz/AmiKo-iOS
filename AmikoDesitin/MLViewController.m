@@ -46,7 +46,7 @@ enum {
 };
 
 enum {
-    kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kSubstances=8, kTherapy=10
+    kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kTherapy=8
 };
 
 static NSString *SEARCH_STRING = @"Suche";
@@ -178,11 +178,6 @@ static BOOL mSearchInteractions = false;
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
             [mBarButtonItemName setString:FULL_TOOLBAR_REGNR];
             mCurrentSearchState = kRegNr;
-        } else if ([btn.title isEqualToString:FULL_TOOLBAR_SUBSTANCES]) {
-            [myTextField setText:FULL_TOOLBAR_SUBSTANCES];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_SUBSTANCES]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_SUBSTANCES];
-            mCurrentSearchState = kSubstances;
         } else if ([btn.title isEqualToString:FULL_TOOLBAR_THERAPY]) {
             [myTextField setText:FULL_TOOLBAR_THERAPY];
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
@@ -207,10 +202,6 @@ static BOOL mSearchInteractions = false;
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
             [mBarButtonItemName setString:FULL_TOOLBAR_REGNR];
             mCurrentSearchState = kRegNr;
-        } else if ([btn.title isEqualToString:SHORT_TOOLBAR_SUBSTANCES]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_SUBSTANCES]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_SUBSTANCES];
-            mCurrentSearchState = kSubstances;
         } else if ([btn.title isEqualToString:SHORT_TOOLBAR_THERAPY]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
             [mBarButtonItemName setString:FULL_TOOLBAR_THERAPY];
@@ -451,7 +442,7 @@ static BOOL mSearchInteractions = false;
 
 - (void) setBarButtonItemsWith:(int)searchState
 {
-    // kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kSubstances=8, kTherapy=10    
+    // kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kTherapy=8
     for (UIBarButtonItem *b in [myToolBar items]) {
         [b setTintColor:[UIColor lightGrayColor]];   // Default color
     }
@@ -477,9 +468,6 @@ static BOOL mSearchInteractions = false;
             break;
         case kRegNr:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
-            break;
-        case kSubstances:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_SUBSTANCES]];
             break;
         case kTherapy:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
@@ -851,6 +839,9 @@ static BOOL mSearchInteractions = false;
                                                           [UIColor lightGrayColor], UITextAttributeTextColor,
                                                           nil]];
     
+    // Applies this color throughout the app
+    // [[UISearchBar appearance] setBarTintColor:[UIColor lightGrayColor]];
+    
     // Add icon (top center)
     // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon_32x32.png"]];
 
@@ -887,7 +878,7 @@ static BOOL mSearchInteractions = false;
     
     // Background color of navigation bar
     if (IOS_NEWER_OR_EQUAL_TO_7) {
-        self.navigationController.navigationBar.backgroundColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
+        self.navigationController.navigationBar.backgroundColor = [UIColor lightGrayColor];// MAIN_TINT_COLOR;
         [myTabBar setTintColor:MAIN_TINT_COLOR];
         [myTabBar setTranslucent:YES];
 
@@ -899,7 +890,7 @@ static BOOL mSearchInteractions = false;
         selectedImage = [[UIImage imageNamed:@"938-connections-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem2.selectedImage = selectedImage;
         
-        // self.navigationController.navigationBar.translucent = NO;
+        // self.navigationController.navigationBar.translucent = YES;
         // self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
     }
     
@@ -910,8 +901,9 @@ static BOOL mSearchInteractions = false;
             searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             // searchField.tintColor = [UIColor blueColor]; // Text color
-            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:0.0];
-            searchField.translucent = NO;
+            searchField.barStyle = UIBarStyleDefault;
+            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+            searchField.translucent = YES;
         } else {
             searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -1078,20 +1070,13 @@ static BOOL mSearchInteractions = false;
 {
     if (mCurrentSearchState == kTitle) {
         searchResults = [mDb searchTitle:searchQuery];
-    }
-    else if (mCurrentSearchState == kAuthor) {
+    } else if (mCurrentSearchState == kAuthor) {
         searchResults = [mDb searchAuthor:searchQuery];
-    }
-    else if (mCurrentSearchState == kAtcCode) {
+    } else if (mCurrentSearchState == kAtcCode) {
         searchResults = [mDb searchATCCode:searchQuery];
-    }
-    else if (mCurrentSearchState == kRegNr) {
+    } else if (mCurrentSearchState == kRegNr) {
         searchResults = [mDb searchRegNr:searchQuery];
-    }
-    else if (mCurrentSearchState == kSubstances) {
-        searchResults = [mDb searchIngredients:searchQuery];
-    }
-    else if (mCurrentSearchState == kTherapy) {
+    } else if (mCurrentSearchState == kTherapy) {
         searchResults = [mDb searchApplication:searchQuery];
     }
 }
@@ -1104,20 +1089,13 @@ static BOOL mSearchInteractions = false;
 
     if (mCurrentSearchState == kTitle) {
         searchRes = [mDb searchTitle:searchQuery];
-    }
-    else if (mCurrentSearchState == kAuthor) {
+    } else if (mCurrentSearchState == kAuthor) {
         searchRes = [mDb searchAuthor:searchQuery];
-    }
-    else if (mCurrentSearchState == kAtcCode) {
+    } else if (mCurrentSearchState == kAtcCode) {
         searchRes = [mDb searchATCCode:searchQuery];
-    }
-    else if (mCurrentSearchState == kRegNr) {
+    } else if (mCurrentSearchState == kRegNr) {
         searchRes = [mDb searchRegNr:searchQuery];
-    }
-    else if (mCurrentSearchState == kSubstances) {
-        searchRes = [mDb searchIngredients:searchQuery];
-    }
-    else if (mCurrentSearchState == kTherapy) {
+    } else if (mCurrentSearchState == kTherapy) {
         searchRes = [mDb searchApplication:searchQuery];
     }
     
@@ -1166,7 +1144,7 @@ static BOOL mSearchInteractions = false;
         case 0:
         {
 #ifdef DEBUG
-            NSLog(@"TabBar - Aips Database - %d", mUsedDatabase);
+            NSLog(@"TabBar - Aips Database");
 #endif
             if (mUsedDatabase==kFavorites || mSearchInteractions==true) {
                 mUsedDatabase = kAips;
@@ -1174,8 +1152,12 @@ static BOOL mSearchInteractions = false;
                 mCurrentIndexPath = nil;
                 [self stopActivityIndicator];
                 [self clearDataInTableView];
+                // Show keyboard
+                [searchField becomeFirstResponder];
             } else {
-                //
+                // Empty searchfield
+                [searchField setText:@""];
+                // 
                 MLViewController* __weak weakSelf = self;
                 //
                 dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
@@ -1552,24 +1534,6 @@ static BOOL mSearchInteractions = false;
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
                             [favoriteKeyData addObject:m.regnrs];      
                             [self addTitle:m.title andRegnrs:m.regnrs andAuthor:m.auth andMedId:m.medId];
-                        }
-                    }
-                }
-            }
-        }
-        else if (mCurrentSearchState == kSubstances) {
-            for (MLMedication *m in searchResults) {
-                if (mUsedDatabase == kAips) {
-                    if (![m.regnrs isEqual:[NSNull null]]) {
-                        [favoriteKeyData addObject:m.regnrs];   
-                        [self addSubstances:m.substances andTitle:m.title andAuthor:m.auth andMedId:m.medId];
-                    }
-                }
-                else if (mUsedDatabase == kFavorites) {
-                    if (![m.regnrs isEqual:[NSNull null]]) {
-                        if ([favoriteMedsSet containsObject:m.regnrs]) {
-                            [favoriteKeyData addObject:m.regnrs];
-                            [self addSubstances:m.substances andTitle:m.title andAuthor:m.auth andMedId:m.medId];
                         }
                     }
                 }
