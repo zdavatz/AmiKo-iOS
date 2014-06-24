@@ -134,19 +134,19 @@
         if ([[MLConstants appLanguage] isEqualToString:@"de"])
             [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Interaktionen"]];
         else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche d'interactions"]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche d'Interactions"]];
     } else {
         if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche"]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Fachinfo"]];
         else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche"]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de Note Infopro"]];
     }
     
     if ([mTitle isEqualToString:@"About"]) {
         if ([[MLConstants appLanguage] isEqualToString:@"de"])
             [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Report"]];
         else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de rapport"]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de Rapport"]];
     }
 }
 

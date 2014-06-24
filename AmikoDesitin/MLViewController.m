@@ -280,7 +280,7 @@ static BOOL mSearchInteractions = false;
         FULL_TOOLBAR_TITLE = @"Préparation";
         FULL_TOOLBAR_AUTHOR = @"Titulaire";
         FULL_TOOLBAR_ATCCODE = @"Principe/ATC";
-        FULL_TOOLBAR_REGNR = @"No d'autor";
+        FULL_TOOLBAR_REGNR = @"No d'Autor";
         FULL_TOOLBAR_SUBSTANCES = @"Principe";
         FULL_TOOLBAR_THERAPY = @"Thérapie";
         //
@@ -566,7 +566,7 @@ static BOOL mSearchInteractions = false;
 {
     if (runningActivityIndicator==NO) {
 #ifdef DEBUG
-        NSLog(@"Start activity indicator");
+        // NSLog(@"Start activity indicator");
 #endif
         mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
@@ -588,7 +588,7 @@ static BOOL mSearchInteractions = false;
 - (void) stopActivityIndicator
 {
 #ifdef DEBUG
-    NSLog(@"Stop activity indicator");
+    // NSLog(@"Stop activity indicator");
 #endif
     [mActivityIndicator stopAnimating];
     [mActivityIndicator removeFromSuperview];
@@ -1150,6 +1150,8 @@ static BOOL mSearchInteractions = false;
                 [self clearDataInTableView];
                 // Show keyboard
                 [searchField becomeFirstResponder];
+                // Reset searchfield
+                [self resetBarButtonItems];
             } else {
                 // Empty searchfield
                 [searchField setText:@""];
@@ -1172,8 +1174,6 @@ static BOOL mSearchInteractions = false;
                             [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
                             inProgress = false;
                         });
-                        // Reset searchfield
-                        [self resetBarButtonItems];
                         //}
                     }
                 });
@@ -1188,6 +1188,8 @@ static BOOL mSearchInteractions = false;
             mUsedDatabase = kFavorites;
             mSearchInteractions = false;
             mCurrentIndexPath = nil;
+            // Reset searchfield
+            [self resetBarButtonItems];
             //
             MLViewController* __weak weakSelf = self;
             //
@@ -1208,8 +1210,6 @@ static BOOL mSearchInteractions = false;
                         [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
                         inProgress = false;
                     });
-                    // Reset searchfield
-                    [self resetBarButtonItems];
                     //}
                 }
             });
