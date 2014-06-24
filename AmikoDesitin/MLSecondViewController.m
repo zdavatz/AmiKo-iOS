@@ -286,6 +286,10 @@
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
+    self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
+    self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+    self.navigationController.navigationBar.translucent = NO;
+    
     UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                                                          style:UIBarButtonItemStyleBordered
                                                                         target:revealController
@@ -307,8 +311,18 @@
         UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
         searchBarView.autoresizingMask = 0;
         // Add search bar as title view to navigation bar
-        self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-        self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        if (IOS_NEWER_OR_EQUAL_TO_7) {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            searchField.barStyle = UIBarStyleDefault;
+            searchField.barTintColor = VERY_LIGHT_GRAY_COLOR;
+            searchField.backgroundColor = [UIColor clearColor];
+            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+            searchField.translucent = NO;
+        } else {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        }
         self.searchField.delegate = self;
         [searchBarView addSubview:self.searchField];
         
@@ -317,6 +331,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField.barTintColor = [UIColor lightGrayColor];
+            searchField.backgroundColor = [UIColor clearColor];
             searchField.translucent = YES;
         }
     }
@@ -360,7 +375,8 @@
         
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.translucent = NO;
+            searchField.backgroundColor = [UIColor clearColor];
+            searchField.translucent = YES;
         }
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -404,7 +420,7 @@
             self.findCounter = [self findCounterAtPos:140.0 andSize:44.0];
             if (mTotalHighlights>0)
                 [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
-            [searchBarView addSubview:self.findCounter];
+             [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
             //
@@ -414,7 +430,11 @@
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         }
         if (IOS_NEWER_OR_EQUAL_TO_7) {
-            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:0.0];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            searchField.barStyle = UIBarStyleDefault;
+            searchField.barTintColor = VERY_LIGHT_GRAY_COLOR;
+            searchField.backgroundColor = [UIColor clearColor];
+            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
             searchField.translucent = NO;
         }
     }

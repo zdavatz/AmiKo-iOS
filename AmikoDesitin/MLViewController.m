@@ -835,10 +835,10 @@ static BOOL mSearchInteractions = false;
     
     self.title = NSLocalizedString(APP_NAME, nil);
     // Sets color and font and whatever else of the navigation bar
+
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                          [UIColor lightGrayColor], UITextAttributeTextColor,
+                                                          VERY_LIGHT_GRAY_COLOR, UITextAttributeTextColor,
                                                           nil]];
-    
     // Applies this color throughout the app
     // [[UISearchBar appearance] setBarTintColor:[UIColor lightGrayColor]];
     
@@ -866,19 +866,13 @@ static BOOL mSearchInteractions = false;
         menuViewNavigationController = nil;
     }
     menuViewNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
-
-    /*
-    UIBarButtonItem *revealMenuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                       style:UIBarButtonItemStyleBordered
-                                                                      target:self
-                                                                      action:@selector(myShowMenuMethod:)];
-    
-    self.navigationItem.rightBarButtonItem = revealMenuItem;
-    */
     
     // Background color of navigation bar
     if (IOS_NEWER_OR_EQUAL_TO_7) {
-        self.navigationController.navigationBar.backgroundColor = [UIColor lightGrayColor];// MAIN_TINT_COLOR;
+        self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
+        self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+        self.navigationController.navigationBar.translucent = NO;
+        
         [myTabBar setTintColor:MAIN_TINT_COLOR];
         [myTabBar setTranslucent:YES];
 
@@ -889,9 +883,6 @@ static BOOL mSearchInteractions = false;
         UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:2];
         selectedImage = [[UIImage imageNamed:@"938-connections-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem2.selectedImage = selectedImage;
-        
-        // self.navigationController.navigationBar.translucent = YES;
-        // self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];// MAIN_TINT_COLOR;
     }
     
     // Add search bar as title view to navigation bar
@@ -900,25 +891,27 @@ static BOOL mSearchInteractions = false;
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            // searchField.tintColor = [UIColor blueColor]; // Text color
             searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-            searchField.translucent = YES;
+            searchField.barTintColor = VERY_LIGHT_GRAY_COLOR;
+            searchField.backgroundColor = [UIColor clearColor];
+            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+            searchField.translucent = NO;
         } else {
             searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         }
+        searchField.delegate = self;
         
         UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
         // searchBarView.autoresizingMask = 0;
-        searchField.delegate = self;
         [searchBarView addSubview:searchField];
         self.navigationItem.titleView = searchBarView;
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (IOS_NEWER_OR_EQUAL_TO_7) {
             searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.translucent = NO;
+            searchField.backgroundColor = [UIColor clearColor];
+            searchField.translucent = YES;
         }
     }
         
@@ -1298,6 +1291,11 @@ static BOOL mSearchInteractions = false;
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
+}
+
+- (void) searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    self.searchDisplayController.searchBar.showsCancelButton = YES;
 }
 
 - (void) addTitle: (NSString *)title andPackInfo: (NSString *)packinfo andMedId: (long)medId
