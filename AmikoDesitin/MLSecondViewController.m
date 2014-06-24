@@ -101,6 +101,8 @@
     return self;
 }
 
+#pragma mark IBAction methods
+
 - (IBAction) moveToNextHighlight:(id)sender
 {
     if (mTotalHighlights>1) {
@@ -123,6 +125,9 @@
     }
 }
 
+/** 
+ Resets searchfield
+ */
 - (void) resetSearchField
 {
     if (mCurrentSearch!=nil)
@@ -150,6 +155,9 @@
     }
 }
 
+/** 
+ Creates find counter label which is located in the searchfield
+ */
 - (UILabel *) findCounterAtPos:(float)x andSize:(float)size
 {
     UILabel *findCnt = [[UILabel alloc] initWithFrame:CGRectMake(x, 0.0, 60.0, size)];
@@ -159,8 +167,9 @@
     return findCnt;
 }
 
-/** This is the observing class
-*/
+/**
+ This is the observing class
+ */
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // [self addObserver:self forKeyPath:@"javaScript" options:0 context:@"javaScriptChanged"];
@@ -248,11 +257,12 @@
     }
     
     mCurrentSearch = @"";
+    // Reset search field place holder
     [self resetSearchField];
     
-    if (self.htmlStr!=nil) {
+    // Update webview which is either "Fachinfo" or "medication basket"
+    if (self.htmlStr!=nil)
         [self updateWebView];
-    }
     
     // Create objc - js bridge
     [self createJSBridge];
@@ -437,6 +447,7 @@
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         }
         if (IOS_NEWER_OR_EQUAL_TO_7) {
+            // Sets colors in toolbar and searchfield - modify with care!
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             searchField.barStyle = UIBarStyleDefault;
             searchField.barTintColor = VERY_LIGHT_GRAY_COLOR;
@@ -516,6 +527,9 @@
     }
 }
 
+/** 
+ Updates medication basket html string
+ */
 - (void) updateInteractionBasketView
 {
     // TODO --> OPTIMIZE!! Pre-load the following files!
@@ -542,6 +556,9 @@
     [self updateWebView];
 }
 
+/** 
+ Updates main webview in second viewcontroller
+ */
 - (void) updateWebView
 {
     // NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -558,8 +575,10 @@
      */
 }
 
-/**
- Create interaction basket html string
+#pragma mark medication basket methods
+
+/** 
+ Creates interaction basket html string
  */
 - (NSString *) medBasketHtml
 {
@@ -628,7 +647,7 @@
 }
 
 /**
- Create html displaying interactions between drugs
+ Creates html displaying interactions between drugs
  */
 - (NSString *) interactionsHtml
 {
@@ -769,6 +788,8 @@
     return @"";
 }
 
+#pragma mark UISearchBarDelegate methods
+
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
@@ -828,7 +849,7 @@
     }
 }
 
-#pragma mark UIWebView delegate methods
+#pragma mark UIWebViewDelegate methods
 
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -864,7 +885,7 @@
     [self showFindPanel:NO];
 }
 
-#pragma mark - MFMailComposeViewControllerDelegate
+#pragma mark MFMailComposeViewControllerDelegate methods
 
 - (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
