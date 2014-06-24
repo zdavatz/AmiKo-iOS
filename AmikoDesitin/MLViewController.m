@@ -405,8 +405,11 @@ static BOOL mSearchInteractions = false;
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
+    searchResults = [NSArray array];
     [medi removeAllObjects];
     [self.myTableView reloadData];
+    mCurrentSearchState = kTitle;
+    [self setBarButtonItemsWith:mCurrentSearchState];
 }
 
 - (void) resetDataInTableView
@@ -1769,7 +1772,12 @@ static BOOL mSearchInteractions = false;
     }
     
     if (titleViewController!=nil && secondViewController!=nil) {
-        [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
+        @try {
+            [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
+        } @catch (NSException *exception) {
+           // Do nothing, obviously the observer wasn't attached and an exception was thrown
+            NSLog(@"Expection thrown...");
+        }
     }
     
     if (secondViewController!=nil) {

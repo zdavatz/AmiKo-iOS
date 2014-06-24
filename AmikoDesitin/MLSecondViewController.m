@@ -137,9 +137,16 @@
             [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche d'interactions"]];
     } else {
         if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Fachinfo"]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche"]];
         else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de notice infopro"]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche"]];
+    }
+    
+    if ([mTitle isEqualToString:@"About"]) {
+        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Report"]];
+        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de rapport"]];
     }
 }
 
