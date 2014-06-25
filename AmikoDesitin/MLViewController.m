@@ -1761,7 +1761,7 @@ static BOOL mSearchInteractions = false;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+{    
     mCurrentIndexPath = indexPath;
 
     long mId = -1;
@@ -1816,9 +1816,9 @@ static BOOL mSearchInteractions = false;
             [self pushToMedBasket];
         
             // Extract section ids
-            NSArray *listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+            NSArray *listofSectionIds = [NSArray array];
             // Extract section titles
-            NSArray *listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
+            NSArray *listofSectionTitles = [NSArray array];
         
             if (titleViewController!=nil) {
                 [titleViewController removeFromParentViewController];

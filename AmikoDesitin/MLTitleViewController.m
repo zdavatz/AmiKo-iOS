@@ -84,6 +84,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
     for (NSString *identifier in ids) {
         [mSectionIds addObject:identifier];
     }
+    [myMenuView reloadData];
 }
 
 - (void) dealloc

@@ -650,7 +650,7 @@
  Creates html displaying interactions between drugs
  */
 - (NSString *) interactionsHtml
-{
+{  
     NSMutableString *interactionStr = [[NSMutableString alloc] initWithString:@""];
     NSMutableArray *sectionIds = [[NSMutableArray alloc] initWithObjects:@"Medikamentenkorb", nil];
     NSMutableArray *sectionTitles = nil;
