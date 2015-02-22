@@ -24,9 +24,12 @@
 
 #import "MLProgressViewController.h"
 
+#import "MLConstants.h"
+
 @implementation MLProgressViewController
 {
     UIAlertView *mAlertView;
+    UIAlertController *mAlertController;
     UIProgressView *mProgressBar;
 }
 
@@ -37,20 +40,43 @@
     self = [super init];
     
     if (self) {
-        mAlertView = [[UIAlertView alloc] initWithTitle:@"Updating AIPS database"
-                                                message:@""
-                                               delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      otherButtonTitles:nil];
+        if ([MLConstants iosVersion]>=8.0f) {
+            mAlertController = [UIAlertController
+                                alertControllerWithTitle:@"Updating AIPS database"
+                                message:@""
+                                preferredStyle: UIAlertControllerStyleAlert];
+            // float width = [mAlertController.view bounds].size.width;
+            
+            // Add cancel button
+            UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil];
+            [mAlertController addAction:cancel];
+            
+            // Add progress bar
+            mProgressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+            UIViewController *v = [[UIViewController alloc] init];
+            v.preferredContentSize = CGSizeMake(240, 20);
+            [v.view addSubview:mProgressBar];
+            [mProgressBar setFrame:CGRectMake(0, 0, 240, 20)];
+            [mAlertController setValue:v forKey:@"contentViewController"];
+        } else {
+            mAlertView = [[UIAlertView alloc] initWithTitle:@"Updating AIPS database"
+                                                    message:@""
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:nil];
         
-        mAlertView.tag = 1;
+            mAlertView.tag = 1;
         
-        mProgressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+            mProgressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
         
-        UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 30)];
-        [v addSubview:mProgressBar];
-        // Little trick
-        [mAlertView setValue:v forKey:@"accessoryView"];
+            UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 30)];
+            [v addSubview:mProgressBar];
+
+            // Little trick
+            [mAlertView setValue:v forKey:@"accessoryView"];
+            [mProgressBar setFrame:CGRectMake(0, 0, 160, 30)];
+        }
+        
         mProgressBar.progress = 0.0;
     }
     
@@ -59,13 +85,24 @@
 
 - (void) setMessage:(NSString *)msg
 {
-    [mAlertView setMessage:msg];
+    if ([MLConstants iosVersion]>=8.0f) {
+        [mAlertController setMessage:msg];
+    } else {
+        [mAlertView setMessage:msg];
+    }
 }
 
 - (void) start
 {
     mDownloadInProgress = YES;
-    [mAlertView show];
+
+    if ([MLConstants iosVersion]>=8.0) {
+        // Get pointer to app delegate, its main window and eventually to the rootViewController
+        UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+        [presentingController presentViewController:mAlertController animated:YES completion:nil];
+    } else {
+        [mAlertView show];
+    }
 }
 
 - (void) updateWith:(int)downloadedBytes andWith:(int)expectedBytes;
@@ -76,10 +113,10 @@
      We change the message before the unzipping does start.
     */
     if (progress<99) {
-        [mAlertView setMessage:[NSString stringWithFormat:@"%d%% (%dkb out of %dkb)",
+        [self setMessage:[NSString stringWithFormat:@"%d%% (%dkb out of %dkb)",
                                 (int)(progress), downloadedBytes/1000, expectedBytes/1000]];
     } else {
-        [mAlertView setMessage:[NSString stringWithFormat:@"Unzipping..."]];
+        [self setMessage:[NSString stringWithFormat:@"Unzipping..."]];
     }
     if (mProgressBar!=nil)
         mProgressBar.progress = progress/100.0f;
@@ -87,22 +124,23 @@
 
 - (void) remove
 {
-    /*
-    for (UIWindow* window in [UIApplication sharedApplication].windows) {
-        NSArray* subviews = window.subviews;
-        if ([subviews count] > 0)
-            if ([[subviews objectAtIndex:0] isKindOfClass:[UIAlertView class]])
-                [(UIAlertView *)[subviews objectAtIndex:0] dismissWithClickedButtonIndex:[(UIAlertView *)[subviews objectAtIndex:0] cancelButtonIndex] animated:NO];
+    if ([MLConstants iosVersion]>8.0f) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [mAlertController dismissViewControllerAnimated:YES completion:nil];
+        });
+    } else {
+        [mAlertView dismissWithClickedButtonIndex:-1 animated:NO];
     }
-    */
-    [mAlertView dismissWithClickedButtonIndex:-1 animated:NO];
     // Alternative in case the previous line causes a crash!
     // [mAlertView removeFromSuperview];
 }
 
 - (void) setCancelButtonTitle:(NSString *)title
 {
-    [mAlertView setTitle:@"Update cancelled!"];
+    if ([MLConstants iosVersion]>=8.0f)
+        [mAlertController setTitle:@"Update cancelled!"];
+    else
+        [mAlertView setTitle:@"Update cancelled!"];
 }
 
 #pragma mark - UIAlertViewDelegate

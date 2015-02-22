@@ -63,6 +63,7 @@ extern const int RearViewRevealOverdraw_Landscape_iPhone_Retina;
 
 
 @interface MLConstants : NSObject
++ (float) iosVersion;
 + (NSString *) appOwner;
 + (NSString *) appLanguage;
 + (NSString *) notSpecified;

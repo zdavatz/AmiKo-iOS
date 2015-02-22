@@ -29,6 +29,7 @@
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 
+#import "MLAlertView.h"
 #import "MLDBAdapter.h"
 #import "MLMedication.h"
 #import "MLSimpleTableCell.h"
@@ -124,7 +125,7 @@ static BOOL mSearchInteractions = false;
     float screenHeight;
     
     NSIndexPath *mCurrentIndexPath;
-    int mNumCurrSearchResults;
+    long mNumCurrSearchResults;
     int timeForSearch_ms;
     
     struct timeval beg_tv;
@@ -209,7 +210,7 @@ static BOOL mSearchInteractions = false;
         }
     }
 
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
+    if ([MLConstants iosVersion]>=7.0f) {
         for (UIBarButtonItem *b in [myToolBar items]) {
             [b setTintColor:[UIColor lightGrayColor]];   // Default color
             if (b==btn)
@@ -292,8 +293,8 @@ static BOOL mSearchInteractions = false;
         SHORT_TOOLBAR_THERAPY = @"Thér";
     }
     
-    // Note: iOS7
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
+    // Note: iOS7 or above
+    if ([MLConstants iosVersion]>=7.0f) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
@@ -345,28 +346,22 @@ static BOOL mSearchInteractions = false;
             int numInteractions = (int)[mDb getNumInteractions];
             
             if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"AIPS Datenbank aktualisiert!"
+                MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"AIPS Datenbank aktualisiert!"
                                                                 message:[NSString stringWithFormat:@"Die Datenbank enthält %ld Fachinfos \nund %d Interaktionen.", numSearchRes, numInteractions]
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
+                                                                 button:@"OK"];
                 [alert show];
             } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Banque des donnees AIPS mises à jour!"
+                MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Banque des donnees AIPS mises à jour!"
                                                                 message:[NSString stringWithFormat:@"La banque des données contien %ld notices infopro \net %d interactions.", numSearchRes, numInteractions]
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
+                                                                 button:@"OK"];
                 [alert show];
             }
         }
     } else if ([[notification name] isEqualToString:@"MLStatusCode404"]) {
         NSLog(@"Status Code 404");
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Datenbank kann nicht aktualisiert werden!"
-                                                        message:@"Blubber"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
+        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Datenbank kann nicht aktualisiert werden!"
+                                                        message:@"Server unreachable..."
+                                                         button:@"OK"];
         [alert show];
     }
 }
@@ -433,7 +428,7 @@ static BOOL mSearchInteractions = false;
     for (UIBarButtonItem *b in [myToolBar items]) {
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
     }
-    if (IOS_NEWER_OR_EQUAL_TO_7)
+    if ([MLConstants iosVersion]>=7.0f)
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
     else
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
@@ -443,7 +438,7 @@ static BOOL mSearchInteractions = false;
     mCurrentSearchState = kTitle;
 }
 
-- (void) setBarButtonItemsWith:(int)searchState
+- (void) setBarButtonItemsWith:(NSInteger)searchState
 {
     // kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kTherapy=8
     for (UIBarButtonItem *b in [myToolBar items]) {
@@ -452,7 +447,7 @@ static BOOL mSearchInteractions = false;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         searchState /= 2;
     
-    if (IOS_NEWER_OR_EQUAL_TO_7)
+    if ([MLConstants iosVersion]>=7.0f)
         [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
     else
         [[[myToolBar items] objectAtIndex:searchState] setTintColor:[UIColor lightGrayColor]];
@@ -510,9 +505,6 @@ static BOOL mSearchInteractions = false;
     if (withAnimation == NO) {
         [myTabBar setHidden:NO];
     } else {
-        if (IOS_NEWER_OR_EQUAL_TO_7)
-            [self setTabbarItemFont];
-        
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDelegate:nil];
         [UIView setAnimationDuration:1.25];
@@ -521,10 +513,13 @@ static BOOL mSearchInteractions = false;
         
         [UIView commitAnimations];
     }
+    
+    if ([MLConstants iosVersion]>=7.0f)
+        [self setTabbarItemFont];
 }
 
 - (void) hideTabBarWithAnimation:(BOOL)withAnimation
-{    
+{
     if (withAnimation == NO) {
         [myTabBar setHidden:YES];
     } else {
@@ -540,23 +535,21 @@ static BOOL mSearchInteractions = false;
 
 - (void) setTabbarItemFont
 {
-    UIFont *tabBarFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         // [NSValue valueWithUIOffset:UIOffsetMake(0,0)], UITextAttributeTextShadowOffset,
-                                         // [UIColor blackColor], NSForegroundColorAttributeName,
-                                         tabBarFont, UITextAttributeFont, nil];
+                                         [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2], UITextAttributeFont,
+                                         // @1.0, NSKernAttributeName,
+                                         // [NSValue valueWithUIOffset:UIOffsetMake(1,0)], UITextAttributeTextShadowOffset,
+                                         nil];
     
-    // [[UITabBarItem appearance] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
-    
-    for (int i=0; i<2; i++)
+    for (int i=0; i<3; i++)
         [[myTabBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
 - (void) setToolbarItemsFontSize
 {
-    UIFont *tabBarFont = [UIFont systemFontOfSize:14];
     NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         tabBarFont, UITextAttributeFont, nil];
+                                         [UIFont systemFontOfSize:14], UITextAttributeFont,
+                                         nil];
     
     for (int i=0; i<9; i+=2)    // 17.06.2014 -> used to be '11'
         [[myToolBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
@@ -622,7 +615,7 @@ static BOOL mSearchInteractions = false;
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             [self setToolbarItemsFontSize];
         }
         
@@ -642,19 +635,18 @@ static BOOL mSearchInteractions = false;
             [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:FULL_TOOLBAR_REGNR];
-            // [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
             [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_THERAPY];
             
             // Hide status bar and navigation bar
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-            if (IOS_NEWER_OR_EQUAL_TO_7)
+            if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
             
-            // Hides tab bar
+            // Hides tab bar (bottom)
             [self hideTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
-            self.myTableViewHeightConstraint.constant = 0;
-        } else {                    
+            self.myTableViewHeightConstraint.constant = 5;
+        } else {
             screenWidth = self.view.bounds.size.width;
             screenHeight = self.view.bounds.size.height;
             // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44-49);
@@ -666,19 +658,19 @@ static BOOL mSearchInteractions = false;
             [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:SHORT_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:SHORT_TOOLBAR_REGNR];
-            // [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
             [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_THERAPY];
             
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-            if (IOS_NEWER_OR_EQUAL_TO_7) {
+            if ([MLConstants iosVersion]>=7.0f) {
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
             }
-            // Displays tab bar (bottom)
+            // Shows tab bar (bottom)
             [self showTabBarWithAnimation:YES];
+            
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 49;
-        }   
+        }
     }
 }
 
@@ -715,12 +707,11 @@ static BOOL mSearchInteractions = false;
         [[[myToolBar items] objectAtIndex:1] setTitle:FULL_TOOLBAR_AUTHOR];
         [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_ATCCODE];
         [[[myToolBar items] objectAtIndex:3] setTitle:FULL_TOOLBAR_REGNR];
-        // [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_SUBSTANCES];
         [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_THERAPY];
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             [self setToolbarItemsFontSize];
         }
                 
@@ -738,7 +729,6 @@ static BOOL mSearchInteractions = false;
             [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:FULL_TOOLBAR_REGNR];
-            // [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_SUBSTANCES];
             [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_THERAPY];
                         
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
@@ -751,7 +741,6 @@ static BOOL mSearchInteractions = false;
             [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
             [[[myToolBar items] objectAtIndex:4] setTitle:SHORT_TOOLBAR_ATCCODE];
             [[[myToolBar items] objectAtIndex:6] setTitle:SHORT_TOOLBAR_REGNR];
-            // [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_SUBSTANCES];
             [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_THERAPY];
             
             // [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
@@ -797,14 +786,14 @@ static BOOL mSearchInteractions = false;
             // Hides tab bar
             [self hideTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
-            self.myTableViewHeightConstraint.constant = 0;
+            self.myTableViewHeightConstraint.constant = 5;
             
             // Hides status bar
-            if (IOS_NEWER_OR_EQUAL_TO_7)
+            if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
         } else {
-            // Hides tab bar
+            // Shows navigation bar
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
             
             // Displays tab bar
@@ -837,8 +826,8 @@ static BOOL mSearchInteractions = false;
     // Do any additional setup after loading the view, typically from a nib.
     
     self.title = NSLocalizedString(APP_NAME, nil);
+    
     // Sets color and font and whatever else of the navigation bar
-
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                           VERY_LIGHT_GRAY_COLOR, UITextAttributeTextColor,
                                                           nil]];
@@ -851,7 +840,7 @@ static BOOL mSearchInteractions = false;
     // Add desitin icon
     UIButton *logoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
-    logoButton.frame = CGRectMake(0, 0, 32, 32);
+    logoButton.frame = CGRectMake(0.0f, 0.0f, 32.0f, 32.0f);
     [logoButton addTarget:self action:@selector(myShowMenuMethod:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *appIconItem = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
 
@@ -871,14 +860,15 @@ static BOOL mSearchInteractions = false;
     menuViewNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
     
     // Background color of navigation bar
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
+    if ([MLConstants iosVersion]>=7.0f) {
         self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
         self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
         self.navigationController.navigationBar.translucent = NO;
         
+        // Customize tabbar
         [myTabBar setTintColor:MAIN_TINT_COLOR];
         [myTabBar setTranslucent:YES];
-
+        
         // Sets tabbar selected images
         UITabBarItem *tabBarItem0 = [myTabBar.items objectAtIndex:0];
         UIImage* selectedImage = [[UIImage imageNamed:@"907-plus-rounded-square-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -889,40 +879,42 @@ static BOOL mSearchInteractions = false;
     }
     
     // Add search bar as title view to navigation bar
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        // Note: iOS7
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = VERY_LIGHT_GRAY_COLOR;
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = NO;
-        } else {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        }
-        searchField.delegate = self;
-        
-        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
-        // searchBarView.autoresizingMask = 0;
-        [searchBarView addSubview:searchField];
-        self.navigationItem.titleView = searchBarView;
-    }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             searchField.barTintColor = [UIColor lightGrayColor];
             searchField.backgroundColor = [UIColor clearColor];
             searchField.translucent = YES;
         }
-    }
+    }    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        // Note: iOS7
+        if ([MLConstants iosVersion]>=7.0f) {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 44.0f)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            searchField.barStyle = UIBarStyleDefault;
+            searchField.barTintColor = [UIColor clearColor];
+            searchField.backgroundImage = [UIImage new];    // Necessary fo completely transparent search bar...
+            searchField.backgroundColor = [UIColor clearColor];
+            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+            searchField.translucent = YES;
+        } else {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0f, 0.0f, 320.0f, 44.0f)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        }
+        searchField.delegate = self;
         
+        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 44.0f)];
+        // searchBarView.autoresizingMask = 0;
+        [searchBarView addSubview:searchField];
+        
+        self.navigationItem.titleView = searchBarView;
+    }
+    
     mBarButtonItemName = [[NSMutableString alloc] initWithString:FULL_TOOLBAR_TITLE];
     
     // Add long press gesture recognizer to tableview
     UILongPressGestureRecognizer *mLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(myLongPressMethod:)];
-    mLongPressRecognizer.minimumPressDuration = 1.5;    // [sec]
+    mLongPressRecognizer.minimumPressDuration = 1.5f;    // [sec]
     mLongPressRecognizer.delegate = self;
     [self.myTableView addGestureRecognizer:mLongPressRecognizer];
     
@@ -1040,7 +1032,7 @@ static BOOL mSearchInteractions = false;
     
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:@"About" andParam:1];
     
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
+    if ([MLConstants iosVersion]>=7.0f) {
         UIFont *font = [UIFont fontWithName:@"Arial" size:14];
         secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     } else {
@@ -1099,8 +1091,8 @@ static BOOL mSearchInteractions = false;
     NSTimeInterval execTime = [endTime timeIntervalSinceDate:startTime];
     
     timeForSearch_ms = (int)(1000*execTime+0.5);
-    mNumCurrSearchResults = [searchRes count];
-    NSLog(@"%d Treffer in %dms", mNumCurrSearchResults, timeForSearch_ms);
+    mNumCurrSearchResults = (int)[searchRes count];
+    NSLog(@"%ld Treffer in %dms", mNumCurrSearchResults, timeForSearch_ms);
 
     return searchRes;
 }
@@ -1113,14 +1105,15 @@ static BOOL mSearchInteractions = false;
     
     for (NSString *regnrs in favoriteMedsSet) {
         NSArray *med = [mDb searchRegNr:regnrs];
-        [medList addObject:med[0]];
+        if (med!=nil && [med count]>0)
+            [medList addObject:med[0]];
     }
     
     NSDate *endTime = [NSDate date];
     NSTimeInterval execTime = [endTime timeIntervalSinceDate:startTime];
     mNumCurrSearchResults = [medList count];
     
-    NSLog(@"%d Favoriten in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
+    NSLog(@"%ld Favoriten in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
     
     return medList;
 }
@@ -1171,7 +1164,7 @@ static BOOL mSearchInteractions = false;
                             [scopeSelf updateTableView];
                             [myTableView reloadData];
                             [searchField resignFirstResponder];
-                            [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
+                            [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], TREFFER_STRING, timeForSearch_ms]];
                             inProgress = false;
                         });
                         //}
@@ -1207,7 +1200,7 @@ static BOOL mSearchInteractions = false;
                         [scopeSelf updateTableView];
                         [myTableView reloadData];
                         [searchField resignFirstResponder];
-                        [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
+                        [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], TREFFER_STRING, timeForSearch_ms]];
                         inProgress = false;
                     });
                     //}
@@ -1281,7 +1274,7 @@ static BOOL mSearchInteractions = false;
                     [searchField resignFirstResponder];
                 [scopeSelf updateTableView];
                 [myTableView reloadData];
-                [myTextField setText:[NSString stringWithFormat:@"%d %@ in %dms", [searchResults count], TREFFER_STRING, timeForSearch_ms]];
+                [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], TREFFER_STRING, timeForSearch_ms]];
                 @synchronized(self) {
                     inProgress = false;
                 }
@@ -1588,7 +1581,7 @@ static BOOL mSearchInteractions = false;
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
 #ifdef DEBUG
-    NSLog(@"Number of characters = %d", [myTextField.text length]);
+    NSLog(@"Number of characters = %ld", (unsigned long)[myTextField.text length]);
 #endif
     return YES;
 }
@@ -1873,7 +1866,7 @@ static BOOL mSearchInteractions = false;
     
     float frameWidth = self.myTableView.frame.size.width;
     
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
+    if ([MLConstants iosVersion]>=7.0f) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             textSize = [self tableText:text sizeWithFont:[UIFont boldSystemFontOfSize:16.0]
                      constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];

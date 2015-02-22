@@ -129,6 +129,12 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                     [UIColor whiteColor], NSForegroundColorAttributeName, nil];
         [[UINavigationBar appearance] setTitleTextAttributes:attributes];
      
+        // Remove shadow?
+        /*
+        [[UINavigationBar appearance] setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+        [[UINavigationBar appearance] setShadowImage:[UIImage new]];
+        */
+        
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }
     

@@ -74,6 +74,11 @@ const int RearViewRevealOverdraw_Landscape_iPhone_Retina = 60;
 
 @implementation MLConstants
 
++ (float) iosVersion
+{
+    return [[UIDevice currentDevice].systemVersion floatValue];
+}
+
 + (NSString *) appOwner
 {
     if ([APP_NAME isEqualToString:@"AmiKoDesitin"]

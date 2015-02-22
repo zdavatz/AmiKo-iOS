@@ -26,6 +26,8 @@
 #import "MLConstants.h"
 #import "MLCustomURLConnection.h"
 
+#import "MLAlertView.h"
+
 #import "SWRevealViewController.h"
 
 @interface MLMenuViewController ()
@@ -193,11 +195,7 @@
         UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [presentingController presentViewController:mailer animated:YES completion:nil];
     } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure"
-                                                        message:@"Your device is not configured to send emails."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles: nil];
+        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Failure" message:@"Your device is not configured to send emails." button:@"OK"];
         [alert show];
     }
 }

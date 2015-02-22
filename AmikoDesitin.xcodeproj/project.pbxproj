@@ -55,6 +55,8 @@
 		D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */; };
 		D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8617B7D8370002E2CF /* Default-Portrait~ipad.png */; };
 		D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8817B7D8580002E2CF /* Default-Landscape~ipad.png */; };
+		D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = D573F4511A990E8600C4F589 /* MLAlertView.m */; };
+		D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = D573F4511A990E8600C4F589 /* MLAlertView.m */; };
 		D59E895618B7C0C100185094 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D59E895518B7C0C100185094 /* MessageUI.framework */; };
 		D59E895718B7C0D600185094 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D59E895518B7C0C100185094 /* MessageUI.framework */; };
 		D59E895818B7C0DB00185094 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
@@ -257,6 +259,8 @@
 		D565DA8D17B7EA9C0002E2CF /* desitin_launch_768x1004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_768x1004.png; sourceTree = "<group>"; };
 		D565DA8E17B7EA9C0002E2CF /* desitin_launch_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_1024x768.png; sourceTree = "<group>"; };
 		D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_1536x2008.png; sourceTree = "<group>"; };
+		D573F4511A990E8600C4F589 /* MLAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAlertView.m; sourceTree = "<group>"; };
+		D573F4541A990E9900C4F589 /* MLAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAlertView.h; sourceTree = "<group>"; };
 		D59E895518B7C0C100185094 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_de.db; sourceTree = "<group>"; };
 		D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
@@ -567,6 +571,8 @@
 				D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */,
 				D5A31F6F18B52D3E00F56BC5 /* MLProgressViewController.h */,
 				D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */,
+				D573F4541A990E9900C4F589 /* MLAlertView.h */,
+				D573F4511A990E8600C4F589 /* MLAlertView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -937,6 +943,7 @@
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
 				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
+				D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
 				D5FFE17818A96BA0002D6159 /* MLMenuViewController.m in Sources */,
@@ -969,6 +976,7 @@
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
+				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
 				D5FFE17918A96BA0002D6159 /* MLMenuViewController.m in Sources */,
@@ -1070,6 +1078,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-AmiKoDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-AmiKoDesitin";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
@@ -1080,6 +1089,7 @@
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1091,12 +1101,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-AmiKoDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-AmiKoDesitin";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = AMIKO_DESITIN;
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

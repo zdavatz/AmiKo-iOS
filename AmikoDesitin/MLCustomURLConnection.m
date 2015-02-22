@@ -177,7 +177,7 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
 
 - (void) zipArchiveWillUnzipFileAtIndex:(NSInteger)fileIndex totalFiles:(NSInteger)totalFiles archivePath:(NSString *)archivePath fileInfo:(unz_file_info)fileInfo
 {
-    NSLog(@"Unzipping: %d of %d", fileIndex+1, totalFiles);
+    NSLog(@"Unzipping: %ld of %ld", (long)fileIndex+1, (long)totalFiles);
 }
 
 @end

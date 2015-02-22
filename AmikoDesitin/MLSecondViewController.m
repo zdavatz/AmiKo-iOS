@@ -31,6 +31,8 @@
 #import "MLMedication.h"
 #import "MLMenuViewController.h"
 
+#import "MLAlertView.h"
+
 #import "WebViewJavascriptBridge.h"
 
 // Class extension
@@ -198,7 +200,7 @@
         } else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
             searchField.barTintColor = [UIColor lightGrayColor];
             searchField.translucent = YES;
@@ -207,15 +209,15 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
             // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 32.0)];
+            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
             self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 32.0)];
+            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
             searchBarView.autoresizingMask = 0;
             self.searchField.delegate = self;
             [searchBarView addSubview:searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:240.0 andSize:32.0];
+            self.findCounter = [self findCounterAtPos:260.0 andSize:32.0];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
             
@@ -227,20 +229,20 @@
                 self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
             }
             // Hides status bar
-            if (IOS_NEWER_OR_EQUAL_TO_7)
+            if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         }
         else {
             // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
+            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
+            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             searchBarView.autoresizingMask = 0;
             self.searchField.delegate = self;
             [searchBarView addSubview:searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:140.0 andSize:44.0];
+            self.findCounter = [self findCounterAtPos:150.0 andSize:44.0];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
             
@@ -249,10 +251,11 @@
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
             self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
         }
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
-            searchField.barTintColor = [UIColor colorWithWhite:0.9 alpha:0.0];
-            searchField.translucent = NO;
+            searchField.barTintColor = [UIColor clearColor];//[UIColor colorWithWhite:0.9 alpha:0.0];
+            searchField.backgroundImage = [UIImage new];
+            searchField.translucent = YES;
         }
     }
     
@@ -303,9 +306,11 @@
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
-    self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
-    self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
-    self.navigationController.navigationBar.translucent = NO;
+    if ([MLConstants iosVersion]>=7.0f) {
+        self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
+        self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+        self.navigationController.navigationBar.translucent = NO;
+    }
     
     UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                                                          style:UIBarButtonItemStyleBordered
@@ -324,33 +329,35 @@
     // PanGestureRecognizer goes here ... could be also placed in the other Views but this is the main view!
     // [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
-        searchBarView.autoresizingMask = 0;
-        // Add search bar as title view to navigation bar
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = VERY_LIGHT_GRAY_COLOR;
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = NO;
-        } else {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        }
-        self.searchField.delegate = self;
-        [searchBarView addSubview:self.searchField];
-        
-        self.navigationItem.titleView = searchBarView;
-    }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             searchField.barTintColor = [UIColor lightGrayColor];
             searchField.backgroundColor = [UIColor clearColor];
             searchField.translucent = YES;
         }
+    }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        // Add search bar as title view to navigation bar
+        if ([MLConstants iosVersion]>=7.0f) {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            searchField.barStyle = UIBarStyleDefault;
+            searchField.barTintColor = [UIColor clearColor];
+            searchField.backgroundImage = [UIImage new];
+            searchField.backgroundColor = [UIColor clearColor];
+            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+            searchField.translucent = YES;
+        } else {
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
+            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        }
+        searchField.delegate = self;
+        
+        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+        // searchBarView.autoresizingMask = 0;
+        [searchBarView addSubview:searchField];
+        
+        self.navigationItem.titleView = searchBarView;
     }
     
     // PanGestureRecognizer goes here
@@ -390,7 +397,7 @@
         else
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             searchField.barTintColor = [UIColor lightGrayColor];
             searchField.backgroundColor = [UIColor clearColor];
             searchField.translucent = YES;
@@ -401,13 +408,13 @@
             // Add search bar as title view to navigation bar
             self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
             self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 32.0)];
+            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
             searchBarView.autoresizingMask = 0;
             self.searchField.delegate = self;
             [searchBarView addSubview:self.searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:240.0 andSize:32.0];
+            self.findCounter = [self findCounterAtPos:260.0 andSize:32.0];
             if (mTotalHighlights>0)
                 [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
@@ -421,20 +428,20 @@
                 self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
             }
             // Hides status bar
-            if (IOS_NEWER_OR_EQUAL_TO_7)
+            if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         }
         else {
             // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
+            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 310.0, 44.0)];
+            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
             searchBarView.autoresizingMask = 0;
             self.searchField.delegate = self;
             [searchBarView addSubview:self.searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:140.0 andSize:44.0];
+            self.findCounter = [self findCounterAtPos:150.0 andSize:44.0];
             if (mTotalHighlights>0)
                 [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
              [searchBarView addSubview:self.findCounter];
@@ -443,17 +450,18 @@
             //
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
             // Shows status bar
-            if (IOS_NEWER_OR_EQUAL_TO_7)
+            if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         }
-        if (IOS_NEWER_OR_EQUAL_TO_7) {
+        if ([MLConstants iosVersion]>=7.0f) {
             // Sets colors in toolbar and searchfield - modify with care!
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = VERY_LIGHT_GRAY_COLOR;
+            searchField.barTintColor = [UIColor clearColor];
+            searchField.backgroundImage = [UIImage new];
             searchField.backgroundColor = [UIColor clearColor];
             searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = NO;
+            searchField.translucent = YES;
         }
     }
 
@@ -518,11 +526,9 @@
         UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [presentingController presentViewController:mailer animated:YES completion:nil];
     } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure"
+        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Failure"
                                                         message:@"Your device is not configured to send emails."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles: nil];
+                                                         button:@"OK"];
         [alert show];
     }
 }
@@ -800,7 +806,7 @@
     mCurrentSearch = searchText;
     
     if ([searchText length] > 2) {
-        mTotalHighlights = [self.webView highlightAllOccurencesOfString:searchText];
+        mTotalHighlights = (int)[self.webView highlightAllOccurencesOfString:searchText];
         mCurrentHightlight = 0;
         if (mTotalHighlights>1) {
             [self.webView nextHighlight:mTotalHighlights-1];
