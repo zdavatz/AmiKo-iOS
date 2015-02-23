@@ -1344,9 +1344,9 @@ static BOOL mSearchInteractions = false;
         m.title = [MLConstants notSpecified];// @"k.A.";
     
     if ([atccode isEqual:[NSNull null]])
-        atccode = @"k.A.";
+        atccode = [MLConstants notSpecified];
     if ([atcclass isEqual:[NSNull null]])
-        atcclass = @"k.A.";
+        atcclass = [MLConstants notSpecified];
     
     NSArray *m_atc = [atccode componentsSeparatedByString:@";"];
     NSArray *m_class = [atcclass componentsSeparatedByString:@";"];
@@ -1798,11 +1798,17 @@ static BOOL mSearchInteractions = false;
             amikoCss = [NSString stringWithString:mMed.styleStr];
  
         secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, mMed.contentStr];
+        NSArray *listofSectionIds = @[[MLConstants notSpecified]];
+        NSArray *listofSectionTitles = @[[MLConstants notSpecified]];
         // Extract section ids
-        NSArray *listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+        if (![mMed.sectionIds isEqual:[NSNull null]]) {
+            listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+        }
         // Extract section titles
-        NSArray *listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
-    
+        if (![mMed.sectionTitles isEqual:[NSNull null]]) {
+            listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
+        }
+        
         if (titleViewController!=nil) {
             [titleViewController removeFromParentViewController];
             titleViewController = nil;
