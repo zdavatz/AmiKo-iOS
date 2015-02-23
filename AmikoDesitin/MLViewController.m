@@ -871,10 +871,10 @@ static BOOL mSearchInteractions = false;
         
         // Sets tabbar selected images
         UITabBarItem *tabBarItem0 = [myTabBar.items objectAtIndex:0];
-        UIImage* selectedImage = [[UIImage imageNamed:@"907-plus-rounded-square-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        UIImage* selectedImage = [[UIImage imageNamed:@"maindb-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem0.selectedImage = selectedImage;
         UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:2];
-        selectedImage = [[UIImage imageNamed:@"938-connections-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        selectedImage = [[UIImage imageNamed:@"interactions-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem2.selectedImage = selectedImage;
     }
     
@@ -1342,6 +1342,12 @@ static BOOL mSearchInteractions = false;
         m.title = title;
     else
         m.title = [MLConstants notSpecified];// @"k.A.";
+    
+    if ([atccode isEqual:[NSNull null]])
+        atccode = @"k.A.";
+    if ([atcclass isEqual:[NSNull null]])
+        atcclass = @"k.A.";
+    
     NSArray *m_atc = [atccode componentsSeparatedByString:@";"];
     NSArray *m_class = [atcclass componentsSeparatedByString:@";"];
     NSMutableString *m_atccode_str = nil;

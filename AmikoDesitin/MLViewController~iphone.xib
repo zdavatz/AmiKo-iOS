@@ -74,9 +74,9 @@
                         <constraint firstAttribute="height" constant="49" id="508"/>
                     </constraints>
                     <items>
-                        <tabBarItem title="AIPS" image="907-plus-rounded-square.png" id="467"/>
-                        <tabBarItem tag="1" systemItem="favorites" id="466"/>
-                        <tabBarItem tag="2" title="Interactions" image="938-connections.png" id="JxN-5u-on8"/>
+                        <tabBarItem title="AIPS" image="maindb.png" id="467"/>
+                        <tabBarItem tag="1" title="Favorites" image="favorites.png" id="466"/>
+                        <tabBarItem tag="2" title="Interactions" image="interactions.png" id="JxN-5u-on8"/>
                     </items>
                     <color key="tintColor" red="0.94901960780000005" green="0.77465540129999999" blue="0.2309191005" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="barTintColor" red="0.95714530109489049" green="0.95777258211678828" blue="0.95680314781021902" alpha="1" colorSpace="calibratedRGB"/>
@@ -103,8 +103,9 @@
         </view>
     </objects>
     <resources>
-        <image name="907-plus-rounded-square.png" width="28" height="28"/>
-        <image name="938-connections.png" width="28" height="28"/>
+        <image name="favorites.png" width="32" height="32"/>
+        <image name="interactions.png" width="32" height="32"/>
+        <image name="maindb.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

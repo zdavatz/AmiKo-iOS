@@ -64,6 +64,26 @@
 		D59E895B18B7E7CB00185094 /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */; };
 		D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */; };
+		D5A1754C1A9A737F00E69385 /* interactions.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754A1A9A737F00E69385 /* interactions.png */; };
+		D5A1754D1A9A737F00E69385 /* interactions.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754A1A9A737F00E69385 /* interactions.png */; };
+		D5A1754E1A9A737F00E69385 /* interactions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754B1A9A737F00E69385 /* interactions@2x.png */; };
+		D5A1754F1A9A737F00E69385 /* interactions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754B1A9A737F00E69385 /* interactions@2x.png */; };
+		D5A175521A9A741B00E69385 /* maindb.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175501A9A741B00E69385 /* maindb.png */; };
+		D5A175531A9A741B00E69385 /* maindb.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175501A9A741B00E69385 /* maindb.png */; };
+		D5A175541A9A741B00E69385 /* maindb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175511A9A741B00E69385 /* maindb@2x.png */; };
+		D5A175551A9A741B00E69385 /* maindb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175511A9A741B00E69385 /* maindb@2x.png */; };
+		D5A175571A9A7A4D00E69385 /* maindb-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175561A9A7A4D00E69385 /* maindb-selected.png */; };
+		D5A175581A9A7A4D00E69385 /* maindb-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175561A9A7A4D00E69385 /* maindb-selected.png */; };
+		D5A1755A1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175591A9A7A5E00E69385 /* maindb-selected@2x.png */; };
+		D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A175591A9A7A5E00E69385 /* maindb-selected@2x.png */; };
+		D5A175601A9BC27400E69385 /* favorites-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755C1A9BC27400E69385 /* favorites-selected.png */; };
+		D5A175611A9BC27400E69385 /* favorites-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755C1A9BC27400E69385 /* favorites-selected.png */; };
+		D5A175621A9BC27400E69385 /* favorites-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755D1A9BC27400E69385 /* favorites-selected@2x.png */; };
+		D5A175631A9BC27400E69385 /* favorites-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755D1A9BC27400E69385 /* favorites-selected@2x.png */; };
+		D5A175641A9BC27400E69385 /* favorites.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755E1A9BC27400E69385 /* favorites.png */; };
+		D5A175651A9BC27400E69385 /* favorites.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755E1A9BC27400E69385 /* favorites.png */; };
+		D5A175661A9BC27400E69385 /* favorites@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755F1A9BC27400E69385 /* favorites@2x.png */; };
+		D5A175671A9BC27400E69385 /* favorites@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1755F1A9BC27400E69385 /* favorites@2x.png */; };
 		D5A2250B1945EA830078FEFF /* drug_interactions_csv_de.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5A2250A1945EA830078FEFF /* drug_interactions_csv_de.csv */; };
 		D5A2250D1945EA890078FEFF /* drug_interactions_csv_fr.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */; };
 		D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A225141945FC7D0078FEFF /* 938-connections@2x.png */; };
@@ -265,6 +285,16 @@
 		D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_de.db; sourceTree = "<group>"; };
 		D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
 		D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = desitin_launch_2048x1536.png; path = "AmikoDesitin/Images.xcassets/LaunchImage-AmiKoDesitin.launchimage/desitin_launch_2048x1536.png"; sourceTree = "<group>"; };
+		D5A1754A1A9A737F00E69385 /* interactions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = interactions.png; sourceTree = "<group>"; };
+		D5A1754B1A9A737F00E69385 /* interactions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "interactions@2x.png"; sourceTree = "<group>"; };
+		D5A175501A9A741B00E69385 /* maindb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = maindb.png; sourceTree = "<group>"; };
+		D5A175511A9A741B00E69385 /* maindb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "maindb@2x.png"; sourceTree = "<group>"; };
+		D5A175561A9A7A4D00E69385 /* maindb-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "maindb-selected.png"; sourceTree = "<group>"; };
+		D5A175591A9A7A5E00E69385 /* maindb-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "maindb-selected@2x.png"; sourceTree = "<group>"; };
+		D5A1755C1A9BC27400E69385 /* favorites-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favorites-selected.png"; sourceTree = "<group>"; };
+		D5A1755D1A9BC27400E69385 /* favorites-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favorites-selected@2x.png"; sourceTree = "<group>"; };
+		D5A1755E1A9BC27400E69385 /* favorites.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorites.png; sourceTree = "<group>"; };
+		D5A1755F1A9BC27400E69385 /* favorites@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favorites@2x.png"; sourceTree = "<group>"; };
 		D5A2250A1945EA830078FEFF /* drug_interactions_csv_de.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = drug_interactions_csv_de.csv; sourceTree = "<group>"; };
 		D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = drug_interactions_csv_fr.csv; sourceTree = "<group>"; };
 		D5A225141945FC7D0078FEFF /* 938-connections@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "938-connections@2x.png"; sourceTree = "<group>"; };
@@ -602,6 +632,16 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5A1755C1A9BC27400E69385 /* favorites-selected.png */,
+				D5A1755D1A9BC27400E69385 /* favorites-selected@2x.png */,
+				D5A1755E1A9BC27400E69385 /* favorites.png */,
+				D5A1755F1A9BC27400E69385 /* favorites@2x.png */,
+				D5A175591A9A7A5E00E69385 /* maindb-selected@2x.png */,
+				D5A175561A9A7A4D00E69385 /* maindb-selected.png */,
+				D5A175501A9A741B00E69385 /* maindb.png */,
+				D5A175511A9A741B00E69385 /* maindb@2x.png */,
+				D5A1754A1A9A737F00E69385 /* interactions.png */,
+				D5A1754B1A9A737F00E69385 /* interactions@2x.png */,
 				D5A22537194A3A400078FEFF /* 218-trash2.png */,
 				D5A22538194A3A400078FEFF /* 217-trash.png */,
 				D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */,
@@ -778,12 +818,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A175661A9BC27400E69385 /* favorites@2x.png in Resources */,
+				D5A1755A1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */,
 				D5A6F24517B1692F00EAB24B /* InfoPlist.strings in Resources */,
 				D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */,
 				D5A6F27017B16A7700EAB24B /* amiko_stylesheet.css in Resources */,
 				D5A6F27617B16AA400EAB24B /* 28-star-gy.png in Resources */,
 				D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */,
+				D5A175621A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
 				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
@@ -822,6 +865,7 @@
 				D5A2253B194A3A400078FEFF /* 217-trash.png in Resources */,
 				D533DA9F17B2D07600199C38 /* desitin_icon_114x114.png in Resources */,
 				D533DAA317B2D2AE00199C38 /* desitin_icon_32x32.png in Resources */,
+				D5A175641A9BC27400E69385 /* favorites.png in Resources */,
 				D533DAA617B434B600199C38 /* Default.png in Resources */,
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
@@ -829,8 +873,11 @@
 				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
 				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D533DAAA17B434FF00199C38 /* Default-Portrait@2x~ipad.png in Resources */,
+				D5A1754E1A9A737F00E69385 /* interactions@2x.png in Resources */,
+				D5A175571A9A7A4D00E69385 /* maindb-selected.png in Resources */,
 				D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */,
 				D533DAAC17B4351700199C38 /* Default@2x.png in Resources */,
+				D5A175521A9A741B00E69385 /* maindb.png in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */,
@@ -839,15 +886,18 @@
 				D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */,
 				D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */,
 				D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */,
+				D5A175541A9A741B00E69385 /* maindb@2x.png in Resources */,
 				D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */,
 				D5FFE1B718B1021B002D6159 /* LICENSE in Resources */,
 				D5A2252819461D200078FEFF /* 938-connections-selected.png in Resources */,
+				D5A1754C1A9A737F00E69385 /* interactions.png in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
 				D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */,
 				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
+				D5A175601A9BC27400E69385 /* favorites-selected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -855,12 +905,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A175671A9BC27400E69385 /* favorites@2x.png in Resources */,
+				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */,
 				D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
 				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,
+				D5A175631A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
@@ -899,6 +952,7 @@
 				D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
+				D5A175651A9BC27400E69385 /* favorites.png in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
 				D5A2251F19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
@@ -906,8 +960,11 @@
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
+				D5A1754F1A9A737F00E69385 /* interactions@2x.png in Resources */,
+				D5A175581A9A7A4D00E69385 /* maindb-selected.png in Resources */,
 				D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */,
 				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
+				D5A175531A9A741B00E69385 /* maindb.png in Resources */,
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
 				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
 				D554574718B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
@@ -916,15 +973,18 @@
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
 				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
+				D5A175551A9A741B00E69385 /* maindb@2x.png in Resources */,
 				D5FFE1BA18B1021B002D6159 /* README.md in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
 				D5A2252919461D200078FEFF /* 938-connections-selected.png in Resources */,
+				D5A1754D1A9A737F00E69385 /* interactions.png in Resources */,
 				D554575718B3E87D003299E0 /* 905-chat-2.png in Resources */,
 				D52A0D6C17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png in Resources */,
 				D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */,
 				D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */,
 				D52A0D7217ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png in Resources */,
 				D5A2252519461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
+				D5A175611A9BC27400E69385 /* favorites-selected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
