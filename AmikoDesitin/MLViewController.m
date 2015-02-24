@@ -71,6 +71,8 @@ static NSString *SHORT_TOOLBAR_THERAPY = @"Ther";
 static NSInteger mUsedDatabase = kNone;
 static NSInteger mCurrentSearchState = kTitle;
 
+static CGFloat searchFieldWidth = 320.0f;
+
 static BOOL mSearchInteractions = false;
 
 @interface DataObject : NSObject
@@ -873,6 +875,11 @@ static BOOL mSearchInteractions = false;
         UITabBarItem *tabBarItem0 = [myTabBar.items objectAtIndex:0];
         UIImage* selectedImage = [[UIImage imageNamed:@"maindb-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem0.selectedImage = selectedImage;
+        
+        UITabBarItem *tabBarItem1 = [myTabBar.items objectAtIndex:1];
+        selectedImage = [[UIImage imageNamed:@"favorites-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        tabBarItem1.selectedImage = selectedImage;
+        
         UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:2];
         selectedImage = [[UIImage imageNamed:@"interactions-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem2.selectedImage = selectedImage;
@@ -889,7 +896,7 @@ static BOOL mSearchInteractions = false;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         // Note: iOS7
         if ([MLConstants iosVersion]>=7.0f) {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 44.0f)];
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(10.0f, 0.0f, searchFieldWidth-20.0f, 44.0f)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             searchField.barStyle = UIBarStyleDefault;
             searchField.barTintColor = [UIColor clearColor];
@@ -898,12 +905,12 @@ static BOOL mSearchInteractions = false;
             searchField.tintColor = [UIColor lightGrayColor];    // cursor color
             searchField.translucent = YES;
         } else {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0f, 0.0f, 320.0f, 44.0f)];
+            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(10.0f, 0.0f, searchFieldWidth-20.0f, 44.0f)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         }
         searchField.delegate = self;
         
-        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 44.0f)];
+        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
         // searchBarView.autoresizingMask = 0;
         [searchBarView addSubview:searchField];
         
