@@ -319,6 +319,34 @@ static BOOL mSearchInteractions = false;
     return self;
 }
 
+- (void) doNotBackupDocumentsDir
+{
+    // See https://developer.apple.com/icloud/documentation/data-storage/index.html
+    NSString *documentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDir error:nil];
+    if (files!=nil) {
+        for (NSString *file in files) {
+            [self addSkipBackupAttributeToItemAtURL:[documentsDir stringByAppendingPathComponent:file]];
+        }
+    }
+}
+
+- (BOOL) addSkipBackupAttributeToItemAtURL:(NSString *)filePathString
+{
+    NSURL *fileURL = [NSURL fileURLWithPath:filePathString];
+#ifdef DEBUG
+    assert([[NSFileManager defaultManager] fileExistsAtPath:[fileURL path]]);
+#endif
+    
+    NSError *error = nil;
+    BOOL success = [fileURL setResourceValue:[NSNumber numberWithBool:YES]
+                                  forKey:NSURLIsExcludedFromBackupKey error:&error];
+    if (!success){
+        NSLog(@"Error excluding %@ from backup %@", [fileURL lastPathComponent], error);
+    }
+    return success;
+}
+
 - (void) finishedDownloading:(NSNotification *)notification
 {
     static int fileCnt = 0;
@@ -332,6 +360,8 @@ static BOOL mSearchInteractions = false;
         if (mDb!=nil && fileCnt==2) {
             // Reset file counter
             fileCnt=0;
+            // Make sure downloaded files cannot be backuped
+            [self doNotBackupDocumentsDir];
             // Close sqlite database
             [mDb closeDatabase];
             // Re-open sqlite database
