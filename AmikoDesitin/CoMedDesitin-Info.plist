@@ -17,7 +17,7 @@
 	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>com.ywesee.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.ywesee.comeddesitin</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
