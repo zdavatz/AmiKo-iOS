@@ -89,7 +89,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
 
 - (void) dealloc
 {
-    //
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) viewDidLoad

@@ -74,6 +74,7 @@ static NSInteger mCurrentSearchState = kTitle;
 static CGFloat searchFieldWidth = 320.0f;
 
 static BOOL mSearchInteractions = false;
+static BOOL mShowReport = false;
 
 @interface DataObject : NSObject
 
@@ -1027,6 +1028,18 @@ static BOOL mSearchInteractions = false;
     }
 }
 
+- (void) invalidateObserver
+{
+    if (titleViewController!=nil && secondViewController!=nil) {
+        @try {
+            [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
+        } @catch (NSException *exception) {
+            // Do nothing, obviously the observer wasn't attached and an exception was thrown
+            NSLog(@"Expection thrown...");
+        }
+    }
+}
+
 - (void) showReport:(id)sender
 {
     // A. Check first users documents folder
@@ -1061,13 +1074,20 @@ static BOOL mSearchInteractions = false;
     // Rightviewcontroller is not needed, nil it!
     mainRevealController = self.revealViewController;
     mainRevealController.rightViewController = nil;
-    
+
+    if (!mShowReport) {
+        [self invalidateObserver];
+        mShowReport = true;
+    }
     if (secondViewController!=nil) {
-        [secondViewController removeFromParentViewController];
+        // [secondViewController removeFromParentViewController];
         secondViewController = nil;
     }
     
-    secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil title:@"About" andParam:1];
+    secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
+                                                                    bundle:nil
+                                                                     title:@"About"
+                                                                  andParam:1];
     
     if ([MLConstants iosVersion]>=7.0f) {
         UIFont *font = [UIFont fontWithName:@"Arial" size:14];
@@ -1806,18 +1826,13 @@ static BOOL mSearchInteractions = false;
         mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
         mMed = [mDb searchId:mId];
     }
-    
-    if (titleViewController!=nil && secondViewController!=nil) {
-        @try {
-            [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
-        } @catch (NSException *exception) {
-           // Do nothing, obviously the observer wasn't attached and an exception was thrown
-            NSLog(@"Expection thrown...");
-        }
+  
+    if (!mShowReport) {
+        [self invalidateObserver];
     }
-    
+    mShowReport = false;
     if (secondViewController!=nil) {
-        // [secondView removeFromParentViewController];
+        // [secondViewController removeFromParentViewController];
         secondViewController = nil;
     }
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"

@@ -74,6 +74,8 @@
     self.webView.delegate = nil;
     self.webView = nil;
     [self.webView removeFromSuperview];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons
