@@ -63,7 +63,6 @@
 		D59E895918B7C0E100185094 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A31F6218B5263500F56BC5 /* libz.1.2.5.dylib */; };
 		D59E895B18B7E7CB00185094 /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */; };
-		D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */; };
 		D5A1754C1A9A737F00E69385 /* interactions.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754A1A9A737F00E69385 /* interactions.png */; };
 		D5A1754D1A9A737F00E69385 /* interactions.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754A1A9A737F00E69385 /* interactions.png */; };
 		D5A1754E1A9A737F00E69385 /* interactions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754B1A9A737F00E69385 /* interactions@2x.png */; };
@@ -172,6 +171,7 @@
 		D5B75BEC17FF53F5008ECDBB /* comed_des_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */; };
 		D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
 		D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
+		D5E9CE2D1B8BA1E1007D0675 /* desitin_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D5E9CE2C1B8BA1E1007D0675 /* desitin_launch_2048x1536.png */; };
 		D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
 		D5F6BB5017E8C87500DCBD16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24617B1692F00EAB24B /* main.m */; };
 		D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */; };
@@ -243,7 +243,6 @@
 		D52A0D6D17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-Portrait@2x~ipad.png"; path = "../ComedDesitin-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		D52A0D6F17ECC243003BF272 /* ComedDesitin-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-Landscape~ipad.png"; path = "../ComedDesitin-Landscape~ipad.png"; sourceTree = "<group>"; };
 		D52A0D7117ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-Landscape@2x~ipad.png"; path = "../ComedDesitin-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
-		D52A0D7317ECC31A003BF272 /* comed_des_launch_1024x748.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_1024x748.png; sourceTree = "<group>"; };
 		D533DA9C17B2D05F00199C38 /* desitin_icon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_57x57.png; sourceTree = "<group>"; };
 		D533DA9E17B2D07600199C38 /* desitin_icon_114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_114x114.png; sourceTree = "<group>"; };
 		D533DAA217B2D2AE00199C38 /* desitin_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_32x32.png; sourceTree = "<group>"; };
@@ -284,7 +283,6 @@
 		D59E895518B7C0C100185094 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_de.db; sourceTree = "<group>"; };
 		D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
-		D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = desitin_launch_2048x1536.png; path = "AmikoDesitin/Images.xcassets/LaunchImage-AmiKoDesitin.launchimage/desitin_launch_2048x1536.png"; sourceTree = "<group>"; };
 		D5A1754A1A9A737F00E69385 /* interactions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = interactions.png; sourceTree = "<group>"; };
 		D5A1754B1A9A737F00E69385 /* interactions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "interactions@2x.png"; sourceTree = "<group>"; };
 		D5A175501A9A741B00E69385 /* maindb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = maindb.png; sourceTree = "<group>"; };
@@ -381,6 +379,7 @@
 		D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_32x32.png; sourceTree = "<group>"; };
 		D5A6F2B217B171C900EAB24B /* MLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLViewController.xib; sourceTree = "<group>"; };
 		D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_2048x1536.png; sourceTree = "<group>"; };
+		D5E9CE2C1B8BA1E1007D0675 /* desitin_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_2048x1536.png; sourceTree = "<group>"; };
 		D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_fr.html; sourceTree = "<group>"; };
 		D5F6BB9417E8C87500DCBD16 /* CoMedDesitin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoMedDesitin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CoMedDesitin-Info.plist"; sourceTree = "<group>"; };
@@ -699,7 +698,7 @@
 		D5F6BBAB17EB8BC200DCBD16 /* LaunchImages */ = {
 			isa = PBXGroup;
 			children = (
-				D59E895E18B8F4DC00185094 /* desitin_launch_2048x1536.png */,
+				D5E9CE2C1B8BA1E1007D0675 /* desitin_launch_2048x1536.png */,
 				D565DA8A17B7EA9C0002E2CF /* desitin_launch_320x480.png */,
 				D565DA8B17B7EA9C0002E2CF /* desitin_launch_640x960.png */,
 				D565DA8C17B7EA9C0002E2CF /* desitin_launch_640x1136.png */,
@@ -709,7 +708,6 @@
 				D5F6BB9D17EB816600DCBD16 /* comed_des_launch_320x480.png */,
 				D5F6BB9E17EB816700DCBD16 /* comed_des_launch_640x960.png */,
 				D5F6BB9F17EB816700DCBD16 /* comed_des_launch_640x1136.png */,
-				D52A0D7317ECC31A003BF272 /* comed_des_launch_1024x748.png */,
 				D5F6BBA917EB81C500DCBD16 /* comed_des_launch_1024x768.png */,
 				D5F6BBA017EB816800DCBD16 /* comed_des_launch_768x1004.png */,
 				D5F6BBA117EB816800DCBD16 /* comed_des_launch_1536x2008.png */,
@@ -877,6 +875,7 @@
 				D5A175571A9A7A4D00E69385 /* maindb-selected.png in Resources */,
 				D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */,
 				D533DAAC17B4351700199C38 /* Default@2x.png in Resources */,
+				D5E9CE2D1B8BA1E1007D0675 /* desitin_launch_2048x1536.png in Resources */,
 				D5A175521A9A741B00E69385 /* maindb.png in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
@@ -893,7 +892,6 @@
 				D5A1754C1A9A737F00E69385 /* interactions.png in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
-				D59E895F18B8F4DC00185094 /* desitin_launch_2048x1536.png in Resources */,
 				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
