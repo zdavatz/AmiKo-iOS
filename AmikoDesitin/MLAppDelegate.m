@@ -72,21 +72,24 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     bool handled = NO;
 
     // Check which quick action to run
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.aips"]) {
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.aips"]
+        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.aips"]) {
 #ifdef DEBUG
         NSLog(@"shortcut tapped: aips");
 #endif
         launchState = eAips;
         handled = YES;
     }
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.favorites"]) {
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.favorites"]
+        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.favorites"]) {
 #ifdef DEBUG
         NSLog(@"shortcut tapped: favorites");
 #endif
         launchState = eFavorites;
         handled = YES;
     }
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.interactions"]) {
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.interactions"]
+        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.interactions"]) {
 #ifdef DEBUG
         NSLog(@"shortcut tapped: interactions");
 #endif
