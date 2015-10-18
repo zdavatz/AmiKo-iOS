@@ -40,6 +40,14 @@
 @synthesize navController = _navController;
 @synthesize revealViewController = _revealViewController;
 
+MLViewController *mainViewController;
+
+enum {
+    eAips=0, eFavorites=1, eInteractions=2
+};
+int launchState = eAips;
+bool launchedFromShortcut = NO;
+
 void onUncaughtException(NSException *exception)
 {
     NSLog(@"uncaught exception: %@", exception.description);
@@ -57,23 +65,80 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     return result;
 }
 
-- (BOOL) application: (UIApplication *)application didFinishLaunchingWithOptions: (NSDictionary *)launchOptions
+/** Handles Quick Action shortcuts
+ */
+- (BOOL) handleShortcutItem:(UIApplicationShortcutItem *)shortcutItem
 {
+    bool handled = NO;
+
+    // Check which quick action to run
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.aips"]) {
+#ifdef DEBUG
+        NSLog(@"shortcut tapped: aips");
+#endif
+        launchState = eAips;
+        handled = YES;
+    }
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.favorites"]) {
+#ifdef DEBUG
+        NSLog(@"shortcut tapped: favorites");
+#endif
+        launchState = eFavorites;
+        handled = YES;
+    }
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.interactions"]) {
+#ifdef DEBUG
+        NSLog(@"shortcut tapped: interactions");
+#endif
+        launchState = eInteractions;
+        handled = YES;
+    }
+
+    if (mainViewController!=nil && handled==YES) {
+        [mainViewController setLaunchState:launchState];
+    }
+    
+    return handled;
+}
+
+/** Override delegate method
+ */
+- (void) application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
+{
+    bool handledShortcutItem = [self handleShortcutItem:shortcutItem];
+    // completionHandler expects a bool indicating whether we are able to handle the item
+    completionHandler(handledShortcutItem);
+}
+
+- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    // Init main window
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:screenBound];
-    CGFloat screenScale = [[UIScreen mainScreen] scale];
     
+    // Print out some useful info
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
     NSLog(@"points w = %f, points h = %f, scale = %f", [[UIScreen mainScreen] applicationFrame].size.width,
           [[UIScreen mainScreen] applicationFrame].size.height, screenScale);
-    
     CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height);
     
-    MLViewController *mainViewController = [[MLViewController alloc] init];
+    // Init all view controllers (main and secondary)
+    mainViewController = [[MLViewController alloc] init];
     UINavigationController *mainViewNavigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
     MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
     UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+
+    // Check if app was launched by quick action
+    UIApplicationShortcutItem *shortcutItem = [launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
+    if (shortcutItem != nil) {
+        [self handleShortcutItem:shortcutItem];
+        // Method returns false if application was launched from shortcut
+        // and prevents performActionForShortcutItem to be called...
+        launchedFromShortcut = YES;
+    }
     
+    // Init swipe (reveal) view controller
     SWRevealViewController *mainRevealController = [[SWRevealViewController alloc]
                                                 initWithRearViewController:mainViewNavigationController
                                                 frontViewController:secondViewNavigationController];
@@ -82,7 +147,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     mainRevealController.rightViewController = titleViewController;
     
     mainRevealController.delegate = self;
-    
+
+    // Make sure the orientation is correct
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -142,7 +208,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);
     
-    return YES;
+    return !launchedFromShortcut;
 }
 
 - (void) applicationWillResignActive: (UIApplication *)application

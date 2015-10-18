@@ -202,7 +202,9 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {    
-    self.javaScript = [NSString stringWithFormat:@"window.location.hash='#%@'", mSectionIds[indexPath.row]];
+    // self.javaScript = [NSString stringWithFormat:@"window.location.hash='#%@'", mSectionIds[indexPath.row]];
+    self.javaScript = [NSString stringWithFormat:@"setTimeout(function(){window.location.hash='#%@'},0)", mSectionIds[indexPath.row]];
+    
     // NSLog(@"%s: Javascript = %@", __FUNCTION__, self.javaScript);
     
     // Grab a handle to the reveal controller

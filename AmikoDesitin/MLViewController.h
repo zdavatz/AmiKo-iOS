@@ -46,6 +46,9 @@
 @property (nonatomic, retain) IBOutlet UIToolbar *myToolBar;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *myTableViewHeightConstraint;
 
+- (id) initWithLaunchState:(int)state;
+- (void) setLaunchState:(int)state;
+
 - (IBAction) searchAction: (id)sender;
 - (IBAction) onToolBarButtonPressed: (id)sender;
 

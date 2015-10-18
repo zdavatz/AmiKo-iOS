@@ -2,10 +2,48 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>UIFileSharingEnabled</key>
-	<false/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>pillbox.oddb.org</key>
+            <dict>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+            </dict>
+        </dict>
+	</dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+        <dict>
+            <key>UIApplicationShortcutItemType</key>
+            <string>com.ywesee.amiko.ios.interactions</string>
+            <key>UIApplicationShortcutItemTitle</key>
+            <string>Interactions</string>
+            <key>UIApplicationShortcutItemIconFile</key>
+            <string>interactions</string>
+        </dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.ywesee.amiko.ios.favorites</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Favorites</string>
+            <key>UIApplicationShortcutItemIconFile</key>
+            <string>favorites</string>
+		</dict>
+        <dict>
+            <key>UIApplicationShortcutItemType</key>
+            <string>com.ywesee.amiko.ios.aips</string>
+            <key>UIApplicationShortcutItemTitle</key>
+            <string>AIPS</string>
+            <key>UIApplicationShortcutItemIconFile</key>
+            <string>maindb</string>
+        </dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -17,7 +55,7 @@
 	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>com.ywesee.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -36,6 +74,8 @@
 	<array>
 		<string>ionicons.ttf</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<false/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -54,5 +94,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

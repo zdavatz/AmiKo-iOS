@@ -94,6 +94,11 @@ static BOOL mShowReport = false;
 
 @implementation MLViewController
 {
+    // Enumerations
+    enum {
+        eAips=0, eFavorites=1, eInteractions
+    };
+
     // Instance variable declarations go here
     NSMutableArray *medi;
     
@@ -317,7 +322,58 @@ static BOOL mShowReport = false;
                                                  name:@"MLStatusCode404"
                                                object:nil];
 
+    // Set default database
+    mUsedDatabase = kAips;
+    // Set current search state
+    mCurrentSearchState = kTitle;
+    
     return self;
+}
+
+- (id) initWithLaunchState:(int)state
+{
+    id handle = [self init];
+    
+    if (handle != nil) {
+        [self setLaunchState:state];
+    }
+    
+    return handle;
+}
+
+- (void) setLaunchState:(int)state
+{
+    if (state==eAips || state==eFavorites || state==eInteractions) {
+        if (state==eAips) {
+            mUsedDatabase = kAips;
+            mSearchInteractions = false;
+            mCurrentIndexPath = nil;
+            // Show keyboard
+            [searchField becomeFirstResponder];
+            // Reset searchfield
+            [self resetBarButtonItems];
+            // Clear main table view
+            [self clearDataInTableView];
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
+        } else if (state==eFavorites) {
+            mUsedDatabase = kFavorites;
+            mCurrentSearchState = kTitle;
+            mSearchInteractions = false;
+            // The following programmatical call takes care of everything...
+            [self switchTabBarItem:[myTabBar.items objectAtIndex:1]];
+        } else if (state==eInteractions) {
+            mUsedDatabase = kAips;
+            mCurrentSearchState = kTitle;
+            mSearchInteractions = true;
+            // Reset searchfield
+            [self resetBarButtonItems];
+            // Go back to main view controller
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
+        }
+        // Go back to main view
+        mainRevealController = self.revealViewController;
+        [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
+    }
 }
 
 - (void) doNotBackupDocumentsDir
@@ -993,12 +1049,6 @@ static BOOL mShowReport = false;
     [self loadData];
     
     favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favoriteData.favMedsSet];
-    
-    // Set default database
-    mUsedDatabase = kAips;
-   
-    // Set current search state
-    mCurrentSearchState = kTitle;
 }
 
 - (void) myShowMenuMethod:(id)sender
