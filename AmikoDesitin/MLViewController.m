@@ -96,7 +96,7 @@ static BOOL mShowReport = false;
 {
     // Enumerations
     enum {
-        eAips=0, eFavorites=1, eInteractions
+        eAips=0, eFavorites=1, eInteractions=2
     };
 
     // Instance variable declarations go here
@@ -348,12 +348,11 @@ static BOOL mShowReport = false;
             mUsedDatabase = kAips;
             mSearchInteractions = false;
             mCurrentIndexPath = nil;
-            // Show keyboard
-            [searchField becomeFirstResponder];
             // Reset searchfield
             [self resetBarButtonItems];
             // Clear main table view
             [self clearDataInTableView];
+            //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
         } else if (state==eFavorites) {
             mUsedDatabase = kFavorites;
@@ -361,18 +360,22 @@ static BOOL mShowReport = false;
             mSearchInteractions = false;
             // The following programmatical call takes care of everything...
             [self switchTabBarItem:[myTabBar.items objectAtIndex:1]];
+            //
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
         } else if (state==eInteractions) {
             mUsedDatabase = kAips;
             mCurrentSearchState = kTitle;
             mSearchInteractions = true;
             // Reset searchfield
             [self resetBarButtonItems];
-            // Go back to main view controller
+            //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
         }
         // Go back to main view
         mainRevealController = self.revealViewController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
+        // Show keyboard
+        [searchField becomeFirstResponder];
     }
 }
 
@@ -1008,7 +1011,7 @@ static BOOL mShowReport = false;
     
     // Add long press gesture recognizer to tableview
     UILongPressGestureRecognizer *mLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(myLongPressMethod:)];
-    mLongPressRecognizer.minimumPressDuration = 1.5f;    // [sec]
+    mLongPressRecognizer.minimumPressDuration = 1.0f;    // [sec]
     mLongPressRecognizer.delegate = self;
     [self.myTableView addGestureRecognizer:mLongPressRecognizer];
     
@@ -1069,11 +1072,17 @@ static BOOL mShowReport = false;
     
     NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
     
-    if( mCurrentSearchState == kAtcCode) {
+    if (mCurrentSearchState == kAtcCode) {
         if (indexPath != nil) {
-            NSString *medSubTitle = [NSString stringWithString:[medi[indexPath.row] subTitle]];
-            NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
-            [searchField setText:mAtc[0]];
+            NSString *subTitle = [medi[indexPath.row] subTitle];
+            if (subTitle!=nil) {
+                NSString *medSubTitle = [NSString stringWithString:subTitle];
+                NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
+                if (mAtc[0]!=nil && ![[searchField text] isEqualToString:mAtc[0]]) {
+                    [searchField setText:mAtc[0]];
+                    [self executeSearch:mAtc[0]];
+                }
+            }
         }
     }
 }
@@ -1306,7 +1315,7 @@ static BOOL mShowReport = false;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [scopeSelf updateTableView];
                         [myTableView reloadData];
-                        [searchField resignFirstResponder];
+                        // [searchField resignFirstResponder];
                         [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], TREFFER_STRING, timeForSearch_ms]];
                         inProgress = false;
                     });
@@ -1337,8 +1346,23 @@ static BOOL mShowReport = false;
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    static volatile bool inProgress = false;
+    [self executeSearch:searchText];
+}
 
+- (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+}
+
+- (void) searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    self.searchDisplayController.searchBar.showsCancelButton = YES;
+}
+
+- (void) executeSearch:(NSString *)searchText
+{
+    static volatile bool inProgress = false;
+    
     int minSearchChars = 0;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         minSearchChars = 0;
@@ -1347,16 +1371,16 @@ static BOOL mShowReport = false;
     
     // Causes searchResults to be released if there are no strong references to it.
     searchResults = [NSArray array];
-
+    
     MLViewController* __weak weakSelf = self;
     
     [self startActivityIndicator];
     
     // Introduces a delay before starting new thread
     /*
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    */
+     double delayInSeconds = 0.1;
+     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+     */
     // Creates a serial dispatch queue (tasks are completed in FIFO order)
     // dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
     // dispatch_after(popTime, mSearchQueue, ^(void){
@@ -1388,17 +1412,6 @@ static BOOL mShowReport = false;
             });
         }
     });
-}
-
-
-- (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    [searchBar resignFirstResponder];
-}
-
-- (void) searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
-{
-    self.searchDisplayController.searchBar.showsCancelButton = YES;
 }
 
 - (void) addTitle: (NSString *)title andPackInfo: (NSString *)packinfo andMedId: (long)medId

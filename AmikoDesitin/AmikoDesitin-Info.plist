@@ -4,45 +4,45 @@
 <dict>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <false/>
-        <key>NSExceptionDomains</key>
-        <dict>
-            <key>pillbox.oddb.org</key>
-            <dict>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-                <true/>
-            </dict>
-        </dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>pillbox.oddb.org</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
 	<key>UIApplicationShortcutItems</key>
 	<array>
-        <dict>
-            <key>UIApplicationShortcutItemType</key>
-            <string>com.ywesee.amiko.ios.interactions</string>
-            <key>UIApplicationShortcutItemTitle</key>
-            <string>Interactions</string>
-            <key>UIApplicationShortcutItemIconFile</key>
-            <string>interactions</string>
-        </dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.ywesee.amiko.ios.interactions</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Interactions</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>interactions</string>
+		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemType</key>
 			<string>com.ywesee.amiko.ios.favorites</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Favorites</string>
-            <key>UIApplicationShortcutItemIconFile</key>
-            <string>favorites</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>favorites</string>
 		</dict>
-        <dict>
-            <key>UIApplicationShortcutItemType</key>
-            <string>com.ywesee.amiko.ios.aips</string>
-            <key>UIApplicationShortcutItemTitle</key>
-            <string>AIPS</string>
-            <key>UIApplicationShortcutItemIconFile</key>
-            <string>maindb</string>
-        </dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.ywesee.amiko.ios.aips</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>AIPS</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>maindb</string>
+		</dict>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
@@ -94,7 +94,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
 </dict>
 </plist>
