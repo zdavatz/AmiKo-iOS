@@ -2,48 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>pillbox.oddb.org</key>
-			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
-	</dict>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.ywesee.amiko.ios.interactions</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Interactions</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>interactions</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.ywesee.amiko.ios.favorites</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Favorites</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>favorites</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.ywesee.amiko.ios.aips</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>AIPS</string>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>maindb</string>
-		</dict>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -63,16 +21,58 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.8</string>
+	<string>2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>pillbox.oddb.org</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ionicons.ttf</string>
+	</array>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>interactions</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Interactions</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.ywesee.amiko.ios.interactions</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>favorites</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Favorites</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.ywesee.amiko.ios.favorites</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>maindb</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>AIPS</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.ywesee.amiko.ios.aips</string>
+		</dict>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<false/>
@@ -94,7 +94,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>UIViewControllerBasedStatusBarAppearance</key>
-    <false/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
