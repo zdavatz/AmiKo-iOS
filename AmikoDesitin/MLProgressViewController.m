@@ -105,7 +105,7 @@
     }
 }
 
-- (void) updateWith:(int)downloadedBytes andWith:(int)expectedBytes;
+- (void) updateWith:(long)downloadedBytes andWith:(long)expectedBytes;
 {
     float progress = 100*(float)downloadedBytes/expectedBytes;
     /*
@@ -113,7 +113,7 @@
      We change the message before the unzipping does start.
     */
     if (progress<99) {
-        [self setMessage:[NSString stringWithFormat:@"%d%% (%dkb out of %dkb)",
+        [self setMessage:[NSString stringWithFormat:@"%d%% (%ldkb out of %ldkb)",
                                 (int)(progress), downloadedBytes/1000, expectedBytes/1000]];
     } else {
         [self setMessage:[NSString stringWithFormat:@"Unzipping..."]];

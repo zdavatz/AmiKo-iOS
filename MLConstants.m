@@ -56,14 +56,18 @@ const int RightViewRevealWidth_Portrait_iPad = 208;
 // Landscape
 const int RearViewRevealWidth_Landscape_iPad = 816;             // 1024 - 208 = 816
 
-/** iPhone
-    Non-Retina : 320 x 480
-    3.5''      : 640 x 960
-    4''        : 640 x 1136
+/** iPhone resolutions in pixels
+    iPhone 3GS :  320 x  480
+    iPhone 4   :  640 x  960 ->  640/2 = 320-60 = 260
+    iPhone 5   :  640 x 1136 ->  640/2 = 320-60 = 260
+    iPhone 6   :  750 x 1334 ->  750/2 = 375-60 = 315
+    iPhone 6+  : 1242 x 2208 -> 1242/2 = 621-60 = 561
 */
 
 // Portrait
 const int RearViewRevealWidth_Portrait_iPhone = 260;            // 260 + 60 = 320 x 2 = 640
+const int RearViewRevealWidth_Portrait_iPhone_6 = 315;
+const int RearViewRevealWidth_Portrait_iPhone_6P = 561;
 const int RearViewRevealOverdraw_Portrait_iPhone = 60;
 const int RightViewRevealWidth_Portrait_iPhone = 180;
 
@@ -72,11 +76,44 @@ const int RearViewRevealWidth_Landscape_iPhone = 420;           // 420 + 60 = 48
 const int RearViewRevealWidth_Landscape_iPhone_Retina = 508;    // 508 + 60 = 568 x 2 = 1136
 const int RearViewRevealOverdraw_Landscape_iPhone_Retina = 60;
 
+/** Width and heigh in points (units)
+ */
+static int WidthInPoints;
+static int HeightInPoints;
+
 @implementation MLConstants
+
+/** Needs to be initialized
+ */
++ (void) start
+{
+    WidthInPoints = [[UIScreen mainScreen] bounds].size.width;
+    HeightInPoints = [[UIScreen mainScreen] bounds].size.height;
+}
 
 + (float) iosVersion
 {
     return [[UIDevice currentDevice].systemVersion floatValue];
+}
+
++ (int) rearViewRevealWidthPortrait
+{
+    return (int)(WidthInPoints - RearViewRevealOverdraw_Portrait_iPhone);
+}
+
++ (int) rearViewRevealWidthLandscape
+{
+    return (int)(HeightInPoints- RearViewRevealOverdraw_Landscape_iPhone_Retina);
+}
+
++ (int) rearViewRevealOverdrawPortrait
+{
+    return RearViewRevealOverdraw_Portrait_iPhone;
+}
+
++ (int) rearViewRevealOverdrawLandscape
+{
+    return RearViewRevealOverdraw_Landscape_iPhone_Retina;
 }
 
 + (NSString *) appOwner

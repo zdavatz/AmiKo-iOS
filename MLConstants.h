@@ -23,6 +23,17 @@
 
 #import <Foundation/Foundation.h>
 
+/* Macros
+ * See: http://stackoverflow.com/questions/7848766/how-can-we-programmatically-detect-which-ios-version-is-device-running-on
+ */
+#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
+#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
+
+/* Externals
+ */
 #if defined (AMIKO_DESITIN)
 extern NSString* const APP_NAME;
 extern NSString* const APP_ID;
@@ -61,9 +72,13 @@ extern const int RearViewRevealWidth_Landscape_iPhone;
 extern const int RearViewRevealWidth_Landscape_iPhone_Retina;
 extern const int RearViewRevealOverdraw_Landscape_iPhone_Retina;
 
-
 @interface MLConstants : NSObject
 + (float) iosVersion;
++ (void) start;
++ (int) rearViewRevealWidthPortrait;
++ (int) rearViewRevealWidthLandscape;
++ (int) rearViewRevealOverdrawPortrait;
++ (int) rearViewRevealOverdrawLandscape;
 + (NSString *) appOwner;
 + (NSString *) appLanguage;
 + (NSString *) notSpecified;

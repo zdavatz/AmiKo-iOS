@@ -33,7 +33,7 @@
 
 - (void) setMessage:(NSString *)msg;
 - (void) start;
-- (void) updateWith:(int)downloadedBytes andWith:(int)expectedBytes;
+- (void) updateWith:(long)downloadedBytes andWith:(long)expectedBytes;
 - (void) remove;
 
 @end

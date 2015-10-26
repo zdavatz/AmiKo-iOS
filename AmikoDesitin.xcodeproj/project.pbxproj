@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
 		D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */; };
 		D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6917ECC1D6003BF272 /* ComedDesitin-568h@2x.png */; };
@@ -25,6 +26,9 @@
 		D533DAAE17B435E300199C38 /* desitin_icon_72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAD17B435E300199C38 /* desitin_icon_72x72.png */; };
 		D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */; };
 		D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */ = {isa = PBXBuildFile; fileRef = D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */; };
+		D53F3D5C1BDD4CDB00BB63ED /* desitin_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D5E9CE2C1B8BA1E1007D0675 /* desitin_launch_2048x1536.png */; };
+		D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */ = {isa = PBXBuildFile; fileRef = D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */; };
+		D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */ = {isa = PBXBuildFile; fileRef = D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */; };
 		D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53817F22A58000EC52A /* desitin_icon_76x76.png */; };
 		D551D53C17F22A58000EC52A /* desitin_icon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53817F22A58000EC52A /* desitin_icon_76x76.png */; };
 		D551D53D17F22A58000EC52A /* desitin_icon_152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53917F22A58000EC52A /* desitin_icon_152x152.png */; };
@@ -171,7 +175,6 @@
 		D5B75BEC17FF53F5008ECDBB /* comed_des_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */; };
 		D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
 		D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
-		D5E9CE2D1B8BA1E1007D0675 /* desitin_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D5E9CE2C1B8BA1E1007D0675 /* desitin_launch_2048x1536.png */; };
 		D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
 		D5F6BB5017E8C87500DCBD16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24617B1692F00EAB24B /* main.m */; };
 		D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */; };
@@ -236,6 +239,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
 		D52A0D6917ECC1D6003BF272 /* ComedDesitin-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin-568h@2x.png"; path = "../ComedDesitin-568h@2x.png"; sourceTree = "<group>"; };
@@ -253,6 +257,7 @@
 		D533DAAD17B435E300199C38 /* desitin_icon_72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_72x72.png; sourceTree = "<group>"; };
 		D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_144x144.png; sourceTree = "<group>"; };
 		D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_de.html; sourceTree = "<group>"; };
+		D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_default.png; sourceTree = "<group>"; };
 		D551D53617F16DE2000EC52A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AmiKoDesitin/Images.xcassets; sourceTree = "<group>"; };
 		D551D53817F22A58000EC52A /* desitin_icon_76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_76x76.png; sourceTree = "<group>"; };
 		D551D53917F22A58000EC52A /* desitin_icon_152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_152x152.png; sourceTree = "<group>"; };
@@ -553,6 +558,7 @@
 		D5A6F26017B169B000EAB24B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */,
 				D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */,
 				D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */,
 				D52A0D6917ECC1D6003BF272 /* ComedDesitin-568h@2x.png */,
@@ -691,6 +697,7 @@
 				D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */,
 				D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */,
 				D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */,
+				D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -816,6 +823,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D53F3D5C1BDD4CDB00BB63ED /* desitin_launch_2048x1536.png in Resources */,
 				D5A175661A9BC27400E69385 /* favorites@2x.png in Resources */,
 				D5A1755A1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */,
@@ -828,6 +836,7 @@
 				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
+				D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5A225181945FC880078FEFF /* 938-connections.png in Resources */,
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
@@ -874,8 +883,8 @@
 				D5A1754E1A9A737F00E69385 /* interactions@2x.png in Resources */,
 				D5A175571A9A7A4D00E69385 /* maindb-selected.png in Resources */,
 				D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */,
+				D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */,
 				D533DAAC17B4351700199C38 /* Default@2x.png in Resources */,
-				D5E9CE2D1B8BA1E1007D0675 /* desitin_launch_2048x1536.png in Resources */,
 				D5A175521A9A741B00E69385 /* maindb.png in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
@@ -907,6 +916,7 @@
 				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */,
 				D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */,
+				D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
@@ -1095,7 +1105,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				SDKROOT = iphoneos;
@@ -1122,7 +1132,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -1147,6 +1157,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1167,6 +1178,7 @@
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = AMIKO_DESITIN;
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

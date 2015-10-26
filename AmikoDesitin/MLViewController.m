@@ -129,9 +129,6 @@ static BOOL mShowReport = false;
     
     UIActivityIndicatorView *mActivityIndicator;
     
-    float screenWidth;
-    float screenHeight;
-    
     NSIndexPath *mCurrentIndexPath;
     long mNumCurrSearchResults;
     int timeForSearch_ms;
@@ -247,6 +244,9 @@ static BOOL mShowReport = false;
 - (id) init
 {
     self = [super init];
+    
+    // Initialize constants
+    [MLConstants start];
     
     medi = [NSMutableArray array];
     
@@ -458,19 +458,6 @@ static BOOL mShowReport = false;
     }
 }
 
-- (void) openInteractionsCsvFile
-{
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_de"]) {
-            NSLog(@"No German drug interactions file!");
-        }
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_fr"]) {
-            NSLog(@"No French drug interactions file!");
-        }
-    }
-}
-
 - (void) openSQLiteDatabase
 {
     mDb = [[MLDBAdapter alloc] init];
@@ -483,6 +470,19 @@ static BOOL mShowReport = false;
         if (![mDb openDatabase:@"amiko_db_full_idx_fr"]) {
             NSLog(@"No French database!");
             mDb = nil;
+        }
+    }
+}
+
+- (void) openInteractionsCsvFile
+{
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+        if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_de"]) {
+            NSLog(@"No German drug interactions file!");
+        }
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+        if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_fr"]) {
+            NSLog(@"No French drug interactions file!");
         }
     }
 }
@@ -628,7 +628,7 @@ static BOOL mShowReport = false;
 - (void) setTabbarItemFont
 {
     NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2], UITextAttributeFont,
+                                         [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2], NSFontAttributeName,
                                          // @1.0, NSKernAttributeName,
                                          // [NSValue valueWithUIOffset:UIOffsetMake(1,0)], UITextAttributeTextShadowOffset,
                                          nil];
@@ -640,7 +640,7 @@ static BOOL mShowReport = false;
 - (void) setToolbarItemsFontSize
 {
     NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [UIFont systemFontOfSize:14], UITextAttributeFont,
+                                         [UIFont systemFontOfSize:14], NSFontAttributeName,
                                          nil];
     
     for (int i=0; i<9; i+=2)    // 17.06.2014 -> used to be '11'
@@ -650,9 +650,6 @@ static BOOL mShowReport = false;
 - (void) startActivityIndicator
 {
     if (runningActivityIndicator==NO) {
-#ifdef DEBUG
-        // NSLog(@"Start activity indicator");
-#endif
         mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
         mActivityIndicator.frame = CGRectIntegral(mActivityIndicator.frame);
@@ -672,23 +669,23 @@ static BOOL mShowReport = false;
 
 - (void) stopActivityIndicator
 {
-#ifdef DEBUG
-    // NSLog(@"Stop activity indicator");
-#endif
     [mActivityIndicator stopAnimating];
     [mActivityIndicator removeFromSuperview];
     runningActivityIndicator = NO;
 }
+
+/*
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    
+}
+*/
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
-    
-    screenWidth = self.view.bounds.size.width;
-    screenHeight = self.view.bounds.size.height;
-    
     return YES;
 }
 
@@ -712,16 +709,8 @@ static BOOL mShowReport = false;
         }
         
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-            screenWidth = self.view.bounds.size.width;
-            screenHeight = self.view.bounds.size.height;
-            // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44);
-
-            if (screenHeight<500)
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone;
-            else {
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
-                self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Landscape_iPhone_Retina;
-            }
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             
             [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
             [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
@@ -739,12 +728,8 @@ static BOOL mShowReport = false;
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 5;
         } else {
-            screenWidth = self.view.bounds.size.width;
-            screenHeight = self.view.bounds.size.height;
-            // self.myTableView.frame = CGRectMake(0, 44, screenWidth, screenHeight-44-49);
-
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-            self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
             
             [[[myToolBar items] objectAtIndex:0] setTitle:SHORT_TOOLBAR_TITLE];
             [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
@@ -785,9 +770,6 @@ static BOOL mShowReport = false;
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    screenWidth = self.view.bounds.size.width;
-    screenHeight = self.view.bounds.size.height;
-        
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
@@ -809,13 +791,8 @@ static BOOL mShowReport = false;
                 
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
  
-            screenHeight = self.view.bounds.size.width;
-            if (screenHeight<500)
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone;
-            else {
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
-                self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Landscape_iPhone_Retina;
-            }
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             
             [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
             [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
@@ -826,8 +803,8 @@ static BOOL mShowReport = false;
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
         } else {
             //
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-            self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
             
             [[[myToolBar items] objectAtIndex:0] setTitle:SHORT_TOOLBAR_TITLE];
             [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
@@ -859,9 +836,6 @@ static BOOL mShowReport = false;
     [super viewDidAppear:animated];
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-
-    screenWidth = self.view.bounds.size.width;
-    screenHeight = self.view.bounds.size.height;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
@@ -921,7 +895,7 @@ static BOOL mShowReport = false;
     
     // Sets color and font and whatever else of the navigation bar
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                          VERY_LIGHT_GRAY_COLOR, UITextAttributeTextColor,
+                                                          VERY_LIGHT_GRAY_COLOR, NSForegroundColorAttributeName,
                                                           nil]];
     // Applies this color throughout the app
     // [[UISearchBar appearance] setBarTintColor:[UIColor lightGrayColor]];
@@ -1003,6 +977,9 @@ static BOOL mShowReport = false;
         UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
         // searchBarView.autoresizingMask = 0;
         [searchBarView addSubview:searchField];
+        
+        // Show keyboard
+        [searchField becomeFirstResponder];
         
         self.navigationItem.titleView = searchBarView;
     }
@@ -1988,45 +1965,54 @@ static BOOL mShowReport = false;
 {
     NSString *text = [medi[indexPath.row] title]; // [titleData objectAtIndex:indexPath.row];
     NSString *subText = [medi[indexPath.row] subTitle]; // [subTitleData objectAtIndex:indexPath.row];
-    CGSize textSize, subTextSize;
+    CGRect textRect, subTextRect;
     CGFloat retVal = 0;
     
     float frameWidth = self.myTableView.frame.size.width;
     
     if ([MLConstants iosVersion]>=7.0f) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            textSize = [self tableText:text sizeWithFont:[UIFont boldSystemFontOfSize:16.0]
-                     constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
-            subTextSize = [self tableText:subText sizeWithFont:[UIFont boldSystemFontOfSize:14.0]
-                        constrainedToSize:CGSizeMake(frameWidth - 1.6*PADDING_IPAD, CGFLOAT_MAX)];
-            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25;
+            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)
+                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0]}
+                                          context:nil];
+            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.6*PADDING_IPAD, CGFLOAT_MAX)
+                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                             attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14.0]}
+                                                context:nil];
+            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPAD * 0.25;
         } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            textSize = [self tableText:text sizeWithFont:[UIFont boldSystemFontOfSize:13.0]
-                     constrainedToSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)];
-            subTextSize = [self tableText:subText sizeWithFont:[UIFont boldSystemFontOfSize:12]
-                        constrainedToSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)];
-            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.3;
+            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)
+                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0]}
+                                          context:nil];
+            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.8*PADDING_IPHONE, CGFLOAT_MAX)
+                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                             attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:12]}
+                                                context:nil];
+            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPHONE * 0.3;
         }
     } else {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:16.0]
-                        constrainedToSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)];
-            subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:14.0]
-                              constrainedToSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)];
-            retVal = textSize.height + subTextSize.height + PADDING_IPAD * 0.25;
+            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)
+                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0]}
+                                          context:nil];
+            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)
+                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                             attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0]}
+                                                context:nil];
+            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPAD * 0.25;
         } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            if (frameWidth > 500) {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0]
-                            constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0]
-                                  constrainedToSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)];
-            } else {
-                textSize = [text sizeWithFont:[UIFont boldSystemFontOfSize:13.0]
-                            constrainedToSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)];
-                subTextSize = [subText sizeWithFont:[UIFont systemFontOfSize:12.0]
-                                  constrainedToSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)];
-            }
-            retVal = textSize.height + subTextSize.height + PADDING_IPHONE * 0.4;
+            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)
+                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0]}
+                                          context:nil];
+            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)
+                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                             attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0]}
+                                                context:nil];
+            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPHONE * 0.4;
         }
     }
     return retVal;
@@ -2040,19 +2026,6 @@ static BOOL mShowReport = false;
                                       options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
                                    attributes:attributesDictionary
                                       context:nil];
-    
-    /* SLOWER implementation
-    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: font}];
-
-    CGRect frame = [attributedText boundingRectWithSize:size
-                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                      context:nil];
-    */
-    /*
-    textSize = [text sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13]}];
-    subTextSize = [subText sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:12]}];
-    */
-    
     return frame.size;
 }
 

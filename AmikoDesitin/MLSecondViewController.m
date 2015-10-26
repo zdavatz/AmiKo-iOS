@@ -225,11 +225,7 @@
             
             self.navigationItem.titleView = searchBarView;
             //
-            if (self.view.bounds.size.height<500)
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone;
-            else {
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
-            }
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             // Hides status bar
             if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
@@ -250,8 +246,8 @@
             
             self.navigationItem.titleView = searchBarView;
             //
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-            self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
         }
         if ([MLConstants iosVersion]>=7.0f) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -422,13 +418,9 @@
             [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
-            //
-            if (self.view.bounds.size.height<500)
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone;
-            else {
-                self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPhone_Retina;
-                self.revealViewController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPhone;
-            }
+            //            
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             // Hides status bar
             if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
@@ -450,7 +442,7 @@
             
             self.navigationItem.titleView = searchBarView;
             //
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             // Shows status bar
             if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];

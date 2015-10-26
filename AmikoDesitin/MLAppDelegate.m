@@ -53,6 +53,8 @@ void onUncaughtException(NSException *exception)
     NSLog(@"uncaught exception: %@", exception.description);
 }
 
+/** Utility functions
+ */
 CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 {
     CGSize result = s.bounds.size;
@@ -104,7 +106,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     return handled;
 }
 
-/** Override delegate method
+/** Override delegate method: quick actions
  */
 - (void) application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
@@ -113,6 +115,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     completionHandler(handledShortcutItem);
 }
 
+
+/** Override method: app entry point
+ */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Init main window
@@ -121,10 +126,12 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     // Print out some useful info
     CGFloat screenScale = [[UIScreen mainScreen] scale];
+    CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
+#ifdef DEBUG
     NSLog(@"points w = %f, points h = %f, scale = %f", [[UIScreen mainScreen] applicationFrame].size.width,
           [[UIScreen mainScreen] applicationFrame].size.height, screenScale);
-    CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height);
+#endif
     
     // Init all view controllers (main and secondary)
     mainViewController = [[MLViewController alloc] init];
@@ -133,12 +140,14 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
     // Check if app was launched by quick action
-    UIApplicationShortcutItem *shortcutItem = [launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
-    if (shortcutItem != nil) {
-        [self handleShortcutItem:shortcutItem];
-        // Method returns false if application was launched from shortcut
-        // and prevents performActionForShortcutItem to be called...
-        launchedFromShortcut = YES;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
+        UIApplicationShortcutItem *shortcutItem = [launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
+        if (shortcutItem != nil) {
+            [self handleShortcutItem:shortcutItem];
+            // Method returns false if application was launched from shortcut
+            // and prevents performActionForShortcutItem to be called...
+            launchedFromShortcut = YES;
+        }
     }
     
     // Init swipe (reveal) view controller
