@@ -107,25 +107,25 @@
 
 #pragma mark IBAction methods
 
-- (IBAction) moveToNextHighlight:(id)sender
+- (IBAction) moveToPrevHighlight:(id)sender
 {
     if (mTotalHighlights>1) {
         mCurrentHightlight -= 1;
         if (mCurrentHightlight<0)
             mCurrentHightlight = mTotalHighlights-1;
         [self.webView nextHighlight:mCurrentHightlight];
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mTotalHighlights-mCurrentHightlight, mTotalHighlights]];
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
     }
 }
 
-- (IBAction) moveToPrevHighlight:(id)sender
+- (IBAction) moveToNextHighlight:(id)sender
 {
     if (mTotalHighlights>1) {
         mCurrentHightlight += 1;
         if (mCurrentHightlight>=mTotalHighlights)
             mCurrentHightlight = 0;
         [self.webView nextHighlight:mCurrentHightlight];
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mTotalHighlights-mCurrentHightlight, mTotalHighlights]];
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
     }
 }
 
@@ -219,7 +219,7 @@
             [searchBarView addSubview:searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:260.0 andSize:32.0];
+            self.findCounter = [self findCounterAtPos:250.0 andSize:32.0];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
             
@@ -240,7 +240,7 @@
             [searchBarView addSubview:searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:150.0 andSize:44.0];
+            self.findCounter = [self findCounterAtPos:200.0 andSize:44.0];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
             
@@ -412,7 +412,7 @@
             [searchBarView addSubview:self.searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:260.0 andSize:32.0];
+            self.findCounter = [self findCounterAtPos:250.0 andSize:32.0];
             if (mTotalHighlights>0)
                 [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
@@ -435,7 +435,7 @@
             [searchBarView addSubview:self.searchField];
             
             // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:150.0 andSize:44.0];
+            self.findCounter = [self findCounterAtPos:200.0 andSize:44.0];
             if (mTotalHighlights>0)
                 [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
              [searchBarView addSubview:self.findCounter];

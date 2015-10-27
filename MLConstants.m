@@ -96,6 +96,16 @@ static int HeightInPoints;
     return [[UIDevice currentDevice].systemVersion floatValue];
 }
 
++ (int) displayWidthInPoints
+{
+    return WidthInPoints;
+}
+
++ (int) displayHeightInPoints
+{
+    return HeightInPoints;
+}
+
 + (int) rearViewRevealWidthPortrait
 {
     return (int)(WidthInPoints - RearViewRevealOverdraw_Portrait_iPhone);

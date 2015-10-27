@@ -43,7 +43,7 @@
 MLViewController *mainViewController;
 
 enum {
-    eAips=0, eFavorites=1, eInteractions=2
+    eAips=0, eFavorites=1, eInteractions=2, eDesitin=3
 };
 int launchState = eAips;
 bool launchedFromShortcut = NO;
@@ -98,7 +98,15 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         launchState = eInteractions;
         handled = YES;
     }
-
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.desitin"]
+        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.desitin"]) {
+#ifdef DEBUG
+        NSLog(@"shortcut tapped: desitin");
+#endif
+        launchState = eDesitin;
+        handled = YES;
+    }
+    
     if (mainViewController!=nil && handled==YES) {
         [mainViewController setLaunchState:launchState];
     }
