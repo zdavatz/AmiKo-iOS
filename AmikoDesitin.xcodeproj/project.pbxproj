@@ -61,6 +61,11 @@
 		D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8817B7D8580002E2CF /* Default-Landscape~ipad.png */; };
 		D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = D573F4511A990E8600C4F589 /* MLAlertView.m */; };
 		D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = D573F4511A990E8600C4F589 /* MLAlertView.m */; };
+		D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */ = {isa = PBXBuildFile; fileRef = D5990A6C1BDEC2A10040C4C2 /* desitin_quick.png */; };
+		D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5990A6D1BDEC2A10040C4C2 /* desitin_quick@2x.png */; };
+		D5990A721BDF42F40040C4C2 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
+		D5990A731BDF44C50040C4C2 /* desitin_quick.png in Resources */ = {isa = PBXBuildFile; fileRef = D5990A6C1BDEC2A10040C4C2 /* desitin_quick.png */; };
+		D5990A741BDF44C80040C4C2 /* desitin_quick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5990A6D1BDEC2A10040C4C2 /* desitin_quick@2x.png */; };
 		D59E895618B7C0C100185094 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D59E895518B7C0C100185094 /* MessageUI.framework */; };
 		D59E895718B7C0D600185094 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D59E895518B7C0C100185094 /* MessageUI.framework */; };
 		D59E895818B7C0DB00185094 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
@@ -285,6 +290,8 @@
 		D565DA8F17B7EA9C0002E2CF /* desitin_launch_1536x2008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_1536x2008.png; sourceTree = "<group>"; };
 		D573F4511A990E8600C4F589 /* MLAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAlertView.m; sourceTree = "<group>"; };
 		D573F4541A990E9900C4F589 /* MLAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAlertView.h; sourceTree = "<group>"; };
+		D5990A6C1BDEC2A10040C4C2 /* desitin_quick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_quick.png; sourceTree = "<group>"; };
+		D5990A6D1BDEC2A10040C4C2 /* desitin_quick@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "desitin_quick@2x.png"; sourceTree = "<group>"; };
 		D59E895518B7C0C100185094 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_de.db; sourceTree = "<group>"; };
 		D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = amiko_db_full_idx_fr.db; sourceTree = "<group>"; };
@@ -637,6 +644,8 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5990A6C1BDEC2A10040C4C2 /* desitin_quick.png */,
+				D5990A6D1BDEC2A10040C4C2 /* desitin_quick@2x.png */,
 				D5A1755C1A9BC27400E69385 /* favorites-selected.png */,
 				D5A1755D1A9BC27400E69385 /* favorites-selected@2x.png */,
 				D5A1755E1A9BC27400E69385 /* favorites.png */,
@@ -876,6 +885,8 @@
 				D533DAA617B434B600199C38 /* Default.png in Resources */,
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
+				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
+				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
 				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
@@ -912,6 +923,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5990A721BDF42F40040C4C2 /* MLLaunchScreen.storyboard in Resources */,
 				D5A175671A9BC27400E69385 /* favorites@2x.png in Resources */,
 				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */,
@@ -964,6 +976,8 @@
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
 				D5A2251F19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
+				D5990A741BDF44C80040C4C2 /* desitin_quick@2x.png in Resources */,
+				D5990A731BDF44C50040C4C2 /* desitin_quick.png in Resources */,
 				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
@@ -1201,6 +1215,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				WRAPPER_EXTENSION = app;
@@ -1217,6 +1232,7 @@
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = COMED_DESITIN;
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				WRAPPER_EXTENSION = app;

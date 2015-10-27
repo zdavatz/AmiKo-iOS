@@ -51,6 +51,14 @@
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
+			<string>desitin_quick</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Desitin Produkte</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.ywesee.amiko.ios.desitin</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
 			<string>interactions</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Interactions</string>

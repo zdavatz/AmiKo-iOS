@@ -21,7 +21,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>2.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -45,8 +45,16 @@
 	</dict>
 	<key>UIApplicationShortcutItems</key>
 	<array>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
+        <dict>
+            <key>UIApplicationShortcutItemIconFile</key>
+            <string>desitin_quick</string>
+            <key>UIApplicationShortcutItemTitle</key>
+            <string>Produits Desitin</string>
+            <key>UIApplicationShortcutItemType</key>
+            <string>com.ywesee.comed.ios.desitin</string>
+        </dict>
+        <dict>
+            <key>UIApplicationShortcutItemIconFile</key>
 			<string>interactions</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Interactions</string>
@@ -72,6 +80,8 @@
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<false/>
+	<key>UILaunchStoryboardName</key>
+	<string>MLLaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

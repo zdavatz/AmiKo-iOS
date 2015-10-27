@@ -96,7 +96,7 @@ static BOOL mShowReport = false;
 {
     // Enumerations
     enum {
-        eAips=0, eFavorites=1, eInteractions=2
+        eAips=0, eFavorites=1, eInteractions=2, eDesitin=3
     };
 
     // Instance variable declarations go here
@@ -343,7 +343,9 @@ static BOOL mShowReport = false;
 
 - (void) setLaunchState:(int)state
 {
-    if (state==eAips || state==eFavorites || state==eInteractions) {
+    bool keyboard_visible = true;
+    
+    if (state==eAips || state==eFavorites || state==eInteractions || state==eDesitin) {
         if (state==eAips) {
             mUsedDatabase = kAips;
             mSearchInteractions = false;
@@ -370,12 +372,25 @@ static BOOL mShowReport = false;
             [self resetBarButtonItems];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
+        } else if (state==eDesitin) {
+            mUsedDatabase = kAips;
+            mCurrentSearchState = kAuthor;
+            mSearchInteractions = false;
+            [self executeSearch:@"desitin"];
+            //
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
+            keyboard_visible = false;
         }
         // Go back to main view
         mainRevealController = self.revealViewController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
         // Show keyboard
-        [searchField becomeFirstResponder];
+        if (keyboard_visible)
+            [searchField becomeFirstResponder];
+        else {
+            [searchField resignFirstResponder];
+            [searchField setText:@"desitin"];
+        }
     }
 }
 
@@ -1033,6 +1048,8 @@ static BOOL mShowReport = false;
 
 - (void) myShowMenuMethod:(id)sender
 {
+    // Remove keyboard
+    [searchField resignFirstResponder];
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad) {
         mainRevealController = self.revealViewController;
