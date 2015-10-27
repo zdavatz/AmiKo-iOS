@@ -692,7 +692,10 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 #pragma mark - Provided action methods
 
 - (void)revealToggle:(id)sender
-{    
+{
+    // Removes keyboard
+    // See: http://stackoverflow.com/questions/741185/easy-way-to-dismiss-keyboard
+    [self.view endEditing:true];
     [self revealToggleAnimated:YES];
 }
 

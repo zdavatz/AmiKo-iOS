@@ -314,6 +314,7 @@
                                                                          style:UIBarButtonItemStyleBordered
                                                                         target:revealController
                                                                         action:@selector(revealToggle:)];
+    
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
     if( mNumRevealButtons==2 ) {
