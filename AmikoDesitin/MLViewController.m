@@ -29,6 +29,7 @@
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 
+#import "MLAppInfo.h"
 #import "MLAlertView.h"
 #import "MLDBAdapter.h"
 #import "MLMedication.h"
@@ -247,6 +248,9 @@ static BOOL mShowReport = false;
     
     // Initialize constants
     [MLConstants start];
+    
+    // Retreive app related information
+    [MLAppInfo checkVersion];
     
     medi = [NSMutableArray array];
     
