@@ -21,9 +21,11 @@
  
  ------------------------------------------------------------------------ */
 
-#import "MLAppInfo.h"
+#import "MLUtility.h"
 
-@implementation MLAppInfo
+#import "MLConstants.h"
+
+@implementation MLUtility
 
 + (int) checkVersion
 {
@@ -44,6 +46,30 @@
 #endif
     
     return 0;
+}
+
++ (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date
+{
+    // Result in seconds
+    NSNumber* timeInterval = [NSNumber numberWithDouble:[date timeIntervalSince1970]];
+    return timeInterval;
+}
+
++ (double) timeIntervalSinceLastDBSync
+{
+    double timeInterval = 0.0;
+    
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"germanDBLastUpdate"];
+        if (lastUpdated!=nil)
+            timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
+        if (lastUpdated!=nil)
+            timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
+    }
+    
+    return timeInterval;
 }
 
 @end

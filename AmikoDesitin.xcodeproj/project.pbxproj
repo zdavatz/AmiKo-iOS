@@ -180,7 +180,8 @@
 		D5B75BEC17FF53F5008ECDBB /* comed_des_launch_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */; };
 		D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
 		D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
-		D5EA5C521BE09B0B00D753C5 /* MLAppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EA5C511BE09B0B00D753C5 /* MLAppInfo.m */; };
+		D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EA5C511BE09B0B00D753C5 /* MLUtility.m */; };
+		D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EA5C511BE09B0B00D753C5 /* MLUtility.m */; };
 		D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
 		D5F6BB5017E8C87500DCBD16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24617B1692F00EAB24B /* main.m */; };
 		D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */; };
@@ -393,8 +394,8 @@
 		D5A6F2B217B171C900EAB24B /* MLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLViewController.xib; sourceTree = "<group>"; };
 		D5B75BEB17FF53F5008ECDBB /* comed_des_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comed_des_launch_2048x1536.png; sourceTree = "<group>"; };
 		D5E9CE2C1B8BA1E1007D0675 /* desitin_launch_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_2048x1536.png; sourceTree = "<group>"; };
-		D5EA5C501BE09B0B00D753C5 /* MLAppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAppInfo.h; sourceTree = "<group>"; };
-		D5EA5C511BE09B0B00D753C5 /* MLAppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAppInfo.m; sourceTree = "<group>"; };
+		D5EA5C501BE09B0B00D753C5 /* MLUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLUtility.h; sourceTree = "<group>"; };
+		D5EA5C511BE09B0B00D753C5 /* MLUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLUtility.m; sourceTree = "<group>"; };
 		D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_fr.html; sourceTree = "<group>"; };
 		D5F6BB9417E8C87500DCBD16 /* CoMedDesitin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoMedDesitin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CoMedDesitin-Info.plist"; sourceTree = "<group>"; };
@@ -590,8 +591,8 @@
 		D5A6F26117B169B900EAB24B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				D5EA5C501BE09B0B00D753C5 /* MLAppInfo.h */,
-				D5EA5C511BE09B0B00D753C5 /* MLAppInfo.m */,
+				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
+				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
 				D5A6F29B17B16C4B00EAB24B /* MLSimpleTableCell.h */,
@@ -1047,7 +1048,7 @@
 				D5A31F5C18B5207200F56BC5 /* zip.c in Sources */,
 				D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */,
 				D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
-				D5EA5C521BE09B0B00D753C5 /* MLAppInfo.m in Sources */,
+				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1081,6 +1082,7 @@
 				D5A31F5D18B5207200F56BC5 /* zip.c in Sources */,
 				D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */,
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
+				D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */,
 				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -40,6 +40,8 @@ NSString* const APP_NAME = @"iAmiKo";
 NSString* const APP_ID = @"687642725";
 #endif
 
+NSString* const PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
+
 /** iPad
     Non-Retina : 768 x 1024
     Retina     : 1536 x 2048

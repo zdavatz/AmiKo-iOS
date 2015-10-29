@@ -24,12 +24,13 @@
 #import "MLViewController.h"
 
 #import "MLConstants.h"
+#import "MLUtility.h"
 
 #import "MLSecondViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 
-#import "MLAppInfo.h"
+#import "MLUtility.h"
 #import "MLAlertView.h"
 #import "MLDBAdapter.h"
 #import "MLMedication.h"
@@ -250,7 +251,7 @@ static BOOL mShowReport = false;
     [MLConstants start];
     
     // Retreive app related information
-    [MLAppInfo checkVersion];
+    [MLUtility checkVersion];
     
     medi = [NSMutableArray array];
     
@@ -326,6 +327,12 @@ static BOOL mShowReport = false;
                                                  name:@"MLStatusCode404"
                                                object:nil];
 
+    // Regisger observer tto check if we are back from the background
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dbSyncNotification:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    
     // Set default database
     mUsedDatabase = kAips;
     // Set current search state
@@ -461,11 +468,21 @@ static BOOL mShowReport = false;
                                                                 message:[NSString stringWithFormat:@"Die Datenbank enthält %ld Fachinfos \nund %d Interaktionen.", numSearchRes, numInteractions]
                                                                  button:@"OK"];
                 [alert show];
+                // Store update date, this variable is set very first time app is set up
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
+                // Make sure it's saved to file immediately
+                [defaults synchronize];
             } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
                 MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Banque des donnees AIPS mises à jour!"
                                                                 message:[NSString stringWithFormat:@"La banque des données contien %ld notices infopro \net %d interactions.", numSearchRes, numInteractions]
                                                                  button:@"OK"];
                 [alert show];
+                // Store update date, this variable is set very first time app is set up
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
+                // Make sure it's saved to file immediately
+                [defaults synchronize];
             }
         }
     } else if ([[notification name] isEqualToString:@"MLStatusCode404"]) {
@@ -474,6 +491,42 @@ static BOOL mShowReport = false;
                                                         message:@"Server unreachable..."
                                                          button:@"OK"];
         [alert show];
+    }
+}
+
+- (void) dbSyncNotification:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:UIApplicationWillEnterForegroundNotification]) {
+        [self checkLastDBSync];
+    }
+}
+
+- (void) checkLastDBSync
+{
+    // Nag user all 30 days! = 60 x 60 x 24 x 30 seconds
+    if ([MLUtility timeIntervalSinceLastDBSync]>60*60*24*30) {
+        // Show alert with OK button
+        if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+            MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Datenbank Aktualisierung"
+                                                            message:@"Ihre Datenbank ist älter als 30 Tage. Wir empfehlen eine Aktualisierung auf die tagesaktuellen Daten. Das Update kann jederzeit auch manuell durch das Klicken auf die Pille oben links ausgeführt werden."
+                                                             button:@"OK"];
+            [alert show];
+            // Store current date, and bother user again in a month
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
+            // Make sure it's saved to file immediately
+            [defaults synchronize];
+        } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+            MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Mise à jour de la banque des données"
+                                                            message:@"Votre banque des données est âgé de plus de 30 jours. Nous vous recommandons une mise à jour. La mise à jour peut également être effectuée manuellement à tout moment en cliquant sur la pilule en haut à gauche."
+                                                             button:@"OK"];
+            [alert show];
+            // Store current date, and bother user again in a month
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
+            // Make sure it's saved to file immediately
+            [defaults synchronize];
+        }
     }
 }
 
@@ -1048,6 +1101,8 @@ static BOOL mShowReport = false;
     [self loadData];
     
     favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favoriteData.favMedsSet];
+    
+    [self checkLastDBSync];
 }
 
 - (void) myShowMenuMethod:(id)sender

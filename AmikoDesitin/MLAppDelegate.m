@@ -224,6 +224,31 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }
     
+    // Register the applications default
+    NSMutableDictionary *appDefaults = [NSMutableDictionary dictionary];
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+        [appDefaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+        [appDefaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    }
+    
+    // Initialize user defaults first time app is run
+    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"germanDBLastUpdate"];
+        if (lastUpdated==nil) {
+            [lastUpdated setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
+            NSLog(@"Initializing defaults...");
+        }
+    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
+        if (lastUpdated==nil) {
+            [lastUpdated setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
+            NSLog(@"Initializing defaults...");
+        }
+    }
+    
     [self.window makeKeyAndVisible];
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);

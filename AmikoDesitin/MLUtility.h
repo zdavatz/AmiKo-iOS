@@ -23,8 +23,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MLAppInfo : NSObject
+@interface MLUtility : NSObject
 
 + (int) checkVersion;
++ (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date;
++ (double) timeIntervalSinceLastDBSync;
 
 @end

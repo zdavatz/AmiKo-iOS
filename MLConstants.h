@@ -51,6 +51,8 @@ extern NSString* const APP_NAME;
 extern NSString* const APP_ID;
 #endif
 
+extern NSString* const PILLBOX_ODDB_ORG;
+
 extern const int RearViewFullWidth_Portrait_iPad;
 extern const int RearViewFullWidth_Landscape_iPad;
 

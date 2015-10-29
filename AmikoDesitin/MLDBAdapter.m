@@ -22,6 +22,7 @@
  ------------------------------------------------------------------------ */
 
 #import "MLDBAdapter.h"
+
 #import "MLSQLiteDatabase.h"
 #import "MLConstants.h"
 
@@ -166,7 +167,6 @@ static NSString *FULL_TABLE = nil;
     }
     return @"";
 }
-
 
 - (void) openDatabase
 {

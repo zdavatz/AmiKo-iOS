@@ -24,6 +24,7 @@
 
 #import "MLCustomURLConnection.h"
 #import "MLProgressViewController.h"
+#import "MLConstants.h"
 
 @implementation MLCustomURLConnection
 {
@@ -40,8 +41,6 @@
     NSString *mFileName;
 }
 
-static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
-
 - (void) downloadFileWithName:(NSString *)fileName andModal:(bool)modal
 {
 #ifdef DEBUG
@@ -56,7 +55,7 @@ static NSString *PILLBOX_ODDB_ORG = @"http://pillbox.oddb.org/";
             myProgressView = [[MLProgressViewController alloc] init];
         [myProgressView start];
     }
-    
+
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async( queue, ^(void){
         NSURL *url = [NSURL URLWithString:[PILLBOX_ODDB_ORG stringByAppendingString:fileName]];
