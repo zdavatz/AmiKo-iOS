@@ -1407,9 +1407,10 @@ static BOOL mShowReport = false;
     [searchBar resignFirstResponder];
 }
 
-- (void) searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+- (void) searchDisplayControllerWillBeginSearch:(UISearchController *)controller
 {
-    self.searchDisplayController.searchBar.showsCancelButton = YES;
+    controller.searchBar.showsCancelButton = YES;
+    // self.searchDisplayController.searchBar.showsCancelButton = YES;
 }
 
 - (void) executeSearch:(NSString *)searchText

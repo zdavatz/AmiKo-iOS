@@ -311,7 +311,7 @@
     }
     
     UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                         style:UIBarButtonItemStyleBordered
+                                                                         style:UIBarButtonItemStylePlain
                                                                         target:revealController
                                                                         action:@selector(revealToggle:)];
     
@@ -319,7 +319,7 @@
     
     if( mNumRevealButtons==2 ) {
         UIBarButtonItem *rightRevealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                                  style:UIBarButtonItemStyleBordered
+                                                                                  style:UIBarButtonItemStylePlain
                                                                                  target:revealController
                                                                                  action:@selector(rightRevealToggle:)];
         self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
