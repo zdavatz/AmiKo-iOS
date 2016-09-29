@@ -453,6 +453,7 @@
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
+				D53F93801D9D150000086E91 /* desitin_icon_32x32.png */,
 				D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */,
 				D533DA9E17B2D07600199C38 /* desitin_icon_114x114.png */,
 				D533DA9C17B2D05F00199C38 /* desitin_icon_57x57.png */,
@@ -507,7 +508,6 @@
 		D5A6F22E17B1692F00EAB24B = {
 			isa = PBXGroup;
 			children = (
-				D53F93801D9D150000086E91 /* desitin_icon_32x32.png */,
 				D551D53617F16DE2000EC52A /* Images.xcassets */,
 				D551D54117F22ACC000EC52A /* AppIcons */,
 				D5F6BBAB17EB8BC200DCBD16 /* LaunchImages */,
