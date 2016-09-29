@@ -265,6 +265,7 @@
 		D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_144x144.png; sourceTree = "<group>"; };
 		D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_de.html; sourceTree = "<group>"; };
 		D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_default.png; sourceTree = "<group>"; };
+		D53F93801D9D150000086E91 /* desitin_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = desitin_icon_32x32.png; path = AmikoDesitin/desitin_icon_32x32.png; sourceTree = "<group>"; };
 		D551D53617F16DE2000EC52A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AmiKoDesitin/Images.xcassets; sourceTree = "<group>"; };
 		D551D53817F22A58000EC52A /* desitin_icon_76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_76x76.png; sourceTree = "<group>"; };
 		D551D53917F22A58000EC52A /* desitin_icon_152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_152x152.png; sourceTree = "<group>"; };
@@ -506,6 +507,7 @@
 		D5A6F22E17B1692F00EAB24B = {
 			isa = PBXGroup;
 			children = (
+				D53F93801D9D150000086E91 /* desitin_icon_32x32.png */,
 				D551D53617F16DE2000EC52A /* Images.xcassets */,
 				D551D54117F22ACC000EC52A /* AppIcons */,
 				D5F6BBAB17EB8BC200DCBD16 /* LaunchImages */,
@@ -985,7 +987,6 @@
 				D5990A741BDF44C80040C4C2 /* desitin_quick@2x.png in Resources */,
 				D5990A731BDF44C50040C4C2 /* desitin_quick.png in Resources */,
 				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
-				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
 				D5A1754F1A9A737F00E69385 /* interactions@2x.png in Resources */,
@@ -1001,6 +1002,7 @@
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
 				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
+				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D5A175551A9A741B00E69385 /* maindb@2x.png in Resources */,
 				D5FFE1BA18B1021B002D6159 /* README.md in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
