@@ -569,7 +569,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 }
 
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
@@ -1060,11 +1060,11 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 // Primitive method for view controller deployment and animated layout to the given position.
 - (void)_setFrontViewPosition:(FrontViewPosition)newPosition withDuration:(NSTimeInterval)duration
 {
-    void (^rearDeploymentCompletion)() = [self _rearViewDeploymentForNewFrontViewPosition:newPosition];
-    void (^rightDeploymentCompletion)() = [self _rightViewDeploymentForNewFrontViewPosition:newPosition];
-    void (^frontDeploymentCompletion)() = [self _frontViewDeploymentForNewFrontViewPosition:newPosition];
+    void (^rearDeploymentCompletion)(void) = [self _rearViewDeploymentForNewFrontViewPosition:newPosition];
+    void (^rightDeploymentCompletion)(void) = [self _rightViewDeploymentForNewFrontViewPosition:newPosition];
+    void (^frontDeploymentCompletion)(void) = [self _frontViewDeploymentForNewFrontViewPosition:newPosition];
     
-    void (^animations)() = ^()
+    void (^animations)(void) = ^()
     {
         // We call the layoutSubviews method on the contentView view and send a delegate, which will
         // occur inside of an animation block if any animated transition is being performed
@@ -1166,10 +1166,10 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
     
     _frontViewPosition = newPosition;
     
-    void (^deploymentCompletion)() =
+    void (^deploymentCompletion)(void) =
         [self _deploymentForViewController:_frontViewController inView:_contentView.frontView appear:appear disappear:disappear];
     
-    void (^completion)() = ^()
+    void (^completion)(void) = ^()
     {
         deploymentCompletion();
         if ( positionIsChanging )
@@ -1291,11 +1291,11 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
     
     if ( toController ) [self addChildViewController:toController];
     
-    void (^deployCompletion)() = [self _deployForViewController:toController inView:view];
+    void (^deployCompletion)(void) = [self _deployForViewController:toController inView:view];
     
     [fromController willMoveToParentViewController:nil];
     
-    void (^undeployCompletion)() = [self _undeployForViewController:fromController];
+    void (^undeployCompletion)(void) = [self _undeployForViewController:fromController];
     
     void (^completionBlock)(void) = ^(void)
     {
