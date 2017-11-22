@@ -980,8 +980,12 @@ static BOOL mShowReport = false;
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0.0f, 0.0f, 32.0f, 32.0f);
     [logoButton addTarget:self action:@selector(myShowMenuMethod:) forControlEvents:UIControlEventTouchUpInside];
+    if (@available(iOS 9, *)) {
+        [logoButton.widthAnchor constraintEqualToConstant:32.0f].active = YES;
+        [logoButton.heightAnchor constraintEqualToConstant:32.0f].active = YES;
+    }
+    
     UIBarButtonItem *appIconItem = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
-
     self.navigationItem.leftBarButtonItem = appIconItem;
     
     // Initialize menu view controllers
