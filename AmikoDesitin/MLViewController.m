@@ -941,6 +941,9 @@ static BOOL mShowReport = false;
         }
     }
     
+    [super viewDidLayoutSubviews];
+    [self.myTabBar invalidateIntrinsicContentSize];
+    
     [self setBarButtonItemsWith:mCurrentSearchState];
 }
 
