@@ -983,7 +983,13 @@ static BOOL mShowReport = false;
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0.0f, 0.0f, 32.0f, 32.0f);
     [logoButton addTarget:self action:@selector(myShowMenuMethod:) forControlEvents:UIControlEventTouchUpInside];
-    if (@available(iOS 9, *)) {
+
+#if (__clang_major__ == 8) && (__clang_minor__ == 0)    // Xcode 8
+    if ([MLConstants iosVersion] >= 9.0f)
+#else
+    if (@available(iOS 9, *))  // this syntax requires Xcode 9
+#endif
+    {
         [logoButton.widthAnchor constraintEqualToConstant:32.0f].active = YES;
         [logoButton.heightAnchor constraintEqualToConstant:32.0f].active = YES;
     }

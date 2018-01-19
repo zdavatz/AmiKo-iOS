@@ -21,7 +21,8 @@
  
  ------------------------------------------------------------------------ */
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+
 
 /**
  UITableViewDelegate -> deals with the appearance of UITableView, manages height of table row, configure section headings and footers, ...
