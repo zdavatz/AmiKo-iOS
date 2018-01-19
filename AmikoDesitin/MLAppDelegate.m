@@ -42,9 +42,6 @@
 
 MLViewController *mainViewController;
 
-enum {
-    eAips=0, eFavorites=1, eInteractions=2, eDesitin=3
-};
 int launchState = eAips;
 bool launchedFromShortcut = NO;
 

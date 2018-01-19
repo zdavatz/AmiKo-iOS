@@ -88,6 +88,7 @@
                         <tabBarItem title="AIPS" image="maindb.png" id="72"/>
                         <tabBarItem tag="1" title="Favorites" image="favorites.png" id="71"/>
                         <tabBarItem tag="2" title="Interactions" image="interactions.png" id="IFm-jM-mZk"/>
+                        <tabBarItem tag="3" title="Prescriptions" image="prescription.png" id="3ok-wB-fCZ" userLabel="Prescriptions"/>
                     </items>
                     <connections>
                         <outlet property="delegate" destination="-1" id="81"/>
@@ -116,6 +117,7 @@
         <image name="favorites.png" width="32" height="32"/>
         <image name="interactions.png" width="32" height="32"/>
         <image name="maindb.png" width="32" height="32"/>
+        <image name="prescription.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

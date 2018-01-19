@@ -76,6 +76,7 @@
                         <tabBarItem title="AIPS" image="maindb.png" id="467"/>
                         <tabBarItem tag="1" title="Favorites" image="favorites.png" id="466"/>
                         <tabBarItem tag="2" title="Interactions" image="interactions.png" id="JxN-5u-on8"/>
+                        <tabBarItem tag="3" title="Prescriptions" image="prescription.png" id="Yye-ET-TME" userLabel="Presc"/>
                     </items>
                     <color key="tintColor" red="0.94901960780000005" green="0.77465540129999999" blue="0.2309191005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="barTintColor" red="0.95714530109489049" green="0.95777258211678828" blue="0.95680314781021902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -104,6 +105,7 @@
         <image name="favorites.png" width="32" height="32"/>
         <image name="interactions.png" width="32" height="32"/>
         <image name="maindb.png" width="32" height="32"/>
+        <image name="prescription.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

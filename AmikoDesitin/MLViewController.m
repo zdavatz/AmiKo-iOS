@@ -96,11 +96,6 @@ static BOOL mShowReport = false;
 
 @implementation MLViewController
 {
-    // Enumerations
-    enum {
-        eAips=0, eFavorites=1, eInteractions=2, eDesitin=3
-    };
-
     // Instance variable declarations go here
     NSMutableArray *medi;
     
@@ -354,10 +349,15 @@ static BOOL mShowReport = false;
 
 - (void) setLaunchState:(int)state
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     bool keyboard_visible = true;
+    bool goBackToMainView = false;
     
-    if (state==eAips || state==eFavorites || state==eInteractions || state==eDesitin) {
-        if (state==eAips) {
+    switch (state) {
+        case eAips:
+            goBackToMainView = true;
             mUsedDatabase = kAips;
             mSearchInteractions = false;
             mCurrentIndexPath = nil;
@@ -367,7 +367,10 @@ static BOOL mShowReport = false;
             [self clearDataInTableView];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
-        } else if (state==eFavorites) {
+            break;
+            
+        case eFavorites:
+            goBackToMainView = true;
             mUsedDatabase = kFavorites;
             mCurrentSearchState = kTitle;
             mSearchInteractions = false;
@@ -375,7 +378,10 @@ static BOOL mShowReport = false;
             [self switchTabBarItem:[myTabBar.items objectAtIndex:1]];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
-        } else if (state==eInteractions) {
+            break;
+            
+        case eInteractions:
+            goBackToMainView = true;
             mUsedDatabase = kAips;
             mCurrentSearchState = kTitle;
             mSearchInteractions = true;
@@ -383,7 +389,10 @@ static BOOL mShowReport = false;
             [self resetBarButtonItems];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
-        } else if (state==eDesitin) {
+            break;
+            
+        case eDesitin:
+            goBackToMainView = true;
             mUsedDatabase = kAips;
             mCurrentSearchState = kAuthor;
             mSearchInteractions = false;
@@ -391,10 +400,24 @@ static BOOL mShowReport = false;
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
             keyboard_visible = false;
-        }
-        // Go back to main view
+            break;
+            
+        case ePrescription:
+            goBackToMainView = true;
+            NSLog(@"TODO: %s, line %i", __FUNCTION__, __LINE__);
+            //
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
+            break;
+            
+        default:
+            NSLog(@"Unknown: %s, line %i", __FUNCTION__, __LINE__);
+            break;
+    }
+
+    if (goBackToMainView) {
         mainRevealController = self.revealViewController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
+
         // Show keyboard
         if (keyboard_visible)
             [searchField becomeFirstResponder];
@@ -592,6 +615,7 @@ static BOOL mShowReport = false;
     for (UIBarButtonItem *b in [myToolBar items]) {
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
     }
+
     if ([MLConstants iosVersion]>=7.0f)
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
     else
@@ -1032,6 +1056,10 @@ static BOOL mShowReport = false;
         UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:2];
         selectedImage = [[UIImage imageNamed:@"interactions-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem2.selectedImage = selectedImage;
+        
+        UITabBarItem *tabBarItem3 = [myTabBar.items objectAtIndex:3];
+        selectedImage = [[UIImage imageNamed:@"prescription-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        tabBarItem3.selectedImage = selectedImage;
     }
     
     // Add search bar as title view to navigation bar
