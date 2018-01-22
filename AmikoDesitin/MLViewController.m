@@ -27,6 +27,7 @@
 #import "MLUtility.h"
 
 #import "MLSecondViewController.h"
+#import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 
@@ -78,6 +79,8 @@ static CGFloat searchFieldWidth = 320.0f;
 static BOOL mSearchInteractions = false;
 static BOOL mShowReport = false;
 
+#pragma mark -
+
 @interface DataObject : NSObject
 
 @property NSString *title;
@@ -86,6 +89,8 @@ static BOOL mShowReport = false;
 
 @end
 
+#pragma mark -
+
 @implementation DataObject
 
 @synthesize title;
@@ -93,6 +98,8 @@ static BOOL mShowReport = false;
 @synthesize medId;
 
 @end
+
+#pragma mark -
 
 @implementation MLViewController
 {
@@ -118,6 +125,7 @@ static BOOL mShowReport = false;
     SWRevealViewController *mainRevealController;
     
     MLSecondViewController *secondViewController;
+    MLPrescriptionViewController *prescriptionViewController;
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
 
@@ -259,6 +267,8 @@ static BOOL mShowReport = false;
     
     secondViewController = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
     secondViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
+    
+    prescriptionViewController = nil;
     
     menuViewController = nil;
     menuViewNavigationController = nil;
@@ -1430,6 +1440,12 @@ static BOOL mShowReport = false;
             [self switchToDrugInteractionView];
             break;
         case 3:
+            NSLog(@"TabBar - Prescription");
+            // TODO
+            // Switch view
+            [self switchToPrescriptionView];
+            break;
+        case 4:
             NSLog(@"TabBar - Developer Info");
             // TODO
             break;
@@ -1818,6 +1834,12 @@ static BOOL mShowReport = false;
     [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
 }
 
+- (void) switchToPrescriptionView
+{
+    // if (mCurrentIndexPath!=nil)
+    [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
+}
+
 /**
  Add med in the buffer to the interaction basket
  */
@@ -1851,6 +1873,7 @@ static BOOL mShowReport = false;
         return 0;
 }
 
+#pragma mark -
 #pragma mark UITableView delegate methods
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1975,7 +1998,10 @@ static BOOL mShowReport = false;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{    
+{
+#ifdef DEBUG
+    NSLog(@"%@ %ld", NSStringFromSelector(_cmd), [indexPath row]);
+#endif
     mCurrentIndexPath = indexPath;
 
     long mId = -1;
@@ -1997,7 +2023,11 @@ static BOOL mShowReport = false;
                                                                     bundle:nil
                                                                      title:FACHINFO_STRING
                                                                   andParam:2];
-    
+
+    prescriptionViewController =
+        [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
+                                                       bundle:nil];
+
     if (mSearchInteractions==false) {
         // Load style sheet from file
         NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
@@ -2147,6 +2177,7 @@ static BOOL mShowReport = false;
     return frame.size;
 }
 
+#pragma mark -
 #pragma mark helper functions
 
 - (void) didReceiveMemoryWarning

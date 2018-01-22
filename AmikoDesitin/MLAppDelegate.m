@@ -27,6 +27,7 @@
 #import "SWRevealViewController.h"
 #import "MLViewController.h"
 #import "MLSecondViewController.h"
+#import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 
@@ -143,6 +144,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     UINavigationController *mainViewNavigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
     MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
     UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+
+    MLPrescriptionViewController *prescriptionViewController = [[MLPrescriptionViewController alloc] init];
 
     // Check if app was launched by quick action
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {

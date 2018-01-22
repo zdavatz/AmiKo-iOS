@@ -61,5 +61,7 @@ enum {
 - (IBAction) onToolBarButtonPressed: (id)sender;
 
 - (void) showReport:(id)sender;
+- (void) switchToDrugInteractionView;
+- (void) switchToPrescriptionView;
 
 @end
