@@ -54,7 +54,6 @@ enum {
 };
 
 static NSString *SEARCH_STRING = @"Suche";
-static NSString *FACHINFO_STRING = @"Fachinformation";
 static NSString *TREFFER_STRING = @"Treffer";
 
 static NSString *FULL_TOOLBAR_TITLE = @"Präparat";
@@ -275,7 +274,6 @@ static BOOL mShowReport = false;
     
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         SEARCH_STRING = @"Suche";
-        FACHINFO_STRING = @"Fachinformation";
         TREFFER_STRING = @"Treffer";
         //
         FULL_TOOLBAR_TITLE = @"Präparat";
@@ -293,7 +291,6 @@ static BOOL mShowReport = false;
         SHORT_TOOLBAR_THERAPY = @"Ther";
     } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         SEARCH_STRING = @"Recherche";
-        FACHINFO_STRING = @"Notice Infopro";
         TREFFER_STRING = @"Réponse(s)";
         //
         FULL_TOOLBAR_TITLE = @"Préparation";
@@ -1000,7 +997,7 @@ static BOOL mShowReport = false;
     
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.title = NSLocalizedString(APP_NAME, nil);
+    self.title = APP_NAME;
     
     // Sets color and font and whatever else of the navigation bar
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -2021,7 +2018,7 @@ static BOOL mShowReport = false;
     }
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                                     bundle:nil
-                                                                     title:FACHINFO_STRING
+                                                                     title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
                                                                   andParam:2];
 
     prescriptionViewController =

@@ -96,7 +96,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
 {
     [super viewDidLoad];
 
-    self.title = NSLocalizedString(@"Kapitel", nil);
+    self.title = NSLocalizedString(@"Chapter", nil);
     
     // Note: iOS7
     if (IOS_NEWER_OR_EQUAL_TO_7) {

@@ -1,2 +1,34 @@
 /* Localized versions of Info.plist keys */
 
+/* No comment provided by engineer. */
+"Prescription Info" = "Prescription Info";
+
+/* No comment provided by engineer. */
+"Search in report" = "Search in report";
+
+/* No comment provided by engineer. */
+"Chapter" = "Chapter";
+
+/* Button */
+"Feedback" = "Feedback";
+
+/* Button */
+"Rate" = "Rate";
+
+/* Button */
+"Report" = "Report";
+
+/* No comment provided by engineer. */
+"Search in report" = "Search in report";
+
+/* Button */
+"Share" = "Share";
+
+/* Button */
+"Update" = "Update";
+
+/* Button */
+"Doctor Signature" = "Doctor Signature";
+
+/* Button */
+"Patients" = "Patients";

@@ -80,6 +80,9 @@
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     self = [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 
     mCurrentSearch = @"";
@@ -151,12 +154,8 @@
             [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de Note Infopro"]];
     }
     
-    if ([mTitle isEqualToString:@"About"]) {
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Report"]];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de Rapport"]];
-    }
+    if ([mTitle isEqualToString:@"About"])
+        [searchField setPlaceholder:NSLocalizedString(@"Search in report", nil)];
 }
 
 /** 
@@ -296,7 +295,7 @@
     
     [super viewDidLoad];
     
-    self.title = NSLocalizedString(mTitle, nil);
+    self.title = mTitle;
     // Do any additional setup after loading the view from its nib.
     
     // SWRevealViewController extends UIViewController!
