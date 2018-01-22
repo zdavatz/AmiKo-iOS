@@ -63,7 +63,8 @@
         NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"germanDBLastUpdate"];
         if (lastUpdated!=nil)
             timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
         if (lastUpdated!=nil)
             timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];

@@ -141,11 +141,19 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     // Init all view controllers (main and secondary)
     mainViewController = [[MLViewController alloc] init];
-    UINavigationController *mainViewNavigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
-    MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
-    UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+    UINavigationController *mainViewNavigationController =
+        [[UINavigationController alloc] initWithRootViewController:mainViewController];
 
+    MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
+    UINavigationController *secondViewNavigationController =
+        [[UINavigationController alloc] initWithRootViewController:secondViewController];
+
+#if 1
+    // TODO: unused
     MLPrescriptionViewController *prescriptionViewController = [[MLPrescriptionViewController alloc] init];
+    UINavigationController *thirdViewNavigationController =
+        [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
+#endif
 
     // Check if app was launched by quick action
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {

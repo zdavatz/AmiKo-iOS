@@ -861,8 +861,9 @@
     return YES;
 }
 
-- (void) webViewDidStartLoad:(UIWebView *)webView {
-    // NSLog(@"%s", __PRETTY_FUNCTION__);
+- (void) webViewDidStartLoad:(UIWebView *)webView
+{   
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView
