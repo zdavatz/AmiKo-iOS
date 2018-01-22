@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		430285BF20160FB1003B2EF3 /* MLPrescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */; };
 		430285C020160FB1003B2EF3 /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 430285BE20160FB1003B2EF3 /* MLPrescriptionViewController.xib */; };
+		430285C820162C72003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
+		430285CD20162DA1003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
+		430285D120162DEB003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
 		439F50F920122665000E82FC /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
 		439F50FA20122665000E82FC /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
 		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
@@ -255,6 +258,9 @@
 		430285BE20160FB1003B2EF3 /* MLPrescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLPrescriptionViewController.xib; path = AmiKoDesitin/MLPrescriptionViewController.xib; sourceTree = SOURCE_ROOT; };
 		430285C4201613B5003B2EF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		430285C520161410003B2EF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		430285C720162C72003B2EF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = AmiKoDesitin/de.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		430285CC20162DA1003B2EF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = AmiKoDesitin/fr.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		430285D020162DEB003B2EF3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = AmiKoDesitin/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		439F50F520122665000E82FC /* prescription-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription-selected.png"; path = "AmiKoDesitin/prescription-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
 		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
@@ -481,6 +487,30 @@
 			name = prescription;
 			sourceTree = "<group>";
 		};
+		430285C920162D6D003B2EF3 /* de */ = {
+			isa = PBXGroup;
+			children = (
+				430285C620162C72003B2EF3 /* Localizable.strings */,
+			);
+			name = de;
+			sourceTree = "<group>";
+		};
+		430285CA20162D7C003B2EF3 /* fr */ = {
+			isa = PBXGroup;
+			children = (
+				430285CB20162DA1003B2EF3 /* Localizable.strings */,
+			);
+			name = fr;
+			sourceTree = "<group>";
+		};
+		430285CE20162DC1003B2EF3 /* en */ = {
+			isa = PBXGroup;
+			children = (
+				430285CF20162DEB003B2EF3 /* Localizable.strings */,
+			);
+			name = en;
+			sourceTree = "<group>";
+		};
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
@@ -588,6 +618,9 @@
 		D5A6F24117B1692F00EAB24B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				430285CE20162DC1003B2EF3 /* en */,
+				430285CA20162D7C003B2EF3 /* fr */,
+				430285C920162D6D003B2EF3 /* de */,
 				D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */,
 				D5A6F24217B1692F00EAB24B /* AmikoDesitin-Info.plist */,
 				D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */,
@@ -901,6 +934,7 @@
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
+				430285C820162C72003B2EF3 /* Localizable.strings in Resources */,
 				439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */,
 				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D533DAAA17B434FF00199C38 /* Default-Portrait@2x~ipad.png in Resources */,
@@ -926,7 +960,9 @@
 				D5A1754C1A9A737F00E69385 /* interactions.png in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
+				430285CD20162DA1003B2EF3 /* Localizable.strings in Resources */,
 				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
+				430285D120162DEB003B2EF3 /* Localizable.strings in Resources */,
 				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
 				D5A175601A9BC27400E69385 /* favorites-selected.png in Resources */,
@@ -1098,6 +1134,30 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		430285C620162C72003B2EF3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430285C720162C72003B2EF3 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		430285CB20162DA1003B2EF3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430285CC20162DA1003B2EF3 /* fr */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		430285CF20162DEB003B2EF3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430285D020162DEB003B2EF3 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		D5A6F24317B1692F00EAB24B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

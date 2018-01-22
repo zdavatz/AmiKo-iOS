@@ -220,7 +220,7 @@
 - (IBAction) sendFeedback:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Send feedback");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     [self sendEmailTo:@"zdavatz@ywesee.com" withSubject:[NSString stringWithFormat:@"%@ Feedback", APP_NAME] andBody:@""];
@@ -229,7 +229,7 @@
 - (IBAction) shareApp:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Share app");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     NSString* subject = [NSString stringWithFormat:@"%@", APP_NAME];
@@ -250,7 +250,7 @@
 - (IBAction) rateApp:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Rate app");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?mt=8", APP_ID]]];
@@ -259,7 +259,7 @@
 - (IBAction) showReport:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Show report");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     if (mParentViewController!=nil) {
@@ -270,7 +270,7 @@
 - (IBAction) startUpdate:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Start update");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     MLCustomURLConnection *reportConn = [[MLCustomURLConnection alloc] init];
