@@ -7,6 +7,7 @@
 //
 
 #import "MLPrescriptionViewController.h"
+#import "SWRevealViewController.h"
 
 @interface MLPrescriptionViewController ()
 
@@ -21,6 +22,21 @@
 #endif
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+
+    // SWRevealViewController extends UIViewController!
+    SWRevealViewController *revealController = [self revealViewController];
+    
+    [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
+
+    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:revealController
+                                                                        action:@selector(revealToggle:)];
+    
+    self.navigationItem.leftBarButtonItem = revealButtonItem;
+    
+    // PanGestureRecognizer goes here
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
 
 - (void)didReceiveMemoryWarning {

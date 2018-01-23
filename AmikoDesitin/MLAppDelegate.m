@@ -126,6 +126,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
  */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     // Init main window
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:screenBound];
@@ -147,13 +150,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
     UINavigationController *secondViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:secondViewController];
-
-#if 1
-    // TODO: unused
-    MLPrescriptionViewController *prescriptionViewController = [[MLPrescriptionViewController alloc] init];
-    UINavigationController *thirdViewNavigationController =
-        [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
-#endif
 
     // Check if app was launched by quick action
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
@@ -192,7 +188,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
 
         self.window.rootViewController = self.revealViewController;
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    }
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
         
@@ -237,7 +234,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         [appDefaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
         [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         [appDefaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
         [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     }
@@ -249,7 +247,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
             [lastUpdated setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
             NSLog(@"Initializing defaults...");
         }
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
         if (lastUpdated==nil) {
             [lastUpdated setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];

@@ -1239,7 +1239,6 @@ static BOOL mShowReport = false;
         secondViewController = nil;
     }
     
-#if 1
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                                     bundle:nil
                                                                      title:@"About"
@@ -1259,12 +1258,6 @@ static BOOL mShowReport = false;
     }
 
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
-#else
-//    prescriptionViewController =
-//    [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
-//                                                   bundle:nil];
-//    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
-#endif
 
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
@@ -1446,8 +1439,6 @@ static BOOL mShowReport = false;
         case 3:
             NSLog(@"TabBar - Prescription");
             mSearchInteractions = false;
-
-            // TODO
             [self stopActivityIndicator];
             [self switchToPrescriptionView];
             break;
@@ -1842,24 +1833,37 @@ static BOOL mShowReport = false;
 
 - (void) switchToPrescriptionView
 {
-    // if (mCurrentIndexPath!=nil)
-    //[self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
-    if (!prescriptionViewController) {
-        prescriptionViewController =
-        [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
-                                                       bundle:nil];
+#if 0
+    UINavigationController *navController2 = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+    // SWRevealViewController * mainRevealController
+    NSLog(@"navController2:%@", navController2); // SWRevealViewController
+#endif
+    
+    if (prescriptionViewController!=nil) {
+        // [prescriptionViewController removeFromParentViewController];
+        prescriptionViewController = nil;
     }
     
-//    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
-#if 1
-    UINavigationController *navController = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
-    // SWRevealViewController * mainRevealController
-
-    //[navController pushViewController:prescriptionViewController animated:YES];  // exception
+    prescriptionViewController =
+    [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
+                                                   bundle:nil];
     
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
+    }
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
+    
+    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    mainRevealController = self.revealViewController;
+    NSLog(@"mainRevealController:%@", mainRevealController);
+#if 0
+    mainRevealController.rightViewController = titleViewController;
+#else
+    mainRevealController.rightViewController = nil;    // Right view controller is not needed, nil it!
+#endif
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
-#endif
 }
 
 /**
@@ -2019,11 +2023,11 @@ static BOOL mShowReport = false;
     });
 }
 
-// We selected one medicine
+// We selected one Medicine or one Favorite
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 #ifdef DEBUG
-    NSLog(@"%@ Selected medicine name at row %ld", NSStringFromSelector(_cmd), [indexPath row]);
+    NSLog(@"%@ Selected medicine or favourite at row %ld", NSStringFromSelector(_cmd), [indexPath row]);
 #endif
     mCurrentIndexPath = indexPath;
 
@@ -2119,11 +2123,7 @@ static BOOL mShowReport = false;
         [otherViewNavigationController removeFromParentViewController];
         otherViewNavigationController = nil;
     }
-#if 1
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
-#else
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
-#endif
 
     // Show SecondViewController! (UIWebView)
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
