@@ -14,6 +14,11 @@
 @end
 
 @implementation MLPrescriptionViewController
+{
+#ifdef DEBUG
+    NSArray *tableData;
+#endif
+}
 
 - (void)viewDidLoad
 {
@@ -37,6 +42,10 @@
     
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+
+#ifdef DEBUG
+    tableData = [NSArray arrayWithObjects:@"Ponstan", @"Marcoumar", @"Abilify", nil];
+#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,4 +63,71 @@
 }
 */
 
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 3;
+}
+
+- (nullable NSString *)tableView:(UITableView *)tableView
+         titleForHeaderInSection:(NSInteger)section
+{
+#ifdef DEBUG
+    NSLog(@"%s section:%ld", __FUNCTION__, section);
+#endif
+    if (section == 0)
+        return NSLocalizedString(@"Doctor", nil);
+    
+    if (section == 1)
+        return NSLocalizedString(@"Patient", nil);
+    
+    return NSLocalizedString(@"Medicines", nil);
+}
+
+- (NSInteger) tableView: (UITableView *)tableView
+  numberOfRowsInSection: (NSInteger)section
+{
+#ifdef DEBUG
+    NSLog(@"%s section:%ld", __FUNCTION__, section);
+#endif
+    // Return the number of rows in the section.
+    if ((section == 0) || (section == 1))
+        return 1;
+
+#ifdef DEBUG
+    return [tableData count];
+#else
+    return 6; // TODO
+#endif
+}
+
+#pragma mark - Table view delegate
+
+- (UITableViewCell *) tableView: (UITableView *)tableView
+          cellForRowAtIndexPath: (NSIndexPath *)indexPath
+{
+#ifdef DEBUG
+    NSLog(@"%s section:%ld, row:%ld", __FUNCTION__, indexPath.section, indexPath.row);
+    static NSString *tableIdentifier = @"PrescriptionTableItem";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:tableIdentifier];
+    }
+    
+    if (indexPath.section == 0)
+        cell.textLabel.text = @"Doctor's name";
+    else if (indexPath.section == 1)
+        cell.textLabel.text = @"Patient's name";
+    else {
+        cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
+        //cell.imageView.image = [UIImage imageNamed:@"test.jpg"];
+    }
+
+    return cell;
+#endif
+}
 @end

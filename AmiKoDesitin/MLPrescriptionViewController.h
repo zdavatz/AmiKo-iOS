@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLPrescriptionViewController : UIViewController
+@interface MLPrescriptionViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

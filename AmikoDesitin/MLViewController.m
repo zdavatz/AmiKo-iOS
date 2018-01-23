@@ -1437,7 +1437,9 @@ static BOOL mShowReport = false;
             [self switchToDrugInteractionView];
             break;
         case 3:
+#ifdef DEBUG
             NSLog(@"TabBar - Prescription");
+#endif
             mSearchInteractions = false;
             [self stopActivityIndicator];
             [self switchToPrescriptionView];
