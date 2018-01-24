@@ -8,6 +8,7 @@
 
 #import "MLPrescriptionViewController.h"
 #import "SWRevealViewController.h"
+#import "MLUtility.h"
 
 @interface MLPrescriptionViewController ()
 
@@ -144,18 +145,70 @@
 #endif
 }
 
-- (IBAction) checkInteractions:(id)sender
+- (IBAction) checkForInteractions:(id)sender
 {
     // TODO:
 }
 
 - (IBAction) savePrescription:(id)sender
 {
-    // TODO:
+    NSString *alertMessage = nil;
+    NSString *alertTitle = nil;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:alertTitle
+                                                                             message:alertMessage
+                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
+
+    UIAlertAction *actionOk = [UIAlertAction actionWithTitle:NSLocalizedString(@"Overwrite Prescription", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *action) {
+                                                         [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                         [self overwritePrescription];
+                                                     }];
+    
+    UIAlertAction *actionNo = [UIAlertAction actionWithTitle:NSLocalizedString(@"Save as New Prescription", nil)
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction *action) {
+                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                             [self saveNewPrescription];
+                                                         }];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction *action) {
+                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                         }];
+    [alertController addAction:actionOk];
+    [alertController addAction:actionNo];
+    [alertController addAction:actionCancel];
+    [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
 
 - (IBAction) sendPrescription:(id)sender
 {
+    [self savePrescription:sender];
     // TODO:
 }
+
+#pragma -
+
+- (void) overwritePrescription
+{
+    NSString *documentsDir = [MLUtility documentsDirectory];
+#ifdef DEBUG
+    NSLog(@"documentsDir:%@", documentsDir);
+#endif
+    
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+}
+
+- (void) saveNewPrescription
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+}
+
 @end

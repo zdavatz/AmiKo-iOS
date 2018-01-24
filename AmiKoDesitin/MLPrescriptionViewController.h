@@ -12,8 +12,11 @@
     <UITableViewDelegate, UITableViewDataSource>
 
 - (IBAction) newPrescription:(id)sender;
-- (IBAction) checkInteractions:(id)sender;
+- (IBAction) checkForInteractions:(id)sender;
 - (IBAction) savePrescription:(id)sender;
 - (IBAction) sendPrescription:(id)sender;
+
+- (void) overwritePrescription;
+- (void) saveNewPrescription;
 
 @end

@@ -73,4 +73,23 @@
     return timeInterval;
 }
 
++ (NSString *) documentsDirectory
+{
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0
+    // if you need to support iOS 7 or earlier
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    //NSLog(@"first:%@", [paths firstObject]);
+    //NSLog(@"last:%@", [paths lastObject]);
+    return [paths lastObject];
+#else
+    // iOS 8 and newer, this is the recommended method
+    NSArray *paths = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                        inDomains:NSUserDomainMask];
+    NSURL *url = [paths lastObject];
+    //NSLog(@"abs.: <%@>", url.absoluteString);   // "file:///Users/... ...Documents/"
+    //NSLog(@"path: <%@>", url.path);             // "/Users/...  .../Documents"
+    return url.absoluteString;
+#endif
+}
+
 @end
