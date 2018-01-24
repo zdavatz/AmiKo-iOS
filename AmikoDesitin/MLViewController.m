@@ -1305,7 +1305,7 @@ static BOOL mShowReport = false;
     
     timeForSearch_ms = (int)(1000*execTime+0.5);
     mNumCurrSearchResults = (int)[searchRes count];
-    NSLog(@"%ld Treffer in %dms", mNumCurrSearchResults, timeForSearch_ms);
+    NSLog(@"%ld hits in %dms", mNumCurrSearchResults, timeForSearch_ms);
 
     return searchRes;
 }
@@ -1326,7 +1326,7 @@ static BOOL mShowReport = false;
     NSTimeInterval execTime = [endTime timeIntervalSinceDate:startTime];
     mNumCurrSearchResults = [medList count];
     
-    NSLog(@"%ld Favoriten in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
+    NSLog(@"%ld favorites in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
     
     return medList;
 }
@@ -2050,10 +2050,6 @@ static BOOL mShowReport = false;
                                                                     bundle:nil
                                                                      title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
                                                                   andParam:2];
-
-//    prescriptionViewController =
-//        [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
-//                                                       bundle:nil];
 
     if (mSearchInteractions==false) {
         // Load style sheet from file

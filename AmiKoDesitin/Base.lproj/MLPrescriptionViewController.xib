@@ -19,18 +19,16 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="f9a-IN-dWa">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="f9a-IN-dWa">
                     <rect key="frame" x="16" y="0.0" width="343" height="623"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="UbI-M0-YSc"/>
                         <outlet property="delegate" destination="-1" id="lK2-cc-x3p"/>
                     </connections>
                 </tableView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SEC-AO-gUj">
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEC-AO-gUj">
                     <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <items>
                         <barButtonItem title="New" id="QUd-Rl-hna">
                             <connections>
@@ -59,6 +57,15 @@
                 </toolbar>
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="0a9-hP-ZRe"/>
+                <constraint firstAttribute="bottom" secondItem="SEC-AO-gUj" secondAttribute="bottom" id="DTR-XD-7gK"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="HrB-dn-GzS"/>
+                <constraint firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Ixo-EK-Nm8"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="XEX-Fc-pie"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="centerX" secondItem="SEC-AO-gUj" secondAttribute="centerX" id="kqt-GF-ekU"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="wzD-8C-U98"/>
+            </constraints>
             <point key="canvasLocation" x="24.5" y="52.5"/>
         </view>
     </objects>

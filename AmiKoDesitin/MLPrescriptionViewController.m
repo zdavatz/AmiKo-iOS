@@ -127,6 +127,7 @@
     else {
         cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
         //cell.imageView.image = [UIImage imageNamed:@"test.jpg"];
+        //cell.textLabel.textAlignment = NSTextAlignmentRight;
     }
 
     return cell;
