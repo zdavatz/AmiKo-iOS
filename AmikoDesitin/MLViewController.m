@@ -1837,7 +1837,6 @@ static BOOL mShowReport = false;
 {
 #if 0
     UINavigationController *navController2 = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
-    // SWRevealViewController * mainRevealController
     NSLog(@"navController2:%@", navController2); // SWRevealViewController
 #endif
     
@@ -1901,8 +1900,7 @@ static BOOL mShowReport = false;
         return 0;
 }
 
-#pragma mark -
-#pragma mark UITableView delegate methods
+#pragma mark - UITableView delegate methods
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 { 
@@ -2206,8 +2204,7 @@ static BOOL mShowReport = false;
     return frame.size;
 }
 
-#pragma mark -
-#pragma mark helper functions
+#pragma mark - helper functions
 
 - (void) didReceiveMemoryWarning
 {

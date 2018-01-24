@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLPrescriptionViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface MLPrescriptionViewController : UIViewController
+    <UITableViewDelegate, UITableViewDataSource>
+
+- (IBAction) newPrescription:(id)sender;
+- (IBAction) checkInteractions:(id)sender;
+- (IBAction) savePrescription:(id)sender;
+- (IBAction) sendPrescription:(id)sender;
 
 @end

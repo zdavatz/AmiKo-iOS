@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		430285BF20160FB1003B2EF3 /* MLPrescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */; };
-		430285C020160FB1003B2EF3 /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 430285BE20160FB1003B2EF3 /* MLPrescriptionViewController.xib */; };
 		430285C820162C72003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
 		430285CD20162DA1003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
 		430285D120162DEB003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
+		4387FC3D20189DB4000A5A0F /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */; };
 		439F50F920122665000E82FC /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
 		439F50FA20122665000E82FC /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
 		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
@@ -255,12 +255,12 @@
 /* Begin PBXFileReference section */
 		430285BC20160FB1003B2EF3 /* MLPrescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPrescriptionViewController.h; path = AmiKoDesitin/MLPrescriptionViewController.h; sourceTree = SOURCE_ROOT; };
 		430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPrescriptionViewController.m; path = AmiKoDesitin/MLPrescriptionViewController.m; sourceTree = SOURCE_ROOT; };
-		430285BE20160FB1003B2EF3 /* MLPrescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLPrescriptionViewController.xib; path = AmiKoDesitin/MLPrescriptionViewController.xib; sourceTree = SOURCE_ROOT; };
 		430285C4201613B5003B2EF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		430285C520161410003B2EF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		430285C720162C72003B2EF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = AmiKoDesitin/de.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		430285CC20162DA1003B2EF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = AmiKoDesitin/fr.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		430285D020162DEB003B2EF3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = AmiKoDesitin/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		4387FC4020189EB8000A5A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLPrescriptionViewController.xib; sourceTree = "<group>"; };
 		439F50F520122665000E82FC /* prescription-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription-selected.png"; path = "AmiKoDesitin/prescription-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
 		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
@@ -482,7 +482,7 @@
 			children = (
 				430285BC20160FB1003B2EF3 /* MLPrescriptionViewController.h */,
 				430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */,
-				430285BE20160FB1003B2EF3 /* MLPrescriptionViewController.xib */,
+				4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */,
 			);
 			name = prescription;
 			sourceTree = "<group>";
@@ -509,6 +509,19 @@
 				430285CF20162DEB003B2EF3 /* Localizable.strings */,
 			);
 			name = en;
+			sourceTree = "<group>";
+		};
+		4387FC3C20188ECE000A5A0F /* main */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F29B17B16C4B00EAB24B /* MLSimpleTableCell.h */,
+				D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */,
+				D5A6F29F17B16C4B00EAB24B /* MLViewController.h */,
+				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
+				D5A6F2B217B171C900EAB24B /* MLViewController.xib */,
+				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
+			);
+			name = main;
 			sourceTree = "<group>";
 		};
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
@@ -656,19 +669,14 @@
 		D5A6F26117B169B900EAB24B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				D5A6F29F17B16C4B00EAB24B /* MLViewController.h */,
-				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
-				D5A6F2B217B171C900EAB24B /* MLViewController.xib */,
-				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
-				430285C32016126F003B2EF3 /* prescription */,
+				4387FC3C20188ECE000A5A0F /* main */,
 				430285C22016124A003B2EF3 /* second */,
+				430285C32016126F003B2EF3 /* prescription */,
 				430285C120161232003B2EF3 /* title */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
-				D5A6F29B17B16C4B00EAB24B /* MLSimpleTableCell.h */,
-				D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */,
 				D5A6F29D17B16C4B00EAB24B /* MLSQLiteDatabase.h */,
 				D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
@@ -858,6 +866,7 @@
 				en,
 				de,
 				fr,
+				Base,
 			);
 			mainGroup = D5A6F22E17B1692F00EAB24B;
 			productRefGroup = D5A6F23817B1692F00EAB24B /* Products */;
@@ -913,7 +922,7 @@
 				D5A6F2A717B16E4400EAB24B /* 28-star@2x.png in Resources */,
 				D5A6F2A917B16EF700EAB24B /* app_icon_57x57.png in Resources */,
 				D5A6F2AB17B16F2300EAB24B /* app_icon_72x72.png in Resources */,
-				430285C020160FB1003B2EF3 /* MLPrescriptionViewController.xib in Resources */,
+				4387FC3D20189DB4000A5A0F /* MLPrescriptionViewController.xib in Resources */,
 				D5A6F2AD17B16F2900EAB24B /* app_icon_144x144.png in Resources */,
 				D5A6F2AF17B16F3600EAB24B /* app_icon_114x114.png in Resources */,
 				D551D53D17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
@@ -1157,6 +1166,15 @@
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
+		};
+		4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4387FC4020189EB8000A5A0F /* Base */,
+			);
+			name = MLPrescriptionViewController.xib;
+			path = AmiKoDesitin;
+			sourceTree = SOURCE_ROOT;
 		};
 		D5A6F24317B1692F00EAB24B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;

@@ -37,8 +37,9 @@
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:revealController
                                                                         action:@selector(revealToggle:)];
-    
     self.navigationItem.leftBarButtonItem = revealButtonItem;
+    
+    // TODO: add button on the right for old prescriptions
     
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
@@ -116,6 +117,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:tableIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
     
     if (indexPath.section == 0)
@@ -129,5 +131,30 @@
 
     return cell;
 #endif
+}
+
+#pragma mark - Toolbar
+
+- (IBAction) newPrescription:(id)sender
+{
+    UIBarButtonItem *btn = (UIBarButtonItem *)sender;
+#ifdef DEBUG
+    NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, btn.tag, btn.title);
+#endif
+}
+
+- (IBAction) checkInteractions:(id)sender
+{
+    // TODO:
+}
+
+- (IBAction) savePrescription:(id)sender
+{
+    // TODO:
+}
+
+- (IBAction) sendPrescription:(id)sender
+{
+    // TODO:
 }
 @end
