@@ -46,7 +46,7 @@
 #import <sys/time.h>
 
 enum {
-    kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kNone=100
+    kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
 };
 
 enum {
@@ -394,6 +394,7 @@ static BOOL mShowReport = false;
             
         case ePrescription:
             goBackToMainView = true;
+            mSearchInteractions = false;
             NSLog(@"TODO: %s, line %i", __FUNCTION__, __LINE__);
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
@@ -602,9 +603,8 @@ static BOOL mShowReport = false;
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    for (UIBarButtonItem *b in [myToolBar items]) {
+    for (UIBarButtonItem *b in [myToolBar items])
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
-    }
 
     if ([MLConstants iosVersion]>=7.0f)
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
@@ -731,8 +731,8 @@ static BOOL mShowReport = false;
                                          // [NSValue valueWithUIOffset:UIOffsetMake(1,0)], UITextAttributeTextShadowOffset,
                                          nil];
     
-    for (int i=0; i<3; i++)
-        [[myTabBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
+    for (UIBarButtonItem *b in [myTabBar items])
+        [b setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
 - (void) setToolbarItemsFontSize
@@ -741,8 +741,9 @@ static BOOL mShowReport = false;
                                          [UIFont systemFontOfSize:14], NSFontAttributeName,
                                          nil];
     
-    for (int i=0; i<9; i+=2)    // 17.06.2014 -> used to be '11'
-        [[myToolBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
+    for (UIBarButtonItem *b in [myToolBar items])
+        if (b.tag != 0)   // Skip UIBarButtonSystemItemFlexibleSpace
+            [b setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
 - (void) startActivityIndicator
@@ -913,14 +914,18 @@ static BOOL mShowReport = false;
             // [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
         }
     }
-    if (mSearchInteractions==false) {
+
+    if (!mSearchInteractions) {
         if (mUsedDatabase == kAips)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
         else if (mUsedDatabase == kFavorites)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
+        else if (mUsedDatabase == kPrescription)
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
         else if (mUsedDatabase == kNone)
             [myTabBar setSelectedItem:nil]; // Clears all cells
-    } else {
+    }
+    else {
         [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
     }
 }
@@ -1440,6 +1445,8 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
             NSLog(@"TabBar - Prescription");
 #endif
+            mUsedDatabase = kAips; // tabbar in rear view selects AIPS
+            //mUsedDatabase = kPrescription;
             mSearchInteractions = false;
             [self stopActivityIndicator];
             [self switchToPrescriptionView];
@@ -1857,7 +1864,6 @@ static BOOL mShowReport = false;
     
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
-    NSLog(@"mainRevealController:%@", mainRevealController);
 #if 0
     mainRevealController.rightViewController = titleViewController;
 #else

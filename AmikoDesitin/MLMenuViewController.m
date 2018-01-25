@@ -156,10 +156,7 @@
 
 - (void) showMenu
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
+    // TODO: replace deprecated UIActionSheet with UIAlertController
     mMenuActionSheet = [[UIActionSheet alloc] initWithTitle:@"Select menu option"
                                                    delegate:self
                                           cancelButtonTitle:@"Cancel"
