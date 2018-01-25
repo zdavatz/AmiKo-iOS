@@ -18,5 +18,6 @@
 
 - (void) overwritePrescription;
 - (void) saveNewPrescription;
+- (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color;
 
 @end
