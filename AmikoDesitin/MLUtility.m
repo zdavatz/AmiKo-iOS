@@ -73,6 +73,7 @@
     return timeInterval;
 }
 
+// Alternatively the implementation could also use NSHomeDirectory()
 + (NSString *) documentsDirectory
 {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0
@@ -88,8 +89,13 @@
     NSURL *url = [paths lastObject];
     //NSLog(@"abs.: <%@>", url.absoluteString);   // "file:///Users/... ...Documents/"
     //NSLog(@"path: <%@>", url.path);             // "/Users/...  .../Documents"
-    return url.absoluteString;
+    return url.path;
 #endif
+}
+
++ (NSString *) amkDirectory
+{
+    return [[MLUtility documentsDirectory] stringByAppendingPathComponent:@"amk"];
 }
 
 @end

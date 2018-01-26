@@ -28,6 +28,8 @@
 + (int) checkVersion;
 + (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date;
 + (double) timeIntervalSinceLastDBSync;
+
 + (NSString *) documentsDirectory;
++ (NSString *) amkDirectory;
 
 @end

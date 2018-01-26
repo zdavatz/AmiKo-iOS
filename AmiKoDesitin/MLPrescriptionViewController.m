@@ -45,9 +45,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 @implementation MLPrescriptionViewController
 {
-#ifdef DEBUG
     NSArray *tableData;
-#endif
     CGRect mainFrame;
 }
 
@@ -88,6 +86,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                   barHeight,
                                   screenBounds.size.width,
                                   CGRectGetHeight(screenBounds) - barHeight);
+#ifdef DEBUG
+    NSError *error;
+    NSArray *amkFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[MLUtility amkDirectory]
+                                                                            error:&error];
+    if (error)
+        NSLog(@"%@", error);
+
+    NSLog(@"amk directory:%@", [MLUtility amkDirectory]);
+    NSLog(@"amk files:%@", amkFiles);
+#endif
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -144,7 +153,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
   numberOfRowsInSection: (NSInteger)section
 {
 #ifdef DEBUG
-    NSLog(@"%s section:%ld", __FUNCTION__, section);
+    //NSLog(@"%s section:%ld", __FUNCTION__, section);
 #endif
     // Return the number of rows in the section.
     if (section == kSectionMeta)
@@ -320,7 +329,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return cell;
 }
 
-#pragma mark - Toolbar
+#pragma mark - Toolbar actions
 
 - (IBAction) newPrescription:(id)sender
 {
@@ -375,7 +384,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // TODO:
 }
 
-#pragma -
+#pragma mark -
 
 - (void) overwritePrescription
 {
@@ -391,9 +400,41 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) saveNewPrescription
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+#if 0
+    NSString *documentsDir = [MLUtility documentsDirectory];
+    NSString *amkDir = [documentsDir stringByAppendingPathComponent:@"amk"];
+#else
+    NSString *amkDir = [MLUtility amkDirectory];
 #endif
+    NSLog(@"amkDir:%@", amkDir);
+    NSURL *amkUrl = [NSURL URLWithString:amkDir];
+    
+    NSError *error;
+    [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
+                              withIntermediateDirectories:YES
+                                               attributes:nil
+                                                    error:&error];
+    if (error) {
+        NSLog(@"%@", error.localizedDescription);
+        return;
+    }
+    
+    // Create file as new name `RZ_timestamp.amk`
+    time_t timestamp = (time_t)[[NSDate date] timeIntervalSince1970];
+    NSString *amkFile = [NSString stringWithFormat:@"%@_%d.amk", @"RZ", (int)timestamp];
+    NSString *amkFilePath = [amkDir stringByAppendingPathComponent:amkFile];
+    NSData *amkData; // TODO
+#ifdef DEBUG
+    char bytes[2];
+    bytes[0] = 0x41;
+    bytes[1] = 0x42;
+    amkData = [NSData dataWithBytes:bytes length:2];
+#endif
+    BOOL amkSaved = [amkData writeToFile:amkFilePath atomically:YES];
+    if (!amkSaved)
+        return;
+
+//    return amkFilePath;
 }
 
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color

@@ -1135,13 +1135,17 @@ static BOOL mShowReport = false;
         // NSLog(@"%@ %@", libraryFolder, [libraryFolder absoluteString]);
         NSError *error = nil;
         NSArray *libraryFolderContent = [fileManager contentsOfDirectoryAtPath:[libraryFolder relativePath] error:&error];
-        if ([libraryFolderContent count] > 0 && error == nil) {
-            // NSLog(@"Contents of library folder = %@", libraryFolderContent);
-        } else if ([libraryFolderContent count] == 0 && error == nil)
-            NSLog(@"Library folder is empty!");
-        else
+
+        if (error)
             NSLog(@"%s: %@", __FUNCTION__, error);
-    } else {
+        else if ([libraryFolderContent count] == 0)
+            NSLog(@"Library folder is empty!");
+#ifdef DEBUG
+        else
+            NSLog(@"Contents of library folder = %@", libraryFolderContent);
+#endif
+    }
+    else {
         NSLog(@"Could not find the Library folder.");
     }
     
