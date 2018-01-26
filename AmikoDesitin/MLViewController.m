@@ -1137,7 +1137,7 @@ static BOOL mShowReport = false;
         NSArray *libraryFolderContent = [fileManager contentsOfDirectoryAtPath:[libraryFolder relativePath] error:&error];
 
         if (error)
-            NSLog(@"%s: %@", __FUNCTION__, error);
+            NSLog(@"%s: %@", __FUNCTION__, error.localizedDescription);
         else if ([libraryFolderContent count] == 0)
             NSLog(@"Library folder is empty!");
 #ifdef DEBUG

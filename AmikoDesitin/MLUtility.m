@@ -73,6 +73,12 @@
     return timeInterval;
 }
 
++ (NSString*) encodeStringToBase64:(NSString*)string
+{
+    NSData *plainData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    return [plainData base64Encoding];
+}
+
 // Alternatively the implementation could also use NSHomeDirectory()
 + (NSString *) documentsDirectory
 {

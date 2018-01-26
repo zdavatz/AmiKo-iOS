@@ -11,6 +11,8 @@
 		430285C820162C72003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
 		430285CD20162DA1003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
 		430285D120162DEB003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
+		4333432A201B6488006BFC23 /* MLPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 43334329201B6488006BFC23 /* MLPatient.m */; };
+		4333432D201B64A2006BFC23 /* MLOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4333432C201B64A2006BFC23 /* MLOperator.m */; };
 		4387FC3D20189DB4000A5A0F /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */; };
 		439F50F920122665000E82FC /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
 		439F50FA20122665000E82FC /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
@@ -260,6 +262,10 @@
 		430285C720162C72003B2EF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = AmiKoDesitin/de.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		430285CC20162DA1003B2EF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = AmiKoDesitin/fr.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		430285D020162DEB003B2EF3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = AmiKoDesitin/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		43334328201B6488006BFC23 /* MLPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPatient.h; path = AmiKoDesitin/MLPatient.h; sourceTree = SOURCE_ROOT; };
+		43334329201B6488006BFC23 /* MLPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPatient.m; path = AmiKoDesitin/MLPatient.m; sourceTree = SOURCE_ROOT; };
+		4333432B201B64A2006BFC23 /* MLOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOperator.h; path = AmiKoDesitin/MLOperator.h; sourceTree = SOURCE_ROOT; };
+		4333432C201B64A2006BFC23 /* MLOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLOperator.m; path = AmiKoDesitin/MLOperator.m; sourceTree = SOURCE_ROOT; };
 		4387FC4020189EB8000A5A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLPrescriptionViewController.xib; sourceTree = "<group>"; };
 		439F50F520122665000E82FC /* prescription-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription-selected.png"; path = "AmiKoDesitin/prescription-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
@@ -511,6 +517,16 @@
 			name = en;
 			sourceTree = "<group>";
 		};
+		43334326201B641E006BFC23 /* menu */ = {
+			isa = PBXGroup;
+			children = (
+				D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */,
+				D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */,
+				D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */,
+			);
+			name = menu;
+			sourceTree = "<group>";
+		};
 		4387FC3C20188ECE000A5A0F /* main */ = {
 			isa = PBXGroup;
 			children = (
@@ -673,6 +689,7 @@
 				430285C22016124A003B2EF3 /* second */,
 				430285C32016126F003B2EF3 /* prescription */,
 				430285C120161232003B2EF3 /* title */,
+				43334326201B641E006BFC23 /* menu */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
@@ -687,15 +704,16 @@
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
 				D5A6F28917B16C0200EAB24B /* MLDataStore.h */,
 				D5A6F28A17B16C0200EAB24B /* MLDataStore.m */,
-				D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */,
-				D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */,
-				D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */,
 				D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */,
 				D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */,
 				D5A31F6F18B52D3E00F56BC5 /* MLProgressViewController.h */,
 				D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */,
 				D573F4541A990E9900C4F589 /* MLAlertView.h */,
 				D573F4511A990E8600C4F589 /* MLAlertView.m */,
+				43334328201B6488006BFC23 /* MLPatient.h */,
+				43334329201B6488006BFC23 /* MLPatient.m */,
+				4333432B201B64A2006BFC23 /* MLOperator.h */,
+				4333432C201B64A2006BFC23 /* MLOperator.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1075,6 +1093,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4333432D201B64A2006BFC23 /* MLOperator.m in Sources */,
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
@@ -1103,6 +1122,7 @@
 				D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
+				4333432A201B6488006BFC23 /* MLPatient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
