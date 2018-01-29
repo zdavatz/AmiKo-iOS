@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define DOCTOR_TN_H     45.0
+#define DOCTOR_TN_W     90.0
+
 @interface MLOperator : NSObject
 
 @property (atomic, copy) NSString *title;
@@ -20,6 +23,10 @@
 @property (atomic, copy) NSString *phoneNumber;
 @property (atomic, copy) NSString *emailAddress;
 
-+ (id)importFromDict:(NSDictionary *)dict;
+@property (nonatomic, strong, readwrite) NSString *signature;
+
+- (void)importFromDict:(NSDictionary *)dict;
+- (UIImage *)signatureThumbnail;
+- (NSInteger)entriesCount;
 
 @end

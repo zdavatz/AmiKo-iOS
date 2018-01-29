@@ -27,11 +27,11 @@
 
 @property (nonatomic, assign) long medId;
 @property (nonatomic, assign) int customerId;
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *auth;
-@property (nonatomic, copy) NSString *atccode;
+@property (nonatomic, copy) NSString *title;    // title
+@property (nonatomic, copy) NSString *auth;     // owner
+@property (nonatomic, copy) NSString *atccode;  // atccode
 @property (nonatomic, copy) NSString *substances;
-@property (nonatomic, copy) NSString *regnrs;
+@property (nonatomic, copy) NSString *regnrs;   // regnrs
 @property (nonatomic, copy) NSString *atcClass;
 @property (nonatomic, copy) NSString *therapy;
 @property (nonatomic, copy) NSString *application;
