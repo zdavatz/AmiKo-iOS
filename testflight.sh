@@ -4,7 +4,7 @@ set -e
 set -u
 
 altool="$(dirname "$(xcode-select -p)")/Applications/Application Loader.app/Contents/Frameworks/ITunesSoftwareService.framework/Support/altool"
-ipa="/Users/zdavatz/Documents/xcode/amiko-ios/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/AmiKoDesitin/InstallationBuildProductsLocation/Applications/AmiKoDesitin.app"
+ipa="/Users/zdavatz/Documents/xcode/amiko-ios/build/AmiKoDesitin.ipa"
 
 echo "Validating app..."
 time "$altool" --validate-app --type ios --file "$ipa" --username "$ITC_USER" --password "$ITC_PASSWORD"
