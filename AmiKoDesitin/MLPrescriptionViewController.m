@@ -11,10 +11,15 @@
 #import "MLUtility.h"
 
 static const float kInfoCellHeight = 20.0;  // fixed
-static const float kItemCellHeight = 44.0;  // minimum height
 
 static const float kSectionHeaderHeight = 27.0;
-static const float kLabelMargin = 2.4;
+
+// Medicine cell layout
+static const float kLabelVerMargin = 2.4;
+static const float kMedCellHorMargin = 12.0;
+static const float kMedCellHeight = 44.0;  // minimum height
+
+static const float kMainframeRightAdjustment = 12.0;
 
 enum {
     kSectionMeta=0,
@@ -37,15 +42,19 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return CGSizeMake(ceil(boundSize.width), ceil(boundSize.height));
 }
 
-#pragma -
+#pragma mark -
 
 @interface MLPrescriptionViewController ()
 
+- (void)layoutCellSeparator:(UITableViewCell *)cell;
+- (void)layoutFrames;
+
 @end
+
+#pragma mark -
 
 @implementation MLPrescriptionViewController
 {
-    NSArray *tableData;
     CGRect mainFrame;
     NSArray *amkFiles;
 }
@@ -53,6 +62,35 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @synthesize placeDate;
 @synthesize doctor;
 @synthesize patient;
+@synthesize medications;
+@synthesize infoView;
+
+- (void)layoutFrames
+{
+    CGRect infoFrame = self.infoView.frame;
+    infoFrame.origin.y = 0.6;
+    infoFrame.size.width = self.view.bounds.size.width;
+    infoFrame.size.height = ((kSectionHeaderHeight * 2) +
+                             (kInfoCellHeight * [doctor entriesCount]) +
+                             (kInfoCellHeight * [patient entriesCount]) +
+                             20.8); // margin
+    [self.infoView setFrame:infoFrame];
+}
+
+- (void)layoutCellSeparator:(UITableViewCell *)cell
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        cell.separatorInset = UIEdgeInsetsZero;
+    }
+
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        cell.preservesSuperviewLayoutMargins = NO;
+    }
+
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        cell.layoutMargins = UIEdgeInsetsZero;
+    }
+}
 
 - (void)viewDidLoad
 {
@@ -60,7 +98,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSLog(@"%s", __FUNCTION__);
 #endif
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    //[self layoutFrames];
+    //infoView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
@@ -78,17 +117,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 
-#ifdef DEBUG
-    tableData = [NSArray arrayWithObjects:@"Ponstan", @"Marcoumar", @"Abilify", nil];
-#endif
-    
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    int statusBarHeight = [
-                           UIApplication sharedApplication].statusBarFrame.size.height;
+    int statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     int navBarHeight = self.navigationController.navigationBar.frame.size.height;
     int barHeight = statusBarHeight + navBarHeight;
     mainFrame = CGRectMake(0, barHeight,
-                           screenBounds.size.width,
+                           screenBounds.size.width - kMainframeRightAdjustment,
                            CGRectGetHeight(screenBounds) - barHeight);
     NSError *error;
     NSString *amkDir = [MLUtility amkDirectory];
@@ -98,6 +132,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         NSLog(@"%@", error.localizedDescription);
 
 #ifdef DEBUG
+    //NSLog(@"mainFrame:%@", NSStringFromCGRect(mainFrame));
     NSLog(@"amk directory:%@", amkDir);
     NSLog(@"amk files:%@", amkFiles);
 #endif
@@ -135,7 +170,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
          titleForHeaderInSection:(NSInteger)section
 {
 #ifdef DEBUG
-    NSLog(@"%s section:%ld", __FUNCTION__, section);
+    //NSLog(@"%s section:%ld", __FUNCTION__, section);
 #endif
     if (section == kSectionMeta)
         return nil; //NSLocalizedString(@"Meta", nil);
@@ -146,7 +181,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (section == kSectionPatient)
         return NSLocalizedString(@"Patient", nil);
     
-    return [NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"Medicines", nil) , [tableData count]];
+    return [NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"Medicines", nil) , [medications count]];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -169,51 +204,65 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (section == kSectionMeta)
         return 1;
 
-    if (section == kSectionOperator)
-        return 5;
+    if ((section == kSectionOperator) && (doctor != nil))
+        return [doctor entriesCount];
 
-    if (section == kSectionPatient)
-        return 6;
+    if ((section == kSectionPatient) && (patient != nil))
+        return [patient entriesCount];
     
-    //if (section == kSectionMedicines)
-        return [tableData count];
+    if (section == kSectionMedicines)
+        return [medications count];
+    
+    return 0;
 }
 
 #pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ((indexPath.section == kSectionOperator) && (indexPath.row == 0))
+        return DOCTOR_TN_H;
+
     if (indexPath.section != kSectionMedicines)
         return kInfoCellHeight;
 
-    //Product *product = [self.receipt.products objectAtIndex:indexPath.row];
-    //if (product)
-    {
-        CGFloat height = 0.0;
-        CGFloat width = tableView.frame.size.width - 24.0;
+    if (medications==nil)
+        return kInfoCellHeight;
 
-        // package name label
-        UILabel *packLabel = [self makeLabel:@"Pack"
-                                   textColor:[UIColor clearColor]];
-        height += getSizeOfLabel(packLabel, width).height;
-        height += kLabelMargin;
-        // ean label
-        UILabel *eanLabel = [self makeLabel:@"Ean"
+    MLProduct *med = medications[indexPath.row];
+    if (med==nil)
+        return kMedCellHeight;
+
+    CGFloat height = 0.0;
+    CGFloat width = tableView.frame.size.width - 24.0;
+
+    // package name label
+    UILabel *packLabel = [self makeLabel:med.packageInfo
+                               textColor:[UIColor clearColor]];
+    height += getSizeOfLabel(packLabel, width).height;
+    height += kLabelVerMargin;
+    // ean label
+    UILabel *eanLabel = [self makeLabel:med.eanCode
+                              textColor:[UIColor clearColor]];
+    height += getSizeOfLabel(eanLabel, width).height;
+    height += kLabelVerMargin;
+    height += 8.0;
+    // comment label
+    UILabel *commentLabel = [self makeLabel:med.comment
                                   textColor:[UIColor clearColor]];
-        height += getSizeOfLabel(eanLabel, width).height;
-        height += kLabelMargin;
-        height += 8.0;
-        // comment label
-        UILabel *commentLabel = [self makeLabel:@"Comment"
-                                      textColor:[UIColor clearColor]];
-        height += getSizeOfLabel(commentLabel, width).height;
-        height += kLabelMargin;
-        height += 8.0;
-        if (height > kItemCellHeight) {
-            return height;
-        }
-    }
-    return kItemCellHeight;
+    height += getSizeOfLabel(commentLabel, width).height;
+    height += kLabelVerMargin;
+    height += 8.0;
+    if (height > kMedCellHeight)
+        return height;
+
+    return kMedCellHeight;
+}
+
+- (void)tableView:(UITableView *)tableView
+  willDisplayCell:(UITableViewCell *)cell
+{
+    [self layoutCellSeparator:cell];
 }
 
 - (UITableViewCell *) tableView: (UITableView *)tableView
@@ -225,21 +274,22 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
 
     static NSString *tableIdentifier = @"PrescriptionTableItem";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
-
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 //UITableViewCellStyleDefault
+    UITableViewCell *cell;
+#if 0
+    cell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
+    if (cell == nil)
+#endif
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:tableIdentifier];
         cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     }
     
-    CGRect frame = CGRectMake(12.0, 0, tableView.frame.size.width, 25.0);
-
-    if (indexPath.section == kSectionMedicines)
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    else
+    if (indexPath.section != kSectionMedicines)
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
+    CGRect frame = CGRectMake(12.0, 0, tableView.frame.size.width, 25.0);  // TODO: remove magic numbers
+    
     UILabel *label = [[UILabel alloc] initWithFrame:frame];
     if (indexPath.section == kSectionMeta) {
         label.font = [UIFont systemFontOfSize:13.8];
@@ -249,6 +299,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.text = placeDate;
     }
     else if (indexPath.section == kSectionOperator) {
+        if (!doctor) {
+            cell.textLabel.text = @"";
+            return cell;
+        }
+
         label.font = [UIFont systemFontOfSize:13.0];
         label.textAlignment = NSTextAlignmentLeft;
         label.textColor = [UIColor blackColor];
@@ -260,7 +315,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 else
                     label.text = [NSString stringWithFormat:@"%@ %@ %@", doctor.title, doctor.familyName, doctor.givenName];
 
-                // TODO: add signature image subview
+                if (([doctor signature] != nil) &&
+                    ![doctor.signature isEqualToString:@""]) {
+                    UIImageView *signatureView = [[UIImageView alloc] initWithImage:doctor.signatureThumbnail];
+                    cell.accessoryView = signatureView;
+                }
                 break;
             case 1:
                 label.text = doctor.postalAddress;
@@ -279,6 +338,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     }
     else if (indexPath.section == kSectionPatient) {
+        if (!patient) {
+            cell.textLabel.text = @"";
+            return cell;
+        }
+
         label.font = [UIFont systemFontOfSize:13.0];
         label.textAlignment = NSTextAlignmentLeft;
         label.textColor = [UIColor blackColor];
@@ -312,24 +376,25 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     else {
         // TODO: get product
-        UILabel *packLabel = [self makeLabel:[tableData objectAtIndex:indexPath.row]
+        MLProduct * med = medications[indexPath.row];
+        UILabel *packLabel = [self makeLabel:med.packageInfo
                                    textColor:[UIColor blackColor]];
 
-        UILabel *eanLabel = [self makeLabel:@"eanLabel"
+        UILabel *eanLabel = [self makeLabel:med.eanCode
                                   textColor:[UIColor darkGrayColor]];
 
-        UILabel *commentLabel = [self makeLabel:@"commentLabel"
+        UILabel *commentLabel = [self makeLabel:med.comment
                                       textColor:[UIColor darkGrayColor]];
 
         // layout
-        CGRect eanFrame = CGRectMake(12.0,
-                                     packLabel.frame.origin.y + packLabel.frame.size.height + kLabelMargin,
+        CGRect eanFrame = CGRectMake(kMedCellHorMargin,
+                                     packLabel.frame.origin.y + packLabel.frame.size.height + kLabelVerMargin,
                                      eanLabel.frame.size.width,
                                      eanLabel.frame.size.height);
         [eanLabel setFrame:eanFrame];
         
-        CGRect commentFrame = CGRectMake(12.0,
-                                         eanLabel.frame.origin.y + eanLabel.frame.size.height + kLabelMargin,
+        CGRect commentFrame = CGRectMake(kMedCellHorMargin,
+                                         eanLabel.frame.origin.y + eanLabel.frame.size.height + kLabelVerMargin,
                                          commentLabel.frame.size.width,
                                          commentLabel.frame.size.height);
         [commentLabel setFrame:commentFrame];
@@ -488,6 +553,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 // see AmiKo loadPrescriptionFromFile
 - (void) readPrescription:(NSURL *)url
 {
+    NSError *error;
 #ifdef DEBUG
     //NSLog(@"%s %@", __FUNCTION__, url);
 #endif
@@ -499,7 +565,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSData *decryptedData = [encryptedData initWithBase64EncodedData:encryptedData
                                                              options:NSDataBase64DecodingIgnoreUnknownCharacters];
     
-    NSError *error;
+    // jsonDict
     NSDictionary *receiptData = [NSJSONSerialization JSONObjectWithData:decryptedData
                                                                 options:NSJSONReadingAllowFragments
                                                                   error:&error];
@@ -521,9 +587,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 
 #ifdef DEBUG
-    NSLog(@"hash: %@", hash);
+    //NSLog(@"hash: %@", hash);
 #endif
 
+#if 0
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hashedKey == %@", hash];
 #ifdef DEBUG
     NSLog(@"predicate: %@", predicate);
@@ -533,40 +600,45 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //        // already imported
 //        return;
 //    }
+#endif
     
     placeDate = [receiptData objectForKey:@"place_date"];
     if (placeDate == nil)
         placeDate = [receiptData objectForKey:@"date"];
 
-    NSMutableArray *medications = [[NSMutableArray alloc] init];
-
     NSDictionary *operatorDict = [receiptData valueForKey:@"operator"] ?: [NSNull null];
-    if (operatorDict)
-        doctor = [MLOperator importFromDict:operatorDict];
+    if (operatorDict) {
+        doctor = [[MLOperator alloc] init];
+        [doctor importFromDict:operatorDict];
+    }
 
     NSDictionary *patientDict = [receiptData valueForKey:@"patient"] ?: [NSNull null];
-    if (patientDict)
-        patient = [MLPatient importFromDict:patientDict];
+    if (patientDict) {
+        patient = [[MLPatient alloc] init];
+        [patient importFromDict:patientDict];
+    }
 
-    // medications (products)
+    // prescription aka medications aka products
+    medications = [[NSMutableArray alloc] init]; // prescription
     NSArray *medicationArray = [receiptData valueForKey:@"medications"] ?: [NSNull null];
+    for (NSDictionary *medicationDict in medicationArray) {
+        MLProduct *med = [MLProduct importFromDict:medicationDict];
+        [medications addObject:med];
+    }
 #ifdef DEBUG
-    NSLog(@"medicationArray: %@", medicationArray);
-#endif
-//    if (medicationArray)
-//        for (NSDictionary *medicationDict in medicationArray)
-//            [medications addObject:[Product importFromDict:medicationDict]];
+//    NSLog(@"medicationArray: %@", medicationArray);
 
-#ifdef DEBUG
-    NSLog(@"medications: %@", medications);
+//    for (MLProduct *med in medications)
+//        NSLog(@"packageInfo: %@", med.packageInfo);
 #endif
 }
 
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color
 {
-    CGRect frame = CGRectMake(12.0, 8.0,
-                              (mainFrame.size.width - 24.0),
-                              kItemCellHeight);
+    CGRect frame = CGRectMake(kMedCellHorMargin,
+                              8.0,
+                              mainFrame.size.width - 2*kMedCellHorMargin,
+                              kMedCellHeight);
     UILabel *label = [[UILabel alloc] initWithFrame:frame];
     label.font = [UIFont systemFontOfSize:12.2];
     label.textAlignment = NSTextAlignmentLeft;

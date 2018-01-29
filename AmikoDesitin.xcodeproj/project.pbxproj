@@ -19,6 +19,7 @@
 		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
 		439F50FC20122665000E82FC /* prescription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F820122665000E82FC /* prescription@2x.png */; };
 		439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
+		43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
 		D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */; };
@@ -271,6 +272,8 @@
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
 		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F820122665000E82FC /* prescription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x.png"; path = "AmiKoDesitin/prescription@2x.png"; sourceTree = SOURCE_ROOT; };
+		43D3A0E0201F3CFB00EA77C6 /* MLProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLProduct.h; path = AmiKoDesitin/MLProduct.h; sourceTree = SOURCE_ROOT; };
+		43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLProduct.m; path = AmiKoDesitin/MLProduct.m; sourceTree = SOURCE_ROOT; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -540,6 +543,19 @@
 			name = main;
 			sourceTree = "<group>";
 		};
+		43D3A0DF201F2D1700EA77C6 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				43334328201B6488006BFC23 /* MLPatient.h */,
+				43334329201B6488006BFC23 /* MLPatient.m */,
+				4333432B201B64A2006BFC23 /* MLOperator.h */,
+				4333432C201B64A2006BFC23 /* MLOperator.m */,
+				43D3A0E0201F3CFB00EA77C6 /* MLProduct.h */,
+				43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */,
+			);
+			name = json;
+			sourceTree = "<group>";
+		};
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
@@ -691,6 +707,7 @@
 				430285C120161232003B2EF3 /* title */,
 				43334326201B641E006BFC23 /* menu */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
+				43D3A0DF201F2D1700EA77C6 /* json */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
@@ -698,8 +715,6 @@
 				D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
 				D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */,
-				D5A6F28F17B16C1D00EAB24B /* MLMedication.h */,
-				D5A6F29017B16C1D00EAB24B /* MLMedication.m */,
 				D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */,
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
 				D5A6F28917B16C0200EAB24B /* MLDataStore.h */,
@@ -710,10 +725,6 @@
 				D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */,
 				D573F4541A990E9900C4F589 /* MLAlertView.h */,
 				D573F4511A990E8600C4F589 /* MLAlertView.m */,
-				43334328201B6488006BFC23 /* MLPatient.h */,
-				43334329201B6488006BFC23 /* MLPatient.m */,
-				4333432B201B64A2006BFC23 /* MLOperator.h */,
-				4333432C201B64A2006BFC23 /* MLOperator.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -732,6 +743,8 @@
 		D5A6F26317B169E300EAB24B /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				D5A6F28F17B16C1D00EAB24B /* MLMedication.h */,
+				D5A6F29017B16C1D00EAB24B /* MLMedication.m */,
 				D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */,
 				D5A2250A1945EA830078FEFF /* drug_interactions_csv_de.csv */,
 				D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */,
@@ -1098,6 +1111,7 @@
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
+				43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,

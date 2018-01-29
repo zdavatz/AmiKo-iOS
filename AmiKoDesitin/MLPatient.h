@@ -24,6 +24,7 @@
 @property (atomic, copy) NSString *phoneNumber;
 @property (atomic, copy) NSString *emailAddress;
 
-+ (id)importFromDict:(NSDictionary *)dict;
+- (void)importFromDict:(NSDictionary *)dict;
+- (NSInteger)entriesCount;
 
 @end

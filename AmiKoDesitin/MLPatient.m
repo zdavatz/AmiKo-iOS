@@ -24,25 +24,26 @@
 @synthesize phoneNumber;
 @synthesize emailAddress;
 
-+ (id)importFromDict:(NSDictionary *)dict
+- (void)importFromDict:(NSDictionary *)dict
 {
-    MLPatient *patient = [[MLPatient alloc] init];
+    uniqueId = [dict objectForKey:@"patient_id"];
+    familyName = [dict objectForKey:@"family_name"];
+    givenName = [dict objectForKey:@"given_name"];
+    birthDate = [dict objectForKey:@"birth_date"];
+    weightKg = [[dict objectForKey:@"weight_kg"] intValue];
+    heightCm = [[dict objectForKey:@"height_cm"] intValue];
+    gender = [dict objectForKey:@"gender"];
+    postalAddress = [dict objectForKey:@"postal_address"];
+    zipCode = [dict objectForKey:@"zip_code"];
+    city = [dict objectForKey:@"city"];
+    country = [dict objectForKey:@"country"];
+    phoneNumber = [dict objectForKey:@"phone_number"];
+    emailAddress = [dict objectForKey:@"email_address"];
+}
 
-    patient.uniqueId = [dict objectForKey:@"patient_id"];
-    patient.familyName = [dict objectForKey:@"family_name"];
-    patient.givenName = [dict objectForKey:@"given_name"];
-    patient.birthDate = [dict objectForKey:@"birth_date"];
-    patient.weightKg = [[dict objectForKey:@"weight_kg"] intValue];
-    patient.heightCm = [[dict objectForKey:@"height_cm"] intValue];
-    patient.gender = [dict objectForKey:@"gender"];
-    patient.postalAddress = [dict objectForKey:@"postal_address"];
-    patient.zipCode = [dict objectForKey:@"zip_code"];
-    patient.city = [dict objectForKey:@"city"];
-    patient.country = [dict objectForKey:@"country"];
-    patient.phoneNumber = [dict objectForKey:@"phone_number"];
-    patient.emailAddress = [dict objectForKey:@"email_address"];
-    
-    return patient;
+- (NSInteger)entriesCount
+{
+    return 6; // TODO
 }
 
 @end
