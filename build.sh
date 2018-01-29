@@ -47,7 +47,7 @@ xcodebuild archive \
 echo "Building IPA..."
 
 #clean the build directory for .ipa
-rm -rf ./build/*.ipa
+rm -rf ./build/*.app
 
 
 #choose export options
