@@ -39,7 +39,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Fku-2J-woe"/>
                         <barButtonItem tag="1" title="Interaction" id="uB5-ix-Kqj">
                             <connections>
-                                <action selector="checkInteractions:" destination="-1" id="gYU-8f-n1d"/>
+                                <action selector="checkForInteractions:" destination="-1" id="9TF-Tk-4oT"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="7NW-JX-z5F"/>

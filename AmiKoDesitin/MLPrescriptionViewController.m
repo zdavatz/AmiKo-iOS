@@ -32,11 +32,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     CGSize constraint = CGSizeMake(width, CGFLOAT_MAX);
     NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
-    CGSize boundSize = [label.text
-                        boundingRectWithSize:constraint
-                        options:NSStringDrawingUsesLineFragmentOrigin
-                        attributes:@{NSFontAttributeName:label.font}
-                        context:context].size;
+    CGSize boundSize = [label.text boundingRectWithSize:constraint
+                                                options:NSStringDrawingUsesLineFragmentOrigin
+                                             attributes:@{NSFontAttributeName:label.font}
+                                                context:context].size;
     return CGSizeMake(ceil(boundSize.width), ceil(boundSize.height));
 }
 
@@ -97,9 +96,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)viewDidLoad
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
     [super viewDidLoad];
 
     // SWRevealViewController extends UIViewController!
@@ -178,24 +174,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return kNumSections;
 }
 
-- (nullable NSString *)tableView:(UITableView *)tableView
-         titleForHeaderInSection:(NSInteger)section
-{
-#ifdef DEBUG
-    //NSLog(@"%s section:%ld", __FUNCTION__, section);
-#endif
-    if (section == kSectionMeta)
-        return nil; //NSLocalizedString(@"Meta", nil);
-    
-    if (section == kSectionOperator)
-        return NSLocalizedString(@"Doctor", nil);
-    
-    if (section == kSectionPatient)
-        return NSLocalizedString(@"Patient", nil);
-    
-    return [NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"Medicines", nil) , [medications count]];
-}
-
 - (NSInteger) tableView: (UITableView *)tableView
   numberOfRowsInSection: (NSInteger)section
 {
@@ -215,6 +193,42 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 }
 
 #pragma mark - Table view delegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    // set height by section
+    CGRect frame = CGRectMake(0, 0, CGRectGetWidth(tableView.frame), 0);
+    UIView *view = [[UIView alloc] initWithFrame:frame];
+    
+    CGRect labelFrame = CGRectMake(kMedCellHorMargin, 2, 200, kSectionHeaderHeight-2);
+    UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
+    label.font = [UIFont systemFontOfSize:13 weight:UIFontWeightLight];
+    label.textColor = [UIColor darkGrayColor];
+    frame.size.height = kSectionHeaderHeight-2;
+    
+    if (section == kSectionMeta) {
+        frame.size.height = 0;
+        label.text = @"";
+    }
+    else if (section == kSectionOperator)
+        label.text = NSLocalizedString(@"Doctor", nil);
+    else if (section == kSectionPatient)
+        label.text = NSLocalizedString(@"Patient", nil);
+    else if (section == kSectionMedicines) {
+        NSString *format;
+        NSInteger count = [medications count];
+        if (count == 1)
+            format = NSLocalizedString(@"Medicine", nil);
+        else
+            format = NSLocalizedString(@"Medicines", nil);
+
+        label.text = [NSString stringWithFormat:@"%@ (%lu)", format, count];
+        [view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    }
+
+    [view addSubview:label];
+    return view;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -316,7 +330,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textAlignment = NSTextAlignmentLeft;
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
-        label.text = @"";  // initialize for appending
+        label.text = @"";  // Initialize for appending
         cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
         switch (indexPath.row) {
             case 0:
@@ -324,16 +338,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 if (([doctor signature] != nil) &&
                     ![doctor.signature isEqualToString:@""]) {
                     UIImageView *signatureView = [[UIImageView alloc] initWithImage:doctor.signatureThumbnail];
-#if 1 // like Generika
                     [signatureView setFrame:CGRectMake(frame.size.width - (DOCTOR_TN_W + 10.0),
                                                        0,
                                                        DOCTOR_TN_W,
                                                        DOCTOR_TN_H)];
                     signatureView.contentMode = UIViewContentModeTopRight;
                     [cell.contentView addSubview:signatureView];
-#else
-                    cell.accessoryView = signatureView;
-#endif
                 }
                 break;
             case 1:
