@@ -90,6 +90,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 }
 
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {
 #ifdef DEBUG
@@ -104,13 +109,19 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
 
-    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                         style:UIBarButtonItemStylePlain
-                                                                        target:revealController
-                                                                        action:@selector(revealToggle:)];
+    UIBarButtonItem *revealButtonItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:revealController
+                                    action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
-    // TODO: add button on the right for old prescriptions
+    UIBarButtonItem *rightRevealButtonItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:revealController
+                                    action:@selector(rightRevealToggle:)];
+    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
@@ -140,6 +151,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         NSURL *url = [NSURL fileURLWithPath:fullFilePath];
         [self readPrescription:url];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(amkListDidChangeSelection:)
+                                                 name:@"AmkFilenameNotification"
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -373,7 +389,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     }
     else {
-        // TODO: get product
         MLProduct * med = medications[indexPath.row];
         UILabel *packLabel = [self makeLabel:med.packageInfo
                                    textColor:[UIColor blackColor]];
@@ -652,4 +667,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return label;
 }
 
+#pragma mark - Notifications
+
+- (void)amkListDidChangeSelection:(NSNotification *)aNotification
+{
+    NSString *amkDir = [MLUtility amkDirectory];
+    NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
+    NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+    [self readPrescription:url];
+    [infoView reloadData];
+    
+    SWRevealViewController *revealController = self.revealViewController;
+    [revealController rightRevealToggleAnimated:YES];
+}
 @end

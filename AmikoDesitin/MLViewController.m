@@ -30,6 +30,7 @@
 #import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+#import "MLAmkListViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -110,6 +111,7 @@ static BOOL mShowReport = false;
     MLPrescriptionViewController *prescriptionViewController;
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
+    MLAmkListViewController *amkListViewController;
 
     UINavigationController *otherViewNavigationController;
     UINavigationController *menuViewNavigationController;
@@ -1868,8 +1870,15 @@ static BOOL mShowReport = false;
     
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
-#if 0
-    mainRevealController.rightViewController = titleViewController;
+#if 1
+    if (amkListViewController!=nil) {
+        [amkListViewController removeFromParentViewController];
+        amkListViewController = nil;
+    }
+
+    amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
+                                                                      bundle:nil];
+    mainRevealController.rightViewController = amkListViewController;
 #else
     mainRevealController.rightViewController = nil;    // Right view controller is not needed, nil it!
 #endif
