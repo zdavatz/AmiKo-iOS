@@ -35,4 +35,6 @@
 
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color;
 
+- (void)amkListDidChangeSelection:(NSNotification *)aNotification;
+
 @end

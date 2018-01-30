@@ -32,11 +32,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     CGSize constraint = CGSizeMake(width, CGFLOAT_MAX);
     NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
-    CGSize boundSize = [label.text
-                        boundingRectWithSize:constraint
-                        options:NSStringDrawingUsesLineFragmentOrigin
-                        attributes:@{NSFontAttributeName:label.font}
-                        context:context].size;
+    CGSize boundSize = [label.text boundingRectWithSize:constraint
+                                                options:NSStringDrawingUsesLineFragmentOrigin
+                                             attributes:@{NSFontAttributeName:label.font}
+                                                context:context].size;
     return CGSizeMake(ceil(boundSize.width), ceil(boundSize.height));
 }
 
@@ -90,27 +89,33 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 }
 
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
     [super viewDidLoad];
-    //[self layoutFrames];
-    //infoView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
 
-    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                         style:UIBarButtonItemStylePlain
-                                                                        target:revealController
-                                                                        action:@selector(revealToggle:)];
+    UIBarButtonItem *revealButtonItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:revealController
+                                    action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
-    // TODO: add button on the right for old prescriptions
+    UIBarButtonItem *rightRevealButtonItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:revealController
+                                    action:@selector(rightRevealToggle:)];
+    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
@@ -140,6 +145,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         NSURL *url = [NSURL fileURLWithPath:fullFilePath];
         [self readPrescription:url];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(amkListDidChangeSelection:)
+                                                 name:@"AmkFilenameNotification"
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -164,41 +174,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return kNumSections;
 }
 
-- (nullable NSString *)tableView:(UITableView *)tableView
-         titleForHeaderInSection:(NSInteger)section
-{
-#ifdef DEBUG
-    //NSLog(@"%s section:%ld", __FUNCTION__, section);
-#endif
-    if (section == kSectionMeta)
-        return nil; //NSLocalizedString(@"Meta", nil);
-    
-    if (section == kSectionOperator)
-        return NSLocalizedString(@"Doctor", nil);
-    
-    if (section == kSectionPatient)
-        return NSLocalizedString(@"Patient", nil);
-    
-    return [NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"Medicines", nil) , [medications count]];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    // default value: UITableViewAutomaticDimension;
-    if (section == kSectionMeta)
-        return kSectionHeaderHeight / 2.5;
-
-    // operator|patient
-    return kSectionHeaderHeight;
-}
-
 - (NSInteger) tableView: (UITableView *)tableView
   numberOfRowsInSection: (NSInteger)section
 {
-#ifdef DEBUG
-    //NSLog(@"%s section:%ld", __FUNCTION__, section);
-#endif
-    // Return the number of rows in the section.
     if (section == kSectionMeta)
         return 1;
 
@@ -216,10 +194,56 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark - Table view delegate
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    // set height by section
+    CGRect frame = CGRectMake(0, 0, CGRectGetWidth(tableView.frame), 0);
+    UIView *view = [[UIView alloc] initWithFrame:frame];
+    
+    CGRect labelFrame = CGRectMake(kMedCellHorMargin, 2, 200, kSectionHeaderHeight-2);
+    UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
+    label.font = [UIFont systemFontOfSize:13 weight:UIFontWeightLight];
+    label.textColor = [UIColor darkGrayColor];
+    frame.size.height = kSectionHeaderHeight-2;
+    
+    if (section == kSectionMeta) {
+        frame.size.height = 0;
+        label.text = @"";
+    }
+    else if (section == kSectionOperator)
+        label.text = NSLocalizedString(@"Doctor", nil);
+    else if (section == kSectionPatient)
+        label.text = NSLocalizedString(@"Patient", nil);
+    else if (section == kSectionMedicines) {
+        NSString *format;
+        NSInteger count = [medications count];
+        if (count == 1)
+            format = NSLocalizedString(@"Medicine", nil);
+        else
+            format = NSLocalizedString(@"Medicines", nil);
+
+        label.text = [NSString stringWithFormat:@"%@ (%lu)", format, count];
+        [view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    }
+
+    [view addSubview:label];
+    return view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    // default value: UITableViewAutomaticDimension;
+    if (section == kSectionMeta)
+        return kSectionHeaderHeight / 2.5;
+    
+    // operator|patient
+    return kSectionHeaderHeight;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == kSectionOperator) && (indexPath.row == 0))
-        return DOCTOR_TN_H;
+//    if ((indexPath.section == kSectionOperator) && (indexPath.row == 0))
+//        return DOCTOR_TN_H;
 
     if (indexPath.section != kSectionMedicines)
         return kInfoCellHeight;
@@ -232,7 +256,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return kMedCellHeight;
 
     CGFloat height = 0.0;
-    CGFloat width = tableView.frame.size.width - 24.0;
+    CGFloat width = tableView.frame.size.width - 24.0; // TODO
 
     // package name label
     UILabel *packLabel = [self makeLabel:med.packageInfo
@@ -306,17 +330,20 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textAlignment = NSTextAlignmentLeft;
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
+        label.text = @"";  // Initialize for appending
+        cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
         switch (indexPath.row) {
             case 0:
-                if ([doctor.title isEqualToString:@""])
-                    label.text = [NSString stringWithFormat:@"%@ %@", doctor.familyName, doctor.givenName];
-                else
-                    label.text = [NSString stringWithFormat:@"%@ %@ %@", doctor.title, doctor.familyName, doctor.givenName];
-
+                label.text = [NSString stringWithFormat:@"%@ %@ %@", doctor.title, doctor.familyName, doctor.givenName];
                 if (([doctor signature] != nil) &&
                     ![doctor.signature isEqualToString:@""]) {
                     UIImageView *signatureView = [[UIImageView alloc] initWithImage:doctor.signatureThumbnail];
-                    cell.accessoryView = signatureView;
+                    [signatureView setFrame:CGRectMake(frame.size.width - (DOCTOR_TN_W + 10.0),
+                                                       0,
+                                                       DOCTOR_TN_W,
+                                                       DOCTOR_TN_H)];
+                    signatureView.contentMode = UIViewContentModeTopRight;
+                    [cell.contentView addSubview:signatureView];
                 }
                 break;
             case 1:
@@ -373,7 +400,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     }
     else {
-        // TODO: get product
         MLProduct * med = medications[indexPath.row];
         UILabel *packLabel = [self makeLabel:med.packageInfo
                                    textColor:[UIColor blackColor]];
@@ -652,4 +678,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return label;
 }
 
+#pragma mark - Notifications
+
+- (void)amkListDidChangeSelection:(NSNotification *)aNotification
+{
+    NSString *amkDir = [MLUtility amkDirectory];
+    NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
+    NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+    [self readPrescription:url];
+    [infoView reloadData];
+    
+    SWRevealViewController *revealController = self.revealViewController;
+    [revealController rightRevealToggleAnimated:YES];
+}
 @end

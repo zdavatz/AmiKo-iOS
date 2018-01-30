@@ -127,7 +127,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 #endif
     // Init main window
     CGRect screenBound = [[UIScreen mainScreen] bounds];
