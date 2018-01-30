@@ -21,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="f9a-IN-dWa">
-                    <rect key="frame" x="16" y="0.0" width="343" height="623"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="UbI-M0-YSc"/>
@@ -59,13 +59,13 @@
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="0a9-hP-ZRe"/>
-                <constraint firstAttribute="bottom" secondItem="SEC-AO-gUj" secondAttribute="bottom" id="DTR-XD-7gK"/>
-                <constraint firstItem="SEC-AO-gUj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="HrB-dn-GzS"/>
-                <constraint firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Ixo-EK-Nm8"/>
-                <constraint firstItem="f9a-IN-dWa" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="XEX-Fc-pie"/>
-                <constraint firstItem="f9a-IN-dWa" firstAttribute="centerX" secondItem="SEC-AO-gUj" secondAttribute="centerX" id="kqt-GF-ekU"/>
-                <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="wzD-8C-U98"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="SEC-AO-gUj" secondAttribute="leading" id="6xR-RW-kx5"/>
+                <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" id="NA6-Gr-iI5"/>
+                <constraint firstAttribute="bottom" secondItem="SEC-AO-gUj" secondAttribute="bottom" id="O3Q-lo-vLW"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="OnM-jG-ivR"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="hRF-kZ-8dt"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="hbz-RX-L6m"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="xlR-GW-zYZ"/>
             </constraints>
             <point key="canvasLocation" x="24.5" y="52.5"/>
         </view>

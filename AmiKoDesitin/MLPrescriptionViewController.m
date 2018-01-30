@@ -19,8 +19,6 @@ static const float kLabelVerMargin = 2.4;
 static const float kMedCellHorMargin = 12.0;
 static const float kMedCellHeight = 44.0;  // minimum height
 
-static const float kMainframeRightAdjustment = 12.0;
-
 enum {
     kSectionMeta=0,
     kSectionOperator,
@@ -122,7 +120,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     int navBarHeight = self.navigationController.navigationBar.frame.size.height;
     int barHeight = statusBarHeight + navBarHeight;
     mainFrame = CGRectMake(0, barHeight,
-                           screenBounds.size.width - kMainframeRightAdjustment,
+                           screenBounds.size.width,
                            CGRectGetHeight(screenBounds) - barHeight);
     NSError *error;
     NSString *amkDir = [MLUtility amkDirectory];
