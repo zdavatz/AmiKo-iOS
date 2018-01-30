@@ -101,8 +101,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSLog(@"%s", __FUNCTION__);
 #endif
     [super viewDidLoad];
-    //[self layoutFrames];
-    //infoView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
@@ -198,23 +196,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return [NSString stringWithFormat:@"%@ (%lu)", NSLocalizedString(@"Medicines", nil) , [medications count]];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    // default value: UITableViewAutomaticDimension;
-    if (section == kSectionMeta)
-        return kSectionHeaderHeight / 2.5;
-
-    // operator|patient
-    return kSectionHeaderHeight;
-}
-
 - (NSInteger) tableView: (UITableView *)tableView
   numberOfRowsInSection: (NSInteger)section
 {
-#ifdef DEBUG
-    //NSLog(@"%s section:%ld", __FUNCTION__, section);
-#endif
-    // Return the number of rows in the section.
     if (section == kSectionMeta)
         return 1;
 
@@ -232,10 +216,20 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark - Table view delegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    // default value: UITableViewAutomaticDimension;
+    if (section == kSectionMeta)
+        return kSectionHeaderHeight / 2.5;
+    
+    // operator|patient
+    return kSectionHeaderHeight;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == kSectionOperator) && (indexPath.row == 0))
-        return DOCTOR_TN_H;
+//    if ((indexPath.section == kSectionOperator) && (indexPath.row == 0))
+//        return DOCTOR_TN_H;
 
     if (indexPath.section != kSectionMedicines)
         return kInfoCellHeight;
@@ -248,7 +242,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return kMedCellHeight;
 
     CGFloat height = 0.0;
-    CGFloat width = tableView.frame.size.width - 24.0;
+    CGFloat width = tableView.frame.size.width - 24.0; // TODO
 
     // package name label
     UILabel *packLabel = [self makeLabel:med.packageInfo
@@ -322,17 +316,24 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textAlignment = NSTextAlignmentLeft;
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
+        label.text = @"";  // initialize for appending
+        cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
         switch (indexPath.row) {
             case 0:
-                if ([doctor.title isEqualToString:@""])
-                    label.text = [NSString stringWithFormat:@"%@ %@", doctor.familyName, doctor.givenName];
-                else
-                    label.text = [NSString stringWithFormat:@"%@ %@ %@", doctor.title, doctor.familyName, doctor.givenName];
-
+                label.text = [NSString stringWithFormat:@"%@ %@ %@", doctor.title, doctor.familyName, doctor.givenName];
                 if (([doctor signature] != nil) &&
                     ![doctor.signature isEqualToString:@""]) {
                     UIImageView *signatureView = [[UIImageView alloc] initWithImage:doctor.signatureThumbnail];
+#if 1 // like Generika
+                    [signatureView setFrame:CGRectMake(frame.size.width - (DOCTOR_TN_W + 10.0),
+                                                       0,
+                                                       DOCTOR_TN_W,
+                                                       DOCTOR_TN_H)];
+                    signatureView.contentMode = UIViewContentModeTopRight;
+                    [cell.contentView addSubview:signatureView];
+#else
                     cell.accessoryView = signatureView;
+#endif
                 }
                 break;
             case 1:

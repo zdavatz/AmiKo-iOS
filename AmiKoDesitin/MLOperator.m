@@ -34,6 +34,10 @@
     phoneNumber = [dict objectForKey:@"phone_number"];
     emailAddress = [dict objectForKey:@"email_address"];
 
+    if (!title) title = @"";
+    if (!familyName) familyName = @"";
+    if (!givenName) givenName = @"";
+
     signature = [dict objectForKey:@"signature"];
 }
 

@@ -1870,7 +1870,7 @@ static BOOL mShowReport = false;
     
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
-#if 1
+
     if (amkListViewController!=nil) {
         [amkListViewController removeFromParentViewController];
         amkListViewController = nil;
@@ -1879,9 +1879,6 @@ static BOOL mShowReport = false;
     amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
                                                                       bundle:nil];
     mainRevealController.rightViewController = amkListViewController;
-#else
-    mainRevealController.rightViewController = nil;    // Right view controller is not needed, nil it!
-#endif
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 }
