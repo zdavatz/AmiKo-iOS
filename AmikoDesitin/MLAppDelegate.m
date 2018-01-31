@@ -30,6 +30,7 @@
 #import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+#import "MLUtility.h"
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
@@ -288,6 +289,50 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 - (void) applicationWillTerminate: (UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+// The file is in Documents/Inbox/ and needs to be moved to Documents/amk/
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+#ifdef DEBUG
+    //NSLog(@"%s url:%@", __FUNCTION__, url);
+#endif
+    if (!url ||
+        ![url isFileURL])
+    {
+        NSLog(@"Invalid URL");
+        return NO;
+    }
+
+    NSString *fileName = [[url absoluteString] lastPathComponent];
+    NSString *extName = [url pathExtension];
+
+    if (![extName isEqualToString:@"amk"] ||
+        ![fileName hasPrefix:@"RZ_"])
+    {
+        NSLog(@"Invalid filename:%@", fileName);
+        return NO;
+    }
+    
+    NSString *amkDir = [MLUtility amkDirectory];
+
+    //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
+    NSString *source = [url path];
+    NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
+
+    // TODO: check if the destination file exists and possibly prompt to overwrite
+
+    NSError *error;
+    [[NSFileManager defaultManager] moveItemAtPath:source
+                                            toPath:destination
+                                             error:&error];
+    if (error)
+        NSLog(@"%@", error.localizedDescription);
+    
+    return YES;
 }
 
 @end
