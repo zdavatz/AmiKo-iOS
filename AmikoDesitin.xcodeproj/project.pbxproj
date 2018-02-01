@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		430285BF20160FB1003B2EF3 /* MLPrescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */; };
+		430285C820162C72003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
+		430285CD20162DA1003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
+		430285D120162DEB003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
+		4333432A201B6488006BFC23 /* MLPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 43334329201B6488006BFC23 /* MLPatient.m */; };
+		4333432D201B64A2006BFC23 /* MLOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4333432C201B64A2006BFC23 /* MLOperator.m */; };
+		4387FC3D20189DB4000A5A0F /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */; };
+		439B6C6520206D210018F922 /* MLAmkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439B6C6320206D210018F922 /* MLAmkListViewController.m */; };
+		439B6C6620206D210018F922 /* MLAmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* MLAmkListViewController.xib */; };
+		439F50F920122665000E82FC /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
+		439F50FA20122665000E82FC /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
+		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
+		439F50FC20122665000E82FC /* prescription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F820122665000E82FC /* prescription@2x.png */; };
+		439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
+		43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
 		D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */; };
@@ -69,7 +84,6 @@
 		D59E895718B7C0D600185094 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D59E895518B7C0C100185094 /* MessageUI.framework */; };
 		D59E895818B7C0DB00185094 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
 		D59E895918B7C0E100185094 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A31F6218B5263500F56BC5 /* libz.1.2.5.dylib */; };
-		D59E895B18B7E7CB00185094 /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */; };
 		D5A1754C1A9A737F00E69385 /* interactions.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754A1A9A737F00E69385 /* interactions.png */; };
 		D5A1754D1A9A737F00E69385 /* interactions.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A1754A1A9A737F00E69385 /* interactions.png */; };
@@ -244,6 +258,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		430285BC20160FB1003B2EF3 /* MLPrescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPrescriptionViewController.h; path = AmiKoDesitin/MLPrescriptionViewController.h; sourceTree = SOURCE_ROOT; };
+		430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPrescriptionViewController.m; path = AmiKoDesitin/MLPrescriptionViewController.m; sourceTree = SOURCE_ROOT; };
+		430285C4201613B5003B2EF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		430285C520161410003B2EF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		430285C720162C72003B2EF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = AmiKoDesitin/de.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		430285CC20162DA1003B2EF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = AmiKoDesitin/fr.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		430285D020162DEB003B2EF3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = AmiKoDesitin/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		43334328201B6488006BFC23 /* MLPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPatient.h; path = AmiKoDesitin/MLPatient.h; sourceTree = SOURCE_ROOT; };
+		43334329201B6488006BFC23 /* MLPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPatient.m; path = AmiKoDesitin/MLPatient.m; sourceTree = SOURCE_ROOT; };
+		4333432B201B64A2006BFC23 /* MLOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOperator.h; path = AmiKoDesitin/MLOperator.h; sourceTree = SOURCE_ROOT; };
+		4333432C201B64A2006BFC23 /* MLOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLOperator.m; path = AmiKoDesitin/MLOperator.m; sourceTree = SOURCE_ROOT; };
+		4387FC4020189EB8000A5A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLPrescriptionViewController.xib; sourceTree = "<group>"; };
+		439B6C6220206D210018F922 /* MLAmkListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLAmkListViewController.h; path = AmiKoDesitin/MLAmkListViewController.h; sourceTree = SOURCE_ROOT; };
+		439B6C6320206D210018F922 /* MLAmkListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLAmkListViewController.m; path = AmiKoDesitin/MLAmkListViewController.m; sourceTree = SOURCE_ROOT; };
+		439B6C6420206D210018F922 /* MLAmkListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLAmkListViewController.xib; path = AmiKoDesitin/MLAmkListViewController.xib; sourceTree = SOURCE_ROOT; };
+		439F50F520122665000E82FC /* prescription-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription-selected.png"; path = "AmiKoDesitin/prescription-selected.png"; sourceTree = SOURCE_ROOT; };
+		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
+		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
+		439F50F820122665000E82FC /* prescription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x.png"; path = "AmiKoDesitin/prescription@2x.png"; sourceTree = SOURCE_ROOT; };
+		43D3A0E0201F3CFB00EA77C6 /* MLProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLProduct.h; path = AmiKoDesitin/MLProduct.h; sourceTree = SOURCE_ROOT; };
+		43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLProduct.m; path = AmiKoDesitin/MLProduct.m; sourceTree = SOURCE_ROOT; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -434,6 +469,108 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		430285C120161232003B2EF3 /* title */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F29117B16C1D00EAB24B /* MLTitleViewController.h */,
+				D5A6F29217B16C1D00EAB24B /* MLTitleViewController.m */,
+				D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */,
+				D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */,
+			);
+			name = title;
+			sourceTree = "<group>";
+		};
+		430285C22016124A003B2EF3 /* second */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F29817B16C3A00EAB24B /* MLSecondViewController.h */,
+				D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */,
+				D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */,
+				D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */,
+			);
+			name = second;
+			sourceTree = "<group>";
+		};
+		430285C32016126F003B2EF3 /* prescription */ = {
+			isa = PBXGroup;
+			children = (
+				430285BC20160FB1003B2EF3 /* MLPrescriptionViewController.h */,
+				430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */,
+				4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */,
+			);
+			name = prescription;
+			sourceTree = "<group>";
+		};
+		430285C920162D6D003B2EF3 /* de */ = {
+			isa = PBXGroup;
+			children = (
+				430285C620162C72003B2EF3 /* Localizable.strings */,
+			);
+			name = de;
+			sourceTree = "<group>";
+		};
+		430285CA20162D7C003B2EF3 /* fr */ = {
+			isa = PBXGroup;
+			children = (
+				430285CB20162DA1003B2EF3 /* Localizable.strings */,
+			);
+			name = fr;
+			sourceTree = "<group>";
+		};
+		430285CE20162DC1003B2EF3 /* en */ = {
+			isa = PBXGroup;
+			children = (
+				430285CF20162DEB003B2EF3 /* Localizable.strings */,
+			);
+			name = en;
+			sourceTree = "<group>";
+		};
+		43334326201B641E006BFC23 /* menu */ = {
+			isa = PBXGroup;
+			children = (
+				D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */,
+				D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */,
+				D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */,
+			);
+			name = menu;
+			sourceTree = "<group>";
+		};
+		4387FC3C20188ECE000A5A0F /* main */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F29B17B16C4B00EAB24B /* MLSimpleTableCell.h */,
+				D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */,
+				D5A6F29F17B16C4B00EAB24B /* MLViewController.h */,
+				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
+				D5A6F2B217B171C900EAB24B /* MLViewController.xib */,
+				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
+			);
+			name = main;
+			sourceTree = "<group>";
+		};
+		439B6C6120206C2D0018F922 /* amk */ = {
+			isa = PBXGroup;
+			children = (
+				439B6C6220206D210018F922 /* MLAmkListViewController.h */,
+				439B6C6320206D210018F922 /* MLAmkListViewController.m */,
+				439B6C6420206D210018F922 /* MLAmkListViewController.xib */,
+			);
+			name = amk;
+			sourceTree = "<group>";
+		};
+		43D3A0DF201F2D1700EA77C6 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				43334328201B6488006BFC23 /* MLPatient.h */,
+				43334329201B6488006BFC23 /* MLPatient.m */,
+				4333432B201B64A2006BFC23 /* MLOperator.h */,
+				4333432C201B64A2006BFC23 /* MLOperator.m */,
+				43D3A0E0201F3CFB00EA77C6 /* MLProduct.h */,
+				43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */,
+			);
+			name = json;
+			sourceTree = "<group>";
+		};
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
@@ -526,7 +663,6 @@
 		D5A6F24017B1692F00EAB24B /* AmikoDesitin */ = {
 			isa = PBXGroup;
 			children = (
-				D5A6F26517B169FB00EAB24B /* Views */,
 				D5A6F26417B169F000EAB24B /* Resources */,
 				D5A6F24917B1692F00EAB24B /* MLAppDelegate.h */,
 				D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */,
@@ -542,6 +678,10 @@
 		D5A6F24117B1692F00EAB24B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				430285CE20162DC1003B2EF3 /* en */,
+				430285CA20162D7C003B2EF3 /* fr */,
+				430285C920162D6D003B2EF3 /* de */,
+				D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */,
 				D5A6F24217B1692F00EAB24B /* AmikoDesitin-Info.plist */,
 				D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */,
 				D5A6F24817B1692F00EAB24B /* AmikoDesitin-Prefix.pch */,
@@ -576,30 +716,25 @@
 		D5A6F26117B169B900EAB24B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4387FC3C20188ECE000A5A0F /* main */,
+				430285C22016124A003B2EF3 /* second */,
+				430285C32016126F003B2EF3 /* prescription */,
+				430285C120161232003B2EF3 /* title */,
+				43334326201B641E006BFC23 /* menu */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
+				43D3A0DF201F2D1700EA77C6 /* json */,
+				439B6C6120206C2D0018F922 /* amk */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
-				D5A6F29B17B16C4B00EAB24B /* MLSimpleTableCell.h */,
-				D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */,
 				D5A6F29D17B16C4B00EAB24B /* MLSQLiteDatabase.h */,
 				D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */,
-				D5A6F29F17B16C4B00EAB24B /* MLViewController.h */,
-				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
-				D5A6F29817B16C3A00EAB24B /* MLSecondViewController.h */,
-				D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */,
-				D5A6F29117B16C1D00EAB24B /* MLTitleViewController.h */,
-				D5A6F29217B16C1D00EAB24B /* MLTitleViewController.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
 				D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */,
-				D5A6F28F17B16C1D00EAB24B /* MLMedication.h */,
-				D5A6F29017B16C1D00EAB24B /* MLMedication.m */,
 				D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */,
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
 				D5A6F28917B16C0200EAB24B /* MLDataStore.h */,
 				D5A6F28A17B16C0200EAB24B /* MLDataStore.m */,
-				D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */,
-				D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */,
 				D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */,
 				D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */,
 				D5A31F6F18B52D3E00F56BC5 /* MLProgressViewController.h */,
@@ -624,6 +759,8 @@
 		D5A6F26317B169E300EAB24B /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				D5A6F28F17B16C1D00EAB24B /* MLMedication.h */,
+				D5A6F29017B16C1D00EAB24B /* MLMedication.m */,
 				D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */,
 				D5A2250A1945EA830078FEFF /* drug_interactions_csv_de.csv */,
 				D59E895C18B7E7D500185094 /* amiko_db_full_idx_fr.db */,
@@ -635,6 +772,10 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				439F50F520122665000E82FC /* prescription-selected.png */,
+				439F50F620122665000E82FC /* prescription.png */,
+				439F50F720122665000E82FC /* prescription@2x-selected.png */,
+				439F50F820122665000E82FC /* prescription@2x.png */,
 				D5990A6C1BDEC2A10040C4C2 /* desitin_quick.png */,
 				D5990A6D1BDEC2A10040C4C2 /* desitin_quick@2x.png */,
 				D5A1755C1A9BC27400E69385 /* favorites-selected.png */,
@@ -685,21 +826,6 @@
 				D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		D5A6F26517B169FB00EAB24B /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				D5A6F2B217B171C900EAB24B /* MLViewController.xib */,
-				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
-				D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */,
-				D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */,
-				D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */,
-				D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */,
-				D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */,
-				D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */,
-			);
-			name = Views;
 			sourceTree = "<group>";
 		};
 		D5FFE19E18B0FF99002D6159 /* SWRevealViewController */ = {
@@ -785,6 +911,9 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				de,
+				fr,
+				Base,
 			);
 			mainGroup = D5A6F22E17B1692F00EAB24B;
 			productRefGroup = D5A6F23817B1692F00EAB24B /* Products */;
@@ -806,7 +935,9 @@
 				D5A1755A1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */,
 				D5A6F24517B1692F00EAB24B /* InfoPlist.strings in Resources */,
+				439F50F920122665000E82FC /* prescription-selected.png in Resources */,
 				D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */,
+				439B6C6620206D210018F922 /* MLAmkListViewController.xib in Resources */,
 				D5A6F27017B16A7700EAB24B /* amiko_stylesheet.css in Resources */,
 				D5A6F27617B16AA400EAB24B /* 28-star-gy.png in Resources */,
 				D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */,
@@ -820,7 +951,6 @@
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */,
-				D59E895B18B7E7CB00185094 /* amiko_db_full_idx_de.db in Resources */,
 				D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */,
 				D5A6F28417B16B6000EAB24B /* MLSecondViewController~iphone.xib in Resources */,
 				D5A6F2B317B171C900EAB24B /* MLViewController.xib in Resources */,
@@ -830,6 +960,7 @@
 				D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				D554575618B3E87D003299E0 /* 905-chat-2.png in Resources */,
 				D5A2253319461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */,
+				439F50FA20122665000E82FC /* prescription.png in Resources */,
 				D5A2252219461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
 				D5A2250B1945EA830078FEFF /* drug_interactions_csv_de.csv in Resources */,
 				D5A2252D19461D750078FEFF /* interactions_css.css in Resources */,
@@ -839,6 +970,7 @@
 				D5A6F2A717B16E4400EAB24B /* 28-star@2x.png in Resources */,
 				D5A6F2A917B16EF700EAB24B /* app_icon_57x57.png in Resources */,
 				D5A6F2AB17B16F2300EAB24B /* app_icon_72x72.png in Resources */,
+				4387FC3D20189DB4000A5A0F /* MLPrescriptionViewController.xib in Resources */,
 				D5A6F2AD17B16F2900EAB24B /* app_icon_144x144.png in Resources */,
 				D5A6F2AF17B16F3600EAB24B /* app_icon_114x114.png in Resources */,
 				D551D53D17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
@@ -855,9 +987,12 @@
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
+				439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */,
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
+				430285C820162C72003B2EF3 /* Localizable.strings in Resources */,
+				439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */,
 				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D533DAAA17B434FF00199C38 /* Default-Portrait@2x~ipad.png in Resources */,
 				D5A1754E1A9A737F00E69385 /* interactions@2x.png in Resources */,
@@ -874,6 +1009,7 @@
 				D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */,
 				D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */,
 				D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */,
+				439F50FC20122665000E82FC /* prescription@2x.png in Resources */,
 				D5A175541A9A741B00E69385 /* maindb@2x.png in Resources */,
 				D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */,
 				D5FFE1B718B1021B002D6159 /* LICENSE in Resources */,
@@ -881,7 +1017,9 @@
 				D5A1754C1A9A737F00E69385 /* interactions.png in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
+				430285CD20162DA1003B2EF3 /* Localizable.strings in Resources */,
 				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
+				430285D120162DEB003B2EF3 /* Localizable.strings in Resources */,
 				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
 				D5A175601A9BC27400E69385 /* favorites-selected.png in Resources */,
@@ -985,13 +1123,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4333432D201B64A2006BFC23 /* MLOperator.m in Sources */,
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
+				43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
+				439B6C6520206D210018F922 /* MLAmkListViewController.m in Sources */,
 				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
@@ -1000,6 +1141,7 @@
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
 				D5A2253E194A435B0078FEFF /* deleterow.js in Sources */,
+				430285BF20160FB1003B2EF3 /* MLPrescriptionViewController.m in Sources */,
 				D5A6F29317B16C1D00EAB24B /* MLMedication.m in Sources */,
 				D5A6F29417B16C1D00EAB24B /* MLTitleViewController.m in Sources */,
 				D5A6F29717B16C2F00EAB24B /* MLSearchWebView.m in Sources */,
@@ -1012,6 +1154,7 @@
 				D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
+				4333432A201B6488006BFC23 /* MLPatient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,10 +1195,45 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		430285C620162C72003B2EF3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430285C720162C72003B2EF3 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		430285CB20162DA1003B2EF3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430285CC20162DA1003B2EF3 /* fr */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		430285CF20162DEB003B2EF3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430285D020162DEB003B2EF3 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4387FC4020189EB8000A5A0F /* Base */,
+			);
+			name = MLPrescriptionViewController.xib;
+			path = AmiKoDesitin;
+			sourceTree = SOURCE_ROOT;
+		};
 		D5A6F24317B1692F00EAB24B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				D5A6F24417B1692F00EAB24B /* en */,
+				430285C4201613B5003B2EF3 /* de */,
+				430285C520161410003B2EF3 /* fr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1067,8 +1245,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1085,7 +1265,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1104,7 +1284,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				SDKROOT = iphoneos;
@@ -1116,8 +1296,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1146,7 +1328,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -1160,8 +1342,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-AmiKoDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-AmiKoDesitin";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1172,7 +1352,6 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1194,7 +1373,6 @@
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = AMIKO_DESITIN;
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1218,7 +1396,6 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				WRAPPER_EXTENSION = app;
@@ -1236,7 +1413,6 @@
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = COMED_DESITIN;
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				WRAPPER_EXTENSION = app;

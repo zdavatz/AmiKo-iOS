@@ -21,7 +21,15 @@
  
  ------------------------------------------------------------------------ */
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+
+enum {
+    eAips=0,
+    eFavorites=1,
+    eInteractions=2,
+    eDesitin=3,
+    ePrescription=4
+};
 
 /**
  UITableViewDelegate -> deals with the appearance of UITableView, manages height of table row, configure section headings and footers, ...
@@ -53,5 +61,7 @@
 - (IBAction) onToolBarButtonPressed: (id)sender;
 
 - (void) showReport:(id)sender;
+- (void) switchToDrugInteractionView;
+- (void) switchToPrescriptionView;
 
 @end

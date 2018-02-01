@@ -27,8 +27,10 @@
 #import "MLUtility.h"
 
 #import "MLSecondViewController.h"
+#import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+#import "MLAmkListViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -45,30 +47,12 @@
 #import <sys/time.h>
 
 enum {
-    kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kNone=100
+    kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
 };
 
 enum {
     kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kTherapy=8
 };
-
-static NSString *SEARCH_STRING = @"Suche";
-static NSString *FACHINFO_STRING = @"Fachinformation";
-static NSString *TREFFER_STRING = @"Treffer";
-
-static NSString *FULL_TOOLBAR_TITLE = @"Präparat";
-static NSString *FULL_TOOLBAR_AUTHOR = @"Inhaber";
-static NSString *FULL_TOOLBAR_ATCCODE = @"Wirkstoff/ATC";
-static NSString *FULL_TOOLBAR_REGNR = @"Reg. Nr.";
-static NSString *FULL_TOOLBAR_SUBSTANCES = @"Wirkstoff";
-static NSString *FULL_TOOLBAR_THERAPY = @"Therapie";
-
-static NSString *SHORT_TOOLBAR_TITLE = @"Prä";
-static NSString *SHORT_TOOLBAR_AUTHOR = @"Inh";
-static NSString *SHORT_TOOLBAR_ATCCODE = @"Wirk/Atc";
-static NSString *SHORT_TOOLBAR_REGNR = @"Reg";
-static NSString *SHORT_TOOLBAR_SUBSTANCES = @"Wirk";
-static NSString *SHORT_TOOLBAR_THERAPY = @"Ther";
 
 static NSInteger mUsedDatabase = kNone;
 static NSInteger mCurrentSearchState = kTitle;
@@ -78,6 +62,8 @@ static CGFloat searchFieldWidth = 320.0f;
 static BOOL mSearchInteractions = false;
 static BOOL mShowReport = false;
 
+#pragma mark -
+
 @interface DataObject : NSObject
 
 @property NSString *title;
@@ -85,6 +71,8 @@ static BOOL mShowReport = false;
 @property long medId;
 
 @end
+
+#pragma mark -
 
 @implementation DataObject
 
@@ -94,13 +82,10 @@ static BOOL mShowReport = false;
 
 @end
 
+#pragma mark -
+
 @implementation MLViewController
 {
-    // Enumerations
-    enum {
-        eAips=0, eFavorites=1, eInteractions=2, eDesitin=3
-    };
-
     // Instance variable declarations go here
     NSMutableArray *medi;
     
@@ -123,10 +108,12 @@ static BOOL mShowReport = false;
     SWRevealViewController *mainRevealController;
     
     MLSecondViewController *secondViewController;
+    MLPrescriptionViewController *prescriptionViewController;
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
+    MLAmkListViewController *amkListViewController;
 
-    UINavigationController *secondViewNavigationController;
+    UINavigationController *otherViewNavigationController;
     UINavigationController *menuViewNavigationController;
     
     UIActivityIndicatorView *mActivityIndicator;
@@ -164,55 +151,88 @@ static BOOL mShowReport = false;
 
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if ( (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) || (orientation == UIInterfaceOrientationLandscapeLeft) || (orientation == UIInterfaceOrientationLandscapeRight) ) {
+    if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ||
+        (orientation == UIInterfaceOrientationLandscapeLeft) ||
+        (orientation == UIInterfaceOrientationLandscapeRight) )
+    {
         [searchField setText:@""];
-        if ([btn.title isEqualToString:FULL_TOOLBAR_TITLE]) {
-            [myTextField setText:FULL_TOOLBAR_TITLE];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_TITLE];
+        if ([btn.title isEqualToString:NSLocalizedString(@"Preparation", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"Preparation", "Full toolbar")];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Preparation", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Preparation", "Full toolbar")];
             mCurrentSearchState = kTitle;
-        } else if ([btn.title isEqualToString:FULL_TOOLBAR_AUTHOR]) {
-            [myTextField setText:FULL_TOOLBAR_AUTHOR];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_AUTHOR]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_AUTHOR];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Owner", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"Owner", "Full toolbar")];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Owner", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Owner", "Full toolbar")];
             mCurrentSearchState = kAuthor;
-        } else if ([btn.title isEqualToString:FULL_TOOLBAR_ATCCODE]) {
-            [myTextField setText:FULL_TOOLBAR_ATCCODE];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_ATCCODE]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_ATCCODE];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"ATC Code", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"ATC Code", "Full toolbar")];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"ATC Code", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
             mCurrentSearchState = kAtcCode;
-        } else if ([btn.title isEqualToString:FULL_TOOLBAR_REGNR]) {
-            [myTextField setText:FULL_TOOLBAR_REGNR];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_REGNR];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg. No.", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No.", "Full toolbar")];
             mCurrentSearchState = kRegNr;
-        } else if ([btn.title isEqualToString:FULL_TOOLBAR_THERAPY]) {
-            [myTextField setText:FULL_TOOLBAR_THERAPY];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_THERAPY];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Therapy", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"Therapy", "Full toolbar")];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Therapy", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
             mCurrentSearchState = kTherapy;
         }
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    }
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
         [searchField setText:@""];
-        if ([btn.title isEqualToString:SHORT_TOOLBAR_TITLE]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_TITLE];
+        if ([btn.title isEqualToString:NSLocalizedString(@"Prep", "Short toolbar")]) {
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Preparation", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Preparation", "Full toolbar")];
             mCurrentSearchState = kTitle;
-        } else if ([btn.title isEqualToString:SHORT_TOOLBAR_AUTHOR]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_AUTHOR]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_AUTHOR];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Own", "Short toolbar")]) {
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Owner", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Owner", "Full toolbar")];
             mCurrentSearchState = kAuthor;
-        } else if ([btn.title isEqualToString:SHORT_TOOLBAR_ATCCODE]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_ATCCODE]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_ATCCODE];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"ATC", "Short toolbar")]) {
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"ATC Code", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
             mCurrentSearchState = kAtcCode;
-        } else if ([btn.title isEqualToString:SHORT_TOOLBAR_REGNR]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_REGNR];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg", "Short toolbar")]) {
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No.", "Full toolbar")];
             mCurrentSearchState = kRegNr;
-        } else if ([btn.title isEqualToString:SHORT_TOOLBAR_THERAPY]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
-            [mBarButtonItemName setString:FULL_TOOLBAR_THERAPY];
+        }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Ther", "Short toolbar")]) {
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Therapy", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
             mCurrentSearchState = kTherapy;
         }
     }
@@ -245,6 +265,9 @@ static BOOL mShowReport = false;
 
 - (id) init
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     self = [super init];
     
     // Initialize constants
@@ -263,48 +286,12 @@ static BOOL mShowReport = false;
     medIdArray = [NSMutableArray array];
     
     secondViewController = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
-    secondViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
+    otherViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
+    
+    prescriptionViewController = nil;
     
     menuViewController = nil;
     menuViewNavigationController = nil;
-    
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        SEARCH_STRING = @"Suche";
-        FACHINFO_STRING = @"Fachinformation";
-        TREFFER_STRING = @"Treffer";
-        //
-        FULL_TOOLBAR_TITLE = @"Präparat";
-        FULL_TOOLBAR_AUTHOR = @"Inhaber";
-        FULL_TOOLBAR_ATCCODE = @"Wirkstoff/ATC";
-        FULL_TOOLBAR_REGNR = @"Reg. Nr.";
-        FULL_TOOLBAR_SUBSTANCES = @"Wirkstoff";
-        FULL_TOOLBAR_THERAPY = @"Therapie";
-        //
-        SHORT_TOOLBAR_TITLE = @"Prä";
-        SHORT_TOOLBAR_AUTHOR = @"Inh";
-        SHORT_TOOLBAR_ATCCODE = @"Wirk/Atc";
-        SHORT_TOOLBAR_REGNR = @"Reg";
-        SHORT_TOOLBAR_SUBSTANCES = @"Wirk";
-        SHORT_TOOLBAR_THERAPY = @"Ther";
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        SEARCH_STRING = @"Recherche";
-        FACHINFO_STRING = @"Notice Infopro";
-        TREFFER_STRING = @"Réponse(s)";
-        //
-        FULL_TOOLBAR_TITLE = @"Préparation";
-        FULL_TOOLBAR_AUTHOR = @"Titulaire";
-        FULL_TOOLBAR_ATCCODE = @"Principe/ATC";
-        FULL_TOOLBAR_REGNR = @"No d'Autor";
-        FULL_TOOLBAR_SUBSTANCES = @"Principe";
-        FULL_TOOLBAR_THERAPY = @"Thérapie";
-        //
-        SHORT_TOOLBAR_TITLE = @"Pré";
-        SHORT_TOOLBAR_AUTHOR = @"Tit";
-        SHORT_TOOLBAR_ATCCODE = @"Prin/Atc";
-        SHORT_TOOLBAR_REGNR = @"Aut";
-        SHORT_TOOLBAR_SUBSTANCES = @"Prin";
-        SHORT_TOOLBAR_THERAPY = @"Thér";
-    }
     
     // Note: iOS7 or above
     if ([MLConstants iosVersion]>=7.0f) {
@@ -354,10 +341,15 @@ static BOOL mShowReport = false;
 
 - (void) setLaunchState:(int)state
 {
+#ifdef DEBUG
+    NSLog(@"%s state:%d", __FUNCTION__, state);
+#endif
     bool keyboard_visible = true;
+    bool goBackToMainView = false;
     
-    if (state==eAips || state==eFavorites || state==eInteractions || state==eDesitin) {
-        if (state==eAips) {
+    switch (state) {
+        case eAips:
+            goBackToMainView = true;
             mUsedDatabase = kAips;
             mSearchInteractions = false;
             mCurrentIndexPath = nil;
@@ -367,7 +359,10 @@ static BOOL mShowReport = false;
             [self clearDataInTableView];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
-        } else if (state==eFavorites) {
+            break;
+            
+        case eFavorites:
+            goBackToMainView = true;
             mUsedDatabase = kFavorites;
             mCurrentSearchState = kTitle;
             mSearchInteractions = false;
@@ -375,7 +370,10 @@ static BOOL mShowReport = false;
             [self switchTabBarItem:[myTabBar.items objectAtIndex:1]];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
-        } else if (state==eInteractions) {
+            break;
+            
+        case eInteractions:
+            goBackToMainView = true;
             mUsedDatabase = kAips;
             mCurrentSearchState = kTitle;
             mSearchInteractions = true;
@@ -383,7 +381,10 @@ static BOOL mShowReport = false;
             [self resetBarButtonItems];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
-        } else if (state==eDesitin) {
+            break;
+            
+        case eDesitin:
+            goBackToMainView = true;
             mUsedDatabase = kAips;
             mCurrentSearchState = kAuthor;
             mSearchInteractions = false;
@@ -391,10 +392,25 @@ static BOOL mShowReport = false;
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
             keyboard_visible = false;
-        }
-        // Go back to main view
+            break;
+            
+        case ePrescription:
+            goBackToMainView = true;
+            mSearchInteractions = false;
+            NSLog(@"TODO: %s, line %i", __FUNCTION__, __LINE__);
+            //
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
+            break;
+            
+        default:
+            NSLog(@"Unknown: %s, line %i", __FUNCTION__, __LINE__);
+            break;
+    }
+
+    if (goBackToMainView) {
         mainRevealController = self.revealViewController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
+
         // Show keyboard
         if (keyboard_visible)
             [searchField becomeFirstResponder];
@@ -589,16 +605,18 @@ static BOOL mShowReport = false;
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    for (UIBarButtonItem *b in [myToolBar items]) {
+    for (UIBarButtonItem *b in [myToolBar items])
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
-    }
+
     if ([MLConstants iosVersion]>=7.0f)
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
     else
         [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
 
     [searchField setText:@""];
-    [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
+    [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                 NSLocalizedString(@"Search",nil),
+                                 NSLocalizedString(@"Preparation", "Full toolbar")]];
     mCurrentSearchState = kTitle;
 }
 
@@ -620,19 +638,29 @@ static BOOL mShowReport = false;
     switch(searchState)
     {
         case kTitle:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_TITLE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Preparation", "Full toolbar")]];
             break;
         case kAuthor:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_AUTHOR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Owner", "Full toolbar")]];
             break;
         case kAtcCode:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_ATCCODE]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"ATC Code", "Full toolbar")]];
             break;
         case kRegNr:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_REGNR]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
             break;
         case kTherapy:
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@", SEARCH_STRING, FULL_TOOLBAR_THERAPY]];
+            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                         NSLocalizedString(@"Search",nil),
+                                         NSLocalizedString(@"Therapy", "Full toolbar")]];
             break;
     }
     mCurrentSearchState = searchState;
@@ -705,8 +733,8 @@ static BOOL mShowReport = false;
                                          // [NSValue valueWithUIOffset:UIOffsetMake(1,0)], UITextAttributeTextShadowOffset,
                                          nil];
     
-    for (int i=0; i<3; i++)
-        [[myTabBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
+    for (UIBarButtonItem *b in [myTabBar items])
+        [b setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
 - (void) setToolbarItemsFontSize
@@ -715,8 +743,9 @@ static BOOL mShowReport = false;
                                          [UIFont systemFontOfSize:14], NSFontAttributeName,
                                          nil];
     
-    for (int i=0; i<9; i+=2)    // 17.06.2014 -> used to be '11'
-        [[myToolBar items][i] setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
+    for (UIBarButtonItem *b in [myToolBar items])
+        if (b.tag != 0)   // Skip UIBarButtonSystemItemFlexibleSpace
+            [b setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
 - (void) startActivityIndicator
@@ -784,11 +813,11 @@ static BOOL mShowReport = false;
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             
-            [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
-            [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
-            [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
-            [[[myToolBar items] objectAtIndex:6] setTitle:FULL_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_THERAPY];
+            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
             
             // Hide status bar and navigation bar
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
@@ -803,11 +832,11 @@ static BOOL mShowReport = false;
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
             
-            [[[myToolBar items] objectAtIndex:0] setTitle:SHORT_TOOLBAR_TITLE];
-            [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
-            [[[myToolBar items] objectAtIndex:4] setTitle:SHORT_TOOLBAR_ATCCODE];
-            [[[myToolBar items] objectAtIndex:6] setTitle:SHORT_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_THERAPY];
+            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Prep", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Own", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Ther", "Short toolbar")];
             
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
@@ -849,11 +878,11 @@ static BOOL mShowReport = false;
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
         
-        [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
-        [[[myToolBar items] objectAtIndex:1] setTitle:FULL_TOOLBAR_AUTHOR];
-        [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_ATCCODE];
-        [[[myToolBar items] objectAtIndex:3] setTitle:FULL_TOOLBAR_REGNR];
-        [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_THERAPY];
+        [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
+        [[[myToolBar items] objectAtIndex:1] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
+        [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
+        [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+        [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
@@ -866,11 +895,11 @@ static BOOL mShowReport = false;
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             
-            [[[myToolBar items] objectAtIndex:0] setTitle:FULL_TOOLBAR_TITLE];
-            [[[myToolBar items] objectAtIndex:2] setTitle:FULL_TOOLBAR_AUTHOR];
-            [[[myToolBar items] objectAtIndex:4] setTitle:FULL_TOOLBAR_ATCCODE];
-            [[[myToolBar items] objectAtIndex:6] setTitle:FULL_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:FULL_TOOLBAR_THERAPY];
+            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
                         
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
         } else {
@@ -878,23 +907,27 @@ static BOOL mShowReport = false;
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
             
-            [[[myToolBar items] objectAtIndex:0] setTitle:SHORT_TOOLBAR_TITLE];
-            [[[myToolBar items] objectAtIndex:2] setTitle:SHORT_TOOLBAR_AUTHOR];
-            [[[myToolBar items] objectAtIndex:4] setTitle:SHORT_TOOLBAR_ATCCODE];
-            [[[myToolBar items] objectAtIndex:6] setTitle:SHORT_TOOLBAR_REGNR];
-            [[[myToolBar items] objectAtIndex:8] setTitle:SHORT_TOOLBAR_THERAPY];
+            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Prep", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Own", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg", "Short toolbar")];
+            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Ther", "Short toolbar")];
             
             // [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
         }
     }
-    if (mSearchInteractions==false) {
+
+    if (!mSearchInteractions) {
         if (mUsedDatabase == kAips)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
         else if (mUsedDatabase == kFavorites)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
+        else if (mUsedDatabase == kPrescription)
+            [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
         else if (mUsedDatabase == kNone)
             [myTabBar setSelectedItem:nil]; // Clears all cells
-    } else {
+    }
+    else {
         [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
     }
 }
@@ -966,7 +999,7 @@ static BOOL mShowReport = false;
     
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.title = NSLocalizedString(APP_NAME, nil);
+    self.title = APP_NAME;
     
     // Sets color and font and whatever else of the navigation bar
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -983,7 +1016,13 @@ static BOOL mShowReport = false;
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0.0f, 0.0f, 32.0f, 32.0f);
     [logoButton addTarget:self action:@selector(myShowMenuMethod:) forControlEvents:UIControlEventTouchUpInside];
-    if (@available(iOS 9, *)) {
+
+#if (__clang_major__ == 8) && (__clang_minor__ == 0)    // Xcode 8
+    if ([MLConstants iosVersion] >= 9.0f)
+#else
+    if (@available(iOS 9, *))  // this syntax requires Xcode 9
+#endif
+    {
         [logoButton.widthAnchor constraintEqualToConstant:32.0f].active = YES;
         [logoButton.heightAnchor constraintEqualToConstant:32.0f].active = YES;
     }
@@ -1026,6 +1065,10 @@ static BOOL mShowReport = false;
         UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:2];
         selectedImage = [[UIImage imageNamed:@"interactions-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         tabBarItem2.selectedImage = selectedImage;
+        
+        UITabBarItem *tabBarItem3 = [myTabBar.items objectAtIndex:3];
+        selectedImage = [[UIImage imageNamed:@"prescription-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        tabBarItem3.selectedImage = selectedImage;
     }
     
     // Add search bar as title view to navigation bar
@@ -1063,7 +1106,7 @@ static BOOL mShowReport = false;
         self.navigationItem.titleView = searchBarView;
     }
     
-    mBarButtonItemName = [[NSMutableString alloc] initWithString:FULL_TOOLBAR_TITLE];
+    mBarButtonItemName = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Preparation", "Full toolbar")];
     
     // Add long press gesture recognizer to tableview
     UILongPressGestureRecognizer *mLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(myLongPressMethod:)];
@@ -1094,13 +1137,17 @@ static BOOL mShowReport = false;
         // NSLog(@"%@ %@", libraryFolder, [libraryFolder absoluteString]);
         NSError *error = nil;
         NSArray *libraryFolderContent = [fileManager contentsOfDirectoryAtPath:[libraryFolder relativePath] error:&error];
-        if ([libraryFolderContent count] > 0 && error == nil) {
-            // NSLog(@"Contents of library folder = %@", libraryFolderContent);
-        } else if ([libraryFolderContent count] == 0 && error == nil)
+
+        if (error)
+            NSLog(@"%s: %@", __FUNCTION__, error.localizedDescription);
+        else if ([libraryFolderContent count] == 0)
             NSLog(@"Library folder is empty!");
+#ifdef DEBUG
         else
-            NSLog(@"%s: %@", __FUNCTION__, error);
-    } else {
+            NSLog(@"Contents of library folder = %@", libraryFolderContent);
+#endif
+    }
+    else {
         NSLog(@"Could not find the Library folder.");
     }
     
@@ -1216,15 +1263,16 @@ static BOOL mShowReport = false;
         secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     }
 
-    if (secondViewNavigationController!=nil) {
-        [secondViewNavigationController removeFromParentViewController];
-        secondViewNavigationController = nil;
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
     }
-    secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
-    
+
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
-    [mainRevealController setFrontViewController:secondViewNavigationController animated:YES];
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
     
     report_memory();
@@ -1268,7 +1316,7 @@ static BOOL mShowReport = false;
     
     timeForSearch_ms = (int)(1000*execTime+0.5);
     mNumCurrSearchResults = (int)[searchRes count];
-    NSLog(@"%ld Treffer in %dms", mNumCurrSearchResults, timeForSearch_ms);
+    NSLog(@"%ld hits in %dms", mNumCurrSearchResults, timeForSearch_ms);
 
     return searchRes;
 }
@@ -1289,7 +1337,7 @@ static BOOL mShowReport = false;
     NSTimeInterval execTime = [endTime timeIntervalSinceDate:startTime];
     mNumCurrSearchResults = [medList count];
     
-    NSLog(@"%ld Favoriten in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
+    NSLog(@"%ld favorites in %dms", mNumCurrSearchResults, (int)(1000*execTime+0.5));
     
     return medList;
 }
@@ -1304,6 +1352,10 @@ static BOOL mShowReport = false;
 - (void) switchTabBarItem: (UITabBarItem *)item
 {
     static bool inProgress = false;
+
+#ifdef DEBUG
+    NSLog(@"%s item.tag:%ld", __FUNCTION__, item.tag);
+#endif
     
     switch (item.tag) {
         case 0:
@@ -1340,7 +1392,7 @@ static BOOL mShowReport = false;
                             [scopeSelf updateTableView];
                             [myTableView reloadData];
                             [searchField resignFirstResponder];
-                            [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], TREFFER_STRING, timeForSearch_ms]];
+                            [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], NSLocalizedString(@"Hit",nil), timeForSearch_ms]];
                             inProgress = false;
                         });
                         //}
@@ -1376,7 +1428,7 @@ static BOOL mShowReport = false;
                         [scopeSelf updateTableView];
                         [myTableView reloadData];
                         // [searchField resignFirstResponder];
-                        [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], TREFFER_STRING, timeForSearch_ms]];
+                        [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], NSLocalizedString(@"Hit",nil), timeForSearch_ms]];
                         inProgress = false;
                     });
                     //}
@@ -1396,6 +1448,16 @@ static BOOL mShowReport = false;
             [self switchToDrugInteractionView];
             break;
         case 3:
+#ifdef DEBUG
+            NSLog(@"TabBar - Prescription");
+#endif
+            mUsedDatabase = kAips; // tabbar in rear view selects AIPS
+            //mUsedDatabase = kPrescription;
+            mSearchInteractions = false;
+            [self stopActivityIndicator];
+            [self switchToPrescriptionView];
+            break;
+        case 4:
             NSLog(@"TabBar - Developer Info");
             // TODO
             break;
@@ -1466,7 +1528,7 @@ static BOOL mShowReport = false;
                     [searchField resignFirstResponder];
                 [scopeSelf updateTableView];
                 [myTableView reloadData];
-                [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], TREFFER_STRING, timeForSearch_ms]];
+                [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], NSLocalizedString(@"Hit",nil), timeForSearch_ms]];
                 @synchronized(self) {
                     inProgress = false;
                 }
@@ -1784,6 +1846,43 @@ static BOOL mShowReport = false;
     [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
 }
 
+- (void) switchToPrescriptionView
+{
+#if 0
+    UINavigationController *navController2 = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+    NSLog(@"navController2:%@", navController2); // SWRevealViewController
+#endif
+    
+    if (prescriptionViewController!=nil) {
+        // [prescriptionViewController removeFromParentViewController];
+        prescriptionViewController = nil;
+    }
+    
+    prescriptionViewController =
+    [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
+                                                   bundle:nil];
+    
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
+    }
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
+    
+    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    mainRevealController = self.revealViewController;
+
+    if (amkListViewController!=nil) {
+        [amkListViewController removeFromParentViewController];
+        amkListViewController = nil;
+    }
+
+    amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
+                                                                      bundle:nil];
+    mainRevealController.rightViewController = amkListViewController;
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+}
+
 /**
  Add med in the buffer to the interaction basket
  */
@@ -1817,7 +1916,7 @@ static BOOL mShowReport = false;
         return 0;
 }
 
-#pragma mark UITableView delegate methods
+#pragma mark - UITableView delegate methods
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 { 
@@ -1940,8 +2039,12 @@ static BOOL mShowReport = false;
     });
 }
 
+// We selected one Medicine or one Favorite
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{    
+{
+#ifdef DEBUG
+    NSLog(@"%@ Selected medicine or favourite at row %ld", NSStringFromSelector(_cmd), [indexPath row]);
+#endif
     mCurrentIndexPath = indexPath;
 
     long mId = -1;
@@ -1961,9 +2064,9 @@ static BOOL mShowReport = false;
     }
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                                     bundle:nil
-                                                                     title:FACHINFO_STRING
+                                                                     title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
                                                                   andParam:2];
-    
+
     if (mSearchInteractions==false) {
         // Load style sheet from file
         NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
@@ -2026,16 +2129,16 @@ static BOOL mShowReport = false;
                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                              context:@"javaScriptChanged"];
     
-    // UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
+    // UINavigationController *otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
     
-    if (secondViewNavigationController!=nil) {
-        [secondViewNavigationController removeFromParentViewController];
-        secondViewNavigationController = nil;
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
     }
-    secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
     // Show SecondViewController! (UIWebView)
-    [mainRevealController setFrontViewController:secondViewNavigationController animated:YES];
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 
 #ifdef DEBUG
@@ -2113,7 +2216,7 @@ static BOOL mShowReport = false;
     return frame.size;
 }
 
-#pragma mark helper functions
+#pragma mark - helper functions
 
 - (void) didReceiveMemoryWarning
 {

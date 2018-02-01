@@ -27,8 +27,10 @@
 #import "SWRevealViewController.h"
 #import "MLViewController.h"
 #import "MLSecondViewController.h"
+#import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+#import "MLUtility.h"
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
@@ -42,9 +44,6 @@
 
 MLViewController *mainViewController;
 
-enum {
-    eAips=0, eFavorites=1, eInteractions=2, eDesitin=3
-};
 int launchState = eAips;
 bool launchedFromShortcut = NO;
 
@@ -128,6 +127,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
  */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#ifdef DEBUG
+    //NSLog(@"%s", __FUNCTION__);
+#endif
     // Init main window
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:screenBound];
@@ -143,9 +145,12 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     // Init all view controllers (main and secondary)
     mainViewController = [[MLViewController alloc] init];
-    UINavigationController *mainViewNavigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    UINavigationController *mainViewNavigationController =
+        [[UINavigationController alloc] initWithRootViewController:mainViewController];
+
     MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
-    UINavigationController *secondViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+    UINavigationController *secondViewNavigationController =
+        [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
     // Check if app was launched by quick action
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
@@ -184,7 +189,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
 
         self.window.rootViewController = self.revealViewController;
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    }
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
         
@@ -229,7 +235,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         [appDefaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
         [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         [appDefaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
         [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     }
@@ -241,7 +248,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
             [lastUpdated setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
             NSLog(@"Initializing defaults...");
         }
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
         if (lastUpdated==nil) {
             [lastUpdated setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
@@ -281,6 +289,50 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 - (void) applicationWillTerminate: (UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+// The file is in Documents/Inbox/ and needs to be moved to Documents/amk/
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+#ifdef DEBUG
+    //NSLog(@"%s url:%@", __FUNCTION__, url);
+#endif
+    if (!url ||
+        ![url isFileURL])
+    {
+        NSLog(@"Invalid URL");
+        return NO;
+    }
+
+    NSString *fileName = [[url absoluteString] lastPathComponent];
+    NSString *extName = [url pathExtension];
+
+    if (![extName isEqualToString:@"amk"] ||
+        ![fileName hasPrefix:@"RZ_"])
+    {
+        NSLog(@"Invalid filename:%@", fileName);
+        return NO;
+    }
+    
+    NSString *amkDir = [MLUtility amkDirectory];
+
+    //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
+    NSString *source = [url path];
+    NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
+
+    // TODO: check if the destination file exists and possibly prompt to overwrite
+
+    NSError *error;
+    [[NSFileManager defaultManager] moveItemAtPath:source
+                                            toPath:destination
+                                             error:&error];
+    if (error)
+        NSLog(@"%@", error.localizedDescription);
+    
+    return YES;
 }
 
 @end

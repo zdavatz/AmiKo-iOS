@@ -28,7 +28,7 @@
 @synthesize medId;
 @synthesize customerId;
 @synthesize title;
-@synthesize auth;
+@synthesize auth;  // owner
 @synthesize atccode;
 @synthesize substances;
 @synthesize regnrs;

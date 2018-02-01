@@ -124,19 +124,25 @@
         case 1: {
             switch (buttonIndex) {
                 case 0:
-                    [self sendFeedback:@"Feedback"];
+                    [self sendFeedback:NSLocalizedString(@"Feedback", "Button")];
                     break;
                 case 1:
-                    [self shareApp:@"Share"];
+                    [self shareApp:NSLocalizedString(@"Share", "Button")];
                     break;
                 case 2:
-                    [self rateApp:@"Rate"];
+                    [self rateApp:NSLocalizedString(@"Rate", "Button")];
                     break;
                 case 3:
-                    [self showReport:@"Report"];
+                    [self showReport:NSLocalizedString(@"Report", "Button")];
                     break;
                 case 4:
-                    [self startUpdate:@"Update"];
+                    [self startUpdate:NSLocalizedString(@"Update", "Button")];
+                    break;
+                case 5:
+                    NSLog(@"TODO: %@", NSLocalizedString(@"Doctor Signature", "Button"));
+                    break;
+                case 6:
+                    NSLog(@"TODO: %@", NSLocalizedString(@"Patients", "Button"));
                     break;
                 default:
                     break;
@@ -150,11 +156,20 @@
 
 - (void) showMenu
 {
+    // TODO: replace deprecated UIActionSheet with UIAlertController
     mMenuActionSheet = [[UIActionSheet alloc] initWithTitle:@"Select menu option"
                                                    delegate:self
                                           cancelButtonTitle:@"Cancel"
                                      destructiveButtonTitle:nil
-                                          otherButtonTitles:@"Feedback", @"Share", @"Rate", @"Report", @"Update", nil];
+                                          otherButtonTitles:
+                        NSLocalizedString(@"Feedback", "Button"),
+                        NSLocalizedString(@"Share",    "Button"),
+                        NSLocalizedString(@"Rate",     "Button"),
+                        NSLocalizedString(@"Report",   "Button"),
+                        NSLocalizedString(@"Update",   "Button"),
+                        NSLocalizedString(@"Doctor Signature",   "Button"),
+                        NSLocalizedString(@"Patients",   "Button"),
+                        nil];
     mMenuActionSheet.tag = 1;
     
     [mMenuActionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
@@ -202,7 +217,7 @@
 - (IBAction) sendFeedback:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Send feedback");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     [self sendEmailTo:@"zdavatz@ywesee.com" withSubject:[NSString stringWithFormat:@"%@ Feedback", APP_NAME] andBody:@""];
@@ -211,7 +226,7 @@
 - (IBAction) shareApp:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Share app");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     NSString* subject = [NSString stringWithFormat:@"%@", APP_NAME];
@@ -232,7 +247,7 @@
 - (IBAction) rateApp:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Rate app");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?mt=8", APP_ID]]];
@@ -241,7 +256,7 @@
 - (IBAction) showReport:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Show report");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     if (mParentViewController!=nil) {
@@ -252,7 +267,7 @@
 - (IBAction) startUpdate:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"Start update");
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     MLCustomURLConnection *reportConn = [[MLCustomURLConnection alloc] init];

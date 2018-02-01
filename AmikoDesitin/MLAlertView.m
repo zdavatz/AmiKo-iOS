@@ -29,12 +29,14 @@
 {
     UIAlertView *mAlertView;
     UIAlertController *mAlertController;
-    UIAlertAction *mButton;
+    UIAlertAction *mAction;
 }
 
 /** Instance functions
  */
-- (instancetype) initWithTitle: (NSString *)alertTitle message: (NSString *)message button: (NSString *)buttonTitle
+- (instancetype) initWithTitle: (NSString *)alertTitle
+                       message: (NSString *)message
+                        button: (NSString *)buttonTitle
 {
     if ([MLConstants iosVersion]>=8.0f) {
         mAlertController = [UIAlertController
@@ -42,9 +44,10 @@
                             message:message
                             preferredStyle: UIAlertControllerStyleAlert];
         // Add button
-        mButton = [UIAlertAction actionWithTitle:buttonTitle style:UIAlertActionStyleDefault handler:nil];
-        [mAlertController addAction:mButton];
-    } else {
+        mAction = [UIAlertAction actionWithTitle:buttonTitle style:UIAlertActionStyleDefault handler:nil];
+        [mAlertController addAction:mAction];
+    }
+    else {
         mAlertView = [[UIAlertView alloc] initWithTitle:alertTitle
                                                         message:message
                                                        delegate:nil

@@ -393,6 +393,9 @@ const int FrontViewPositionNone = 0xff;
 
 - (id)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
 {
+#ifdef DEBUG
+    //NSLog(@"%s %p", __FUNCTION__, self);
+#endif
     self = [super init];
     if ( self )
     {

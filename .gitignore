@@ -1,0 +1,6 @@
+*.xcworkspace
+*.DS_Store
+__MACOSX/
+*.xcscheme
+xcuserdata
+AmiKoDesitin/amiko_db_full_idx_de.db

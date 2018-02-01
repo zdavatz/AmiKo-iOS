@@ -56,7 +56,6 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
 - (id) initWithMenu: (NSArray *)sectionTitles sectionIds: (NSArray *)sectionIds andLanguage:(NSString *)appLanguage
 {
     self = [super init];
-    
     if (self) {
         mSectionTitles = [[NSMutableArray alloc] init];
         for (NSString *title in sectionTitles) {
@@ -96,7 +95,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
 {
     [super viewDidLoad];
 
-    self.title = NSLocalizedString(@"Kapitel", nil);
+    self.title = NSLocalizedString(@"Chapter", nil);
     
     // Note: iOS7
     if (IOS_NEWER_OR_EQUAL_TO_7) {

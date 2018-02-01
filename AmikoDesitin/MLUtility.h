@@ -29,4 +29,9 @@
 + (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date;
 + (double) timeIntervalSinceLastDBSync;
 
++ (NSString*) encodeStringToBase64:(NSString*)string;
+
++ (NSString *) documentsDirectory;
++ (NSString *) amkDirectory;
+
 @end
