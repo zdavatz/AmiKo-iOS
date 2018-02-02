@@ -561,8 +561,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
 
     if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
-        NSLog(@"Error: invalid JSON object");
-        return;
+        NSLog(@"Invalid JSON object:%@", prescriptionDict);
+        //return;
     }
     // TODO:
     
@@ -572,6 +572,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            error:&error];
     
     NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
+    //NSLog(@"jsonStr:%@", jsonStr);
     NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
     
     // Create file as new name `RZ_timestamp.amk`
