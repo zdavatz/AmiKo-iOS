@@ -99,9 +99,24 @@
 #endif
 }
 
+// Create the directory if it doesn't exist
 + (NSString *) amkDirectory
 {
-    return [[MLUtility documentsDirectory] stringByAppendingPathComponent:@"amk"];
+    NSString *amk = [[MLUtility documentsDirectory] stringByAppendingPathComponent:@"amk"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:amk])
+    {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:amk
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error) {
+            NSLog(@"error creating directory: %@", error.localizedDescription);
+            amk = nil;
+        }
+    }
+
+    return amk;
 }
 
 @end

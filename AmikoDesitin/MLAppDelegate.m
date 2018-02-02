@@ -31,6 +31,7 @@
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 #import "MLUtility.h"
+#import "MLAlertView.h"
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
@@ -323,14 +324,33 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSString *source = [url path];
     NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
 
-    // TODO: check if the destination file exists and possibly prompt to overwrite
+    // TODO: base the check for file existance on the hash rather than the filename
 
     NSError *error;
     [[NSFileManager defaultManager] moveItemAtPath:source
                                             toPath:destination
                                              error:&error];
-    if (error)
+    MLAlertView *alert;
+    if (error) {
         NSLog(@"%@", error.localizedDescription);
+        // Redefine error message to present to the user
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"%@ has already been imported",nil), fileName];
+        error = [NSError errorWithDomain:@"receipt"
+                                    code:99
+                                userInfo:@{NSLocalizedDescriptionKey:message}];
+
+        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Import Error"
+                                                        message:error.localizedDescription
+                                                         button:@"OK"];
+        [alert show];
+        return NO;
+    }
+
+    NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
+    alert = [[MLAlertView alloc] initWithTitle:@"Success!"
+                                       message:alertMessage
+                                        button:@"OK"];
+    [alert show];
     
     return YES;
 }
