@@ -137,13 +137,23 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     //NSLog(@"mainFrame:%@", NSStringFromCGRect(mainFrame));
     NSLog(@"amk directory:%@", amkDir);
-    NSLog(@"amk files:%@", amkFiles);
+    //NSLog(@"amk files:%@", amkFiles);
 #endif
 
-    if ([amkFiles count] > 0) {
+    // Try to reopen the last used file
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
+    NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
+        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+        [self readPrescription:url];
+        NSLog(@"Reopening:%@", fileName);
+    }
+    else if ([amkFiles count] > 0) {
         NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[amkFiles objectAtIndex:0]];
         NSURL *url = [NSURL fileURLWithPath:fullFilePath];
         [self readPrescription:url];
+        NSLog(@"Opening first:%@", [amkFiles objectAtIndex:0]);
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -527,17 +537,33 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return;
     }
     
-    NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
-
     NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
     [patientDict setObject:@"John" forKey:@"given_name"];  // TODO
 
     NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
     [operatorDict setObject:@"Jack" forKey:@"given_name"];  // TODO
 
+#if 0
+    NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
+    //[prescriptionDict setObject:hash forKey:@"prescription_hash"];
+    //[prescriptionDict setObject:placeDate forKey:@"place_date"];
     [prescriptionDict setObject:patientDict forKey:@"patient"];
     [prescriptionDict setObject:operatorDict forKey:@"operator"];
+    //[prescriptionDict setObject:prescription forKey:@"medications"];
+#else
+    NSDictionary *prescriptionDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      //hash, @"prescription_hash",
+                                      placeDate, @"place_date",
+                                      patientDict, @"patient",
+                                      operatorDict, @"operator",
+                                      //prescription, @"medications",
+                                      nil];
+#endif
 
+    if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
+        NSLog(@"Invalid JSON object:%@", prescriptionDict);
+        //return;
+    }
     // TODO:
     
     // Map cart array to json
@@ -546,6 +572,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            error:&error];
     
     NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
+    //NSLog(@"jsonStr:%@", jsonStr);
     NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
     
     // Create file as new name `RZ_timestamp.amk`
@@ -601,7 +628,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSLog(@"JSON: %@\nEnd of JSON file", receiptData);
 
     // hashedKey (prescription_hash) is required
-    NSString *hash = [receiptData valueForKey:@"prescription_hash"];
+    NSString *hash = [receiptData objectForKey:@"prescription_hash"];
     if (hash == nil ||
         [hash isEqual:[NSNull null]] ||
         [hash isEqualToString:@""])
@@ -630,13 +657,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (placeDate == nil)
         placeDate = [receiptData objectForKey:@"date"];
 
-    NSDictionary *operatorDict = [receiptData valueForKey:@"operator"] ?: [NSNull null];
+    NSDictionary *operatorDict = [receiptData objectForKey:@"operator"] ?: [NSNull null];
     if (operatorDict) {
         doctor = [[MLOperator alloc] init];
         [doctor importFromDict:operatorDict];
     }
 
-    NSDictionary *patientDict = [receiptData valueForKey:@"patient"] ?: [NSNull null];
+    NSDictionary *patientDict = [receiptData objectForKey:@"patient"] ?: [NSNull null];
     if (patientDict) {
         patient = [[MLPatient alloc] init];
         [patient importFromDict:patientDict];
@@ -644,7 +671,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     // prescription aka medications aka products
     medications = [[NSMutableArray alloc] init]; // prescription
-    NSArray *medicationArray = [receiptData valueForKey:@"medications"] ?: [NSNull null];
+    NSArray *medicationArray = [receiptData objectForKey:@"medications"] ?: [NSNull null];
     for (NSDictionary *medicationDict in medicationArray) {
         MLProduct *med = [MLProduct importFromDict:medicationDict];
         [medications addObject:med];
@@ -682,6 +709,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification
 {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[aNotification object] forKey:@"lastUsedPrescription"];
+    [defaults synchronize];
+    
     NSString *amkDir = [MLUtility amkDirectory];
     NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];

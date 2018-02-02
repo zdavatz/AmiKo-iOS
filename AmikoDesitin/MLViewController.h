@@ -64,4 +64,6 @@ enum {
 - (void) switchToDrugInteractionView;
 - (void) switchToPrescriptionView;
 
+- (void) switchTabBarItem: (UITabBarItem *)item;
+
 @end

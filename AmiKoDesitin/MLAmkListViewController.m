@@ -18,17 +18,26 @@ static const float kAmkLabelFontSize = 12.0;
 
 @implementation MLAmkListViewController
 {
-    NSArray *amkFiles;
+    NSMutableArray *amkFiles;
 }
+
+@synthesize myTableView;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
    
+    if (IOS_NEWER_OR_EQUAL_TO_7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        myTableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
+    
     NSError *error;
     NSString *amkDir = [MLUtility amkDirectory];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
-    amkFiles = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+    amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
+
     if (error)
         NSLog(@"%@", error.localizedDescription);
 }
@@ -48,7 +57,57 @@ static const float kAmkLabelFontSize = 12.0;
 }
 */
 
-#pragma mark - Table view data source
+#pragma mark - UIGestureRecognizerDelegate
+
+- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture
+{
+    CGPoint p = [gesture locationInView:self.myTableView];
+    NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
+    
+    if (indexPath == nil) {
+        NSLog(@"long press on table view but not on a row");
+        return;
+    }
+
+    if (gesture.state != UIGestureRecognizerStateBegan) {
+#ifdef DEBUG
+        //NSLog(@"gestureRecognizer.state = %ld", gesture.state);
+#endif
+        return;
+    }
+
+    //NSLog(@"long press on table view at row %ld", indexPath.row);
+
+    NSString *alertMessage = nil;
+    NSString *alertTitle = nil;
+    NSString *actionTitle = [NSString stringWithFormat:NSLocalizedString(@"Delete %@",nil), amkFiles[indexPath.row]];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:alertTitle
+                                                                             message:alertMessage
+                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *actionOk = [UIAlertAction actionWithTitle:actionTitle
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *action) {
+                                                         [alertController dismissViewControllerAnimated:YES completion:nil];
+
+                                                         NSLog(@"TODO: delete file %@", amkFiles[indexPath.row]);
+
+                                                         [amkFiles removeObjectAtIndex:indexPath.row];
+                                                         [myTableView reloadData];
+                                                     }];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction *action) {
+                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                         }];
+    [alertController addAction:actionOk];
+    [alertController addAction:actionCancel];
+    [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
+}
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView: (UITableView *)tableView
   numberOfRowsInSection: (NSInteger)section
@@ -61,19 +120,37 @@ static const float kAmkLabelFontSize = 12.0;
 {
     static NSString *tableIdentifier = @"amkListTableItem";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
-    if (cell == nil)
+    if (!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:tableIdentifier];
-        //cell.textLabel.textAlignment = NSTextAlignmentRight;
+        cell.textLabel.textAlignment = NSTextAlignmentRight;
+        
+        /** Use subview */
+        UILabel *subLabel = nil;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,230,36)];
+            [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize+2]];
+        }
+        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)];
+            [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
+        }
+        subLabel.textAlignment = NSTextAlignmentRight;
+        
+        // subLabel.text = [mSectionTitles objectAtIndex:indexPath.row];
+        subLabel.tag = 123; // Constant which uniquely defines the label
+        [cell.contentView addSubview:subLabel];
     }
     
-    cell.textLabel.text = amkFiles[indexPath.row];
-    [cell.textLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
+    UILabel *label = (UILabel *)[cell.contentView viewWithTag:123];
+    label.text = amkFiles[indexPath.row];
+//    cell.textLabel.text = amkFiles[indexPath.row];
+//    [cell.textLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
     return cell;
 }
 
-#pragma mark - Table view delegate
+#pragma mark - UITableViewDelegate
 
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 //{
