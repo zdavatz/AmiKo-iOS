@@ -319,12 +319,15 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
     
     NSString *amkDir = [MLUtility amkDirectory];
+    
+    // TODO: every patient has a subdirectory
 
     //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
     NSString *source = [url path];
     NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
 
-    // TODO: base the check for file existance on the hash rather than the filename
+    // TODO: base the check for file existance on the unique `prescription_hash`
+    // rather than the filename or patient_id
 
     NSError *error;
     [[NSFileManager defaultManager] moveItemAtPath:source
@@ -352,6 +355,16 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                         button:@"OK"];
     [alert show];
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:fileName forKey:@"lastUsedPrescription"];
+    [defaults synchronize];
+    
+    // Switch to prescription view to show what we just imported
+    UITabBarItem *item = [[UITabBarItem alloc] init];
+    item.tag = 3;  // Simulate a tap on the tabbar 4th item
+    [mainViewController switchTabBarItem:item];
+    //[mainViewController setLaunchState:ePrescription];
+
     return YES;
 }
 
