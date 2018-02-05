@@ -16,5 +16,5 @@
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
 
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
-
+- (void) removeItem:(NSUInteger)rowIndex;
 @end

@@ -57,6 +57,29 @@ static const float kAmkLabelFontSize = 12.0;
 }
 */
 
+- (void) removeItem:(NSUInteger)rowIndex
+{
+    NSLog(@"Delete amk file: %@", amkFiles[rowIndex]);
+    NSString *amkDir = [MLUtility amkDirectory];
+    NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
+
+    if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
+        NSLog(@"Error removing file at path: %@", amkFiles[rowIndex]);
+        return;
+    }
+
+    // First remove the actual file
+    NSError *error;
+    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:destination
+                                                              error:&error];
+    if (!success)
+        NSLog(@"Error removing file at path: %@", error.localizedDescription);
+    
+    // Finally remove the entry from the list
+    [amkFiles removeObjectAtIndex:rowIndex];
+    [myTableView reloadData];
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture
@@ -78,32 +101,35 @@ static const float kAmkLabelFontSize = 12.0;
 
     //NSLog(@"long press on table view at row %ld", indexPath.row);
 
-    NSString *alertMessage = nil;
-    NSString *alertTitle = nil;
-    NSString *actionTitle = [NSString stringWithFormat:NSLocalizedString(@"Delete %@",nil), amkFiles[indexPath.row]];
+    NSString *actionTitle = [NSString stringWithFormat:NSLocalizedString(@"Confirm delete %@",nil), amkFiles[indexPath.row]];
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:alertTitle
-                                                                             message:alertMessage
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
+                                                                             message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *actionOk = [UIAlertAction actionWithTitle:actionTitle
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction *action) {
+    UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:actionTitle
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:^(UIAlertAction *action) {
                                                          [alertController dismissViewControllerAnimated:YES completion:nil];
 
-                                                         NSLog(@"TODO: delete file %@", amkFiles[indexPath.row]);
-
-                                                         [amkFiles removeObjectAtIndex:indexPath.row];
-                                                         [myTableView reloadData];
-                                                     }];
+                                                         [self removeItem:indexPath.row];
+                                                         }];
     
+    // Cancel buttons are removed from popovers automatically, because tapping outside the popover represents "cancel", in a popover context
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:^(UIAlertAction *action) {
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
                                                          }];
-    [alertController addAction:actionOk];
+    [alertController addAction:actionDelete];
     [alertController addAction:actionCancel];
+    [alertController setModalPresentationStyle:UIModalPresentationPopover];
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
+        alertController.popoverPresentationController.sourceView = cell.contentView;
+    }
+
     [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
 
