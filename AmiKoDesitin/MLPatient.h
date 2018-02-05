@@ -26,5 +26,6 @@
 
 - (void)importFromDict:(NSDictionary *)dict;
 - (NSInteger)entriesCount;
+- (NSString *) generateUniqueID;
 
 @end

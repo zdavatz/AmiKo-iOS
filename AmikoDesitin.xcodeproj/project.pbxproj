@@ -17,6 +17,7 @@
 		439B6C6520206D210018F922 /* MLAmkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439B6C6320206D210018F922 /* MLAmkListViewController.m */; };
 		439B6C6620206D210018F922 /* MLAmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* MLAmkListViewController.xib */; };
 		439F25EC20286BF200396C29 /* MLPrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F25EB20286BF200396C29 /* MLPrescription.m */; };
+		439F261D2028B7FF00396C29 /* MLPatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* MLPatientDBAdapter.m */; };
 		439F50F920122665000E82FC /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
 		439F50FA20122665000E82FC /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
 		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
@@ -276,6 +277,8 @@
 		439B6C6420206D210018F922 /* MLAmkListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLAmkListViewController.xib; path = AmiKoDesitin/MLAmkListViewController.xib; sourceTree = SOURCE_ROOT; };
 		439F25EA20286BF100396C29 /* MLPrescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPrescription.h; path = AmiKoDesitin/MLPrescription.h; sourceTree = SOURCE_ROOT; };
 		439F25EB20286BF200396C29 /* MLPrescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPrescription.m; path = AmiKoDesitin/MLPrescription.m; sourceTree = SOURCE_ROOT; };
+		439F261B2028B7FF00396C29 /* MLPatientDBAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPatientDBAdapter.h; path = AmiKoDesitin/MLPatientDBAdapter.h; sourceTree = SOURCE_ROOT; };
+		439F261C2028B7FF00396C29 /* MLPatientDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPatientDBAdapter.m; path = AmiKoDesitin/MLPatientDBAdapter.m; sourceTree = SOURCE_ROOT; };
 		439F50F520122665000E82FC /* prescription-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription-selected.png"; path = "AmiKoDesitin/prescription-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
 		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
@@ -561,6 +564,19 @@
 			name = amk;
 			sourceTree = "<group>";
 		};
+		439F261A2028B1A400396C29 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F29D17B16C4B00EAB24B /* MLSQLiteDatabase.h */,
+				D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */,
+				D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */,
+				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
+				439F261B2028B7FF00396C29 /* MLPatientDBAdapter.h */,
+				439F261C2028B7FF00396C29 /* MLPatientDBAdapter.m */,
+			);
+			name = DB;
+			sourceTree = "<group>";
+		};
 		43D3A0DF201F2D1700EA77C6 /* json */ = {
 			isa = PBXGroup;
 			children = (
@@ -721,6 +737,7 @@
 		D5A6F26117B169B900EAB24B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				439F261A2028B1A400396C29 /* DB */,
 				4387FC3C20188ECE000A5A0F /* main */,
 				430285C22016124A003B2EF3 /* second */,
 				430285C32016126F003B2EF3 /* prescription */,
@@ -732,12 +749,8 @@
 				439B6C6120206C2D0018F922 /* amk */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
-				D5A6F29D17B16C4B00EAB24B /* MLSQLiteDatabase.h */,
-				D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
 				D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */,
-				D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */,
-				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
 				D5A6F28917B16C0200EAB24B /* MLDataStore.h */,
 				D5A6F28A17B16C0200EAB24B /* MLDataStore.m */,
 				D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */,
@@ -1136,6 +1149,7 @@
 				43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
+				439F261D2028B7FF00396C29 /* MLPatientDBAdapter.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
 				439B6C6520206D210018F922 /* MLAmkListViewController.m in Sources */,

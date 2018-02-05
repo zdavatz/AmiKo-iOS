@@ -31,6 +31,12 @@
 - (id) initWithPath: (NSString *)path;
 - (NSArray *) performQuery: (NSString *)query;
 - (NSInteger) numberRecordsForTable: (NSString *)table;
+- (BOOL) insertRowIntoTable:(NSString *)table forColumns:(NSString *)columns andValues:(NSString *)values;
+- (BOOL) updateRowIntoTable:(NSString *)table forExpressions:(NSString *)expressions andConditions:(NSString *)conditions;
+- (BOOL) deleteRowFromTable:(NSString *)table withRowId:(long)rowId;
+- (BOOL) deleteRowFromTable:(NSString *)table withUId:(NSString *)uId;
 - (void) close;
 
+- (BOOL) createWithPath:(NSString *)path andTable:(NSString *)table andColumns:(NSString *)columns
+;
 @end
