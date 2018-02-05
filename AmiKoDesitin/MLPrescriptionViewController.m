@@ -487,6 +487,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                              [self saveNewPrescription];
                                                          }];
     
+    // Cancel buttons are removed from popovers automatically, because tapping outside the popover represents "cancel", in a popover context
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:^(UIAlertAction *action) {
@@ -495,6 +496,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [alertController addAction:actionOk];
     [alertController addAction:actionNo];
     [alertController addAction:actionCancel];
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        //UIBarButtonItem *button = (UIBarButtonItem *)sender;
+        alertController.popoverPresentationController.barButtonItem = sender;
+        alertController.popoverPresentationController.sourceView = self.view;
+    }
+
     [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
 

@@ -59,7 +59,6 @@ static const float kAmkLabelFontSize = 12.0;
 
 - (void) removeItem:(NSUInteger)rowIndex
 {
-    NSLog(@"Delete amk file: %@", amkFiles[rowIndex]);
     NSString *amkDir = [MLUtility amkDirectory];
     NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
 
