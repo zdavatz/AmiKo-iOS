@@ -28,6 +28,7 @@
 #import "MLCustomURLConnection.h"
 #import "MLAlertView.h"
 #import "SWRevealViewController.h"
+#import "MLPatientViewController.h"
 
 @interface MLMenuViewController ()
 
@@ -142,7 +143,7 @@
                     NSLog(@"TODO: %@", NSLocalizedString(@"Doctor Signature", "Button"));
                     break;
                 case 6:
-                    NSLog(@"TODO: %@", NSLocalizedString(@"Patients", "Button"));
+                    [self showPatients:nil];
                     break;
                 default:
                     break;
@@ -253,15 +254,24 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?mt=8", APP_ID]]];
 }
 
+- (IBAction) showPatients:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    
+    if (mParentViewController!=nil)
+        [mParentViewController showPatientList];
+}
+
 - (IBAction) showReport:(id)sender
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    if (mParentViewController!=nil) {
+    if (mParentViewController!=nil)
         [mParentViewController showReport:self];
-    }
 }
 
 - (IBAction) startUpdate:(id)sender

@@ -56,10 +56,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSArray *amkFiles;
 }
 
-@synthesize placeDate;
-@synthesize doctor;
-@synthesize patient;
-@synthesize medications;
+@synthesize prescription;
 @synthesize infoView;
 
 - (void)layoutFrames
@@ -67,9 +64,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     CGRect infoFrame = self.infoView.frame;
     infoFrame.origin.y = 0.6;
     infoFrame.size.width = self.view.bounds.size.width;
+
     infoFrame.size.height = ((kSectionHeaderHeight * 2) +
-                             (kInfoCellHeight * [doctor entriesCount]) +
-                             (kInfoCellHeight * [patient entriesCount]) +
+                             (kInfoCellHeight * [prescription.doctor entriesCount]) +
+                             (kInfoCellHeight * [prescription.patient entriesCount]) +
                              20.8); // margin
     [self.infoView setFrame:infoFrame];
 }
@@ -140,19 +138,21 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSLog(@"amk files:%@", amkFiles);
 #endif
 
+    prescription = [[MLPrescription alloc] init];
+    
     // Try to reopen the last used file
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
     NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
     if ([[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
         NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [self readPrescription:url];
+        [prescription importFromURL:url];
         NSLog(@"Reopening:%@", fileName);
     }
     else if ([amkFiles count] > 0) {
         NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[amkFiles objectAtIndex:0]];
         NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [self readPrescription:url];
+        [prescription importFromURL:url];
         NSLog(@"Opening first:%@", [amkFiles objectAtIndex:0]);
     }
     
@@ -190,14 +190,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (section == kSectionMeta)
         return 1;
 
-    if ((section == kSectionOperator) && (doctor != nil))
-        return [doctor entriesCount];
-
-    if ((section == kSectionPatient) && (patient != nil))
-        return [patient entriesCount];
+    if ((section == kSectionOperator) && (prescription.doctor != nil))
+        return [prescription.doctor entriesCount];
+    
+    if ((section == kSectionPatient) && (prescription.patient != nil))
+        return [prescription.patient entriesCount];
     
     if (section == kSectionMedicines)
-        return [medications count];
+        return [prescription.medications count];
     
     return 0;
 }
@@ -226,7 +226,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.text = NSLocalizedString(@"Patient", nil);
     else if (section == kSectionMedicines) {
         NSString *format;
-        NSInteger count = [medications count];
+        NSInteger count = [prescription.medications count];
         if (count == 1)
             format = NSLocalizedString(@"Medicine", nil);
         else
@@ -258,10 +258,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (indexPath.section != kSectionMedicines)
         return kInfoCellHeight;
 
-    if (medications==nil)
+    if (prescription.medications==nil)
         return kInfoCellHeight;
 
-    MLProduct *med = medications[indexPath.row];
+    MLProduct *med = prescription.medications[indexPath.row];
     if (med==nil)
         return kMedCellHeight;
 
@@ -328,10 +328,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textAlignment = NSTextAlignmentLeft;
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
-        label.text = placeDate;
+        label.text = prescription.placeDate;
     }
     else if (indexPath.section == kSectionOperator) {
-        if (!doctor) {
+        if (!prescription.doctor) {
             cell.textLabel.text = @"";
             return cell;
         }
@@ -344,10 +344,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
         switch (indexPath.row) {
             case 0:
-                label.text = [NSString stringWithFormat:@"%@ %@ %@", doctor.title, doctor.familyName, doctor.givenName];
-                if (([doctor signature] != nil) &&
-                    ![doctor.signature isEqualToString:@""]) {
-                    UIImageView *signatureView = [[UIImageView alloc] initWithImage:doctor.signatureThumbnail];
+                label.text = [NSString stringWithFormat:@"%@ %@ %@",
+                              prescription.doctor.title,
+                              prescription.doctor.familyName,
+                              prescription.doctor.givenName];
+
+                if (([prescription.doctor signature] != nil) &&
+                    ![prescription.doctor.signature isEqualToString:@""])
+                {
+                    UIImageView *signatureView = [[UIImageView alloc] initWithImage:prescription.doctor.signatureThumbnail];
                     [signatureView setFrame:CGRectMake(frame.size.width - (DOCTOR_TN_W + 10.0),
                                                        0,
                                                        DOCTOR_TN_W,
@@ -357,23 +362,25 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 }
                 break;
             case 1:
-                label.text = doctor.postalAddress;
+                label.text = prescription.doctor.postalAddress;
                 break;
             case 2:
-                label.text = [NSString stringWithFormat:@"%@ %@", doctor.zipCode, doctor.city];
+                    label.text = [NSString stringWithFormat:@"%@ %@",
+                                  prescription.doctor.zipCode,
+                                  prescription.doctor.city];
                 break;
             case 3:
-                label.text = doctor.phoneNumber;
+                    label.text = prescription.doctor.phoneNumber;
                 break;
             case 4:
-                label.text = doctor.emailAddress;
+                    label.text = prescription.doctor.emailAddress;
                 break;
             default:
                 break;
         }
     }
     else if (indexPath.section == kSectionPatient) {
-        if (!patient) {
+        if (!prescription.patient) {
             cell.textLabel.text = @"";
             return cell;
         }
@@ -384,33 +391,38 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.backgroundColor = [UIColor clearColor];
         switch (indexPath.row) {
             case 0:
-                label.text = [NSString stringWithFormat:@"%@ %@", patient.familyName, patient.givenName];
+                label.text = [NSString stringWithFormat:@"%@ %@",
+                              prescription.patient.familyName,
+                              prescription.patient.givenName];
                 break;
             case 1:
                 label.text = [NSString stringWithFormat:@"%dkg/%dcm %@ %@",
-                              patient.weightKg,
-                              patient.heightCm,
-                              patient.gender,
-                              patient.birthDate];
+                              prescription.patient.weightKg,
+                              prescription.patient.heightCm,
+                              prescription.patient.gender,
+                              prescription.patient.birthDate];
                 break;
             case 2:
-                label.text = patient.postalAddress;
+                label.text = prescription.patient.postalAddress;
                 break;
             case 3:
-                label.text = [NSString stringWithFormat:@"%@ %@", patient.city, patient.country];
+                label.text = [NSString stringWithFormat:@"%@ %@",
+                              prescription.patient.city,
+                              prescription.patient.country];
                 break;
             case 4:
-                label.text = patient.phoneNumber;
+                label.text = prescription.patient.phoneNumber;
                 break;
             case 5:
-                label.text = patient.emailAddress;
+                label.text = prescription.patient.emailAddress;
                 break;
             default:
                 break;
         }
     }
     else {
-        MLProduct * med = medications[indexPath.row];
+
+        MLProduct * med = prescription.medications[indexPath.row];
         UILabel *packLabel = [self makeLabel:med.packageInfo
                                    textColor:[UIColor blackColor]];
 
@@ -561,7 +573,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #else
     NSDictionary *prescriptionDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                       //hash, @"prescription_hash",
-                                      placeDate, @"place_date",
+                                      prescription.placeDate, @"place_date",
                                       patientDict, @"patient",
                                       operatorDict, @"operator",
                                       //prescription, @"medications",
@@ -608,90 +620,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //    return amkFilePath;
 }
 
-// see Generika importReceiptFromURL
-// see AmiKo loadPrescriptionFromFile
-- (void) readPrescription:(NSURL *)url
-{
-    NSError *error;
-#ifdef DEBUG
-    //NSLog(@"%s %@", __FUNCTION__, url);
-#endif
-    NSData *encryptedData = [NSData dataWithContentsOfURL:url];
-    if (encryptedData == nil) {
-        NSLog(@"Cannot get data from <%@>", url);
-        return;
-    }
-    NSData *decryptedData = [encryptedData initWithBase64EncodedData:encryptedData
-                                                             options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    
-    // jsonDict
-    NSDictionary *receiptData = [NSJSONSerialization JSONObjectWithData:decryptedData
-                                                                options:NSJSONReadingAllowFragments
-                                                                  error:&error];
-    if (error) {
-        NSLog(@"%@", error.localizedDescription);
-        return;
-    }
-    
-    //NSLog(@"JSON: %@\nEnd of JSON file", receiptData);
-
-    // hashedKey (prescription_hash) is required
-    NSString *hash = [receiptData objectForKey:@"prescription_hash"];
-    if (hash == nil ||
-        [hash isEqual:[NSNull null]] ||
-        [hash isEqualToString:@""])
-    {
-        NSLog(@"Error with prescription hash");
-        return;
-    }
-
-#ifdef DEBUG
-    //NSLog(@"hash: %@", hash);
-#endif
-
-#if 0
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hashedKey == %@", hash];
-#ifdef DEBUG
-    NSLog(@"predicate: %@", predicate);
-#endif
-//    NSArray *matched = [self.receipts filteredArrayUsingPredicate:predicate];
-//    if ([matched count] > 0) {
-//        // already imported
-//        return;
-//    }
-#endif
-    
-    placeDate = [receiptData objectForKey:@"place_date"];
-    if (placeDate == nil)
-        placeDate = [receiptData objectForKey:@"date"];
-
-    NSDictionary *operatorDict = [receiptData objectForKey:@"operator"] ?: [NSNull null];
-    if (operatorDict) {
-        doctor = [[MLOperator alloc] init];
-        [doctor importFromDict:operatorDict];
-    }
-
-    NSDictionary *patientDict = [receiptData objectForKey:@"patient"] ?: [NSNull null];
-    if (patientDict) {
-        patient = [[MLPatient alloc] init];
-        [patient importFromDict:patientDict];
-    }
-
-    // prescription aka medications aka products
-    medications = [[NSMutableArray alloc] init]; // prescription
-    NSArray *medicationArray = [receiptData objectForKey:@"medications"] ?: [NSNull null];
-    for (NSDictionary *medicationDict in medicationArray) {
-        MLProduct *med = [MLProduct importFromDict:medicationDict];
-        [medications addObject:med];
-    }
-#ifdef DEBUG
-//    NSLog(@"medicationArray: %@", medicationArray);
-
-//    for (MLProduct *med in medications)
-//        NSLog(@"packageInfo: %@", med.packageInfo);
-#endif
-}
-
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color
 {
     CGRect frame = CGRectMake(kMedCellHorMargin,
@@ -724,7 +652,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSString *amkDir = [MLUtility amkDirectory];
     NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-    [self readPrescription:url];
+    [prescription importFromURL:url];
     [infoView reloadData];
     
     SWRevealViewController *revealController = self.revealViewController;

@@ -31,6 +31,7 @@
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 #import "MLAmkListViewController.h"
+#import "MLPatientViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -112,6 +113,7 @@ static BOOL mShowReport = false;
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
     MLAmkListViewController *amkListViewController;
+    MLPatientViewController *patientListViewController;
 
     UINavigationController *otherViewNavigationController;
     UINavigationController *menuViewNavigationController;
@@ -1206,6 +1208,34 @@ static BOOL mShowReport = false;
     }
 }
 
+- (void) showPatientList
+{
+    // Rightviewcontroller is not needed, nil it!
+    mainRevealController = self.revealViewController;
+    mainRevealController.rightViewController = nil;
+    
+    if (patientListViewController!=nil) {
+        // [patientListViewController removeFromParentViewController];
+        secondViewController = nil;
+    }
+    
+    patientListViewController =
+    [[MLPatientViewController alloc] initWithNibName:@"MLPatientViewController"
+                                              bundle:nil];
+    
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
+    }
+    
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
+    
+    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    mainRevealController = self.revealViewController;
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+}
+
 - (void) showReport:(id)sender
 {
     // A. Check first users documents folder
@@ -1223,7 +1253,8 @@ static BOOL mShowReport = false;
             amikoReportFile = filePath;
         else
             amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_fr"] stringByAppendingPathExtension:@"html"];
         if ([fileManager fileExistsAtPath:filePath])
             amikoReportFile = filePath;
