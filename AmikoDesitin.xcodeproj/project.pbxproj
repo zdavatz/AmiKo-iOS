@@ -16,6 +16,7 @@
 		4387FC3D20189DB4000A5A0F /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */; };
 		439B6C6520206D210018F922 /* MLAmkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439B6C6320206D210018F922 /* MLAmkListViewController.m */; };
 		439B6C6620206D210018F922 /* MLAmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* MLAmkListViewController.xib */; };
+		439F25EC20286BF200396C29 /* MLPrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F25EB20286BF200396C29 /* MLPrescription.m */; };
 		439F50F920122665000E82FC /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
 		439F50FA20122665000E82FC /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
 		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
@@ -273,6 +274,8 @@
 		439B6C6220206D210018F922 /* MLAmkListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLAmkListViewController.h; path = AmiKoDesitin/MLAmkListViewController.h; sourceTree = SOURCE_ROOT; };
 		439B6C6320206D210018F922 /* MLAmkListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLAmkListViewController.m; path = AmiKoDesitin/MLAmkListViewController.m; sourceTree = SOURCE_ROOT; };
 		439B6C6420206D210018F922 /* MLAmkListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLAmkListViewController.xib; path = AmiKoDesitin/MLAmkListViewController.xib; sourceTree = SOURCE_ROOT; };
+		439F25EA20286BF100396C29 /* MLPrescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPrescription.h; path = AmiKoDesitin/MLPrescription.h; sourceTree = SOURCE_ROOT; };
+		439F25EB20286BF200396C29 /* MLPrescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPrescription.m; path = AmiKoDesitin/MLPrescription.m; sourceTree = SOURCE_ROOT; };
 		439F50F520122665000E82FC /* prescription-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription-selected.png"; path = "AmiKoDesitin/prescription-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
 		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
@@ -567,6 +570,8 @@
 				4333432C201B64A2006BFC23 /* MLOperator.m */,
 				43D3A0E0201F3CFB00EA77C6 /* MLProduct.h */,
 				43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */,
+				439F25EA20286BF100396C29 /* MLPrescription.h */,
+				439F25EB20286BF200396C29 /* MLPrescription.m */,
 			);
 			name = json;
 			sourceTree = "<group>";
@@ -1124,6 +1129,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4333432D201B64A2006BFC23 /* MLOperator.m in Sources */,
+				439F25EC20286BF200396C29 /* MLPrescription.m in Sources */,
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
