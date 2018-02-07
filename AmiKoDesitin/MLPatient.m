@@ -10,6 +10,7 @@
 
 @implementation MLPatient
 
+@synthesize rowId;
 @synthesize uniqueId;
 @synthesize familyName;
 @synthesize givenName;
@@ -41,6 +42,7 @@
     emailAddress = [dict objectForKey:@"email_address"];
 }
 
+// Return number of lines of patient information to be displayed in the prescription
 - (NSInteger)entriesCount
 {
     return 6; // TODO

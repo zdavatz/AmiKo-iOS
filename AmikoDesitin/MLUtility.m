@@ -73,6 +73,14 @@
     return timeInterval;
 }
 
++ (NSString *) currentTime
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm.ss";
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    return [dateFormatter stringFromDate:[NSDate date]];
+}
+
 + (NSString*) encodeStringToBase64:(NSString*)string
 {
     NSData *plainData = [string dataUsingEncoding:NSUTF8StringEncoding];

@@ -7,10 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MLPatient.h"
 
 @interface MLPatientDBAdapter : NSObject
 
 - (BOOL) openDatabase:(NSString *)dbName;
 - (void) closeDatabase;
+- (NSString *) addEntry:(MLPatient *)patient;
+- (NSString *) insertEntry:(MLPatient *)patient;
+
+- (MLPatient *) getPatientWithUniqueID:(NSString *)uniqueID;
+- (MLPatient *) cursorToPatient:(NSArray *)cursor;
 
 @end

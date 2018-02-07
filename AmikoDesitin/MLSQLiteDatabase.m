@@ -101,28 +101,45 @@
     return self;
 }
 
-- (BOOL) createWithPath:(NSString *)path andTable:(NSString *)table andColumns:(NSString *)columns
+- (BOOL) createWithPath:(NSString *)path
+               andTable:(NSString *)table
+             andColumns:(NSString *)columns
 {
     NSFileManager *fileMgr = [[NSFileManager alloc] init];
     
-    if (![fileMgr fileExistsAtPath:path]) {
-        // Setup database object
-        sqlite3 *dbConnection;
-        // Database does not exist yet. Let's open and create an empty table
-        if (sqlite3_open([path UTF8String], &dbConnection) == SQLITE_OK) {
-            NSString *queryStr = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ %@", table, columns];
-            if (sqlite3_exec(dbConnection, [queryStr UTF8String], NULL, NULL, NULL) == SQLITE_OK) {
-                NSLog(@"%@ table created successfully...", table);
-                database = dbConnection;
-            } else {
-                NSLog(@"Failed to create table %@ for database with path %@", table, path);
-                return FALSE;
-            }
-        } else {
-            NSLog(@"Failed to create database with path %@", path);
-            return FALSE;
-        }
+    if ([fileMgr fileExistsAtPath:path]) {
+        NSLog(@"Patient DB file already created");
+        return TRUE;
     }
+
+    // Setup database object
+    sqlite3 *dbConnection;
+    int rc;
+
+    // Database does not exist yet. Let's open...
+    rc = sqlite3_open([path UTF8String], &dbConnection);
+    if (rc != SQLITE_OK) {
+        NSLog(@"Failed to open database with path %@", path);
+        return FALSE;
+    }
+
+    // ...and create an empty table
+    char *err = NULL;
+    NSString *queryStr = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ %@", table, columns];
+    rc = sqlite3_exec(dbConnection, [queryStr UTF8String], NULL, NULL, &err);
+    if (rc != SQLITE_OK) {
+        NSLog(@"Failed to create table %@ for database with path %@", table, path);
+        return FALSE;
+    }
+
+    if (err) {
+        NSLog(@"Error %s", err);
+        sqlite3_free(err);
+        return FALSE;
+    }
+    
+    NSLog(@"%@ table created successfully...", table);
+    database = dbConnection;
     return TRUE;
 }
 

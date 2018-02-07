@@ -10,6 +10,7 @@
 
 @interface MLPatient : NSObject
 
+@property (atomic, assign) long rowId;  // primary key
 @property (atomic, copy) NSString *uniqueId;
 @property (atomic, copy) NSString *familyName;
 @property (atomic, copy) NSString *givenName;

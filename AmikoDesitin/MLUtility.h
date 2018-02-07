@@ -29,6 +29,8 @@
 + (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date;
 + (double) timeIntervalSinceLastDBSync;
 
++ (NSString *) currentTime;
+
 + (NSString*) encodeStringToBase64:(NSString*)string;
 
 + (NSString *) documentsDirectory;

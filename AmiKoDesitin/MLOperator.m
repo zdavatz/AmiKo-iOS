@@ -41,6 +41,7 @@
     signature = [dict objectForKey:@"signature"];
 }
 
+// Return number of lines of doctor information to be displayed in the prescription
 - (NSInteger)entriesCount
 {
     return 5; // TODO
