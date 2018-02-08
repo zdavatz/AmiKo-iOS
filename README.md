@@ -8,7 +8,7 @@ AmiKo for iPhone and iPad.
 ./build.sh Release
 ```
 
-## If you build via SSH you first need to do
+If you build via SSH you first need to do
 ```
 security unlock-keychain
 ```
