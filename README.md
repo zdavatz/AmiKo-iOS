@@ -17,3 +17,11 @@ security unlock-keychain
 ```
 ./testflight
 ```
+
+## .bash_profile for testflight script
+```
+export ITC_USER="your@email.com"
+export ITC_PASSWORD="one-time-itc-pw"
+
+alias ios="cd /Users/userid/Documents/xcode/amiko-ios"
+```
