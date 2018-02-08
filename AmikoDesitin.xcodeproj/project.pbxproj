@@ -559,14 +559,14 @@
 			name = main;
 			sourceTree = "<group>";
 		};
-		439B6C6120206C2D0018F922 /* amk */ = {
+		439B6C6120206C2D0018F922 /* amk list */ = {
 			isa = PBXGroup;
 			children = (
 				439B6C6220206D210018F922 /* MLAmkListViewController.h */,
 				439B6C6320206D210018F922 /* MLAmkListViewController.m */,
 				439B6C6420206D210018F922 /* MLAmkListViewController.xib */,
 			);
-			name = amk;
+			name = "amk list";
 			sourceTree = "<group>";
 		};
 		439F261A2028B1A400396C29 /* DB */ = {
@@ -762,7 +762,7 @@
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
 				43D3A0DF201F2D1700EA77C6 /* json */,
-				439B6C6120206C2D0018F922 /* amk */,
+				439B6C6120206C2D0018F922 /* amk list */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
