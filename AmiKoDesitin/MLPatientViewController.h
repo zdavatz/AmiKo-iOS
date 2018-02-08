@@ -7,8 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MLPatient.h"
 
 @interface MLPatientViewController : UIViewController
+{
+//    IBOutlet NSWindow *mPanel;
+//    IBOutlet NSTableView *mTableView;
+//    IBOutlet NSTextField *mNumPatients;
+//    IBOutlet NSTextField *mNotification;
+//    IBOutlet NSSearchField *mSearchKey;
+    IBOutlet UITextField *mFamilyName;
+    IBOutlet UITextField *mGivenName;
+    IBOutlet UITextField *mBirthDate;
+    IBOutlet UITextField *mWeight_kg;
+    IBOutlet UITextField *mHeight_cm;
+    IBOutlet UITextField *mZipCode;
+    IBOutlet UITextField *mPostalAddress;
+    IBOutlet UITextField *mCity;
+    IBOutlet UITextField *mCountry;
+    IBOutlet UITextField *mPhone;
+    IBOutlet UITextField *mEmail;
+    IBOutlet UISegmentedControl *mSex;
+}
 
 - (IBAction) savePatient:(id)sender;
 
