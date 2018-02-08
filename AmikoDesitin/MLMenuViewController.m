@@ -261,7 +261,7 @@
 #endif
     
     if (mParentViewController!=nil)
-        [mParentViewController showPatientList];
+        [mParentViewController switchToPatientEditView];
 }
 
 - (IBAction) showReport:(id)sender

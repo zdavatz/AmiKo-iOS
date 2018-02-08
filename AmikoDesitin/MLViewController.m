@@ -32,6 +32,7 @@
 #import "MLMenuViewController.h"
 #import "MLAmkListViewController.h"
 #import "MLPatientViewController.h"
+#import "MLContactsListViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -114,6 +115,7 @@ static BOOL mShowReport = false;
     MLMenuViewController *menuViewController;
     MLAmkListViewController *amkListViewController;
     MLPatientViewController *patientListViewController;
+    MLContactsListViewController *contactsListViewController;
 
     UINavigationController *otherViewNavigationController;
     UINavigationController *menuViewNavigationController;
@@ -1208,7 +1210,7 @@ static BOOL mShowReport = false;
     }
 }
 
-- (void) showPatientList
+- (void) switchToPatientEditView
 {
     // Rightviewcontroller is not needed, nil it!
     mainRevealController = self.revealViewController;
@@ -1216,7 +1218,7 @@ static BOOL mShowReport = false;
     
     if (patientListViewController!=nil) {
         // [patientListViewController removeFromParentViewController];
-        secondViewController = nil;
+        patientListViewController = nil;
     }
     
     patientListViewController =
@@ -1232,6 +1234,26 @@ static BOOL mShowReport = false;
     
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
+
+    if (contactsListViewController!=nil) {
+        [contactsListViewController removeFromParentViewController];
+        contactsListViewController = nil;
+    }
+
+    contactsListViewController =
+    [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
+                                                   bundle:nil];
+
+#if 1 // TODO: optimize width
+    float frameWidth = self.view.frame.size.width;
+#ifdef DEBUG
+    NSLog(@"%s width:%.f", __FUNCTION__, mainRevealController.rightViewRevealWidth); //180
+    NSLog(@"%s frameWidth:%.f", __FUNCTION__, frameWidth);
+#endif
+#endif
+
+    mainRevealController.rightViewRevealWidth = frameWidth-50;//RearViewRevealWidth_Portrait_iPhone;  // TODO
+    mainRevealController.rightViewController = contactsListViewController;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 }

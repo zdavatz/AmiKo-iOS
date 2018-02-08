@@ -42,6 +42,16 @@
                                     action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
+#if 1
+    // TODO: show Contacts list
+    UIBarButtonItem *rightRevealButtonItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:revealController
+                                    action:@selector(rightRevealToggle:)];
+    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+#endif
+    
     mPatientUUID = nil;
 
     // Open patient DB
