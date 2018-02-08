@@ -119,7 +119,7 @@
     // Database does not exist yet. Let's open...
     rc = sqlite3_open([path UTF8String], &dbConnection);
     if (rc != SQLITE_OK) {
-        NSLog(@"Failed to open database with path %@", path);
+        NSLog(@"Failed to open database %@", path);
         return FALSE;
     }
 
@@ -128,7 +128,7 @@
     NSString *queryStr = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ %@", table, columns];
     rc = sqlite3_exec(dbConnection, [queryStr UTF8String], NULL, NULL, &err);
     if (rc != SQLITE_OK) {
-        NSLog(@"Failed to create table %@ for database with path %@", table, path);
+        NSLog(@"Failed to create table %@ for database %@", table, path);
         return FALSE;
     }
 

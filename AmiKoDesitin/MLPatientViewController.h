@@ -14,8 +14,9 @@
 //    IBOutlet NSWindow *mPanel;
 //    IBOutlet NSTableView *mTableView;
 //    IBOutlet NSTextField *mNumPatients;
-//    IBOutlet NSTextField *mNotification;
+    IBOutlet UITextField *mNotification;
 //    IBOutlet NSSearchField *mSearchKey;
+
     IBOutlet UITextField *mFamilyName;
     IBOutlet UITextField *mGivenName;
     IBOutlet UITextField *mBirthDate;
@@ -31,5 +32,6 @@
 }
 
 - (IBAction) savePatient:(id)sender;
+- (IBAction) cancelPatient:(id)sender;
 
 @end

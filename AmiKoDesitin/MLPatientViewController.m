@@ -16,6 +16,8 @@
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(MLPatient *)patient;
 - (MLPatient *) getAllFields;
+- (void) resetAllFields;
+- (void) friendlyNote;
 
 @end
 
@@ -40,6 +42,16 @@
                                     action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
+#if 1
+    // TODO: show Contacts list
+    UIBarButtonItem *rightRevealButtonItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:revealController
+                                    action:@selector(rightRevealToggle:)];
+    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+#endif
+    
     mPatientUUID = nil;
 
     // Open patient DB
@@ -48,6 +60,8 @@
         NSLog(@"Could not open patient DB!");
         mPatientDb = nil;
     }
+    
+    [mNotification setText:@""];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,16 +86,46 @@
 
 - (void) resetFieldsColors
 {
-    UIColor *defaultColor = [UIColor whiteColor];
-
-    mFamilyName.backgroundColor = defaultColor;
-    mGivenName.backgroundColor = defaultColor;
-    mBirthDate.backgroundColor = defaultColor;
-    mPostalAddress.backgroundColor = defaultColor;
-    mCity.backgroundColor = defaultColor;
-    mZipCode.backgroundColor = defaultColor;
+    mFamilyName.backgroundColor = nil;
+    mGivenName.backgroundColor = nil;
+    mBirthDate.backgroundColor = nil;
+    mPostalAddress.backgroundColor = nil;
+    mCity.backgroundColor = nil;
+    mZipCode.backgroundColor = nil;
+    mSex.backgroundColor = nil;
 }
 
+- (void) resetAllFields
+{
+    [self resetFieldsColors];
+    
+    [mFamilyName setText:@""];
+    [mGivenName setText:@""];
+    [mBirthDate setText:@""];
+    [mCity setText:@""];
+    [mZipCode setText:@""];
+    [mWeight_kg setText:@""];
+    [mHeight_cm setText:@""];
+    [mPostalAddress setText:@""];
+    [mZipCode setText:@""];
+    [mCity setText:@""];
+    [mCountry setText:@""];
+    [mPhone setText:@""];
+    [mEmail setText:@""];
+    [mSex setSelectedSegmentIndex:UISegmentedControlNoSegment];
+    
+    mPatientUUID = nil;
+    
+    [mNotification setText:@""];
+}
+
+- (void) friendlyNote
+{
+    [mNotification setText:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
+}
+
+
+// Validate required fields
 - (BOOL) validateFields:(MLPatient *)patient
 {
     BOOL valid = TRUE;
@@ -91,10 +135,6 @@
                                         alpha:0.3];
 
     [self resetFieldsColors];
-    
-#ifdef DEBUG
-    NSLog(@"%s mFamilyName.backgroundColor:%@", __FUNCTION__, mFamilyName.backgroundColor);
-#endif
     
     if ([self stringIsNilOrEmpty:patient.familyName]) {
         mFamilyName.backgroundColor = lightRed;
@@ -125,6 +165,14 @@
         mZipCode.backgroundColor = lightRed;
         valid = FALSE;
     }
+    
+    if ([mSex selectedSegmentIndex] == UISegmentedControlNoSegment) {
+        mSex.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+
+    // TODO: the email is an optional field,
+    // but if it's there, check at least that it is like *@*
 
     return valid;
 }
@@ -145,13 +193,30 @@
     patient.phoneNumber = [mPhone text];
     patient.emailAddress = [mEmail text];
     
-    patient.gender = [mSex selectedSegmentIndex] ? @"woman" : @"man";
-
-#ifdef DEBUG
-    NSLog(@"%s mSex:%ld, %@", __FUNCTION__, [mSex selectedSegmentIndex], patient.gender);
-#endif
+    switch ([mSex selectedSegmentIndex]) {
+        case UISegmentedControlNoSegment:
+            patient.gender = @"";
+            break;
+        case 0:
+            patient.gender = @"man";
+            break;
+        case 1:
+            patient.gender = @"woman";
+            break;
+    }
 
     return patient;
+}
+
+#pragma mark - Actions
+
+- (IBAction) cancelPatient:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    [self resetAllFields];
+    // TODO: show list of patients from DB
 }
 
 - (IBAction) savePatient:(id)sender
@@ -185,8 +250,8 @@
     mSearchFiltered = FALSE;
     [mSearchKey setStringValue:@""];
     [self updateAmiKoAddressBookTableView];
-    [self friendlyNote];
 #endif
+    [self friendlyNote];
 }
 
 @end
