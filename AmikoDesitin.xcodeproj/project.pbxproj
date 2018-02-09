@@ -13,6 +13,7 @@
 		430285D120162DEB003B2EF3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
 		4333432A201B6488006BFC23 /* MLPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 43334329201B6488006BFC23 /* MLPatient.m */; };
 		4333432D201B64A2006BFC23 /* MLOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4333432C201B64A2006BFC23 /* MLOperator.m */; };
+		435D2E32202DA1B6001A829C /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
 		4387FC3D20189DB4000A5A0F /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */; };
 		439B6C6520206D210018F922 /* MLAmkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439B6C6320206D210018F922 /* MLAmkListViewController.m */; };
 		439B6C6620206D210018F922 /* MLAmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* MLAmkListViewController.xib */; };
@@ -275,6 +276,7 @@
 		43334329201B6488006BFC23 /* MLPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPatient.m; path = AmiKoDesitin/MLPatient.m; sourceTree = SOURCE_ROOT; };
 		4333432B201B64A2006BFC23 /* MLOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOperator.h; path = AmiKoDesitin/MLOperator.h; sourceTree = SOURCE_ROOT; };
 		4333432C201B64A2006BFC23 /* MLOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLOperator.m; path = AmiKoDesitin/MLOperator.m; sourceTree = SOURCE_ROOT; };
+		435D2E31202DA1B6001A829C /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
 		4387FC4020189EB8000A5A0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLPrescriptionViewController.xib; sourceTree = "<group>"; };
 		439B6C6220206D210018F922 /* MLAmkListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLAmkListViewController.h; path = AmiKoDesitin/MLAmkListViewController.h; sourceTree = SOURCE_ROOT; };
 		439B6C6320206D210018F922 /* MLAmkListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLAmkListViewController.m; path = AmiKoDesitin/MLAmkListViewController.m; sourceTree = SOURCE_ROOT; };
@@ -458,6 +460,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				435D2E32202DA1B6001A829C /* Contacts.framework in Frameworks */,
 				D59E895618B7C0C100185094 /* MessageUI.framework in Frameworks */,
 				D5A31F6318B5263500F56BC5 /* libz.1.2.5.dylib in Frameworks */,
 				D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */,
@@ -700,6 +703,7 @@
 		D5A6F23917B1692F00EAB24B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				435D2E31202DA1B6001A829C /* Contacts.framework */,
 				D59E895518B7C0C100185094 /* MessageUI.framework */,
 				D5A6F26617B16A2300EAB24B /* libsqlite3.0.dylib */,
 				D5A31F6218B5263500F56BC5 /* libz.1.2.5.dylib */,

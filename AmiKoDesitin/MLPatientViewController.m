@@ -15,6 +15,7 @@
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(MLPatient *)patient;
+- (void) setAllFields:(MLPatient *)p;
 - (MLPatient *) getAllFields;
 - (void) resetAllFields;
 - (void) friendlyNote;
@@ -43,13 +44,20 @@
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
 #if 1
-    // TODO: show Contacts list
+    // Add button for showing Contacts list view
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(rightRevealToggle:)];
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+#else
+    // Display an Edit|Done button in the navigation bar
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+#endif
+    
+#ifdef DEBUG
+    self.navigationItem.prompt = @"Patient Edit";
 #endif
     
     mPatientUUID = nil;
@@ -62,6 +70,11 @@
     }
     
     [mNotification setText:@""];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(contactsListDidChangeSelection:)
+                                                 name:@"ContactSelectedNotification"
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -124,57 +137,43 @@
     [mNotification setText:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
 }
 
-
-// Validate required fields
-- (BOOL) validateFields:(MLPatient *)patient
+- (void) setAllFields:(MLPatient *)p
 {
-    BOOL valid = TRUE;
-    UIColor *lightRed = [UIColor colorWithRed:1.0
-                                        green:0.0
-                                         blue:0.0
-                                        alpha:0.3];
+    if (p.familyName!=nil)
+        [mFamilyName setText:p.familyName];
+    if (p.givenName!=nil)
+        [mGivenName setText:p.givenName];
+    if (p.birthDate!=nil)
+        [mBirthDate setText:p.birthDate];
+    if (p.city!=nil)
+        [mCity setText:p.city];
+    if (p.zipCode!=nil)
+        [mZipCode setText:p.zipCode];
+    if (p.weightKg>0)
+        [mWeight_kg setText:[NSString stringWithFormat:@"%d", p.weightKg]];
+    if (p.heightCm>0)
+        [mHeight_cm setText:[NSString stringWithFormat:@"%d", p.heightCm]];
+    if (p.phoneNumber!=nil)
+        [mPhone setText:p.phoneNumber];
+    if (p.country!=nil)
+        [mCity setText:p.city];
+    if (p.country!=nil)
+        [mCountry setText:p.country];
+    if (p.postalAddress!=nil)
+        [mPostalAddress setText:p.postalAddress];
+    if (p.emailAddress!=nil)
+        [mEmail setText:p.emailAddress];
+    if (p.phoneNumber!=nil)
+        [mPhone setText:p.phoneNumber];
+    if (p.uniqueId!=nil)
+        mPatientUUID = p.uniqueId;
 
-    [self resetFieldsColors];
-    
-    if ([self stringIsNilOrEmpty:patient.familyName]) {
-        mFamilyName.backgroundColor = lightRed;
-        valid = FALSE;
+    if (p.gender) {
+        if ([p.gender isEqualToString:@"man"])
+            [mSex setSelectedSegmentIndex:0];
+        else if ([p.gender isEqualToString:@"woman"])
+            [mSex setSelectedSegmentIndex:1];
     }
-
-    if ([self stringIsNilOrEmpty:patient.givenName]) {
-        mGivenName.backgroundColor = lightRed;
-        valid = FALSE;
-    }
-
-    if ([self stringIsNilOrEmpty:patient.birthDate]) {
-        mBirthDate.backgroundColor = lightRed;
-        valid = FALSE;
-    }
-
-    if ([self stringIsNilOrEmpty:patient.postalAddress]) {
-        mPostalAddress.backgroundColor = lightRed;
-        valid = FALSE;
-    }
-
-    if ([self stringIsNilOrEmpty:patient.city]) {
-        mCity.backgroundColor = lightRed;
-        valid = FALSE;
-    }
-
-    if ([self stringIsNilOrEmpty:patient.zipCode]) {
-        mZipCode.backgroundColor = lightRed;
-        valid = FALSE;
-    }
-    
-    if ([mSex selectedSegmentIndex] == UISegmentedControlNoSegment) {
-        mSex.backgroundColor = lightRed;
-        valid = FALSE;
-    }
-
-    // TODO: the email is an optional field,
-    // but if it's there, check at least that it is like *@*
-
-    return valid;
 }
 
 - (MLPatient *) getAllFields
@@ -206,6 +205,58 @@
     }
 
     return patient;
+}
+
+// Validate "required" fields
+- (BOOL) validateFields:(MLPatient *)patient
+{
+    BOOL valid = TRUE;
+    UIColor *lightRed = [UIColor colorWithRed:1.0
+                                        green:0.0
+                                         blue:0.0
+                                        alpha:0.3];
+    
+    [self resetFieldsColors];
+    
+    if ([self stringIsNilOrEmpty:patient.familyName]) {
+        mFamilyName.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:patient.givenName]) {
+        mGivenName.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:patient.birthDate]) {
+        mBirthDate.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:patient.postalAddress]) {
+        mPostalAddress.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:patient.city]) {
+        mCity.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:patient.zipCode]) {
+        mZipCode.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([mSex selectedSegmentIndex] == UISegmentedControlNoSegment) {
+        mSex.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    // TODO: the email is an optional field,
+    // but if it's there, check at least that it is like *@*
+    
+    return valid;
 }
 
 #pragma mark - Actions
@@ -252,6 +303,23 @@
     [self updateAmiKoAddressBookTableView];
 #endif
     [self friendlyNote];
+}
+
+#pragma mark - Notifications
+
+- (void)contactsListDidChangeSelection:(NSNotification *)aNotification
+{
+    MLPatient * p = [aNotification object];
+#ifdef DEBUG
+    //NSLog(@"%s selected familyName:%@", __FUNCTION__, p.familyName);
+#endif
+    [self resetAllFields];
+    [self setAllFields:p];
+    
+    // TODO: Add contact to patient DB
+    
+    SWRevealViewController *revealController = self.revealViewController;
+    [revealController rightRevealToggleAnimated:YES];
 }
 
 @end
