@@ -10,4 +10,7 @@
 
 @interface MLContactsListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
+- (NSArray *) getAllContacts;
+- (NSArray *) addAllContactsToArray:(NSMutableArray *)arrayOfContacts;
+
 @end

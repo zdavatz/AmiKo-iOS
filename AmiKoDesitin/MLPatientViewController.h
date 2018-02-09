@@ -34,4 +34,6 @@
 - (IBAction) savePatient:(id)sender;
 - (IBAction) cancelPatient:(id)sender;
 
+- (void)contactsListDidChangeSelection:(NSNotification *)aNotification;
+
 @end

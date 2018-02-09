@@ -1039,7 +1039,8 @@ static BOOL mShowReport = false;
         [menuViewController removeFromParentViewController];
         menuViewController = nil;
     }
-    menuViewController = [[MLMenuViewController alloc] initWithNibName:@"MLMenuViewController" bundle:nil parent:self];
+    menuViewController =
+    [[MLMenuViewController alloc] initWithNibName:@"MLMenuViewController" bundle:nil parent:self];
     
     if (menuViewNavigationController!=nil) {
         [menuViewNavigationController removeFromParentViewController];
@@ -1252,7 +1253,7 @@ static BOOL mShowReport = false;
 #endif
 #endif
 
-    mainRevealController.rightViewRevealWidth = frameWidth-50;//RearViewRevealWidth_Portrait_iPhone;  // TODO
+    //mainRevealController.rightViewRevealWidth = frameWidth;//RearViewRevealWidth_Portrait_iPhone;  // TODO
     mainRevealController.rightViewController = contactsListViewController;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
