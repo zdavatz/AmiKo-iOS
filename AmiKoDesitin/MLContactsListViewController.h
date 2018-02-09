@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLContactsListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface MLContactsListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+{
+    IBOutlet UISearchBar *theSearchBar;
+    IBOutlet UITableView *mTableView;
+}
+
+@property (nonatomic, retain) IBOutlet UISearchBar *theSearchBar;
+
+//- (IBAction) searchDatabase:(id)sender;
 
 - (NSArray *) getAllContacts;
 - (NSArray *) addAllContactsToArray:(NSMutableArray *)arrayOfContacts;

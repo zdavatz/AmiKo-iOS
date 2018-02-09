@@ -2,14 +2,14 @@
 //  MLPatientViewController.h
 //  AmikoDesitin
 //
-//  Created by Alex Bettarini on 2/5/18.
+//  Created by Alex Bettarini on 5 Feb 2018
 //  Copyright © 2018 Ywesee GmbH. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "MLPatient.h"
 
-@interface MLPatientViewController : UIViewController
+@interface MLPatientViewController : UIViewController <UITextFieldDelegate>
 {
 //    IBOutlet NSWindow *mPanel;
 //    IBOutlet NSTableView *mTableView;

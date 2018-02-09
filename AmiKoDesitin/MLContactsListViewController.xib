@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MLContactsListViewController">
             <connections>
+                <outlet property="mTableView" destination="ZdL-PR-7hF" id="she-a6-8pl"/>
+                <outlet property="theSearchBar" destination="OFX-Ir-jRP" id="rcN-VD-KVI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -22,6 +24,9 @@
                 <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="OFX-Ir-jRP">
                     <rect key="frame" x="0.0" y="17" width="375" height="44"/>
                     <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="atT-Dj-uFK"/>
+                    </connections>
                 </searchBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ZdL-PR-7hF">
                     <rect key="frame" x="0.0" y="61" width="375" height="606"/>

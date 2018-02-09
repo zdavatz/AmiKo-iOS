@@ -13,6 +13,8 @@
 
 @interface MLContactsListViewController ()
 
+- (BOOL) stringIsNilOrEmpty:(NSString*)str;
+
 @end
 
 @implementation MLContactsListViewController
@@ -24,6 +26,8 @@
     NSArray *mArrayOfPatients;
     NSMutableArray *groupOfContacts;
 }
+
+@synthesize theSearchBar;
 
 - (void)viewDidLoad
 {
@@ -40,6 +44,11 @@
 //    for (MLPatient *p in mArrayOfPatients)
 //        NSLog(@"%s familyName: %@", __FUNCTION__, p.familyName);
 #endif
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self.theSearchBar becomeFirstResponder];
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -148,12 +157,108 @@
     return arrayOfContacts;
 }
 
+- (BOOL) stringIsNilOrEmpty:(NSString*)str
+{
+    return !(str && str.length);
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+#ifdef DEBUG
+    NSLog(@"%s User searched for %@", __FUNCTION__, searchBar.text);
+#endif
+
+    NSString *searchKey = searchBar.text;
+    [mFilteredArrayOfPatients removeAllObjects];
+    if (![self stringIsNilOrEmpty:searchKey]) {
+        NSString *searchKeyLower = [searchKey lowercaseString];
+        for (MLPatient *p in mArrayOfPatients) {
+            if ([[p.familyName lowercaseString] hasPrefix:searchKeyLower] ||
+                [[p.givenName lowercaseString] hasPrefix:searchKeyLower] ||
+                [[p.postalAddress lowercaseString] hasPrefix:searchKeyLower] ||
+                [p.zipCode hasPrefix:searchKeyLower])
+            {
+                [mFilteredArrayOfPatients addObject:p];
+            }
+        }
+    }
+
+    if (mFilteredArrayOfPatients) {
+        if ([mFilteredArrayOfPatients count]>0) {
+            //[self setNumPatients:[mFilteredArrayOfPatients count]];  // TODO
+            mSearchFiltered = TRUE;
+        }
+        else {
+            if ([searchKey length]>0) {
+                //[self setNumPatients:0]; // TODO
+                mSearchFiltered = TRUE;
+            }
+            else {
+                //[self setNumPatients:[mArrayOfPatients count]]; // TODO
+                mSearchFiltered = FALSE;
+            }
+        }
+    }
+    else {
+        // [self setNumPatients:[mArrayOfPatients count]]; // TODO
+        mSearchFiltered = FALSE;
+    }   
+   
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    
+    mTableView.allowsSelection = YES;
+    mTableView.scrollEnabled = YES;
+    
+//    [self.tableData removeAllObjects];
+//    [self.tableData addObjectsFromArray:results];
+    [mTableView reloadData];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    searchBar.text = @"";
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    mTableView.allowsSelection = YES;
+    mTableView.scrollEnabled = YES;
+
+    mSearchFiltered = FALSE;
+    [mTableView reloadData];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    [searchBar setShowsCancelButton:YES animated:YES];
+//    self.theTableView.allowsSelection = NO;
+//    self.theTableView.scrollEnabled = NO;
+}
+
+// See onSearchDatabase in AmiKo
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, searchText);
+#endif
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView: (UITableView *)tableView
   numberOfRowsInSection: (NSInteger)section
 {
-    return [mArrayOfPatients count]; // TODO: scroll bar
+    if (mSearchFiltered)
+        return [mFilteredArrayOfPatients count];
+
+    return [mArrayOfPatients count];
 }
 
 - (UITableViewCell *) tableView: (UITableView *)tableView
@@ -166,9 +271,11 @@
                                       reuseIdentifier:tableIdentifier];
         cell.textLabel.textAlignment = NSTextAlignmentRight;
         //cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.textColor = [UIColor grayColor];
     }
     
-    MLPatient *p = mArrayOfPatients[indexPath.row];
+    MLPatient *p = [self getContactAtRow:indexPath.row];
+//    MLPatient *p = mArrayOfPatients[indexPath.row];
     cell.textLabel.text = p.familyName;
     //cell.detailTextLabel.text = [NSString stringWithFormat:@"example %ld", indexPath.row];
     return cell;
@@ -179,14 +286,14 @@
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
 #ifdef DEBUG
-    //NSLog(@"%s selected row:%ld", __FUNCTION__, indexPath.row);
+    NSLog(@"%s selected row:%ld", __FUNCTION__, indexPath.row);
 #endif
     
     MLPatient *p = [self getContactAtRow:indexPath.row];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ContactSelectedNotification"
                                                         object:p];
-    
     mPatientUUID = p.uniqueId;
+    mSearchFiltered = FALSE;
 }
 
 @end

@@ -2,7 +2,7 @@
 //  MLPatientViewController.m
 //  AmikoDesitin
 //
-//  Created by Alex Bettarini on 2/5/18.
+//  Created by Alex Bettarini on 5 Feb 2018
 //  Copyright © 2018 Ywesee GmbH. All rights reserved.
 //
 
@@ -11,6 +11,18 @@
 
 #import "MLPatientDBAdapter.h"
 
+enum {
+    NameFieldTag = 1,
+    SurnameFieldTag,
+    AddressFieldTag,
+    CityFieldTag,
+    ZIPFieldTag,
+    DOBFieldTag,
+    SexFieldTag,
+
+    NumberOfFieldTags
+};
+
 @interface MLPatientViewController ()
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
@@ -18,7 +30,7 @@
 - (void) setAllFields:(MLPatient *)p;
 - (MLPatient *) getAllFields;
 - (void) resetAllFields;
-- (void) friendlyNote;
+- (void) friendlyNote:(NSString*)str;
 
 @end
 
@@ -108,6 +120,33 @@
     mSex.backgroundColor = nil;
 }
 
+- (void) checkFields
+{
+    UIColor *lightRed = [UIColor colorWithRed:1.0
+                                        green:0.0
+                                         blue:0.0
+                                        alpha:0.3];
+    [self resetFieldsColors];
+    
+    if ([self stringIsNilOrEmpty:[mFamilyName text]])
+        mFamilyName.backgroundColor = lightRed;
+
+    if ([self stringIsNilOrEmpty:[mGivenName text]])
+        mGivenName.backgroundColor = lightRed;
+
+    if ([self stringIsNilOrEmpty:[mBirthDate text]])
+        mBirthDate.backgroundColor = lightRed;
+
+    if ([self stringIsNilOrEmpty:[mPostalAddress text]])
+        mPostalAddress.backgroundColor = lightRed;
+
+    if ([self stringIsNilOrEmpty:[mCity text]])
+        mCity.backgroundColor = lightRed;
+
+    if ([self stringIsNilOrEmpty:[mZipCode text]])
+        mZipCode.backgroundColor = lightRed;
+}
+
 - (void) resetAllFields
 {
     [self resetFieldsColors];
@@ -132,40 +171,53 @@
     [mNotification setText:@""];
 }
 
-- (void) friendlyNote
+- (void) friendlyNote:(NSString*)str
 {
-    [mNotification setText:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
+    [mNotification setText:str];
 }
 
 - (void) setAllFields:(MLPatient *)p
 {
-    if (p.familyName!=nil)
+    if (p.familyName)
         [mFamilyName setText:p.familyName];
-    if (p.givenName!=nil)
+
+    if (p.givenName)
         [mGivenName setText:p.givenName];
-    if (p.birthDate!=nil)
+
+    if (p.birthDate)
         [mBirthDate setText:p.birthDate];
-    if (p.city!=nil)
+
+    if (p.city)
         [mCity setText:p.city];
-    if (p.zipCode!=nil)
+
+    if (p.zipCode)
         [mZipCode setText:p.zipCode];
+
     if (p.weightKg>0)
         [mWeight_kg setText:[NSString stringWithFormat:@"%d", p.weightKg]];
+
     if (p.heightCm>0)
         [mHeight_cm setText:[NSString stringWithFormat:@"%d", p.heightCm]];
-    if (p.phoneNumber!=nil)
+
+    if (p.phoneNumber)
         [mPhone setText:p.phoneNumber];
-    if (p.country!=nil)
+
+    if (p.country)
         [mCity setText:p.city];
-    if (p.country!=nil)
+
+    if (p.country)
         [mCountry setText:p.country];
-    if (p.postalAddress!=nil)
+
+    if (p.postalAddress)
         [mPostalAddress setText:p.postalAddress];
-    if (p.emailAddress!=nil)
+
+    if (p.emailAddress)
         [mEmail setText:p.emailAddress];
-    if (p.phoneNumber!=nil)
+
+    if (p.phoneNumber)
         [mPhone setText:p.phoneNumber];
-    if (p.uniqueId!=nil)
+
+    if (p.uniqueId)
         mPatientUUID = p.uniqueId;
 
     if (p.gender) {
@@ -259,6 +311,47 @@
     return valid;
 }
 
+#pragma mark - UITextFieldDelegate
+
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    
+//}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+#ifdef DEBUG
+    NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
+#endif
+    UIColor *lightRed = [UIColor colorWithRed:1.0
+                                        green:0.0
+                                         blue:0.0
+                                        alpha:0.3];
+    BOOL valid = TRUE;
+    if ([textField.text isEqualToString:@""])
+        valid = FALSE;
+
+//    switch (textField.tag) {
+//        case NameFieldTag: break;
+//        case SurnameFieldTag: break;
+//        case AddressFieldTag: break;
+//        case CityFieldTag: break;
+//        case ZIPFieldTag: break;
+//        case DOBFieldTag: break;
+//        case SexFieldTag: break;
+//
+//        default:
+//            break;
+//    }
+
+    if (valid)
+        textField.backgroundColor = nil;
+    else
+        textField.backgroundColor = lightRed;
+    
+    return valid;
+}
+
 #pragma mark - Actions
 
 - (IBAction) cancelPatient:(id)sender
@@ -290,19 +383,18 @@
     if (mPatientUUID && [mPatientUUID length]>0)
         patient.uniqueId = mPatientUUID;
     
-    if ([mPatientDb getPatientWithUniqueID:mPatientUUID]==nil) {
+    if ([mPatientDb getPatientWithUniqueID:mPatientUUID]==nil)
         mPatientUUID = [mPatientDb addEntry:patient];
-    }
-    else {
+    else
         mPatientUUID = [mPatientDb insertEntry:patient];
-    }
 
 #if 0 // TODO
     mSearchFiltered = FALSE;
     [mSearchKey setStringValue:@""];
     [self updateAmiKoAddressBookTableView];
 #endif
-    [self friendlyNote];
+
+    [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
 }
 
 #pragma mark - Notifications
