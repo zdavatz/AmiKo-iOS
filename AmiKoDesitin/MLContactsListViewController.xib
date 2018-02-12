@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G19009" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G19009" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -39,15 +39,20 @@
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="trailing" secondItem="ZdL-PR-7hF" secondAttribute="trailing" id="2l5-5N-YvR"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="17" id="F9O-EF-eZH"/>
-                <constraint firstAttribute="bottom" secondItem="ZdL-PR-7hF" secondAttribute="bottom" id="HEF-fC-2S6"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="MD3-It-wEf"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="ZdL-PR-7hF" secondAttribute="leading" id="NUj-6e-RFC"/>
-                <constraint firstAttribute="trailing" secondItem="OFX-Ir-jRP" secondAttribute="trailing" id="ea3-vf-Wxb"/>
-                <constraint firstItem="ZdL-PR-7hF" firstAttribute="top" secondItem="OFX-Ir-jRP" secondAttribute="bottom" id="ylR-Ks-GxN"/>
+                <constraint firstAttribute="trailing" secondItem="OFX-Ir-jRP" secondAttribute="trailing" id="8Tm-bm-dtx"/>
+                <constraint firstAttribute="bottom" secondItem="ZdL-PR-7hF" secondAttribute="bottom" id="8wf-9g-Oqq"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="trailing" secondItem="ZdL-PR-7hF" secondAttribute="trailing" id="ZPh-QF-Ihu"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="ZdL-PR-7hF" secondAttribute="leading" id="gKK-S7-qXG"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qH0-KD-wGr"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="17" id="yxa-Fy-qhS"/>
+                <constraint firstItem="ZdL-PR-7hF" firstAttribute="top" secondItem="OFX-Ir-jRP" secondAttribute="bottom" id="zlV-D7-a5J"/>
             </constraints>
             <point key="canvasLocation" x="88.5" y="82.5"/>
         </view>
     </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
+    </simulatedMetricsContainer>
 </document>

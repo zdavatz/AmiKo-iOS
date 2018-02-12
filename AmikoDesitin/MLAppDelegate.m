@@ -258,6 +258,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         }
     }
     
+    self.window.rootViewController = self.revealViewController;
+    
     [self.window makeKeyAndVisible];
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);

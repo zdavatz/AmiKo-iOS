@@ -164,16 +164,17 @@
 
 #pragma mark - UISearchBarDelegate
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+// See onSearchDatabase in AmiKo
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
 #ifdef DEBUG
-    NSLog(@"%s User searched for %@", __FUNCTION__, searchBar.text);
+    //NSLog(@"%s %@", __FUNCTION__, searchText);
 #endif
 
-    NSString *searchKey = searchBar.text;
     [mFilteredArrayOfPatients removeAllObjects];
-    if (![self stringIsNilOrEmpty:searchKey]) {
-        NSString *searchKeyLower = [searchKey lowercaseString];
+    if (![self stringIsNilOrEmpty:searchText]) {
+        
+        NSString *searchKeyLower = [searchText lowercaseString];
         for (MLPatient *p in mArrayOfPatients) {
             if ([[p.familyName lowercaseString] hasPrefix:searchKeyLower] ||
                 [[p.givenName lowercaseString] hasPrefix:searchKeyLower] ||
@@ -184,14 +185,14 @@
             }
         }
     }
-
+    
     if (mFilteredArrayOfPatients) {
         if ([mFilteredArrayOfPatients count]>0) {
             //[self setNumPatients:[mFilteredArrayOfPatients count]];  // TODO
             mSearchFiltered = TRUE;
         }
         else {
-            if ([searchKey length]>0) {
+            if ([searchText length]>0) {
                 //[self setNumPatients:0]; // TODO
                 mSearchFiltered = TRUE;
             }
@@ -204,50 +205,9 @@
     else {
         // [self setNumPatients:[mArrayOfPatients count]]; // TODO
         mSearchFiltered = FALSE;
-    }   
-   
-    [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar resignFirstResponder];
+    }
     
-    mTableView.allowsSelection = YES;
-    mTableView.scrollEnabled = YES;
-    
-//    [self.tableData removeAllObjects];
-//    [self.tableData addObjectsFromArray:results];
     [mTableView reloadData];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    searchBar.text = @"";
-    [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar resignFirstResponder];
-    mTableView.allowsSelection = YES;
-    mTableView.scrollEnabled = YES;
-
-    mSearchFiltered = FALSE;
-    [mTableView reloadData];
-}
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    [searchBar setShowsCancelButton:YES animated:YES];
-//    self.theTableView.allowsSelection = NO;
-//    self.theTableView.scrollEnabled = NO;
-}
-
-// See onSearchDatabase in AmiKo
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
-{
-#ifdef DEBUG
-    NSLog(@"%s %@", __FUNCTION__, searchText);
-#endif
 }
 
 #pragma mark - UITableViewDataSource
@@ -275,8 +235,8 @@
     }
     
     MLPatient *p = [self getContactAtRow:indexPath.row];
-//    MLPatient *p = mArrayOfPatients[indexPath.row];
-    cell.textLabel.text = p.familyName;
+    NSString *cellStr = [NSString stringWithFormat:@"%@ %@", p.familyName, p.givenName];
+    cell.textLabel.text = cellStr;
     //cell.detailTextLabel.text = [NSString stringWithFormat:@"example %ld", indexPath.row];
     return cell;
 }

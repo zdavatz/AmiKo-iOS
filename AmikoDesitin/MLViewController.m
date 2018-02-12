@@ -114,8 +114,6 @@ static BOOL mShowReport = false;
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
     MLAmkListViewController *amkListViewController;
-    MLPatientViewController *patientListViewController;
-    MLContactsListViewController *contactsListViewController;
 
     UINavigationController *otherViewNavigationController;
     UINavigationController *menuViewNavigationController;
@@ -1019,7 +1017,9 @@ static BOOL mShowReport = false;
     UIButton *logoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0.0f, 0.0f, 32.0f, 32.0f);
-    [logoButton addTarget:self action:@selector(myShowMenuMethod:) forControlEvents:UIControlEventTouchUpInside];
+    [logoButton addTarget:self
+                   action:@selector(myShowMenuMethod:)
+         forControlEvents:UIControlEventTouchUpInside];
 
 #if (__clang_major__ == 8) && (__clang_minor__ == 0)    // Xcode 8
     if ([MLConstants iosVersion] >= 9.0f)
@@ -1209,54 +1209,6 @@ static BOOL mShowReport = false;
             NSLog(@"Expection thrown...");
         }
     }
-}
-
-- (void) switchToPatientEditView
-{
-    // Rightviewcontroller is not needed, nil it!
-    mainRevealController = self.revealViewController;
-    mainRevealController.rightViewController = nil;
-    
-    if (patientListViewController!=nil) {
-        // [patientListViewController removeFromParentViewController];
-        patientListViewController = nil;
-    }
-    
-    patientListViewController =
-    [[MLPatientViewController alloc] initWithNibName:@"MLPatientViewController"
-                                              bundle:nil];
-    
-    if (otherViewNavigationController!=nil) {
-        [otherViewNavigationController removeFromParentViewController];
-        otherViewNavigationController = nil;
-    }
-    
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
-    
-    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
-    mainRevealController = self.revealViewController;
-
-    if (contactsListViewController!=nil) {
-        [contactsListViewController removeFromParentViewController];
-        contactsListViewController = nil;
-    }
-
-    contactsListViewController =
-    [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
-                                                   bundle:nil];
-
-#if 1 // TODO: optimize width
-    float frameWidth = self.view.frame.size.width;
-#ifdef DEBUG
-    NSLog(@"%s width:%.f", __FUNCTION__, mainRevealController.rightViewRevealWidth); //180
-    NSLog(@"%s frameWidth:%.f", __FUNCTION__, frameWidth);
-#endif
-#endif
-
-    //mainRevealController.rightViewRevealWidth = frameWidth;//RearViewRevealWidth_Portrait_iPhone;  // TODO
-    mainRevealController.rightViewController = contactsListViewController;
-    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 }
 
 - (void) showReport:(id)sender
@@ -1902,11 +1854,19 @@ static BOOL mShowReport = false;
 
 - (void) switchToPrescriptionView
 {
-#if 0
-    UINavigationController *navController2 = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
-    NSLog(@"navController2:%@", navController2); // SWRevealViewController
-#endif
+    mainRevealController = self.revealViewController;
+
+    // Right
+    if (amkListViewController!=nil) {
+        [amkListViewController removeFromParentViewController];
+        amkListViewController = nil;
+    }
     
+    amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
+                                                                      bundle:nil];
+    [mainRevealController setRightViewController:amkListViewController];
+
+    // Front
     if (prescriptionViewController!=nil) {
         // [prescriptionViewController removeFromParentViewController];
         prescriptionViewController = nil;
@@ -1922,18 +1882,28 @@ static BOOL mShowReport = false;
     }
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
     
-    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    mainRevealController.rightViewRevealOverdraw = 0;
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+}
+
+- (void) switchToPatientEditView
+{
     mainRevealController = self.revealViewController;
 
-    if (amkListViewController!=nil) {
-        [amkListViewController removeFromParentViewController];
-        amkListViewController = nil;
-    }
+    // Right
+    MLContactsListViewController *contactsListViewController =
+    [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
+                                                   bundle:nil];
+    [mainRevealController setRightViewController:contactsListViewController];
 
-    amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
-                                                                      bundle:nil];
-    mainRevealController.rightViewController = amkListViewController;
+    // Front
+    MLPatientViewController *patientListViewController =
+    [[MLPatientViewController alloc] initWithNibName:@"MLPatientViewController"
+                                              bundle:nil];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    mainRevealController.rightViewRevealOverdraw = 0;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
 }
 
