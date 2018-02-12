@@ -235,8 +235,8 @@
     }
     
     MLPatient *p = [self getContactAtRow:indexPath.row];
-//    MLPatient *p = mArrayOfPatients[indexPath.row];
-    cell.textLabel.text = p.familyName;
+    NSString *cellStr = [NSString stringWithFormat:@"%@ %@", p.familyName, p.givenName];
+    cell.textLabel.text = cellStr;
     //cell.detailTextLabel.text = [NSString stringWithFormat:@"example %ld", indexPath.row];
     return cell;
 }
