@@ -164,46 +164,6 @@
 
 #pragma mark - UISearchBarDelegate
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-#ifdef DEBUG
-    //NSLog(@"%s User searched for %@", __FUNCTION__, searchBar.text);
-#endif
-    
-    [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar resignFirstResponder];
-    
-    mTableView.allowsSelection = YES;
-    mTableView.scrollEnabled = YES;
-    
-    //[mTableView reloadData];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    searchBar.text = @"";
-    [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar resignFirstResponder];
-    mTableView.allowsSelection = YES;
-    mTableView.scrollEnabled = YES;
-
-    mSearchFiltered = FALSE;
-    //[mTableView reloadData];
-}
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    [searchBar setShowsCancelButton:YES animated:YES];
-//    self.theTableView.allowsSelection = NO;
-//    self.theTableView.scrollEnabled = NO;
-}
-
 // See onSearchDatabase in AmiKo
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
@@ -211,11 +171,10 @@
     //NSLog(@"%s %@", __FUNCTION__, searchText);
 #endif
 
-    NSString *searchKey = searchText;
     [mFilteredArrayOfPatients removeAllObjects];
-    if (![self stringIsNilOrEmpty:searchKey]) {
+    if (![self stringIsNilOrEmpty:searchText]) {
         
-        NSString *searchKeyLower = [searchKey lowercaseString];
+        NSString *searchKeyLower = [searchText lowercaseString];
         for (MLPatient *p in mArrayOfPatients) {
             if ([[p.familyName lowercaseString] hasPrefix:searchKeyLower] ||
                 [[p.givenName lowercaseString] hasPrefix:searchKeyLower] ||
@@ -233,7 +192,7 @@
             mSearchFiltered = TRUE;
         }
         else {
-            if ([searchKey length]>0) {
+            if ([searchText length]>0) {
                 //[self setNumPatients:0]; // TODO
                 mSearchFiltered = TRUE;
             }

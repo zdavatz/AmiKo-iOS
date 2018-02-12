@@ -11,6 +11,8 @@
 
 #import "MLPatientDBAdapter.h"
 
+#import "MLViewController.h"
+
 enum {
     NameFieldTag = 1,
     SurnameFieldTag,
@@ -42,12 +44,14 @@ enum {
     NSString *mPatientUUID;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
     SWRevealViewController *revealController = [self revealViewController];
 
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain

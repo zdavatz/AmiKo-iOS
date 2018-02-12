@@ -149,7 +149,7 @@ static const float kAmkLabelFontSize = 12.0;
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:tableIdentifier];
-        cell.textLabel.textAlignment = NSTextAlignmentRight;
+        //cell.textLabel.textAlignment = NSTextAlignmentLeft;
         
         /** Use subview */
         UILabel *subLabel = nil;
@@ -161,7 +161,7 @@ static const float kAmkLabelFontSize = 12.0;
             subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)];
             [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
         }
-        subLabel.textAlignment = NSTextAlignmentRight;
+        subLabel.textAlignment = NSTextAlignmentLeft;
         
         // subLabel.text = [mSectionTitles objectAtIndex:indexPath.row];
         subLabel.tag = 123; // Constant which uniquely defines the label
