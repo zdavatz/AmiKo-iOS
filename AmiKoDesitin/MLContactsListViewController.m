@@ -173,17 +173,14 @@
 
     [mFilteredArrayOfPatients removeAllObjects];
     if (![self stringIsNilOrEmpty:searchText]) {
+        NSPredicate *p1 = [NSPredicate predicateWithFormat:@"familyName BEGINSWITH[cd] %@", searchText];
+        NSPredicate *p2 = [NSPredicate predicateWithFormat:@"givenName BEGINSWITH[cd] %@", searchText];
+        NSPredicate *p3 = [NSPredicate predicateWithFormat:@"postalAddress BEGINSWITH[cd] %@", searchText];
+        NSPredicate *p4 = [NSPredicate predicateWithFormat:@"zipCode BEGINSWITH[cd] %@", searchText];
         
-        NSString *searchKeyLower = [searchText lowercaseString];
-        for (MLPatient *p in mArrayOfPatients) {
-            if ([[p.familyName lowercaseString] hasPrefix:searchKeyLower] ||
-                [[p.givenName lowercaseString] hasPrefix:searchKeyLower] ||
-                [[p.postalAddress lowercaseString] hasPrefix:searchKeyLower] ||
-                [p.zipCode hasPrefix:searchKeyLower])
-            {
-                [mFilteredArrayOfPatients addObject:p];
-            }
-        }
+        NSPredicate *predicate = [NSCompoundPredicate orPredicateWithSubpredicates: [NSArray arrayWithObjects: p1, p2, p3, p4, nil]];
+        
+        mFilteredArrayOfPatients = [[mArrayOfPatients filteredArrayUsingPredicate:predicate] mutableCopy];
     }
     
     if (mFilteredArrayOfPatients) {
