@@ -1248,11 +1248,13 @@ static BOOL mShowReport = false;
 #if 1 // TODO: optimize width
     float frameWidth = self.view.frame.size.width;
 #ifdef DEBUG
-    NSLog(@"%s width:%.f", __FUNCTION__, mainRevealController.rightViewRevealWidth); //180
+    NSLog(@"%s width:%.f", __FUNCTION__, mainRevealController.rightViewRevealWidth); // 180
+    NSLog(@"%s displ:%.f", __FUNCTION__, mainRevealController.rightViewRevealDisplacement); // 40
     NSLog(@"%s frameWidth:%.f", __FUNCTION__, frameWidth);
 #endif
 #endif
 
+    //mainRevealController.rightViewRevealDisplacement = mainRevealController.rightViewRevealWidth;
     //mainRevealController.rightViewRevealWidth = frameWidth;//RearViewRevealWidth_Portrait_iPhone;  // TODO
     mainRevealController.rightViewController = contactsListViewController;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];

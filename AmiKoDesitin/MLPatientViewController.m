@@ -411,7 +411,11 @@ enum {
     // TODO: Add contact to patient DB
     
     SWRevealViewController *revealController = self.revealViewController;
+#if 1
     [revealController rightRevealToggleAnimated:YES];
+#else
+    [revealController setFrontViewPosition:FrontViewPositionLeftSideMost animated:YES];
+#endif
 }
 
 @end

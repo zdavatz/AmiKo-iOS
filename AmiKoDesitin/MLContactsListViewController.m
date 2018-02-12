@@ -167,12 +167,54 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
 #ifdef DEBUG
-    NSLog(@"%s User searched for %@", __FUNCTION__, searchBar.text);
+    //NSLog(@"%s User searched for %@", __FUNCTION__, searchBar.text);
+#endif
+    
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    
+    mTableView.allowsSelection = YES;
+    mTableView.scrollEnabled = YES;
+    
+    //[mTableView reloadData];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    searchBar.text = @"";
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    mTableView.allowsSelection = YES;
+    mTableView.scrollEnabled = YES;
+
+    mSearchFiltered = FALSE;
+    //[mTableView reloadData];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    [searchBar setShowsCancelButton:YES animated:YES];
+//    self.theTableView.allowsSelection = NO;
+//    self.theTableView.scrollEnabled = NO;
+}
+
+// See onSearchDatabase in AmiKo
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+#ifdef DEBUG
+    //NSLog(@"%s %@", __FUNCTION__, searchText);
 #endif
 
-    NSString *searchKey = searchBar.text;
+    NSString *searchKey = searchText;
     [mFilteredArrayOfPatients removeAllObjects];
     if (![self stringIsNilOrEmpty:searchKey]) {
+        
         NSString *searchKeyLower = [searchKey lowercaseString];
         for (MLPatient *p in mArrayOfPatients) {
             if ([[p.familyName lowercaseString] hasPrefix:searchKeyLower] ||
@@ -184,7 +226,7 @@
             }
         }
     }
-
+    
     if (mFilteredArrayOfPatients) {
         if ([mFilteredArrayOfPatients count]>0) {
             //[self setNumPatients:[mFilteredArrayOfPatients count]];  // TODO
@@ -204,50 +246,9 @@
     else {
         // [self setNumPatients:[mArrayOfPatients count]]; // TODO
         mSearchFiltered = FALSE;
-    }   
-   
-    [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar resignFirstResponder];
+    }
     
-    mTableView.allowsSelection = YES;
-    mTableView.scrollEnabled = YES;
-    
-//    [self.tableData removeAllObjects];
-//    [self.tableData addObjectsFromArray:results];
     [mTableView reloadData];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    searchBar.text = @"";
-    [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar resignFirstResponder];
-    mTableView.allowsSelection = YES;
-    mTableView.scrollEnabled = YES;
-
-    mSearchFiltered = FALSE;
-    [mTableView reloadData];
-}
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    [searchBar setShowsCancelButton:YES animated:YES];
-//    self.theTableView.allowsSelection = NO;
-//    self.theTableView.scrollEnabled = NO;
-}
-
-// See onSearchDatabase in AmiKo
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
-{
-#ifdef DEBUG
-    NSLog(@"%s %@", __FUNCTION__, searchText);
-#endif
 }
 
 #pragma mark - UITableViewDataSource
