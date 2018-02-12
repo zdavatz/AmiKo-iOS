@@ -59,18 +59,19 @@ enum {
                                     action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
-#if 1
     // Add button for showing Contacts list view
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
+
+#ifdef CONTACTS_LIST_FULL_WIDTH
+                                    target:self
+                                    action:@selector(myRightRevealToggle:)];
+#else
                                     target:revealController
                                     action:@selector(rightRevealToggle:)];
-    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
-#else
-    // Display an Edit|Done button in the navigation bar
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 #endif
+    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     
 #ifdef DEBUG
     self.navigationItem.prompt = @"Patient Edit";
@@ -357,6 +358,21 @@ enum {
 }
 
 #pragma mark - Actions
+
+#ifdef CONTACTS_LIST_FULL_WIDTH
+- (IBAction)myRightRevealToggle:(id)sender
+{
+    SWRevealViewController *revealController = [self revealViewController];
+
+    float frameWidth = self.view.frame.size.width;
+    revealController.rightViewRevealWidth = frameWidth;
+    
+    if ([revealController frontViewPosition] == FrontViewPositionLeft)
+        [revealController setFrontViewPosition:FrontViewPositionLeftSide animated:YES];
+    else
+        [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+}
+#endif
 
 - (IBAction) cancelPatient:(id)sender
 {

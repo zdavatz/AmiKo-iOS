@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MLPatient.h"
 
+#define CONTACTS_LIST_FULL_WIDTH
+
 @interface MLPatientViewController : UIViewController <UITextFieldDelegate>
 {
 //    IBOutlet NSWindow *mPanel;
@@ -33,6 +35,10 @@
 
 - (IBAction) savePatient:(id)sender;
 - (IBAction) cancelPatient:(id)sender;
+
+#ifdef CONTACTS_LIST_FULL_WIDTH
+- (IBAction) myRightRevealToggle:(id)sender;
+#endif
 
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification;
 
