@@ -23,6 +23,7 @@
 - (IBAction) checkForInteractions:(id)sender;
 - (IBAction) savePrescription:(id)sender;
 - (IBAction) sendPrescription:(id)sender;
+- (IBAction) showPatientDbList:(id)sender;
 
 - (void) overwritePrescription;
 - (void) saveNewPrescription;

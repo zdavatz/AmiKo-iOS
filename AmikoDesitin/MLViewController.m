@@ -1279,7 +1279,7 @@ static BOOL mShowReport = false;
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
     report_memory();
 }
@@ -1883,8 +1883,15 @@ static BOOL mShowReport = false;
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
     
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+
+    //
     mainRevealController.rightViewRevealOverdraw = 0;
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;
+
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
 - (void) switchToPatientEditView
@@ -1904,7 +1911,7 @@ static BOOL mShowReport = false;
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     mainRevealController.rightViewRevealOverdraw = 0;
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
 /**
@@ -2163,7 +2170,7 @@ static BOOL mShowReport = false;
 
     // Show SecondViewController! (UIWebView)
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 
 #ifdef DEBUG
     report_memory();

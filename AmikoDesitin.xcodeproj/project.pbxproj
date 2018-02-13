@@ -28,6 +28,8 @@
 		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
 		439F50FC20122665000E82FC /* prescription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F820122665000E82FC /* prescription@2x.png */; };
 		439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
+		43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
+		43A385062032B930001A5849 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
 		43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -251,8 +253,6 @@
 		D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
 		D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
 		D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
-		D5FFE17818A96BA0002D6159 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
-		D5FFE17918A96BA0002D6159 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
 		D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE1AF18B1021B002D6159 /* IonIcons.m */; };
 		D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE1AF18B1021B002D6159 /* IonIcons.m */; };
 		D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B018B1021B002D6159 /* ionicons.ttf */; };
@@ -443,9 +443,9 @@
 		D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_fr.html; sourceTree = "<group>"; };
 		D5F6BB9417E8C87500DCBD16 /* CoMedDesitin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoMedDesitin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5F6BB9917E8C9CE00DCBD16 /* CoMedDesitin-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CoMedDesitin-Info.plist"; sourceTree = "<group>"; };
-		D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLMenuViewController.xib; sourceTree = "<group>"; };
-		D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMenuViewController.h; sourceTree = "<group>"; };
-		D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLMenuViewController.m; sourceTree = "<group>"; };
+		D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLMenuViewController.xib; path = AmikoDesitin/MLMenuViewController.xib; sourceTree = SOURCE_ROOT; };
+		D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLMenuViewController.h; path = AmikoDesitin/MLMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLMenuViewController.m; path = AmikoDesitin/MLMenuViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FFE1AD18B1021B002D6159 /* ionicons-codes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ionicons-codes.h"; sourceTree = "<group>"; };
 		D5FFE1AE18B1021B002D6159 /* IonIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IonIcons.h; sourceTree = "<group>"; };
 		D5FFE1AF18B1021B002D6159 /* IonIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IonIcons.m; sourceTree = "<group>"; };
@@ -488,7 +488,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		430285C120161232003B2EF3 /* title */ = {
+		430285C120161232003B2EF3 /* right */ = {
 			isa = PBXGroup;
 			children = (
 				D5A6F29117B16C1D00EAB24B /* MLTitleViewController.h */,
@@ -496,10 +496,10 @@
 				D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */,
 				D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */,
 			);
-			name = title;
+			name = right;
 			sourceTree = "<group>";
 		};
-		430285C22016124A003B2EF3 /* second */ = {
+		430285C22016124A003B2EF3 /* front */ = {
 			isa = PBXGroup;
 			children = (
 				D5A6F29817B16C3A00EAB24B /* MLSecondViewController.h */,
@@ -507,15 +507,14 @@
 				D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */,
 				D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */,
 			);
-			name = second;
+			name = front;
 			sourceTree = "<group>";
 		};
 		430285C32016126F003B2EF3 /* prescription */ = {
 			isa = PBXGroup;
 			children = (
-				430285BC20160FB1003B2EF3 /* MLPrescriptionViewController.h */,
-				430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */,
-				4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */,
+				439B6C6120206C2D0018F922 /* right */,
+				43A385072032CA64001A5849 /* front */,
 			);
 			name = prescription;
 			sourceTree = "<group>";
@@ -557,34 +556,31 @@
 		4387FC3C20188ECE000A5A0F /* main */ = {
 			isa = PBXGroup;
 			children = (
-				D5A6F29B17B16C4B00EAB24B /* MLSimpleTableCell.h */,
-				D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */,
-				D5A6F29F17B16C4B00EAB24B /* MLViewController.h */,
-				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
-				D5A6F2B217B171C900EAB24B /* MLViewController.xib */,
-				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
+				430285C120161232003B2EF3 /* right */,
+				430285C22016124A003B2EF3 /* front */,
+				43A385082032CAB8001A5849 /* rear */,
 			);
 			name = main;
 			sourceTree = "<group>";
 		};
-		439B6C6120206C2D0018F922 /* amk list */ = {
+		439B6C6120206C2D0018F922 /* right */ = {
 			isa = PBXGroup;
 			children = (
 				439B6C6220206D210018F922 /* MLAmkListViewController.h */,
 				439B6C6320206D210018F922 /* MLAmkListViewController.m */,
 				439B6C6420206D210018F922 /* MLAmkListViewController.xib */,
 			);
-			name = "amk list";
+			name = right;
 			sourceTree = "<group>";
 		};
-		439EEF41202CBE6300817588 /* contacts list */ = {
+		439EEF41202CBE6300817588 /* right */ = {
 			isa = PBXGroup;
 			children = (
 				439EEF42202CBF4900817588 /* MLContactsListViewController.h */,
 				439EEF43202CBF4900817588 /* MLContactsListViewController.m */,
 				439EEF44202CBF4900817588 /* MLContactsListViewController.xib */,
 			);
-			name = "contacts list";
+			name = right;
 			sourceTree = "<group>";
 		};
 		439F261A2028B1A400396C29 /* DB */ = {
@@ -600,14 +596,58 @@
 			name = DB;
 			sourceTree = "<group>";
 		};
-		439F261E2028C88900396C29 /* patient */ = {
+		439F261E2028C88900396C29 /* patients */ = {
+			isa = PBXGroup;
+			children = (
+				439EEF41202CBE6300817588 /* right */,
+				43A385092032CB08001A5849 /* front */,
+			);
+			name = patients;
+			sourceTree = "<group>";
+		};
+		43A385072032CA64001A5849 /* front */ = {
+			isa = PBXGroup;
+			children = (
+				430285BC20160FB1003B2EF3 /* MLPrescriptionViewController.h */,
+				430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */,
+				4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */,
+			);
+			name = front;
+			sourceTree = "<group>";
+		};
+		43A385082032CAB8001A5849 /* rear */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F29B17B16C4B00EAB24B /* MLSimpleTableCell.h */,
+				D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */,
+				D5A6F29F17B16C4B00EAB24B /* MLViewController.h */,
+				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
+				D5A6F2B217B171C900EAB24B /* MLViewController.xib */,
+				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
+			);
+			name = rear;
+			sourceTree = "<group>";
+		};
+		43A385092032CB08001A5849 /* front */ = {
 			isa = PBXGroup;
 			children = (
 				439F261F2028C8A600396C29 /* MLPatientViewController.h */,
 				439F26202028C8A700396C29 /* MLPatientViewController.m */,
 				439F26212028C8A700396C29 /* MLPatientViewController.xib */,
 			);
-			name = patient;
+			name = front;
+			sourceTree = "<group>";
+		};
+		43A3850A2032CB3C001A5849 /* SW */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */,
+				D5A6F26817B16A5900EAB24B /* SWRevealViewController.h */,
+				430285C32016126F003B2EF3 /* prescription */,
+				4387FC3C20188ECE000A5A0F /* main */,
+				439F261E2028C88900396C29 /* patients */,
+			);
+			name = SW;
 			sourceTree = "<group>";
 		};
 		43D3A0DF201F2D1700EA77C6 /* json */ = {
@@ -771,18 +811,12 @@
 		D5A6F26117B169B900EAB24B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				439EEF41202CBE6300817588 /* contacts list */,
-				439F261E2028C88900396C29 /* patient */,
+				43A3850A2032CB3C001A5849 /* SW */,
 				439F261A2028B1A400396C29 /* DB */,
-				4387FC3C20188ECE000A5A0F /* main */,
-				430285C22016124A003B2EF3 /* second */,
-				430285C32016126F003B2EF3 /* prescription */,
-				430285C120161232003B2EF3 /* title */,
 				43334326201B641E006BFC23 /* menu */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
 				43D3A0DF201F2D1700EA77C6 /* json */,
-				439B6C6120206C2D0018F922 /* amk list */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
 				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
@@ -805,7 +839,6 @@
 				D5A2252F19461D8D0078FEFF /* WebViewJavascriptBridge */,
 				D5A31F4B18B5205E00F56BC5 /* SSZipArchive */,
 				D5FFE1AC18B1021B002D6159 /* ionicons */,
-				D5FFE19E18B0FF99002D6159 /* SWRevealViewController */,
 			);
 			name = Libs;
 			sourceTree = "<group>";
@@ -880,15 +913,6 @@
 				D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		D5FFE19E18B0FF99002D6159 /* SWRevealViewController */ = {
-			isa = PBXGroup;
-			children = (
-				D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */,
-				D5A6F26817B16A5900EAB24B /* SWRevealViewController.h */,
-			);
-			name = SWRevealViewController;
 			sourceTree = "<group>";
 		};
 		D5FFE1AC18B1021B002D6159 /* ionicons */ = {
@@ -1182,6 +1206,7 @@
 			files = (
 				4333432D201B64A2006BFC23 /* MLOperator.m in Sources */,
 				439F25EC20286BF200396C29 /* MLPrescription.m in Sources */,
+				43A385062032B930001A5849 /* MLMenuViewController.m in Sources */,
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
@@ -1196,7 +1221,6 @@
 				D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
-				D5FFE17818A96BA0002D6159 /* MLMenuViewController.m in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
 				D5A2253E194A435B0078FEFF /* deleterow.js in Sources */,
@@ -1234,7 +1258,6 @@
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
-				D5FFE17918A96BA0002D6159 /* MLMenuViewController.m in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
 				D5A2253F194A435B0078FEFF /* deleterow.js in Sources */,
@@ -1244,6 +1267,7 @@
 				D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */,
 				D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */,
 				D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */,
+				43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */,
 				D5F6BB5C17E8C87500DCBD16 /* MLViewController.m in Sources */,
 				D5A31F5D18B5207200F56BC5 /* zip.c in Sources */,
 				D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */,

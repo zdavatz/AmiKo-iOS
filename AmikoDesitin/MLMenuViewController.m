@@ -215,6 +215,8 @@
     }
 }
 
+#pragma mark - Actions
+
 - (IBAction) sendFeedback:(id)sender
 {
 #ifdef DEBUG
@@ -252,6 +254,13 @@
 #endif
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?mt=8", APP_ID]]];
+}
+
+- (IBAction) showDoctor:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
 }
 
 - (IBAction) showPatients:(id)sender

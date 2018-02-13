@@ -39,13 +39,13 @@
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="OFX-Ir-jRP" secondAttribute="trailing" id="8Tm-bm-dtx"/>
-                <constraint firstAttribute="bottom" secondItem="ZdL-PR-7hF" secondAttribute="bottom" id="8wf-9g-Oqq"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="trailing" secondItem="ZdL-PR-7hF" secondAttribute="trailing" id="ZPh-QF-Ihu"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="ZdL-PR-7hF" secondAttribute="leading" id="gKK-S7-qXG"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qH0-KD-wGr"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="17" id="yxa-Fy-qhS"/>
-                <constraint firstItem="ZdL-PR-7hF" firstAttribute="top" secondItem="OFX-Ir-jRP" secondAttribute="bottom" id="zlV-D7-a5J"/>
+                <constraint firstItem="ZdL-PR-7hF" firstAttribute="top" secondItem="OFX-Ir-jRP" secondAttribute="bottom" id="0dU-9c-PXk"/>
+                <constraint firstAttribute="trailing" secondItem="OFX-Ir-jRP" secondAttribute="trailing" id="6Tx-dz-SZh"/>
+                <constraint firstAttribute="bottom" secondItem="ZdL-PR-7hF" secondAttribute="bottom" id="Kdu-Uh-RpU"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="trailing" secondItem="ZdL-PR-7hF" secondAttribute="trailing" id="grE-8G-Z8v"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="j50-cz-UcK"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="ZdL-PR-7hF" secondAttribute="leading" id="qOj-XQ-dlF"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="17" id="y9m-R9-8JI"/>
             </constraints>
             <point key="canvasLocation" x="88.5" y="82.5"/>
         </view>
