@@ -139,9 +139,22 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     CGFloat screenScale = [[UIScreen mainScreen] scale];
     CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
 #ifdef DEBUG
-    NSLog(@"points w = %f, points h = %f, scale = %f", [[UIScreen mainScreen] applicationFrame].size.width,
+    // Screen size minus the size of the status bar (if visible)
+    // This is the size of the app window
+    NSLog(@"points w = %f, points h = %f, scale = %f",
+          [[UIScreen mainScreen] applicationFrame].size.width,
           [[UIScreen mainScreen] applicationFrame].size.height, screenScale);
-    NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height);
+    
+    // Screen size regardless of status bar.
+    // This is the size of the device
+    NSLog(@"points w = %f, points h = %f, scale = %f",
+          [[UIScreen mainScreen] bounds].size.width,
+          [[UIScreen mainScreen] bounds].size.height, screenScale);
+
+    NSLog(@"points w = %f, points h = %f, scale = %f",
+          [[UIScreen mainScreen] nativeBounds].size.width,
+          [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
+    NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
 #endif
     
     // Init all view controllers (main and secondary)

@@ -29,6 +29,7 @@
 
 @interface MLMenuViewController : UIViewController <UIActionSheetDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate>
 
+- (IBAction) showDoctor:(id)sender;
 - (IBAction) showPatients:(id)sender;
 - (IBAction) showReport:(id)sender;
 - (IBAction) startUpdate:(id)sender;
