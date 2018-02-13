@@ -8,6 +8,7 @@
 
 #import "MLPatientViewController.h"
 #import "SWRevealViewController.h"
+#import "MLContactsListViewController.h"
 
 #import "MLPatientDBAdapter.h"
 
@@ -363,6 +364,22 @@ enum {
 - (IBAction)myRightRevealToggle:(id)sender
 {
     SWRevealViewController *revealController = [self revealViewController];
+
+    // Check that the right controller class is MLContactsListViewController
+    UIViewController *vc = revealController.rightViewController;
+    
+#ifdef DEBUG
+    NSLog(@"%s vc: %@", __FUNCTION__, [vc class]);
+#endif
+    
+    if (![vc isKindOfClass:[MLContactsListViewController class]] ) {
+        // Replace right controller
+        MLContactsListViewController *contactsListViewController =
+        [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
+                                                       bundle:nil];
+        [revealController setRightViewController:contactsListViewController];
+        NSLog(@"Replaced right VC");
+    }
 
     float frameWidth = self.view.frame.size.width;
     revealController.rightViewRevealWidth = frameWidth;

@@ -33,6 +33,7 @@
 #import "MLAmkListViewController.h"
 #import "MLPatientViewController.h"
 #import "MLContactsListViewController.h"
+#import "MLPatientDbListViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -1846,6 +1847,8 @@ static BOOL mShowReport = false;
     // TODO
 }
 
+#pragma mark -
+
 - (void) switchToDrugInteractionView
 {
     // if (mCurrentIndexPath!=nil)
@@ -1894,7 +1897,8 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
-- (void) switchToPatientEditView
+// With Contacts
+- (void) switchToPatientEditView1
 {
     mainRevealController = self.revealViewController;
 
@@ -1910,8 +1914,37 @@ static BOOL mShowReport = false;
                                               bundle:nil];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+
+    //
     mainRevealController.rightViewRevealOverdraw = 0;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+// With Patient DB list
+- (void) switchToPatientEditView2
+{
+    mainRevealController = self.revealViewController;
+    
+    // Right
+    MLBaseListViewController *listViewController =
+    [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
+                                                   bundle:nil];
+    [mainRevealController setRightViewController:listViewController];
+    
+    // Front
+    MLPatientViewController *patientListViewController =
+    [[MLPatientViewController alloc] initWithNibName:@"MLPatientViewController"
+                                              bundle:nil];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:NO];
+    
+    //
+    mainRevealController.rightViewRevealOverdraw = 0;
+#if 0  // PATIENT_DB_LIST_FULL_WIDTH
+    float frameWidth = self.view.frame.size.width;
+    mainRevealController.rightViewRevealWidth = frameWidth;
+#endif
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
 }
 
 /**
