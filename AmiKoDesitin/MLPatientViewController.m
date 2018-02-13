@@ -370,7 +370,7 @@ enum {
     if ([revealController frontViewPosition] == FrontViewPositionLeft)
         [revealController setFrontViewPosition:FrontViewPositionLeftSide animated:YES];
     else
-        [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+        [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 #endif
 
