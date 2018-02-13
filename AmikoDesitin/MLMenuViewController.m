@@ -175,7 +175,7 @@
     
     [mMenuActionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
     
-    if (mParentViewController!=nil)
+    if (mParentViewController)
         [mMenuActionSheet showInView:[mParentViewController view]];
 }
 
@@ -269,8 +269,8 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    if (mParentViewController!=nil)
-        [mParentViewController switchToPatientEditView];
+    if (mParentViewController)
+        [mParentViewController switchToPatientEditView1];
 }
 
 - (IBAction) showReport:(id)sender
@@ -279,7 +279,7 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    if (mParentViewController!=nil)
+    if (mParentViewController)
         [mParentViewController showReport:self];
 }
 

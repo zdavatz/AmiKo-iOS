@@ -30,6 +30,9 @@
 		439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
 		43A385062032B930001A5849 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
+		43A3851320333147001A5849 /* MLBaseListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851220333147001A5849 /* MLBaseListViewController.m */; };
+		43A3851720333355001A5849 /* MLPatientDbListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851520333355001A5849 /* MLPatientDbListViewController.m */; };
+		43A3851820333355001A5849 /* MLPatientDbListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43A3851620333355001A5849 /* MLPatientDbListViewController.xib */; };
 		43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -295,6 +298,11 @@
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
 		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F820122665000E82FC /* prescription@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x.png"; path = "AmiKoDesitin/prescription@2x.png"; sourceTree = SOURCE_ROOT; };
+		43A3851120333147001A5849 /* MLBaseListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLBaseListViewController.h; path = AmiKoDesitin/MLBaseListViewController.h; sourceTree = SOURCE_ROOT; };
+		43A3851220333147001A5849 /* MLBaseListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLBaseListViewController.m; path = AmiKoDesitin/MLBaseListViewController.m; sourceTree = SOURCE_ROOT; };
+		43A3851420333355001A5849 /* MLPatientDbListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPatientDbListViewController.h; path = AmiKoDesitin/MLPatientDbListViewController.h; sourceTree = SOURCE_ROOT; };
+		43A3851520333355001A5849 /* MLPatientDbListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPatientDbListViewController.m; path = AmiKoDesitin/MLPatientDbListViewController.m; sourceTree = SOURCE_ROOT; };
+		43A3851620333355001A5849 /* MLPatientDbListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLPatientDbListViewController.xib; path = AmiKoDesitin/MLPatientDbListViewController.xib; sourceTree = SOURCE_ROOT; };
 		43D3A0E0201F3CFB00EA77C6 /* MLProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLProduct.h; path = AmiKoDesitin/MLProduct.h; sourceTree = SOURCE_ROOT; };
 		43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLProduct.m; path = AmiKoDesitin/MLProduct.m; sourceTree = SOURCE_ROOT; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -573,14 +581,14 @@
 			name = right;
 			sourceTree = "<group>";
 		};
-		439EEF41202CBE6300817588 /* right */ = {
+		439EEF41202CBE6300817588 /* right1 */ = {
 			isa = PBXGroup;
 			children = (
 				439EEF42202CBF4900817588 /* MLContactsListViewController.h */,
 				439EEF43202CBF4900817588 /* MLContactsListViewController.m */,
 				439EEF44202CBF4900817588 /* MLContactsListViewController.xib */,
 			);
-			name = right;
+			name = right1;
 			sourceTree = "<group>";
 		};
 		439F261A2028B1A400396C29 /* DB */ = {
@@ -599,7 +607,10 @@
 		439F261E2028C88900396C29 /* patients */ = {
 			isa = PBXGroup;
 			children = (
-				439EEF41202CBE6300817588 /* right */,
+				43A3851120333147001A5849 /* MLBaseListViewController.h */,
+				43A3851220333147001A5849 /* MLBaseListViewController.m */,
+				43A3850B203330F9001A5849 /* right2 */,
+				439EEF41202CBE6300817588 /* right1 */,
 				43A385092032CB08001A5849 /* front */,
 			);
 			name = patients;
@@ -648,6 +659,16 @@
 				439F261E2028C88900396C29 /* patients */,
 			);
 			name = SW;
+			sourceTree = "<group>";
+		};
+		43A3850B203330F9001A5849 /* right2 */ = {
+			isa = PBXGroup;
+			children = (
+				43A3851420333355001A5849 /* MLPatientDbListViewController.h */,
+				43A3851520333355001A5849 /* MLPatientDbListViewController.m */,
+				43A3851620333355001A5849 /* MLPatientDbListViewController.xib */,
+			);
+			name = right2;
 			sourceTree = "<group>";
 		};
 		43D3A0DF201F2D1700EA77C6 /* json */ = {
@@ -1012,6 +1033,7 @@
 				D5A175661A9BC27400E69385 /* favorites@2x.png in Resources */,
 				D5A1755A1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */,
+				43A3851820333355001A5849 /* MLPatientDbListViewController.xib in Resources */,
 				D5A6F24517B1692F00EAB24B /* InfoPlist.strings in Resources */,
 				439F50F920122665000E82FC /* prescription-selected.png in Resources */,
 				D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */,
@@ -1222,6 +1244,7 @@
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
+				43A3851720333355001A5849 /* MLPatientDbListViewController.m in Sources */,
 				D5A2253E194A435B0078FEFF /* deleterow.js in Sources */,
 				430285BF20160FB1003B2EF3 /* MLPrescriptionViewController.m in Sources */,
 				439F26222028C8A700396C29 /* MLPatientViewController.m in Sources */,
@@ -1235,6 +1258,7 @@
 				D5A6F2A317B16C4B00EAB24B /* MLViewController.m in Sources */,
 				D5A31F5C18B5207200F56BC5 /* zip.c in Sources */,
 				D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */,
+				43A3851320333147001A5849 /* MLBaseListViewController.m in Sources */,
 				D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,

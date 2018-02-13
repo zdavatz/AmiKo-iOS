@@ -10,6 +10,8 @@
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
 
+#import "MLViewController.h"
+
 static const float kInfoCellHeight = 20.0;  // fixed
 
 static const float kSectionHeaderHeight = 27.0;
@@ -486,9 +488,26 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) showPatientDbList:(id)sender
 {
+    SWRevealViewController *revealController = [self revealViewController];
+    UIViewController *nc = revealController.rearViewController;
+    MLViewController *vc = [nc.childViewControllers firstObject];
+
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s nc: %@", __FUNCTION__, [nc class]); // UINavigationController
+    NSLog(@"%s vc: %@", __FUNCTION__, [vc class]); // MLViewController
 #endif
+
+    if (![vc isKindOfClass:[MLViewController class]]) {
+        NSLog(@"Not a MLViewController");
+        return;
+    }
+
+    if (![vc respondsToSelector:@selector(switchToPatientEditView2)]) {
+        NSLog(@"No switchToPatientEditView2");
+        return;
+    }
+
+    [vc switchToPatientEditView2];
 }
 
 #pragma mark - Toolbar actions

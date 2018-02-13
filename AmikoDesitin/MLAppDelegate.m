@@ -157,11 +157,12 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
 #endif
     
-    // Init all view controllers (main and secondary)
+    // Rear
     mainViewController = [[MLViewController alloc] init];
     UINavigationController *mainViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:mainViewController];
 
+    // Front
     MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
     UINavigationController *secondViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:secondViewController];
