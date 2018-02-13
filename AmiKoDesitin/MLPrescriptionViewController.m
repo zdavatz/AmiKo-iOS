@@ -101,13 +101,34 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
 
+    // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
+#if 0
+    // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
+#else
+    // Two buttons on the left (with spacer between them)
+    UIBarButtonItem *patientsItem =
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Search Patients", nil)
+                                         style:UIBarButtonItemStylePlain
+                                        target:self
+                                        action:@selector(showPatientDbList:)];
+
+    UIBarButtonItem *spacer =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                      target:nil
+                                                      action:nil];
+    spacer.width = 90.0f;
+
+    self.navigationItem.leftBarButtonItems =
+        [NSArray arrayWithObjects:revealButtonItem, spacer, patientsItem, nil];
+#endif
     
+    // Right button
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
@@ -459,6 +480,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     
     return cell;
+}
+
+#pragma mark - Actions
+
+- (IBAction) showPatientDbList:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
 }
 
 #pragma mark - Toolbar actions
