@@ -27,10 +27,12 @@
 #import "MLUtility.h"
 
 #import "MLSecondViewController.h"
-#import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+
+#import "MLPrescriptionViewController.h"
 #import "MLAmkListViewController.h"
+
 #import "MLPatientViewController.h"
 #import "MLContactsListViewController.h"
 #import "MLPatientDbListViewController.h"
@@ -1940,7 +1942,7 @@ static BOOL mShowReport = false;
     
     //
     mainRevealController.rightViewRevealOverdraw = 0;
-#if 1  // PATIENT_DB_LIST_FULL_WIDTH
+#ifdef PATIENT_DB_LIST_FULL_WIDTH
     float frameWidth = self.view.frame.size.width;
     mainRevealController.rightViewRevealWidth = frameWidth;
 #endif

@@ -14,6 +14,8 @@
 
 #import "MLViewController.h"
 
+//#define DYNAMIC_BUTTONS
+
 enum {
     NameFieldTag = 1,
     SurnameFieldTag,
@@ -53,26 +55,66 @@ enum {
 
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
     
+    // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
+#if 0
+    // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
+#else
+    // Two buttons on the left (with spacer between them)
+    UIBarButtonItem *cancelItem =
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(cancelPatient:)];
+#ifdef DYNAMIC_BUTTONS
+    cancelItem.enabled = NO;
+#endif
+
+    UIBarButtonItem *spacer =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                  target:nil
+                                                  action:nil];
+    spacer.width = -15.0f;
     
-    // Add button for showing Contacts list view
+    self.navigationItem.leftBarButtonItems =
+    [NSArray arrayWithObjects:revealButtonItem, spacer, cancelItem, nil];
+#endif
+    
+    // Right button
+#ifdef CONTACTS_LIST_FULL_WIDTH
+    id aTarget = self;
+    SEL aSelector = @selector(myRightRevealToggle:);
+#else
+    id aTarget = revealController;
+    SEL aSelector = @selector(rightRevealToggle:);
+#endif
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
-
-#ifdef CONTACTS_LIST_FULL_WIDTH
-                                    target:self
-                                    action:@selector(myRightRevealToggle:)];
-#else
-                                    target:revealController
-                                    action:@selector(rightRevealToggle:)];
-#endif
+                                    target:aTarget
+                                    action:aSelector];
+#if 0
+    // A single button on the right
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+#else
+    // Two buttons on the right (with spacer between them)
+    UIBarButtonItem *saveItem =
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(savePatient:)];
+#ifdef DYNAMIC_BUTTONS
+    saveItem.enabled = NO;
+#endif
+
+    self.navigationItem.rightBarButtonItems =
+    [NSArray arrayWithObjects:rightRevealButtonItem, spacer, saveItem, nil];
+#endif
     
 #ifdef DEBUG
     self.navigationItem.prompt = @"Patient Edit";
@@ -309,15 +351,21 @@ enum {
 
 #pragma mark - UITextFieldDelegate
 
-//- (void)textFieldDidEndEditing:(UITextField *)textField
-//{
-//    
-//}
+#ifdef DYNAMIC_BUTTONS
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    self.navigationItem.leftBarButtonItems[0].enabled = NO;
+    self.navigationItem.leftBarButtonItems[2].enabled = YES;
+
+    self.navigationItem.rightBarButtonItems[0].enabled = NO;
+    self.navigationItem.rightBarButtonItems[2].enabled = YES;
+}
+#endif
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
 #ifdef DEBUG
-    NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
+    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
 #endif
     UIColor *lightRed = [UIColor colorWithRed:1.0
                                         green:0.0
@@ -388,6 +436,14 @@ enum {
 #endif
     [self resetAllFields];
 
+#ifdef DYNAMIC_BUTTONS
+    self.navigationItem.leftBarButtonItems[0].enabled = YES;
+    self.navigationItem.leftBarButtonItems[2].enabled = NO;
+    
+    self.navigationItem.rightBarButtonItems[0].enabled = YES;
+    self.navigationItem.rightBarButtonItems[2].enabled = NO;
+#endif
+
     // Show list of patients from DB
     SWRevealViewController *revealController = [self revealViewController];
     UIViewController *nc = revealController.rearViewController;
@@ -443,6 +499,14 @@ enum {
 #endif
 
     [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
+
+#ifdef DYNAMIC_BUTTONS
+    self.navigationItem.leftBarButtonItems[0].enabled = YES;
+    self.navigationItem.leftBarButtonItems[2].enabled = NO;
+    
+    self.navigationItem.rightBarButtonItems[0].enabled = YES;
+    self.navigationItem.rightBarButtonItems[2].enabled = NO;
+#endif
 }
 
 #pragma mark - Notifications
