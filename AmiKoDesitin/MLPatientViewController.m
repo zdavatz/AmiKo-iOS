@@ -14,6 +14,8 @@
 
 #import "MLViewController.h"
 
+#define DYNAMIC_BUTTONS
+
 enum {
     NameFieldTag = 1,
     SurnameFieldTag,
@@ -34,6 +36,10 @@ enum {
 - (MLPatient *) getAllFields;
 - (void) resetAllFields;
 - (void) friendlyNote:(NSString*)str;
+#ifdef DYNAMIC_BUTTONS
+- (void) saveCancelOn;
+- (void) saveCancelOff;
+#endif
 
 @end
 
@@ -53,26 +59,66 @@ enum {
 
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
     
+    // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
+#if 0
+    // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
+#else
+    // Two buttons on the left (with spacer between them)
+    UIBarButtonItem *cancelItem =
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(cancelPatient:)];
+#ifdef DYNAMIC_BUTTONS
+    cancelItem.enabled = NO;
+#endif
+
+    UIBarButtonItem *spacer =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                  target:nil
+                                                  action:nil];
+    spacer.width = -15.0f;
     
-    // Add button for showing Contacts list view
+    self.navigationItem.leftBarButtonItems =
+    [NSArray arrayWithObjects:revealButtonItem, spacer, cancelItem, nil];
+#endif
+    
+    // Right button
+#ifdef CONTACTS_LIST_FULL_WIDTH
+    id aTarget = self;
+    SEL aSelector = @selector(myRightRevealToggle:);
+#else
+    id aTarget = revealController;
+    SEL aSelector = @selector(rightRevealToggle:);
+#endif
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
-
-#ifdef CONTACTS_LIST_FULL_WIDTH
-                                    target:self
-                                    action:@selector(myRightRevealToggle:)];
-#else
-                                    target:revealController
-                                    action:@selector(rightRevealToggle:)];
-#endif
+                                    target:aTarget
+                                    action:aSelector];
+#if 0
+    // A single button on the right
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+#else
+    // Two buttons on the right (with spacer between them)
+    UIBarButtonItem *saveItem =
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", nil)
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(savePatient:)];
+#ifdef DYNAMIC_BUTTONS
+    saveItem.enabled = NO;
+#endif
+
+    self.navigationItem.rightBarButtonItems =
+    [NSArray arrayWithObjects:rightRevealButtonItem, spacer, saveItem, nil];
+#endif
     
 #ifdef DEBUG
     self.navigationItem.prompt = @"Patient Edit";
@@ -99,16 +145,6 @@ enum {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str
 {
@@ -317,17 +353,39 @@ enum {
     return valid;
 }
 
+#ifdef DYNAMIC_BUTTONS
+- (void) saveCancelOn
+{
+    self.navigationItem.leftBarButtonItems[0].enabled = NO;
+    self.navigationItem.leftBarButtonItems[2].enabled = YES;
+    
+    self.navigationItem.rightBarButtonItems[0].enabled = NO;
+    self.navigationItem.rightBarButtonItems[2].enabled = YES;
+}
+
+- (void) saveCancelOff
+{
+    self.navigationItem.leftBarButtonItems[0].enabled = YES;
+    self.navigationItem.leftBarButtonItems[2].enabled = NO;
+    
+    self.navigationItem.rightBarButtonItems[0].enabled = YES;
+    self.navigationItem.rightBarButtonItems[2].enabled = NO;
+}
+#endif
+
 #pragma mark - UITextFieldDelegate
 
-//- (void)textFieldDidEndEditing:(UITextField *)textField
-//{
-//    
-//}
+#ifdef DYNAMIC_BUTTONS
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self saveCancelOn];
+}
+#endif
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
 #ifdef DEBUG
-    NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
+    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
 #endif
     UIColor *lightRed = [UIColor colorWithRed:1.0
                                         green:0.0
@@ -397,7 +455,32 @@ enum {
     NSLog(@"%s", __FUNCTION__);
 #endif
     [self resetAllFields];
-    // TODO: show list of patients from DB
+
+#ifdef DYNAMIC_BUTTONS
+    [self saveCancelOff];
+#endif
+
+    // Show list of patients from DB
+    SWRevealViewController *revealController = [self revealViewController];
+    UIViewController *nc = revealController.rearViewController;
+    MLViewController *vc = [nc.childViewControllers firstObject];
+    
+#ifdef DEBUG
+    NSLog(@"nc: %@", [nc class]); // UINavigationController
+    NSLog(@"vc: %@", [vc class]); // MLViewController
+#endif
+    
+    if (![vc isKindOfClass:[MLViewController class]]) {
+        NSLog(@"Not a MLViewController");
+        return;
+    }
+    
+    if (![vc respondsToSelector:@selector(switchToPatientEditView2)]) {
+        NSLog(@"Cannot switchToPatientEditView2");
+        return;
+    }
+    
+    [vc switchToPatientEditView2];
 }
 
 - (IBAction) savePatient:(id)sender
@@ -425,13 +508,11 @@ enum {
     else
         mPatientUUID = [mPatientDb insertEntry:patient];
 
-#if 0 // TODO
-    mSearchFiltered = FALSE;
-    [mSearchKey setStringValue:@""];
-    [self updateAmiKoAddressBookTableView];
-#endif
-
     [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
+
+#ifdef DYNAMIC_BUTTONS
+    [self saveCancelOff];
+#endif
 }
 
 #pragma mark - Notifications

@@ -7,19 +7,41 @@
 //
 
 #import "MLPatientDbListViewController.h"
+#import "MLPatientDBAdapter.h"
 
 @interface MLPatientDbListViewController ()
 
 @end
 
 @implementation MLPatientDbListViewController
+{
+    MLPatientDBAdapter *mPatientDb;
+}
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
+
+    notificationName = @"ContactSelectedNotification";
+    tableIdentifier = @"patientDbListTableItem";
+    textColor = [UIColor blackColor];
+
+    mSearchFiltered = FALSE;
+
+    // Retrieves contacts from address DB
+    // Open patient DB
+    mPatientDb = [[MLPatientDBAdapter alloc] init];
+    if (![mPatientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        mPatientDb = nil;
+    }
+    else
+        mArray = [mPatientDb getAllPatients];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self.theSearchBar becomeFirstResponder];
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -27,16 +49,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - Overloaded
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSString *) getTextAtRow:(NSInteger)row
+{
+#ifdef DEBUG
+    //NSLog(@"%s", __FUNCTION__);
+#endif
+    MLPatient *p = [self getItemAtRow:row];
+    NSString *cellStr = [NSString stringWithFormat:@"%@ %@", p.familyName, p.givenName];
+    return cellStr;
 }
-*/
-
-
-
 @end

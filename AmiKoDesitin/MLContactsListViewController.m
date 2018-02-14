@@ -12,6 +12,11 @@
 #import "SWRevealViewController.h"
 
 @interface MLContactsListViewController ()
+{
+    UIColor *textColor;
+    NSString *tableIdentifier;
+    NSNotificationName notificationName;
+}
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 
@@ -33,6 +38,10 @@
 {
     [super viewDidLoad];
 
+    notificationName = @"ContactSelectedNotification";
+    tableIdentifier = @"contactsListTableItem";
+    textColor = [UIColor grayColor];
+    
     mFilteredArrayOfPatients = [[NSMutableArray alloc] init];
     mSearchFiltered = FALSE;
     mPatientUUID = nil;
@@ -56,22 +65,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (MLPatient *) getContactAtRow:(NSInteger)row
 {
     if (mSearchFiltered)
         return mFilteredArrayOfPatients[row];
 
-    if (mArrayOfPatients!=nil)
+    if (mArrayOfPatients)
         return mArrayOfPatients[row];
 
     return nil;
@@ -221,14 +220,14 @@
 - (UITableViewCell *) tableView: (UITableView *)tableView
           cellForRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    static NSString *tableIdentifier = @"contactsListTableItem";
+    //static NSString *tableIdentifier = @"contactsListTableItem";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:tableIdentifier];
         cell.textLabel.textAlignment = NSTextAlignmentRight;
         //cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.textColor = [UIColor grayColor];
+        cell.textLabel.textColor = textColor;
     }
     
     MLPatient *p = [self getContactAtRow:indexPath.row];
@@ -247,7 +246,7 @@
 #endif
     
     MLPatient *p = [self getContactAtRow:indexPath.row];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ContactSelectedNotification"
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
                                                         object:p];
     mPatientUUID = p.uniqueId;
     mSearchFiltered = FALSE;
