@@ -1923,7 +1923,7 @@ static BOOL mShowReport = false;
 }
 
 // With Patient DB list
-- (void) switchToPatientEditView2
+- (void) switchRigthToPatientDbList
 {
     mainRevealController = self.revealViewController;
     
@@ -1933,12 +1933,14 @@ static BOOL mShowReport = false;
                                                    bundle:nil];
     [mainRevealController setRightViewController:listViewController];
     
+#if 0 // Commented out to keep the same front controller
     // Front
     MLPatientViewController *patientListViewController =
     [[MLPatientViewController alloc] initWithNibName:@"MLPatientViewController"
                                               bundle:nil];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:NO];
+#endif
     
     //
     mainRevealController.rightViewRevealOverdraw = 0;

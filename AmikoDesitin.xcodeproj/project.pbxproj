@@ -551,14 +551,14 @@
 			name = en;
 			sourceTree = "<group>";
 		};
-		43334326201B641E006BFC23 /* menu */ = {
+		43334326201B641E006BFC23 /* menu (iPad) */ = {
 			isa = PBXGroup;
 			children = (
 				D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */,
 				D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */,
 				D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */,
 			);
-			name = menu;
+			name = "menu (iPad)";
 			sourceTree = "<group>";
 		};
 		4387FC3C20188ECE000A5A0F /* main */ = {
@@ -834,7 +834,7 @@
 			children = (
 				43A3850A2032CB3C001A5849 /* GUI */,
 				439F261A2028B1A400396C29 /* DB */,
-				43334326201B641E006BFC23 /* menu */,
+				43334326201B641E006BFC23 /* menu (iPad) */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
 				43D3A0DF201F2D1700EA77C6 /* json */,
