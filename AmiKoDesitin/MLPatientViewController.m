@@ -14,7 +14,7 @@
 
 #import "MLViewController.h"
 
-//#define DYNAMIC_BUTTONS
+#define DYNAMIC_BUTTONS
 
 enum {
     NameFieldTag = 1,
@@ -36,6 +36,10 @@ enum {
 - (MLPatient *) getAllFields;
 - (void) resetAllFields;
 - (void) friendlyNote:(NSString*)str;
+#ifdef DYNAMIC_BUTTONS
+- (void) saveCancelOn;
+- (void) saveCancelOff;
+#endif
 
 @end
 
@@ -349,16 +353,32 @@ enum {
     return valid;
 }
 
+#ifdef DYNAMIC_BUTTONS
+- (void) saveCancelOn
+{
+    self.navigationItem.leftBarButtonItems[0].enabled = NO;
+    self.navigationItem.leftBarButtonItems[2].enabled = YES;
+    
+    self.navigationItem.rightBarButtonItems[0].enabled = NO;
+    self.navigationItem.rightBarButtonItems[2].enabled = YES;
+}
+
+- (void) saveCancelOff
+{
+    self.navigationItem.leftBarButtonItems[0].enabled = YES;
+    self.navigationItem.leftBarButtonItems[2].enabled = NO;
+    
+    self.navigationItem.rightBarButtonItems[0].enabled = YES;
+    self.navigationItem.rightBarButtonItems[2].enabled = NO;
+}
+#endif
+
 #pragma mark - UITextFieldDelegate
 
 #ifdef DYNAMIC_BUTTONS
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    self.navigationItem.leftBarButtonItems[0].enabled = NO;
-    self.navigationItem.leftBarButtonItems[2].enabled = YES;
-
-    self.navigationItem.rightBarButtonItems[0].enabled = NO;
-    self.navigationItem.rightBarButtonItems[2].enabled = YES;
+    [self saveCancelOn];
 }
 #endif
 
@@ -437,11 +457,7 @@ enum {
     [self resetAllFields];
 
 #ifdef DYNAMIC_BUTTONS
-    self.navigationItem.leftBarButtonItems[0].enabled = YES;
-    self.navigationItem.leftBarButtonItems[2].enabled = NO;
-    
-    self.navigationItem.rightBarButtonItems[0].enabled = YES;
-    self.navigationItem.rightBarButtonItems[2].enabled = NO;
+    [self saveCancelOff];
 #endif
 
     // Show list of patients from DB
@@ -492,20 +508,10 @@ enum {
     else
         mPatientUUID = [mPatientDb insertEntry:patient];
 
-#if 0 // TODO
-    mSearchFiltered = FALSE;
-    [mSearchKey setStringValue:@""];
-    [self updateAmiKoAddressBookTableView];
-#endif
-
     [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
 
 #ifdef DYNAMIC_BUTTONS
-    self.navigationItem.leftBarButtonItems[0].enabled = YES;
-    self.navigationItem.leftBarButtonItems[2].enabled = NO;
-    
-    self.navigationItem.rightBarButtonItems[0].enabled = YES;
-    self.navigationItem.rightBarButtonItems[2].enabled = NO;
+    [self saveCancelOff];
 #endif
 }
 
