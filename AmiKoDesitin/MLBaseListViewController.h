@@ -9,5 +9,24 @@
 #import <UIKit/UIKit.h>
 
 @interface MLBaseListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+{
+    NSString *tableIdentifier;
+    UIColor *textColor;
+    NSNotificationName notificationName;
+
+    NSArray *mFilteredArray;
+    BOOL mSearchFiltered;
+    
+    NSArray *mArray;
+
+    IBOutlet UISearchBar *theSearchBar;
+    IBOutlet UITableView *mTableView;
+}
+
+@property (nonatomic, retain) IBOutlet UISearchBar *theSearchBar;
+
+// To be overloaded by subclasses
+- (NSString *) getTextAtRow:(NSInteger)row;
+- (id) getItemAtRow:(NSInteger)row;
 
 @end

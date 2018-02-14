@@ -190,16 +190,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -488,13 +478,16 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) showPatientDbList:(id)sender
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     SWRevealViewController *revealController = [self revealViewController];
     UIViewController *nc = revealController.rearViewController;
     MLViewController *vc = [nc.childViewControllers firstObject];
 
 #ifdef DEBUG
-    NSLog(@"%s nc: %@", __FUNCTION__, [nc class]); // UINavigationController
-    NSLog(@"%s vc: %@", __FUNCTION__, [vc class]); // MLViewController
+    NSLog(@"nc: %@", [nc class]); // UINavigationController
+    NSLog(@"vc: %@", [vc class]); // MLViewController
 #endif
 
     if (![vc isKindOfClass:[MLViewController class]]) {
@@ -503,7 +496,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 
     if (![vc respondsToSelector:@selector(switchToPatientEditView2)]) {
-        NSLog(@"No switchToPatientEditView2");
+        NSLog(@"Cannot switchToPatientEditView2");
         return;
     }
 

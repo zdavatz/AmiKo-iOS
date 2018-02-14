@@ -167,6 +167,25 @@ static NSString *DATABASE_COLUMNS = nil;
     return nil;
 }
 
+- (NSArray *) getAllPatients
+{
+    NSMutableArray *listOfPatients = [NSMutableArray array];
+    
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@", ALL_COLUMNS, DATABASE_TABLE];
+    NSArray *results = [myPatientDb performQuery:query];
+    if ([results count]>0) {
+        for (NSArray *cursor in results) {
+            [listOfPatients addObject:[self cursorToPatient:cursor]];
+        }
+
+        // Sort alphabetically
+        NSSortDescriptor *nameSort = [NSSortDescriptor sortDescriptorWithKey:@"familyName" ascending:YES];
+        [listOfPatients sortUsingDescriptors:[NSArray arrayWithObject:nameSort]];
+    }
+    
+    return listOfPatients;
+}
+
 - (MLPatient *) getPatientWithUniqueID:(NSString *)uniqueID
 {
     if (!uniqueID)
@@ -176,7 +195,7 @@ static NSString *DATABASE_COLUMNS = nil;
     NSArray *results = [myPatientDb performQuery:query];
     if ([results count]>0) {
         for (NSArray *cursor in results) {
-            return [self cursorToPatient:cursor];
+            return [self cursorToPatient:cursor];  // TODO: check
         }
     }
 

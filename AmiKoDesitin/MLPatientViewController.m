@@ -100,16 +100,6 @@ enum {
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (BOOL) stringIsNilOrEmpty:(NSString*)str
 {
     return !(str && str.length);
@@ -397,7 +387,28 @@ enum {
     NSLog(@"%s", __FUNCTION__);
 #endif
     [self resetAllFields];
-    // TODO: show list of patients from DB
+
+    // Show list of patients from DB
+    SWRevealViewController *revealController = [self revealViewController];
+    UIViewController *nc = revealController.rearViewController;
+    MLViewController *vc = [nc.childViewControllers firstObject];
+    
+#ifdef DEBUG
+    NSLog(@"nc: %@", [nc class]); // UINavigationController
+    NSLog(@"vc: %@", [vc class]); // MLViewController
+#endif
+    
+    if (![vc isKindOfClass:[MLViewController class]]) {
+        NSLog(@"Not a MLViewController");
+        return;
+    }
+    
+    if (![vc respondsToSelector:@selector(switchToPatientEditView2)]) {
+        NSLog(@"Cannot switchToPatientEditView2");
+        return;
+    }
+    
+    [vc switchToPatientEditView2];
 }
 
 - (IBAction) savePatient:(id)sender

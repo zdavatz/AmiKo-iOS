@@ -649,7 +649,7 @@
 			name = front;
 			sourceTree = "<group>";
 		};
-		43A3850A2032CB3C001A5849 /* SW */ = {
+		43A3850A2032CB3C001A5849 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
 				D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */,
@@ -658,7 +658,7 @@
 				4387FC3C20188ECE000A5A0F /* main */,
 				439F261E2028C88900396C29 /* patients */,
 			);
-			name = SW;
+			name = GUI;
 			sourceTree = "<group>";
 		};
 		43A3850B203330F9001A5849 /* right2 */ = {
@@ -832,7 +832,7 @@
 		D5A6F26117B169B900EAB24B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				43A3850A2032CB3C001A5849 /* SW */,
+				43A3850A2032CB3C001A5849 /* GUI */,
 				439F261A2028B1A400396C29 /* DB */,
 				43334326201B641E006BFC23 /* menu */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,

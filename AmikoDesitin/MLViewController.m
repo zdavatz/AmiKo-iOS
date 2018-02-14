@@ -1940,7 +1940,7 @@ static BOOL mShowReport = false;
     
     //
     mainRevealController.rightViewRevealOverdraw = 0;
-#if 0  // PATIENT_DB_LIST_FULL_WIDTH
+#if 1  // PATIENT_DB_LIST_FULL_WIDTH
     float frameWidth = self.view.frame.size.width;
     mainRevealController.rightViewRevealWidth = frameWidth;
 #endif

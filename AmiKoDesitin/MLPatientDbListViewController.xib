@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MLPatientDbListViewController">
             <connections>
+                <outlet property="mTableView" destination="CoF-Jb-cs2" id="EfM-6O-G3m"/>
+                <outlet property="theSearchBar" destination="2Il-9N-CM5" id="WQZ-XR-hX8"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -19,24 +21,32 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CoF-Jb-cs2">
-                    <rect key="frame" x="0.0" y="106" width="375" height="505"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CoF-Jb-cs2">
+                    <rect key="frame" x="0.0" y="61" width="375" height="606"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Z9M-Oa-9FO"/>
                         <outlet property="delegate" destination="-1" id="5NO-b4-2XD"/>
                     </connections>
                 </tableView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Patient DB list" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KH-IW-b4l">
-                    <rect key="frame" x="16" y="77" width="107" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="2Il-9N-CM5">
+                    <rect key="frame" x="0.0" y="17" width="375" height="44"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="Lxb-Vu-4hQ"/>
+                    </connections>
+                </searchBar>
             </subviews>
-            <color key="backgroundColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="trailing" secondItem="CoF-Jb-cs2" secondAttribute="trailing" id="FhM-Cn-laW"/>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="JEk-Lp-39g"/>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="leading" secondItem="CoF-Jb-cs2" secondAttribute="leading" id="P6R-hJ-D28"/>
+                <constraint firstItem="CoF-Jb-cs2" firstAttribute="top" secondItem="2Il-9N-CM5" secondAttribute="bottom" id="UgT-Ae-RSv"/>
+                <constraint firstAttribute="bottom" secondItem="CoF-Jb-cs2" secondAttribute="bottom" id="Vym-Px-NgE"/>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="17" id="c5e-sQ-shJ"/>
+                <constraint firstAttribute="trailing" secondItem="2Il-9N-CM5" secondAttribute="trailing" id="tri-tM-fHZ"/>
+            </constraints>
             <point key="canvasLocation" x="26.5" y="51.5"/>
         </view>
     </objects>
