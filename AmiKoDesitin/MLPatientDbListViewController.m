@@ -49,12 +49,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark -
+#pragma mark - Overloaded
 
 - (NSString *) getTextAtRow:(NSInteger)row
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 #endif
     MLPatient *p = [self getItemAtRow:row];
     NSString *cellStr = [NSString stringWithFormat:@"%@ %@", p.familyName, p.givenName];

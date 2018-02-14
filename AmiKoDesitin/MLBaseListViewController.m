@@ -10,6 +10,8 @@
 
 @interface MLBaseListViewController ()
 
+- (BOOL) stringIsNilOrEmpty:(NSString*)str;
+
 @end
 
 @implementation MLBaseListViewController
@@ -19,6 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
+    mSearchFiltered = FALSE;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,13 +41,46 @@
     return nil;
 }
 
-//- (NSString *) getTextAtRow:(NSInteger)row
-//{
-//#ifdef DEBUG
-//    NSLog(@"%s", __FUNCTION__);
-//#endif
-//    return @"";
-//}
+// This is supposed to be overloaded by subclasses
+
+- (NSString *) getTextAtRow:(NSInteger)row
+{
+#ifdef DEBUG
+    NSLog(@"%s This shouldn't get called", __FUNCTION__);
+#endif
+    return @"";
+}
+
+- (BOOL) stringIsNilOrEmpty:(NSString*)str
+{
+    return !(str && str.length);
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+#ifdef DEBUG
+    //NSLog(@"%s %@", __FUNCTION__, searchText);
+#endif
+
+    if ([self stringIsNilOrEmpty:searchText]) {
+        mSearchFiltered = FALSE;
+    }
+    else {
+        mSearchFiltered = TRUE;
+        NSPredicate *p1 = [NSPredicate predicateWithFormat:@"familyName BEGINSWITH[cd] %@", searchText];
+        NSPredicate *p2 = [NSPredicate predicateWithFormat:@"givenName BEGINSWITH[cd] %@", searchText];
+        NSPredicate *p3 = [NSPredicate predicateWithFormat:@"postalAddress BEGINSWITH[cd] %@", searchText];
+        NSPredicate *p4 = [NSPredicate predicateWithFormat:@"zipCode BEGINSWITH[cd] %@", searchText];
+        
+        NSPredicate *predicate = [NSCompoundPredicate orPredicateWithSubpredicates: [NSArray arrayWithObjects: p1, p2, p3, p4, nil]];
+        
+        mFilteredArray = [mArray filteredArrayUsingPredicate:predicate];
+    }
+
+    [mTableView reloadData];
+}
 
 #pragma mark - UITableViewDataSource
 
