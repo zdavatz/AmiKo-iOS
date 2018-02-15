@@ -495,12 +495,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return;
     }
 
-    if (![vc respondsToSelector:@selector(switchToPatientEditView2)]) {
-        NSLog(@"Cannot switchToPatientEditView2");
+    if (![vc respondsToSelector:@selector(switchRigthToPatientDbList)]) {
+        NSLog(@"Cannot switch right To PatientDB list");
         return;
     }
 
-    [vc switchToPatientEditView2];
+    [vc switchRigthToPatientDbList];
 }
 
 #pragma mark - Toolbar actions

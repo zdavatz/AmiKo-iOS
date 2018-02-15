@@ -90,7 +90,8 @@ enum {
 #endif
     
     // Right button
-#ifdef CONTACTS_LIST_FULL_WIDTH
+#if 1 //def CONTACTS_LIST_FULL_WIDTH
+    // First ensure the "right" is a MLContactsListViewController
     id aTarget = self;
     SEL aSelector = @selector(myRightRevealToggle:);
 #else
@@ -418,7 +419,6 @@ enum {
 
 #pragma mark - Actions
 
-#ifdef CONTACTS_LIST_FULL_WIDTH
 - (IBAction)myRightRevealToggle:(id)sender
 {
     SWRevealViewController *revealController = [self revealViewController];
@@ -439,15 +439,16 @@ enum {
         NSLog(@"Replaced right VC");
     }
 
+#ifdef CONTACTS_LIST_FULL_WIDTH
     float frameWidth = self.view.frame.size.width;
     revealController.rightViewRevealWidth = frameWidth;
+#endif
     
     if ([revealController frontViewPosition] == FrontViewPositionLeft)
         [revealController setFrontViewPosition:FrontViewPositionLeftSide animated:YES];
     else
         [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
-#endif
 
 - (IBAction) cancelPatient:(id)sender
 {
@@ -475,12 +476,12 @@ enum {
         return;
     }
     
-    if (![vc respondsToSelector:@selector(switchToPatientEditView2)]) {
-        NSLog(@"Cannot switchToPatientEditView2");
+    if (![vc respondsToSelector:@selector(switchRigthToPatientDbList)]) {
+        NSLog(@"Cannot switch right to Patient Db List");
         return;
     }
     
-    [vc switchToPatientEditView2];
+    [vc switchRigthToPatientDbList];
 }
 
 - (IBAction) savePatient:(id)sender
