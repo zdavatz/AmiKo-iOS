@@ -387,23 +387,18 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
 - (void) switchRigthToPatientDbList
 {
+    id right = self.revealViewController.rightViewController;
+    if ([right isKindOfClass:[MLPatientDbListViewController class]] ) {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-    UIViewController *nc = self.revealViewController.rearViewController;
-    MLViewController *vc = [nc.childViewControllers firstObject];
-    NSLog(@"nc: %@", [nc class]); // UINavigationController
-    NSLog(@"vc: %@", [vc class]); // MLViewController
-    
-    NSLog(@"del: %@", [[[UIApplication sharedApplication] delegate] class]); //  MLAppDelegate
-    NSLog(@"rvc: %@", [[[[[UIApplication sharedApplication] delegate] window] rootViewController] class]); //  SWRevealViewController
+        NSLog(@"Right is already %@", [right class]);
 #endif
-    
-    // Right
-    MLBaseListViewController *listViewController =
+        return;
+    }
+
+    UIViewController *listViewController =
     [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
                                                     bundle:nil];
-    [self.revealViewController setRightViewController:listViewController];
-    
+    [self.revealViewController setRightViewController:listViewController];    
    
     //
     self.revealViewController.rightViewRevealOverdraw = 0;

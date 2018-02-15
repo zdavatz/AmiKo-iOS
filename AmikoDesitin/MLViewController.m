@@ -1900,7 +1900,7 @@ static BOOL mShowReport = false;
 }
 
 // With Contacts
-- (void) switchToPatientEditView1
+- (void) switchToPatientEditView
 {
     mainRevealController = self.revealViewController;
 

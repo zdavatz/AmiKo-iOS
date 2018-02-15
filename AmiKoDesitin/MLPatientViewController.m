@@ -497,6 +497,10 @@ enum {
 #ifdef DYNAMIC_BUTTONS
     [self saveCancelOff];
 #endif
+    
+    // Show list of patients from DB
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:2.0];
 }
 
 #pragma mark - Notifications
