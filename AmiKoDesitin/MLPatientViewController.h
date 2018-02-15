@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "MLPatient.h"
 
-//#define CONTACTS_LIST_FULL_WIDTH
-//#define PATIENT_DB_LIST_FULL_WIDTH
-
 @interface MLPatientViewController : UIViewController <UITextFieldDelegate>
 {
 //    IBOutlet NSWindow *mPanel;

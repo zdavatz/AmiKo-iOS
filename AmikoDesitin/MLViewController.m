@@ -1922,35 +1922,6 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
-// With Patient DB list
-- (void) switchRigthToPatientDbList
-{
-    mainRevealController = self.revealViewController;
-    
-    // Right
-    MLBaseListViewController *listViewController =
-    [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
-                                                   bundle:nil];
-    [mainRevealController setRightViewController:listViewController];
-    
-#if 0 // Commented out to keep the same front controller
-    // Front
-    MLPatientViewController *patientListViewController =
-    [[MLPatientViewController alloc] initWithNibName:@"MLPatientViewController"
-                                              bundle:nil];
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
-    [mainRevealController setFrontViewController:otherViewNavigationController animated:NO];
-#endif
-    
-    //
-    mainRevealController.rightViewRevealOverdraw = 0;
-#ifdef PATIENT_DB_LIST_FULL_WIDTH
-    float frameWidth = self.view.frame.size.width;
-    mainRevealController.rightViewRevealWidth = frameWidth;
-#endif
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
-}
-
 /**
  Add med in the buffer to the interaction basket
  */

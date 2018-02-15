@@ -22,14 +22,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="OFX-Ir-jRP">
-                    <rect key="frame" x="0.0" y="17" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="atT-Dj-uFK"/>
                     </connections>
                 </searchBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ZdL-PR-7hF">
-                    <rect key="frame" x="0.0" y="61" width="375" height="606"/>
+                    <rect key="frame" x="0.0" y="66" width="375" height="601"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="pmy-5R-AVr"/>
@@ -39,13 +39,13 @@
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="ZdL-PR-7hF" firstAttribute="top" secondItem="OFX-Ir-jRP" secondAttribute="bottom" id="0dU-9c-PXk"/>
-                <constraint firstAttribute="trailing" secondItem="OFX-Ir-jRP" secondAttribute="trailing" id="6Tx-dz-SZh"/>
-                <constraint firstAttribute="bottom" secondItem="ZdL-PR-7hF" secondAttribute="bottom" id="Kdu-Uh-RpU"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="trailing" secondItem="ZdL-PR-7hF" secondAttribute="trailing" id="grE-8G-Z8v"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="j50-cz-UcK"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="ZdL-PR-7hF" secondAttribute="leading" id="qOj-XQ-dlF"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="17" id="y9m-R9-8JI"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="22" id="5RJ-cl-QqX"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="trailing" secondItem="ZdL-PR-7hF" secondAttribute="trailing" id="BUf-ek-MUg"/>
+                <constraint firstItem="ZdL-PR-7hF" firstAttribute="top" secondItem="OFX-Ir-jRP" secondAttribute="bottom" id="Nqs-Ns-6r7"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="ZdL-PR-7hF" secondAttribute="leading" id="SDb-gJ-Njd"/>
+                <constraint firstAttribute="trailing" secondItem="OFX-Ir-jRP" secondAttribute="trailing" id="izk-eo-UWB"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="jBd-bx-QpM"/>
+                <constraint firstAttribute="bottom" secondItem="ZdL-PR-7hF" secondAttribute="bottom" id="jy9-OR-jYo"/>
             </constraints>
             <point key="canvasLocation" x="88.5" y="82.5"/>
         </view>
