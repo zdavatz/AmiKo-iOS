@@ -32,6 +32,7 @@
 #import "MLMenuViewController.h"
 #import "MLUtility.h"
 #import "MLAlertView.h"
+#import "MLPatientDbListViewController.h"
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
@@ -382,6 +383,35 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     //[mainViewController setLaunchState:ePrescription];
 
     return YES;
+}
+
+- (void) switchRigthToPatientDbList
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+    UIViewController *nc = self.revealViewController.rearViewController;
+    MLViewController *vc = [nc.childViewControllers firstObject];
+    NSLog(@"nc: %@", [nc class]); // UINavigationController
+    NSLog(@"vc: %@", [vc class]); // MLViewController
+    
+    NSLog(@"del: %@", [[[UIApplication sharedApplication] delegate] class]); //  MLAppDelegate
+    NSLog(@"rvc: %@", [[[[[UIApplication sharedApplication] delegate] window] rootViewController] class]); //  SWRevealViewController
+#endif
+    
+    // Right
+    MLBaseListViewController *listViewController =
+    [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
+                                                    bundle:nil];
+    [self.revealViewController setRightViewController:listViewController];
+    
+   
+    //
+    self.revealViewController.rightViewRevealOverdraw = 0;
+#ifdef PATIENT_DB_LIST_FULL_WIDTH
+    float frameWidth = self.view.frame.size.width;
+    self.revealViewController.rightViewRevealWidth = frameWidth;
+#endif
+    [self.revealViewController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
 }
 
 @end

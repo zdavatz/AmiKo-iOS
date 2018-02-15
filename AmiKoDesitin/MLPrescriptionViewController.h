@@ -25,6 +25,8 @@
 - (IBAction) sendPrescription:(id)sender;
 - (IBAction) showPatientDbList:(id)sender;
 
+- (IBAction) myRightRevealToggle:(id)sender;
+
 - (void) overwritePrescription;
 - (void) saveNewPrescription;
 

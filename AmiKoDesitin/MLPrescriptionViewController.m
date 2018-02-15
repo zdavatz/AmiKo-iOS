@@ -11,6 +11,8 @@
 #import "MLUtility.h"
 
 #import "MLViewController.h"
+#import "MLAppDelegate.h"
+#import "MLAmkListViewController.h"
 
 static const float kInfoCellHeight = 20.0;  // fixed
 
@@ -131,11 +133,20 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
     
     // Right button
+#if 1
+    // First ensure the "right" is a MLContactsListViewController
+    id aTarget = self;
+    SEL aSelector = @selector(myRightRevealToggle:);
+#else
+    id aTarget = revealController;
+    SEL aSelector = @selector(rightRevealToggle:);
+#endif
+
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
-                                    target:revealController
-                                    action:@selector(rightRevealToggle:)];
+                                    target:aTarget
+                                    action:aSelector];
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     
     // PanGestureRecognizer goes here
@@ -476,31 +487,44 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark - Actions
 
+- (IBAction)myRightRevealToggle:(id)sender
+{
+    SWRevealViewController *revealController = [self revealViewController];
+    
+    // Check that the right controller class is MLAmkListViewController
+    UIViewController *vc = revealController.rightViewController;
+    
+#ifdef DEBUG
+    NSLog(@"%s vc: %@", __FUNCTION__, [vc class]);
+#endif
+    
+    if (![vc isKindOfClass:[MLAmkListViewController class]] ) {
+        // Replace right controller
+        MLAmkListViewController *amkListViewController =
+        [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
+                                                       bundle:nil];
+        [revealController setRightViewController:amkListViewController];
+        NSLog(@"Replaced right VC");
+    }
+    
+#ifdef CONTACTS_LIST_FULL_WIDTH
+    float frameWidth = self.view.frame.size.width;
+    revealController.rightViewRevealWidth = frameWidth;
+#endif
+    
+    if ([revealController frontViewPosition] == FrontViewPositionLeft)
+        [revealController setFrontViewPosition:FrontViewPositionLeftSide animated:YES];
+    else
+        [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
 - (IBAction) showPatientDbList:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 #endif
-    SWRevealViewController *revealController = [self revealViewController];
-    UIViewController *nc = revealController.rearViewController;
-    MLViewController *vc = [nc.childViewControllers firstObject];
-
-#ifdef DEBUG
-    NSLog(@"nc: %@", [nc class]); // UINavigationController
-    NSLog(@"vc: %@", [vc class]); // MLViewController
-#endif
-
-    if (![vc isKindOfClass:[MLViewController class]]) {
-        NSLog(@"Not a MLViewController");
-        return;
-    }
-
-    if (![vc respondsToSelector:@selector(switchRigthToPatientDbList)]) {
-        NSLog(@"Cannot switch right To PatientDB list");
-        return;
-    }
-
-    [vc switchRigthToPatientDbList];
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDel switchRigthToPatientDbList];
 }
 
 #pragma mark - Toolbar actions

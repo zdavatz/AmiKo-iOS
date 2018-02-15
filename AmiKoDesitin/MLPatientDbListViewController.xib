@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CoF-Jb-cs2">
-                    <rect key="frame" x="0.0" y="61" width="375" height="606"/>
+                    <rect key="frame" x="0.0" y="66" width="375" height="601"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Z9M-Oa-9FO"/>
@@ -30,7 +30,7 @@
                     </connections>
                 </tableView>
                 <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="2Il-9N-CM5">
-                    <rect key="frame" x="0.0" y="17" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="Lxb-Vu-4hQ"/>
@@ -39,13 +39,13 @@
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="2Il-9N-CM5" firstAttribute="trailing" secondItem="CoF-Jb-cs2" secondAttribute="trailing" id="FhM-Cn-laW"/>
-                <constraint firstItem="2Il-9N-CM5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="JEk-Lp-39g"/>
-                <constraint firstItem="2Il-9N-CM5" firstAttribute="leading" secondItem="CoF-Jb-cs2" secondAttribute="leading" id="P6R-hJ-D28"/>
-                <constraint firstItem="CoF-Jb-cs2" firstAttribute="top" secondItem="2Il-9N-CM5" secondAttribute="bottom" id="UgT-Ae-RSv"/>
-                <constraint firstAttribute="bottom" secondItem="CoF-Jb-cs2" secondAttribute="bottom" id="Vym-Px-NgE"/>
-                <constraint firstItem="2Il-9N-CM5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="17" id="c5e-sQ-shJ"/>
-                <constraint firstAttribute="trailing" secondItem="2Il-9N-CM5" secondAttribute="trailing" id="tri-tM-fHZ"/>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="leading" secondItem="CoF-Jb-cs2" secondAttribute="leading" id="0KV-n6-iQm"/>
+                <constraint firstAttribute="bottom" secondItem="CoF-Jb-cs2" secondAttribute="bottom" id="0x8-Pa-Mm9"/>
+                <constraint firstAttribute="trailing" secondItem="2Il-9N-CM5" secondAttribute="trailing" id="8uV-00-fHY"/>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="trailing" secondItem="CoF-Jb-cs2" secondAttribute="trailing" id="FPu-hz-Xfo"/>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="FkR-1y-UmW"/>
+                <constraint firstItem="2Il-9N-CM5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="22" id="UpI-Ev-oVE"/>
+                <constraint firstItem="CoF-Jb-cs2" firstAttribute="top" secondItem="2Il-9N-CM5" secondAttribute="bottom" id="osG-xv-TNq"/>
             </constraints>
             <point key="canvasLocation" x="26.5" y="51.5"/>
         </view>

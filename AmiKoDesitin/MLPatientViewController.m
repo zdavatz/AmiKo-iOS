@@ -13,6 +13,7 @@
 #import "MLPatientDBAdapter.h"
 
 #import "MLViewController.h"
+#import "MLAppDelegate.h"
 
 #define DYNAMIC_BUTTONS
 
@@ -89,8 +90,8 @@ enum {
     [NSArray arrayWithObjects:revealButtonItem, spacer, cancelItem, nil];
 #endif
     
-    // Right button
-#if 1 //def CONTACTS_LIST_FULL_WIDTH
+    // Right button(s)
+#if 1
     // First ensure the "right" is a MLContactsListViewController
     id aTarget = self;
     SEL aSelector = @selector(myRightRevealToggle:);
@@ -462,26 +463,8 @@ enum {
 #endif
 
     // Show list of patients from DB
-    SWRevealViewController *revealController = [self revealViewController];
-    UIViewController *nc = revealController.rearViewController;
-    MLViewController *vc = [nc.childViewControllers firstObject];
-    
-#ifdef DEBUG
-    NSLog(@"nc: %@", [nc class]); // UINavigationController
-    NSLog(@"vc: %@", [vc class]); // MLViewController
-#endif
-    
-    if (![vc isKindOfClass:[MLViewController class]]) {
-        NSLog(@"Not a MLViewController");
-        return;
-    }
-    
-    if (![vc respondsToSelector:@selector(switchRigthToPatientDbList)]) {
-        NSLog(@"Cannot switch right to Patient Db List");
-        return;
-    }
-    
-    [vc switchRigthToPatientDbList];
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDel switchRigthToPatientDbList];
 }
 
 - (IBAction) savePatient:(id)sender

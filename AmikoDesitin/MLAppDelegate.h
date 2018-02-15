@@ -23,6 +23,9 @@
 
 #import <UIKit/UIKit.h>
 
+//#define CONTACTS_LIST_FULL_WIDTH
+//#define PATIENT_DB_LIST_FULL_WIDTH
+
 @class SWRevealViewController;
 
 @interface MLAppDelegate : UIResponder <UIApplicationDelegate>
@@ -30,5 +33,7 @@
 @property (strong, nonatomic) IBOutlet UIWindow *window;
 @property (retain, nonatomic) UINavigationController *navController;
 @property (strong, nonatomic) SWRevealViewController *revealViewController;
+
+- (void) switchRigthToPatientDbList;
 
 @end
