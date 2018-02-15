@@ -123,7 +123,7 @@ enum {
 #endif
     
 #ifdef DEBUG
-    self.navigationItem.prompt = @"Patient Edit";
+    //self.navigationItem.prompt = @"Patient Edit";
 #endif
     
     mPatientUUID = nil;

@@ -388,24 +388,23 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 - (void) switchRigthToPatientDbList
 {
     id right = self.revealViewController.rightViewController;
-    if ([right isKindOfClass:[MLPatientDbListViewController class]] ) {
+    if (![right isKindOfClass:[MLPatientDbListViewController class]] ) {
+        UIViewController *listViewController =
+        [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
+                                                        bundle:nil];
+        [self.revealViewController setRightViewController:listViewController];
 #ifdef DEBUG
-        NSLog(@"Right is already %@", [right class]);
+        //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);
 #endif
-        return;
+
+        self.revealViewController.rightViewRevealOverdraw = 0;
+#ifdef PATIENT_DB_LIST_FULL_WIDTH
+        float frameWidth = self.view.frame.size.width;
+        self.revealViewController.rightViewRevealWidth = frameWidth;
+#endif
     }
 
-    UIViewController *listViewController =
-    [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
-                                                    bundle:nil];
-    [self.revealViewController setRightViewController:listViewController];    
-   
-    //
-    self.revealViewController.rightViewRevealOverdraw = 0;
-#ifdef PATIENT_DB_LIST_FULL_WIDTH
-    float frameWidth = self.view.frame.size.width;
-    self.revealViewController.rightViewRevealWidth = frameWidth;
-#endif
+    // Finally make it visible
     [self.revealViewController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
 }
 
