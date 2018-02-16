@@ -387,30 +387,24 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
 - (void) switchRigthToPatientDbList
 {
+    id right = self.revealViewController.rightViewController;
+    if (![right isKindOfClass:[MLPatientDbListViewController class]] ) {
+        UIViewController *listViewController =
+        [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
+                                                        bundle:nil];
+        [self.revealViewController setRightViewController:listViewController];
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-    UIViewController *nc = self.revealViewController.rearViewController;
-    MLViewController *vc = [nc.childViewControllers firstObject];
-    NSLog(@"nc: %@", [nc class]); // UINavigationController
-    NSLog(@"vc: %@", [vc class]); // MLViewController
-    
-    NSLog(@"del: %@", [[[UIApplication sharedApplication] delegate] class]); //  MLAppDelegate
-    NSLog(@"rvc: %@", [[[[[UIApplication sharedApplication] delegate] window] rootViewController] class]); //  SWRevealViewController
+        //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);
 #endif
-    
-    // Right
-    MLBaseListViewController *listViewController =
-    [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
-                                                    bundle:nil];
-    [self.revealViewController setRightViewController:listViewController];
-    
-   
-    //
-    self.revealViewController.rightViewRevealOverdraw = 0;
+
+        self.revealViewController.rightViewRevealOverdraw = 0;
 #ifdef PATIENT_DB_LIST_FULL_WIDTH
-    float frameWidth = self.view.frame.size.width;
-    self.revealViewController.rightViewRevealWidth = frameWidth;
+        float frameWidth = self.view.frame.size.width;
+        self.revealViewController.rightViewRevealWidth = frameWidth;
 #endif
+    }
+
+    // Finally make it visible
     [self.revealViewController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
 }
 

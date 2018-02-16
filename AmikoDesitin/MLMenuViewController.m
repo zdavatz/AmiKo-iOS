@@ -270,7 +270,7 @@
 #endif
     
     if (mParentViewController)
-        [mParentViewController switchToPatientEditView1];
+        [mParentViewController switchToPatientEditView];
 }
 
 - (IBAction) showReport:(id)sender

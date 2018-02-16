@@ -167,6 +167,15 @@ static NSString *DATABASE_COLUMNS = nil;
     return nil;
 }
 
+- (BOOL) deleteEntry:(MLPatient *)patient
+{
+    if (myPatientDb) {
+        [myPatientDb deleteRowFromTable:@"patients" withUId:patient.uniqueId];
+        return TRUE;
+    }
+    return FALSE;
+}
+
 - (NSArray *) getAllPatients
 {
     NSMutableArray *listOfPatients = [NSMutableArray array];
