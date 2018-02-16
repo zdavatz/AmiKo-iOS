@@ -524,7 +524,7 @@ enum {
 
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification
 {
-    MLPatient * p = [aNotification object];
+    MLPatient *p = [aNotification object];
 #ifdef DEBUG
     //NSLog(@"%s selected familyName:%@", __FUNCTION__, p.familyName);
 #endif

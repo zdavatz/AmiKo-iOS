@@ -466,7 +466,12 @@ static BOOL mShowReport = false;
     NSLog(@"%s %@", __FUNCTION__, aNotification);
 #endif
     // TODO: make sure we have the correct front controller
-    // TODO: set as default patient for the prescription
+
+    // Set as default patient for prescriptions
+    MLPatient *p = [aNotification object];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:p.uniqueId forKey:@"currentPatient"];
+    [defaults synchronize];
 }
 
 - (void) finishedDownloading:(NSNotification *)notification

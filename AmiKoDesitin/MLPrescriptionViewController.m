@@ -13,6 +13,7 @@
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
 #import "MLAmkListViewController.h"
+#import "MLPatientDBAdapter.h"
 
 static const float kInfoCellHeight = 20.0;  // fixed
 
@@ -49,6 +50,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
+- (void)loadCurrentPatient;
 
 @end
 
@@ -183,22 +185,53 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [prescription importFromURL:url];
         NSLog(@"Reopening:%@", fileName);
     }
+#if 0
+    // This feature is not (yet) in the specifications
     else if ([amkFiles count] > 0) {
         NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[amkFiles objectAtIndex:0]];
         NSURL *url = [NSURL fileURLWithPath:fullFilePath];
         [prescription importFromURL:url];
         NSLog(@"Opening first:%@", [amkFiles objectAtIndex:0]);
     }
+#endif
+    else {
+        // TODO: load doctor
+        [self loadCurrentPatient];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
                                                  name:@"AmkFilenameNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(patientDbListDidChangeSelection:)
+                                                 name:@"PatientSelectedNotification"
                                                object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -
+
+- (void)loadCurrentPatient
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *patientId = [defaults stringForKey:@"currentPatient"];
+    if (!patientId)
+        return;
+    
+    MLPatientDBAdapter *patientDb = [[MLPatientDBAdapter alloc] init];
+    if (![patientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        return;
+    }
+
+    MLPatient *pat = [patientDb getPatientWithUniqueID:patientId];
+    [prescription setPatient:pat];
 }
 
 #pragma mark - Table view data source
@@ -535,6 +568,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, btn.tag, btn.title);
 #endif
+    // TODO: load doctor
+    [self loadCurrentPatient];
+    [infoView reloadData];
 }
 
 - (IBAction) checkForInteractions:(id)sender
@@ -724,4 +760,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     SWRevealViewController *revealController = self.revealViewController;
     [revealController rightRevealToggleAnimated:YES];
 }
+
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
+{
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, aNotification);
+#endif
+    [prescription setPatient:[aNotification object]];
+    [infoView reloadData];
+}
+
 @end
