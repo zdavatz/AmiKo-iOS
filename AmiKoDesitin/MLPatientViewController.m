@@ -52,6 +52,8 @@ enum {
     NSString *mPatientUUID;
 }
 
+@synthesize scrollView;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -141,6 +143,16 @@ enum {
                                              selector:@selector(contactsListDidChangeSelection:)
                                                  name:@"ContactSelectedNotification"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -521,6 +533,24 @@ enum {
 }
 
 #pragma mark - Notifications
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+    NSDictionary *info = [notification userInfo];
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+
+    UIEdgeInsets contentInset = self.scrollView.contentInset;
+    contentInset.bottom = keyboardRect.size.height;
+    self.scrollView.contentInset = contentInset;
+}
+
+-(void)keyboardDidHide:(NSNotification *)notification
+{
+    UIEdgeInsets contentInset = self.scrollView.contentInset;
+    contentInset.bottom = 0;
+    self.scrollView.contentInset = contentInset;
+}
 
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification
 {
