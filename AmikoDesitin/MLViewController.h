@@ -67,4 +67,6 @@ enum {
 
 - (void) switchTabBarItem: (UITabBarItem *)item;
 
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
+
 @end
