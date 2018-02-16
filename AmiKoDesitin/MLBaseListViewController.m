@@ -14,9 +14,12 @@
 
 @end
 
+#pragma mark -
+
 @implementation MLBaseListViewController
 
 @synthesize theSearchBar;
+@synthesize mArray;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -115,7 +118,7 @@
 #pragma mark - UITableViewDelegate
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
-{
+{    
     // Show front view
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
                                                         object:[self getItemAtRow:indexPath.row]];

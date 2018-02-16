@@ -34,6 +34,8 @@
 
 @synthesize theSearchBar;
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

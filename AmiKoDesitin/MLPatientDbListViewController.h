@@ -8,6 +8,9 @@
 
 #import "MLBaseListViewController.h"
 
-@interface MLPatientDbListViewController : MLBaseListViewController
+@interface MLPatientDbListViewController : MLBaseListViewController <UIGestureRecognizerDelegate>
+
+- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
+- (void) removeItem:(NSUInteger)rowIndex;
 
 @end

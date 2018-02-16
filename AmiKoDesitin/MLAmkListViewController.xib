@@ -37,7 +37,7 @@
             </connections>
             <point key="canvasLocation" x="57.5" y="59.5"/>
         </view>
-        <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="1.5" id="7jq-ED-fsD">
+        <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.90000000000000002" id="7jq-ED-fsD">
             <connections>
                 <action selector="handleLongPress:" destination="-1" id="JUC-SI-39D"/>
                 <outlet property="delegate" destination="-1" id="39o-sL-PBm"/>

@@ -31,11 +31,15 @@
     IBOutlet UISegmentedControl *mSex;
 }
 
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+
 - (IBAction) savePatient:(id)sender;
 - (IBAction) cancelPatient:(id)sender;
 
 - (IBAction) myRightRevealToggle:(id)sender;
 
+- (void)keyboardDidShow:(NSNotification *)notification;
+- (void)keyboardDidHide:(NSNotification *)notification;
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification;
 
 @end

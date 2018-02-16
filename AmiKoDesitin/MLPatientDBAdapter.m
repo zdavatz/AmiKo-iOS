@@ -54,6 +54,7 @@ static NSString *DATABASE_COLUMNS = nil;
 
 #pragma mark - Instance functions
 
+// Patients DB
 - (BOOL) openDatabase:(NSString *)dbName
 {
 #ifdef DEBUG
@@ -74,7 +75,7 @@ static NSString *DATABASE_COLUMNS = nil;
     NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:@"db"];
 
 #ifdef DEBUG
-    NSLog(@"DB filePath:%@", filePath);
+    //NSLog(@"DB filePath:%@", filePath);
 #endif
 
     if (!filePath)
@@ -143,7 +144,9 @@ static NSString *DATABASE_COLUMNS = nil;
         return nil;
 
     // If UUID exist re-use it!
-    if (patient.uniqueId!=nil && [patient.uniqueId length]>0) {
+    if (patient.uniqueId!=nil &&
+        [patient.uniqueId length]>0)
+    {
         NSString *expressions = [NSString stringWithFormat:@"%@=%d, %@=%d, %@=\"%@\", %@=\"%@\", %@=\"%@\", %@=\"%@\", %@=\"%@\", %@=\"%@\", %@=\"%@\"",
                                  KEY_WEIGHT_KG, patient.weightKg,
                                  KEY_HEIGHT_CM, patient.heightCm,
@@ -156,15 +159,36 @@ static NSString *DATABASE_COLUMNS = nil;
                                  KEY_GENDER, patient.gender];
         NSString *conditions = [NSString stringWithFormat:@"%@=\"%@\"", KEY_UID, patient.uniqueId];
 
-        // Update existing entry
+#ifdef DEBUG
+        NSLog(@"Update existing entry, uniqueId: %@", patient.uniqueId);
+#endif
         [myPatientDb updateRowIntoTable:@"patients" forExpressions:expressions andConditions:conditions];
         return patient.uniqueId;
     }
     else {
+#ifdef DEBUG
+        NSLog(@"Add entry, uniqueId: %@", patient.uniqueId);
+#endif
         return [self addEntry:patient];
     }
 
     return nil;
+}
+
+- (BOOL) deleteEntry:(MLPatient *)patient
+{
+    if (myPatientDb) {
+        [myPatientDb deleteRowFromTable:@"patients" withUId:patient.uniqueId];
+        return TRUE;
+    }
+    return FALSE;
+}
+
+- (NSInteger) getNumPatients
+{
+    NSInteger numRecords = [myPatientDb numberRecordsForTable:DATABASE_TABLE];
+    
+    return numRecords;
 }
 
 - (NSArray *) getAllPatients
@@ -199,6 +223,9 @@ static NSString *DATABASE_COLUMNS = nil;
         }
     }
 
+#ifdef DEBUG
+    //NSLog(@"%s patient %@ not in DB", __FUNCTION__, uniqueID);
+#endif
     return nil;
 }
 

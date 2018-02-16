@@ -38,6 +38,7 @@
                 </searchBar>
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+            <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="2Il-9N-CM5" firstAttribute="leading" secondItem="CoF-Jb-cs2" secondAttribute="leading" id="0KV-n6-iQm"/>
                 <constraint firstAttribute="bottom" secondItem="CoF-Jb-cs2" secondAttribute="bottom" id="0x8-Pa-Mm9"/>
@@ -47,7 +48,15 @@
                 <constraint firstItem="2Il-9N-CM5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="22" id="UpI-Ev-oVE"/>
                 <constraint firstItem="CoF-Jb-cs2" firstAttribute="top" secondItem="2Il-9N-CM5" secondAttribute="bottom" id="osG-xv-TNq"/>
             </constraints>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="Jm6-3d-QAZ" appends="YES" id="SQq-ox-2cg"/>
+            </connections>
             <point key="canvasLocation" x="26.5" y="51.5"/>
         </view>
+        <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.90000000000000002" id="Jm6-3d-QAZ">
+            <connections>
+                <action selector="handleLongPress:" destination="-1" id="wmu-gs-MmE"/>
+            </connections>
+        </pongPressGestureRecognizer>
     </objects>
 </document>

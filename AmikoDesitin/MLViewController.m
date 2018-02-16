@@ -325,6 +325,10 @@ static BOOL mShowReport = false;
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(patientDbListDidChangeSelection:)
+                                                 name:@"PatientSelectedNotification"
+                                               object:nil];
     // Set default database
     mUsedDatabase = kAips;
     // Set current search state
@@ -454,6 +458,22 @@ static BOOL mShowReport = false;
     return success;
 }
 
+#pragma mark - Notifications
+
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
+{
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, aNotification);
+#endif
+    // TODO: make sure we have the correct front controller
+
+    // Set as default patient for prescriptions
+    MLPatient *p = [aNotification object];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:p.uniqueId forKey:@"currentPatient"];
+    [defaults synchronize];
+}
+
 - (void) finishedDownloading:(NSNotification *)notification
 {
     static int fileCnt = 0;
@@ -521,6 +541,8 @@ static BOOL mShowReport = false;
         [self checkLastDBSync];
     }
 }
+
+#pragma mark -
 
 - (void) checkLastDBSync
 {
@@ -1900,7 +1922,7 @@ static BOOL mShowReport = false;
 }
 
 // With Contacts
-- (void) switchToPatientEditView1
+- (void) switchToPatientEditView
 {
     mainRevealController = self.revealViewController;
 

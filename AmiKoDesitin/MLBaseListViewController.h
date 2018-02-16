@@ -17,13 +17,12 @@
     NSArray *mFilteredArray;
     BOOL mSearchFiltered;
     
-    NSArray *mArray;
-
     IBOutlet UISearchBar *theSearchBar;
     IBOutlet UITableView *mTableView;
 }
 
 @property (nonatomic, retain) IBOutlet UISearchBar *theSearchBar;
+@property (retain) NSArray *mArray;
 
 // To be overloaded by subclasses
 - (NSString *) getTextAtRow:(NSInteger)row;
