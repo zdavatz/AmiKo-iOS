@@ -52,6 +52,8 @@ enum {
     NSString *mPatientUUID;
 }
 
+@synthesize scrollView;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -141,6 +143,16 @@ enum {
                                              selector:@selector(contactsListDidChangeSelection:)
                                                  name:@"ContactSelectedNotification"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -213,11 +225,6 @@ enum {
     mPatientUUID = nil;
     
     [mNotification setText:@""];
-}
-
-- (void) friendlyNote:(NSString*)str
-{
-    [mNotification setText:str];
 }
 
 - (void) setAllFields:(MLPatient *)p
@@ -303,6 +310,11 @@ enum {
     return patient;
 }
 
+- (void) friendlyNote:(NSString*)str
+{
+    [mNotification setText:str];
+}
+
 // Validate "required" fields
 - (BOOL) validateFields:(MLPatient *)patient
 {
@@ -351,6 +363,8 @@ enum {
     
     // TODO: the email is an optional field,
     // but if it's there, check at least that it is like *@*
+    
+    mPatientUUID = [patient generateUniqueID];
     
     return valid;
 }
@@ -454,7 +468,7 @@ enum {
 - (IBAction) cancelPatient:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 #endif
     [self resetAllFields];
 
@@ -470,7 +484,7 @@ enum {
 - (IBAction) savePatient:(id)sender
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 #endif
 
     if (!mPatientDb) {
@@ -484,6 +498,10 @@ enum {
         return;
     }
     
+#ifdef DEBUG
+    //NSLog(@"before adding %@, count %ld", mPatientUUID, [mPatientDb getNumPatients]);
+#endif
+    
     if (mPatientUUID && [mPatientUUID length]>0)
         patient.uniqueId = mPatientUUID;
     
@@ -492,10 +510,21 @@ enum {
     else
         mPatientUUID = [mPatientDb insertEntry:patient];
 
+    if (mPatientUUID==nil) {
+#ifdef DEBUG
+        NSLog(@"%s:%d Could not add/insert patient", __FUNCTION__, __LINE__);
+#endif
+        return;
+    }
+    
     [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
 
 #ifdef DYNAMIC_BUTTONS
     [self saveCancelOff];
+#endif
+    
+#ifdef DEBUG
+    //NSLog(@"patients after adding: %ld", [mPatientDb getNumPatients]);
 #endif
     
     // Show list of patients from DB
@@ -505,12 +534,31 @@ enum {
 
 #pragma mark - Notifications
 
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+    NSDictionary *info = [notification userInfo];
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+
+    UIEdgeInsets contentInset = self.scrollView.contentInset;
+    contentInset.bottom = keyboardRect.size.height;
+    self.scrollView.contentInset = contentInset;
+}
+
+-(void)keyboardDidHide:(NSNotification *)notification
+{
+    UIEdgeInsets contentInset = self.scrollView.contentInset;
+    contentInset.bottom = 0;
+    self.scrollView.contentInset = contentInset;
+}
+
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification
 {
-    MLPatient * p = [aNotification object];
+    MLPatient *p = [aNotification object];
 #ifdef DEBUG
     //NSLog(@"%s selected familyName:%@", __FUNCTION__, p.familyName);
 #endif
+    
     [self resetAllFields];
     [self setAllFields:p];
     
@@ -523,5 +571,6 @@ enum {
     [revealController setFrontViewPosition:FrontViewPositionLeftSideMost animated:YES];
 #endif
 }
+
 
 @end

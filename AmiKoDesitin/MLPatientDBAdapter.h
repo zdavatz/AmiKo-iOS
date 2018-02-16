@@ -16,6 +16,7 @@
 - (NSString *) addEntry:(MLPatient *)patient;
 - (NSString *) insertEntry:(MLPatient *)patient;
 - (BOOL) deleteEntry:(MLPatient *)patient;
+- (NSInteger) getNumPatients;
 
 - (NSArray *) getAllPatients;
 - (MLPatient *) getPatientWithUniqueID:(NSString *)uniqueID;

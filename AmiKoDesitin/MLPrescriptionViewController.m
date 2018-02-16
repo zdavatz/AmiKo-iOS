@@ -13,6 +13,7 @@
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
 #import "MLAmkListViewController.h"
+#import "MLPatientDBAdapter.h"
 
 static const float kInfoCellHeight = 20.0;  // fixed
 
@@ -49,6 +50,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
+- (BOOL)loadDefaultPrescription;
+- (BOOL)loadDefaultPatient;
 
 @end
 
@@ -174,31 +177,68 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     prescription = [[MLPrescription alloc] init];
     
-    // Try to reopen the last used file
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
-    NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [prescription importFromURL:url];
-        NSLog(@"Reopening:%@", fileName);
-    }
-    else if ([amkFiles count] > 0) {
-        NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[amkFiles objectAtIndex:0]];
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [prescription importFromURL:url];
-        NSLog(@"Opening first:%@", [amkFiles objectAtIndex:0]);
+    if (![self loadDefaultPrescription]) {
+        // TODO: load doctor
+        [self loadDefaultPatient];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
                                                  name:@"AmkFilenameNotification"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(patientDbListDidChangeSelection:)
+                                                 name:@"PatientSelectedNotification"
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -
+
+// Try to reopen the last used file
+- (BOOL)loadDefaultPrescription
+{
+    // Try to reopen the last used file
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
+    if (!fileName)
+        return FALSE;
+    
+    NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath])
+        return FALSE;
+
+    NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+    [prescription importFromURL:url];
+    NSLog(@"Reopening:%@", fileName);
+    return TRUE;
+}
+
+- (BOOL)loadDefaultPatient
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *patientId = [defaults stringForKey:@"currentPatient"];
+    if (!patientId) {
+#ifdef DEBUG
+        NSLog(@"Default patient is not yet defined");
+#endif
+        return FALSE;
+    }
+    
+    MLPatientDBAdapter *patientDb = [[MLPatientDBAdapter alloc] init];
+    if (![patientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        return FALSE;
+    }
+
+    MLPatient *pat = [patientDb getPatientWithUniqueID:patientId];
+    [prescription setPatient:pat];
+    return TRUE;
 }
 
 #pragma mark - Table view data source
@@ -535,6 +575,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, btn.tag, btn.title);
 #endif
+    // TODO: load doctor
+    if ([self loadDefaultPatient])
+        [infoView reloadData];
+    
+    // TODO: clear medicines
 }
 
 - (IBAction) checkForInteractions:(id)sender
@@ -724,4 +769,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     SWRevealViewController *revealController = self.revealViewController;
     [revealController rightRevealToggleAnimated:YES];
 }
+
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
+{
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, aNotification);
+#endif
+    [prescription setPatient:[aNotification object]];
+    [infoView reloadData];
+}
+
 @end

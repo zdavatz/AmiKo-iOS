@@ -182,6 +182,7 @@ static NSString *FULL_TABLE = nil;
     mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
 }
 
+// Drugs database
 - (BOOL) openDatabase: (NSString *)dbName
 {
     // Check first users documents folder

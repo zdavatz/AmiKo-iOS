@@ -21,9 +21,12 @@
 
 - (void)viewDidLoad
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     [super viewDidLoad];
 
-    notificationName = @"ContactSelectedNotification";
+    notificationName = @"PatientSelectedNotification";
     tableIdentifier = @"patientDbListTableItem";
     textColor = [UIColor blackColor];
 
@@ -37,7 +40,7 @@
         mPatientDb = nil;
     }
     else
-        mArray = [mPatientDb getAllPatients];
+        self.mArray = [mPatientDb getAllPatients];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -60,12 +63,14 @@
         pat = mFilteredArray[rowIndex];
     }
     else {
-        pat = mArray[rowIndex];
+        pat = self.mArray[rowIndex];
     }
     
-#if 0 // TODO remove all amk files for this patient
+#if 0
     NSString *amkDir = [MLUtility amkDirectory];
     NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
+    
+    // TODO: find patient subdirectory and loop to delete all AMK files. Finally delete directory.
     
     if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
         NSLog(@"Error removing file at path: %@", amkFiles[rowIndex]);
@@ -81,11 +86,22 @@
     
 #endif
 
+#ifdef DEBUG
+    NSLog(@"patients before deleting: %ld", [mPatientDb getNumPatients]);
+#endif
+    
     // Finally remove the entry from the list
     [mPatientDb deleteEntry:pat];
-    mArray = [mPatientDb getAllPatients];
+
+#ifdef DEBUG
+    NSLog(@"patients after deleting: %ld", [mPatientDb getNumPatients]);
+#endif
+
+    // (Instead of removing one item from a NSMutableArray) reassign the whole NSArray
+    self.mArray = [mPatientDb getAllPatients];
+
     mSearchFiltered = FALSE;
-    [mTableView reloadData];  // TODO: debug why it's not refreshed
+    [mTableView reloadData];
 }
 
 #pragma mark - Overloaded
@@ -119,13 +135,7 @@
         return;
     }
     
-    NSLog(@"long press on table view at row %ld", indexPath.row);
-    MLPatient *pat = nil;
-//    if (mSearchFiltered) {
-//        pat = mFilteredArray[indexPath.row];
-//    } else {
-//        pat = mArray[indexPath.row];
-//    }
+    //NSLog(@"long press on table view at row %ld", indexPath.row);
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
@@ -139,7 +149,6 @@
                                                               [self removeItem:indexPath.row];
                                                          }];
     
-    // Cancel buttons are removed from popovers automatically, because tapping outside the popover represents "cancel", in a popover context
     UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit", nil)
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
@@ -158,4 +167,5 @@
     
     [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
+
 @end
