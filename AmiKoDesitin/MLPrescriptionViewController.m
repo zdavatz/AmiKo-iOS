@@ -50,7 +50,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
-- (void)loadCurrentPatient;
+- (BOOL)loadDefaultPrescription;
+- (BOOL)loadDefaultPatient;
 
 @end
 
@@ -176,27 +177,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     prescription = [[MLPrescription alloc] init];
     
-    // Try to reopen the last used file
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
-    NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [prescription importFromURL:url];
-        NSLog(@"Reopening:%@", fileName);
-    }
-#if 0
-    // This feature is not (yet) in the specifications
-    else if ([amkFiles count] > 0) {
-        NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[amkFiles objectAtIndex:0]];
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [prescription importFromURL:url];
-        NSLog(@"Opening first:%@", [amkFiles objectAtIndex:0]);
-    }
-#endif
-    else {
+    if (![self loadDefaultPrescription]) {
         // TODO: load doctor
-        [self loadCurrentPatient];
+        [self loadDefaultPatient];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -217,21 +200,45 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark -
 
-- (void)loadCurrentPatient
+// Try to reopen the last used file
+- (BOOL)loadDefaultPrescription
+{
+    // Try to reopen the last used file
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
+    if (!fileName)
+        return FALSE;
+    
+    NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath])
+        return FALSE;
+
+    NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+    [prescription importFromURL:url];
+    NSLog(@"Reopening:%@", fileName);
+    return TRUE;
+}
+
+- (BOOL)loadDefaultPatient
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *patientId = [defaults stringForKey:@"currentPatient"];
-    if (!patientId)
-        return;
+    if (!patientId) {
+#ifdef DEBUG
+        NSLog(@"Default patient is not yet defined");
+#endif
+        return FALSE;
+    }
     
     MLPatientDBAdapter *patientDb = [[MLPatientDBAdapter alloc] init];
     if (![patientDb openDatabase:@"patient_db"]) {
         NSLog(@"Could not open patient DB!");
-        return;
+        return FALSE;
     }
 
     MLPatient *pat = [patientDb getPatientWithUniqueID:patientId];
     [prescription setPatient:pat];
+    return TRUE;
 }
 
 #pragma mark - Table view data source
@@ -569,8 +576,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, btn.tag, btn.title);
 #endif
     // TODO: load doctor
-    [self loadCurrentPatient];
-    [infoView reloadData];
+    if ([self loadDefaultPatient])
+        [infoView reloadData];
+    
+    // TODO: clear medicines
 }
 
 - (IBAction) checkForInteractions:(id)sender
