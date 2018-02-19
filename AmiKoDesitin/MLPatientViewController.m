@@ -529,7 +529,7 @@ enum {
     
     // Show list of patients from DB
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:2.0];
+    [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:1.0];
 }
 
 #pragma mark - Notifications
