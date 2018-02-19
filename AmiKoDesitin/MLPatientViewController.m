@@ -79,7 +79,7 @@ enum {
                                     target:self
                                     action:@selector(cancelPatient:)];
 #ifdef DYNAMIC_BUTTONS
-    cancelItem.enabled = NO;
+    //cancelItem.enabled = NO; // Cancel always enabled
 #endif
 
     UIBarButtonItem *spacer =
@@ -150,9 +150,9 @@ enum {
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidHide:)
-                                                 name:UIKeyboardDidHideNotification
-                                               object:nil];    
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -373,7 +373,7 @@ enum {
 - (void) saveCancelOn
 {
     self.navigationItem.leftBarButtonItems[0].enabled = NO;
-    self.navigationItem.leftBarButtonItems[2].enabled = YES;
+    //self.navigationItem.leftBarButtonItems[2].enabled = YES;  // Cancel always enabled
     
     self.navigationItem.rightBarButtonItems[0].enabled = NO;
     self.navigationItem.rightBarButtonItems[2].enabled = YES;
@@ -382,7 +382,7 @@ enum {
 - (void) saveCancelOff
 {
     self.navigationItem.leftBarButtonItems[0].enabled = YES;
-    self.navigationItem.leftBarButtonItems[2].enabled = NO;
+    //self.navigationItem.leftBarButtonItems[2].enabled = NO;
     
     self.navigationItem.rightBarButtonItems[0].enabled = YES;
     self.navigationItem.rightBarButtonItems[2].enabled = NO;
@@ -529,7 +529,7 @@ enum {
     
     // Show list of patients from DB
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:2.0];
+    [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:1.0];
 }
 
 #pragma mark - Notifications
@@ -543,13 +543,15 @@ enum {
     UIEdgeInsets contentInset = self.scrollView.contentInset;
     contentInset.bottom = keyboardRect.size.height;
     self.scrollView.contentInset = contentInset;
+    self.scrollView.scrollIndicatorInsets = contentInset;
 }
 
--(void)keyboardDidHide:(NSNotification *)notification
+-(void)keyboardWillHide:(NSNotification *)notification
 {
     UIEdgeInsets contentInset = self.scrollView.contentInset;
     contentInset.bottom = 0;
     self.scrollView.contentInset = contentInset;
+    scrollView.scrollIndicatorInsets = contentInset;
 }
 
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification
