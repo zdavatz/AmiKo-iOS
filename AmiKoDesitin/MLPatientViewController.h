@@ -39,7 +39,7 @@
 - (IBAction) myRightRevealToggle:(id)sender;
 
 - (void)keyboardDidShow:(NSNotification *)notification;
-- (void)keyboardDidHide:(NSNotification *)notification;
+- (void)keyboardWillHide:(NSNotification *)notification;
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification;
 
 @end
