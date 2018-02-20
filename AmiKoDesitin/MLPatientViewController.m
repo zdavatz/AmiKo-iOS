@@ -33,9 +33,7 @@ enum {
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(MLPatient *)patient;
-- (void) setAllFields:(MLPatient *)p;
 - (MLPatient *) getAllFields;
-- (void) resetAllFields;
 - (void) friendlyNote:(NSString*)str;
 #ifdef DYNAMIC_BUTTONS
 - (void) saveCancelOn;
@@ -527,9 +525,21 @@ enum {
     //NSLog(@"patients after adding: %ld", [mPatientDb getNumPatients]);
 #endif
     
-    // Show list of patients from DB
+    // Set as default patient for prescriptions
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:patient.uniqueId forKey:@"currentPatient"];
+    [defaults synchronize];
+    
+    // Switch view
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:1.0];
+    if (appDel.editMode == EDIT_MODE_PATIENTS) {
+        [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:1.0];
+    }
+    else if (appDel.editMode == EDIT_MODE_PRESCRIPTION) {
+        UIViewController *nc = self.revealViewController.rearViewController;
+        MLViewController *vc = [nc.childViewControllers firstObject];
+        [vc switchToPrescriptionView];
+    }
 }
 
 #pragma mark - Notifications

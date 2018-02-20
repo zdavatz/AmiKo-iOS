@@ -35,7 +35,6 @@
 
 #import "MLPatientViewController.h"
 #import "MLContactsListViewController.h"
-#import "MLPatientDbListViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -50,6 +49,8 @@
 
 #import <mach/mach.h>
 #import <sys/time.h>
+
+#import "MLAppDelegate.h"
 
 enum {
     kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
@@ -465,13 +466,22 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
     NSLog(@"%s %@", __FUNCTION__, aNotification);
 #endif
-    // TODO: make sure we have the correct front controller
-
     // Set as default patient for prescriptions
     MLPatient *p = [aNotification object];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:p.uniqueId forKey:@"currentPatient"];
     [defaults synchronize];
+
+    // TODO: make sure we have the correct front controller
+    UIViewController *nc = self.revealViewController.frontViewController;
+    MLPatientViewController *vc = [nc.childViewControllers firstObject];
+    if ([vc isKindOfClass:[MLPatientViewController class]]) {
+        [vc resetAllFields];
+        [vc setAllFields:p];
+    }
+    
+    // TODO: reload the fields
+    [self.revealViewController rightRevealToggle:self];    
 }
 
 - (void) finishedDownloading:(NSNotification *)notification
@@ -1485,6 +1495,10 @@ static BOOL mShowReport = false;
             mUsedDatabase = kAips; // tabbar in rear view selects AIPS
             //mUsedDatabase = kPrescription;
             mSearchInteractions = false;
+            {
+                MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+                appDel.editMode = EDIT_MODE_PRESCRIPTION;
+            }
             [self stopActivityIndicator];
             [self switchToPrescriptionView];
             break;

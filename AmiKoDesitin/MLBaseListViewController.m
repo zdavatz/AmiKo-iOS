@@ -7,6 +7,7 @@
 //
 
 #import "MLBaseListViewController.h"
+//#import "MLAppDelegate.h"
 
 @interface MLBaseListViewController ()
 
@@ -118,11 +119,13 @@
 #pragma mark - UITableViewDelegate
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
-{    
+{
+//    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+//    NSLog(@"appDel.editMode %ld", appDel.editMode);
+
     // Show front view
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
-                                                        object:[self getItemAtRow:indexPath.row]];
-    
+                                                        object:[self getItemAtRow:indexPath.row]];    
     mSearchFiltered = FALSE;
 }
 

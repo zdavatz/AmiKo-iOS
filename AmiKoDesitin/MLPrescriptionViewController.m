@@ -766,8 +766,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [prescription importFromURL:url];
     [infoView reloadData];
     
-    SWRevealViewController *revealController = self.revealViewController;
-    [revealController rightRevealToggleAnimated:YES];
+    [self.revealViewController rightRevealToggleAnimated:YES];
 }
 
 - (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
@@ -777,6 +776,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
     [prescription setPatient:[aNotification object]];
     [infoView reloadData];
+    //[self.revealViewController rightRevealToggle:self];
 }
 
 @end

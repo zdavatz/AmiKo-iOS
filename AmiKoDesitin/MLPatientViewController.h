@@ -38,6 +38,9 @@
 
 - (IBAction) myRightRevealToggle:(id)sender;
 
+- (void) setAllFields:(MLPatient *)p;
+- (void) resetAllFields;
+
 - (void)keyboardDidShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification;
