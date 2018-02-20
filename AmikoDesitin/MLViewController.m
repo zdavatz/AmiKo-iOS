@@ -472,15 +472,36 @@ static BOOL mShowReport = false;
     [defaults setObject:p.uniqueId forKey:@"currentPatient"];
     [defaults synchronize];
 
-    // TODO: make sure we have the correct front controller
-    UIViewController *nc = self.revealViewController.frontViewController;
-    MLPatientViewController *vc = [nc.childViewControllers firstObject];
-    if ([vc isKindOfClass:[MLPatientViewController class]]) {
-        [vc resetAllFields];
-        [vc setAllFields:p];
+    UIViewController *nc_front = self.revealViewController.frontViewController;
+    UIViewController *vc_front = [nc_front.childViewControllers firstObject];
+
+    // Make sure we have the correct front controller
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+#ifdef DEBUG
+    NSLog(@"appDel.editMode %ld", appDel.editMode);
+    NSLog(@"front: %@ %p", [vc_front class], vc_front);
+#endif
+    
+    switch (appDel.editMode) {
+        case EDIT_MODE_PRESCRIPTION:
+            // There is only one case when we need to replace the front view
+            if ([vc_front isKindOfClass:[MLPatientViewController class]])
+                [self switchToPrescriptionView];
+            break;
+
+        case EDIT_MODE_PATIENTS:
+            if ([vc_front isKindOfClass:[MLPatientViewController class]]) {
+                MLPatientViewController *pvc = (MLPatientViewController *)vc_front;
+                [pvc resetAllFields];
+                [pvc setAllFields:p];
+            }
+            break;
+
+        default:
+        case EDIT_MODE_UNDEFINED:
+            break;
     }
     
-    // TODO: reload the fields
     [self.revealViewController rightRevealToggle:self];    
 }
 
@@ -1935,7 +1956,18 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
-// With Contacts
+- (void)switchFrontToPatientEditView
+{
+    mainRevealController = self.revealViewController;
+    
+    MLPatientViewController *patientListViewController = [MLPatientViewController sharedInstance];
+
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
+
+    [mainRevealController setFrontViewController:otherViewNavigationController];
+}
+
+// Front: Patient Edit, Right: Contacts
 - (void) switchToPatientEditView
 {
     mainRevealController = self.revealViewController;
@@ -1947,9 +1979,7 @@ static BOOL mShowReport = false;
     [mainRevealController setRightViewController:contactsListViewController];
 
     // Front
-    MLPatientViewController *patientListViewController =
-    [[MLPatientViewController alloc] initWithNibName:@"MLPatientViewController"
-                                              bundle:nil];
+    MLPatientViewController *patientListViewController = [MLPatientViewController sharedInstance];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 

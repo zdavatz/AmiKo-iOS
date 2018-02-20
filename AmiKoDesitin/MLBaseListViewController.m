@@ -7,7 +7,8 @@
 //
 
 #import "MLBaseListViewController.h"
-//#import "MLAppDelegate.h"
+#import "MLAppDelegate.h"
+#import "SWRevealViewController.h"
 
 @interface MLBaseListViewController ()
 
@@ -120,9 +121,6 @@
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-//    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
-//    NSLog(@"appDel.editMode %ld", appDel.editMode);
-
     // Show front view
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
                                                         object:[self getItemAtRow:indexPath.row]];    

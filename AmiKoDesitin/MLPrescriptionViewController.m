@@ -532,13 +532,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     SWRevealViewController *revealController = [self revealViewController];
     
     // Check that the right controller class is MLAmkListViewController
-    UIViewController *vc = revealController.rightViewController;
+    UIViewController *vc_right = revealController.rightViewController;
     
 #ifdef DEBUG
-    NSLog(@"%s vc: %@", __FUNCTION__, [vc class]);
+    NSLog(@"%s vc: %@", __FUNCTION__, [vc_right class]);
 #endif
     
-    if (![vc isKindOfClass:[MLAmkListViewController class]] ) {
+    if (![vc_right isKindOfClass:[MLAmkListViewController class]] ) {
         // Replace right controller
         MLAmkListViewController *amkListViewController =
         [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"

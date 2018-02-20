@@ -10,6 +10,11 @@
 #import "MLPatientDBAdapter.h"
 #import "SWRevealViewController.h"
 
+#import "MLViewController.h"
+#import "MLPatientViewController.h"
+
+#import "MLAppDelegate.h"
+
 @interface MLPatientDbListViewController ()
 
 @end
@@ -156,6 +161,8 @@
     }
     
     //NSLog(@"long press on table view at row %ld", indexPath.row);
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
@@ -168,16 +175,62 @@
                                                              
                                                               [self removeItem:indexPath.row];
                                                          }];
-    
-    UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit", nil)
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:^(UIAlertAction *action) {
-                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
-
-                                                             NSLog(@"TODO: Show patient edit view");
-                                                         }];
     [alertController addAction:actionDelete];
-    [alertController addAction:actionEdit];
+
+    if (appDel.editMode == EDIT_MODE_PRESCRIPTION) {
+        UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit", nil)
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction *action) {
+                                                                 [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                                 
+                                                                 // Make sure front is MLPatientViewController
+                                                                 UIViewController *nc_front = self.revealViewController.frontViewController;
+                                                                 UIViewController *vc_front = [nc_front.childViewControllers firstObject];
+                                                                 if (![vc_front isKindOfClass:[MLPatientViewController class]]) {
+                                                                     UIViewController *nc_rear = self.revealViewController.rearViewController;
+                                                                     MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+                                                                     [vc_rear switchFrontToPatientEditView];
+                                                                 }
+
+                                                                 // Update the pointers to our controllers
+                                                                 nc_front = self.revealViewController.frontViewController;
+                                                                 vc_front = [nc_front.childViewControllers firstObject];
+                                                                 //NSLog(@"nc_front: %@", [nc_front class]); // UINavigationController
+                                                                 //NSLog(@"vc_front: %@", [vc_front class]); // MLPatientViewController
+                                                                 if ([vc_front isKindOfClass:[MLPatientViewController class]]) {
+
+                                                                     // Make sure viewDidLoad has run once before setting the patient
+                                                                     [vc_front view];
+
+                                                                     MLPatientViewController *pvc = (MLPatientViewController *)vc_front;
+                                                                     [pvc resetAllFields];
+                                                                     
+                                                                     MLPatient *pat = nil;
+                                                                     if (mSearchFiltered)
+                                                                         pat = mFilteredArray[indexPath.row];
+                                                                     else
+                                                                         pat = self.mArray[indexPath.row];
+                                                                     
+                                                                     [pvc setAllFields:pat];
+
+                                                                     // Finally show it
+                                                                     [self.revealViewController rightRevealToggle:self];
+                                                                 }
+                                                                 
+                                                             }];
+        [alertController addAction:actionEdit];
+    }
+    else if ((appDel.editMode == EDIT_MODE_PATIENTS) &&
+             (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone))
+    {
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction *action) {
+                                                                 [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                             }];
+        [alertController addAction:actionCancel];
+    }
+
     [alertController setModalPresentationStyle:UIModalPresentationPopover];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
