@@ -60,6 +60,7 @@ enum {
 - (IBAction) searchAction: (id)sender;
 - (IBAction) onToolBarButtonPressed: (id)sender;
 
+- (void) switchFrontToPatientEditView;
 - (void) switchToPatientEditView;
 - (void) showReport:(id)sender;
 - (void) switchToDrugInteractionView;

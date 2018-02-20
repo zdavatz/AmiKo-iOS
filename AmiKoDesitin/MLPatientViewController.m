@@ -52,6 +52,17 @@ enum {
 
 @synthesize scrollView;
 
++ (MLPatientViewController *)sharedInstance
+{
+    __strong static id sharedObject = nil;
+    
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedObject = [[self alloc] init];
+    });
+    return sharedObject;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -128,14 +139,16 @@ enum {
     
     mPatientUUID = nil;
 
-    // Open patient DB
-    mPatientDb = [[MLPatientDBAdapter alloc] init];
-    if (![mPatientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        mPatientDb = nil;
-    }
-    
-    [mNotification setText:@""];
+//#if 0
+//    // Open patient DB
+//    mPatientDb = [[MLPatientDBAdapter alloc] init];
+//    if (![mPatientDb openDatabase:@"patient_db"]) {
+//        NSLog(@"Could not open patient DB!");
+//        mPatientDb = nil;
+//    }
+//    
+//    [mNotification setText:@""];
+//#endif
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(contactsListDidChangeSelection:)
@@ -151,6 +164,18 @@ enum {
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    // Open patient DB
+    mPatientDb = [[MLPatientDBAdapter alloc] init];
+    if (![mPatientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        mPatientDb = nil;
+    }
+    
+    [mNotification setText:@""];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -203,6 +228,10 @@ enum {
 
 - (void) resetAllFields
 {
+#ifdef DEBUG
+    //NSLog(@"%s %p", __FUNCTION__, self);
+#endif
+    
     [self resetFieldsColors];
     
     [mFamilyName setText:@""];
@@ -437,13 +466,13 @@ enum {
     SWRevealViewController *revealController = [self revealViewController];
 
     // Check that the right controller class is MLContactsListViewController
-    UIViewController *vc = revealController.rightViewController;
+    UIViewController *vc_right = revealController.rightViewController;
     
 #ifdef DEBUG
-    NSLog(@"%s vc: %@", __FUNCTION__, [vc class]);
+    NSLog(@"%s vc: %@", __FUNCTION__, [vc_right class]);
 #endif
     
-    if (![vc isKindOfClass:[MLContactsListViewController class]] ) {
+    if (![vc_right isKindOfClass:[MLContactsListViewController class]] ) {
         // Replace right controller
         MLContactsListViewController *contactsListViewController =
         [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
@@ -583,6 +612,5 @@ enum {
     [revealController setFrontViewPosition:FrontViewPositionLeftSideMost animated:YES];
 #endif
 }
-
 
 @end

@@ -33,6 +33,8 @@
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
++ (MLPatientViewController *)sharedInstance;
+
 - (IBAction) savePatient:(id)sender;
 - (IBAction) cancelPatient:(id)sender;
 

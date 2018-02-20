@@ -103,15 +103,19 @@ static const float kAmkLabelFontSize = 12.0;
 
                                                          [self removeItem:indexPath.row];
                                                          }];
-    
-    // Cancel buttons are removed from popovers automatically, because tapping outside the popover represents "cancel", in a popover context
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
-                                                           style:UIAlertActionStyleCancel
-                                                         handler:^(UIAlertAction *action) {
-                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
-                                                         }];
     [alertController addAction:actionDelete];
-    [alertController addAction:actionCancel];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        // iPad: Cancel buttons are removed from popovers automatically,
+        // because tapping outside the popover represents "cancel", in a popover context
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction *action) {
+                                                                 [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                             }];
+        [alertController addAction:actionCancel];
+    }
+
     [alertController setModalPresentationStyle:UIModalPresentationPopover];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
