@@ -278,6 +278,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [self.window makeKeyAndVisible];
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);
+    self.editMode = EDIT_MODE_UNDEFINED;
     
     return !launchedFromShortcut;
 }
@@ -389,9 +390,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 {
     id right = self.revealViewController.rightViewController;
     if (![right isKindOfClass:[MLPatientDbListViewController class]] ) {
-        UIViewController *listViewController =
-        [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
-                                                        bundle:nil];
+        UIViewController *listViewController = [MLPatientDbListViewController sharedInstance];
         [self.revealViewController setRightViewController:listViewController];
 #ifdef DEBUG
         //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);

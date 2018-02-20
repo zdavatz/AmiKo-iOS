@@ -10,6 +10,7 @@
 
 @interface MLPatientDbListViewController : MLBaseListViewController <UIGestureRecognizerDelegate>
 
++ (MLPatientDbListViewController *)sharedInstance;
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
 - (void) removeItem:(NSUInteger)rowIndex;
 

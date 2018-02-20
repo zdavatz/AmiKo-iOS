@@ -19,19 +19,39 @@
     MLPatientDBAdapter *mPatientDb;
 }
 
++ (MLPatientDbListViewController *)sharedInstance
+{
+    __strong static id sharedObject = nil;
+
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedObject = [[self alloc] init];
+    });
+    return sharedObject;
+}
+
+// Called once per instance
 - (void)viewDidLoad
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s %p", __FUNCTION__, self);
 #endif
     [super viewDidLoad];
 
     notificationName = @"PatientSelectedNotification";
     tableIdentifier = @"patientDbListTableItem";
     textColor = [UIColor blackColor];
+}
 
+// Called every time the instance is displayed
+- (void)viewDidAppear:(BOOL)animated
+{
+#ifdef DEBUG
+    NSLog(@"%s %p", __FUNCTION__, self);
+#endif
+    
     mSearchFiltered = FALSE;
-
+    
     // Retrieves contacts from address DB
     // Open patient DB
     mPatientDb = [[MLPatientDBAdapter alloc] init];
@@ -39,11 +59,11 @@
         NSLog(@"Could not open patient DB!");
         mPatientDb = nil;
     }
-    else
+    else {
         self.mArray = [mPatientDb getAllPatients];
-}
+        [mTableView reloadData];
+    }    
 
-- (void)viewDidAppear:(BOOL)animated {
     [self.theSearchBar becomeFirstResponder];
     [super viewDidAppear:animated];
 }
