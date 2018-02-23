@@ -81,6 +81,14 @@
     return [dateFormatter stringFromDate:[NSDate date]];
 }
 
++ (NSString *) prettyTime
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"dd.MM.yyyy (HH:mm:ss)";
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    return [dateFormatter stringFromDate:[NSDate date]];
+}
+
 + (NSString*) encodeStringToBase64:(NSString*)string
 {
     NSData *plainData = [string dataUsingEncoding:NSUTF8StringEncoding];
@@ -108,7 +116,7 @@
 }
 
 // Create the directory if it doesn't exist
-+ (NSString *) amkDirectory
++ (NSString *) amkBaseDirectory
 {
     NSString *amk = [[MLUtility documentsDirectory] stringByAppendingPathComponent:@"amk"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:amk])
@@ -123,8 +131,45 @@
             amk = nil;
         }
     }
-
     return amk;
+}
+
++ (NSString *) amkDirectory
+{
+    NSString *amk = [MLUtility amkBaseDirectory];
+
+    // If the current patient is defined in the defaults,
+    // return his/her subdirectory
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *patientId = [defaults stringForKey:@"currentPatient"];
+    if (patientId)
+        return [MLUtility amkDirectoryForPatient:patientId];
+    
+    return amk;
+}
+
++ (NSString *) amkDirectoryForPatient:(NSString*)uid
+{
+    NSString *amk = [MLUtility amkBaseDirectory];
+    NSString *patientAmk = [amk stringByAppendingPathComponent:uid];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:patientAmk])
+    {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:patientAmk
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error) {
+            NSLog(@"error creating directory: %@", error.localizedDescription);
+            patientAmk = nil;
+        }
+#ifdef DEBUG
+        else
+            NSLog(@"Created patient directory: %@", patientAmk);
+#endif
+    }
+    
+    return patientAmk;
 }
 
 @end

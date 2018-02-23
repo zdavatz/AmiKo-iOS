@@ -30,6 +30,7 @@
 - (void) overwritePrescription;
 - (void) saveNewPrescription;
 
+- (NSString *) makeNewUniqueHash;
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color;
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification;

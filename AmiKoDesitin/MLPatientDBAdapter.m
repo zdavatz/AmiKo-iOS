@@ -236,10 +236,8 @@ static NSString *DB_SCHEMA = nil;
 {
     MLPatient *patient = [[MLPatient alloc] init];
     
-#ifdef DEBUG
-    NSString *timeStamp =   (NSString *)[cursor objectAtIndex:0];
-    //NSLog(@"timeStamp %@", timeStamp);
-#endif
+//    NSString *timeStamp =   (NSString *)[cursor objectAtIndex:0];
+//    NSLog(@"timeStamp %@", timeStamp);
 
     NSUInteger idx = 1;
     patient.uniqueId =      (NSString *)[cursor objectAtIndex:idx++];

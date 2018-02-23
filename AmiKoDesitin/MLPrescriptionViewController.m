@@ -162,8 +162,24 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     mainFrame = CGRectMake(0, barHeight,
                            screenBounds.size.width,
                            CGRectGetHeight(screenBounds) - barHeight);
+    
+    NSString *amkDir;
+
+    prescription = [[MLPrescription alloc] init];
+    
+    //if (![self loadDefaultPrescription])
+    {
+        // TODO: load doctor
+        [self loadDefaultPatient];
+    }
+
+    NSString *uid = [self.prescription.patient uniqueId];
+    if (uid)
+        amkDir = [MLUtility amkDirectoryForPatient:uid];
+    else
+        amkDir = [MLUtility amkDirectory];
+
     NSError *error;
-    NSString *amkDir = [MLUtility amkDirectory];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
     amkFiles = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
     if (error)
@@ -174,13 +190,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSLog(@"amk directory:%@", amkDir);
     //NSLog(@"amk files:%@", amkFiles);
 #endif
-
-    prescription = [[MLPrescription alloc] init];
-    
-    if (![self loadDefaultPrescription]) {
-        // TODO: load doctor
-        [self loadDefaultPatient];
-    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
@@ -196,6 +205,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -
+
+- (NSString *) makeNewUniqueHash
+{
+    // Creates and returns a new UUID with RFC 4122 version 4 random bytes
+    return [[NSUUID UUID] UUIDString];
 }
 
 #pragma mark -
@@ -651,45 +668,55 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) saveNewPrescription
 {
-#if 0
-    NSString *documentsDir = [MLUtility documentsDirectory];
-    NSString *amkDir = [documentsDir stringByAppendingPathComponent:@"amk"];
-#else
-    NSString *amkDir = [MLUtility amkDirectory];
-#endif
+    NSString *amkDir;
+    NSString *uid = [self.prescription.patient uniqueId];
+    if (uid)
+        amkDir = [MLUtility amkDirectoryForPatient:uid];
+    else
+        amkDir = [MLUtility amkDirectory];
     
     NSError *error;
-    [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
-                              withIntermediateDirectories:YES
-                                               attributes:nil
-                                                    error:&error];
-    if (error) {
-        NSLog(@"%@", error.localizedDescription);
-        return;
-    }
+//    [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
+//                              withIntermediateDirectories:YES
+//                                               attributes:nil
+//                                                    error:&error];
+//    if (error) {
+//        NSLog(@"%@", error.localizedDescription);
+//        return;
+//    }
     
     NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
-    [patientDict setObject:@"John" forKey:@"given_name"];  // TODO
+    [patientDict setObject:[self.prescription.patient givenName] forKey:@"given_name"];
 
     NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
-    [operatorDict setObject:@"Jack" forKey:@"given_name"];  // TODO
+    [operatorDict setObject:[self.prescription.patient familyName] forKey:@"given_name"];
 
-#if 0
+    NSLocale *currentLocale = [NSLocale currentLocale];
+    NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+    prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
+                              countryCode, //[defaults stringForKey:@"city"],  // TODO:
+                              [MLUtility prettyTime]];
+    
+    NSString *hash = [self makeNewUniqueHash];
+    NSLog(@"Line %d, hash:%@", __LINE__, hash);
+#if 1
     NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
-    //[prescriptionDict setObject:hash forKey:@"prescription_hash"];
-    //[prescriptionDict setObject:placeDate forKey:@"place_date"];
+    [prescriptionDict setObject:hash forKey:@"prescription_hash"];
+    [prescriptionDict setObject:prescription.placeDate forKey:@"place_date"];
     [prescriptionDict setObject:patientDict forKey:@"patient"];
     [prescriptionDict setObject:operatorDict forKey:@"operator"];
     //[prescriptionDict setObject:prescription forKey:@"medications"];
 #else
     NSDictionary *prescriptionDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      //hash, @"prescription_hash",
+                                      hash, @"prescription_hash",
                                       prescription.placeDate, @"place_date",
                                       patientDict, @"patient",
                                       operatorDict, @"operator",
                                       //prescription, @"medications",
                                       nil];
 #endif
+    
+    //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 
     if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
         NSLog(@"Invalid JSON object:%@", prescriptionDict);
@@ -703,32 +730,28 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            error:&error];
     
     NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
-    //NSLog(@"jsonStr:%@", jsonStr);
+    NSLog(@"Line %d, jsonStr:%@", __LINE__, jsonStr);
     NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
     
-    // Create file as new name `RZ_timestamp.amk`
-    time_t timestamp = (time_t)[[NSDate date] timeIntervalSince1970];  // TODO: format it like AmiKo
+#if 1
+    // Prescription file name like AmiKo
+    NSString *currentTime = [[MLUtility currentTime] stringByReplacingOccurrencesOfString:@":" withString:@""];
+    currentTime = [currentTime stringByReplacingOccurrencesOfString:@"." withString:@""];
+    NSString *amkFile = [NSString stringWithFormat:@"RZ_%@.amk", currentTime];
+    NSString *amkFilePath = [amkDir stringByAppendingPathComponent:amkFile];
+#else
+    // Prescription file name like Generika
+    time_t timestamp = (time_t)[[NSDate date] timeIntervalSince1970];
     NSString *amkFile = [NSString stringWithFormat:@"%@_%d.amk", @"RZ", (int)timestamp];
     NSString *amkFilePath = [amkDir stringByAppendingPathComponent:amkFile];
-#if 1
-    BOOL amkSaved = [base64Str writeToFile:amkFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    if (!amkSaved) {
-        NSLog(@"Error: %@", [error userInfo]);
-    }
-#else
-    NSData *amkData; // TODO
-#ifdef DEBUG
-    char bytes[2];
-    bytes[0] = 0x41;
-    bytes[1] = 0x42;
-    amkData = [NSData dataWithBytes:bytes length:2];
 #endif
-    BOOL amkSaved = [amkData writeToFile:amkFilePath atomically:YES];
-#endif
-    if (!amkSaved)
-        return;
 
-//    return amkFilePath;
+    BOOL amkSaved = [base64Str writeToFile:amkFilePath
+                                atomically:YES
+                                  encoding:NSUTF8StringEncoding
+                                     error:&error];
+    if (!amkSaved)
+        NSLog(@"Error: %@", [error userInfo]);
 }
 
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color

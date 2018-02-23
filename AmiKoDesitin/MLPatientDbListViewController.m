@@ -14,6 +14,7 @@
 #import "MLPatientViewController.h"
 
 #import "MLAppDelegate.h"
+#import "MLUtility.h"
 
 @interface MLPatientDbListViewController ()
 
@@ -80,9 +81,6 @@
 
 - (void) removeItem:(NSUInteger)rowIndex
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
     MLPatient *pat = nil;
     if (mSearchFiltered) {
         pat = mFilteredArray[rowIndex];
@@ -91,14 +89,17 @@
         pat = self.mArray[rowIndex];
     }
     
-#if 0
     NSString *amkDir = [MLUtility amkDirectory];
-    NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
+#ifdef DEBUG
+    NSLog(@"remove patient %@", amkDir);
+#endif
+#if 0
+    NSString *destination = [amkDir stringByAppendingPathComponent:self.mArray[rowIndex]];
     
     // TODO: find patient subdirectory and loop to delete all AMK files. Finally delete directory.
     
     if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
-        NSLog(@"Error removing file at path: %@", amkFiles[rowIndex]);
+        NSLog(@"Error removing file at path: %@", self.mArray[rowIndex]);
         return;
     }
     
@@ -107,8 +108,7 @@
     BOOL success = [[NSFileManager defaultManager] removeItemAtPath:destination
                                                               error:&error];
     if (!success)
-        NSLog(@"Error removing file at path: %@", error.localizedDescription);
-    
+        NSLog(@"Error removing file at path: %@", error.localizedDescription);    
 #endif
 
 #ifdef DEBUG
