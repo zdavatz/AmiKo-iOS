@@ -89,27 +89,15 @@
         pat = self.mArray[rowIndex];
     }
     
+    // Remove the amk subdirectory for this patient
     NSString *amkDir = [MLUtility amkDirectory];
 #ifdef DEBUG
     NSLog(@"remove patient %@", amkDir);
 #endif
-#if 0
-    NSString *destination = [amkDir stringByAppendingPathComponent:self.mArray[rowIndex]];
-    
-    // TODO: find patient subdirectory and loop to delete all AMK files. Finally delete directory.
-    
-    if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
-        NSLog(@"Error removing file at path: %@", self.mArray[rowIndex]);
-        return;
-    }
-    
-    // First remove the actual file
     NSError *error;
-    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:destination
-                                                              error:&error];
-    if (!success)
-        NSLog(@"Error removing file at path: %@", error.localizedDescription);    
-#endif
+    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:amkDir error:&error];
+    if (!success || error)
+        NSLog(@"Error removing file at path: %@", error.localizedDescription);
 
 #ifdef DEBUG
     NSLog(@"patients before deleting: %ld", [mPatientDb getNumPatients]);
@@ -122,6 +110,11 @@
     NSLog(@"patients after deleting: %ld", [mPatientDb getNumPatients]);
 #endif
 
+    // Clear the current user
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"currentPatient"];
+    [defaults synchronize];
+    
     // (Instead of removing one item from a NSMutableArray) reassign the whole NSArray
     self.mArray = [mPatientDb getAllPatients];
 
