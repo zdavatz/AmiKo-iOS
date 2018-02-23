@@ -237,7 +237,7 @@ static NSString *FULL_TABLE = nil;
 
 - (MLMedication *) searchId: (long)rowId
 {
-    // getRecord returns an NSArray* hence the objectAtIndex!!   
+    // getRecord returns an NSArray* hence the objectAtIndex  
     return [self cursorToFullMedInfo:[[self getRecord:rowId] objectAtIndex:0]];
 }
 
