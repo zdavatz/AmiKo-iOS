@@ -21,7 +21,7 @@
 {
     NSError *error;
 #ifdef DEBUG
-    NSLog(@"%s %@", __FUNCTION__, url);
+    //NSLog(@"%s %@", __FUNCTION__, url);
 #endif
     NSData *encryptedData = [NSData dataWithContentsOfURL:url];
     if (encryptedData == nil) {
@@ -39,7 +39,7 @@
         NSLog(@"%@", error.localizedDescription);
         return;
     }
-    
+
     // hashedKey (prescription_hash) is required
     NSString *hash = [receiptData objectForKey:@"prescription_hash"];
     if (hash == nil ||
@@ -56,10 +56,6 @@
         medications = nil;
         return;
     }
-    
-#ifdef DEBUG
-    //NSLog(@"hash: %@", hash);
-#endif
     
 #if 0
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hashedKey == %@", hash];
@@ -89,13 +85,14 @@
         [patient importFromDict:patientDict];
     }
     
-    // prescription aka medications aka products
-    medications = [[NSMutableArray alloc] init]; // prescription
-    NSArray *medicationArray = [receiptData objectForKey:@"medications"] ?: [NSNull null];
-    for (NSDictionary *medicationDict in medicationArray) {
-        MLProduct *med = [MLProduct importFromDict:medicationDict];
-        [medications addObject:med];
-    }
+    // medications aka products
+    medications = [[NSMutableArray alloc] init];
+    NSArray *medicationArray = [receiptData objectForKey:@"medications"];
+    if (medicationArray)
+        for (NSDictionary *medicationDict in medicationArray) {
+            MLProduct *med = [MLProduct importFromDict:medicationDict];
+            [medications addObject:med];
+        }
     
 #ifdef DEBUG
 //    NSLog(@"medicationArray: %@", medicationArray);

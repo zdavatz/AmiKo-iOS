@@ -127,14 +127,14 @@
     char *err = NULL;
     NSString *queryStr = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ %@", table, columns];
     rc = sqlite3_exec(dbConnection, [queryStr UTF8String], NULL, NULL, &err);
-    if (rc != SQLITE_OK) {
+    if (rc != SQLITE_OK || err) {
         NSLog(@"Failed to create table %@ for database %@", table, path);
-        return FALSE;
-    }
 
-    if (err) {
-        NSLog(@"Error %s", err);
-        sqlite3_free(err);
+        if (err) {
+            NSLog(@"Error: %s", err);
+            sqlite3_free(err);
+        }
+
         return FALSE;
     }
     
@@ -232,7 +232,8 @@
     return TRUE;
 }
 
-- (BOOL) deleteRowFromTable:(NSString *)table withRowId:(long)rowId
+- (BOOL) deleteRowFromTable:(NSString *)table
+                  withRowId:(long)rowId  // KEY_ROWID primary key
 {
     char *errMsg;
     NSString *query = [NSString stringWithFormat:@"delete from %@ where rowId=%ld", table, rowId];
@@ -243,7 +244,8 @@
     return TRUE;
 }
 
-- (BOOL) deleteRowFromTable:(NSString *)table withUId:(NSString *)uId
+- (BOOL) deleteRowFromTable:(NSString *)table
+                    withUId:(NSString *)uId // KEY_UID
 {
     char *errMsg;
     NSString *query = [NSString stringWithFormat:@"delete from %@ where uid='%@'", table, uId];

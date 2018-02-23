@@ -14,6 +14,7 @@
 #import "MLPatientViewController.h"
 
 #import "MLAppDelegate.h"
+#import "MLUtility.h"
 
 @interface MLPatientDbListViewController ()
 
@@ -80,9 +81,6 @@
 
 - (void) removeItem:(NSUInteger)rowIndex
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
     MLPatient *pat = nil;
     if (mSearchFiltered) {
         pat = mFilteredArray[rowIndex];
@@ -91,25 +89,15 @@
         pat = self.mArray[rowIndex];
     }
     
-#if 0
+    // Remove the amk subdirectory for this patient
     NSString *amkDir = [MLUtility amkDirectory];
-    NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
-    
-    // TODO: find patient subdirectory and loop to delete all AMK files. Finally delete directory.
-    
-    if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
-        NSLog(@"Error removing file at path: %@", amkFiles[rowIndex]);
-        return;
-    }
-    
-    // First remove the actual file
-    NSError *error;
-    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:destination
-                                                              error:&error];
-    if (!success)
-        NSLog(@"Error removing file at path: %@", error.localizedDescription);
-    
+#ifdef DEBUG
+    NSLog(@"remove patient %@", amkDir);
 #endif
+    NSError *error;
+    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:amkDir error:&error];
+    if (!success || error)
+        NSLog(@"Error removing file at path: %@", error.localizedDescription);
 
 #ifdef DEBUG
     NSLog(@"patients before deleting: %ld", [mPatientDb getNumPatients]);
@@ -122,6 +110,11 @@
     NSLog(@"patients after deleting: %ld", [mPatientDb getNumPatients]);
 #endif
 
+    // Clear the current user
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"currentPatient"];
+    [defaults synchronize];
+    
     // (Instead of removing one item from a NSMutableArray) reassign the whole NSArray
     self.mArray = [mPatientDb getAllPatients];
 

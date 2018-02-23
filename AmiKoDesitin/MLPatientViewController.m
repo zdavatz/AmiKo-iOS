@@ -9,11 +9,10 @@
 #import "MLPatientViewController.h"
 #import "SWRevealViewController.h"
 #import "MLContactsListViewController.h"
-
 #import "MLPatientDBAdapter.h"
-
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
+#import "MLUtility.h"
 
 #define DYNAMIC_BUTTONS
 
@@ -556,8 +555,17 @@ enum {
     
     // Set as default patient for prescriptions
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:patient.uniqueId forKey:@"currentPatient"];
+    [defaults setObject:mPatientUUID forKey:@"currentPatient"];
     [defaults synchronize];
+    
+    // Create patient subdirectory for prescriptions
+#if 0 //def DEBUG
+    NSString *amkDir = [MLUtility amkDirectory];
+    NSLog(@"amk subdirectory: %@", amkDir);
+#else
+    //[MLUtility amkDirectoryForPatient:mPatientUUID];
+    [MLUtility amkDirectory];
+#endif
     
     // Switch view
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];

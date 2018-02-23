@@ -338,8 +338,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     NSString *amkDir = [MLUtility amkDirectory];
     
-    // TODO: every patient has a subdirectory
-
     //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
     NSString *source = [url path];
     NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
