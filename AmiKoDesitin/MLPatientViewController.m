@@ -9,11 +9,10 @@
 #import "MLPatientViewController.h"
 #import "SWRevealViewController.h"
 #import "MLContactsListViewController.h"
-
 #import "MLPatientDBAdapter.h"
-
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
+#import "MLUtility.h"
 
 #define DYNAMIC_BUTTONS
 
@@ -33,9 +32,7 @@ enum {
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(MLPatient *)patient;
-- (void) setAllFields:(MLPatient *)p;
 - (MLPatient *) getAllFields;
-- (void) resetAllFields;
 - (void) friendlyNote:(NSString*)str;
 #ifdef DYNAMIC_BUTTONS
 - (void) saveCancelOn;
@@ -53,6 +50,17 @@ enum {
 }
 
 @synthesize scrollView;
+
++ (MLPatientViewController *)sharedInstance
+{
+    __strong static id sharedObject = nil;
+    
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedObject = [[self alloc] init];
+    });
+    return sharedObject;
+}
 
 - (void)viewDidLoad
 {
@@ -79,7 +87,7 @@ enum {
                                     target:self
                                     action:@selector(cancelPatient:)];
 #ifdef DYNAMIC_BUTTONS
-    cancelItem.enabled = NO;
+    //cancelItem.enabled = NO; // Cancel always enabled
 #endif
 
     UIBarButtonItem *spacer =
@@ -130,14 +138,16 @@ enum {
     
     mPatientUUID = nil;
 
-    // Open patient DB
-    mPatientDb = [[MLPatientDBAdapter alloc] init];
-    if (![mPatientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        mPatientDb = nil;
-    }
-    
-    [mNotification setText:@""];
+//#if 0
+//    // Open patient DB
+//    mPatientDb = [[MLPatientDBAdapter alloc] init];
+//    if (![mPatientDb openDatabase:@"patient_db"]) {
+//        NSLog(@"Could not open patient DB!");
+//        mPatientDb = nil;
+//    }
+//    
+//    [mNotification setText:@""];
+//#endif
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(contactsListDidChangeSelection:)
@@ -150,9 +160,21 @@ enum {
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidHide:)
-                                                 name:UIKeyboardDidHideNotification
-                                               object:nil];    
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    // Open patient DB
+    mPatientDb = [[MLPatientDBAdapter alloc] init];
+    if (![mPatientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        mPatientDb = nil;
+    }
+    
+    [mNotification setText:@""];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -205,6 +227,10 @@ enum {
 
 - (void) resetAllFields
 {
+#ifdef DEBUG
+    //NSLog(@"%s %p", __FUNCTION__, self);
+#endif
+    
     [self resetFieldsColors];
     
     [mFamilyName setText:@""];
@@ -373,7 +399,7 @@ enum {
 - (void) saveCancelOn
 {
     self.navigationItem.leftBarButtonItems[0].enabled = NO;
-    self.navigationItem.leftBarButtonItems[2].enabled = YES;
+    //self.navigationItem.leftBarButtonItems[2].enabled = YES;  // Cancel always enabled
     
     self.navigationItem.rightBarButtonItems[0].enabled = NO;
     self.navigationItem.rightBarButtonItems[2].enabled = YES;
@@ -382,7 +408,7 @@ enum {
 - (void) saveCancelOff
 {
     self.navigationItem.leftBarButtonItems[0].enabled = YES;
-    self.navigationItem.leftBarButtonItems[2].enabled = NO;
+    //self.navigationItem.leftBarButtonItems[2].enabled = NO;
     
     self.navigationItem.rightBarButtonItems[0].enabled = YES;
     self.navigationItem.rightBarButtonItems[2].enabled = NO;
@@ -439,13 +465,13 @@ enum {
     SWRevealViewController *revealController = [self revealViewController];
 
     // Check that the right controller class is MLContactsListViewController
-    UIViewController *vc = revealController.rightViewController;
+    UIViewController *vc_right = revealController.rightViewController;
     
 #ifdef DEBUG
-    NSLog(@"%s vc: %@", __FUNCTION__, [vc class]);
+    NSLog(@"%s vc: %@", __FUNCTION__, [vc_right class]);
 #endif
     
-    if (![vc isKindOfClass:[MLContactsListViewController class]] ) {
+    if (![vc_right isKindOfClass:[MLContactsListViewController class]] ) {
         // Replace right controller
         MLContactsListViewController *contactsListViewController =
         [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
@@ -527,9 +553,30 @@ enum {
     //NSLog(@"patients after adding: %ld", [mPatientDb getNumPatients]);
 #endif
     
-    // Show list of patients from DB
+    // Set as default patient for prescriptions
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:mPatientUUID forKey:@"currentPatient"];
+    [defaults synchronize];
+    
+    // Create patient subdirectory for prescriptions
+#if 0 //def DEBUG
+    NSString *amkDir = [MLUtility amkDirectory];
+    NSLog(@"amk subdirectory: %@", amkDir);
+#else
+    //[MLUtility amkDirectoryForPatient:mPatientUUID];
+    [MLUtility amkDirectory];
+#endif
+    
+    // Switch view
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:2.0];
+    if (appDel.editMode == EDIT_MODE_PATIENTS) {
+        [appDel performSelector:@selector(switchRigthToPatientDbList) withObject:nil afterDelay:1.0];
+    }
+    else if (appDel.editMode == EDIT_MODE_PRESCRIPTION) {
+        UIViewController *nc = self.revealViewController.rearViewController;
+        MLViewController *vc = [nc.childViewControllers firstObject];
+        [vc switchToPrescriptionView];
+    }
 }
 
 #pragma mark - Notifications
@@ -543,13 +590,15 @@ enum {
     UIEdgeInsets contentInset = self.scrollView.contentInset;
     contentInset.bottom = keyboardRect.size.height;
     self.scrollView.contentInset = contentInset;
+    self.scrollView.scrollIndicatorInsets = contentInset;
 }
 
--(void)keyboardDidHide:(NSNotification *)notification
+-(void)keyboardWillHide:(NSNotification *)notification
 {
     UIEdgeInsets contentInset = self.scrollView.contentInset;
     contentInset.bottom = 0;
     self.scrollView.contentInset = contentInset;
+    scrollView.scrollIndicatorInsets = contentInset;
 }
 
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification
@@ -571,6 +620,5 @@ enum {
     [revealController setFrontViewPosition:FrontViewPositionLeftSideMost animated:YES];
 #endif
 }
-
 
 @end

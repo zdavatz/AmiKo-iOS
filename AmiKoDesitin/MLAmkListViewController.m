@@ -31,15 +31,23 @@ static const float kAmkLabelFontSize = 12.0;
         self.edgesForExtendedLayout = UIRectEdgeNone;
         myTableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }
-    
-    NSError *error;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
     NSString *amkDir = [MLUtility amkDirectory];
+#ifdef DEBUG
+    NSLog(@"%s %p %@", __FUNCTION__, self, amkDir);
+#endif
+    NSError *error;
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
     NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
     amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
-
+    
     if (error)
         NSLog(@"%@", error.localizedDescription);
+    
+    [myTableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,6 +58,7 @@ static const float kAmkLabelFontSize = 12.0;
 - (void) removeItem:(NSUInteger)rowIndex
 {
     NSString *amkDir = [MLUtility amkDirectory];
+    
     NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
 
     if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
@@ -103,15 +112,19 @@ static const float kAmkLabelFontSize = 12.0;
 
                                                          [self removeItem:indexPath.row];
                                                          }];
-    
-    // Cancel buttons are removed from popovers automatically, because tapping outside the popover represents "cancel", in a popover context
-    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
-                                                           style:UIAlertActionStyleCancel
-                                                         handler:^(UIAlertAction *action) {
-                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
-                                                         }];
     [alertController addAction:actionDelete];
-    [alertController addAction:actionCancel];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        // iPad: Cancel buttons are removed from popovers automatically,
+        // because tapping outside the popover represents "cancel", in a popover context
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction *action) {
+                                                                 [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                             }];
+        [alertController addAction:actionCancel];
+    }
+
     [alertController setModalPresentationStyle:UIModalPresentationPopover];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

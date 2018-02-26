@@ -30,6 +30,8 @@
 #import "SWRevealViewController.h"
 #import "MLPatientViewController.h"
 
+#import "MLAppDelegate.h"
+
 @interface MLMenuViewController ()
 
 @end
@@ -269,6 +271,9 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDel.editMode = EDIT_MODE_PATIENTS;
+
     if (mParentViewController)
         [mParentViewController switchToPatientEditView];
 }

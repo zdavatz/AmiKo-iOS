@@ -278,6 +278,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [self.window makeKeyAndVisible];
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);
+    self.editMode = EDIT_MODE_UNDEFINED;
     
     return !launchedFromShortcut;
 }
@@ -337,8 +338,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     NSString *amkDir = [MLUtility amkDirectory];
     
-    // TODO: every patient has a subdirectory
-
     //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
     NSString *source = [url path];
     NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
@@ -389,9 +388,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 {
     id right = self.revealViewController.rightViewController;
     if (![right isKindOfClass:[MLPatientDbListViewController class]] ) {
-        UIViewController *listViewController =
-        [[MLPatientDbListViewController alloc] initWithNibName:@"MLPatientDbListViewController"
-                                                        bundle:nil];
+        UIViewController *listViewController = [MLPatientDbListViewController sharedInstance];
         [self.revealViewController setRightViewController:listViewController];
 #ifdef DEBUG
         //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);

@@ -26,12 +26,12 @@ static NSString *KEY_ADDRESS = @"address";
 static NSString *KEY_PHONE = @"phone";
 static NSString *KEY_EMAIL = @"email";
 
-static NSString *DATABASE_TABLE = @"patients";
+static NSString *DB_TABLE_NAME = @"patients";
 
 /** Table columns for fast queries
  */
-static NSString *ALL_COLUMNS = nil;
-static NSString *DATABASE_COLUMNS = nil;
+static NSString *QUERY_COLUMNS = nil;
+static NSString *DB_SCHEMA = nil;
 
 @implementation MLPatientDBAdapter
 {
@@ -42,12 +42,16 @@ static NSString *DATABASE_COLUMNS = nil;
 
 + (void) initialize
 {
-    if (self == [MLPatientDBAdapter class]) {
-        if (ALL_COLUMNS == nil) {
-            ALL_COLUMNS = [NSString stringWithFormat: @"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@", KEY_ROWID, KEY_TIMESTAMP, KEY_UID, KEY_FAMILYNAME, KEY_GIVENNAME, KEY_BIRTHDATE, KEY_GENDER, KEY_WEIGHT_KG, KEY_HEIGHT_CM, KEY_ZIPCODE, KEY_CITY, KEY_COUNTRY, KEY_ADDRESS, KEY_PHONE, KEY_EMAIL];
+    if (self == [MLPatientDBAdapter class])
+    {
+        if (QUERY_COLUMNS == nil) {
+            QUERY_COLUMNS = [NSString stringWithFormat: @"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
+                KEY_TIMESTAMP, KEY_UID, KEY_FAMILYNAME, KEY_GIVENNAME, KEY_BIRTHDATE, KEY_GENDER, KEY_WEIGHT_KG, KEY_HEIGHT_CM, KEY_ZIPCODE, KEY_CITY, KEY_COUNTRY, KEY_ADDRESS, KEY_PHONE, KEY_EMAIL];
         }
-        if (DATABASE_COLUMNS == nil) {
-            DATABASE_COLUMNS = [NSString stringWithFormat: @"(%@ INTEGER, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ INTEGER, %@ INTEGER, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT)", KEY_ROWID, KEY_TIMESTAMP, KEY_UID, KEY_FAMILYNAME, KEY_GIVENNAME, KEY_BIRTHDATE, KEY_GENDER, KEY_WEIGHT_KG, KEY_HEIGHT_CM, KEY_ZIPCODE, KEY_CITY, KEY_COUNTRY, KEY_ADDRESS, KEY_PHONE, KEY_EMAIL];
+        
+        // Schema
+        if (DB_SCHEMA == nil) {
+            DB_SCHEMA = [NSString stringWithFormat: @"(%@ INTEGER PRIMARY KEY, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ INTEGER, %@ INTEGER, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT)", KEY_ROWID, KEY_TIMESTAMP, KEY_UID, KEY_FAMILYNAME, KEY_GIVENNAME, KEY_BIRTHDATE, KEY_GENDER, KEY_WEIGHT_KG, KEY_HEIGHT_CM, KEY_ZIPCODE, KEY_CITY, KEY_COUNTRY, KEY_ADDRESS, KEY_PHONE, KEY_EMAIL];
         }
     }
 }
@@ -90,8 +94,8 @@ static NSString *DATABASE_COLUMNS = nil;
     
     NSLog(@"Patient DB NOT found in user's documents folder %@", filePath);
     if ([[MLSQLiteDatabase alloc] createWithPath:filePath
-                                        andTable:DATABASE_TABLE
-                                      andColumns:DATABASE_COLUMNS])
+                                        andTable:DB_TABLE_NAME
+                                      andColumns:DB_SCHEMA])
     {
         myPatientDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
         return TRUE;
@@ -115,9 +119,8 @@ static NSString *DATABASE_COLUMNS = nil;
     // Patient entry does not exist (yet)
     NSString *uuidStr = [patient generateUniqueID];    // e.g. 3466684318797166812
     NSString *timeStr = [MLUtility currentTime];
-    NSString *columnStr = [NSString stringWithFormat:@"(%@)", ALL_COLUMNS];
-    NSString *valueStr = [NSString stringWithFormat:@"(%ld, \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", %d, %d, \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",
-                          patient.rowId,
+    NSString *columnStr = [NSString stringWithFormat:@"(%@)", QUERY_COLUMNS];
+    NSString *valueStr = [NSString stringWithFormat:@"(\"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", %d, %d, \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",
                           timeStr,
                           uuidStr,
                           patient.familyName,
@@ -186,8 +189,7 @@ static NSString *DATABASE_COLUMNS = nil;
 
 - (NSInteger) getNumPatients
 {
-    NSInteger numRecords = [myPatientDb numberRecordsForTable:DATABASE_TABLE];
-    
+    NSInteger numRecords = [myPatientDb numberRecordsForTable:DB_TABLE_NAME];
     return numRecords;
 }
 
@@ -195,7 +197,7 @@ static NSString *DATABASE_COLUMNS = nil;
 {
     NSMutableArray *listOfPatients = [NSMutableArray array];
     
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@", ALL_COLUMNS, DATABASE_TABLE];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@", QUERY_COLUMNS, DB_TABLE_NAME];
     NSArray *results = [myPatientDb performQuery:query];
     if ([results count]>0) {
         for (NSArray *cursor in results) {
@@ -215,7 +217,8 @@ static NSString *DATABASE_COLUMNS = nil;
     if (!uniqueID)
         return nil;
 
-    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@'", ALL_COLUMNS, DATABASE_TABLE, KEY_UID, uniqueID];
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%@'",
+                       QUERY_COLUMNS, DB_TABLE_NAME, KEY_UID, uniqueID];
     NSArray *results = [myPatientDb performQuery:query];
     if ([results count]>0) {
         for (NSArray *cursor in results) {
@@ -233,20 +236,23 @@ static NSString *DATABASE_COLUMNS = nil;
 {
     MLPatient *patient = [[MLPatient alloc] init];
     
-    patient.rowId = [[cursor objectAtIndex:0] longLongValue];
-    patient.uniqueId = (NSString *)[cursor objectAtIndex:2];
-    patient.familyName = (NSString *)[cursor objectAtIndex:3];
-    patient.givenName = (NSString *)[cursor objectAtIndex:4];
-    patient.birthDate = (NSString *)[cursor objectAtIndex:5];
-    patient.gender = (NSString *)[cursor objectAtIndex:6];
-    patient.weightKg = [[cursor objectAtIndex:7] intValue];
-    patient.heightCm = [[cursor objectAtIndex:8] intValue];
-    patient.zipCode = (NSString *)[cursor objectAtIndex:9];
-    patient.city = (NSString *)[cursor objectAtIndex:10];
-    patient.country = (NSString *)[cursor objectAtIndex:11];
-    patient.postalAddress = (NSString *)[cursor objectAtIndex:12];
-    patient.phoneNumber = (NSString *)[cursor objectAtIndex:13];
-    patient.emailAddress = (NSString *)[cursor objectAtIndex:14];
+//    NSString *timeStamp =   (NSString *)[cursor objectAtIndex:0];
+//    NSLog(@"timeStamp %@", timeStamp);
+
+    NSUInteger idx = 1;
+    patient.uniqueId =      (NSString *)[cursor objectAtIndex:idx++];
+    patient.familyName =    (NSString *)[cursor objectAtIndex:idx++];
+    patient.givenName =     (NSString *)[cursor objectAtIndex:idx++];
+    patient.birthDate =     (NSString *)[cursor objectAtIndex:idx++];
+    patient.gender =        (NSString *)[cursor objectAtIndex:idx++];
+    patient.weightKg =                 [[cursor objectAtIndex:idx++] intValue];
+    patient.heightCm =                 [[cursor objectAtIndex:idx++] intValue];
+    patient.zipCode =       (NSString *)[cursor objectAtIndex:idx++];
+    patient.city =          (NSString *)[cursor objectAtIndex:idx++];
+    patient.country =       (NSString *)[cursor objectAtIndex:idx++];
+    patient.postalAddress = (NSString *)[cursor objectAtIndex:idx++];
+    patient.phoneNumber =   (NSString *)[cursor objectAtIndex:idx++];
+    patient.emailAddress =  (NSString *)[cursor objectAtIndex:idx++];
     //patient.databaseType = eLocal;  // TODO    
     
     return patient;

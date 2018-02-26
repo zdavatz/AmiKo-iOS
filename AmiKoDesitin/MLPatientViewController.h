@@ -33,13 +33,18 @@
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
++ (MLPatientViewController *)sharedInstance;
+
 - (IBAction) savePatient:(id)sender;
 - (IBAction) cancelPatient:(id)sender;
 
 - (IBAction) myRightRevealToggle:(id)sender;
 
+- (void) setAllFields:(MLPatient *)p;
+- (void) resetAllFields;
+
 - (void)keyboardDidShow:(NSNotification *)notification;
-- (void)keyboardDidHide:(NSNotification *)notification;
+- (void)keyboardWillHide:(NSNotification *)notification;
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification;
 
 @end

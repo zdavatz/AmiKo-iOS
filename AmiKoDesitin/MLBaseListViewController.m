@@ -7,6 +7,8 @@
 //
 
 #import "MLBaseListViewController.h"
+#import "MLAppDelegate.h"
+#import "SWRevealViewController.h"
 
 @interface MLBaseListViewController ()
 
@@ -118,11 +120,10 @@
 #pragma mark - UITableViewDelegate
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
-{    
+{
     // Show front view
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
-                                                        object:[self getItemAtRow:indexPath.row]];
-    
+                                                        object:[self getItemAtRow:indexPath.row]];    
     mSearchFiltered = FALSE;
 }
 
