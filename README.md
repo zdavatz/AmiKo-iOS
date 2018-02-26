@@ -29,3 +29,6 @@ alias ios="cd /Users/userid/Documents/xcode/amiko-ios"
 
 ## License
 GPLv3.0, see https://github.com/zdavatz/AmiKo-iOS/blob/master/LICENSE
+
+## French Translations
+Dr. André Dubied
