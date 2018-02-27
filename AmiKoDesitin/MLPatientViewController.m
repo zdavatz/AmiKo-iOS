@@ -137,17 +137,6 @@ enum {
 #endif
     
     mPatientUUID = nil;
-
-//#if 0
-//    // Open patient DB
-//    mPatientDb = [[MLPatientDBAdapter alloc] init];
-//    if (![mPatientDb openDatabase:@"patient_db"]) {
-//        NSLog(@"Could not open patient DB!");
-//        mPatientDb = nil;
-//    }
-//    
-//    [mNotification setText:@""];
-//#endif
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(contactsListDidChangeSelection:)

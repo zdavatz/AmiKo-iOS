@@ -10,7 +10,7 @@
 
 @implementation MLPrescription
 
-@synthesize placeDate;
+@synthesize hash, placeDate;
 @synthesize doctor;
 @synthesize patient;
 @synthesize medications;
@@ -41,7 +41,7 @@
     }
 
     // hashedKey (prescription_hash) is required
-    NSString *hash = [receiptData objectForKey:@"prescription_hash"];
+    hash = [receiptData objectForKey:@"prescription_hash"];
     if (hash == nil ||
         [hash isEqual:[NSNull null]] ||
         [hash isEqualToString:@""])

@@ -114,7 +114,6 @@ static BOOL mShowReport = false;
     SWRevealViewController *mainRevealController;
     
     MLSecondViewController *secondViewController;
-    MLPrescriptionViewController *prescriptionViewController;
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
     MLAmkListViewController *amkListViewController;
@@ -293,8 +292,6 @@ static BOOL mShowReport = false;
     
     secondViewController = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
     otherViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
-    
-    prescriptionViewController = nil;
     
     menuViewController = nil;
     menuViewNavigationController = nil;
@@ -478,8 +475,8 @@ static BOOL mShowReport = false;
     // Make sure we have the correct front controller
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
 #ifdef DEBUG
-    NSLog(@"appDel.editMode %ld", appDel.editMode);
-    NSLog(@"front: %@ %p", [vc_front class], vc_front);
+    //NSLog(@"appDel.editMode %ld", appDel.editMode);
+    //NSLog(@"front: %@ %p", [vc_front class], vc_front);
 #endif
     
     switch (appDel.editMode) {
@@ -1929,21 +1926,13 @@ static BOOL mShowReport = false;
     [mainRevealController setRightViewController:amkListViewController];
 
     // Front
-    if (prescriptionViewController!=nil) {
-        // [prescriptionViewController removeFromParentViewController];
-        prescriptionViewController = nil;
-    }
-    
-    prescriptionViewController =
-    [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
-                                                   bundle:nil];
+    MLPrescriptionViewController *prescriptionViewController = [MLPrescriptionViewController sharedInstance];
     
     if (otherViewNavigationController!=nil) {
         [otherViewNavigationController removeFromParentViewController];
         otherViewNavigationController = nil;
     }
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
-    
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];    
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 
     //

@@ -66,6 +66,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @synthesize prescription;
 @synthesize infoView;
 
++ (MLPrescriptionViewController *)sharedInstance
+{
+    __strong static id sharedObject = nil;
+    
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedObject = [[self alloc] init];
+    });
+    return sharedObject;
+}
+
 - (void)layoutFrames
 {
     CGRect infoFrame = self.infoView.frame;
@@ -255,6 +266,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     MLPatient *pat = [patientDb getPatientWithUniqueID:patientId];
     [prescription setPatient:pat];
+    [patientDb closeDatabase];
     return TRUE;
 }
 
@@ -552,7 +564,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     UIViewController *vc_right = revealController.rightViewController;
     
 #ifdef DEBUG
-    NSLog(@"%s vc: %@", __FUNCTION__, [vc_right class]);
+    //NSLog(@"%s vc: %@", __FUNCTION__, [vc_right class]);
 #endif
     
     if (![vc_right isKindOfClass:[MLAmkListViewController class]] ) {
@@ -697,11 +709,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                               countryCode, //[defaults stringForKey:@"city"],  // TODO:
                               [MLUtility prettyTime]];
     
-    NSString *hash = [self makeNewUniqueHash];
-    NSLog(@"Line %d, hash:%@", __LINE__, hash);
+    prescription.hash = [self makeNewUniqueHash];
 #if 1
     NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
-    [prescriptionDict setObject:hash forKey:@"prescription_hash"];
+    [prescriptionDict setObject:prescription.hash forKey:@"prescription_hash"];
     [prescriptionDict setObject:prescription.placeDate forKey:@"place_date"];
     [prescriptionDict setObject:patientDict forKey:@"patient"];
     [prescriptionDict setObject:operatorDict forKey:@"operator"];

@@ -19,6 +19,8 @@
 @property (nonatomic, retain) IBOutlet UITableView *infoView;
 @property (atomic) MLPrescription *prescription;
 
++ (MLPrescriptionViewController *)sharedInstance;
+
 - (IBAction) newPrescription:(id)sender;
 - (IBAction) checkForInteractions:(id)sender;
 - (IBAction) savePrescription:(id)sender;
