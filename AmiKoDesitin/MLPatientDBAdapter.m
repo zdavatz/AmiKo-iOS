@@ -62,7 +62,7 @@ static NSString *DB_SCHEMA = nil;
 - (BOOL) openDatabase:(NSString *)dbName
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 #endif
     
     if (myPatientDb) {

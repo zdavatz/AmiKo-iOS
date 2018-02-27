@@ -33,6 +33,7 @@
 #import "MLUtility.h"
 #import "MLAlertView.h"
 #import "MLPatientDbListViewController.h"
+#import "MLPatientDBAdapter.h"
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
@@ -310,12 +311,14 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-// The file is in Documents/Inbox/ and needs to be moved to Documents/amk/
+// The file is in "Documents/Inbox/" and needs to be moved to "Documents/amk/"
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
+    NSError *error;
+
 #ifdef DEBUG
     //NSLog(@"%s url:%@", __FUNCTION__, url);
 #endif
@@ -326,33 +329,76 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         return NO;
     }
 
+    // Validation of the filename
     NSString *fileName = [[url absoluteString] lastPathComponent];
     NSString *extName = [url pathExtension];
-
     if (![extName isEqualToString:@"amk"] ||
         ![fileName hasPrefix:@"RZ_"])
     {
         NSLog(@"Invalid filename:%@", fileName);
         return NO;
     }
-    
-    NSString *amkDir = [MLUtility amkDirectory];
-    
-    //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
-    NSString *source = [url path];
-    NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
 
-    // TODO: base the check for file existance on the unique `prescription_hash`
-    // rather than the filename or patient_id
+    // Load the prescription from the file in Inbox
+    MLPrescription *presInbox = [[MLPrescription alloc] init];
+    [presInbox importFromURL:url];
+    
+    // Check if the patient subdirectory exists and possibly create it
+    NSString *amk = [MLUtility amkBaseDirectory];
+    NSString *amkDir = [amk stringByAppendingPathComponent:presInbox.patient.uniqueId];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:amkDir])
+    {
+        [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error) {
+            NSLog(@"Error creating directory: %@", error.localizedDescription);
+            amkDir = nil;
+            // Cannot proceed if there is no target for the import
+            return NO;
+        }
 
-    NSError *error;
-    [[NSFileManager defaultManager] moveItemAtPath:source
-                                            toPath:destination
-                                             error:&error];
+#ifdef DEBUG
+        NSLog(@"Created patient directory: %@", amkDir);
+#endif
+    }
+
+    // Check if the patient is already in the DB and possibly add it.
+    MLPatientDBAdapter *patientDb;
+    patientDb = [[MLPatientDBAdapter alloc] init];
+    if (![patientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        return NO;
+    }
+    
+    if ([patientDb getPatientWithUniqueID:presInbox.patient.uniqueId]==nil) {
+        //NSLog(@"Add patient to DB");
+        [patientDb addEntry:presInbox.patient];
+    }
+
+    [patientDb closeDatabase];
+    
+    // Check the hash of the existing amk files
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
+    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+
+    BOOL prescriptionNeedsToBeImported = YES;
+    MLPrescription *presAmkDir = [[MLPrescription alloc] init];
+    for (NSString *f in amkFilesArray) {
+        //NSLog(@"Checking existing amkFile:%@", f);
+        NSString *fullFilePath = [amkDir stringByAppendingPathComponent:f];
+        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+        [presAmkDir importFromURL:url];
+        if ([presInbox.hash isEqualToString:presAmkDir.hash]) {
+            prescriptionNeedsToBeImported = NO;
+            //NSLog(@"Line %d, hash %@ exists", __LINE__, presInbox.hash);
+            break;
+        }
+    }
+    
     MLAlertView *alert;
-    if (error) {
-        NSLog(@"%@", error.localizedDescription);
-        // Redefine error message to present to the user
+    if (!prescriptionNeedsToBeImported) {
         NSString *message = [NSString stringWithFormat:NSLocalizedString(@"%@ has already been imported",nil), fileName];
         error = [NSError errorWithDomain:@"receipt"
                                     code:99
@@ -362,16 +408,40 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                                         message:error.localizedDescription
                                                          button:@"OK"];
         [alert show];
+        
+        // Clean up: discard amk file from Inbox
+#ifdef DEBUG
+        if (![[NSFileManager defaultManager] isDeletableFileAtPath:[url resourceSpecifier]])
+            NSLog(@"Not deletable: %@", [url resourceSpecifier]);
+#endif
+        BOOL success = [[NSFileManager defaultManager] removeItemAtURL:url
+                                                                  error:&error];
+        if (!success)
+            NSLog(@"Error removing file: %@", error.localizedDescription);
+
         return NO;
     }
 
-    NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
-    alert = [[MLAlertView alloc] initWithTitle:@"Success!"
-                                       message:alertMessage
-                                        button:@"OK"];
-    [alert show];
+    // Finally move amk from Inbox to patient subdirectory
+    //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
+    NSString *source = [url path];
+    NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
     
+    [[NSFileManager defaultManager] moveItemAtPath:source
+                                            toPath:destination
+                                             error:&error];
+
+    if (!error) {
+        NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
+        alert = [[MLAlertView alloc] initWithTitle:@"Success!"
+                                           message:alertMessage
+                                            button:@"OK"];
+        [alert show];
+    }
+    
+    // Update defaults to be used in other views
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:presInbox.patient.uniqueId forKey:@"currentPatient"];
     [defaults setObject:fileName forKey:@"lastUsedPrescription"];
     [defaults synchronize];
     

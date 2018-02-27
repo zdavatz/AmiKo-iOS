@@ -13,6 +13,7 @@
 
 @interface MLPrescription : NSObject
 
+@property (atomic) NSString *hash;
 @property (atomic) NSString *placeDate;
 @property (atomic) MLOperator *doctor;
 @property (atomic) MLPatient *patient;
