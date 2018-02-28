@@ -43,8 +43,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>2.8</string>
-	<key>ITSEncryptionExportComplianceCode</key>
-	<string>false</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+        <false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
