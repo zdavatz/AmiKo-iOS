@@ -73,7 +73,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
     return self;
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     // Restore default in case it was changed
     self.revealViewController.rightViewRevealOverdraw = 60.0;
