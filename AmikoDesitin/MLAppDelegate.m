@@ -210,7 +210,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
-        
+
         self.revealViewController = mainRevealController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
         
