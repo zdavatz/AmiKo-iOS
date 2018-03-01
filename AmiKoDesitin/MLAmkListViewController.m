@@ -42,8 +42,10 @@ static const float kAmkLabelFontSize = 12.0;
     NSError *error;
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
     NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
+    amkFilesArray = [amkFilesArray sortedArrayUsingDescriptors:@[sd]];    
     amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
-    
+
     if (error)
         NSLog(@"%@", error.localizedDescription);
     
