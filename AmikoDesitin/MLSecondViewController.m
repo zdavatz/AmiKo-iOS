@@ -132,9 +132,6 @@
     }
 }
 
-/** 
- Resets searchfield
- */
 - (void) resetSearchField
 {
     if (mCurrentSearch!=nil)
@@ -289,6 +286,7 @@
 
 - (void) viewDidLoad
 {
+    
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
 #endif
