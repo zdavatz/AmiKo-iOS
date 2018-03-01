@@ -61,7 +61,6 @@
     }
     else
         self.imageView.frame = CGRectMake(8, 4, 22, 22);//imageViewFrame;
-    
 }
 
 #pragma mark - Property methods

@@ -60,7 +60,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @implementation MLPrescriptionViewController
 {
     CGRect mainFrame;
-    NSArray *amkFiles;
 }
 
 @synthesize prescription;
@@ -174,43 +173,32 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                            screenBounds.size.width,
                            CGRectGetHeight(screenBounds) - barHeight);
     
-    NSString *amkDir;
-
     prescription = [[MLPrescription alloc] init];
-    
-    //if (![self loadDefaultPrescription])
-    {
-        // TODO: load doctor
-        [self loadDefaultPatient];
-    }
 
-    NSString *uid = [self.prescription.patient uniqueId];
-    if (uid)
-        amkDir = [MLUtility amkDirectoryForPatient:uid];
-    else
-        amkDir = [MLUtility amkDirectory];
-
-    NSError *error;
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
-    amkFiles = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
-    if (error)
-        NSLog(@"%@", error.localizedDescription);
-
-#ifdef DEBUG
-    //NSLog(@"mainFrame:%@", NSStringFromCGRect(mainFrame));
-    NSLog(@"amk directory:%@", amkDir);
-    //NSLog(@"amk files:%@", amkFiles);
-#endif
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
-                                                 name:@"AmkFilenameNotification"
+                                                 name:@"AmkFilenameSelectedNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(amkDeleted:)
+                                                 name:@"AmkFilenameDeletedNotification"
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(patientDbListDidChangeSelection:)
                                                  name:@"PatientSelectedNotification"
                                                object:nil];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    if (![self loadDefaultPrescription]) {
+        // TODO: load doctor
+        [self loadDefaultPatient];
+    }
+    
+    [infoView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -238,8 +226,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return FALSE;
     
     NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath])
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
+        [defaults removeObjectForKey:@"lastUsedPrescription"];
+        [defaults synchronize];
         return FALSE;
+    }
 
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
     [prescription importFromURL:url];
@@ -803,14 +794,26 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self.revealViewController rightRevealToggleAnimated:YES];
 }
 
-- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
+- (void)amkDeleted:(NSNotification *)aNotification
 {
 #ifdef DEBUG
-    NSLog(@"%s %@", __FUNCTION__, aNotification);
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 #endif
+    
+    prescription.hash = nil;
+    prescription.placeDate = nil;
+    prescription.medications = nil;
+    prescription.patient = nil;
+    
+    [infoView reloadData];
+    
+    [self.revealViewController rightRevealToggleAnimated:YES];
+}
+
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
+{
     [prescription setPatient:[aNotification object]];
     [infoView reloadData];
-    //[self.revealViewController rightRevealToggle:self];
 }
 
 @end

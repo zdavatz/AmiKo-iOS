@@ -247,35 +247,38 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }
     
-    // Register the applications default
+    // Register the applications defaults
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *appDefaults = [NSMutableDictionary dictionary];
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         [appDefaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
-        [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+        [defaults registerDefaults:appDefaults];
     }
     else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         [appDefaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
-        [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+        [defaults registerDefaults:appDefaults];
     }
     
     // Initialize user defaults first time app is run
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"germanDBLastUpdate"];
+        NSDate* lastUpdated = [defaults objectForKey:@"germanDBLastUpdate"];
         if (lastUpdated==nil) {
             [lastUpdated setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
             NSLog(@"Initializing defaults...");
         }
     }
     else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
+        NSDate* lastUpdated = [defaults objectForKey:@"frenchDBLastUpdate"];
         if (lastUpdated==nil) {
             [lastUpdated setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
             NSLog(@"Initializing defaults...");
         }
     }
     
-    self.window.rootViewController = self.revealViewController;
+    [defaults removeObjectForKey:@"lastUsedPrescription"];
+    [defaults synchronize];
     
+    self.window.rootViewController = self.revealViewController;
     [self.window makeKeyAndVisible];
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);
