@@ -13,6 +13,11 @@ If you build via SSH you first need to do
 security unlock-keychain
 ```
 
+To clear the upload tokens (in case you get stuck uploading test-Builds) do
+```
+rm ~/.itmstransporter/UploadTokens/*.token
+```
+
 ## Testflight the App with
 ```
 ./testflight
