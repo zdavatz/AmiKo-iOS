@@ -161,7 +161,7 @@ static const float kAmkLabelFontSize = 12.0;
             [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize+2]];
         }
         else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)];
+            subLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,230,28)];
             [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
         }
         subLabel.textAlignment = NSTextAlignmentLeft;
@@ -172,7 +172,7 @@ static const float kAmkLabelFontSize = 12.0;
     }
     
     UILabel *label = (UILabel *)[cell.contentView viewWithTag:123];
-    label.text = amkFiles[indexPath.row];
+    label.text = [amkFiles[indexPath.row] stringByDeletingPathExtension];
 //    cell.textLabel.text = amkFiles[indexPath.row];
 //    [cell.textLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
     return cell;
