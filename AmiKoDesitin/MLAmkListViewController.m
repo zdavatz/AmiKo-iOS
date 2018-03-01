@@ -42,8 +42,10 @@ static const float kAmkLabelFontSize = 12.0;
     NSError *error;
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
     NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
+    amkFilesArray = [amkFilesArray sortedArrayUsingDescriptors:@[sd]];    
     amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
-    
+
     if (error)
         NSLog(@"%@", error.localizedDescription);
     
@@ -58,7 +60,6 @@ static const float kAmkLabelFontSize = 12.0;
 - (void) removeItem:(NSUInteger)rowIndex
 {
     NSString *amkDir = [MLUtility amkDirectory];
-    
     NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
 
     if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
@@ -73,6 +74,20 @@ static const float kAmkLabelFontSize = 12.0;
     if (!success)
         NSLog(@"Error removing file at path: %@", error.localizedDescription);
     
+    // If it's the one currently displayed,
+    // remove it from the defaults and refresh the prescription view
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
+    NSLog(@"lastUsedPrescription: %@, amkFiles[rowIndex] %@", fileName, amkFiles[rowIndex]);
+    if ([fileName isEqualToString:amkFiles[rowIndex]]) {
+        [defaults removeObjectForKey:@"lastUsedPrescription"];
+        [defaults synchronize];
+
+        // Show empty prescription
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"AmkFilenameDeletedNotification"
+                                                            object:nil];
+    }
+
     // Finally remove the entry from the list
     [amkFiles removeObjectAtIndex:rowIndex];
     [myTableView reloadData];
@@ -188,7 +203,8 @@ static const float kAmkLabelFontSize = 12.0;
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     NSString *filename = amkFiles[indexPath.row];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"AmkFilenameNotification"
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"AmkFilenameSelectedNotification"
                                                         object:filename];
 }
 @end
