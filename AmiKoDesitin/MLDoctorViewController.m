@@ -8,6 +8,7 @@
 
 #import "MLDoctorViewController.h"
 #import "SWRevealViewController.h"
+#import "MLUtility.h"
 
 @interface MLDoctorViewController ()
 
@@ -133,7 +134,22 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    self.signatureView.image = chosenImage;
+    
+    // Resize
+    CGSize size = self.signatureView.frame.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [chosenImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    // Save to PNG file
+    NSString *documentsDirectory = [MLUtility documentsDirectory];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"op_signature.png"];
+    [UIImagePNGRepresentation(smallImage) writeToFile:filePath atomically:YES];
+
+    // Show it
+    self.signatureView.image = smallImage;
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
