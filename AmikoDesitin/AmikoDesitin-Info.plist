@@ -45,6 +45,8 @@
 	<string>2.8</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
         <false/>
+	<key>NSCameraUsageDescription</key>
+    	<string>Access the camera to take a selfie.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     	<string>AmiKoDesitin photos and video use.</string>
 	<key>LSRequiresIPhoneOS</key>
