@@ -142,10 +142,10 @@
                     [self startUpdate:NSLocalizedString(@"Update", "Button")];
                     break;
                 case 5:
-                    NSLog(@"TODO: %@", NSLocalizedString(@"Doctor Signature", "Button"));
+                    [self showPatients:nil];
                     break;
                 case 6:
-                    [self showPatients:nil];
+                    [self showDoctor:nil];
                     break;
                 default:
                     break;
@@ -170,8 +170,8 @@
                         NSLocalizedString(@"Rate",     "Button"),
                         NSLocalizedString(@"Report",   "Button"),
                         NSLocalizedString(@"Update",   "Button"),
-                        NSLocalizedString(@"Doctor Signature",   "Button"),
                         NSLocalizedString(@"Patients",   "Button"),
+                        NSLocalizedString(@"Doctor Signature",   "Button"),
                         nil];
     mMenuActionSheet.tag = 1;
     
@@ -263,6 +263,10 @@
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    if (mParentViewController)
+        [mParentViewController switchToDoctorEditView];
 }
 
 - (IBAction) showPatients:(id)sender

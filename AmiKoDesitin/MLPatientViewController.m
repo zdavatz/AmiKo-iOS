@@ -23,9 +23,7 @@ enum {
     CityFieldTag,
     ZIPFieldTag,
     DOBFieldTag,
-    SexFieldTag,
-
-    NumberOfFieldTags
+    SexFieldTag
 };
 
 @interface MLPatientViewController ()

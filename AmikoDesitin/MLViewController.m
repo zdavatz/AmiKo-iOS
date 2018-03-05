@@ -33,6 +33,7 @@
 #import "MLPrescriptionViewController.h"
 #import "MLAmkListViewController.h"
 
+#import "MLDoctorViewController.h"
 #import "MLPatientViewController.h"
 #import "MLContactsListViewController.h"
 
@@ -185,12 +186,12 @@ static BOOL mShowReport = false;
             [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
             mCurrentSearchState = kAtcCode;
         }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg. No.", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg. No", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
             mCurrentSearchState = kRegNr;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Therapy", "Full toolbar")]) {
@@ -229,8 +230,8 @@ static BOOL mShowReport = false;
         else if ([btn.title isEqualToString:NSLocalizedString(@"Reg", "Short toolbar")]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
             mCurrentSearchState = kRegNr;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Ther", "Short toolbar")]) {
@@ -710,7 +711,7 @@ static BOOL mShowReport = false;
         case kRegNr:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
+                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
             break;
         case kTherapy:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -871,7 +872,7 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
             
             // Hide status bar and navigation bar
@@ -936,7 +937,7 @@ static BOOL mShowReport = false;
         [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:1] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-        [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+        [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -953,7 +954,7 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
                         
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
@@ -1968,10 +1969,28 @@ static BOOL mShowReport = false;
     [mainRevealController setRightViewController:contactsListViewController];
 
     // Front
-    MLPatientViewController *patientListViewController = [MLPatientViewController sharedInstance];
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
+    MLPatientViewController *patientEditViewController = [MLPatientViewController sharedInstance];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientEditViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 
+    //
+    mainRevealController.rightViewRevealOverdraw = 0;
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+// Front: Doctor Edit, Right: nil
+- (void) switchToDoctorEditView
+{
+    mainRevealController = self.revealViewController;
+    
+    // Right
+    MLContactsListViewController *contactsListViewController = nil;
+    
+    // Front
+    MLDoctorViewController *doctorEditViewController = [MLDoctorViewController sharedInstance];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:doctorEditViewController];
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    
     //
     mainRevealController.rightViewRevealOverdraw = 0;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center

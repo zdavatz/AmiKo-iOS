@@ -265,6 +265,8 @@
 		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
+		FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
+		FA66294C204D541B0000904A /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA66294A204D541B0000904A /* MLDoctorViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -461,6 +463,9 @@
 		D5FFE1B118B1021B002D6159 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		D5FFE1B218B1021B002D6159 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FA662948204D541B0000904A /* MLDoctorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLDoctorViewController.h; path = AmiKoDesitin/MLDoctorViewController.h; sourceTree = SOURCE_ROOT; };
+		FA662949204D541B0000904A /* MLDoctorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLDoctorViewController.m; path = AmiKoDesitin/MLDoctorViewController.m; sourceTree = SOURCE_ROOT; };
+		FA66294A204D541B0000904A /* MLDoctorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MLDoctorViewController.xib; path = AmiKoDesitin/MLDoctorViewController.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -652,6 +657,7 @@
 		43A3850A2032CB3C001A5849 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				FA662946204D532D0000904A /* doctor */,
 				D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */,
 				D5A6F26817B16A5900EAB24B /* SWRevealViewController.h */,
 				430285C32016126F003B2EF3 /* prescription */,
@@ -949,6 +955,24 @@
 			path = ionicons;
 			sourceTree = "<group>";
 		};
+		FA662946204D532D0000904A /* doctor */ = {
+			isa = PBXGroup;
+			children = (
+				FA662947204D53470000904A /* front */,
+			);
+			name = doctor;
+			sourceTree = "<group>";
+		};
+		FA662947204D53470000904A /* front */ = {
+			isa = PBXGroup;
+			children = (
+				FA662948204D541B0000904A /* MLDoctorViewController.h */,
+				FA662949204D541B0000904A /* MLDoctorViewController.m */,
+				FA66294A204D541B0000904A /* MLDoctorViewController.xib */,
+			);
+			name = front;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1045,6 +1069,7 @@
 				D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */,
 				D5A175621A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
 				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
+				FA66294C204D541B0000904A /* MLDoctorViewController.xib in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
 				D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
@@ -1236,6 +1261,7 @@
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
 				439F261D2028B7FF00396C29 /* MLPatientDBAdapter.m in Sources */,
+				FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
 				439B6C6520206D210018F922 /* MLAmkListViewController.m in Sources */,

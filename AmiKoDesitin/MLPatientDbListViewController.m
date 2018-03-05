@@ -120,6 +120,8 @@
 
     mSearchFiltered = FALSE;
     [mTableView reloadData];
+    
+    // TODO: the patient edit view needs to go blank.
 }
 
 #pragma mark - Overloaded
