@@ -532,7 +532,7 @@ enum {
         return;
     }
     
-    [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book.", nil)];
+    [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book", nil)];
 
 #ifdef DYNAMIC_BUTTONS
     [self saveCancelOff];

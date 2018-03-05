@@ -422,6 +422,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         if (!success)
             NSLog(@"Error removing file: %@", error.localizedDescription);
 
+        // TODO: show the prescription that was found
+
         return NO;
     }
 
