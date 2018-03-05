@@ -33,6 +33,7 @@
 #import "MLPrescriptionViewController.h"
 #import "MLAmkListViewController.h"
 
+#import "MLDoctorViewController.h"
 #import "MLPatientViewController.h"
 #import "MLContactsListViewController.h"
 
@@ -1968,10 +1969,28 @@ static BOOL mShowReport = false;
     [mainRevealController setRightViewController:contactsListViewController];
 
     // Front
-    MLPatientViewController *patientListViewController = [MLPatientViewController sharedInstance];
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
+    MLPatientViewController *patientEditViewController = [MLPatientViewController sharedInstance];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientEditViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 
+    //
+    mainRevealController.rightViewRevealOverdraw = 0;
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+// Front: Doctor Edit, Right: nil
+- (void) switchToDoctorEditView
+{
+    mainRevealController = self.revealViewController;
+    
+    // Right
+    MLContactsListViewController *contactsListViewController = nil;
+    
+    // Front
+    MLDoctorViewController *doctorEditViewController = [MLDoctorViewController sharedInstance];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:doctorEditViewController];
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    
     //
     mainRevealController.rightViewRevealOverdraw = 0;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center

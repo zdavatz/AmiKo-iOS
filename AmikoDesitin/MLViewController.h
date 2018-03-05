@@ -62,6 +62,7 @@ enum {
 
 - (void) switchFrontToPatientEditView;
 - (void) switchToPatientEditView;
+- (void) switchToDoctorEditView;
 - (void) showReport:(id)sender;
 - (void) switchToDrugInteractionView;
 - (void) switchToPrescriptionView;
