@@ -17,7 +17,9 @@ enum {
     ZIPFieldTag
 };
 
-@interface MLDoctorViewController : UIViewController <UITextFieldDelegate>
+@interface MLDoctorViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+
+@property (nonatomic, retain) IBOutlet UIImageView *signatureView;
 
 + (MLDoctorViewController *)sharedInstance;
 

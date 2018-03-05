@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MLDoctorViewController">
             <connections>
+                <outlet property="signatureView" destination="9fo-9w-bVa" id="sOA-b5-FR2"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -145,6 +146,7 @@
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9fo-9w-bVa">
                             <rect key="frame" x="197" y="284" width="134" height="383"/>
+                            <color key="backgroundColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="383" id="eXa-xB-uf4"/>
                             </constraints>
@@ -152,6 +154,9 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ln5-t1-rrK">
                             <rect key="frame" x="60" y="313" width="66" height="30"/>
                             <state key="normal" title="Signature"/>
+                            <connections>
+                                <action selector="handleSignature:" destination="-1" eventType="touchUpInside" id="pwx-Du-Mqj"/>
+                            </connections>
                         </button>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5pI-CT-Ktr" userLabel="Name">
                             <rect key="frame" x="121" y="7" width="88" height="30"/>

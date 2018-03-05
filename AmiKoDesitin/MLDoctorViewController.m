@@ -17,6 +17,8 @@
 
 @implementation MLDoctorViewController
 
+@synthesize signatureView;
+
 + (MLDoctorViewController *)sharedInstance
 {
     __strong static id sharedObject = nil;
@@ -36,6 +38,8 @@
     SWRevealViewController *revealController = [self revealViewController];
     
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    
+    self.navigationItem.title = NSLocalizedString(@"Doctor", nil);
     
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
@@ -98,13 +102,40 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     self.navigationItem.rightBarButtonItems[0].enabled = NO;
+    
+    // TODO: set as default for prescriptions
 }
 
+// Take selfie or choose file
 - (IBAction) handleSignature:(id)sender
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        NSLog(@"Camera not available");
+        return;
+    }
+
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    self.signatureView.image = chosenImage;
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
