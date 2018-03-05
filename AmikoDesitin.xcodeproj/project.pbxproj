@@ -1506,11 +1506,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 4B37356EGR;
-=======
-				DEVELOPMENT_TEAM = "";
->>>>>>> 3117002c15640a74691b1edacda0e0d42085ceeb
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
