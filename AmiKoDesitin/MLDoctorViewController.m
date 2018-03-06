@@ -102,9 +102,13 @@
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
-    self.navigationItem.rightBarButtonItems[0].enabled = NO;
     
     // TODO: set as default for prescriptions
+    
+    // Back to main screen
+    //self.navigationItem.rightBarButtonItems[0].enabled = NO;
+    //SWRevealViewController *revealController = [self revealViewController];
+    [[self revealViewController] revealToggle:nil];
 }
 
 // Take selfie or choose file
