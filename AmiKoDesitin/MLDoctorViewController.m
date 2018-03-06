@@ -106,8 +106,6 @@
     // TODO: set as default for prescriptions
     
     // Back to main screen
-    //self.navigationItem.rightBarButtonItems[0].enabled = NO;
-    //SWRevealViewController *revealController = [self revealViewController];
     [[self revealViewController] revealToggle:nil];
 }
 
