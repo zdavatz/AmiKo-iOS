@@ -109,8 +109,8 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sek-3O-F8M" userLabel="ZIP">
-                            <rect key="frame" x="121" y="207" width="88" height="30"/>
+                        <textField opaque="NO" tag="5" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sek-3O-F8M" userLabel="ZIP">
+                            <rect key="frame" x="121" y="207" width="63" height="30"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
@@ -133,8 +133,8 @@
                                 <outlet property="delegate" destination="-1" id="2F5-0Y-4ZU"/>
                             </connections>
                         </textField>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="email*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDk-jF-QdY">
-                            <rect key="frame" x="22" y="292" width="48" height="21"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDk-jF-QdY">
+                            <rect key="frame" x="22" y="292" width="49" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -148,14 +148,6 @@
                                 <outlet property="delegate" destination="-1" id="jVC-GW-Ysk"/>
                             </connections>
                         </textField>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9fo-9w-bVa">
-                            <rect key="frame" x="237" y="334" width="78" height="104"/>
-                            <color key="backgroundColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="104" id="idB-La-ofZ"/>
-                                <constraint firstAttribute="width" constant="78" id="tXO-nJ-0S8"/>
-                            </constraints>
-                        </imageView>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ln5-t1-rrK">
                             <rect key="frame" x="8" y="363" width="201" height="30"/>
                             <constraints>
@@ -166,8 +158,8 @@
                                 <action selector="signWithSelfie:" destination="-1" eventType="touchDown" id="PzJ-No-9S3"/>
                             </connections>
                         </button>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5pI-CT-Ktr" userLabel="Name">
-                            <rect key="frame" x="121" y="7" width="88" height="30"/>
+                        <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5pI-CT-Ktr" userLabel="Name">
+                            <rect key="frame" x="121" y="7" width="63" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="88" id="1s6-1y-hnE"/>
                             </constraints>
@@ -177,12 +169,12 @@
                         </textField>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eOx-v7-0eW">
                             <rect key="frame" x="8" y="401" width="212" height="30"/>
-                            <state key="normal" title="Sign with Photo from Library"/>
+                            <state key="normal" title="Sign with Photo"/>
                             <connections>
                                 <action selector="signWithPhoto:" destination="-1" eventType="touchDown" id="wn2-iN-inl"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aspect ratio 1.33" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edA-0p-y3g">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aspect ratio 4:3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edA-0p-y3g">
                             <rect key="frame" x="8" y="334" width="169" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="Xcu-cw-2tP"/>
@@ -191,6 +183,14 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9fo-9w-bVa">
+                            <rect key="frame" x="203" y="334" width="78" height="104"/>
+                            <color key="backgroundColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="104" id="idB-La-ofZ"/>
+                                <constraint firstAttribute="width" constant="78" id="tXO-nJ-0S8"/>
+                            </constraints>
+                        </imageView>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="9fo-9w-bVa" secondAttribute="trailing" constant="60" id="2or-Ah-RUT"/>
