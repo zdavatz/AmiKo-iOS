@@ -11,7 +11,7 @@
 "K2v-Ld-fgV.text" = "Vorname*";
 
 /* Class = "UIButton"; normalTitle = "Sign with Selfie"; ObjectID = "Ln5-t1-rrK"; */
-"Ln5-t1-rrK.normalTitle" = "Unterschrift with Selfie";
+"Ln5-t1-rrK.normalTitle" = "Unterschrift mit Selfie";
 
 /* Class = "UILabel"; text = "Address*"; ObjectID = "RAn-T3-58s"; */
 "RAn-T3-58s.text" = "Adresse*";
@@ -23,7 +23,7 @@
 "Wmv-Vd-WhX.text" = "Telefonnr.*";
 
 /* Class = "UIButton"; normalTitle = "Sign with Photo from Library"; ObjectID = "eOx-v7-0eW"; */
-"eOx-v7-0eW.normalTitle" = "Sign with Photo from Library";
+"eOx-v7-0eW.normalTitle" = "Unterschrift aus Photo";
 
 /* Class = "UILabel"; text = "Aspect ratio 1.33"; ObjectID = "edA-0p-y3g"; */
 "edA-0p-y3g.text" = "Aspect ratio 1.33";
