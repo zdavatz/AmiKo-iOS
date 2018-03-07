@@ -26,8 +26,8 @@
 /* Class = "UILabel"; text = "Sex*"; ObjectID = "ipa-Lx-J6I"; */
 "ipa-Lx-J6I.text" = "Gendre*";
 
-/* Class = "UITextField"; text = "Save..."; ObjectID = "lyg-cM-u3T"; */
-"lyg-cM-u3T.text" = "Sauver...";
+/* Class = "UITextField"; text = "Save"; ObjectID = "lyg-cM-u3T"; */
+"lyg-cM-u3T.text" = "Sauver";
 
 /* Class = "UILabel"; text = "Email:"; ObjectID = "o7U-gv-YHK"; */
 "o7U-gv-YHK.text" = "Email:";
