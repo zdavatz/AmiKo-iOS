@@ -11,6 +11,8 @@
 #import "MLUtility.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
+//#define SELFIE_EDIT_MODE
+
 @interface MLDoctorViewController ()
 
 @end
@@ -122,7 +124,9 @@
 
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
+#ifdef SELFIE_EDIT_MODE
     picker.allowsEditing = YES;
+#endif
     //picker.navigationBarHidden = NO;
     //picker.wantsFullScreenLayout = NO;
 
@@ -148,7 +152,9 @@
     
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
+#ifdef SELFIE_EDIT_MODE
     picker.allowsEditing = YES;
+#endif
     //picker.navigationBarHidden = NO;
     //picker.wantsFullScreenLayout = NO;
 
@@ -165,7 +171,12 @@
 #ifdef DEBUG
     //NSLog(@"%s %@", __FUNCTION__, info);
 #endif
+    
+#ifdef SELFIE_EDIT_MODE
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+#else
+    UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
+#endif
     //NSLog(@"chosenImage %@", NSStringFromCGSize(chosenImage.size));
     
     // TODO: first resize it for the PNG file, then resize even smaller for the view
