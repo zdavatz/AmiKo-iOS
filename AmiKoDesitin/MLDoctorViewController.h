@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MLOperator.h"
 
 enum {
     TitleFieldTag,
@@ -18,7 +19,18 @@ enum {
 };
 
 @interface MLDoctorViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+{
+    IBOutlet UITextField *mTitle;
+    IBOutlet UITextField *mGivenName;
+    IBOutlet UITextField *mFamilyName;
+    IBOutlet UITextField *mPostalAddress;
+    IBOutlet UITextField *mCity;
+    IBOutlet UITextField *mZipCode;
+    IBOutlet UITextField *mPhone;
+    IBOutlet UITextField *mEmail;
+}
 
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIImageView *signatureView;
 
 + (MLDoctorViewController *)sharedInstance;
@@ -26,5 +38,8 @@ enum {
 - (IBAction) saveDoctor:(id)sender;
 - (IBAction) signWithSelfie:(id)sender;
 - (IBAction) signWithPhoto:(id)sender;
+
+- (void)keyboardDidShow:(NSNotification *)notification;
+- (void)keyboardWillHide:(NSNotification *)notification;
 
 @end

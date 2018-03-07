@@ -15,6 +15,10 @@
 
 @interface MLDoctorViewController ()
 
+- (BOOL) stringIsNilOrEmpty:(NSString*)str;
+- (BOOL) validateFields:(MLOperator *)doctor;
+- (void) resetFieldsColors;
+
 @end
 
 #pragma mark -
@@ -22,6 +26,7 @@
 @implementation MLDoctorViewController
 
 @synthesize signatureView;
+@synthesize scrollView;
 
 + (MLDoctorViewController *)sharedInstance
 {
@@ -63,11 +68,133 @@
                                     action:@selector(saveDoctor:)];
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL) stringIsNilOrEmpty:(NSString*)str
+{
+    return !(str && str.length);
+}
+
+- (void) resetFieldsColors
+{
+    mGivenName.backgroundColor = nil;
+    mFamilyName.backgroundColor = nil;
+    mPostalAddress.backgroundColor = nil;
+    mCity.backgroundColor = nil;
+    mZipCode.backgroundColor = nil;
+    mPhone.backgroundColor = nil;
+    mEmail.backgroundColor = nil;
+}
+
+- (void) checkFields
+{
+    UIColor *lightRed = [UIColor colorWithRed:1.0
+                                        green:0.0
+                                         blue:0.0
+                                        alpha:0.3];
+    [self resetFieldsColors];
+    
+    if ([self stringIsNilOrEmpty:[mGivenName text]])
+        mGivenName.backgroundColor = lightRed;
+    
+    if ([self stringIsNilOrEmpty:[mFamilyName text]])
+        mFamilyName.backgroundColor = lightRed;
+    
+    if ([self stringIsNilOrEmpty:[mPostalAddress text]])
+        mPostalAddress.backgroundColor = lightRed;
+    
+    if ([self stringIsNilOrEmpty:[mCity text]])
+        mCity.backgroundColor = lightRed;
+    
+    if ([self stringIsNilOrEmpty:[mZipCode text]])
+        mZipCode.backgroundColor = lightRed;
+    
+    if ([self stringIsNilOrEmpty:[mPhone text]])
+        mPhone.backgroundColor = lightRed;
+    
+    if ([self stringIsNilOrEmpty:[mEmail text]])
+        mEmail.backgroundColor = lightRed;
+}
+
+- (MLOperator *) getAllFields
+{
+    MLOperator *doctor = [[MLOperator alloc] init];
+    
+    doctor.title = [mTitle text];
+    doctor.givenName = [mGivenName text];
+    doctor.familyName = [mFamilyName text];
+    doctor.city = [mCity text];
+    doctor.zipCode = [mZipCode text];
+    doctor.postalAddress = [mPostalAddress text];
+    doctor.phoneNumber = [mPhone text];
+    doctor.emailAddress = [mEmail text];
+    
+    return doctor;
+}
+
+// Validate "required" fields
+- (BOOL) validateFields:(MLOperator *)doctor
+{
+    BOOL valid = TRUE;
+    UIColor *lightRed = [UIColor colorWithRed:1.0
+                                        green:0.0
+                                         blue:0.0
+                                        alpha:0.3];
+    
+    [self resetFieldsColors];
+    
+    if ([self stringIsNilOrEmpty:doctor.givenName]) {
+        mGivenName.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+
+    if ([self stringIsNilOrEmpty:doctor.familyName]) {
+        mFamilyName.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:doctor.postalAddress]) {
+        mPostalAddress.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:doctor.city]) {
+        mCity.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:doctor.zipCode]) {
+        mZipCode.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:doctor.phoneNumber]) {
+        mPhone.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty:doctor.emailAddress]) {
+        // TODO:  check at least that it is like *@*
+        mEmail.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+
+    return valid;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -106,7 +233,30 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    // TODO: set as default for prescriptions
+    MLOperator *doctor = [self getAllFields];
+    if (![self validateFields:doctor]) {
+        NSLog(@"Doctor field validation failed");
+        return;
+    }
+    
+    // Set as default for prescriptions
+    NSMutableDictionary *doctorDict = [[NSMutableDictionary alloc] init];
+    [doctorDict setObject:mTitle.text forKey:@"title"];
+    [doctorDict setObject:mGivenName.text forKey:@"name"];
+    [doctorDict setObject:mFamilyName.text forKey:@"surname"];
+    [doctorDict setObject:mPostalAddress.text forKey:@"address"];
+    [doctorDict setObject:mCity.text forKey:@"city"];
+    [doctorDict setObject:mZipCode.text forKey:@"zip"];
+    [doctorDict setObject:mPhone.text forKey:@"phone"];
+    [doctorDict setObject:mEmail.text forKey:@"email"];
+
+#ifdef DEBUG
+    NSLog(@"doctorDict: %@", doctorDict);
+#endif
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:doctorDict forKey:@"currentDoctor"];
+    [defaults synchronize];
     
     // Back to main screen
     [[self revealViewController] revealToggle:nil];
@@ -162,6 +312,28 @@
     picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum; // camera roll
     
     [self presentViewController:picker animated:YES completion:NULL];
+}
+
+#pragma mark - Notifications
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+    NSDictionary *info = [notification userInfo];
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    
+    UIEdgeInsets contentInset = self.scrollView.contentInset;
+    contentInset.bottom = keyboardRect.size.height;
+    self.scrollView.contentInset = contentInset;
+    self.scrollView.scrollIndicatorInsets = contentInset;
+}
+
+-(void)keyboardWillHide:(NSNotification *)notification
+{
+    UIEdgeInsets contentInset = self.scrollView.contentInset;
+    contentInset.bottom = 0;
+    self.scrollView.contentInset = contentInset;
+    scrollView.scrollIndicatorInsets = contentInset;
 }
 
 #pragma mark - UIImagePickerControllerDelegate
