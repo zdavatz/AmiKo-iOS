@@ -15,7 +15,7 @@
 "Nqq-S6-oX3.text" = "Adresse*";
 
 /* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
-"U99-ak-doX.text" = "Geburtstag*";
+"U99-ak-doX.text" = "Gebr.*";
 
 /* Class = "UILabel"; text = "City*"; ObjectID = "b1W-Hi-EVX"; */
 "b1W-Hi-EVX.text" = "Stadt*";
@@ -24,13 +24,13 @@
 "cFQ-vB-rrd.text" = "Land";
 
 /* Class = "UILabel"; text = "Sex*"; ObjectID = "ipa-Lx-J6I"; */
-"ipa-Lx-J6I.text" = "Geschlecht*";
+"ipa-Lx-J6I.text" = "Geschl.*";
 
-/* Class = "UITextField"; text = "Save..."; ObjectID = "lyg-cM-u3T"; */
-"lyg-cM-u3T.text" = "Save...";
+/* Class = "UITextField"; text = "Save"; ObjectID = "lyg-cM-u3T"; */
+"lyg-cM-u3T.text" = "Save";
 
 /* Class = "UILabel"; text = "Email:"; ObjectID = "o7U-gv-YHK"; */
-"o7U-gv-YHK.text" = "Email:";
+"o7U-gv-YHK.text" = "Email";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "qxH-aW-xMw"; */
 "qxH-aW-xMw.text" = "Vorname*";
