@@ -194,6 +194,12 @@
         valid = FALSE;
     }
 
+    // Validate photo
+    if (!self.signatureView.image) {
+        self.signatureView.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+
     return valid;
 }
 
@@ -376,6 +382,7 @@
     [UIImagePNGRepresentation(smallImage) writeToFile:filePath atomically:YES];
 
     // Show it
+    self.signatureView.backgroundColor = nil;
     self.signatureView.image = smallImage;
     
     [picker dismissViewControllerAnimated:YES completion:nil];
