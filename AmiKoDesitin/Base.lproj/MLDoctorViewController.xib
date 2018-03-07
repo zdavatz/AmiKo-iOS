@@ -13,6 +13,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MLDoctorViewController">
             <connections>
+                <outlet property="mCity" destination="OrR-SW-sfn" id="NFu-Jc-ff2"/>
+                <outlet property="mEmail" destination="piK-dm-F1a" id="OT1-IE-fbo"/>
+                <outlet property="mFamilyName" destination="nMs-uF-Rcg" id="hku-Fp-k7x"/>
+                <outlet property="mGivenName" destination="Jb1-1g-reO" id="bIU-Yu-QvG"/>
+                <outlet property="mPhone" destination="NnV-m8-xEK" id="rvJ-ls-4Ao"/>
+                <outlet property="mPostalAddress" destination="uDo-WJ-d8Q" id="lLe-Gh-QO9"/>
+                <outlet property="mTitle" destination="5pI-CT-Ktr" id="tIN-3n-KEh"/>
+                <outlet property="mZipCode" destination="Sek-3O-F8M" id="TvL-vT-sMg"/>
+                <outlet property="scrollView" destination="vzc-UX-qUa" id="vaT-r7-yfx"/>
                 <outlet property="signatureView" destination="9fo-9w-bVa" id="sOA-b5-FR2"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -22,7 +31,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vzc-UX-qUa">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="vzc-UX-qUa">
                     <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hvl-IU-phx">
