@@ -6,10 +6,10 @@
 "5KD-lg-L0x.text" = "Telefonnr.";
 
 /* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
-"BEZ-6Y-wKL.text" = "Gewicht in kg";
+"BEZ-6Y-wKL.text" = "Gewicht (kg)";
 
 /* Class = "UILabel"; text = "Height (cm)"; ObjectID = "G5L-ae-7Kn"; */
-"G5L-ae-7Kn.text" = "Grösse in cm";
+"G5L-ae-7Kn.text" = "Grösse (cm)";
 
 /* Class = "UILabel"; text = "Address*"; ObjectID = "Nqq-S6-oX3"; */
 "Nqq-S6-oX3.text" = "Adresse*";
