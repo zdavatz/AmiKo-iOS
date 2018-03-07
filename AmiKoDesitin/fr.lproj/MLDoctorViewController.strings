@@ -21,19 +21,12 @@
 
 /* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
 "Wmv-Vd-WhX.text" = "No. Téléphone*";
-<<<<<<< HEAD
-=======
 
 /* Class = "UIButton"; normalTitle = "Sign with Photo from Library"; ObjectID = "eOx-v7-0eW"; */
 "eOx-v7-0eW.normalTitle" = "Sign with Photo from Library";
->>>>>>> 54e760ef129302ee813e8ffa1e46045e7da7b49e
 
 /* Class = "UILabel"; text = "Aspect ratio 1.33"; ObjectID = "edA-0p-y3g"; */
 "edA-0p-y3g.text" = "Aspect ratio 1.33";
 
 /* Class = "UILabel"; text = "email*"; ObjectID = "wDk-jF-QdY"; */
 "wDk-jF-QdY.text" = "Email*";
-<<<<<<< HEAD
-=======
-
->>>>>>> 54e760ef129302ee813e8ffa1e46045e7da7b49e
