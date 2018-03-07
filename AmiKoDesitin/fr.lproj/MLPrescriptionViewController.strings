@@ -1,4 +1,3 @@
-
 /* Class = "UIBarButtonItem"; title = "Save"; ObjectID = "BG5-Nh-8va"; */
 "BG5-Nh-8va.title" = "Sauver";
 
@@ -9,4 +8,9 @@
 "QUd-Rl-hna.title" = "Nouvelle ord.";
 
 /* Class = "UIBarButtonItem"; title = "Interaction"; ObjectID = "uB5-ix-Kqj"; */
+<<<<<<< HEAD
 "uB5-ix-Kqj.title" = "Interactions";
+=======
+"uB5-ix-Kqj.title" = "Interaction";
+
+>>>>>>> 54e760ef129302ee813e8ffa1e46045e7da7b49e

@@ -1,9 +1,9 @@
 
 /* Class = "UITextField"; placeholder = "DD.MM.YYYY"; ObjectID = "11x-yn-ywg"; */
-"11x-yn-ywg.placeholder" = "DD.MM.YYYY";
+"11x-yn-ywg.placeholder" = "DD.MM.JJJJ";
 
 /* Class = "UILabel"; text = "Phone"; ObjectID = "5KD-lg-L0x"; */
-"5KD-lg-L0x.text" = "Phone";
+"5KD-lg-L0x.text" = "No. téléphone";
 
 /* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
 "BEZ-6Y-wKL.text" = "Poids en kg";
@@ -18,7 +18,11 @@
 "U99-ak-doX.text" = "Anniversaire*";
 
 /* Class = "UILabel"; text = "City*"; ObjectID = "b1W-Hi-EVX"; */
+<<<<<<< HEAD
 "b1W-Hi-EVX.text" = "Ville*";
+=======
+"b1W-Hi-EVX.text" = "Résidence*";
+>>>>>>> 54e760ef129302ee813e8ffa1e46045e7da7b49e
 
 /* Class = "UILabel"; text = "Country"; ObjectID = "cFQ-vB-rrd"; */
 "cFQ-vB-rrd.text" = "Pays";
