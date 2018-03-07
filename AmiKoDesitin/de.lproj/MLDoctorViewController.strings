@@ -14,7 +14,7 @@
 "Ln5-t1-rrK.normalTitle" = "Sign. mit Selfie";
 
 /* Class = "UILabel"; text = "Address*"; ObjectID = "RAn-T3-58s"; */
-"RAn-T3-58s.text" = "Adresse*";
+"RAn-T3-58s.text" = "Strasse*";
 
 /* Class = "UILabel"; text = "Name*"; ObjectID = "VVo-lv-GrG"; */
 "VVo-lv-GrG.text" = "Name*";

@@ -42,7 +42,7 @@
 "vEs-iS-Qh7.text" = "PLZ*";
 
 /* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[0] = "Male"; ObjectID = "wpI-ZL-spi"; */
-"wpI-ZL-spi.segmentTitles[0]" = "männlich";
+"wpI-ZL-spi.segmentTitles[0]" = "M";
 
 /* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[1] = "Female"; ObjectID = "wpI-ZL-spi"; */
-"wpI-ZL-spi.segmentTitles[1]" = "weiblich";
+"wpI-ZL-spi.segmentTitles[1]" = "F";
