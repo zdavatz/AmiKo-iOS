@@ -20,7 +20,7 @@
 "VVo-lv-GrG.text" = "Nom*";
 
 /* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
-"Wmv-Vd-WhX.text" = "No. Téléphone*";
+"Wmv-Vd-WhX.text" = "Tél.*";
 
 /* Class = "UIButton"; normalTitle = "Sign with Photo from Library"; ObjectID = "eOx-v7-0eW"; */
 "eOx-v7-0eW.normalTitle" = "Sign. avec Photo";
