@@ -1,15 +1,15 @@
 
 /* Class = "UILabel"; text = "City*"; ObjectID = "7e7-M2-teX"; */
-"7e7-M2-teX.text" = "City*";
+"7e7-M2-teX.text" = "Ville*";
 
 /* Class = "UILabel"; text = "ZIP*"; ObjectID = "8ha-Tw-evz"; */
-"8ha-Tw-evz.text" = "ZIP*";
+"8ha-Tw-evz.text" = "NP*";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "Hvl-IU-phx"; */
-"Hvl-IU-phx.text" = "Title";
+"Hvl-IU-phx.text" = "Titre";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "K2v-Ld-fgV"; */
-"K2v-Ld-fgV.text" = "Surname*";
+"K2v-Ld-fgV.text" = "Prénom*";
 
 /* Class = "UIButton"; normalTitle = "Signature"; ObjectID = "Ln5-t1-rrK"; */
 "Ln5-t1-rrK.normalTitle" = "Signature";
@@ -18,13 +18,13 @@
 "RAn-T3-58s.text" = "Address*";
 
 /* Class = "UILabel"; text = "Name*"; ObjectID = "VVo-lv-GrG"; */
-"VVo-lv-GrG.text" = "Name*";
+"VVo-lv-GrG.text" = "Nom*";
 
 /* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
-"Wmv-Vd-WhX.text" = "Phone*";
+"Wmv-Vd-WhX.text" = "No. Téléphone*";
 
 /* Class = "UILabel"; text = "Aspect ratio 1.33"; ObjectID = "edA-0p-y3g"; */
 "edA-0p-y3g.text" = "Aspect ratio 1.33";
 
 /* Class = "UILabel"; text = "email*"; ObjectID = "wDk-jF-QdY"; */
-"wDk-jF-QdY.text" = "email*";
+"wDk-jF-QdY.text" = "Email*";

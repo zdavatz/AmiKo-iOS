@@ -6,43 +6,43 @@
 "5KD-lg-L0x.text" = "Phone";
 
 /* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
-"BEZ-6Y-wKL.text" = "Weight (kg)";
+"BEZ-6Y-wKL.text" = "Poids en kg";
 
 /* Class = "UILabel"; text = "Height (cm)"; ObjectID = "G5L-ae-7Kn"; */
-"G5L-ae-7Kn.text" = "Height (cm)";
+"G5L-ae-7Kn.text" = "Taille en cm";
 
 /* Class = "UILabel"; text = "Address*"; ObjectID = "Nqq-S6-oX3"; */
-"Nqq-S6-oX3.text" = "Address*";
+"Nqq-S6-oX3.text" = "Adresse*";
 
 /* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
-"U99-ak-doX.text" = "Birthday*";
+"U99-ak-doX.text" = "Anniversaire*";
 
 /* Class = "UILabel"; text = "City*"; ObjectID = "b1W-Hi-EVX"; */
-"b1W-Hi-EVX.text" = "City*";
+"b1W-Hi-EVX.text" = "Ville*";
 
 /* Class = "UILabel"; text = "Country"; ObjectID = "cFQ-vB-rrd"; */
-"cFQ-vB-rrd.text" = "Country";
+"cFQ-vB-rrd.text" = "Pays";
 
 /* Class = "UILabel"; text = "Sex*"; ObjectID = "ipa-Lx-J6I"; */
-"ipa-Lx-J6I.text" = "Sex*";
+"ipa-Lx-J6I.text" = "Gendre*";
 
 /* Class = "UITextField"; text = "Save..."; ObjectID = "lyg-cM-u3T"; */
-"lyg-cM-u3T.text" = "Save...";
+"lyg-cM-u3T.text" = "Sauver...";
 
 /* Class = "UILabel"; text = "Email:"; ObjectID = "o7U-gv-YHK"; */
 "o7U-gv-YHK.text" = "Email:";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "qxH-aW-xMw"; */
-"qxH-aW-xMw.text" = "Surname*";
+"qxH-aW-xMw.text" = "Prénom*";
 
 /* Class = "UILabel"; text = "Name*"; ObjectID = "uhp-vp-JVu"; */
-"uhp-vp-JVu.text" = "Name*";
+"uhp-vp-JVu.text" = "Nom*";
 
 /* Class = "UILabel"; text = "ZIP*"; ObjectID = "vEs-iS-Qh7"; */
-"vEs-iS-Qh7.text" = "ZIP*";
+"vEs-iS-Qh7.text" = "NP*";
 
 /* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[0] = "Male"; ObjectID = "wpI-ZL-spi"; */
-"wpI-ZL-spi.segmentTitles[0]" = "Male";
+"wpI-ZL-spi.segmentTitles[0]" = "masculin";
 
 /* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[1] = "Female"; ObjectID = "wpI-ZL-spi"; */
-"wpI-ZL-spi.segmentTitles[1]" = "Female";
+"wpI-ZL-spi.segmentTitles[1]" = "féminin";
