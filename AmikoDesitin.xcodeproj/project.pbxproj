@@ -264,6 +264,8 @@
 		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
+		FA410460204FEE4B00E41C41 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA41045F204FEE4B00E41C41 /* Localizable.strings */; };
+		FA410462204FF05300E41C41 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA410461204FF05300E41C41 /* Localizable.strings */; };
 		FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
 		FA4511B8204ECBCB00899A77 /* MLPatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */; };
 		FA4511BE204ECF9600899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BD204ECF9600899A77 /* Localizable.strings */; };
@@ -469,6 +471,8 @@
 		D5FFE1B118B1021B002D6159 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		D5FFE1B218B1021B002D6159 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FA41045F204FEE4B00E41C41 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA410461204FF05300E41C41 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		FA4511B6204ECAFD00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLDoctorViewController.xib; sourceTree = "<group>"; };
 		FA4511B9204ECBCB00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLPatientViewController.xib; sourceTree = "<group>"; };
 		FA4511BB204ECF9300899A77 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
@@ -820,6 +824,8 @@
 		D5A6F24117B1692F00EAB24B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FA410461204FF05300E41C41 /* Localizable.strings */,
+				FA41045F204FEE4B00E41C41 /* Localizable.strings */,
 				FA4511C9204EF43300899A77 /* Localizable.strings */,
 				FA4511C7204EEB3400899A77 /* Localizable.strings */,
 				FA4511C5204EEA3700899A77 /* Localizable.strings */,
@@ -1210,6 +1216,7 @@
 				D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */,
 				FA4511C4204EE7F200899A77 /* Localizable.strings in Resources */,
 				D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */,
+				FA410462204FF05300E41C41 /* Localizable.strings in Resources */,
 				D554575118B3E86B003299E0 /* 970-medal.png in Resources */,
 				D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */,
 				D554574518B3E847003299E0 /* 1100-list-2.png in Resources */,
@@ -1272,6 +1279,7 @@
 				D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */,
 				FA4511CA204EF43300899A77 /* Localizable.strings in Resources */,
 				D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */,
+				FA410460204FEE4B00E41C41 /* Localizable.strings in Resources */,
 				D52A0D7217ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png in Resources */,
 				D5A2252519461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
 				D5A175611A9BC27400E69385 /* favorites-selected.png in Resources */,

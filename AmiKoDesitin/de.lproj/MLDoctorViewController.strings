@@ -10,8 +10,8 @@
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "K2v-Ld-fgV"; */
 "K2v-Ld-fgV.text" = "Vorname*";
 
-/* Class = "UIButton"; normalTitle = "Signature"; ObjectID = "Ln5-t1-rrK"; */
-"Ln5-t1-rrK.normalTitle" = "Unterschrift";
+/* Class = "UIButton"; normalTitle = "Sign with Selfie"; ObjectID = "Ln5-t1-rrK"; */
+"Ln5-t1-rrK.normalTitle" = "Unterschrift with Selfie";
 
 /* Class = "UILabel"; text = "Address*"; ObjectID = "RAn-T3-58s"; */
 "RAn-T3-58s.text" = "Adresse*";
@@ -21,6 +21,9 @@
 
 /* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
 "Wmv-Vd-WhX.text" = "Telefonnr.*";
+
+/* Class = "UIButton"; normalTitle = "Sign with Photo from Library"; ObjectID = "eOx-v7-0eW"; */
+"eOx-v7-0eW.normalTitle" = "Sign with Photo from Library";
 
 /* Class = "UILabel"; text = "Aspect ratio 1.33"; ObjectID = "edA-0p-y3g"; */
 "edA-0p-y3g.text" = "Aspect ratio 1.33";
