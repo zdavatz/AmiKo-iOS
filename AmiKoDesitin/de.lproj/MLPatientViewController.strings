@@ -18,7 +18,7 @@
 "U99-ak-doX.text" = "Geburtstag*";
 
 /* Class = "UILabel"; text = "City*"; ObjectID = "b1W-Hi-EVX"; */
-"b1W-Hi-EVX.text" = "Wohnort*";
+"b1W-Hi-EVX.text" = "Stadt*";
 
 /* Class = "UILabel"; text = "Country"; ObjectID = "cFQ-vB-rrd"; */
 "cFQ-vB-rrd.text" = "Land";
