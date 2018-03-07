@@ -3,7 +3,7 @@
 "11x-yn-ywg.placeholder" = "DD.MM.JJJJ";
 
 /* Class = "UILabel"; text = "Phone"; ObjectID = "5KD-lg-L0x"; */
-"5KD-lg-L0x.text" = "Telefonnr.";
+"5KD-lg-L0x.text" = "Telefon";
 
 /* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
 "BEZ-6Y-wKL.text" = "Gewicht (kg)";
