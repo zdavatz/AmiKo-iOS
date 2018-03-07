@@ -3,7 +3,7 @@
 "11x-yn-ywg.placeholder" = "DD.MM.JJJJ";
 
 /* Class = "UILabel"; text = "Phone"; ObjectID = "5KD-lg-L0x"; */
-"5KD-lg-L0x.text" = "No. téléphone";
+"5KD-lg-L0x.text" = "Tél.";
 
 /* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
 "BEZ-6Y-wKL.text" = "Poids (kg)";
@@ -15,7 +15,7 @@
 "Nqq-S6-oX3.text" = "Adresse*";
 
 /* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
-"U99-ak-doX.text" = "Anniversaire*";
+"U99-ak-doX.text" = "Annivrs.*";
 
 /* Class = "UILabel"; text = "City*"; ObjectID = "b1W-Hi-EVX"; */
 "b1W-Hi-EVX.text" = "Ville*";
