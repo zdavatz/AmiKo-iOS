@@ -139,7 +139,7 @@
                             </connections>
                         </textField>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aspect ratio 1.33" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edA-0p-y3g">
-                            <rect key="frame" x="60" y="334" width="129" height="21"/>
+                            <rect key="frame" x="60" y="334" width="169" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="pDC-Je-NDT"/>
                             </constraints>
@@ -148,18 +148,18 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9fo-9w-bVa">
-                            <rect key="frame" x="197" y="334" width="78" height="104"/>
+                            <rect key="frame" x="237" y="334" width="78" height="104"/>
                             <color key="backgroundColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="78" id="cVZ-ah-jx2"/>
                                 <constraint firstAttribute="height" constant="104" id="huv-Lo-lqe"/>
                             </constraints>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ln5-t1-rrK">
-                            <rect key="frame" x="60" y="363" width="66" height="30"/>
-                            <state key="normal" title="Signature"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ln5-t1-rrK">
+                            <rect key="frame" x="60" y="363" width="127" height="30"/>
+                            <state key="normal" title="Sign with Selfie"/>
                             <connections>
-                                <action selector="handleSignature:" destination="-1" eventType="touchUpInside" id="pwx-Du-Mqj"/>
+                                <action selector="signWithSelfie:" destination="-1" eventType="touchDown" id="PzJ-No-9S3"/>
                             </connections>
                         </button>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5pI-CT-Ktr" userLabel="Name">
@@ -171,6 +171,14 @@
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eOx-v7-0eW">
+                            <rect key="frame" x="26" y="401" width="195" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Sign with Photo from Library"/>
+                            <connections>
+                                <action selector="signWithPhoto:" destination="-1" eventType="touchDown" id="wn2-iN-inl"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>

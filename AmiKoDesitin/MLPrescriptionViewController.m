@@ -50,6 +50,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
+- (void)loadDefaultDoctor;
 - (BOOL)loadDefaultPrescription;
 - (BOOL)loadDefaultPatient;
 
@@ -193,8 +194,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) viewDidAppear:(BOOL)animated
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     if (![self loadDefaultPrescription]) {
-        // TODO: load doctor
+        [self loadDefaultDoctor];
         [self loadDefaultPatient];
     }
     
@@ -216,19 +220,47 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark -
 
+- (void)loadDefaultDoctor
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    
+    if (!prescription.doctor)
+        prescription.doctor = [[MLOperator alloc] init];
+
+    // Get signature
+    NSString *documentsDirectory = [MLUtility documentsDirectory];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"op_signature.png"];
+    if (filePath) {
+        UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
+        NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
+        NSData *imgData = UIImagePNGRepresentation(signatureImg);
+        prescription.doctor.signature = [imgData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    }
+    
+    // TODO: get all the other defaults
+}
+
 // Try to reopen the last used file
 - (BOOL)loadDefaultPrescription
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     // Try to reopen the last used file
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
-    if (!fileName)
+    if (!fileName) {
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
         return FALSE;
+    }
     
     NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
     if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
         [defaults removeObjectForKey:@"lastUsedPrescription"];
         [defaults synchronize];
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
         return FALSE;
     }
 
