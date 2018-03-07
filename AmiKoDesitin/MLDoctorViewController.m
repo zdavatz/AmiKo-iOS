@@ -9,6 +9,7 @@
 #import "MLDoctorViewController.h"
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @interface MLDoctorViewController ()
 
@@ -102,13 +103,14 @@
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
-    self.navigationItem.rightBarButtonItems[0].enabled = NO;
     
     // TODO: set as default for prescriptions
+    
+    // Back to main screen
+    [[self revealViewController] revealToggle:nil];
 }
 
-// Take selfie or choose file
-- (IBAction) handleSignature:(id)sender
+- (IBAction) signWithSelfie:(id)sender
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
@@ -121,7 +123,37 @@
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
+    //picker.navigationBarHidden = NO;
+    //picker.wantsFullScreenLayout = NO;
+
     picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    picker.mediaTypes = @[(NSString *) kUTTypeImage];
+    //picker.mediaTypes = @[(NSString *) kUTTypeImage, (NSString *) kUTTypeLivePhoto];
+    picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+    //picker.showsCameraControls = NO;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
+- (IBAction) signWithPhoto:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        NSLog(@"Photo library not available");
+        return;
+    }
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    //picker.navigationBarHidden = NO;
+    //picker.wantsFullScreenLayout = NO;
+
+    //picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;  // all folders in gallery
+    picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum; // camera roll
     
     [self presentViewController:picker animated:YES completion:NULL];
 }
@@ -131,9 +163,21 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s %@", __FUNCTION__, info);
 #endif
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    //NSLog(@"chosenImage %@", NSStringFromCGSize(chosenImage.size));
+    
+    // TODO: first resize it for the PNG file, then resize even smaller for the view
+
+#if 0
+    // If we want to keep the image for future use:
+    // check if the image originated from the camera, store it in the photo album
+    // this require NSAppleMusicUsageDescription in Info.plist
+    UIImage *referenceURL = info[UIImagePickerControllerReferenceURL];
+    if (!referenceURL) // nil if coming from camera
+        UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
+#endif
     
     // Resize
     CGSize size = self.signatureView.frame.size;
@@ -141,11 +185,11 @@
     [chosenImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
     UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+    //NSLog(@"smallImage %@", NSStringFromCGSize(smallImage.size));
+
     // Save to PNG file
     NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"op_signature.png"];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"op_signature.png"];
     [UIImagePNGRepresentation(smallImage) writeToFile:filePath atomically:YES];
 
     // Show it

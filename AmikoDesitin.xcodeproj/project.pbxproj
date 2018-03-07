@@ -22,7 +22,6 @@
 		439F25EC20286BF200396C29 /* MLPrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F25EB20286BF200396C29 /* MLPrescription.m */; };
 		439F261D2028B7FF00396C29 /* MLPatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* MLPatientDBAdapter.m */; };
 		439F26222028C8A700396C29 /* MLPatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F26202028C8A700396C29 /* MLPatientViewController.m */; };
-		439F26232028C8A700396C29 /* MLPatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439F26212028C8A700396C29 /* MLPatientViewController.xib */; };
 		439F50F920122665000E82FC /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
 		439F50FA20122665000E82FC /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
 		439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
@@ -265,8 +264,16 @@
 		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
+		FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
+		FA4511B8204ECBCB00899A77 /* MLPatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */; };
+		FA4511BE204ECF9600899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BD204ECF9600899A77 /* Localizable.strings */; };
+		FA4511C0204EE60400899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BF204EE60400899A77 /* Localizable.strings */; };
+		FA4511C2204EE68F00899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C1204EE68F00899A77 /* Localizable.strings */; };
+		FA4511C4204EE7F200899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C3204EE7F200899A77 /* Localizable.strings */; };
+		FA4511C6204EEA3700899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C5204EEA3700899A77 /* Localizable.strings */; };
+		FA4511C8204EEB3400899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C7204EEB3400899A77 /* Localizable.strings */; };
+		FA4511CA204EF43300899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C9204EF43300899A77 /* Localizable.strings */; };
 		FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
-		FA66294C204D541B0000904A /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA66294A204D541B0000904A /* MLDoctorViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -295,7 +302,6 @@
 		439F261C2028B7FF00396C29 /* MLPatientDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPatientDBAdapter.m; path = AmiKoDesitin/MLPatientDBAdapter.m; sourceTree = SOURCE_ROOT; };
 		439F261F2028C8A600396C29 /* MLPatientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPatientViewController.h; path = AmiKoDesitin/MLPatientViewController.h; sourceTree = SOURCE_ROOT; };
 		439F26202028C8A700396C29 /* MLPatientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPatientViewController.m; path = AmiKoDesitin/MLPatientViewController.m; sourceTree = SOURCE_ROOT; };
-		439F26212028C8A700396C29 /* MLPatientViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLPatientViewController.xib; path = AmiKoDesitin/MLPatientViewController.xib; sourceTree = SOURCE_ROOT; };
 		439F50F520122665000E82FC /* prescription-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription-selected.png"; path = "AmiKoDesitin/prescription-selected.png"; sourceTree = SOURCE_ROOT; };
 		439F50F620122665000E82FC /* prescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prescription.png; path = AmiKoDesitin/prescription.png; sourceTree = SOURCE_ROOT; };
 		439F50F720122665000E82FC /* prescription@2x-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "prescription@2x-selected.png"; path = "AmiKoDesitin/prescription@2x-selected.png"; sourceTree = SOURCE_ROOT; };
@@ -463,9 +469,23 @@
 		D5FFE1B118B1021B002D6159 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		D5FFE1B218B1021B002D6159 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FA4511B6204ECAFD00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLDoctorViewController.xib; sourceTree = "<group>"; };
+		FA4511B9204ECBCB00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLPatientViewController.xib; sourceTree = "<group>"; };
+		FA4511BB204ECF9300899A77 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
+		FA4511BC204ECF9400899A77 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MLDoctorViewController.strings; sourceTree = "<group>"; };
+		FA4511BD204ECF9600899A77 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA4511BF204EE60400899A77 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA4511C1204EE68F00899A77 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA4511C3204EE7F200899A77 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA4511C5204EEA3700899A77 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA4511C7204EEB3400899A77 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA4511C9204EF43300899A77 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA4511CC204EF4CD00899A77 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MLPatientViewController.strings; sourceTree = "<group>"; };
+		FA4511CE204EF51700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLDoctorViewController.strings; sourceTree = "<group>"; };
+		FA4511D0204EF52E00899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
+		FA4511D2204EF53700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPatientViewController.strings; sourceTree = "<group>"; };
 		FA662948204D541B0000904A /* MLDoctorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLDoctorViewController.h; path = AmiKoDesitin/MLDoctorViewController.h; sourceTree = SOURCE_ROOT; };
 		FA662949204D541B0000904A /* MLDoctorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLDoctorViewController.m; path = AmiKoDesitin/MLDoctorViewController.m; sourceTree = SOURCE_ROOT; };
-		FA66294A204D541B0000904A /* MLDoctorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MLDoctorViewController.xib; path = AmiKoDesitin/MLDoctorViewController.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -649,7 +669,7 @@
 			children = (
 				439F261F2028C8A600396C29 /* MLPatientViewController.h */,
 				439F26202028C8A700396C29 /* MLPatientViewController.m */,
-				439F26212028C8A700396C29 /* MLPatientViewController.xib */,
+				FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */,
 			);
 			name = front;
 			sourceTree = "<group>";
@@ -800,6 +820,13 @@
 		D5A6F24117B1692F00EAB24B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FA4511C9204EF43300899A77 /* Localizable.strings */,
+				FA4511C7204EEB3400899A77 /* Localizable.strings */,
+				FA4511C5204EEA3700899A77 /* Localizable.strings */,
+				FA4511C3204EE7F200899A77 /* Localizable.strings */,
+				FA4511C1204EE68F00899A77 /* Localizable.strings */,
+				FA4511BF204EE60400899A77 /* Localizable.strings */,
+				FA4511BD204ECF9600899A77 /* Localizable.strings */,
 				430285CE20162DC1003B2EF3 /* en */,
 				430285CA20162D7C003B2EF3 /* fr */,
 				430285C920162D6D003B2EF3 /* de */,
@@ -968,7 +995,7 @@
 			children = (
 				FA662948204D541B0000904A /* MLDoctorViewController.h */,
 				FA662949204D541B0000904A /* MLDoctorViewController.m */,
-				FA66294A204D541B0000904A /* MLDoctorViewController.xib */,
+				FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */,
 			);
 			name = front;
 			sourceTree = "<group>";
@@ -1069,7 +1096,7 @@
 				D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */,
 				D5A175621A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
 				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
-				FA66294C204D541B0000904A /* MLDoctorViewController.xib in Resources */,
+				FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
 				D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
@@ -1149,7 +1176,7 @@
 				430285D120162DEB003B2EF3 /* Localizable.strings in Resources */,
 				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
-				439F26232028C8A700396C29 /* MLPatientViewController.xib in Resources */,
+				FA4511B8204ECBCB00899A77 /* MLPatientViewController.xib in Resources */,
 				D5A175601A9BC27400E69385 /* favorites-selected.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1158,6 +1185,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA4511C0204EE60400899A77 /* Localizable.strings in Resources */,
 				D5990A721BDF42F40040C4C2 /* MLLaunchScreen.storyboard in Resources */,
 				D5A175671A9BC27400E69385 /* favorites@2x.png in Resources */,
 				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
@@ -1170,6 +1198,7 @@
 				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,
 				D5A175631A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
+				FA4511C6204EEA3700899A77 /* Localizable.strings in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
@@ -1179,6 +1208,7 @@
 				D5F6BB6B17E8C87500DCBD16 /* 10-medical.png in Resources */,
 				D551D53C17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */,
+				FA4511C4204EE7F200899A77 /* Localizable.strings in Resources */,
 				D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */,
 				D554575118B3E86B003299E0 /* 970-medal.png in Resources */,
 				D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */,
@@ -1208,11 +1238,13 @@
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5A175651A9BC27400E69385 /* favorites.png in Resources */,
+				FA4511C2204EE68F00899A77 /* Localizable.strings in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
 				D5A2251F19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D5990A741BDF44C80040C4C2 /* desitin_quick@2x.png in Resources */,
 				D5990A731BDF44C50040C4C2 /* desitin_quick.png in Resources */,
+				FA4511C8204EEB3400899A77 /* Localizable.strings in Resources */,
 				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
@@ -1231,12 +1263,14 @@
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D5A175551A9A741B00E69385 /* maindb@2x.png in Resources */,
 				D5FFE1BA18B1021B002D6159 /* README.md in Resources */,
+				FA4511BE204ECF9600899A77 /* Localizable.strings in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
 				D5A2252919461D200078FEFF /* 938-connections-selected.png in Resources */,
 				D5A1754D1A9A737F00E69385 /* interactions.png in Resources */,
 				D554575718B3E87D003299E0 /* 905-chat-2.png in Resources */,
 				D52A0D6C17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png in Resources */,
 				D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */,
+				FA4511CA204EF43300899A77 /* Localizable.strings in Resources */,
 				D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */,
 				D52A0D7217ECC24C003BF272 /* ComedDesitin-Landscape@2x~ipad.png in Resources */,
 				D5A2252519461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
@@ -1358,6 +1392,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				4387FC4020189EB8000A5A0F /* Base */,
+				FA4511BB204ECF9300899A77 /* de */,
+				FA4511D0204EF52E00899A77 /* fr */,
 			);
 			name = MLPrescriptionViewController.xib;
 			path = AmiKoDesitin;
@@ -1372,6 +1408,28 @@
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
+		};
+		FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA4511B6204ECAFD00899A77 /* Base */,
+				FA4511BC204ECF9400899A77 /* de */,
+				FA4511CE204EF51700899A77 /* fr */,
+			);
+			name = MLDoctorViewController.xib;
+			path = AmiKoDesitin;
+			sourceTree = SOURCE_ROOT;
+		};
+		FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA4511B9204ECBCB00899A77 /* Base */,
+				FA4511CC204EF4CD00899A77 /* de */,
+				FA4511D2204EF53700899A77 /* fr */,
+			);
+			name = MLPatientViewController.xib;
+			path = AmiKoDesitin;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXVariantGroup section */
 

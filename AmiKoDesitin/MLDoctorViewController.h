@@ -24,6 +24,7 @@ enum {
 + (MLDoctorViewController *)sharedInstance;
 
 - (IBAction) saveDoctor:(id)sender;
-- (IBAction) handleSignature:(id)sender;
+- (IBAction) signWithSelfie:(id)sender;
+- (IBAction) signWithPhoto:(id)sender;
 
 @end
