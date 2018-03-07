@@ -12,7 +12,7 @@
 "G5L-ae-7Kn.text" = "Grösse (cm)";
 
 /* Class = "UILabel"; text = "Address*"; ObjectID = "Nqq-S6-oX3"; */
-"Nqq-S6-oX3.text" = "Adresse*";
+"Nqq-S6-oX3.text" = "Strasse*";
 
 /* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
 "U99-ak-doX.text" = "Gebr.*";
