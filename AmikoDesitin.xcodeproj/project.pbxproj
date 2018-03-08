@@ -275,6 +275,8 @@
 		FA4511C6204EEA3700899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C5204EEA3700899A77 /* Localizable.strings */; };
 		FA4511C8204EEB3400899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C7204EEB3400899A77 /* Localizable.strings */; };
 		FA4511CA204EF43300899A77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4511C9204EF43300899A77 /* Localizable.strings */; };
+		FA45E5D22051546500A6B525 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA45E5D12051546500A6B525 /* Localizable.strings */; };
+		FA45E5D42051547B00A6B525 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA45E5D32051547B00A6B525 /* Localizable.strings */; };
 		FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -488,6 +490,8 @@
 		FA4511CE204EF51700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLDoctorViewController.strings; sourceTree = "<group>"; };
 		FA4511D0204EF52E00899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
 		FA4511D2204EF53700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPatientViewController.strings; sourceTree = "<group>"; };
+		FA45E5D12051546500A6B525 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA45E5D32051547B00A6B525 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		FA662948204D541B0000904A /* MLDoctorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLDoctorViewController.h; path = AmiKoDesitin/MLDoctorViewController.h; sourceTree = SOURCE_ROOT; };
 		FA662949204D541B0000904A /* MLDoctorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLDoctorViewController.m; path = AmiKoDesitin/MLDoctorViewController.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -824,6 +828,8 @@
 		D5A6F24117B1692F00EAB24B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FA45E5D32051547B00A6B525 /* Localizable.strings */,
+				FA45E5D12051546500A6B525 /* Localizable.strings */,
 				FA410461204FF05300E41C41 /* Localizable.strings */,
 				FA41045F204FEE4B00E41C41 /* Localizable.strings */,
 				FA4511C9204EF43300899A77 /* Localizable.strings */,
@@ -1192,6 +1198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA4511C0204EE60400899A77 /* Localizable.strings in Resources */,
+				FA45E5D42051547B00A6B525 /* Localizable.strings in Resources */,
 				D5990A721BDF42F40040C4C2 /* MLLaunchScreen.storyboard in Resources */,
 				D5A175671A9BC27400E69385 /* favorites@2x.png in Resources */,
 				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
@@ -1207,6 +1214,7 @@
 				FA4511C6204EEA3700899A77 /* Localizable.strings in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
+				FA45E5D22051546500A6B525 /* Localizable.strings in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */,
 				D5FFE1B818B1021B002D6159 /* LICENSE in Resources */,

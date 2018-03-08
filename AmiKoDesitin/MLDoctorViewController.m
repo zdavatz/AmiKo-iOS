@@ -69,6 +69,10 @@
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
     
+    // Make the picture area stand out with a border
+    [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
+    [self.signatureView.layer setBorderWidth: 2.0];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardDidShow:)
                                                  name:UIKeyboardDidShowNotification

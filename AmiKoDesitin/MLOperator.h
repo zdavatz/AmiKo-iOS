@@ -14,12 +14,12 @@
 @interface MLOperator : NSObject
 
 @property (atomic, copy) NSString *title;
-@property (atomic, copy) NSString *familyName;
 @property (atomic, copy) NSString *givenName;
+@property (atomic, copy) NSString *familyName;
 @property (atomic, copy) NSString *postalAddress;
-@property (atomic, copy) NSString *zipCode;
 @property (atomic, copy) NSString *city;
-@property (atomic, copy) NSString *country;
+@property (atomic, copy) NSString *zipCode;
+//@property (atomic, copy) NSString *country; // unused ?
 @property (atomic, copy) NSString *phoneNumber;
 @property (atomic, copy) NSString *emailAddress;
 
