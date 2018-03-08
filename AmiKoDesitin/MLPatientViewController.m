@@ -263,12 +263,6 @@ enum {
     if (p.heightCm>0)
         [mHeight_cm setText:[NSString stringWithFormat:@"%d", p.heightCm]];
 
-    if (p.phoneNumber)
-        [mPhone setText:p.phoneNumber];
-
-    if (p.country)
-        [mCity setText:p.city];
-
     if (p.country)
         [mCountry setText:p.country];
 

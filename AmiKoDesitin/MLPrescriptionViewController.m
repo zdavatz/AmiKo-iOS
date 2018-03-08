@@ -228,16 +228,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     if (!prescription.doctor)
         prescription.doctor = [[MLOperator alloc] init];
-
-    // Get signature
-    NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"op_signature.png"];
-    if (filePath) {
-        UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
-        NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
-        NSData *imgData = UIImagePNGRepresentation(signatureImg);
-        prescription.doctor.signature = [imgData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    }
     
     // Init from defaults
     // See also MLOperator importFromDict
@@ -252,14 +242,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"Default doctor %@", doctorDictionary);
 #endif
-    prescription.doctor.title = [doctorDictionary objectForKey: @"title"];
-    prescription.doctor.givenName = [doctorDictionary objectForKey: @"name"];
-    prescription.doctor.familyName = [doctorDictionary objectForKey: @"surname"];
-    prescription.doctor.postalAddress = [doctorDictionary objectForKey: @"address"];
-    prescription.doctor.city = [doctorDictionary objectForKey: @"city"];
-    prescription.doctor.zipCode = [doctorDictionary objectForKey: @"zip"];
-    prescription.doctor.phoneNumber = [doctorDictionary objectForKey: @"phone"];
-    prescription.doctor.emailAddress = [doctorDictionary objectForKey: @"email"];
+    [prescription.doctor importFromDict:doctorDictionary];    
+    [prescription.doctor importSignature];
 }
 
 // Try to reopen the last used file

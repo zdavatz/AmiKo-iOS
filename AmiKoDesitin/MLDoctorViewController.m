@@ -69,10 +69,7 @@
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
     
-    // Make the picture area stand out with a border
-    [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
-    [self.signatureView.layer setBorderWidth: 2.0];
-    
+    // Register for notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardDidShow:)
                                                  name:UIKeyboardDidShowNotification
@@ -82,6 +79,31 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    if (!doctorDictionary) {
+        return;
+    }
+    
+#ifdef DEBUG
+    NSLog(@"Default doctor %@", doctorDictionary);
+#endif
+    MLOperator *doctor = [[MLOperator alloc] init];
+    [doctor importFromDict:doctorDictionary];
+    [self setAllFields:doctor];
+
+    if ([doctor importSignature]) {
+        self.signatureView.image = doctor.signatureThumbnail;  // FIXME: 45x90
+    }
+    else {
+        // Make the picture area stand out with a border
+        [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
+        [self.signatureView.layer setBorderWidth: 2.0];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -133,6 +155,34 @@
     
     if ([self stringIsNilOrEmpty:[mEmail text]])
         mEmail.backgroundColor = lightRed;
+}
+
+- (void) setAllFields:(MLOperator *)p
+{
+    if (p.title)
+        [mTitle setText:p.title];
+    
+    if (p.givenName)
+        [mGivenName setText:p.givenName];
+    
+    if (p.familyName)
+        [mFamilyName setText:p.familyName];
+    
+    if (p.city)
+        [mCity setText:p.city];
+    
+    if (p.zipCode)
+        [mZipCode setText:p.zipCode];
+    
+    if (p.postalAddress)
+        [mPostalAddress setText:p.postalAddress];
+    
+    if (p.phoneNumber)
+        [mPhone setText:p.phoneNumber];
+    
+    if (p.emailAddress)
+        [mEmail setText:p.emailAddress];
+    
 }
 
 - (MLOperator *) getAllFields
@@ -250,15 +300,16 @@
     }
     
     // Set as default for prescriptions
+    // Use same "keys" as the amk file
     NSMutableDictionary *doctorDict = [[NSMutableDictionary alloc] init];
     [doctorDict setObject:mTitle.text forKey:@"title"];
-    [doctorDict setObject:mGivenName.text forKey:@"name"];
-    [doctorDict setObject:mFamilyName.text forKey:@"surname"];
-    [doctorDict setObject:mPostalAddress.text forKey:@"address"];
+    [doctorDict setObject:mGivenName.text forKey:@"given_name"];
+    [doctorDict setObject:mFamilyName.text forKey:@"family_mame"];
+    [doctorDict setObject:mPostalAddress.text forKey:@"postal_address"];
     [doctorDict setObject:mCity.text forKey:@"city"];
-    [doctorDict setObject:mZipCode.text forKey:@"zip"];
-    [doctorDict setObject:mPhone.text forKey:@"phone"];
-    [doctorDict setObject:mEmail.text forKey:@"email"];
+    [doctorDict setObject:mZipCode.text forKey:@"zip_code"];
+    [doctorDict setObject:mPhone.text forKey:@"phone_number"];
+    [doctorDict setObject:mEmail.text forKey:@"email_address"];
 
 #ifdef DEBUG
     NSLog(@"doctorDict: %@", doctorDict);
