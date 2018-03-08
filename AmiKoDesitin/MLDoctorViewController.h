@@ -39,6 +39,8 @@ enum {
 - (IBAction) signWithSelfie:(id)sender;
 - (IBAction) signWithPhoto:(id)sender;
 
+- (void) setAllFields:(MLOperator *)p;
+
 - (void)keyboardDidShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
 

@@ -7,6 +7,7 @@
 //
 
 #import "MLOperator.h"
+#import "MLUtility.h"
 
 @implementation MLOperator
 
@@ -37,8 +38,25 @@
     if (!title) title = @"";
     if (!familyName) familyName = @"";
     if (!givenName) givenName = @"";
+}
 
+- (void)importSignatureFromDict:(NSDictionary *)dict
+{
     signature = [dict objectForKey:@"signature"];
+}
+
+- (BOOL)importSignature
+{
+    NSString *documentsDirectory = [MLUtility documentsDirectory];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"op_signature.png"];
+    if (!filePath)
+        return FALSE;
+    
+    UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
+    NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
+    NSData *imgData = UIImagePNGRepresentation(signatureImg);
+    signature = [imgData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return TRUE;
 }
 
 // Return number of lines of doctor information to be displayed in the prescription
@@ -49,9 +67,9 @@
 
 - (UIImage *)signatureThumbnail
 {
-    if (self.signature == nil) {
+    if (self.signature == nil)
         return nil;
-    }
+
     NSData *data = [[NSData alloc]
                     initWithBase64EncodedString:self.signature
                     options:NSDataBase64DecodingIgnoreUnknownCharacters];
