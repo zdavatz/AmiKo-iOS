@@ -239,7 +239,27 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         prescription.doctor.signature = [imgData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     }
     
-    // TODO: get all the other defaults
+    // Init from defaults
+    // See also MLOperator importFromDict
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    if (!doctorDictionary) {
+#ifdef DEBUG
+        NSLog(@"Default doctor is not yet defined");
+#endif
+        return;
+    }
+#ifdef DEBUG
+    NSLog(@"Default doctor %@", doctorDictionary);
+#endif
+    prescription.doctor.title = [doctorDictionary objectForKey: @"title"];
+    prescription.doctor.givenName = [doctorDictionary objectForKey: @"name"];
+    prescription.doctor.familyName = [doctorDictionary objectForKey: @"surname"];
+    prescription.doctor.postalAddress = [doctorDictionary objectForKey: @"address"];
+    prescription.doctor.city = [doctorDictionary objectForKey: @"city"];
+    prescription.doctor.zipCode = [doctorDictionary objectForKey: @"zip"];
+    prescription.doctor.phoneNumber = [doctorDictionary objectForKey: @"phone"];
+    prescription.doctor.emailAddress = [doctorDictionary objectForKey: @"email"];
 }
 
 // Try to reopen the last used file

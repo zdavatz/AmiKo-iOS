@@ -1,17 +1,26 @@
+/* Class = "UILabel"; text = "Phone"; ObjectID = "5KD-lg-L0x"; */
+"5KD-lg-L0x.text" = "Telefonnr.";
 
 /* Class = "UITextField"; placeholder = "DD.MM.YYYY"; ObjectID = "11x-yn-ywg"; */
 "11x-yn-ywg.placeholder" = "DD.MM.JJJJ";
 
+<<<<<<< HEAD
 /* Class = "UILabel"; text = "Phone"; ObjectID = "5KD-lg-L0x"; */
 "5KD-lg-L0x.text" = "Telefon";
 
+=======
+>>>>>>> f60930c5cfd0d4bcd855b45836f22737d633da7c
 /* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
 "BEZ-6Y-wKL.text" = "Gewicht (kg)";
 
 /* Class = "UILabel"; text = "Height (cm)"; ObjectID = "G5L-ae-7Kn"; */
 "G5L-ae-7Kn.text" = "Grösse (cm)";
 
+<<<<<<< HEAD
 /* Class = "UILabel"; text = "Address*"; ObjectID = "Nqq-S6-oX3"; */
+=======
+/* Class = "UILabel"; text = "Street*"; ObjectID = "Nqq-S6-oX3"; */
+>>>>>>> f60930c5cfd0d4bcd855b45836f22737d633da7c
 "Nqq-S6-oX3.text" = "Strasse*";
 
 /* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
@@ -45,4 +54,9 @@
 "wpI-ZL-spi.segmentTitles[0]" = "M";
 
 /* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[1] = "Female"; ObjectID = "wpI-ZL-spi"; */
+<<<<<<< HEAD
 "wpI-ZL-spi.segmentTitles[1]" = "F";
+=======
+"wpI-ZL-spi.segmentTitles[1]" = "weiblich";
+
+>>>>>>> f60930c5cfd0d4bcd855b45836f22737d633da7c

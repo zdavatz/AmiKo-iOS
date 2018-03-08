@@ -16,7 +16,7 @@
 @synthesize postalAddress;
 @synthesize zipCode;
 @synthesize city;
-@synthesize country;
+//@synthesize country;
 @synthesize phoneNumber;
 @synthesize emailAddress;
 
@@ -30,7 +30,7 @@
     postalAddress = [dict objectForKey:@"postal_address"];
     zipCode = [dict objectForKey:@"zip_code"];
     city = [dict objectForKey:@"city"];
-    country = @"";
+    //country = @"";
     phoneNumber = [dict objectForKey:@"phone_number"];
     emailAddress = [dict objectForKey:@"email_address"];
 
