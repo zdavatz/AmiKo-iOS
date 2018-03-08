@@ -26,6 +26,9 @@
 @property (nonatomic, strong, readwrite) NSString *signature;
 
 - (void)importFromDict:(NSDictionary *)dict;
+- (void)importSignatureFromDict:(NSDictionary *)dict;
+- (BOOL)importSignature;
+
 - (UIImage *)signatureThumbnail;
 - (NSInteger)entriesCount;
 

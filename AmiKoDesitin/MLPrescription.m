@@ -77,6 +77,8 @@
     if (operatorDict) {
         doctor = [[MLOperator alloc] init];
         [doctor importFromDict:operatorDict];
+        [doctor importSignatureFromDict:operatorDict];
+        //doctor.signature = [operatorDict objectForKey:@"signature"];
     }
     
     NSDictionary *patientDict = [receiptData objectForKey:@"patient"] ?: [NSNull null];
