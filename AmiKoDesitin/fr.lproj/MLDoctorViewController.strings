@@ -10,29 +10,19 @@
 /* Class = "UIButton"; normalTitle = "Sign with Selfie"; ObjectID = "Ln5-t1-rrK"; */
 "Ln5-t1-rrK.normalTitle" = "Sign. avec Selfie";
 
-<<<<<<< HEAD
-/* Class = "UILabel"; text = "Address*"; ObjectID = "RAn-T3-58s"; */
-"RAn-T3-58s.text" = "Adresse*";
-=======
 /* Class = "UILabel"; text = "City*"; ObjectID = "RAn-T3-58s"; */
 "RAn-T3-58s.text" = "Ville*";
->>>>>>> f60930c5cfd0d4bcd855b45836f22737d633da7c
 
 /* Class = "UILabel"; text = "Name*"; ObjectID = "VVo-lv-GrG"; */
 "VVo-lv-GrG.text" = "Nom*";
 
 /* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
 "Wmv-Vd-WhX.text" = "Tél.*";
-<<<<<<< HEAD
-
-/* Class = "UIButton"; normalTitle = "Sign with Photo from Library"; ObjectID = "eOx-v7-0eW"; */
-=======
 
 /* Class = "UILabel"; text = "Street*"; ObjectID = "Z3T-z3-1aC"; */
 "Z3T-z3-1aC.text" = "Adresse*";
 
 /* Class = "UIButton"; normalTitle = "Sign with Photo"; ObjectID = "eOx-v7-0eW"; */
->>>>>>> f60930c5cfd0d4bcd855b45836f22737d633da7c
 "eOx-v7-0eW.normalTitle" = "Sign. avec Photo";
 
 /* Class = "UILabel"; text = "Aspect ratio 1.33"; ObjectID = "edA-0p-y3g"; */
