@@ -526,8 +526,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 label.text = prescription.patient.postalAddress;
                 break;
             case 3:
-                label.text = [NSString stringWithFormat:@"%@ %@",
+                label.text = [NSString stringWithFormat:@"%@ %@ %@",
                               prescription.patient.city,
+                              prescription.patient.zipCode,
                               prescription.patient.country];
                 break;
             case 4:
