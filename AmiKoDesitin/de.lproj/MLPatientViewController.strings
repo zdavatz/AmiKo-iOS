@@ -23,7 +23,7 @@
 "cFQ-vB-rrd.text" = "Land";
 
 /* Class = "UILabel"; text = "Sex*"; ObjectID = "ipa-Lx-J6I"; */
-"ipa-Lx-J6I.text" = "Geschl.*";
+"ipa-Lx-J6I.text" = "Geschlecht*";
 
 /* Class = "UITextField"; text = "Save"; ObjectID = "lyg-cM-u3T"; */
 "lyg-cM-u3T.text" = "Save";
