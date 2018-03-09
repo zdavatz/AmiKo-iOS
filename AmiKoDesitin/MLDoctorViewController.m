@@ -74,6 +74,8 @@
     
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    //scrollView.scrollEnabled = FALSE;
+    scrollView.bounces = NO;
     
     // Register for notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
