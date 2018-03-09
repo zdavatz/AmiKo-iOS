@@ -17,7 +17,6 @@
 @synthesize postalAddress;
 @synthesize zipCode;
 @synthesize city;
-//@synthesize country;
 @synthesize phoneNumber;
 @synthesize emailAddress;
 
@@ -25,15 +24,14 @@
 
 - (void)importFromDict:(NSDictionary *)dict
 {
-    title = [dict objectForKey:@"title"];
-    familyName = [dict objectForKey:@"family_mame"];
-    givenName = [dict objectForKey:@"given_name"];
-    postalAddress = [dict objectForKey:@"postal_address"];
-    zipCode = [dict objectForKey:@"zip_code"];
-    city = [dict objectForKey:@"city"];
-    //country = @"";
-    phoneNumber = [dict objectForKey:@"phone_number"];
-    emailAddress = [dict objectForKey:@"email_address"];
+    title =         [dict objectForKey:KEY_AMK_DOC_TITLE];
+    familyName =    [dict objectForKey:KEY_AMK_DOC_SURNAME];
+    givenName =     [dict objectForKey:KEY_AMK_DOC_NAME];
+    postalAddress = [dict objectForKey:KEY_AMK_DOC_ADDRESS];
+    city =          [dict objectForKey:KEY_AMK_DOC_CITY];
+    zipCode =       [dict objectForKey:KEY_AMK_DOC_ZIP];
+    phoneNumber =   [dict objectForKey:KEY_AMK_DOC_PHONE];
+    emailAddress =  [dict objectForKey:KEY_AMK_DOC_EMAIL];
 
     if (!title) title = @"";
     if (!familyName) familyName = @"";

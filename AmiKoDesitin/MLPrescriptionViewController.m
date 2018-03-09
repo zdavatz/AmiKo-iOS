@@ -528,8 +528,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 break;
             case 3:
                 label.text = [NSString stringWithFormat:@"%@ %@ %@",
-                              prescription.patient.city,
                               prescription.patient.zipCode,
+                              prescription.patient.city,
                               prescription.patient.country];
                 break;
             case 4:
@@ -633,7 +633,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, btn.tag, btn.title);
 #endif
-    // TODO: load doctor
+    [self loadDefaultDoctor];
+    
     if ([self loadDefaultPatient])
         [infoView reloadData];
     
@@ -727,15 +728,34 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //    }
     
     NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
-    [patientDict setObject:[self.prescription.patient givenName] forKey:@"given_name"];
+    [patientDict setObject:[self.prescription.patient uniqueId] forKey:KEY_AMK_PAT_ID];
+    [patientDict setObject:[self.prescription.patient givenName] forKey:KEY_AMK_PAT_NAME];
+    [patientDict setObject:[self.prescription.patient familyName] forKey:KEY_AMK_PAT_SURNAME];
+    [patientDict setObject:[self.prescription.patient birthDate] forKey:KEY_AMK_PAT_BIRTHDATE];
+    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient weightKg]] forKey:KEY_AMK_PAT_WEIGHT];
+    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient heightCm]] forKey:KEY_AMK_PAT_HEIGHT];
+    [patientDict setObject:[self.prescription.patient gender] forKey:KEY_AMK_PAT_GENDER];
+    [patientDict setObject:[self.prescription.patient postalAddress] forKey:KEY_AMK_PAT_ADDRESS];
+    [patientDict setObject:[self.prescription.patient zipCode] forKey:KEY_AMK_PAT_ZIP];
+    [patientDict setObject:[self.prescription.patient city] forKey:KEY_AMK_PAT_CITY];
+    [patientDict setObject:[self.prescription.patient country] forKey:KEY_AMK_PAT_COUNTRY];
+    [patientDict setObject:[self.prescription.patient phoneNumber] forKey:KEY_AMK_PAT_PHONE];
+    [patientDict setObject:[self.prescription.patient emailAddress] forKey:KEY_AMK_PAT_EMAIL];
 
     NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
-    [operatorDict setObject:[self.prescription.patient familyName] forKey:@"given_name"];
+    [operatorDict setObject:[self.prescription.doctor title] forKey:KEY_AMK_DOC_TITLE];
+    [operatorDict setObject:[self.prescription.doctor givenName] forKey:KEY_AMK_DOC_NAME];
+    [operatorDict setObject:[self.prescription.doctor familyName] forKey:KEY_AMK_DOC_SURNAME];
+    [operatorDict setObject:[self.prescription.doctor postalAddress] forKey:KEY_AMK_DOC_ADDRESS];
+    [operatorDict setObject:[self.prescription.doctor city] forKey:KEY_AMK_DOC_CITY];
+    [operatorDict setObject:[self.prescription.doctor zipCode] forKey:KEY_AMK_DOC_ZIP];
+    [operatorDict setObject:[self.prescription.doctor phoneNumber] forKey:KEY_AMK_DOC_PHONE];
+    [operatorDict setObject:[self.prescription.doctor emailAddress] forKey:KEY_AMK_DOC_EMAIL];
 
     NSLocale *currentLocale = [NSLocale currentLocale];
     NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
     prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
-                              countryCode, //[defaults stringForKey:@"city"],  // TODO:
+                              countryCode, //[defaults stringForKey:KEY_AMK_DOC_CITY],  // TODO:
                               [MLUtility prettyTime]];
     
     prescription.hash = [self makeNewUniqueHash];

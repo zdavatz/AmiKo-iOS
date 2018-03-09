@@ -92,6 +92,9 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
     if (!doctorDictionary) {
+        NSLog(@"Default doctor details not yet defined");
+        [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
+        [self.signatureView.layer setBorderWidth: 2.0];
         return;
     }
     
@@ -106,6 +109,7 @@
         self.signatureView.image = [doctor thumbnailFromSignature:self.signatureView.frame.size];
     }
     else {
+        NSLog(@"Default doctor signature not yet defined");
         // Make the picture area stand out with a border
         [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
@@ -306,16 +310,15 @@
     }
     
     // Set as default for prescriptions
-    // Use same "keys" as the amk file
     NSMutableDictionary *doctorDict = [[NSMutableDictionary alloc] init];
-    [doctorDict setObject:mTitle.text forKey:@"title"];
-    [doctorDict setObject:mGivenName.text forKey:@"given_name"];
-    [doctorDict setObject:mFamilyName.text forKey:@"family_mame"];
-    [doctorDict setObject:mPostalAddress.text forKey:@"postal_address"];
-    [doctorDict setObject:mCity.text forKey:@"city"];
-    [doctorDict setObject:mZipCode.text forKey:@"zip_code"];
-    [doctorDict setObject:mPhone.text forKey:@"phone_number"];
-    [doctorDict setObject:mEmail.text forKey:@"email_address"];
+    [doctorDict setObject:mTitle.text         forKey:KEY_AMK_DOC_TITLE];
+    [doctorDict setObject:mGivenName.text     forKey:KEY_AMK_DOC_NAME];
+    [doctorDict setObject:mFamilyName.text    forKey:KEY_AMK_DOC_SURNAME];
+    [doctorDict setObject:mPostalAddress.text forKey:KEY_AMK_DOC_ADDRESS];
+    [doctorDict setObject:mCity.text          forKey:KEY_AMK_DOC_CITY];
+    [doctorDict setObject:mZipCode.text       forKey:KEY_AMK_DOC_ZIP];
+    [doctorDict setObject:mPhone.text         forKey:KEY_AMK_DOC_PHONE];
+    [doctorDict setObject:mEmail.text         forKey:KEY_AMK_DOC_EMAIL];
 
 #ifdef DEBUG
     NSLog(@"doctorDict: %@", doctorDict);
