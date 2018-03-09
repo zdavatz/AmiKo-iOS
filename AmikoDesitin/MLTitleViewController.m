@@ -73,6 +73,12 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Co
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    // Restore default in case it was changed
+    self.revealViewController.rightViewRevealOverdraw = 60.0;
+}
+
 - (void) setSectionTitles:(NSArray *)titles andIds:(NSArray *)ids
 {
     mSectionTitles = [[NSMutableArray alloc] init];

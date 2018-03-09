@@ -7,6 +7,7 @@
 //
 
 #import "MLOperator.h"
+#import "MLUtility.h"
 
 @implementation MLOperator
 
@@ -16,7 +17,6 @@
 @synthesize postalAddress;
 @synthesize zipCode;
 @synthesize city;
-@synthesize country;
 @synthesize phoneNumber;
 @synthesize emailAddress;
 
@@ -24,33 +24,50 @@
 
 - (void)importFromDict:(NSDictionary *)dict
 {
-    title = [dict objectForKey:@"title"];
-    familyName = [dict objectForKey:@"family_mame"];
-    givenName = [dict objectForKey:@"given_name"];
-    postalAddress = [dict objectForKey:@"postal_address"];
-    zipCode = [dict objectForKey:@"zip_code"];
-    city = [dict objectForKey:@"city"];
-    country = @"";
-    phoneNumber = [dict objectForKey:@"phone_number"];
-    emailAddress = [dict objectForKey:@"email_address"];
+    title =         [dict objectForKey:KEY_AMK_DOC_TITLE];
+    familyName =    [dict objectForKey:KEY_AMK_DOC_SURNAME];
+    givenName =     [dict objectForKey:KEY_AMK_DOC_NAME];
+    postalAddress = [dict objectForKey:KEY_AMK_DOC_ADDRESS];
+    city =          [dict objectForKey:KEY_AMK_DOC_CITY];
+    zipCode =       [dict objectForKey:KEY_AMK_DOC_ZIP];
+    phoneNumber =   [dict objectForKey:KEY_AMK_DOC_PHONE];
+    emailAddress =  [dict objectForKey:KEY_AMK_DOC_EMAIL];
 
     if (!title) title = @"";
     if (!familyName) familyName = @"";
     if (!givenName) givenName = @"";
+}
 
+- (void)importSignatureFromDict:(NSDictionary *)dict
+{
     signature = [dict objectForKey:@"signature"];
 }
 
+- (BOOL)importSignature
+{
+    NSString *documentsDirectory = [MLUtility documentsDirectory];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"op_signature.png"];
+    if (!filePath)
+        return FALSE;
+    
+    UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
+    NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
+    NSData *imgData = UIImagePNGRepresentation(signatureImg);
+    signature = [imgData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return TRUE;
+}
+
+// Return number of lines of doctor information to be displayed in the prescription
 - (NSInteger)entriesCount
 {
     return 5; // TODO
 }
 
-- (UIImage *)signatureThumbnail
+- (UIImage *)thumbnailFromSignature:(CGSize) size
 {
-    if (self.signature == nil) {
+    if (self.signature == nil)
         return nil;
-    }
+
     NSData *data = [[NSData alloc]
                     initWithBase64EncodedString:self.signature
                     options:NSDataBase64DecodingIgnoreUnknownCharacters];
@@ -58,13 +75,11 @@
     UIImage* image = [UIImage imageWithData:data];
     
     // resize
-    CGSize size = CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H);
-    CGRect rect = CGRectZero;
-    
     CGFloat width = size.width / image.size.width;
     CGFloat height = size.height / image.size.height;
     CGFloat ratio = MIN(width, height);
     
+    CGRect rect = CGRectZero;
     rect.size.width = image.size.width * ratio;
     rect.size.height = image.size.height * ratio;
     rect.origin.x = (size.width - rect.size.width) / 2.0f;

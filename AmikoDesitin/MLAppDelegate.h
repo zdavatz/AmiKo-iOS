@@ -23,6 +23,15 @@
 
 #import <UIKit/UIKit.h>
 
+//#define CONTACTS_LIST_FULL_WIDTH
+//#define PATIENT_DB_LIST_FULL_WIDTH
+
+typedef NS_ENUM(NSInteger, EditMode) {
+    EDIT_MODE_UNDEFINED,
+    EDIT_MODE_PATIENTS,
+    EDIT_MODE_PRESCRIPTION
+};
+
 @class SWRevealViewController;
 
 @interface MLAppDelegate : UIResponder <UIApplicationDelegate>
@@ -30,5 +39,8 @@
 @property (strong, nonatomic) IBOutlet UIWindow *window;
 @property (retain, nonatomic) UINavigationController *navController;
 @property (strong, nonatomic) SWRevealViewController *revealViewController;
+@property EditMode editMode;
+
+- (void) switchRigthToPatientDbList;
 
 @end

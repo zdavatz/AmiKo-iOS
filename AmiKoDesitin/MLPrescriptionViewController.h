@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MLPatient.h"
-#import "MLOperator.h"
-#import "MLProduct.h"
+
+#import "MLPrescription.h"
 
 @interface MLPrescriptionViewController : UIViewController
     <UITableViewDelegate, UITableViewDataSource>
@@ -18,23 +17,26 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *infoView;
+@property (atomic) MLPrescription *prescription;
 
-@property (atomic) NSString *placeDate;
-@property (atomic) MLOperator *doctor;
-@property (atomic) MLPatient *patient;
-@property (atomic) NSMutableArray *medications;
++ (MLPrescriptionViewController *)sharedInstance;
 
 - (IBAction) newPrescription:(id)sender;
 - (IBAction) checkForInteractions:(id)sender;
 - (IBAction) savePrescription:(id)sender;
 - (IBAction) sendPrescription:(id)sender;
+- (IBAction) showPatientDbList:(id)sender;
+
+- (IBAction) myRightRevealToggle:(id)sender;
 
 - (void) overwritePrescription;
 - (void) saveNewPrescription;
-- (void) readPrescription:(NSURL *)url;
 
+- (NSString *) makeNewUniqueHash;
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color;
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification;
+- (void)amkDeleted:(NSNotification *)aNotification;
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
 
 @end

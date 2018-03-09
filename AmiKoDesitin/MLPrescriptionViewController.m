@@ -10,6 +10,11 @@
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
 
+#import "MLViewController.h"
+#import "MLAppDelegate.h"
+#import "MLAmkListViewController.h"
+#import "MLPatientDBAdapter.h"
+
 static const float kInfoCellHeight = 20.0;  // fixed
 
 static const float kSectionHeaderHeight = 27.0;
@@ -45,6 +50,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
+- (void)loadDefaultDoctor;
+- (BOOL)loadDefaultPrescription;
+- (BOOL)loadDefaultPatient;
 
 @end
 
@@ -53,23 +61,31 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @implementation MLPrescriptionViewController
 {
     CGRect mainFrame;
-    NSArray *amkFiles;
 }
 
-@synthesize placeDate;
-@synthesize doctor;
-@synthesize patient;
-@synthesize medications;
+@synthesize prescription;
 @synthesize infoView;
+
++ (MLPrescriptionViewController *)sharedInstance
+{
+    __strong static id sharedObject = nil;
+    
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedObject = [[self alloc] init];
+    });
+    return sharedObject;
+}
 
 - (void)layoutFrames
 {
     CGRect infoFrame = self.infoView.frame;
     infoFrame.origin.y = 0.6;
     infoFrame.size.width = self.view.bounds.size.width;
+
     infoFrame.size.height = ((kSectionHeaderHeight * 2) +
-                             (kInfoCellHeight * [doctor entriesCount]) +
-                             (kInfoCellHeight * [patient entriesCount]) +
+                             (kInfoCellHeight * [prescription.doctor entriesCount]) +
+                             (kInfoCellHeight * [prescription.patient entriesCount]) +
                              20.8); // margin
     [self.infoView setFrame:infoFrame];
 }
@@ -103,18 +119,48 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
 
+    // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
+#if 0
+    // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
+#else
+    // Two buttons on the left (with spacer between them)
+    UIBarButtonItem *patientsItem =
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Search Patients", nil)
+                                         style:UIBarButtonItemStylePlain
+                                        target:self
+                                        action:@selector(showPatientDbList:)];
+
+    UIBarButtonItem *spacer =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                      target:nil
+                                                      action:nil];
+    spacer.width = 90.0f;
+
+    self.navigationItem.leftBarButtonItems =
+        [NSArray arrayWithObjects:revealButtonItem, spacer, patientsItem, nil];
+#endif
     
+    // Right button
+#if 1
+    // First ensure the "right" is a MLContactsListViewController
+    id aTarget = self;
+    SEL aSelector = @selector(myRightRevealToggle:);
+#else
+    id aTarget = revealController;
+    SEL aSelector = @selector(rightRevealToggle:);
+#endif
+
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                      style:UIBarButtonItemStylePlain
-                                    target:revealController
-                                    action:@selector(rightRevealToggle:)];
+                                    target:aTarget
+                                    action:aSelector];
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     
     // PanGestureRecognizer goes here
@@ -127,29 +173,36 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     mainFrame = CGRectMake(0, barHeight,
                            screenBounds.size.width,
                            CGRectGetHeight(screenBounds) - barHeight);
-    NSError *error;
-    NSString *amkDir = [MLUtility amkDirectory];
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
-    amkFiles = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
-    if (error)
-        NSLog(@"%@", error.localizedDescription);
-
-#ifdef DEBUG
-    //NSLog(@"mainFrame:%@", NSStringFromCGRect(mainFrame));
-    NSLog(@"amk directory:%@", amkDir);
-    NSLog(@"amk files:%@", amkFiles);
-#endif
-
-    if ([amkFiles count] > 0) {
-        NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[amkFiles objectAtIndex:0]];
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [self readPrescription:url];
-    }
     
+    prescription = [[MLPrescription alloc] init];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
-                                                 name:@"AmkFilenameNotification"
+                                                 name:@"AmkFilenameSelectedNotification"
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(amkDeleted:)
+                                                 name:@"AmkFilenameDeletedNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(patientDbListDidChangeSelection:)
+                                                 name:@"PatientSelectedNotification"
+                                               object:nil];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    if (![self loadDefaultPrescription]) {
+        [self loadDefaultDoctor];
+        [self loadDefaultPatient];
+    }
+    
+    [infoView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -157,15 +210,92 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark -
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSString *) makeNewUniqueHash
+{
+    // Creates and returns a new UUID with RFC 4122 version 4 random bytes
+    return [[NSUUID UUID] UUIDString];
 }
-*/
+
+#pragma mark -
+
+- (void)loadDefaultDoctor
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    
+    if (!prescription.doctor)
+        prescription.doctor = [[MLOperator alloc] init];
+    
+    // Init from defaults
+    // See also MLOperator importFromDict
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    if (!doctorDictionary) {
+#ifdef DEBUG
+        NSLog(@"Default doctor is not yet defined");
+#endif
+        return;
+    }
+#ifdef DEBUG
+    //NSLog(@"Default doctor %@", doctorDictionary);
+#endif
+    [prescription.doctor importFromDict:doctorDictionary];    
+    [prescription.doctor importSignature];
+}
+
+// Try to reopen the last used file
+- (BOOL)loadDefaultPrescription
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    // Try to reopen the last used file
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
+    if (!fileName) {
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
+        return FALSE;
+    }
+    
+    NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
+        [defaults removeObjectForKey:@"lastUsedPrescription"];
+        [defaults synchronize];
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
+        return FALSE;
+    }
+
+    NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+    [prescription importFromURL:url];
+    NSLog(@"Reopening:%@", fileName);
+    return TRUE;
+}
+
+- (BOOL)loadDefaultPatient
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *patientId = [defaults stringForKey:@"currentPatient"];
+    if (!patientId) {
+#ifdef DEBUG
+        NSLog(@"Default patient is not yet defined");
+#endif
+        return FALSE;
+    }
+    
+    MLPatientDBAdapter *patientDb = [[MLPatientDBAdapter alloc] init];
+    if (![patientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        return FALSE;
+    }
+
+    MLPatient *pat = [patientDb getPatientWithUniqueID:patientId];
+    [prescription setPatient:pat];
+    [patientDb closeDatabase];
+    return TRUE;
+}
 
 #pragma mark - Table view data source
 
@@ -180,14 +310,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (section == kSectionMeta)
         return 1;
 
-    if ((section == kSectionOperator) && (doctor != nil))
-        return [doctor entriesCount];
-
-    if ((section == kSectionPatient) && (patient != nil))
-        return [patient entriesCount];
+    if ((section == kSectionOperator) && (prescription.doctor != nil))
+        return [prescription.doctor entriesCount];
+    
+    if ((section == kSectionPatient) && (prescription.patient != nil))
+        return [prescription.patient entriesCount];
     
     if (section == kSectionMedicines)
-        return [medications count];
+        return [prescription.medications count];
     
     return 0;
 }
@@ -216,7 +346,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.text = NSLocalizedString(@"Patient", nil);
     else if (section == kSectionMedicines) {
         NSString *format;
-        NSInteger count = [medications count];
+        NSInteger count = [prescription.medications count];
         if (count == 1)
             format = NSLocalizedString(@"Medicine", nil);
         else
@@ -248,10 +378,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (indexPath.section != kSectionMedicines)
         return kInfoCellHeight;
 
-    if (medications==nil)
+    if (prescription.medications==nil)
         return kInfoCellHeight;
 
-    MLProduct *med = medications[indexPath.row];
+    MLProduct *med = prescription.medications[indexPath.row];
     if (med==nil)
         return kMedCellHeight;
 
@@ -318,10 +448,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textAlignment = NSTextAlignmentLeft;
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
-        label.text = placeDate;
+        label.text = prescription.placeDate;
     }
     else if (indexPath.section == kSectionOperator) {
-        if (!doctor) {
+        if (!prescription.doctor) {
             cell.textLabel.text = @"";
             return cell;
         }
@@ -334,10 +464,16 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
         switch (indexPath.row) {
             case 0:
-                label.text = [NSString stringWithFormat:@"%@ %@ %@", doctor.title, doctor.familyName, doctor.givenName];
-                if (([doctor signature] != nil) &&
-                    ![doctor.signature isEqualToString:@""]) {
-                    UIImageView *signatureView = [[UIImageView alloc] initWithImage:doctor.signatureThumbnail];
+                label.text = [NSString stringWithFormat:@"%@ %@ %@",
+                              prescription.doctor.title,
+                              prescription.doctor.familyName,
+                              prescription.doctor.givenName];
+
+                if (([prescription.doctor signature] != nil) &&
+                    ![prescription.doctor.signature isEqualToString:@""])
+                {
+                    UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
+                    UIImageView *signatureView = [[UIImageView alloc] initWithImage:img];
                     [signatureView setFrame:CGRectMake(frame.size.width - (DOCTOR_TN_W + 10.0),
                                                        0,
                                                        DOCTOR_TN_W,
@@ -347,23 +483,25 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 }
                 break;
             case 1:
-                label.text = doctor.postalAddress;
+                label.text = prescription.doctor.postalAddress;
                 break;
             case 2:
-                label.text = [NSString stringWithFormat:@"%@ %@", doctor.zipCode, doctor.city];
+                    label.text = [NSString stringWithFormat:@"%@ %@",
+                                  prescription.doctor.zipCode,
+                                  prescription.doctor.city];
                 break;
             case 3:
-                label.text = doctor.phoneNumber;
+                    label.text = prescription.doctor.phoneNumber;
                 break;
             case 4:
-                label.text = doctor.emailAddress;
+                    label.text = prescription.doctor.emailAddress;
                 break;
             default:
                 break;
         }
     }
     else if (indexPath.section == kSectionPatient) {
-        if (!patient) {
+        if (!prescription.patient) {
             cell.textLabel.text = @"";
             return cell;
         }
@@ -374,33 +512,39 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.backgroundColor = [UIColor clearColor];
         switch (indexPath.row) {
             case 0:
-                label.text = [NSString stringWithFormat:@"%@ %@", patient.familyName, patient.givenName];
+                label.text = [NSString stringWithFormat:@"%@ %@",
+                              prescription.patient.familyName,
+                              prescription.patient.givenName];
                 break;
             case 1:
                 label.text = [NSString stringWithFormat:@"%dkg/%dcm %@ %@",
-                              patient.weightKg,
-                              patient.heightCm,
-                              patient.gender,
-                              patient.birthDate];
+                              prescription.patient.weightKg,
+                              prescription.patient.heightCm,
+                              prescription.patient.gender,
+                              prescription.patient.birthDate];
                 break;
             case 2:
-                label.text = patient.postalAddress;
+                label.text = prescription.patient.postalAddress;
                 break;
             case 3:
-                label.text = [NSString stringWithFormat:@"%@ %@", patient.city, patient.country];
+                label.text = [NSString stringWithFormat:@"%@ %@ %@",
+                              prescription.patient.zipCode,
+                              prescription.patient.city,
+                              prescription.patient.country];
                 break;
             case 4:
-                label.text = patient.phoneNumber;
+                label.text = prescription.patient.phoneNumber;
                 break;
             case 5:
-                label.text = patient.emailAddress;
+                label.text = prescription.patient.emailAddress;
                 break;
             default:
                 break;
         }
     }
     else {
-        MLProduct * med = medications[indexPath.row];
+
+        MLProduct * med = prescription.medications[indexPath.row];
         UILabel *packLabel = [self makeLabel:med.packageInfo
                                    textColor:[UIColor blackColor]];
 
@@ -439,6 +583,48 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return cell;
 }
 
+#pragma mark - Actions
+
+- (IBAction)myRightRevealToggle:(id)sender
+{
+    SWRevealViewController *revealController = [self revealViewController];
+    
+    // Check that the right controller class is MLAmkListViewController
+    UIViewController *vc_right = revealController.rightViewController;
+    
+#ifdef DEBUG
+    //NSLog(@"%s vc: %@", __FUNCTION__, [vc_right class]);
+#endif
+    
+    if (![vc_right isKindOfClass:[MLAmkListViewController class]] ) {
+        // Replace right controller
+        MLAmkListViewController *amkListViewController =
+        [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
+                                                       bundle:nil];
+        [revealController setRightViewController:amkListViewController];
+        NSLog(@"Replaced right VC");
+    }
+    
+#ifdef CONTACTS_LIST_FULL_WIDTH
+    float frameWidth = self.view.frame.size.width;
+    revealController.rightViewRevealWidth = frameWidth;
+#endif
+    
+    if ([revealController frontViewPosition] == FrontViewPositionLeft)
+        [revealController setFrontViewPosition:FrontViewPositionLeftSide animated:YES];
+    else
+        [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+- (IBAction) showPatientDbList:(id)sender
+{
+#ifdef DEBUG
+    //NSLog(@"%s", __FUNCTION__);
+#endif
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDel switchRigthToPatientDbList];
+}
+
 #pragma mark - Toolbar actions
 
 - (IBAction) newPrescription:(id)sender
@@ -447,6 +633,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, btn.tag, btn.title);
 #endif
+    [self loadDefaultDoctor];
+    
+    if ([self loadDefaultPatient])
+        [infoView reloadData];
+    
+    // TODO: clear medicines
 }
 
 - (IBAction) checkForInteractions:(id)sender
@@ -477,6 +669,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                              [self saveNewPrescription];
                                                          }];
     
+    // Cancel buttons are removed from popovers automatically, because tapping outside the popover represents "cancel", in a popover context
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:^(UIAlertAction *action) {
@@ -485,6 +678,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [alertController addAction:actionOk];
     [alertController addAction:actionNo];
     [alertController addAction:actionCancel];
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        //UIBarButtonItem *button = (UIBarButtonItem *)sender;
+        alertController.popoverPresentationController.barButtonItem = sender;
+        alertController.popoverPresentationController.sourceView = self.view;
+    }
+
     [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
 
@@ -510,34 +710,78 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) saveNewPrescription
 {
-#if 0
-    NSString *documentsDir = [MLUtility documentsDirectory];
-    NSString *amkDir = [documentsDir stringByAppendingPathComponent:@"amk"];
-#else
-    NSString *amkDir = [MLUtility amkDirectory];
-#endif
+    NSString *amkDir;
+    NSString *uid = [self.prescription.patient uniqueId];
+    if (uid)
+        amkDir = [MLUtility amkDirectoryForPatient:uid];
+    else
+        amkDir = [MLUtility amkDirectory];
     
     NSError *error;
-    [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
-                              withIntermediateDirectories:YES
-                                               attributes:nil
-                                                    error:&error];
-    if (error) {
-        NSLog(@"%@", error.localizedDescription);
-        return;
-    }
+//    [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
+//                              withIntermediateDirectories:YES
+//                                               attributes:nil
+//                                                    error:&error];
+//    if (error) {
+//        NSLog(@"%@", error.localizedDescription);
+//        return;
+//    }
     
-    NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
-
     NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
-    [patientDict setObject:@"John" forKey:@"given_name"];  // TODO
+    [patientDict setObject:[self.prescription.patient uniqueId] forKey:KEY_AMK_PAT_ID];
+    [patientDict setObject:[self.prescription.patient givenName] forKey:KEY_AMK_PAT_NAME];
+    [patientDict setObject:[self.prescription.patient familyName] forKey:KEY_AMK_PAT_SURNAME];
+    [patientDict setObject:[self.prescription.patient birthDate] forKey:KEY_AMK_PAT_BIRTHDATE];
+    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient weightKg]] forKey:KEY_AMK_PAT_WEIGHT];
+    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient heightCm]] forKey:KEY_AMK_PAT_HEIGHT];
+    [patientDict setObject:[self.prescription.patient gender] forKey:KEY_AMK_PAT_GENDER];
+    [patientDict setObject:[self.prescription.patient postalAddress] forKey:KEY_AMK_PAT_ADDRESS];
+    [patientDict setObject:[self.prescription.patient zipCode] forKey:KEY_AMK_PAT_ZIP];
+    [patientDict setObject:[self.prescription.patient city] forKey:KEY_AMK_PAT_CITY];
+    [patientDict setObject:[self.prescription.patient country] forKey:KEY_AMK_PAT_COUNTRY];
+    [patientDict setObject:[self.prescription.patient phoneNumber] forKey:KEY_AMK_PAT_PHONE];
+    [patientDict setObject:[self.prescription.patient emailAddress] forKey:KEY_AMK_PAT_EMAIL];
 
     NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
-    [operatorDict setObject:@"Jack" forKey:@"given_name"];  // TODO
+    [operatorDict setObject:[self.prescription.doctor title] forKey:KEY_AMK_DOC_TITLE];
+    [operatorDict setObject:[self.prescription.doctor givenName] forKey:KEY_AMK_DOC_NAME];
+    [operatorDict setObject:[self.prescription.doctor familyName] forKey:KEY_AMK_DOC_SURNAME];
+    [operatorDict setObject:[self.prescription.doctor postalAddress] forKey:KEY_AMK_DOC_ADDRESS];
+    [operatorDict setObject:[self.prescription.doctor city] forKey:KEY_AMK_DOC_CITY];
+    [operatorDict setObject:[self.prescription.doctor zipCode] forKey:KEY_AMK_DOC_ZIP];
+    [operatorDict setObject:[self.prescription.doctor phoneNumber] forKey:KEY_AMK_DOC_PHONE];
+    [operatorDict setObject:[self.prescription.doctor emailAddress] forKey:KEY_AMK_DOC_EMAIL];
 
+    NSLocale *currentLocale = [NSLocale currentLocale];
+    NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+    prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
+                              countryCode, //[defaults stringForKey:KEY_AMK_DOC_CITY],  // TODO:
+                              [MLUtility prettyTime]];
+    
+    prescription.hash = [self makeNewUniqueHash];
+#if 1
+    NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
+    [prescriptionDict setObject:prescription.hash forKey:@"prescription_hash"];
+    [prescriptionDict setObject:prescription.placeDate forKey:@"place_date"];
     [prescriptionDict setObject:patientDict forKey:@"patient"];
     [prescriptionDict setObject:operatorDict forKey:@"operator"];
+    //[prescriptionDict setObject:prescription forKey:@"medications"];
+#else
+    NSDictionary *prescriptionDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      hash, @"prescription_hash",
+                                      prescription.placeDate, @"place_date",
+                                      patientDict, @"patient",
+                                      operatorDict, @"operator",
+                                      //prescription, @"medications",
+                                      nil];
+#endif
+    
+    //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 
+    if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
+        NSLog(@"Invalid JSON object:%@", prescriptionDict);
+        //return;
+    }
     // TODO:
     
     // Map cart array to json
@@ -546,115 +790,28 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            error:&error];
     
     NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
+    NSLog(@"Line %d, jsonStr:%@", __LINE__, jsonStr);
     NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
     
-    // Create file as new name `RZ_timestamp.amk`
-    time_t timestamp = (time_t)[[NSDate date] timeIntervalSince1970];  // TODO: format it like AmiKo
+#if 1
+    // Prescription file name like AmiKo
+    NSString *currentTime = [[MLUtility currentTime] stringByReplacingOccurrencesOfString:@":" withString:@""];
+    currentTime = [currentTime stringByReplacingOccurrencesOfString:@"." withString:@""];
+    NSString *amkFile = [NSString stringWithFormat:@"RZ_%@.amk", currentTime];
+    NSString *amkFilePath = [amkDir stringByAppendingPathComponent:amkFile];
+#else
+    // Prescription file name like Generika
+    time_t timestamp = (time_t)[[NSDate date] timeIntervalSince1970];
     NSString *amkFile = [NSString stringWithFormat:@"%@_%d.amk", @"RZ", (int)timestamp];
     NSString *amkFilePath = [amkDir stringByAppendingPathComponent:amkFile];
-#if 1
-    BOOL amkSaved = [base64Str writeToFile:amkFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    if (!amkSaved) {
-        NSLog(@"Error: %@", [error userInfo]);
-    }
-#else
-    NSData *amkData; // TODO
-#ifdef DEBUG
-    char bytes[2];
-    bytes[0] = 0x41;
-    bytes[1] = 0x42;
-    amkData = [NSData dataWithBytes:bytes length:2];
 #endif
-    BOOL amkSaved = [amkData writeToFile:amkFilePath atomically:YES];
-#endif
+
+    BOOL amkSaved = [base64Str writeToFile:amkFilePath
+                                atomically:YES
+                                  encoding:NSUTF8StringEncoding
+                                     error:&error];
     if (!amkSaved)
-        return;
-
-//    return amkFilePath;
-}
-
-// see Generika importReceiptFromURL
-// see AmiKo loadPrescriptionFromFile
-- (void) readPrescription:(NSURL *)url
-{
-    NSError *error;
-#ifdef DEBUG
-    //NSLog(@"%s %@", __FUNCTION__, url);
-#endif
-    NSData *encryptedData = [NSData dataWithContentsOfURL:url];
-    if (encryptedData == nil) {
-        NSLog(@"Cannot get data from <%@>", url);
-        return;
-    }
-    NSData *decryptedData = [encryptedData initWithBase64EncodedData:encryptedData
-                                                             options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    
-    // jsonDict
-    NSDictionary *receiptData = [NSJSONSerialization JSONObjectWithData:decryptedData
-                                                                options:NSJSONReadingAllowFragments
-                                                                  error:&error];
-    if (error) {
-        NSLog(@"%@", error.localizedDescription);
-        return;
-    }
-    
-    //NSLog(@"JSON: %@\nEnd of JSON file", receiptData);
-
-    // hashedKey (prescription_hash) is required
-    NSString *hash = [receiptData valueForKey:@"prescription_hash"];
-    if (hash == nil ||
-        [hash isEqual:[NSNull null]] ||
-        [hash isEqualToString:@""])
-    {
-        NSLog(@"Error with prescription hash");
-        return;
-    }
-
-#ifdef DEBUG
-    //NSLog(@"hash: %@", hash);
-#endif
-
-#if 0
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hashedKey == %@", hash];
-#ifdef DEBUG
-    NSLog(@"predicate: %@", predicate);
-#endif
-//    NSArray *matched = [self.receipts filteredArrayUsingPredicate:predicate];
-//    if ([matched count] > 0) {
-//        // already imported
-//        return;
-//    }
-#endif
-    
-    placeDate = [receiptData objectForKey:@"place_date"];
-    if (placeDate == nil)
-        placeDate = [receiptData objectForKey:@"date"];
-
-    NSDictionary *operatorDict = [receiptData valueForKey:@"operator"] ?: [NSNull null];
-    if (operatorDict) {
-        doctor = [[MLOperator alloc] init];
-        [doctor importFromDict:operatorDict];
-    }
-
-    NSDictionary *patientDict = [receiptData valueForKey:@"patient"] ?: [NSNull null];
-    if (patientDict) {
-        patient = [[MLPatient alloc] init];
-        [patient importFromDict:patientDict];
-    }
-
-    // prescription aka medications aka products
-    medications = [[NSMutableArray alloc] init]; // prescription
-    NSArray *medicationArray = [receiptData valueForKey:@"medications"] ?: [NSNull null];
-    for (NSDictionary *medicationDict in medicationArray) {
-        MLProduct *med = [MLProduct importFromDict:medicationDict];
-        [medications addObject:med];
-    }
-#ifdef DEBUG
-//    NSLog(@"medicationArray: %@", medicationArray);
-
-//    for (MLProduct *med in medications)
-//        NSLog(@"packageInfo: %@", med.packageInfo);
-#endif
+        NSLog(@"Error: %@", [error userInfo]);
 }
 
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color
@@ -682,13 +839,39 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification
 {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[aNotification object] forKey:@"lastUsedPrescription"];
+    [defaults synchronize];
+    
     NSString *amkDir = [MLUtility amkDirectory];
     NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-    [self readPrescription:url];
+    [prescription importFromURL:url];
     [infoView reloadData];
     
-    SWRevealViewController *revealController = self.revealViewController;
-    [revealController rightRevealToggleAnimated:YES];
+    [self.revealViewController rightRevealToggleAnimated:YES];
 }
+
+- (void)amkDeleted:(NSNotification *)aNotification
+{
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
+    
+    prescription.hash = nil;
+    prescription.placeDate = nil;
+    prescription.medications = nil;
+    prescription.patient = nil;
+    
+    [infoView reloadData];
+    
+    [self.revealViewController rightRevealToggleAnimated:YES];
+}
+
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
+{
+    [prescription setPatient:[aNotification object]];
+    [infoView reloadData];
+}
+
 @end

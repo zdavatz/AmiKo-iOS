@@ -29,7 +29,7 @@
 #import "SWRevealViewController.h"
 #import "MLSearchWebView.h"
 #import "MLMedication.h"
-#import "MLMenuViewController.h"
+//#import "MLMenuViewController.h"
 
 #import "MLAlertView.h"
 
@@ -132,9 +132,6 @@
     }
 }
 
-/** 
- Resets searchfield
- */
 - (void) resetSearchField
 {
     if (mCurrentSearch!=nil)
@@ -289,6 +286,7 @@
 
 - (void) viewDidLoad
 {
+    
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
 #endif
@@ -309,18 +307,19 @@
         self.navigationController.navigationBar.translucent = NO;
     }
     
-    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                         style:UIBarButtonItemStylePlain
-                                                                        target:revealController
-                                                                        action:@selector(revealToggle:)];
-    
+    UIBarButtonItem *revealButtonItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:revealController
+                                    action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
-    if( mNumRevealButtons==2 ) {
-        UIBarButtonItem *rightRevealButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                                                                  style:UIBarButtonItemStylePlain
-                                                                                 target:revealController
-                                                                                 action:@selector(rightRevealToggle:)];
+    if ( mNumRevealButtons==2 ) {
+        UIBarButtonItem *rightRevealButtonItem =
+        [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                         style:UIBarButtonItemStylePlain
+                                        target:revealController
+                                        action:@selector(rightRevealToggle:)];
         self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     }
     

@@ -27,10 +27,15 @@
 #import "MLUtility.h"
 
 #import "MLSecondViewController.h"
-#import "MLPrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+
+#import "MLPrescriptionViewController.h"
 #import "MLAmkListViewController.h"
+
+#import "MLDoctorViewController.h"
+#import "MLPatientViewController.h"
+#import "MLContactsListViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -45,6 +50,8 @@
 
 #import <mach/mach.h>
 #import <sys/time.h>
+
+#import "MLAppDelegate.h"
 
 enum {
     kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
@@ -108,7 +115,6 @@ static BOOL mShowReport = false;
     SWRevealViewController *mainRevealController;
     
     MLSecondViewController *secondViewController;
-    MLPrescriptionViewController *prescriptionViewController;
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
     MLAmkListViewController *amkListViewController;
@@ -180,12 +186,12 @@ static BOOL mShowReport = false;
             [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
             mCurrentSearchState = kAtcCode;
         }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg. No.", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg. No", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
             mCurrentSearchState = kRegNr;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Therapy", "Full toolbar")]) {
@@ -224,8 +230,8 @@ static BOOL mShowReport = false;
         else if ([btn.title isEqualToString:NSLocalizedString(@"Reg", "Short toolbar")]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
+            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
             mCurrentSearchState = kRegNr;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Ther", "Short toolbar")]) {
@@ -288,8 +294,6 @@ static BOOL mShowReport = false;
     secondViewController = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
     otherViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
     
-    prescriptionViewController = nil;
-    
     menuViewController = nil;
     menuViewNavigationController = nil;
     
@@ -320,6 +324,10 @@ static BOOL mShowReport = false;
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(patientDbListDidChangeSelection:)
+                                                 name:@"PatientSelectedNotification"
+                                               object:nil];
     // Set default database
     mUsedDatabase = kAips;
     // Set current search state
@@ -449,6 +457,52 @@ static BOOL mShowReport = false;
     return success;
 }
 
+#pragma mark - Notifications
+
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification
+{
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, aNotification);
+#endif
+    // Set as default patient for prescriptions
+    MLPatient *p = [aNotification object];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:p.uniqueId forKey:@"currentPatient"];
+    [defaults synchronize];
+
+    UIViewController *nc_front = self.revealViewController.frontViewController;
+    UIViewController *vc_front = [nc_front.childViewControllers firstObject];
+
+    // Make sure we have the correct front controller
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+#ifdef DEBUG
+    //NSLog(@"appDel.editMode %ld", appDel.editMode);
+    //NSLog(@"front: %@ %p", [vc_front class], vc_front);
+#endif
+    
+    switch (appDel.editMode) {
+        case EDIT_MODE_PRESCRIPTION:
+            // There is only one case when we need to replace the front view
+            if ([vc_front isKindOfClass:[MLPatientViewController class]])
+                [self switchToPrescriptionView];
+            break;
+
+        case EDIT_MODE_PATIENTS:
+            if ([vc_front isKindOfClass:[MLPatientViewController class]]) {
+                MLPatientViewController *pvc = (MLPatientViewController *)vc_front;
+                [pvc resetAllFields];
+                [pvc setAllFields:p];
+            }
+            break;
+
+        default:
+        case EDIT_MODE_UNDEFINED:
+            break;
+    }
+    
+    [self.revealViewController rightRevealToggle:self];    
+}
+
 - (void) finishedDownloading:(NSNotification *)notification
 {
     static int fileCnt = 0;
@@ -516,6 +570,8 @@ static BOOL mShowReport = false;
         [self checkLastDBSync];
     }
 }
+
+#pragma mark -
 
 - (void) checkLastDBSync
 {
@@ -655,7 +711,7 @@ static BOOL mShowReport = false;
         case kRegNr:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No.", "Full toolbar")]];
+                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
             break;
         case kTherapy:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -816,7 +872,7 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
             
             // Hide status bar and navigation bar
@@ -881,7 +937,7 @@ static BOOL mShowReport = false;
         [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:1] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-        [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+        [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -898,7 +954,7 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No.", "Full toolbar")];
+            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
                         
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
@@ -1015,7 +1071,9 @@ static BOOL mShowReport = false;
     UIButton *logoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0.0f, 0.0f, 32.0f, 32.0f);
-    [logoButton addTarget:self action:@selector(myShowMenuMethod:) forControlEvents:UIControlEventTouchUpInside];
+    [logoButton addTarget:self
+                   action:@selector(myShowMenuMethod:)
+         forControlEvents:UIControlEventTouchUpInside];
 
 #if (__clang_major__ == 8) && (__clang_minor__ == 0)    // Xcode 8
     if ([MLConstants iosVersion] >= 9.0f)
@@ -1035,7 +1093,8 @@ static BOOL mShowReport = false;
         [menuViewController removeFromParentViewController];
         menuViewController = nil;
     }
-    menuViewController = [[MLMenuViewController alloc] initWithNibName:@"MLMenuViewController" bundle:nil parent:self];
+    menuViewController =
+    [[MLMenuViewController alloc] initWithNibName:@"MLMenuViewController" bundle:nil parent:self];
     
     if (menuViewNavigationController!=nil) {
         [menuViewNavigationController removeFromParentViewController];
@@ -1223,7 +1282,8 @@ static BOOL mShowReport = false;
             amikoReportFile = filePath;
         else
             amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_fr"] stringByAppendingPathExtension:@"html"];
         if ([fileManager fileExistsAtPath:filePath])
             amikoReportFile = filePath;
@@ -1273,7 +1333,7 @@ static BOOL mShowReport = false;
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
     report_memory();
 }
@@ -1454,6 +1514,10 @@ static BOOL mShowReport = false;
             mUsedDatabase = kAips; // tabbar in rear view selects AIPS
             //mUsedDatabase = kPrescription;
             mSearchInteractions = false;
+            {
+                MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+                appDel.editMode = EDIT_MODE_PRESCRIPTION;
+            }
             [self stopActivityIndicator];
             [self switchToPrescriptionView];
             break;
@@ -1840,6 +1904,8 @@ static BOOL mShowReport = false;
     // TODO
 }
 
+#pragma mark -
+
 - (void) switchToDrugInteractionView
 {
     // if (mCurrentIndexPath!=nil)
@@ -1848,39 +1914,86 @@ static BOOL mShowReport = false;
 
 - (void) switchToPrescriptionView
 {
-#if 0
-    UINavigationController *navController2 = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
-    NSLog(@"navController2:%@", navController2); // SWRevealViewController
-#endif
-    
-    if (prescriptionViewController!=nil) {
-        // [prescriptionViewController removeFromParentViewController];
-        prescriptionViewController = nil;
+    mainRevealController = self.revealViewController;
+
+    // Right
+    if (amkListViewController!=nil) {
+        [amkListViewController removeFromParentViewController];
+        amkListViewController = nil;
     }
     
-    prescriptionViewController =
-    [[MLPrescriptionViewController alloc] initWithNibName:@"MLPrescriptionViewController"
-                                                   bundle:nil];
+    amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
+                                                                      bundle:nil];
+    [mainRevealController setRightViewController:amkListViewController];
+
+    // Front
+    MLPrescriptionViewController *prescriptionViewController = [MLPrescriptionViewController sharedInstance];
     
     if (otherViewNavigationController!=nil) {
         [otherViewNavigationController removeFromParentViewController];
         otherViewNavigationController = nil;
     }
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];    
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+
+    //
+    mainRevealController.rightViewRevealOverdraw = 0;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;
+
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+- (void)switchFrontToPatientEditView
+{
+    mainRevealController = self.revealViewController;
     
-    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    MLPatientViewController *patientListViewController = [MLPatientViewController sharedInstance];
+
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
+
+    [mainRevealController setFrontViewController:otherViewNavigationController];
+}
+
+// Front: Patient Edit, Right: Contacts
+- (void) switchToPatientEditView
+{
     mainRevealController = self.revealViewController;
 
-    if (amkListViewController!=nil) {
-        [amkListViewController removeFromParentViewController];
-        amkListViewController = nil;
-    }
+    // Right
+    MLContactsListViewController *contactsListViewController =
+    [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
+                                                   bundle:nil];
+    [mainRevealController setRightViewController:contactsListViewController];
 
-    amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
-                                                                      bundle:nil];
-    mainRevealController.rightViewController = amkListViewController;
+    // Front
+    MLPatientViewController *patientEditViewController = [MLPatientViewController sharedInstance];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientEditViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+
+    //
+    mainRevealController.rightViewRevealOverdraw = 0;
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+// Front: Doctor Edit, Right: nil
+- (void) switchToDoctorEditView
+{
+    mainRevealController = self.revealViewController;
+    
+    // Right
+    MLContactsListViewController *contactsListViewController = nil;
+    
+    // Front
+    MLDoctorViewController *doctorEditViewController = [MLDoctorViewController sharedInstance];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:doctorEditViewController];
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    
+    //
+    mainRevealController.rightViewRevealOverdraw = 0;
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
 /**
@@ -2139,7 +2252,7 @@ static BOOL mShowReport = false;
 
     // Show SecondViewController! (UIWebView)
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 
 #ifdef DEBUG
     report_memory();

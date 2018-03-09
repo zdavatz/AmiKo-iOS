@@ -28,6 +28,9 @@
 #import "MLCustomURLConnection.h"
 #import "MLAlertView.h"
 #import "SWRevealViewController.h"
+#import "MLPatientViewController.h"
+
+#import "MLAppDelegate.h"
 
 @interface MLMenuViewController ()
 
@@ -139,10 +142,10 @@
                     [self startUpdate:NSLocalizedString(@"Update", "Button")];
                     break;
                 case 5:
-                    NSLog(@"TODO: %@", NSLocalizedString(@"Doctor Signature", "Button"));
+                    [self showPatients:nil];
                     break;
                 case 6:
-                    NSLog(@"TODO: %@", NSLocalizedString(@"Patients", "Button"));
+                    [self showDoctor:nil];
                     break;
                 default:
                     break;
@@ -167,14 +170,14 @@
                         NSLocalizedString(@"Rate",     "Button"),
                         NSLocalizedString(@"Report",   "Button"),
                         NSLocalizedString(@"Update",   "Button"),
-                        NSLocalizedString(@"Doctor Signature",   "Button"),
                         NSLocalizedString(@"Patients",   "Button"),
+                        NSLocalizedString(@"Doctor Signature",   "Button"),
                         nil];
     mMenuActionSheet.tag = 1;
     
     [mMenuActionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
     
-    if (mParentViewController!=nil)
+    if (mParentViewController)
         [mMenuActionSheet showInView:[mParentViewController view]];
 }
 
@@ -213,6 +216,8 @@
         [alert show];
     }
 }
+
+#pragma mark - Actions
 
 - (IBAction) sendFeedback:(id)sender
 {
@@ -253,15 +258,38 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?mt=8", APP_ID]]];
 }
 
+- (IBAction) showDoctor:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    if (mParentViewController)
+        [mParentViewController switchToDoctorEditView];
+}
+
+- (IBAction) showPatients:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    
+    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDel.editMode = EDIT_MODE_PATIENTS;
+
+    if (mParentViewController)
+        [mParentViewController switchToPatientEditView];
+}
+
 - (IBAction) showReport:(id)sender
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    if (mParentViewController!=nil) {
+    if (mParentViewController)
         [mParentViewController showReport:self];
-    }
 }
 
 - (IBAction) startUpdate:(id)sender

@@ -101,6 +101,48 @@
     return self;
 }
 
+- (BOOL) createWithPath:(NSString *)path
+               andTable:(NSString *)table
+             andColumns:(NSString *)columns
+{
+    NSFileManager *fileMgr = [[NSFileManager alloc] init];
+    
+    if ([fileMgr fileExistsAtPath:path]) {
+        NSLog(@"Patient DB file already created");
+        return TRUE;
+    }
+
+    // Setup database object
+    sqlite3 *dbConnection;
+    int rc;
+
+    // Database does not exist yet. Let's open...
+    rc = sqlite3_open([path UTF8String], &dbConnection);
+    if (rc != SQLITE_OK) {
+        NSLog(@"Failed to open database %@", path);
+        return FALSE;
+    }
+
+    // ...and create an empty table
+    char *err = NULL;
+    NSString *queryStr = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ %@", table, columns];
+    rc = sqlite3_exec(dbConnection, [queryStr UTF8String], NULL, NULL, &err);
+    if (rc != SQLITE_OK || err) {
+        NSLog(@"Failed to create table %@ for database %@", table, path);
+
+        if (err) {
+            NSLog(@"Error: %s", err);
+            sqlite3_free(err);
+        }
+
+        return FALSE;
+    }
+    
+    NSLog(@"%@ table created successfully...", table);
+    database = dbConnection;
+    return TRUE;
+}
+
 - (NSInteger) numberRecordsForTable: (NSString *)table
 {
     NSInteger numTableRecords = -1;
@@ -166,6 +208,52 @@
         return result;
     }
     return nil;
+}
+
+- (BOOL) insertRowIntoTable:(NSString *)table forColumns:(NSString *)columns andValues:(NSString *)values
+{
+    char *errMsg;
+    NSString *query = [NSString stringWithFormat:@"insert into %@ %@ values %@", table, columns, values];
+    if (sqlite3_exec(database, [query UTF8String], NULL, NULL, &errMsg) != SQLITE_OK) {
+        NSLog(@"Failed to insert record into table %@ with query %@: %s", table, query, errMsg);
+        return FALSE;
+    }
+    return TRUE;
+}
+
+- (BOOL) updateRowIntoTable:(NSString *)table forExpressions:(NSString *)expressions andConditions:(NSString *)conditions
+{
+    char *errMsg;
+    NSString *query = [NSString stringWithFormat:@"update %@ set %@ where %@", table, expressions, conditions];
+    if (sqlite3_exec(database, [query UTF8String], NULL, NULL, &errMsg) != SQLITE_OK) {
+        NSLog(@"Failed to replace record into table %@ with query %@: %s", table, query, errMsg);
+        return FALSE;
+    }
+    return TRUE;
+}
+
+- (BOOL) deleteRowFromTable:(NSString *)table
+                  withRowId:(long)rowId  // KEY_ROWID primary key
+{
+    char *errMsg;
+    NSString *query = [NSString stringWithFormat:@"delete from %@ where rowId=%ld", table, rowId];
+    if (sqlite3_exec(database, [query UTF8String], NULL, NULL, &errMsg) != SQLITE_OK) {
+        NSLog(@"Failed to delete record from db: %s", errMsg);
+        return FALSE;
+    }
+    return TRUE;
+}
+
+- (BOOL) deleteRowFromTable:(NSString *)table
+                    withUId:(NSString *)uId // KEY_UID
+{
+    char *errMsg;
+    NSString *query = [NSString stringWithFormat:@"delete from %@ where uid='%@'", table, uId];
+    if (sqlite3_exec(database, [query UTF8String], NULL, NULL, &errMsg) != SQLITE_OK) {
+        NSLog(@"Failed to delete record from db: %s", errMsg);
+        return FALSE;
+    }
+    return TRUE;
 }
 
 - (void) close

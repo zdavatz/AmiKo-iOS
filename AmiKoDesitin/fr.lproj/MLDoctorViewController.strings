@@ -1,0 +1,33 @@
+/* Class = "UILabel"; text = "ZIP*"; ObjectID = "8ha-Tw-evz"; */
+"8ha-Tw-evz.text" = "NP*";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "Hvl-IU-phx"; */
+"Hvl-IU-phx.text" = "Titre";
+
+/* Class = "UILabel"; text = "Surname*"; ObjectID = "K2v-Ld-fgV"; */
+"K2v-Ld-fgV.text" = "Prénom*";
+
+/* Class = "UIButton"; normalTitle = "Sign with Selfie"; ObjectID = "Ln5-t1-rrK"; */
+"Ln5-t1-rrK.normalTitle" = "Sign. avec Selfie";
+
+/* Class = "UILabel"; text = "City*"; ObjectID = "RAn-T3-58s"; */
+"RAn-T3-58s.text" = "Ville*";
+
+/* Class = "UILabel"; text = "Name*"; ObjectID = "VVo-lv-GrG"; */
+"VVo-lv-GrG.text" = "Nom*";
+
+/* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
+"Wmv-Vd-WhX.text" = "Tél.*";
+
+/* Class = "UILabel"; text = "Street*"; ObjectID = "Z3T-z3-1aC"; */
+"Z3T-z3-1aC.text" = "Adresse*";
+
+/* Class = "UIButton"; normalTitle = "Sign with Photo"; ObjectID = "eOx-v7-0eW"; */
+"eOx-v7-0eW.normalTitle" = "Sign. avec Photo";
+
+/* Class = "UILabel"; text = "Aspect ratio 1.33"; ObjectID = "edA-0p-y3g"; */
+"edA-0p-y3g.text" = "Aspect ratio 1.33";
+
+/* Class = "UILabel"; text = "email*"; ObjectID = "wDk-jF-QdY"; */
+"wDk-jF-QdY.text" = "Email*";
+

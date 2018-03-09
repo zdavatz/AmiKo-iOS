@@ -60,8 +60,15 @@ enum {
 - (IBAction) searchAction: (id)sender;
 - (IBAction) onToolBarButtonPressed: (id)sender;
 
+- (void) switchFrontToPatientEditView;
+- (void) switchToPatientEditView;
+- (void) switchToDoctorEditView;
 - (void) showReport:(id)sender;
 - (void) switchToDrugInteractionView;
 - (void) switchToPrescriptionView;
+
+- (void) switchTabBarItem: (UITabBarItem *)item;
+
+- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
 
 @end

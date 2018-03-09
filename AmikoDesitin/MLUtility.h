@@ -29,9 +29,13 @@
 + (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date;
 + (double) timeIntervalSinceLastDBSync;
 
++ (NSString *) currentTime;
++ (NSString *) prettyTime;
 + (NSString*) encodeStringToBase64:(NSString*)string;
 
 + (NSString *) documentsDirectory;
++ (NSString *) amkBaseDirectory;
 + (NSString *) amkDirectory;
++ (NSString *) amkDirectoryForPatient:(NSString*)uid;
 
 @end

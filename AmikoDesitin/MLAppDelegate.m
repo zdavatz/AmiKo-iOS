@@ -31,6 +31,9 @@
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 #import "MLUtility.h"
+#import "MLAlertView.h"
+#import "MLPatientDbListViewController.h"
+#import "MLPatientDBAdapter.h"
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
@@ -138,16 +141,30 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     CGFloat screenScale = [[UIScreen mainScreen] scale];
     CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
 #ifdef DEBUG
-    NSLog(@"points w = %f, points h = %f, scale = %f", [[UIScreen mainScreen] applicationFrame].size.width,
+    // Screen size minus the size of the status bar (if visible)
+    // This is the size of the app window
+    NSLog(@"points w = %f, points h = %f, scale = %f",
+          [[UIScreen mainScreen] applicationFrame].size.width,
           [[UIScreen mainScreen] applicationFrame].size.height, screenScale);
-    NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height);
+    
+    // Screen size regardless of status bar.
+    // This is the size of the device
+    NSLog(@"points w = %f, points h = %f, scale = %f",
+          [[UIScreen mainScreen] bounds].size.width,
+          [[UIScreen mainScreen] bounds].size.height, screenScale);
+
+    NSLog(@"points w = %f, points h = %f, scale = %f",
+          [[UIScreen mainScreen] nativeBounds].size.width,
+          [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
+    NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
 #endif
     
-    // Init all view controllers (main and secondary)
+    // Rear
     mainViewController = [[MLViewController alloc] init];
     UINavigationController *mainViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:mainViewController];
 
+    // Front
     MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
     UINavigationController *secondViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:secondViewController];
@@ -193,7 +210,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
-        
+
         self.revealViewController = mainRevealController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
         
@@ -230,36 +247,42 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     }
     
-    // Register the applications default
+    // Register the applications defaults
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *appDefaults = [NSMutableDictionary dictionary];
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         [appDefaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
-        [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+        [defaults registerDefaults:appDefaults];
     }
     else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
         [appDefaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
-        [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+        [defaults registerDefaults:appDefaults];
     }
     
     // Initialize user defaults first time app is run
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"germanDBLastUpdate"];
+        NSDate* lastUpdated = [defaults objectForKey:@"germanDBLastUpdate"];
         if (lastUpdated==nil) {
             [lastUpdated setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
             NSLog(@"Initializing defaults...");
         }
     }
     else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
+        NSDate* lastUpdated = [defaults objectForKey:@"frenchDBLastUpdate"];
         if (lastUpdated==nil) {
             [lastUpdated setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
             NSLog(@"Initializing defaults...");
         }
     }
     
+    [defaults removeObjectForKey:@"lastUsedPrescription"];
+    [defaults synchronize];
+    
+    self.window.rootViewController = self.revealViewController;
     [self.window makeKeyAndVisible];
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);
+    self.editMode = EDIT_MODE_UNDEFINED;
     
     return !launchedFromShortcut;
 }
@@ -291,12 +314,14 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-// The file is in Documents/Inbox/ and needs to be moved to Documents/amk/
+// The file is in "Documents/Inbox/" and needs to be moved to "Documents/amk/"
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
+    NSError *error;
+
 #ifdef DEBUG
     //NSLog(@"%s url:%@", __FUNCTION__, url);
 #endif
@@ -307,32 +332,152 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         return NO;
     }
 
+    // Validation of the filename
     NSString *fileName = [[url absoluteString] lastPathComponent];
     NSString *extName = [url pathExtension];
-
     if (![extName isEqualToString:@"amk"] ||
         ![fileName hasPrefix:@"RZ_"])
     {
         NSLog(@"Invalid filename:%@", fileName);
         return NO;
     }
-    
-    NSString *amkDir = [MLUtility amkDirectory];
 
+    // Load the prescription from the file in Inbox
+    MLPrescription *presInbox = [[MLPrescription alloc] init];
+    [presInbox importFromURL:url];
+    
+    // Check if the patient subdirectory exists and possibly create it
+    NSString *amk = [MLUtility amkBaseDirectory];
+    NSString *amkDir = [amk stringByAppendingPathComponent:presInbox.patient.uniqueId];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:amkDir])
+    {
+        [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error) {
+            NSLog(@"Error creating directory: %@", error.localizedDescription);
+            amkDir = nil;
+            // Cannot proceed if there is no target for the import
+            return NO;
+        }
+
+#ifdef DEBUG
+        NSLog(@"Created patient directory: %@", amkDir);
+#endif
+    }
+
+    // Check if the patient is already in the DB and possibly add it.
+    MLPatientDBAdapter *patientDb;
+    patientDb = [[MLPatientDBAdapter alloc] init];
+    if (![patientDb openDatabase:@"patient_db"]) {
+        NSLog(@"Could not open patient DB!");
+        return NO;
+    }
+    
+    if ([patientDb getPatientWithUniqueID:presInbox.patient.uniqueId]==nil) {
+        //NSLog(@"Add patient to DB");
+        [patientDb addEntry:presInbox.patient];
+    }
+
+    [patientDb closeDatabase];
+    
+    // Check the hash of the existing amk files
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
+    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+
+    BOOL prescriptionNeedsToBeImported = YES;
+    MLPrescription *presAmkDir = [[MLPrescription alloc] init];
+    for (NSString *f in amkFilesArray) {
+        //NSLog(@"Checking existing amkFile:%@", f);
+        NSString *fullFilePath = [amkDir stringByAppendingPathComponent:f];
+        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+        [presAmkDir importFromURL:url];
+        if ([presInbox.hash isEqualToString:presAmkDir.hash]) {
+            prescriptionNeedsToBeImported = NO;
+            //NSLog(@"Line %d, hash %@ exists", __LINE__, presInbox.hash);
+            break;
+        }
+    }
+    
+    MLAlertView *alert;
+    if (!prescriptionNeedsToBeImported) {
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"%@ has already been imported",nil), fileName];
+        error = [NSError errorWithDomain:@"receipt"
+                                    code:99
+                                userInfo:@{NSLocalizedDescriptionKey:message}];
+
+        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Import Error"
+                                                        message:error.localizedDescription
+                                                         button:@"OK"];
+        [alert show];
+        
+        // Clean up: discard amk file from Inbox
+#ifdef DEBUG
+        if (![[NSFileManager defaultManager] isDeletableFileAtPath:[url resourceSpecifier]])
+            NSLog(@"Not deletable: %@", [url resourceSpecifier]);
+#endif
+        BOOL success = [[NSFileManager defaultManager] removeItemAtURL:url
+                                                                  error:&error];
+        if (!success)
+            NSLog(@"Error removing file: %@", error.localizedDescription);
+
+        // TODO: show the prescription that was found
+
+        return NO;
+    }
+
+    // Finally move amk from Inbox to patient subdirectory
     //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
     NSString *source = [url path];
     NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
-
-    // TODO: check if the destination file exists and possibly prompt to overwrite
-
-    NSError *error;
+    
     [[NSFileManager defaultManager] moveItemAtPath:source
                                             toPath:destination
                                              error:&error];
-    if (error)
-        NSLog(@"%@", error.localizedDescription);
+
+    if (!error) {
+        NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
+        alert = [[MLAlertView alloc] initWithTitle:@"Success!"
+                                           message:alertMessage
+                                            button:@"OK"];
+        [alert show];
+    }
     
+    // Update defaults to be used in other views
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:presInbox.patient.uniqueId forKey:@"currentPatient"];
+    [defaults setObject:fileName forKey:@"lastUsedPrescription"];
+    [defaults synchronize];
+    
+    // Switch to prescription view to show what we just imported
+    UITabBarItem *item = [[UITabBarItem alloc] init];
+    item.tag = 3;  // Simulate a tap on the tabbar 4th item
+    [mainViewController switchTabBarItem:item];
+    //[mainViewController setLaunchState:ePrescription];
+
     return YES;
+}
+
+- (void) switchRigthToPatientDbList
+{
+    id right = self.revealViewController.rightViewController;
+    if (![right isKindOfClass:[MLPatientDbListViewController class]] ) {
+        UIViewController *listViewController = [MLPatientDbListViewController sharedInstance];
+        [self.revealViewController setRightViewController:listViewController];
+#ifdef DEBUG
+        //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);
+#endif
+
+        self.revealViewController.rightViewRevealOverdraw = 0;
+#ifdef PATIENT_DB_LIST_FULL_WIDTH
+        float frameWidth = self.view.frame.size.width;
+        self.revealViewController.rightViewRevealWidth = frameWidth;
+#endif
+    }
+
+    // Finally make it visible
+    [self.revealViewController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
 }
 
 @end

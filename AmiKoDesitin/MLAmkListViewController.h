@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLAmkListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface MLAmkListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
+{
+    IBOutlet UITableView *myTableView;
+}
 
+@property (nonatomic, retain) IBOutlet UITableView *myTableView;
+
+- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
+- (void) removeItem:(NSUInteger)rowIndex;
 @end
