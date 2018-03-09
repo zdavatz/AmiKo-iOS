@@ -36,10 +36,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="5Vf-vV-36R">
-                    <rect key="frame" x="5" y="20" width="360" height="647"/>
+                    <rect key="frame" x="0.0" y="20" width="340" height="647"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Save..." textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="lyg-cM-u3T" userLabel="Notification">
-                            <rect key="frame" x="14" y="10" width="348" height="30"/>
+                            <rect key="frame" x="0.0" y="10" width="329" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="Bnx-EG-7bJ"/>
                             </constraints>
@@ -275,23 +275,25 @@
                         </stackView>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="lyg-cM-u3T" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="14" id="09l-9i-OhZ"/>
+                        <constraint firstItem="lyg-cM-u3T" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" id="09l-9i-OhZ"/>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="top" secondItem="5Vf-vV-36R" secondAttribute="top" constant="10" id="C2i-CQ-h0O"/>
                         <constraint firstAttribute="bottom" secondItem="SYY-Xo-Nso" secondAttribute="bottom" constant="120" id="Tit-OY-bCo"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="16" id="Uy5-ZI-5nh"/>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="trailing" secondItem="5Vf-vV-36R" secondAttribute="trailingMargin" id="Yga-Cf-ueG"/>
-                        <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" constant="33" id="yP4-Xs-KBC"/>
+                        <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" id="yP4-Xs-KBC"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="top" secondItem="lyg-cM-u3T" secondAttribute="bottom" constant="17" id="yTF-6w-Plh"/>
                     </constraints>
+                    <viewLayoutGuide key="safeArea" id="wPZ-rd-mdb"/>
                 </scrollView>
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="5Vf-vV-36R" secondAttribute="trailing" id="PcS-rh-UIJ"/>
+                <constraint firstItem="HCI-et-oSQ" firstAttribute="trailing" secondItem="5Vf-vV-36R" secondAttribute="trailing" constant="10" id="PcS-rh-UIJ"/>
                 <constraint firstItem="5Vf-vV-36R" firstAttribute="leading" secondItem="HCI-et-oSQ" secondAttribute="leading" constant="5" id="Rls-Bz-ioq"/>
                 <constraint firstItem="5Vf-vV-36R" firstAttribute="bottom" secondItem="HCI-et-oSQ" secondAttribute="bottom" id="bhT-or-gqB"/>
                 <constraint firstItem="5Vf-vV-36R" firstAttribute="top" secondItem="HCI-et-oSQ" secondAttribute="top" id="l4u-Wh-7ZW"/>
             </constraints>
+            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
             <viewLayoutGuide key="safeArea" id="HCI-et-oSQ"/>
             <point key="canvasLocation" x="33.5" y="70.5"/>
         </view>
