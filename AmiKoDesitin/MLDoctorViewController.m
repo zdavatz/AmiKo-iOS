@@ -43,13 +43,16 @@
 {
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view from its nib.
     SWRevealViewController *revealController = [self revealViewController];
     
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
     
-    self.navigationItem.title = NSLocalizedString(@"Doctor", nil);
-    
+#if 1
+    self.navigationItem.title = NSLocalizedString(@"Doctor", nil);      // grey, in the navigation bar
+#else
+    self.navigationItem.prompt = NSLocalizedString(@"Doctor", nil);     // black, above the navigation bar
+#endif
+
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
@@ -69,6 +72,9 @@
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
     
+    // PanGestureRecognizer goes here
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    
     // Register for notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardDidShow:)
@@ -86,20 +92,24 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
     if (!doctorDictionary) {
+        NSLog(@"Default doctor details not yet defined");
+        [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
+        [self.signatureView.layer setBorderWidth: 2.0];
         return;
     }
     
 #ifdef DEBUG
-    NSLog(@"Default doctor %@", doctorDictionary);
+    //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
     MLOperator *doctor = [[MLOperator alloc] init];
     [doctor importFromDict:doctorDictionary];
     [self setAllFields:doctor];
 
     if ([doctor importSignature]) {
-        self.signatureView.image = doctor.signatureThumbnail;  // FIXME: 45x90
+        self.signatureView.image = [doctor thumbnailFromSignature:self.signatureView.frame.size];
     }
     else {
+        NSLog(@"Default doctor signature not yet defined");
         // Make the picture area stand out with a border
         [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
@@ -300,16 +310,15 @@
     }
     
     // Set as default for prescriptions
-    // Use same "keys" as the amk file
     NSMutableDictionary *doctorDict = [[NSMutableDictionary alloc] init];
-    [doctorDict setObject:mTitle.text forKey:@"title"];
-    [doctorDict setObject:mGivenName.text forKey:@"given_name"];
-    [doctorDict setObject:mFamilyName.text forKey:@"family_mame"];
-    [doctorDict setObject:mPostalAddress.text forKey:@"postal_address"];
-    [doctorDict setObject:mCity.text forKey:@"city"];
-    [doctorDict setObject:mZipCode.text forKey:@"zip_code"];
-    [doctorDict setObject:mPhone.text forKey:@"phone_number"];
-    [doctorDict setObject:mEmail.text forKey:@"email_address"];
+    [doctorDict setObject:mTitle.text         forKey:KEY_AMK_DOC_TITLE];
+    [doctorDict setObject:mGivenName.text     forKey:KEY_AMK_DOC_NAME];
+    [doctorDict setObject:mFamilyName.text    forKey:KEY_AMK_DOC_SURNAME];
+    [doctorDict setObject:mPostalAddress.text forKey:KEY_AMK_DOC_ADDRESS];
+    [doctorDict setObject:mCity.text          forKey:KEY_AMK_DOC_CITY];
+    [doctorDict setObject:mZipCode.text       forKey:KEY_AMK_DOC_ZIP];
+    [doctorDict setObject:mPhone.text         forKey:KEY_AMK_DOC_PHONE];
+    [doctorDict setObject:mEmail.text         forKey:KEY_AMK_DOC_EMAIL];
 
 #ifdef DEBUG
     NSLog(@"doctorDict: %@", doctorDict);

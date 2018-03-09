@@ -28,7 +28,7 @@
 /* Class = "UITextField"; text = "Save..."; ObjectID = "lyg-cM-u3T"; */
 "lyg-cM-u3T.text" = "Sauver...";
 
-/* Class = "UILabel"; text = "Email:"; ObjectID = "o7U-gv-YHK"; */
+/* Class = "UILabel"; text = "Email"; ObjectID = "o7U-gv-YHK"; */
 "o7U-gv-YHK.text" = "Email:";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "qxH-aW-xMw"; */
@@ -40,9 +40,9 @@
 /* Class = "UILabel"; text = "ZIP*"; ObjectID = "vEs-iS-Qh7"; */
 "vEs-iS-Qh7.text" = "NP*";
 
-/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[0] = "Male"; ObjectID = "wpI-ZL-spi"; */
+/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[0] = "M"; ObjectID = "wpI-ZL-spi"; */
 "wpI-ZL-spi.segmentTitles[0]" = "M";
 
-/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[1] = "Female"; ObjectID = "wpI-ZL-spi"; */
+/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[1] = "F"; ObjectID = "wpI-ZL-spi"; */
 "wpI-ZL-spi.segmentTitles[1]" = "F";
 

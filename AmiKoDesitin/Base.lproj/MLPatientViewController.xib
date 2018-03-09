@@ -35,8 +35,8 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" bouncesZoom="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="5Vf-vV-36R">
-                    <rect key="frame" x="5" y="10" width="370" height="647"/>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="5Vf-vV-36R">
+                    <rect key="frame" x="5" y="20" width="370" height="647"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Save..." textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="lyg-cM-u3T" userLabel="Notification">
                             <rect key="frame" x="14" y="10" width="348" height="30"/>
@@ -48,7 +48,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="SYY-Xo-Nso">
-                            <rect key="frame" x="11" y="57" width="321" height="470"/>
+                            <rect key="frame" x="16" y="57" width="321" height="470"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GWo-NA-2Un" userLabel="Stack View Labels">
                                     <rect key="frame" x="0.0" y="0.0" width="91" height="470"/>
@@ -119,21 +119,21 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o7U-gv-YHK">
-                                            <rect key="frame" x="0.0" y="449" width="45.5" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o7U-gv-YHK">
+                                            <rect key="frame" x="0.0" y="449" width="41" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                 </stackView>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="okd-1h-fSB" userLabel="Stack View Fields">
+                                <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" distribution="fillEqually" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="okd-1h-fSB" userLabel="Stack View Fields">
                                     <rect key="frame" x="121" y="0.0" width="200" height="470"/>
                                     <subviews>
                                         <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kdz-qV-7oB" userLabel="Name">
-                                            <rect key="frame" x="0.0" y="0.0" width="200" height="30"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="30"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="200" id="4Sz-Tz-zaz"/>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="6bg-ZO-Ugp"/>
                                             </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -143,16 +143,22 @@
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Skb-JL-6Sj" userLabel="Surname">
-                                            <rect key="frame" x="0.0" y="40" width="200" height="30"/>
+                                            <rect key="frame" x="0.0" y="40" width="150" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="150" id="P80-DY-UYS"/>
+                                            </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
+                                            <textInputTraits key="textInputTraits" textContentType="name"/>
                                             <connections>
                                                 <outlet property="delegate" destination="-1" id="nI3-gu-Swe"/>
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qzX-8r-1Qb" userLabel="Street">
                                             <rect key="frame" x="0.0" y="80" width="200" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="200" id="0sZ-SE-62U"/>
+                                            </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -161,7 +167,10 @@
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tCD-Fe-fLt" userLabel="City">
-                                            <rect key="frame" x="0.0" y="120" width="200" height="30"/>
+                                            <rect key="frame" x="0.0" y="120" width="150" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="150" id="Ta1-N9-Imb"/>
+                                            </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -182,10 +191,16 @@
                                             </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ecz-0N-JHp" userLabel="Country">
-                                            <rect key="frame" x="0.0" y="200" width="200" height="30"/>
+                                            <rect key="frame" x="0.0" y="200" width="150" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="150" id="X9Q-Gu-NUd"/>
+                                            </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="v3e-qW-ReG"/>
+                                            </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="DD.MM.YYYY" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="11x-yn-ywg" userLabel="Birthday">
                                             <rect key="frame" x="0.0" y="240" width="107.5" height="30"/>
@@ -197,51 +212,61 @@
                                             </connections>
                                         </textField>
                                         <segmentedControl opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="wpI-ZL-spi">
-                                            <rect key="frame" x="0.0" y="280" width="117" height="31"/>
+                                            <rect key="frame" x="0.0" y="280" width="53" height="31"/>
                                             <segments>
-                                                <segment title="Male"/>
-                                                <segment title="Female"/>
+                                                <segment title="M"/>
+                                                <segment title="F"/>
                                             </segments>
                                         </segmentedControl>
                                         <textField opaque="NO" clipsSubviews="YES" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T5B-4S-2Dv" userLabel="Weight">
-                                            <rect key="frame" x="0.0" y="320" width="75" height="30"/>
+                                            <rect key="frame" x="0.0" y="320" width="100" height="30"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="75" id="3Tj-Tj-vbm"/>
+                                                <constraint firstAttribute="width" constant="100" id="3Tj-Tj-vbm"/>
                                             </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="Nyn-eD-LJw"/>
+                                            </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bT1-dJ-dQD" userLabel="Height">
-                                            <rect key="frame" x="0.0" y="360" width="75" height="30"/>
+                                            <rect key="frame" x="0.0" y="360" width="100" height="30"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="75" id="y0F-Ta-k5w"/>
+                                                <constraint firstAttribute="width" constant="100" id="y0F-Ta-k5w"/>
                                             </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="BaJ-Uh-xi1"/>
+                                            </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jOp-uC-7Ge" userLabel="Phone">
                                             <rect key="frame" x="0.0" y="400" width="200" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="200" id="cHd-Rd-KYh"/>
+                                            </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="oU9-v3-xcp"/>
+                                            </connections>
                                         </textField>
                                         <textField opaque="NO" clipsSubviews="YES" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vXb-TK-peO" userLabel="Email">
                                             <rect key="frame" x="0.0" y="440" width="200" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="200" id="3ou-QA-w6S"/>
+                                            </constraints>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="jNm-bi-yB0"/>
+                                            </connections>
                                         </textField>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailingMargin" secondItem="ecz-0N-JHp" secondAttribute="trailing" id="64r-dJ-EwR"/>
-                                        <constraint firstAttribute="trailing" secondItem="tCD-Fe-fLt" secondAttribute="trailing" id="C1T-jN-4pe"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="jOp-uC-7Ge" secondAttribute="trailing" id="Gt7-OJ-xyY"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="vXb-TK-peO" secondAttribute="trailing" id="NN0-5f-2cq"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Skb-JL-6Sj" secondAttribute="trailing" id="lr8-2S-MEe"/>
-                                        <constraint firstAttribute="trailing" secondItem="qzX-8r-1Qb" secondAttribute="trailing" id="s2a-Vf-3Pv"/>
-                                    </constraints>
                                 </stackView>
                             </subviews>
                             <constraints>
@@ -253,9 +278,9 @@
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="14" id="09l-9i-OhZ"/>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="top" secondItem="5Vf-vV-36R" secondAttribute="top" constant="10" id="C2i-CQ-h0O"/>
                         <constraint firstAttribute="bottom" secondItem="SYY-Xo-Nso" secondAttribute="bottom" constant="120" id="Tit-OY-bCo"/>
-                        <constraint firstItem="SYY-Xo-Nso" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="11" id="Uy5-ZI-5nh"/>
+                        <constraint firstItem="SYY-Xo-Nso" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="16" id="Uy5-ZI-5nh"/>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="trailing" secondItem="5Vf-vV-36R" secondAttribute="trailingMargin" id="Yga-Cf-ueG"/>
-                        <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" constant="38" id="yP4-Xs-KBC"/>
+                        <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" constant="33" id="yP4-Xs-KBC"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="top" secondItem="lyg-cM-u3T" secondAttribute="bottom" constant="17" id="yTF-6w-Plh"/>
                     </constraints>
                 </scrollView>

@@ -134,6 +134,9 @@ enum {
     //self.navigationItem.prompt = @"Patient Edit";
 #endif
     
+    // PanGestureRecognizer goes here
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    
     mPatientUUID = nil;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -152,7 +155,7 @@ enum {
                                                object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     // Open patient DB
     mPatientDb = [[MLPatientDBAdapter alloc] init];
@@ -410,10 +413,20 @@ enum {
 #ifdef DEBUG
     //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
 #endif
+    if ((textField.tag == 6) ||     // country
+        (textField.tag == 9) ||     // weight
+        (textField.tag == 10) ||    // height
+        (textField.tag == 11) ||    // phone
+        (textField.tag == 12))      // email
+    {
+        return TRUE;  // Allow non mandatory fields to be empty
+    }
+        
     UIColor *lightRed = [UIColor colorWithRed:1.0
                                         green:0.0
                                          blue:0.0
                                         alpha:0.3];
+
     BOOL valid = TRUE;
     if ([textField.text isEqualToString:@""])
         valid = FALSE;
