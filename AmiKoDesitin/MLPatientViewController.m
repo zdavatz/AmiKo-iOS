@@ -134,6 +134,9 @@ enum {
     //self.navigationItem.prompt = @"Patient Edit";
 #endif
     
+    // PanGestureRecognizer goes here
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    
     mPatientUUID = nil;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -152,7 +155,7 @@ enum {
                                                object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     // Open patient DB
     mPatientDb = [[MLPatientDBAdapter alloc] init];

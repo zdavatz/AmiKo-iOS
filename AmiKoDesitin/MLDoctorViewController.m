@@ -43,13 +43,16 @@
 {
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view from its nib.
     SWRevealViewController *revealController = [self revealViewController];
     
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
     
-    self.navigationItem.title = NSLocalizedString(@"Doctor", nil);
-    
+#if 1
+    self.navigationItem.title = NSLocalizedString(@"Doctor", nil);      // grey, in the navigation bar
+#else
+    self.navigationItem.prompt = NSLocalizedString(@"Doctor", nil);     // black, above the navigation bar
+#endif
+
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
@@ -68,6 +71,9 @@
                                     action:@selector(saveDoctor:)];
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
+    
+    // PanGestureRecognizer goes here
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
     
     // Register for notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -90,14 +96,14 @@
     }
     
 #ifdef DEBUG
-    NSLog(@"Default doctor %@", doctorDictionary);
+    //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
     MLOperator *doctor = [[MLOperator alloc] init];
     [doctor importFromDict:doctorDictionary];
     [self setAllFields:doctor];
 
     if ([doctor importSignature]) {
-        self.signatureView.image = doctor.signatureThumbnail;  // FIXME: 45x90
+        self.signatureView.image = [doctor thumbnailFromSignature:self.signatureView.frame.size];
     }
     else {
         // Make the picture area stand out with a border

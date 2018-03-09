@@ -240,7 +240,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return;
     }
 #ifdef DEBUG
-    NSLog(@"Default doctor %@", doctorDictionary);
+    //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
     [prescription.doctor importFromDict:doctorDictionary];    
     [prescription.doctor importSignature];
@@ -472,7 +472,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 if (([prescription.doctor signature] != nil) &&
                     ![prescription.doctor.signature isEqualToString:@""])
                 {
-                    UIImageView *signatureView = [[UIImageView alloc] initWithImage:prescription.doctor.signatureThumbnail];
+                    UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
+                    UIImageView *signatureView = [[UIImageView alloc] initWithImage:img];
                     [signatureView setFrame:CGRectMake(frame.size.width - (DOCTOR_TN_W + 10.0),
                                                        0,
                                                        DOCTOR_TN_W,

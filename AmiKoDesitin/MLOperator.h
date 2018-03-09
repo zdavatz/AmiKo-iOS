@@ -29,7 +29,7 @@
 - (void)importSignatureFromDict:(NSDictionary *)dict;
 - (BOOL)importSignature;
 
-- (UIImage *)signatureThumbnail;
+- (UIImage *)thumbnailFromSignature:(CGSize) size;
 - (NSInteger)entriesCount;
 
 @end

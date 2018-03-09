@@ -65,7 +65,7 @@
     return 5; // TODO
 }
 
-- (UIImage *)signatureThumbnail
+- (UIImage *)thumbnailFromSignature:(CGSize) size
 {
     if (self.signature == nil)
         return nil;
@@ -77,13 +77,11 @@
     UIImage* image = [UIImage imageWithData:data];
     
     // resize
-    CGSize size = CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H);
-    CGRect rect = CGRectZero;
-    
     CGFloat width = size.width / image.size.width;
     CGFloat height = size.height / image.size.height;
     CGFloat ratio = MIN(width, height);
     
+    CGRect rect = CGRectZero;
     rect.size.width = image.size.width * ratio;
     rect.size.height = image.size.height * ratio;
     rect.origin.x = (size.width - rect.size.width) / 2.0f;
