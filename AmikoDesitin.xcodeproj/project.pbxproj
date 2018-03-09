@@ -264,6 +264,8 @@
 		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
+		FA3E5D7120528E5600EFA4C3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA3E5D7020528E5600EFA4C3 /* Localizable.strings */; };
+		FA3E5D7320528E6700EFA4C3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA3E5D7220528E6700EFA4C3 /* Localizable.strings */; };
 		FA410460204FEE4B00E41C41 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA41045F204FEE4B00E41C41 /* Localizable.strings */; };
 		FA410462204FF05300E41C41 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA410461204FF05300E41C41 /* Localizable.strings */; };
 		FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
@@ -473,6 +475,8 @@
 		D5FFE1B118B1021B002D6159 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		D5FFE1B218B1021B002D6159 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FA3E5D7020528E5600EFA4C3 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		FA3E5D7220528E6700EFA4C3 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		FA41045F204FEE4B00E41C41 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		FA410461204FF05300E41C41 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		FA4511B6204ECAFD00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLDoctorViewController.xib; sourceTree = "<group>"; };
@@ -828,6 +832,8 @@
 		D5A6F24117B1692F00EAB24B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FA3E5D7220528E6700EFA4C3 /* Localizable.strings */,
+				FA3E5D7020528E5600EFA4C3 /* Localizable.strings */,
 				FA45E5D32051547B00A6B525 /* Localizable.strings */,
 				FA45E5D12051546500A6B525 /* Localizable.strings */,
 				FA410461204FF05300E41C41 /* Localizable.strings */,
@@ -1210,6 +1216,7 @@
 				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
 				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,
 				D5A175631A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
+				FA3E5D7320528E6700EFA4C3 /* Localizable.strings in Resources */,
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
 				FA4511C6204EEA3700899A77 /* Localizable.strings in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
@@ -1232,6 +1239,7 @@
 				D5A225161945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */,
 				D5A2253419461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */,
+				FA3E5D7120528E5600EFA4C3 /* Localizable.strings in Resources */,
 				D5A2252319461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
 				D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */,
 				D5A2252E19461D750078FEFF /* interactions_css.css in Resources */,
