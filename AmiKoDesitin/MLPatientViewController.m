@@ -136,7 +136,10 @@ enum {
     
     // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-    
+    //scrollView.scrollEnabled = FALSE;
+    //scrollView.alwaysBounceHorizontal = NO;
+    scrollView.bounces = NO;
+
     mPatientUUID = nil;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
