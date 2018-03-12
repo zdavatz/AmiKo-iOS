@@ -583,11 +583,10 @@
 {
     // basket_html_str + delete_all_button_str + "<br><br>" + top_note_html_str
     int medCnt = 0;
-    NSString *medBasketStr = @"";
-    if ([[MLConstants appLanguage] isEqualToString:@"de"])
-        medBasketStr = [medBasketStr stringByAppendingString:@"<div id=\"Medikamentenkorb\"><fieldset><legend>Medikamentenkorb</legend></fieldset></div><table id=\"InterTable\" width=\"100%25\">"];
-    else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-        medBasketStr = [medBasketStr stringByAppendingString:@"<div id=\"Medikamentenkorb\"><fieldset><legend>Panier des Médicaments</legend></fieldset></div><table id=\"InterTable\" width=\"100%25\">"];
+    NSString *medBasketStr = [NSString stringWithFormat:
+                              @"<div id=\"Medikamentenkorb\"><fieldset><legend>%@</legend></fieldset></div>"
+                              @"<table id=\"InterTable\" width=\"100%%25\">",
+                              NSLocalizedString(@"Drugs Basket", nil)];
     
     // Check if there are meds in the "Medikamentenkorb"
     if ([medBasket count]>0) {
@@ -614,17 +613,17 @@
                             @"<td align=\"right\"><input type=\"image\" src=\"217-trash.png\" onclick=\"deleteRow('Single','InterTable',this)\" />"
                             @"</tr>", medCnt, name, atc_code, active_ingredient];
         }
+
         // Add delete all button
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            medBasketStr = [medBasketStr stringByAppendingString:@"</table><div id=\"Delete_all\"><input type=\"button\" value=\"Korb leeren\" onclick=\"deleteRow('Delete_all','InterTable',this)\" /></div>"];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            medBasketStr = [medBasketStr stringByAppendingString:@"</table><div id=\"Delete_all\"><input type=\"button\" value=\"Tout supprimer\" onclick=\"deleteRow('Delete_all','InterTable',this)\" /></div>"];
-    } else {
-        // Medikamentenkorb is empty
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            medBasketStr = @"<div>Ihr Medikamentenkorb ist leer.<br><br></div>";
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            medBasketStr = @"<div>Votre panier des médicaments est vide.<br><br></div>";
+        medBasketStr = [medBasketStr stringByAppendingFormat:@"</table>"
+                        @"<div id=\"Delete_all\"><input type=\"button\" "
+                        @"value=\"%@\" "
+                        @"onclick=\"deleteRow('Delete_all','InterTable',this)\" /></div>",
+                        NSLocalizedString(@"Delete everything", nil)];
+    }
+    else {
+        medBasketStr = [NSString stringWithFormat:@"<div>%@<br><br></div>",
+                        NSLocalizedString(@"Your medicine basket is empty", nil)];
     }
     
     return medBasketStr;
@@ -636,10 +635,11 @@
     
     if ([medBasket count]>1) {
         // Add note to indicate that there are no interactions
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            topNote = @"<fieldset><legend>Bekannte Interaktionen</legend></fieldset><p>Werden keine Interaktionen angezeigt, sind z.Z. keine Interaktionen bekannt.</p>";
-        else  if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            topNote = @"<fieldset><legend>Interactions Connues</legend></fieldset><p>Werden keine Interaktionen angezeigt, sind z.Z. keine Interaktionen bekannt.</p>";
+        topNote = [NSString stringWithFormat:
+                   @"<fieldset><legend>%@</legend></fieldset>"
+                   @"<p>%@</p>",
+                   NSLocalizedString(@"Known interactions", nil),
+                   NSLocalizedString(@"If no interactions are displayed, no interactions known", nil)];
     }
     
     return topNote;
@@ -654,19 +654,15 @@
     NSMutableArray *sectionIds = [[NSMutableArray alloc] initWithObjects:@"Medikamentenkorb", nil];
     NSMutableArray *sectionTitles = nil;
     
-    if ([medBasket count]>0) {
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            sectionTitles = [[NSMutableArray alloc] initWithObjects:@"Medikamentenkorb", nil];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            sectionTitles = [[NSMutableArray alloc] initWithObjects:@"Panier des médicaments", nil];
-    }
+    if ([medBasket count]>0)
+        sectionTitles = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"Drugs Basket", nil), nil];
     
     // Check if there are meds in the "Medikamentenkorb"
     if ([medBasket count]>1) {
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            [interactionStr appendString:@"<fieldset><legend>Bekannte Interaktionen</legend></fieldset>"];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [interactionStr appendString:@"<fieldset><legend>Interactions Connues</legend></fieldset>"];
+        [interactionStr appendString:[NSString stringWithFormat:
+                                      @"<fieldset><legend>%@</legend></fieldset>",
+                                      NSLocalizedString(@"Known interactions", nil)]];
+
         // First sort them alphabetically
         NSArray *sortedNames = [[medBasket allKeys] sortedArrayUsingSelector: @selector(compare:)];
         // Big loop
@@ -717,7 +713,8 @@
                 [interactionStr appendString:@"<p class=\"paragraph0\">Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten in der EPha.ch-Datenbank vorhanden. Weitere Informationen finden Sie in der Fachinformation.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Interaktion melden\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
             else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
                 [interactionStr appendString:@"<p class=\"paragraph0\">Il n’y a aucune information dans la banque de données EPha.ch à propos d’une interaction entre les médicaments sélectionnés. Veuillez consulter les informations professionelles.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Signaler une interaction\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
-        } else if ([sectionTitles count]>2) {
+        }
+        else if ([sectionTitles count]>2) {
             [interactionStr appendString:@"<br>"];
         }
     }

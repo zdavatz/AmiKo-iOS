@@ -528,10 +528,19 @@ enum {
     if (mPatientUUID && [mPatientUUID length]>0)
         patient.uniqueId = mPatientUUID;
     
+    NSString *note = NSLocalizedString(@"Contact was saved in the AmiKo address book", nil);
+    
     if ([mPatientDb getPatientWithUniqueID:mPatientUUID]==nil)
-        mPatientUUID = [mPatientDb addEntry:patient];
-    else
-        mPatientUUID = [mPatientDb insertEntry:patient];
+        mPatientUUID = [mPatientDb addEntry:patient];       // insert into DB
+    else {
+        if (patient.uniqueId!=nil &&
+            [patient.uniqueId length]>0)
+        {
+            note = NSLocalizedString(@"The entry has been updated", nil);
+        }
+
+        mPatientUUID = [mPatientDb insertEntry:patient];    // insert into DB or update
+    }
 
     if (mPatientUUID==nil) {
 #ifdef DEBUG
@@ -540,7 +549,7 @@ enum {
         return;
     }
     
-    [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book", nil)];
+    [self friendlyNote:note];
 
 #ifdef DYNAMIC_BUTTONS
     [self saveCancelOff];

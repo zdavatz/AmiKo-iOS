@@ -2014,22 +2014,22 @@ static BOOL mShowReport = false;
     }
 }
 
+#pragma mark - UITableViewDataSource
+
 /** UITableViewDataSource
  */
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // How many rows in the table?
-    if (mUsedDatabase == kAips)
+    if (mUsedDatabase == kAips) {
         return [medi count];
         // return [titleData count];
-    else if (mUsedDatabase == kFavorites) {
-        return [favoriteKeyData count];
     }
-    else
-        return 0;
-}
+    
+    if (mUsedDatabase == kFavorites)
+        return [favoriteKeyData count];
 
-#pragma mark - UITableView delegate methods
+    return 0;
+}
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 { 
@@ -2101,6 +2101,8 @@ static BOOL mShowReport = false;
     return cell;
 }
 
+#pragma mark -
+
 - (void) myTapMethod:(id)sender
 {
     if (mNumCurrSearchResults>500)
@@ -2152,6 +2154,8 @@ static BOOL mShowReport = false;
     });
 }
 
+#pragma mark - UITableViewDelegate
+
 // We selected one Medicine or one Favorite
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -2170,11 +2174,13 @@ static BOOL mShowReport = false;
     if (!mShowReport) {
         [self invalidateObserver];
     }
+
     mShowReport = false;
     if (secondViewController!=nil) {
         // [secondViewController removeFromParentViewController];
         secondViewController = nil;
     }
+
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                                     bundle:nil
                                                                      title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
@@ -2222,8 +2228,8 @@ static BOOL mShowReport = false;
                 titleViewController = nil;
             }
             titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
-                                                               sectionIds:listofSectionIds
-                                                              andLanguage:[MLConstants appLanguage]];
+                                                                   sectionIds:listofSectionIds
+                                                                  andLanguage:[MLConstants appLanguage]];
         
             // Update medication basket
             secondViewController.dbAdapter = mDb;

@@ -74,7 +74,7 @@
 
 - (void) toggleChecked
 {
-    self.checked =  !self.checked;
+    self.checked = !self.checked;
 }
 
 /** Override all touch-related methods
