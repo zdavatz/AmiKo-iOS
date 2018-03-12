@@ -1984,8 +1984,8 @@ static BOOL mShowReport = false;
     mainRevealController = self.revealViewController;
     
     // Right
-    MLContactsListViewController *contactsListViewController = nil;
-    
+    mainRevealController.rightViewController = nil;
+
     // Front
     MLDoctorViewController *doctorEditViewController = [MLDoctorViewController sharedInstance];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:doctorEditViewController];
