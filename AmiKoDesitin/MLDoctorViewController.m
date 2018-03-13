@@ -45,8 +45,6 @@
     
     SWRevealViewController *revealController = [self revealViewController];
     
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-    
 #if 1
     self.navigationItem.title = NSLocalizedString(@"Doctor", nil);      // grey, in the navigation bar
 #else
@@ -71,10 +69,7 @@
                                     action:@selector(saveDoctor:)];
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
-    
-    // PanGestureRecognizer goes here
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-    //scrollView.scrollEnabled = FALSE;
+
     scrollView.bounces = NO;
     
     // Register for notifications
@@ -89,8 +84,19 @@
                                                object:nil];
 }
 
+#ifdef DEBUG
+- (void) viewDidAppear:(BOOL)animated
+{
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
+}
+#endif
+
 - (void) viewWillAppear:(BOOL)animated
 {
+    if ([[self.view gestureRecognizers] count] == 0)
+        [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
     if (!doctorDictionary) {

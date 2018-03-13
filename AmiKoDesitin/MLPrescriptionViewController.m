@@ -114,10 +114,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     [super viewDidLoad];
 
-    // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
-    
-    [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
 
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
@@ -163,9 +160,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                     action:aSelector];
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     
-    // PanGestureRecognizer goes here
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     int statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     int navBarHeight = self.navigationController.navigationBar.frame.size.height;
@@ -192,10 +186,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                object:nil];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    if ([[self.view gestureRecognizers] count] == 0)
+        [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
+}
+
 - (void) viewDidAppear:(BOOL)animated
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
 #endif
     if (![self loadDefaultPrescription]) {
         [self loadDefaultDoctor];

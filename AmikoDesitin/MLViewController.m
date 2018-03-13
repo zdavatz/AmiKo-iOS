@@ -992,6 +992,7 @@ static BOOL mShowReport = false;
 {
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
 #endif
     
     [super viewDidAppear:animated];
@@ -1330,8 +1331,6 @@ static BOOL mShowReport = false;
 
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
-    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
-    mainRevealController = self.revealViewController;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
@@ -1974,6 +1973,7 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 
     //
+    //mainRevealController.bounceBackOnOverdraw = NO;
     mainRevealController.rightViewRevealOverdraw = 0;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
@@ -1993,6 +1993,7 @@ static BOOL mShowReport = false;
     
     //
     mainRevealController.rightViewRevealOverdraw = 0;
+    //mainRevealController.bounceBackOnOverdraw = YES;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 

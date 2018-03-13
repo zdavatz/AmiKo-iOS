@@ -66,8 +66,6 @@ enum {
     
     SWRevealViewController *revealController = [self revealViewController];
 
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-    
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
@@ -133,13 +131,8 @@ enum {
 #ifdef DEBUG
     //self.navigationItem.prompt = @"Patient Edit";
 #endif
-    
-    // PanGestureRecognizer goes here
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-    //scrollView.scrollEnabled = FALSE;
-    //scrollView.alwaysBounceHorizontal = NO;
-    scrollView.bounces = NO;
 
+    scrollView.bounces = NO;
     mPatientUUID = nil;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -158,8 +151,19 @@ enum {
                                                object:nil];
 }
 
+#ifdef DEBUG
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
+}
+#endif
+
 - (void)viewWillAppear:(BOOL)animated
 {
+    if ([[self.view gestureRecognizers] count] == 0)
+        [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
+    
     // Open patient DB
     mPatientDb = [[MLPatientDBAdapter alloc] init];
     if (![mPatientDb openDatabase:@"patient_db"]) {
