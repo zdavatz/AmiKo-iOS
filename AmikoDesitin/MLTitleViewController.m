@@ -32,7 +32,7 @@
 
 static NSString *SectionTitle_DE[] = {@"Zusammensetzung", @"Galenische Form", @"Kontraindikationen", @"Indikationen", @"Dosierung/Anwendung", @"Vorsichtsmassnahmen", @"Interaktionen", @"Schwangerschaft", @"Fahrtüchtigkeit", @"Unerwünschte Wirk.", @"Überdosierung", @"Eig./Wirkung", @"Kinetik", @"Präklinik", @"Sonstige Hinweise", @"Zulassungsnummer", @"Packungen", @"Inhaberin", @"Stand der Information", nil};
 
-static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique",  @"Contre-indications", @"Indications", @"Posologie", @"Précautions", @"Interactions", @"Grossesse/All.", @"Conduite", @"Effets indésir.", @"Surdosage", @"Propriétés/Effets", @"Cinétique", @"Préclinique", @"Remarques", @"Numéro d'autorisation", @"Présentation", @"Titulaire", @"Mise à jour", nil};
+static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Contre-indications", @"Indications", @"Posologie", @"Précautions", @"Interactions", @"Grossesse/All.", @"Conduite", @"Effets indésir.", @"Surdosage", @"Propriétés/Effets", @"Cinétique", @"Préclinique", @"Remarques", @"Numéro d'autorisation", @"Présentation", @"Titulaire", @"Mise à jour", nil};
 
 
 @implementation MLTitleViewController
