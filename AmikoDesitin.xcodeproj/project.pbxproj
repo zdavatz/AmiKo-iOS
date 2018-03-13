@@ -192,7 +192,6 @@
 		D5A6F29A17B16C3A00EAB24B /* MLSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */; };
 		D5A6F2A117B16C4B00EAB24B /* MLSimpleTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */; };
 		D5A6F2A217B16C4B00EAB24B /* MLSQLiteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */; };
-		D5A6F2A317B16C4B00EAB24B /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		D5A6F2A617B16E4400EAB24B /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A417B16E4400EAB24B /* 28-star.png */; };
 		D5A6F2A717B16E4400EAB24B /* 28-star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A517B16E4400EAB24B /* 28-star@2x.png */; };
 		D5A6F2A917B16EF700EAB24B /* app_icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A817B16EF700EAB24B /* app_icon_57x57.png */; };
@@ -218,7 +217,6 @@
 		D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */; };
 		D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */; };
 		D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */; };
-		D5F6BB5C17E8C87500DCBD16 /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D565DA8217B7B48D0002E2CF /* MLConstants.m */; };
 		D5F6BB5F17E8C87500DCBD16 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F26617B16A2300EAB24B /* libsqlite3.0.dylib */; };
 		D5F6BB6017E8C87500DCBD16 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23A17B1692F00EAB24B /* UIKit.framework */; };
@@ -264,6 +262,8 @@
 		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
+		FA4263702058117A00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
+		FA4263712058117B00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
 		FA4511B8204ECBCB00899A77 /* MLPatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */; };
 		FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
@@ -1288,7 +1288,7 @@
 				D5A6F29A17B16C3A00EAB24B /* MLSecondViewController.m in Sources */,
 				D5A6F2A117B16C4B00EAB24B /* MLSimpleTableCell.m in Sources */,
 				D5A6F2A217B16C4B00EAB24B /* MLSQLiteDatabase.m in Sources */,
-				D5A6F2A317B16C4B00EAB24B /* MLViewController.m in Sources */,
+				FA4263712058117B00C2269E /* MLViewController.m in Sources */,
 				D5A31F5C18B5207200F56BC5 /* zip.c in Sources */,
 				D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */,
 				43A3851320333147001A5849 /* MLBaseListViewController.m in Sources */,
@@ -1322,9 +1322,9 @@
 				D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */,
 				D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */,
 				D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */,
+				FA4263702058117A00C2269E /* MLViewController.m in Sources */,
 				D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */,
 				43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */,
-				D5F6BB5C17E8C87500DCBD16 /* MLViewController.m in Sources */,
 				D5A31F5D18B5207200F56BC5 /* zip.c in Sources */,
 				D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */,
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,

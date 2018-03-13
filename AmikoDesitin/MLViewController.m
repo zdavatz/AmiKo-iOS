@@ -1233,27 +1233,6 @@ static BOOL mShowReport = false;
     }
 }
 
-- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
-{
-    CGPoint p = [gesture locationInView:self.myTableView];
-    
-    NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
-    
-    if (mCurrentSearchState == kAtcCode) {
-        if (indexPath != nil) {
-            NSString *subTitle = [medi[indexPath.row] subTitle];
-            if (subTitle!=nil) {
-                NSString *medSubTitle = [NSString stringWithString:subTitle];
-                NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
-                if (mAtc[0]!=nil && ![[searchField text] isEqualToString:mAtc[0]]) {
-                    [searchField setText:mAtc[0]];
-                    [self executeSearch:mAtc[0]];
-                }
-            }
-        }
-    }
-}
-
 - (void) invalidateObserver
 {
     if (titleViewController!=nil && secondViewController!=nil) {
@@ -2334,6 +2313,63 @@ static BOOL mShowReport = false;
                                    attributes:attributesDictionary
                                       context:nil];
     return frame.size;
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
+{
+#ifdef DEBUG
+    NSLog(@"%s mCurrentSearchState:%ld", __FUNCTION__, mCurrentSearchState);
+#endif
+    CGPoint p = [gesture locationInView:self.myTableView];
+    NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
+    
+    if (indexPath == nil) {
+        NSLog(@"long press on table view but not on a row");
+        return;
+    }
+    
+    if (gesture.state != UIGestureRecognizerStateBegan) {
+#ifdef DEBUG
+        //NSLog(@"gestureRecognizer.state = %ld", gesture.state);
+#endif
+        return;
+    }
+    
+    NSLog(@"long press began on table view at row %ld", indexPath.row);
+
+    switch (mCurrentSearchState) {
+        case kTitle:    // Can only add medicine from Prep like in AmiKo OSX
+        {
+            NSString *subTitle = [medi[indexPath.row] subTitle];
+            NSArray *listOfPackages = [subTitle componentsSeparatedByString:@"\n"];
+            NSInteger numPackages = [listOfPackages count];
+#ifdef DEBUG
+            //NSLog(@"subTitle: <%@>", subTitle);
+            NSLog(@"listOfPackages: <%@>", listOfPackages);
+            NSLog(@"%ld packages", numPackages);
+#endif
+        }
+
+            break;
+            
+        case kAtcCode:
+            {
+                NSString *subTitle = [medi[indexPath.row] subTitle];
+                NSString *medSubTitle = [NSString stringWithString:subTitle];
+                NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
+                if (mAtc[0]!=nil && ![[searchField text] isEqualToString:mAtc[0]]) {
+                    [searchField setText:mAtc[0]];
+                    [self executeSearch:mAtc[0]];
+                }
+            }
+            break;
+            
+        default:
+            NSLog(@"Can only add medicine from Prep");
+            break;
+    }
 }
 
 #pragma mark - helper functions
