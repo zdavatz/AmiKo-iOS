@@ -873,6 +873,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     [prescription setPatient:[aNotification object]];
     [infoView reloadData];
+    // TODO: (TBC) make sure the right view is back to the AMK list, for the sake of the swiping action
 }
 
 @end

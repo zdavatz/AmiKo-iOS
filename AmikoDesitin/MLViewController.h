@@ -59,6 +59,7 @@ enum {
 
 - (IBAction) searchAction: (id)sender;
 - (IBAction) onToolBarButtonPressed: (id)sender;
+- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture;
 
 - (void) switchFrontToPatientEditView;
 - (void) switchToPatientEditView;

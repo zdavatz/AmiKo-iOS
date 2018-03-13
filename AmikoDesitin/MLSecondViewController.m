@@ -134,22 +134,15 @@
 
 - (void) resetSearchField
 {
-    if (mCurrentSearch!=nil)
+    if (mCurrentSearch)
         [searchField setText:mCurrentSearch];
     else
         [searchField setText:@""];
     
-    if ([self.htmlStr isEqualToString:@"Interactions"]) {
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Interaktionen"]];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche d'Interactions"]];
-    } else {
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Suche in Fachinfo"]];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
-            [searchField setPlaceholder:[NSString stringWithFormat:@"Recherche de Note Infopro"]];
-    }
+    if ([self.htmlStr isEqualToString:@"Interactions"])
+        [searchField setPlaceholder:[NSString stringWithFormat:NSLocalizedString(@"Search in interactions", nil)]];
+    else
+        [searchField setPlaceholder:[NSString stringWithFormat:NSLocalizedString(@"Search in technical info", nil)]];
     
     if ([mTitle isEqualToString:@"About"])
         [searchField setPlaceholder:NSLocalizedString(@"Search in report", nil)];

@@ -47,6 +47,7 @@
     notificationName = @"PatientSelectedNotification";
     tableIdentifier = @"patientDbListTableItem";
     textColor = [UIColor blackColor];
+    // TODO: (TBC) make sure the right view is back to the iOS Contacts list, for the sake of the swiping action
 }
 
 // Called every time the instance is displayed
