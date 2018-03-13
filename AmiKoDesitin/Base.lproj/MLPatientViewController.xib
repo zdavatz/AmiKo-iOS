@@ -38,7 +38,7 @@
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="5Vf-vV-36R">
                     <rect key="frame" x="5" y="20" width="360" height="647"/>
                     <subviews>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Save..." textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="lyg-cM-u3T" userLabel="Notification">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Save..." textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="lyg-cM-u3T" userLabel="Notification">
                             <rect key="frame" x="14" y="10" width="320" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="Bnx-EG-7bJ"/>
@@ -275,12 +275,12 @@
                         </stackView>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="lyg-cM-u3T" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" id="09l-9i-OhZ"/>
+                        <constraint firstItem="lyg-cM-u3T" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="14" id="09l-9i-OhZ"/>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="top" secondItem="5Vf-vV-36R" secondAttribute="top" constant="10" id="C2i-CQ-h0O"/>
                         <constraint firstAttribute="bottom" secondItem="SYY-Xo-Nso" secondAttribute="bottom" constant="120" id="Tit-OY-bCo"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="16" id="Uy5-ZI-5nh"/>
-                        <constraint firstItem="lyg-cM-u3T" firstAttribute="trailing" secondItem="5Vf-vV-36R" secondAttribute="trailingMargin" id="Yga-Cf-ueG"/>
-                        <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" id="yP4-Xs-KBC"/>
+                        <constraint firstItem="lyg-cM-u3T" firstAttribute="trailing" secondItem="5Vf-vV-36R" secondAttribute="trailingMargin" constant="-18" id="Yga-Cf-ueG"/>
+                        <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" constant="23" id="yP4-Xs-KBC"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="top" secondItem="lyg-cM-u3T" secondAttribute="bottom" constant="17" id="yTF-6w-Plh"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="wPZ-rd-mdb"/>
