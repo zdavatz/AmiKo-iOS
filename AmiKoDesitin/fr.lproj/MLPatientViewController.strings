@@ -1,5 +1,5 @@
 /* Class = "UILabel"; text = "Phone"; ObjectID = "5KD-lg-L0x"; */
-"5KD-lg-L0x.text" = "Téléphone";
+"5KD-lg-L0x.text" = "Tél.";
 
 /* Class = "UITextField"; placeholder = "DD.MM.YYYY"; ObjectID = "11x-yn-ywg"; */
 "11x-yn-ywg.placeholder" = "DD.MM.JJJJ";
