@@ -1,5 +1,5 @@
 /* Class = "UILabel"; text = "Phone"; ObjectID = "5KD-lg-L0x"; */
-"5KD-lg-L0x.text" = "Tél.";
+"5KD-lg-L0x.text" = "Téléphone";
 
 /* Class = "UITextField"; placeholder = "DD.MM.YYYY"; ObjectID = "11x-yn-ywg"; */
 "11x-yn-ywg.placeholder" = "DD.MM.JJJJ";
@@ -14,7 +14,7 @@
 "Nqq-S6-oX3.text" = "Rue*";
 
 /* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
-"U99-ak-doX.text" = "Annivrs.*";
+"U99-ak-doX.text" = "Anniversaire*";
 
 /* Class = "UILabel"; text = "City*"; ObjectID = "b1W-Hi-EVX"; */
 "b1W-Hi-EVX.text" = "Ville*";
@@ -26,7 +26,7 @@
 "ipa-Lx-J6I.text" = "Gendre*";
 
 /* Class = "UITextField"; text = "Save..."; ObjectID = "lyg-cM-u3T"; */
-"lyg-cM-u3T.text" = "Sauver...";
+"lyg-cM-u3T.text" = "Sauver";
 
 /* Class = "UILabel"; text = "Email"; ObjectID = "o7U-gv-YHK"; */
 "o7U-gv-YHK.text" = "Email:";

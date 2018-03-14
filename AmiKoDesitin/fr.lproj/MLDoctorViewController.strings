@@ -17,7 +17,7 @@
 "VVo-lv-GrG.text" = "Nom*";
 
 /* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
-"Wmv-Vd-WhX.text" = "Tél.*";
+"Wmv-Vd-WhX.text" = "Téléphone*";
 
 /* Class = "UILabel"; text = "Street*"; ObjectID = "Z3T-z3-1aC"; */
 "Z3T-z3-1aC.text" = "Adresse*";
