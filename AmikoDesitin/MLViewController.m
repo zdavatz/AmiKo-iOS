@@ -53,6 +53,9 @@
 
 #import "MLAppDelegate.h"
 
+// Requirement to show at least up to the first comma, no line wrapping
+#define CUSTOM_FONT_SIZE_PICKER
+
 enum {
     kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
 };
@@ -2423,13 +2426,36 @@ static BOOL mShowReport = false;
     return _pickerData.count;
 }
 
-// The data to return for the row and component (column) that's being passed in
+#ifdef CUSTOM_FONT_SIZE_PICKER
+- (UIView *)pickerView:(UIPickerView *)pickerView
+            viewForRow:(NSInteger)row
+          forComponent:(NSInteger)component
+           reusingView:(UIView *)view
+{
+    UILabel *pickerLabel = (UILabel *)view;
+    
+    // Reuse the label if possible, otherwise create and configure a new one
+    if ((pickerLabel == nil) || ([pickerLabel class] != [UILabel class])) { //newlabel
+        CGRect frame = CGRectMake(0.0, 0.0, 270, 32.0);
+        pickerLabel = [[UILabel alloc] initWithFrame:frame];
+        pickerLabel.textAlignment = NSTextAlignmentLeft;
+        pickerLabel.backgroundColor = [UIColor clearColor];
+        pickerLabel.font = [UIFont systemFontOfSize:14.0];
+    }
+    
+    //pickerLabel.textColor = [UIColor brownColor];
+    pickerLabel.text = _pickerData[row];
+    //[pickerLabel sizeToFit];
+    return pickerLabel;
+}
+#else
 - (NSString*)pickerView:(UIPickerView *)pickerView
             titleForRow:(NSInteger)row
            forComponent:(NSInteger)component
 {
     return _pickerData[row];
 }
+#endif
 
 // Catpure the picker view selection
 - (void)pickerView:(UIPickerView *)pickerView
