@@ -132,7 +132,7 @@
                                                 <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uDo-WJ-d8Q" userLabel="City">
                                                     <rect key="frame" x="0.0" y="118.5" width="200" height="29"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="yhs-yt-G5w"/>
+                                                        <constraint firstAttribute="width" constant="190" id="yhs-yt-G5w"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -168,7 +168,7 @@
                                                 <textField opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NnV-m8-xEK" userLabel="Phone">
                                                     <rect key="frame" x="0.0" y="236.5" width="200" height="29.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="wof-se-fml"/>
+                                                        <constraint firstAttribute="width" constant="190" id="wof-se-fml"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -180,7 +180,7 @@
                                                 <textField opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="piK-dm-F1a" userLabel="email">
                                                     <rect key="frame" x="0.0" y="276" width="200" height="28"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="vSP-ok-D2J"/>
+                                                        <constraint firstAttribute="width" constant="190" id="vSP-ok-D2J"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
