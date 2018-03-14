@@ -29,7 +29,7 @@
 "lyg-cM-u3T.text" = "Sauver";
 
 /* Class = "UILabel"; text = "Email"; ObjectID = "o7U-gv-YHK"; */
-"o7U-gv-YHK.text" = "Email:";
+"o7U-gv-YHK.text" = "Email";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "qxH-aW-xMw"; */
 "qxH-aW-xMw.text" = "Prénom*";
