@@ -9,9 +9,23 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) photos and video use.</string>
 	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>		
+￼ 	<key>CFBundleDisplayName</key>		
+￼ 	<string>${PRODUCT_NAME}</string>		
+￼ 	<key>CFBundleDocumentTypes</key>		
+￼ 	<array>		
+￼ 		<dict>		
+￼ 			<key>CFBundleTypeIconFiles</key>		
+￼ 			<array/>		
+￼ 			<key>CFBundleTypeName</key>		
+￼ 			<string>Amiko Receipt File</string>		
+￼ 			<key>CFBundleTypeRole</key>		
+￼ 			<string>Editor</string>		
+￼ 			<key>LSHandlerRank</key>		
+￼ 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.ywesee.AmiKoDesitin.amk</string>
+			<string>com.ywesee.AmiKoDesitin.amk</string>
 			</array>
 		</dict>
 	</array>
