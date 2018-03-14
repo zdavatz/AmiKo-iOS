@@ -141,6 +141,7 @@ static BOOL mShowReport = false;
 @synthesize myTableView;
 @synthesize myToolBar;
 @synthesize myTabBar;
+@synthesize pickerSheet, pickerView;
 
 /** Instance functions
  */
@@ -1587,6 +1588,7 @@ static BOOL mShowReport = false;
         m.title = title;
     else
         m.title = [MLConstants notSpecified];// @"k.A.";
+
     if (![packinfo isEqual:[NSNull null]]) {
         if ([packinfo length]>0)
             m.subTitle = packinfo;
@@ -1594,6 +1596,7 @@ static BOOL mShowReport = false;
             m.subTitle = [MLConstants notSpecified];// @"k.A.";
     } else
         m.subTitle = [MLConstants notSpecified];// @"k.A.";
+
     m.medId = medId;
     
     [medi addObject:m];
@@ -2320,7 +2323,7 @@ static BOOL mShowReport = false;
 - (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
 {
 #ifdef DEBUG
-    NSLog(@"%s mCurrentSearchState:%ld", __FUNCTION__, mCurrentSearchState);
+    //NSLog(@"%s mCurrentSearchState:%ld", __FUNCTION__, mCurrentSearchState);
 #endif
     CGPoint p = [gesture locationInView:self.myTableView];
     NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
@@ -2343,33 +2346,103 @@ static BOOL mShowReport = false;
         case kTitle:    // Can only add medicine from Prep like in AmiKo OSX
         {
             NSString *subTitle = [medi[indexPath.row] subTitle];
-            NSArray *listOfPackages = [subTitle componentsSeparatedByString:@"\n"];
-            NSInteger numPackages = [listOfPackages count];
+            _pickerData = [subTitle componentsSeparatedByString:@"\n"];
 #ifdef DEBUG
             //NSLog(@"subTitle: <%@>", subTitle);
-            NSLog(@"listOfPackages: <%@>", listOfPackages);
-            NSLog(@"%ld packages", numPackages);
+            //NSLog(@"listOfPackages: <%@>", _pickerData);
+            //NSLog(@"%ld packages", [_pickerData count]);
+#endif
+            
+#if 1
+            if ([_pickerData count] < 1) {
+                NSLog(@"No packages to select from");
+            }
+            else if ([_pickerData count] == 1) {
+                NSLog(@"Selected package <%@>", _pickerData[0]);
+            }
+            else {
+                
+                self.pickerSheet = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Select package", nil)
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+                self.pickerView = [[UIPickerView alloc]initWithFrame:CGRectZero];
+                self.pickerView.dataSource = self;
+                self.pickerView.delegate = self;
+                self.pickerView.showsSelectionIndicator = YES;
+                [self.pickerView selectRow:1 inComponent:0 animated:YES];
+                [self.pickerSheet.view addSubview:self.pickerView];
+                self.pickerView.translatesAutoresizingMaskIntoConstraints = NO;
+                UIView *view = self.pickerView;
+                [self.pickerSheet.view addConstraints:[NSLayoutConstraint
+                                                       constraintsWithVisualFormat:@"V:|[view]|"
+                                                       options:0l
+                                                       metrics:nil
+                                                       views:NSDictionaryOfVariableBindings(view)]];
+                
+                [self.pickerSheet.view addConstraints:[NSLayoutConstraint
+                                                       constraintsWithVisualFormat:@"H:|[view]|"
+                                                       options:0l
+                                                       metrics:nil
+                                                       views:NSDictionaryOfVariableBindings(view)]];
+                [self presentViewController:self.pickerSheet animated:YES completion:^{
+                }];
+            }
 #endif
         }
-
             break;
             
         case kAtcCode:
-            {
-                NSString *subTitle = [medi[indexPath.row] subTitle];
-                NSString *medSubTitle = [NSString stringWithString:subTitle];
-                NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
-                if (mAtc[0]!=nil && ![[searchField text] isEqualToString:mAtc[0]]) {
-                    [searchField setText:mAtc[0]];
-                    [self executeSearch:mAtc[0]];
-                }
+        {
+            NSString *subTitle = [medi[indexPath.row] subTitle];
+            NSString *medSubTitle = [NSString stringWithString:subTitle];
+            NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
+            if (mAtc[0]!=nil && ![[searchField text] isEqualToString:mAtc[0]]) {
+                [searchField setText:mAtc[0]];
+                [self executeSearch:mAtc[0]];
             }
+        }
             break;
             
         default:
-            NSLog(@"Can only add medicine from Prep");
             break;
     }
+}
+
+#pragma mark - UIPickerViewDelegate
+#pragma mark - UIPickerViewDataSource
+
+// The number of columns of data
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// The number of rows of data
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return _pickerData.count;
+}
+
+// The data to return for the row and component (column) that's being passed in
+- (NSString*)pickerView:(UIPickerView *)pickerView
+            titleForRow:(NSInteger)row
+           forComponent:(NSInteger)component
+{
+    return _pickerData[row];
+}
+
+// Catpure the picker view selection
+- (void)pickerView:(UIPickerView *)pickerView
+      didSelectRow:(NSInteger)row
+       inComponent:(NSInteger)component
+{
+#ifdef DEBUG
+    NSLog(@"%s, row:%ld", __FUNCTION__, row);
+    NSLog(@"Selected package <%@>", _pickerData[row]);
+#endif
+
+    [self.pickerSheet dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 #pragma mark - helper functions
