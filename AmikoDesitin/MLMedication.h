@@ -44,4 +44,6 @@
 @property (nonatomic, copy) NSString *styleStr;
 @property (nonatomic, copy) NSString *contentStr;
 
+@property (nonatomic, copy) NSString *packages;
+
 @end

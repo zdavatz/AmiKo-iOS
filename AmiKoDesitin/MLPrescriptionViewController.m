@@ -65,6 +65,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 @synthesize prescription;
 @synthesize infoView;
+@synthesize editedMedicines;
 
 + (MLPrescriptionViewController *)sharedInstance
 {
@@ -74,6 +75,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     dispatch_once(&onceToken, ^{
         sharedObject = [[self alloc] init];
     });
+    
     return sharedObject;
 }
 
@@ -168,8 +170,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                            screenBounds.size.width,
                            CGRectGetHeight(screenBounds) - barHeight);
     
-    prescription = [[MLPrescription alloc] init];
-
+    if (!prescription)
+        prescription = [[MLPrescription alloc] init];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
                                                  name:@"AmkFilenameSelectedNotification"
@@ -184,6 +187,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                              selector:@selector(patientDbListDidChangeSelection:)
                                                  name:@"PatientSelectedNotification"
                                                object:nil];
+    self.editedMedicines = false;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -198,10 +202,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSLog(@"%s", __FUNCTION__);
     //NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
 #endif
-    if (![self loadDefaultPrescription]) {
-        [self loadDefaultDoctor];
-        [self loadDefaultPatient];
-    }
+    if (!editedMedicines) // do the following only if we haven't added any medicines yet
+        if (![self loadDefaultPrescription]) {
+            [self loadDefaultDoctor];
+            [self loadDefaultPatient];
+        }
     
     [infoView reloadData];
 }
@@ -766,14 +771,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [prescriptionDict setObject:prescription.placeDate forKey:@"place_date"];
     [prescriptionDict setObject:patientDict forKey:@"patient"];
     [prescriptionDict setObject:operatorDict forKey:@"operator"];
-    //[prescriptionDict setObject:prescription forKey:@"medications"];
+    [prescriptionDict setObject:prescription.medications forKey:@"medications"];
 #else
     NSDictionary *prescriptionDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                       hash, @"prescription_hash",
                                       prescription.placeDate, @"place_date",
                                       patientDict, @"patient",
                                       operatorDict, @"operator",
-                                      //prescription, @"medications",
+                                      prescription.medications, @"medications",
                                       nil];
 #endif
     
