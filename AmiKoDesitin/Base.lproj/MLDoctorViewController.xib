@@ -38,7 +38,7 @@
                             <rect key="frame" x="16" y="8" width="306" height="448"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="1l8-HU-bGs" userLabel="Stack View H1">
-                                    <rect key="frame" x="0.0" y="0.0" width="306" height="304"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="296" height="304"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="mRh-pz-tTH" userLabel="Stack View Labels">
                                             <rect key="frame" x="0.0" y="0.0" width="76" height="304"/>
@@ -94,7 +94,7 @@
                                             </subviews>
                                         </stackView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="n9P-5e-oHj" userLabel="Stack View Fields">
-                                            <rect key="frame" x="106" y="0.0" width="200" height="304"/>
+                                            <rect key="frame" x="106" y="0.0" width="190" height="304"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5pI-CT-Ktr" userLabel="Title">
                                                     <rect key="frame" x="0.0" y="0.0" width="59" height="29.5"/>
@@ -129,10 +129,10 @@
                                                         <outlet property="delegate" destination="-1" id="vJ5-WM-55C"/>
                                                     </connections>
                                                 </textField>
-                                                <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uDo-WJ-d8Q" userLabel="City">
-                                                    <rect key="frame" x="0.0" y="118.5" width="200" height="29"/>
+                                                <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uDo-WJ-d8Q" userLabel="Street">
+                                                    <rect key="frame" x="0.0" y="118.5" width="190" height="29"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="yhs-yt-G5w"/>
+                                                        <constraint firstAttribute="width" constant="190" id="yhs-yt-G5w"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -166,9 +166,9 @@
                                                     </connections>
                                                 </textField>
                                                 <textField opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NnV-m8-xEK" userLabel="Phone">
-                                                    <rect key="frame" x="0.0" y="236.5" width="200" height="29.5"/>
+                                                    <rect key="frame" x="0.0" y="236.5" width="190" height="29.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="wof-se-fml"/>
+                                                        <constraint firstAttribute="width" constant="190" id="wof-se-fml"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -178,9 +178,9 @@
                                                     </connections>
                                                 </textField>
                                                 <textField opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="piK-dm-F1a" userLabel="email">
-                                                    <rect key="frame" x="0.0" y="276" width="200" height="28"/>
+                                                    <rect key="frame" x="0.0" y="276" width="190" height="28"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="200" id="vSP-ok-D2J"/>
+                                                        <constraint firstAttribute="width" constant="190" id="vSP-ok-D2J"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
