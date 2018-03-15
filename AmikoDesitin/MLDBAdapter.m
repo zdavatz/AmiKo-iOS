@@ -27,7 +27,7 @@
 #import "MLConstants.h"
 
 enum {
-    kMedId = 0, kTitle, kAuth, kAtcCode, kSubstances, kRegnrs, kAtcClass, kTherapy, kApplication, kIndications, kCustomerId, kPackInfo, kAddInfo, kIdsStr, kSectionsStr, kContentStr, kStyleStr
+    kMedId = 0, kTitle, kAuth, kAtcCode, kSubstances, kRegnrs, kAtcClass, kTherapy, kApplication, kIndications, kCustomerId, kPackInfo, kPackages, kAddInfo, kIdsStr, kSectionsStr, kContentStr, kStyleStr
 };
 
 static NSString *KEY_ROWID = @"_id";
@@ -47,6 +47,7 @@ static NSString *KEY_IDS = @"ids_str";
 static NSString *KEY_SECTIONS = @"titles_str";
 static NSString *KEY_CONTENT = @"content";
 static NSString *KEY_STYLE = @"style_str";
+static NSString *KEY_PACKAGES = @"packages";
 
 static NSString *DATABASE_TABLE = @"amikodb";
 
@@ -70,12 +71,12 @@ static NSString *FULL_TABLE = nil;
 {
     if (self == [MLDBAdapter class]) {
         if (SHORT_TABLE == nil) {
-            SHORT_TABLE = [[NSString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
-                           KEY_ROWID, KEY_TITLE, KEY_AUTH, KEY_ATCCODE, KEY_SUBSTANCES, KEY_REGNRS, KEY_ATCCLASS, KEY_THERAPY, KEY_APPLICATION, KEY_INDICATIONS, KEY_CUSTOMER_ID, KEY_PACK_INFO];
+            SHORT_TABLE = [[NSString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
+                           KEY_ROWID, KEY_TITLE, KEY_AUTH, KEY_ATCCODE, KEY_SUBSTANCES, KEY_REGNRS, KEY_ATCCLASS, KEY_THERAPY, KEY_APPLICATION, KEY_INDICATIONS, KEY_CUSTOMER_ID, KEY_PACK_INFO, KEY_PACKAGES];
         }
         if (FULL_TABLE == nil) {
-            FULL_TABLE = [[NSString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
-                          KEY_ROWID, KEY_TITLE, KEY_AUTH, KEY_ATCCODE, KEY_SUBSTANCES, KEY_REGNRS, KEY_ATCCLASS, KEY_THERAPY, KEY_APPLICATION, KEY_INDICATIONS, KEY_CUSTOMER_ID, KEY_PACK_INFO, KEY_ADDINFO, KEY_IDS, KEY_SECTIONS, KEY_CONTENT, KEY_STYLE];
+            FULL_TABLE = [[NSString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
+                          KEY_ROWID, KEY_TITLE, KEY_AUTH, KEY_ATCCODE, KEY_SUBSTANCES, KEY_REGNRS, KEY_ATCCLASS, KEY_THERAPY, KEY_APPLICATION, KEY_INDICATIONS, KEY_CUSTOMER_ID, KEY_PACK_INFO, KEY_PACKAGES, KEY_ADDINFO, KEY_IDS, KEY_SECTIONS, KEY_CONTENT, KEY_STYLE];
         }
     }
 }
@@ -358,6 +359,8 @@ static NSString *FULL_TABLE = nil;
     [m setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
     [m setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
     [m setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
+    [m setPackages:(NSString *)[cursor objectAtIndex:kPackages]];
+
     [m setAddInfo:(NSString *)[cursor objectAtIndex:kAddInfo]];
     [m setSectionIds:(NSString *)[cursor objectAtIndex:kIdsStr]];
     [m setSectionTitles:(NSString *)[cursor objectAtIndex:kSectionsStr]];
@@ -386,6 +389,7 @@ static NSString *FULL_TABLE = nil;
         [m setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
         [m setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
         [m setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
+        [m setPackages:(NSString *)[cursor objectAtIndex:kPackages]];
         
         [medList addObject:m];
     }
@@ -412,6 +416,8 @@ static NSString *FULL_TABLE = nil;
         [m setIndications:(NSString *)[cursor objectAtIndex:kIndications]];        
         [m setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
         [m setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
+        [m setPackages:(NSString *)[cursor objectAtIndex:kPackages]];
+
         [m setAddInfo:(NSString *)[cursor objectAtIndex:kAddInfo]];
         [m setSectionIds:(NSString *)[cursor objectAtIndex:kIdsStr]];
         [m setSectionTitles:(NSString *)[cursor objectAtIndex:kSectionsStr]];

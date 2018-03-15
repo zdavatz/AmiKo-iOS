@@ -1,21 +1,21 @@
 
 /* Class = "UIBarButtonItem"; title = "Prä"; ObjectID = "405"; */
-"405.title" = "Prä";
+"405.title" = "Pré";
 
 /* Class = "UIBarButtonItem"; title = "Inh"; ObjectID = "406"; */
-"406.title" = "Inh";
+"406.title" = "Tit";
 
 /* Class = "UIBarButtonItem"; title = "Wirk/Atc"; ObjectID = "407"; */
-"407.title" = "Wirk/Atc";
+"407.title" = "Prin/Atc";
 
 /* Class = "UIBarButtonItem"; title = "Reg"; ObjectID = "408"; */
-"408.title" = "Reg";
+"408.title" = "Aut";
 
 /* Class = "UIBarButtonItem"; title = "Ther"; ObjectID = "410"; */
-"410.title" = "Ther";
+"410.title" = "Thér";
 
 /* Class = "UITabBarItem"; title = "Favorites"; ObjectID = "466"; */
-"466.title" = "Favorites";
+"466.title" = "Favoris";
 
 /* Class = "UITabBarItem"; title = "AIPS"; ObjectID = "467"; */
 "467.title" = "Compendium";

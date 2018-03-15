@@ -88,7 +88,11 @@
     }
     
     // medications aka products
-    medications = [[NSMutableArray alloc] init];
+    if (medications)
+        [medications removeAllObjects];
+    else
+        medications = [[NSMutableArray alloc] init];
+
     NSArray *medicationArray = [receiptData objectForKey:@"medications"];
     if (medicationArray)
         for (NSDictionary *medicationDict in medicationArray) {

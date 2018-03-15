@@ -1905,7 +1905,7 @@ static BOOL mShowReport = false;
 
 - (void) switchToDrugInteractionView
 {
-    // if (mCurrentIndexPath!=nil)
+    // if (mCurrentIndexPath)
     [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
 }
 
@@ -2000,7 +2000,7 @@ static BOOL mShowReport = false;
  */
 - (void) pushToMedBasket
 {
-    if (mMed!=nil) {
+    if (mMed) {
         NSString *title = [mMed title];
         title = [title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if ([title length]>30) {
@@ -2165,7 +2165,7 @@ static BOOL mShowReport = false;
 
     long mId = -1;
     
-    if (mCurrentIndexPath!=nil) {
+    if (mCurrentIndexPath) {
         mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
         mMed = [mDb searchId:mId];
     }
@@ -2371,6 +2371,12 @@ static BOOL mShowReport = false;
 #endif
             
 #if 1
+            //mCurrentIndexPath = indexPath;  // for drug interaction view
+            long mId = [medi[indexPath.row] medId];
+            mMed = [mDb searchId:mId];  // MLMedication
+            NSLog(@"%@", mMed);
+#endif
+#if 1
             if ([_pickerData count] < 1) {
                 NSLog(@"No packages to select from");
             }
@@ -2479,16 +2485,33 @@ static BOOL mShowReport = false;
 
 // Catpure the picker view selection
 - (void)pickerView:(UIPickerView *)pickerView
-      didSelectRow:(NSInteger)row
+      didSelectRow:(NSInteger)pickerRow
        inComponent:(NSInteger)component
 {
 #ifdef DEBUG
-    NSLog(@"%s, row:%ld", __FUNCTION__, row);
-    NSLog(@"Selected package <%@>", _pickerData[row]);
+    NSLog(@"%s, picker row:%ld", __FUNCTION__, pickerRow);
+    NSLog(@"Selected package <%@>", _pickerData[pickerRow]);
+    //NSLog(@"%ld medicines in table view", [medi count]);
 #endif
 
     [self.pickerSheet dismissViewControllerAnimated:YES completion:^{
     }];
+    
+#if 1
+    //NSLog(@"Line %d, %@", __LINE__, mMed); // MLMedication
+    MLProduct *med = [[MLProduct alloc] initWithMedication:mMed :pickerRow];
+    //NSLog(@"%@", med);
+
+    MLPrescriptionViewController * vc = [MLPrescriptionViewController sharedInstance];
+    if (!vc.prescription)
+        vc.prescription = [[MLPrescription alloc] init];
+
+    if (!vc.prescription.medications)
+        vc.prescription.medications = [[NSMutableArray alloc] init];
+
+    [vc.prescription.medications addObject:med];
+    vc.editedMedicines = true;
+#endif
 }
 
 #pragma mark - helper functions

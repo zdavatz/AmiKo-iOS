@@ -18,6 +18,7 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *infoView;
 @property (atomic) MLPrescription *prescription;
+@property (nonatomic) bool editedMedicines; // "dirty" flag
 
 + (MLPrescriptionViewController *)sharedInstance;
 
