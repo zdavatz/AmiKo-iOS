@@ -324,47 +324,47 @@ static NSString *FULL_TABLE = nil;
 }
 - (MLMedication *) cursorToShortMedInfo: (NSArray *)cursor
 {
-    MLMedication *medi = [[MLMedication alloc] init];
+    MLMedication *m = [[MLMedication alloc] init];
         
-    [medi setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
-    [medi setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
-    [medi setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
-    [medi setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
-    [medi setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
-    [medi setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
-    [medi setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
-    [medi setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
-    [medi setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
-    [medi setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
-    [medi setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
-    [medi setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
+    [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
+    [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
+    [m setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
+    [m setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
+    [m setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
+    [m setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
+    [m setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
+    [m setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
+    [m setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
+    [m setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
+    [m setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
+    [m setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
     
-    return medi;
+    return m;
 }
 
 - (MLMedication *) cursorToFullMedInfo: (NSArray *)cursor
 {
-    MLMedication *medi = [[MLMedication alloc] init];
+    MLMedication *m = [[MLMedication alloc] init];
     
-    [medi setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
-    [medi setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
-    [medi setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
-    [medi setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
-    [medi setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
-    [medi setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
-    [medi setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
-    [medi setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
-    [medi setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
-    [medi setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
-    [medi setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
-    [medi setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
-    [medi setAddInfo:(NSString *)[cursor objectAtIndex:kAddInfo]];
-    [medi setSectionIds:(NSString *)[cursor objectAtIndex:kIdsStr]];
-    [medi setSectionTitles:(NSString *)[cursor objectAtIndex:kSectionsStr]];
-    [medi setContentStr:(NSString *)[cursor objectAtIndex:kContentStr]];
-    [medi setStyleStr:(NSString *)[cursor objectAtIndex:kStyleStr]];
+    [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
+    [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
+    [m setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
+    [m setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
+    [m setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
+    [m setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
+    [m setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
+    [m setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
+    [m setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
+    [m setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
+    [m setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
+    [m setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
+    [m setAddInfo:(NSString *)[cursor objectAtIndex:kAddInfo]];
+    [m setSectionIds:(NSString *)[cursor objectAtIndex:kIdsStr]];
+    [m setSectionTitles:(NSString *)[cursor objectAtIndex:kSectionsStr]];
+    [m setContentStr:(NSString *)[cursor objectAtIndex:kContentStr]];
+    [m setStyleStr:(NSString *)[cursor objectAtIndex:kStyleStr]];
     
-    return medi;
+    return m;
 }
 
 - (NSArray *) extractShortMedInfoFrom: (NSArray *)results
@@ -372,22 +372,22 @@ static NSString *FULL_TABLE = nil;
     NSMutableArray *medList = [NSMutableArray array];
 
     for (NSArray *cursor in results) {
-        MLMedication *medi = [[MLMedication alloc] init];
+        MLMedication *m = [[MLMedication alloc] init];
         
-        [medi setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
-        [medi setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
-        [medi setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
-        [medi setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
-        [medi setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
-        [medi setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
-        [medi setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
-        [medi setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
-        [medi setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
-        [medi setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
-        [medi setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
-        [medi setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
+        [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
+        [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
+        [m setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
+        [m setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
+        [m setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
+        [m setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
+        [m setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
+        [m setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
+        [m setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
+        [m setIndications:(NSString *)[cursor objectAtIndex:kIndications]];
+        [m setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
+        [m setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
         
-        [medList addObject:medi];
+        [medList addObject:m];
     }
     
     return medList;
@@ -398,27 +398,27 @@ static NSString *FULL_TABLE = nil;
     NSMutableArray *medList = [NSMutableArray array];
     
     for (NSArray *cursor in results) {
-        MLMedication *medi = [[MLMedication alloc] init];
+        MLMedication *m = [[MLMedication alloc] init];
         
-        [medi setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
-        [medi setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
-        [medi setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
-        [medi setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
-        [medi setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
-        [medi setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
-        [medi setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
-        [medi setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
-        [medi setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
-        [medi setIndications:(NSString *)[cursor objectAtIndex:kIndications]];        
-        [medi setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
-        [medi setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
-        [medi setAddInfo:(NSString *)[cursor objectAtIndex:kAddInfo]];
-        [medi setSectionIds:(NSString *)[cursor objectAtIndex:kIdsStr]];
-        [medi setSectionTitles:(NSString *)[cursor objectAtIndex:kSectionsStr]];
-        [medi setContentStr:(NSString *)[cursor objectAtIndex:kContentStr]];
-        [medi setStyleStr:(NSString *)[cursor objectAtIndex:kStyleStr]];
+        [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
+        [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
+        [m setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
+        [m setAtccode:(NSString *)[cursor objectAtIndex:kAtcCode]];
+        [m setSubstances:(NSString *)[cursor objectAtIndex:kSubstances]];
+        [m setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
+        [m setAtcClass:(NSString *)[cursor objectAtIndex:kAtcClass]];
+        [m setTherapy:(NSString *)[cursor objectAtIndex:kTherapy]];
+        [m setApplication:(NSString *)[cursor objectAtIndex:kApplication]];
+        [m setIndications:(NSString *)[cursor objectAtIndex:kIndications]];        
+        [m setCustomerId:[(NSString *)[cursor objectAtIndex:kCustomerId] intValue]];
+        [m setPackInfo:(NSString *)[cursor objectAtIndex:kPackInfo]];
+        [m setAddInfo:(NSString *)[cursor objectAtIndex:kAddInfo]];
+        [m setSectionIds:(NSString *)[cursor objectAtIndex:kIdsStr]];
+        [m setSectionTitles:(NSString *)[cursor objectAtIndex:kSectionsStr]];
+        [m setContentStr:(NSString *)[cursor objectAtIndex:kContentStr]];
+        [m setStyleStr:(NSString *)[cursor objectAtIndex:kStyleStr]];
         
-        [medList addObject:medi];
+        [medList addObject:m];
     }
     
     return medList;

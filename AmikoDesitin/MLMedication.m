@@ -43,4 +43,10 @@
 @synthesize styleStr;
 @synthesize contentStr;
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ id:%ld <%@>",
+            NSStringFromClass([self class]), self.medId, self.title];
+}
+
 @end

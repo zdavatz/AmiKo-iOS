@@ -90,6 +90,12 @@ static BOOL mShowReport = false;
 @synthesize subTitle;
 @synthesize medId;
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ id:%ld <%@>",
+            NSStringFromClass([self class]), self.medId, self.title];
+}
+
 @end
 
 #pragma mark -
@@ -1590,15 +1596,16 @@ static BOOL mShowReport = false;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [MLConstants notSpecified];// @"k.A.";
+        m.title = [MLConstants notSpecified];// @"k.A."
 
     if (![packinfo isEqual:[NSNull null]]) {
         if ([packinfo length]>0)
             m.subTitle = packinfo;
         else
-            m.subTitle = [MLConstants notSpecified];// @"k.A.";
-    } else
-        m.subTitle = [MLConstants notSpecified];// @"k.A.";
+            m.subTitle = [MLConstants notSpecified];// @"k.A."
+    }
+    else
+        m.subTitle = [MLConstants notSpecified];// @"k.A."
 
     m.medId = medId;
     
@@ -1681,13 +1688,16 @@ static BOOL mShowReport = false;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [MLConstants notSpecified]; // @"k.A.";;
+        m.title = [MLConstants notSpecified]; // @"k.A.";
+    
     NSMutableString *m_regnrs = [NSMutableString stringWithString:regnrs];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_regnrs isEqual:[NSNull null]])
         [m_regnrs setString:[MLConstants notSpecified]];
+    
     if ([m_auth isEqual:[NSNull null]])
         [m_auth setString:[MLConstants notSpecified]];
+    
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_regnrs, m_auth];
     m.medId = medId;
     
@@ -1705,12 +1715,15 @@ static BOOL mShowReport = false;
     }
     else
         m.title = [MLConstants notSpecified]; // @"k.A.";
+    
     NSMutableString *m_title = [NSMutableString stringWithString:title];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_title isEqual:[NSNull null]])
         [m_title setString:[MLConstants notSpecified]];
+    
     if ([m_auth isEqual:[NSNull null]])
         [m_auth setString:[MLConstants notSpecified]];
+    
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_title, m_auth];
     m.medId = medId;
     
@@ -2351,7 +2364,8 @@ static BOOL mShowReport = false;
             NSString *subTitle = [medi[indexPath.row] subTitle];
             _pickerData = [subTitle componentsSeparatedByString:@"\n"];
 #ifdef DEBUG
-            //NSLog(@"subTitle: <%@>", subTitle);
+            DataObject *m = medi[indexPath.row];
+            NSLog(@"%@", m);
             //NSLog(@"listOfPackages: <%@>", _pickerData);
             //NSLog(@"%ld packages", [_pickerData count]);
 #endif
@@ -2387,6 +2401,12 @@ static BOOL mShowReport = false;
                                                        options:0l
                                                        metrics:nil
                                                        views:NSDictionaryOfVariableBindings(view)]];
+                
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
+                    self.pickerSheet.popoverPresentationController.sourceView = cell.contentView;
+                }
+                
                 [self presentViewController:self.pickerSheet animated:YES completion:^{
                 }];
             }
