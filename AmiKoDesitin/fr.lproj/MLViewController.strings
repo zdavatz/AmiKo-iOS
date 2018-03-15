@@ -1,0 +1,27 @@
+
+/* Class = "UIBarButtonItem"; title = "Präparat"; ObjectID = "27"; */
+"27.title" = "Präparat";
+
+/* Class = "UIBarButtonItem"; title = "Inhaber"; ObjectID = "31"; */
+"31.title" = "Inhaber";
+
+/* Class = "UIBarButtonItem"; title = "Wirkstoff/ATC Code"; ObjectID = "32"; */
+"32.title" = "Wirkstoff/ATC Code";
+
+/* Class = "UIBarButtonItem"; title = "Reg. Nr."; ObjectID = "33"; */
+"33.title" = "Reg. Nr.";
+
+/* Class = "UIBarButtonItem"; title = "Therapie"; ObjectID = "35"; */
+"35.title" = "Therapie";
+
+/* Class = "UITabBarItem"; title = "Favorites"; ObjectID = "71"; */
+"71.title" = "Favorites";
+
+/* Class = "UITabBarItem"; title = "AIPS"; ObjectID = "72"; */
+"72.title" = "Compendium";
+
+/* Class = "UITabBarItem"; title = "Prescriptions"; ObjectID = "3ok-wB-fCZ"; */
+"3ok-wB-fCZ.title" = "Ordonnance";
+
+/* Class = "UITabBarItem"; title = "Interactions"; ObjectID = "IFm-jM-mZk"; */
+"IFm-jM-mZk.title" = "Interactions";

@@ -179,7 +179,6 @@
 		D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */; };
 		D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27417B16AA400EAB24B /* 10-medical.png */; };
 		D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */; };
-		D5A6F27D17B16B5800EAB24B /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */; };
 		D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */; };
 		D5A6F28417B16B6000EAB24B /* MLSecondViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */; };
 		D5A6F28517B16B6000EAB24B /* MLTitleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */; };
@@ -199,7 +198,6 @@
 		D5A6F2AD17B16F2900EAB24B /* app_icon_144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2AC17B16F2900EAB24B /* app_icon_144x144.png */; };
 		D5A6F2AF17B16F3600EAB24B /* app_icon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */; };
 		D5A6F2B117B16FFD00EAB24B /* app_icon_32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */; };
-		D5A6F2B317B171C900EAB24B /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B217B171C900EAB24B /* MLViewController.xib */; };
 		D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
 		D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D551D53617F16DE2000EC52A /* Images.xcassets */; };
 		D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EA5C511BE09B0B00D753C5 /* MLUtility.m */; };
@@ -233,8 +231,6 @@
 		D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */; };
 		D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */; };
 		D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */; };
-		D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2B217B171C900EAB24B /* MLViewController.xib */; };
-		D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */; };
 		D5F6BB7117E8C87500DCBD16 /* MLTitleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */; };
 		D5F6BB7217E8C87500DCBD16 /* MLTitleViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F28217B16B6000EAB24B /* MLTitleViewController~iphone.xib */; };
 		D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F2A417B16E4400EAB24B /* 28-star.png */; };
@@ -266,6 +262,10 @@
 		FA4263712058117B00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
 		FA4511B8204ECBCB00899A77 /* MLPatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */; };
+		FA5FA7EF205A743200E0C042 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7F2205A743200E0C042 /* MLViewController.xib */; };
+		FA5FA7F0205A743200E0C042 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7F2205A743200E0C042 /* MLViewController.xib */; };
+		FA5FA7F7205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
+		FA5FA7F8205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
 		FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -416,7 +416,6 @@
 		D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon@2x.png"; sourceTree = "<group>"; };
 		D5A6F27417B16AA400EAB24B /* 10-medical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "10-medical.png"; sourceTree = "<group>"; };
 		D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "10-medical@2x.png"; sourceTree = "<group>"; };
-		D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MLViewController~iphone.xib"; sourceTree = "<group>"; };
 		D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLSecondViewController.xib; sourceTree = "<group>"; };
 		D5A6F28017B16B6000EAB24B /* MLSecondViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MLSecondViewController~iphone.xib"; sourceTree = "<group>"; };
 		D5A6F28117B16B6000EAB24B /* MLTitleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLTitleViewController.xib; sourceTree = "<group>"; };
@@ -446,7 +445,6 @@
 		D5A6F2AC17B16F2900EAB24B /* app_icon_144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_144x144.png; sourceTree = "<group>"; };
 		D5A6F2AE17B16F3600EAB24B /* app_icon_114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_114x114.png; sourceTree = "<group>"; };
 		D5A6F2B017B16FFD00EAB24B /* app_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon_32x32.png; sourceTree = "<group>"; };
-		D5A6F2B217B171C900EAB24B /* MLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLViewController.xib; sourceTree = "<group>"; };
 		D5EA5C501BE09B0B00D753C5 /* MLUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLUtility.h; sourceTree = "<group>"; };
 		D5EA5C511BE09B0B00D753C5 /* MLUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLUtility.m; sourceTree = "<group>"; };
 		D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_fr.html; sourceTree = "<group>"; };
@@ -470,6 +468,12 @@
 		FA4511CE204EF51700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLDoctorViewController.strings; sourceTree = "<group>"; };
 		FA4511D0204EF52E00899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
 		FA4511D2204EF53700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPatientViewController.strings; sourceTree = "<group>"; };
+		FA5FA7F1205A743200E0C042 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLViewController.xib; sourceTree = "<group>"; };
+		FA5FA7F4205A744D00E0C042 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = ../AmiKoDesitin/de.lproj/MLViewController.strings; sourceTree = "<group>"; };
+		FA5FA7F6205A744E00E0C042 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = ../AmiKoDesitin/fr.lproj/MLViewController.strings; sourceTree = "<group>"; };
+		FA5FA7F9205A745B00E0C042 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/MLViewController~iphone.xib"; sourceTree = "<group>"; };
+		FA5FA7FC205A745D00E0C042 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "../AmiKoDesitin/de.lproj/MLViewController~iphone.strings"; sourceTree = "<group>"; };
+		FA5FA7FE205A745F00E0C042 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "../AmiKoDesitin/fr.lproj/MLViewController~iphone.strings"; sourceTree = "<group>"; };
 		FA662948204D541B0000904A /* MLDoctorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLDoctorViewController.h; path = AmiKoDesitin/MLDoctorViewController.h; sourceTree = SOURCE_ROOT; };
 		FA662949204D541B0000904A /* MLDoctorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLDoctorViewController.m; path = AmiKoDesitin/MLDoctorViewController.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -644,8 +648,8 @@
 				D5A6F29C17B16C4B00EAB24B /* MLSimpleTableCell.m */,
 				D5A6F29F17B16C4B00EAB24B /* MLViewController.h */,
 				D5A6F2A017B16C4B00EAB24B /* MLViewController.m */,
-				D5A6F2B217B171C900EAB24B /* MLViewController.xib */,
-				D5A6F27B17B16B5800EAB24B /* MLViewController~iphone.xib */,
+				FA5FA7F2205A743200E0C042 /* MLViewController.xib */,
+				FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */,
 			);
 			name = rear;
 			sourceTree = "<group>";
@@ -1086,8 +1090,8 @@
 				D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */,
 				D5A6F28417B16B6000EAB24B /* MLSecondViewController~iphone.xib in Resources */,
-				D5A6F2B317B171C900EAB24B /* MLViewController.xib in Resources */,
-				D5A6F27D17B16B5800EAB24B /* MLViewController~iphone.xib in Resources */,
+				FA5FA7EF205A743200E0C042 /* MLViewController.xib in Resources */,
+				FA5FA7F7205A745B00E0C042 /* MLViewController~iphone.xib in Resources */,
 				D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5A6F28517B16B6000EAB24B /* MLTitleViewController.xib in Resources */,
 				D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
@@ -1191,10 +1195,10 @@
 				D554574518B3E847003299E0 /* 1100-list-2.png in Resources */,
 				D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */,
 				D5A225161945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
-				D5F6BB6F17E8C87500DCBD16 /* MLViewController.xib in Resources */,
+				FA5FA7F0205A743200E0C042 /* MLViewController.xib in Resources */,
 				D5A2253419461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */,
 				D5A2252319461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
-				D5F6BB7017E8C87500DCBD16 /* MLViewController~iphone.xib in Resources */,
+				FA5FA7F8205A745B00E0C042 /* MLViewController~iphone.xib in Resources */,
 				D5A2252E19461D750078FEFF /* interactions_css.css in Resources */,
 				D5F6BB7117E8C87500DCBD16 /* MLTitleViewController.xib in Resources */,
 				D5A2250D1945EA890078FEFF /* drug_interactions_csv_fr.csv in Resources */,
@@ -1402,6 +1406,26 @@
 			name = MLPatientViewController.xib;
 			path = AmiKoDesitin;
 			sourceTree = SOURCE_ROOT;
+		};
+		FA5FA7F2205A743200E0C042 /* MLViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA5FA7F1205A743200E0C042 /* Base */,
+				FA5FA7F4205A744D00E0C042 /* de */,
+				FA5FA7F6205A744E00E0C042 /* fr */,
+			);
+			name = MLViewController.xib;
+			sourceTree = "<group>";
+		};
+		FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA5FA7F9205A745B00E0C042 /* Base */,
+				FA5FA7FC205A745D00E0C042 /* de */,
+				FA5FA7FE205A745F00E0C042 /* fr */,
+			);
+			name = "MLViewController~iphone.xib";
+			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
