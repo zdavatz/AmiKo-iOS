@@ -1,21 +1,21 @@
 
 /* Class = "UIBarButtonItem"; title = "Präparat"; ObjectID = "27"; */
-"27.title" = "Präparat";
+"27.title" = "Préparation";
 
 /* Class = "UIBarButtonItem"; title = "Inhaber"; ObjectID = "31"; */
-"31.title" = "Inhaber";
+"31.title" = "Titulaire d'autorisation";
 
 /* Class = "UIBarButtonItem"; title = "Wirkstoff/ATC Code"; ObjectID = "32"; */
-"32.title" = "Wirkstoff/ATC Code";
+"32.title" = "Principe actif/Code ATC";
 
 /* Class = "UIBarButtonItem"; title = "Reg. Nr."; ObjectID = "33"; */
-"33.title" = "Reg. Nr.";
+"33.title" = "Numéro d'autorisation";
 
 /* Class = "UIBarButtonItem"; title = "Therapie"; ObjectID = "35"; */
-"35.title" = "Therapie";
+"35.title" = "Thérapie";
 
 /* Class = "UITabBarItem"; title = "Favorites"; ObjectID = "71"; */
-"71.title" = "Favorites";
+"71.title" = "Favoris";
 
 /* Class = "UITabBarItem"; title = "AIPS"; ObjectID = "72"; */
 "72.title" = "Compendium";
