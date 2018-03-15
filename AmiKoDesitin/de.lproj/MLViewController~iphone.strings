@@ -21,7 +21,7 @@
 "467.title" = "Kompendium";
 
 /* Class = "UITabBarItem"; title = "Interactions"; ObjectID = "JxN-5u-on8"; */
-"JxN-5u-on8.title" = "Rezept";
+"JxN-5u-on8.title" = "Interaktionen";
 
 /* Class = "UITabBarItem"; title = "Prescriptions"; ObjectID = "Yye-ET-TME"; */
-"Yye-ET-TME.title" = "Interaktionen";
+"Yye-ET-TME.title" = "Rezepte";
