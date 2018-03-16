@@ -5,7 +5,7 @@
 "Hvl-IU-phx.text" = "Titre";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "K2v-Ld-fgV"; */
-"K2v-Ld-fgV.text" = "Prénom*";
+"K2v-Ld-fgV.text" = "Nom*";
 
 /* Class = "UIButton"; normalTitle = "Sign with Selfie"; ObjectID = "Ln5-t1-rrK"; */
 "Ln5-t1-rrK.normalTitle" = "Sign. avec Selfie";
@@ -14,7 +14,7 @@
 "RAn-T3-58s.text" = "Ville*";
 
 /* Class = "UILabel"; text = "Name*"; ObjectID = "VVo-lv-GrG"; */
-"VVo-lv-GrG.text" = "Nom*";
+"VVo-lv-GrG.text" = "Prénom*";
 
 /* Class = "UILabel"; text = "Phone*"; ObjectID = "Wmv-Vd-WhX"; */
 "Wmv-Vd-WhX.text" = "Tél.*";
