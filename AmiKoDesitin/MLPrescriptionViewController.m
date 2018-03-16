@@ -768,38 +768,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //        return;
 //    }
     
-    NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
-    [patientDict setObject:[self.prescription.patient uniqueId] forKey:KEY_AMK_PAT_ID];
-    [patientDict setObject:[self.prescription.patient givenName] forKey:KEY_AMK_PAT_NAME];
-    [patientDict setObject:[self.prescription.patient familyName] forKey:KEY_AMK_PAT_SURNAME];
-    [patientDict setObject:[self.prescription.patient birthDate] forKey:KEY_AMK_PAT_BIRTHDATE];
-    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient weightKg]] forKey:KEY_AMK_PAT_WEIGHT];
-    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient heightCm]] forKey:KEY_AMK_PAT_HEIGHT];
-    [patientDict setObject:[self.prescription.patient gender] forKey:KEY_AMK_PAT_GENDER];
-    [patientDict setObject:[self.prescription.patient postalAddress] forKey:KEY_AMK_PAT_ADDRESS];
-    [patientDict setObject:[self.prescription.patient zipCode] forKey:KEY_AMK_PAT_ZIP];
-    [patientDict setObject:[self.prescription.patient city] forKey:KEY_AMK_PAT_CITY];
-    [patientDict setObject:[self.prescription.patient country] forKey:KEY_AMK_PAT_COUNTRY];
-    [patientDict setObject:[self.prescription.patient phoneNumber] forKey:KEY_AMK_PAT_PHONE];
-    [patientDict setObject:[self.prescription.patient emailAddress] forKey:KEY_AMK_PAT_EMAIL];
-
-    NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
-#ifdef DEBUG
-    NSLog(@"%@", self.prescription.doctor);
-#endif
-    if ([self.prescription.doctor title])  // optional field
-        [operatorDict setObject:[self.prescription.doctor title] forKey:KEY_AMK_DOC_TITLE];
-    else
-        [operatorDict setObject:@"" forKey:KEY_AMK_DOC_TITLE];
-    
-    [operatorDict setObject:[self.prescription.doctor givenName] forKey:KEY_AMK_DOC_NAME];
-    [operatorDict setObject:[self.prescription.doctor familyName] forKey:KEY_AMK_DOC_SURNAME];
-    [operatorDict setObject:[self.prescription.doctor postalAddress] forKey:KEY_AMK_DOC_ADDRESS];
-    [operatorDict setObject:[self.prescription.doctor city] forKey:KEY_AMK_DOC_CITY];
-    [operatorDict setObject:[self.prescription.doctor zipCode] forKey:KEY_AMK_DOC_ZIP];
-    [operatorDict setObject:[self.prescription.doctor phoneNumber] forKey:KEY_AMK_DOC_PHONE];
-    [operatorDict setObject:[self.prescription.doctor emailAddress] forKey:KEY_AMK_DOC_EMAIL];
-
     NSLocale *currentLocale = [NSLocale currentLocale];
     NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
     prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
@@ -809,11 +777,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     prescription.hash = [self makeNewUniqueHash];
 
     NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
-    [prescriptionDict setObject:prescription.hash forKey:@"prescription_hash"];
-    [prescriptionDict setObject:prescription.placeDate forKey:@"place_date"];
-    [prescriptionDict setObject:patientDict forKey:@"patient"];
-    [prescriptionDict setObject:operatorDict forKey:@"operator"];
-    [prescriptionDict setObject:[self.prescription makeMedicationsArray] forKey:@"medications"];
+    [prescriptionDict setObject:prescription.hash forKey:KEY_AMK_HASH];
+    [prescriptionDict setObject:prescription.placeDate forKey:KEY_AMK_PLACE_DATE];
+    [prescriptionDict setObject:[prescription makePatientDictionary] forKey:KEY_AMK_PATIENT];
+    [prescriptionDict setObject:[prescription makeOperatorDictionary] forKey:KEY_AMK_OPERATOR];
+    [prescriptionDict setObject:[prescription makeMedicationsArray] forKey:KEY_AMK_MEDICATIONS];
     
     //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 

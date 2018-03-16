@@ -15,6 +15,45 @@
 @synthesize patient;
 @synthesize medications;
 
+- (NSDictionary *) makePatientDictionary
+{
+    NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
+    
+    [patientDict setObject:[self.patient uniqueId] forKey:KEY_AMK_PAT_ID];
+    [patientDict setObject:[self.patient givenName] forKey:KEY_AMK_PAT_NAME];
+    [patientDict setObject:[self.patient familyName] forKey:KEY_AMK_PAT_SURNAME];
+    [patientDict setObject:[self.patient birthDate] forKey:KEY_AMK_PAT_BIRTHDATE];
+    [patientDict setObject:[NSNumber numberWithInt:[self.patient weightKg]] forKey:KEY_AMK_PAT_WEIGHT];
+    [patientDict setObject:[NSNumber numberWithInt:[self.patient heightCm]] forKey:KEY_AMK_PAT_HEIGHT];
+    [patientDict setObject:[self.patient gender] forKey:KEY_AMK_PAT_GENDER];
+    [patientDict setObject:[self.patient postalAddress] forKey:KEY_AMK_PAT_ADDRESS];
+    [patientDict setObject:[self.patient zipCode] forKey:KEY_AMK_PAT_ZIP];
+    [patientDict setObject:[self.patient city] forKey:KEY_AMK_PAT_CITY];
+    [patientDict setObject:[self.patient country] forKey:KEY_AMK_PAT_COUNTRY];
+    [patientDict setObject:[self.patient phoneNumber] forKey:KEY_AMK_PAT_PHONE];
+    [patientDict setObject:[self.patient emailAddress] forKey:KEY_AMK_PAT_EMAIL];
+    return patientDict;
+}
+
+- (NSDictionary *) makeOperatorDictionary
+{
+    NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
+
+    if ([doctor title])  // optional field
+        [operatorDict setObject:[doctor title] forKey:KEY_AMK_DOC_TITLE];
+    else
+        [operatorDict setObject:@"" forKey:KEY_AMK_DOC_TITLE];
+    
+    [operatorDict setObject:[doctor givenName]      forKey:KEY_AMK_DOC_NAME];
+    [operatorDict setObject:[doctor familyName]     forKey:KEY_AMK_DOC_SURNAME];
+    [operatorDict setObject:[doctor postalAddress]  forKey:KEY_AMK_DOC_ADDRESS];
+    [operatorDict setObject:[doctor city]           forKey:KEY_AMK_DOC_CITY];
+    [operatorDict setObject:[doctor zipCode]        forKey:KEY_AMK_DOC_ZIP];
+    [operatorDict setObject:[doctor phoneNumber]    forKey:KEY_AMK_DOC_PHONE];
+    [operatorDict setObject:[doctor emailAddress]   forKey:KEY_AMK_DOC_EMAIL];
+    return operatorDict;
+}
+
 - (NSArray *) makeMedicationsArray;
 {
     NSMutableArray *prescription = [[NSMutableArray alloc] init];
@@ -65,7 +104,7 @@
     }
 
     // hashedKey (prescription_hash) is required
-    hash = [receiptData objectForKey:@"prescription_hash"];
+    hash = [receiptData objectForKey:KEY_AMK_HASH];
     if (hash == nil ||
         [hash isEqual:[NSNull null]] ||
         [hash isEqualToString:@""])
@@ -93,11 +132,11 @@
 //    }
 #endif
     
-    placeDate = [receiptData objectForKey:@"place_date"];
+    placeDate = [receiptData objectForKey:KEY_AMK_PLACE_DATE];
     if (placeDate == nil)
         placeDate = [receiptData objectForKey:@"date"];
     
-    NSDictionary *operatorDict = [receiptData objectForKey:@"operator"] ?: [NSNull null];
+    NSDictionary *operatorDict = [receiptData objectForKey:KEY_AMK_OPERATOR] ? : [NSNull null];
     if (operatorDict) {
         doctor = [[MLOperator alloc] init];
         [doctor importFromDict:operatorDict];
@@ -105,7 +144,7 @@
         //doctor.signature = [operatorDict objectForKey:@"signature"];
     }
     
-    NSDictionary *patientDict = [receiptData objectForKey:@"patient"] ?: [NSNull null];
+    NSDictionary *patientDict = [receiptData objectForKey:KEY_AMK_PATIENT] ? : [NSNull null];
     if (patientDict) {
         patient = [[MLPatient alloc] init];
         [patient importFromDict:patientDict];
@@ -117,10 +156,10 @@
     else
         medications = [[NSMutableArray alloc] init];
 
-    NSArray *medicationArray = [receiptData objectForKey:@"medications"];
+    NSArray *medicationArray = [receiptData objectForKey:KEY_AMK_MEDICATIONS];
     if (medicationArray)
         for (NSDictionary *medicationDict in medicationArray) {
-            MLProduct *med = [MLProduct importFromDict:medicationDict];
+            MLProduct *med = [[MLProduct alloc] initWithDict:medicationDict];
             [medications addObject:med];
         }
     
