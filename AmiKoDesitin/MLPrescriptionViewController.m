@@ -198,15 +198,22 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    if (editedMedicines) {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-    //NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
 #endif
-    if (!editedMedicines) // do the following only if we haven't added any medicines yet
+        [self loadDefaultDoctor];
+    }
+    else {
+#ifdef DEBUG
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
+#endif
+        // do the following only if we haven't added any medicines yet
         if (![self loadDefaultPrescription]) {
             [self loadDefaultDoctor];
             [self loadDefaultPatient];
         }
+    }
     
     [infoView reloadData];
 }
@@ -226,15 +233,29 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark -
 
-- (void)loadDefaultDoctor
+- (BOOL) checkDefaultDoctor
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    if (doctorDictionary)
+        return TRUE;
+    
+#ifdef DEBUG
+    NSLog(@"Default doctor is not yet defined");
+#endif
+    return FALSE;
+}
+
+- (void) loadDefaultDoctor
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    if (!prescription.doctor)
-        prescription.doctor = [[MLOperator alloc] init];
-    
+#if 0
+    if ([self checkDefaultDoctor])
+        return;
+#else
     // Init from defaults
     // See also MLOperator importFromDict
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -245,10 +266,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
         return;
     }
+#endif
+    
 #ifdef DEBUG
     //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
-    [prescription.doctor importFromDict:doctorDictionary];    
+    if (!prescription.doctor)
+        prescription.doctor = [[MLOperator alloc] init];
+    
+    [prescription.doctor importFromDict:doctorDictionary];
     [prescription.doctor importSignature];
 }
 
@@ -716,6 +742,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) saveNewPrescription
 {
+    if (![self checkDefaultDoctor])
+        return;
+    
+    if ((!self.prescription.medications) ||
+        ([self.prescription.medications count] < 1)) {
+        NSLog(@"Cannot save prescription with no medications");
+        return;
+    }
+    
     NSString *amkDir;
     NSString *uid = [self.prescription.patient uniqueId];
     if (uid)
@@ -749,7 +784,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [patientDict setObject:[self.prescription.patient emailAddress] forKey:KEY_AMK_PAT_EMAIL];
 
     NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
-    [operatorDict setObject:[self.prescription.doctor title] forKey:KEY_AMK_DOC_TITLE];
+#ifdef DEBUG
+    NSLog(@"%@", self.prescription.doctor);
+#endif
+    if ([self.prescription.doctor title])  // optional field
+        [operatorDict setObject:[self.prescription.doctor title] forKey:KEY_AMK_DOC_TITLE];
+    else
+        [operatorDict setObject:@"" forKey:KEY_AMK_DOC_TITLE];
+    
     [operatorDict setObject:[self.prescription.doctor givenName] forKey:KEY_AMK_DOC_NAME];
     [operatorDict setObject:[self.prescription.doctor familyName] forKey:KEY_AMK_DOC_SURNAME];
     [operatorDict setObject:[self.prescription.doctor postalAddress] forKey:KEY_AMK_DOC_ADDRESS];
@@ -765,22 +807,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                               [MLUtility prettyTime]];
     
     prescription.hash = [self makeNewUniqueHash];
-#if 1
+
     NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
     [prescriptionDict setObject:prescription.hash forKey:@"prescription_hash"];
     [prescriptionDict setObject:prescription.placeDate forKey:@"place_date"];
     [prescriptionDict setObject:patientDict forKey:@"patient"];
     [prescriptionDict setObject:operatorDict forKey:@"operator"];
-    [prescriptionDict setObject:prescription.medications forKey:@"medications"];
-#else
-    NSDictionary *prescriptionDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      hash, @"prescription_hash",
-                                      prescription.placeDate, @"place_date",
-                                      patientDict, @"patient",
-                                      operatorDict, @"operator",
-                                      prescription.medications, @"medications",
-                                      nil];
-#endif
+    [prescriptionDict setObject:[self.prescription makeMedicationsArray] forKey:@"medications"];
     
     //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 
