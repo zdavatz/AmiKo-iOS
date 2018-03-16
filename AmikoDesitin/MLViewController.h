@@ -22,6 +22,7 @@
  ------------------------------------------------------------------------ */
 
 @import UIKit;
+#import "MLMedication.h"
 
 enum {
     eAips=0,
@@ -75,7 +76,8 @@ enum {
 
 - (void) switchTabBarItem: (UITabBarItem *)item;
 
-- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
+- (void) patientDbListDidChangeSelection:(NSNotification *)aNotification;
 - (void) executeSearch:(NSString *)searchText;
+- (void) addMedicineToPrescription:(MLMedication *)medication :(NSInteger)packageIndex;
 
 @end

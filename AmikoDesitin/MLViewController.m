@@ -40,7 +40,6 @@
 #import "MLUtility.h"
 #import "MLAlertView.h"
 #import "MLDBAdapter.h"
-#import "MLMedication.h"
 #import "MLSimpleTableCell.h"
 #import "MLDataStore.h"
 
@@ -2334,6 +2333,26 @@ static BOOL mShowReport = false;
     return frame.size;
 }
 
+#pragma mark -
+
+- (void) addMedicineToPrescription:(MLMedication *)medication :(NSInteger)packageIndex
+{
+    //NSLog(@"Line %d, %@", __LINE__, mMed); // MLMedication
+    MLProduct *product = [[MLProduct alloc] initWithMedication:mMed :packageIndex];
+    //NSLog(@"%@", med);
+    
+    MLPrescriptionViewController * vc = [MLPrescriptionViewController sharedInstance];
+    if (!vc.prescription)
+        vc.prescription = [[MLPrescription alloc] init];
+    
+    if (!vc.prescription.medications)
+        vc.prescription.medications = [[NSMutableArray alloc] init];
+    
+    [vc.prescription.medications addObject:product];
+    vc.editedMedicines = true;
+    [vc.infoView reloadData];
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
@@ -2382,6 +2401,7 @@ static BOOL mShowReport = false;
             }
             else if ([_pickerData count] == 1) {
                 NSLog(@"Selected package <%@>", _pickerData[0]);
+                [self addMedicineToPrescription:mMed :0];
             }
             else {
                 
@@ -2497,21 +2517,7 @@ static BOOL mShowReport = false;
     [self.pickerSheet dismissViewControllerAnimated:YES completion:^{
     }];
     
-#if 1
-    //NSLog(@"Line %d, %@", __LINE__, mMed); // MLMedication
-    MLProduct *med = [[MLProduct alloc] initWithMedication:mMed :pickerRow];
-    //NSLog(@"%@", med);
-
-    MLPrescriptionViewController * vc = [MLPrescriptionViewController sharedInstance];
-    if (!vc.prescription)
-        vc.prescription = [[MLPrescription alloc] init];
-
-    if (!vc.prescription.medications)
-        vc.prescription.medications = [[NSMutableArray alloc] init];
-
-    [vc.prescription.medications addObject:med];
-    vc.editedMedicines = true;
-#endif
+    [self addMedicineToPrescription:mMed :pickerRow];
 }
 
 #pragma mark - helper functions
