@@ -93,4 +93,10 @@
     return scaledImage;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ title:%@, name:%@, surname:%@",
+            NSStringFromClass([self class]), self.title, self.givenName, self.familyName];
+}
+
 @end

@@ -19,6 +19,7 @@
 @property (atomic) MLPatient *patient;
 @property (atomic) NSMutableArray *medications;
 
+- (NSArray *) makeMedicationsArray;
 - (void) importFromURL:(NSURL *)url;
 
 @end
