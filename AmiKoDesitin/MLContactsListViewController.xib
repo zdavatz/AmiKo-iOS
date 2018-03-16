@@ -23,9 +23,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="OFX-Ir-jRP">
-                    <rect key="frame" x="0.0" y="6" width="375" height="58"/>
+                    <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="58" id="Y3k-hh-kID"/>
+                        <constraint firstAttribute="height" constant="44" id="Y3k-hh-kID"/>
                     </constraints>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
@@ -48,7 +48,7 @@
                 <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="ZdL-PR-7hF" secondAttribute="leading" id="SCi-d1-ZeY"/>
                 <constraint firstItem="ZdL-PR-7hF" firstAttribute="top" secondItem="OFX-Ir-jRP" secondAttribute="bottom" id="X67-ts-aeU"/>
                 <constraint firstItem="OFX-Ir-jRP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cw6-n1-v0E"/>
-                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="ueY-ga-rbA" secondAttribute="top" constant="-14" id="iSZ-te-pCc"/>
+                <constraint firstItem="OFX-Ir-jRP" firstAttribute="top" secondItem="ueY-ga-rbA" secondAttribute="top" id="iSZ-te-pCc"/>
                 <constraint firstItem="ZdL-PR-7hF" firstAttribute="bottom" secondItem="ueY-ga-rbA" secondAttribute="bottom" id="nW4-7M-c7d"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ueY-ga-rbA"/>
