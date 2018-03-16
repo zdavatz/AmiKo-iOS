@@ -31,7 +31,7 @@
                     </connections>
                 </tableView>
                 <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="2Il-9N-CM5">
-                    <rect key="frame" x="0.0" y="20" width="768" height="44"/>
+                    <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="Ghf-I0-zDe"/>
                     </constraints>

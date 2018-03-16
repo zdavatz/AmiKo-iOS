@@ -8,6 +8,8 @@
 
 #import "MLProduct.h"
 
+#define INDEX_EAN_CODE_IN_PACK   9
+
 @implementation MLProduct
 
 @synthesize eanCode;
@@ -23,24 +25,23 @@
             NSStringFromClass([self class]), self.eanCode, self.regnrs, self.title];
 }
 
-+ (id)importFromDict:(NSDictionary *)dict
+- (id)initWithDict:(NSDictionary *)dict
 {
-    MLProduct *med = [[MLProduct alloc] init];
-    
-    med.eanCode     = [dict objectForKey:KEY_AMK_MED_EAN];
-    med.packageInfo = [dict objectForKey:KEY_AMK_MED_PACKAGE];
-    med.prodName    = [dict objectForKey:KEY_AMK_MED_PROD_NAME];
-    med.comment     = [dict objectForKey:KEY_AMK_MED_COMMENT];
-    
-    med.title       = [dict objectForKey:KEY_AMK_MED_TITLE];
-    med.auth        = [dict objectForKey:KEY_AMK_MED_OWNER];
-    med.regnrs      = [dict objectForKey:KEY_AMK_MED_REGNRS];
-    med.atccode     = [dict objectForKey:KEY_AMK_MED_ATC];
-    
-    return med;
+    self = [super init];
+    if (self) {
+        eanCode     = [dict objectForKey:KEY_AMK_MED_EAN];
+        packageInfo = [dict objectForKey:KEY_AMK_MED_PACKAGE];
+        prodName    = [dict objectForKey:KEY_AMK_MED_PROD_NAME];
+        comment     = [dict objectForKey:KEY_AMK_MED_COMMENT];
+        
+        title       = [dict objectForKey:KEY_AMK_MED_TITLE];
+        auth        = [dict objectForKey:KEY_AMK_MED_OWNER];
+        regnrs      = [dict objectForKey:KEY_AMK_MED_REGNRS];
+        atccode     = [dict objectForKey:KEY_AMK_MED_ATC];
+    }
+    return self;
 }
 
-#define INDEX_EAN_CODE_IN_PACK   9
 - (id)initWithMedication:(MLMedication *)m :(NSInteger)packageIndex
 {
 #ifdef DEBUG
