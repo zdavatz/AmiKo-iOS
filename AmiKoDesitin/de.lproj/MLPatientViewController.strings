@@ -32,10 +32,10 @@
 "o7U-gv-YHK.text" = "Email";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "qxH-aW-xMw"; */
-"qxH-aW-xMw.text" = "Vorname*";
+"qxH-aW-xMw.text" = "Name*";
 
 /* Class = "UILabel"; text = "Name*"; ObjectID = "uhp-vp-JVu"; */
-"uhp-vp-JVu.text" = "Name*";
+"uhp-vp-JVu.text" = "Vorname*";
 
 /* Class = "UILabel"; text = "ZIP*"; ObjectID = "vEs-iS-Qh7"; */
 "vEs-iS-Qh7.text" = "PLZ*";

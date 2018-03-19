@@ -11,6 +11,12 @@
 #import "MLOperator.h"
 #import "MLProduct.h"
 
+#define KEY_AMK_HASH                @"prescription_hash"
+#define KEY_AMK_PLACE_DATE          @"place_date"
+#define KEY_AMK_PATIENT             @"patient"
+#define KEY_AMK_OPERATOR            @"operator"
+#define KEY_AMK_MEDICATIONS         @"medications"
+
 @interface MLPrescription : NSObject
 
 @property (atomic) NSString *hash;
@@ -19,6 +25,9 @@
 @property (atomic) MLPatient *patient;
 @property (atomic) NSMutableArray *medications;
 
+- (NSDictionary *) makePatientDictionary;
+- (NSDictionary *) makeOperatorDictionary;
+- (NSArray *) makeMedicationsArray;
 - (void) importFromURL:(NSURL *)url;
 
 @end

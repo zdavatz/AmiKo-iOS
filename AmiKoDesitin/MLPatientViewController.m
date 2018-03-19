@@ -66,8 +66,6 @@ enum {
     
     SWRevealViewController *revealController = [self revealViewController];
 
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-    
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
@@ -133,13 +131,8 @@ enum {
 #ifdef DEBUG
     //self.navigationItem.prompt = @"Patient Edit";
 #endif
-    
-    // PanGestureRecognizer goes here
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-    //scrollView.scrollEnabled = FALSE;
-    //scrollView.alwaysBounceHorizontal = NO;
-    scrollView.bounces = NO;
 
+    scrollView.bounces = NO;
     mPatientUUID = nil;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -158,8 +151,19 @@ enum {
                                                object:nil];
 }
 
+#ifdef DEBUG
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
+}
+#endif
+
 - (void)viewWillAppear:(BOOL)animated
 {
+    if ([[self.view gestureRecognizers] count] == 0)
+        [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
+    
     // Open patient DB
     mPatientDb = [[MLPatientDBAdapter alloc] init];
     if (![mPatientDb openDatabase:@"patient_db"]) {
@@ -528,10 +532,19 @@ enum {
     if (mPatientUUID && [mPatientUUID length]>0)
         patient.uniqueId = mPatientUUID;
     
+    NSString *note = NSLocalizedString(@"Contact was saved in the AmiKo address book", nil);
+    
     if ([mPatientDb getPatientWithUniqueID:mPatientUUID]==nil)
-        mPatientUUID = [mPatientDb addEntry:patient];
-    else
-        mPatientUUID = [mPatientDb insertEntry:patient];
+        mPatientUUID = [mPatientDb addEntry:patient];       // insert into DB
+    else {
+        if (patient.uniqueId!=nil &&
+            [patient.uniqueId length]>0)
+        {
+            note = NSLocalizedString(@"The entry has been updated", nil);
+        }
+
+        mPatientUUID = [mPatientDb insertEntry:patient];    // insert into DB or update
+    }
 
     if (mPatientUUID==nil) {
 #ifdef DEBUG
@@ -540,7 +553,7 @@ enum {
         return;
     }
     
-    [self friendlyNote:NSLocalizedString(@"Contact was saved in the AmiKo address book", nil)];
+    [self friendlyNote:note];
 
 #ifdef DYNAMIC_BUTTONS
     [self saveCancelOff];

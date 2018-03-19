@@ -1,0 +1,27 @@
+
+/* Class = "UIBarButtonItem"; title = "Prä"; ObjectID = "405"; */
+"405.title" = "Prä";
+
+/* Class = "UIBarButtonItem"; title = "Inh"; ObjectID = "406"; */
+"406.title" = "Inh";
+
+/* Class = "UIBarButtonItem"; title = "Wirk/Atc"; ObjectID = "407"; */
+"407.title" = "Wirk/Atc";
+
+/* Class = "UIBarButtonItem"; title = "Reg"; ObjectID = "408"; */
+"408.title" = "Reg";
+
+/* Class = "UIBarButtonItem"; title = "Ther"; ObjectID = "410"; */
+"410.title" = "Ther";
+
+/* Class = "UITabBarItem"; title = "Favorites"; ObjectID = "466"; */
+"466.title" = "Favoriten";
+
+/* Class = "UITabBarItem"; title = "AIPS"; ObjectID = "467"; */
+"467.title" = "Kompendium";
+
+/* Class = "UITabBarItem"; title = "Interactions"; ObjectID = "JxN-5u-on8"; */
+"JxN-5u-on8.title" = "Interaktionen";
+
+/* Class = "UITabBarItem"; title = "Prescriptions"; ObjectID = "Yye-ET-TME"; */
+"Yye-ET-TME.title" = "Rezept";

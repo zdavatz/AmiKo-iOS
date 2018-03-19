@@ -29,13 +29,13 @@
 "lyg-cM-u3T.text" = "Sauver...";
 
 /* Class = "UILabel"; text = "Email"; ObjectID = "o7U-gv-YHK"; */
-"o7U-gv-YHK.text" = "Email:";
+"o7U-gv-YHK.text" = "Email";
 
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "qxH-aW-xMw"; */
-"qxH-aW-xMw.text" = "Prénom*";
+"qxH-aW-xMw.text" = "Nom*";
 
 /* Class = "UILabel"; text = "Name*"; ObjectID = "uhp-vp-JVu"; */
-"uhp-vp-JVu.text" = "Nom*";
+"uhp-vp-JVu.text" = "Prénom*";
 
 /* Class = "UILabel"; text = "ZIP*"; ObjectID = "vEs-iS-Qh7"; */
 "vEs-iS-Qh7.text" = "NP*";

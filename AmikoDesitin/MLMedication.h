@@ -21,7 +21,8 @@
  
  ------------------------------------------------------------------------ */
 
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface MLMedication : NSObject
 
@@ -42,5 +43,7 @@
 @property (nonatomic, copy) NSString *sectionTitles;
 @property (nonatomic, copy) NSString *styleStr;
 @property (nonatomic, copy) NSString *contentStr;
+
+@property (nonatomic, copy) NSString *packages;
 
 @end

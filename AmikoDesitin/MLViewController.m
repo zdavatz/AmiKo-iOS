@@ -40,7 +40,6 @@
 #import "MLUtility.h"
 #import "MLAlertView.h"
 #import "MLDBAdapter.h"
-#import "MLMedication.h"
 #import "MLSimpleTableCell.h"
 #import "MLDataStore.h"
 
@@ -52,6 +51,9 @@
 #import <sys/time.h>
 
 #import "MLAppDelegate.h"
+
+// Requirement to show at least up to the first comma, no line wrapping
+#define CUSTOM_FONT_SIZE_PICKER
 
 enum {
     kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
@@ -86,6 +88,12 @@ static BOOL mShowReport = false;
 @synthesize title;
 @synthesize subTitle;
 @synthesize medId;
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ id:%ld <%@>",
+            NSStringFromClass([self class]), self.medId, self.title];
+}
 
 @end
 
@@ -141,6 +149,7 @@ static BOOL mShowReport = false;
 @synthesize myTableView;
 @synthesize myToolBar;
 @synthesize myTabBar;
+@synthesize pickerSheet, pickerView;
 
 /** Instance functions
  */
@@ -992,6 +1001,7 @@ static BOOL mShowReport = false;
 {
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    //NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
 #endif
     
     [super viewDidAppear:animated];
@@ -1232,27 +1242,6 @@ static BOOL mShowReport = false;
     }
 }
 
-- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
-{
-    CGPoint p = [gesture locationInView:self.myTableView];
-    
-    NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
-    
-    if (mCurrentSearchState == kAtcCode) {
-        if (indexPath != nil) {
-            NSString *subTitle = [medi[indexPath.row] subTitle];
-            if (subTitle!=nil) {
-                NSString *medSubTitle = [NSString stringWithString:subTitle];
-                NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
-                if (mAtc[0]!=nil && ![[searchField text] isEqualToString:mAtc[0]]) {
-                    [searchField setText:mAtc[0]];
-                    [self executeSearch:mAtc[0]];
-                }
-            }
-        }
-    }
-}
-
 - (void) invalidateObserver
 {
     if (titleViewController!=nil && secondViewController!=nil) {
@@ -1330,8 +1319,6 @@ static BOOL mShowReport = false;
 
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
-    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
-    mainRevealController = self.revealViewController;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
@@ -1608,14 +1595,17 @@ static BOOL mShowReport = false;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [MLConstants notSpecified];// @"k.A.";
+        m.title = [MLConstants notSpecified];// @"k.A."
+
     if (![packinfo isEqual:[NSNull null]]) {
         if ([packinfo length]>0)
             m.subTitle = packinfo;
         else
-            m.subTitle = [MLConstants notSpecified];// @"k.A.";
-    } else
-        m.subTitle = [MLConstants notSpecified];// @"k.A.";
+            m.subTitle = [MLConstants notSpecified];// @"k.A."
+    }
+    else
+        m.subTitle = [MLConstants notSpecified];// @"k.A."
+
     m.medId = medId;
     
     [medi addObject:m];
@@ -1697,13 +1687,16 @@ static BOOL mShowReport = false;
     if (![title isEqual:[NSNull null]])
         m.title = title;
     else
-        m.title = [MLConstants notSpecified]; // @"k.A.";;
+        m.title = [MLConstants notSpecified]; // @"k.A.";
+    
     NSMutableString *m_regnrs = [NSMutableString stringWithString:regnrs];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_regnrs isEqual:[NSNull null]])
         [m_regnrs setString:[MLConstants notSpecified]];
+    
     if ([m_auth isEqual:[NSNull null]])
         [m_auth setString:[MLConstants notSpecified]];
+    
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_regnrs, m_auth];
     m.medId = medId;
     
@@ -1721,12 +1714,15 @@ static BOOL mShowReport = false;
     }
     else
         m.title = [MLConstants notSpecified]; // @"k.A.";
+    
     NSMutableString *m_title = [NSMutableString stringWithString:title];
     NSMutableString *m_auth = [NSMutableString stringWithString:author];
     if ([m_title isEqual:[NSNull null]])
         [m_title setString:[MLConstants notSpecified]];
+    
     if ([m_auth isEqual:[NSNull null]])
         [m_auth setString:[MLConstants notSpecified]];
+    
     m.subTitle = [NSString stringWithFormat:@"%@ - %@", m_title, m_auth];
     m.medId = medId;
     
@@ -1908,7 +1904,7 @@ static BOOL mShowReport = false;
 
 - (void) switchToDrugInteractionView
 {
-    // if (mCurrentIndexPath!=nil)
+    // if (mCurrentIndexPath)
     [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
 }
 
@@ -1974,6 +1970,7 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 
     //
+    //mainRevealController.bounceBackOnOverdraw = NO;
     mainRevealController.rightViewRevealOverdraw = 0;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
@@ -1984,8 +1981,8 @@ static BOOL mShowReport = false;
     mainRevealController = self.revealViewController;
     
     // Right
-    MLContactsListViewController *contactsListViewController = nil;
-    
+    mainRevealController.rightViewController = nil;
+
     // Front
     MLDoctorViewController *doctorEditViewController = [MLDoctorViewController sharedInstance];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:doctorEditViewController];
@@ -1993,6 +1990,7 @@ static BOOL mShowReport = false;
     
     //
     mainRevealController.rightViewRevealOverdraw = 0;
+    //mainRevealController.bounceBackOnOverdraw = YES;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
@@ -2001,7 +1999,7 @@ static BOOL mShowReport = false;
  */
 - (void) pushToMedBasket
 {
-    if (mMed!=nil) {
+    if (mMed) {
         NSString *title = [mMed title];
         title = [title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if ([title length]>30) {
@@ -2014,22 +2012,22 @@ static BOOL mShowReport = false;
     }
 }
 
+#pragma mark - UITableViewDataSource
+
 /** UITableViewDataSource
  */
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // How many rows in the table?
-    if (mUsedDatabase == kAips)
+    if (mUsedDatabase == kAips) {
         return [medi count];
         // return [titleData count];
-    else if (mUsedDatabase == kFavorites) {
-        return [favoriteKeyData count];
     }
-    else
-        return 0;
-}
+    
+    if (mUsedDatabase == kFavorites)
+        return [favoriteKeyData count];
 
-#pragma mark - UITableView delegate methods
+    return 0;
+}
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 { 
@@ -2101,6 +2099,8 @@ static BOOL mShowReport = false;
     return cell;
 }
 
+#pragma mark -
+
 - (void) myTapMethod:(id)sender
 {
     if (mNumCurrSearchResults>500)
@@ -2152,6 +2152,8 @@ static BOOL mShowReport = false;
     });
 }
 
+#pragma mark - UITableViewDelegate
+
 // We selected one Medicine or one Favorite
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -2162,7 +2164,7 @@ static BOOL mShowReport = false;
 
     long mId = -1;
     
-    if (mCurrentIndexPath!=nil) {
+    if (mCurrentIndexPath) {
         mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
         mMed = [mDb searchId:mId];
     }
@@ -2170,11 +2172,13 @@ static BOOL mShowReport = false;
     if (!mShowReport) {
         [self invalidateObserver];
     }
+
     mShowReport = false;
     if (secondViewController!=nil) {
         // [secondViewController removeFromParentViewController];
         secondViewController = nil;
     }
+
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                                     bundle:nil
                                                                      title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
@@ -2222,8 +2226,8 @@ static BOOL mShowReport = false;
                 titleViewController = nil;
             }
             titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
-                                                               sectionIds:listofSectionIds
-                                                              andLanguage:[MLConstants appLanguage]];
+                                                                   sectionIds:listofSectionIds
+                                                                  andLanguage:[MLConstants appLanguage]];
         
             // Update medication basket
             secondViewController.dbAdapter = mDb;
@@ -2327,6 +2331,193 @@ static BOOL mShowReport = false;
                                    attributes:attributesDictionary
                                       context:nil];
     return frame.size;
+}
+
+#pragma mark -
+
+- (void) addMedicineToPrescription:(MLMedication *)medication :(NSInteger)packageIndex
+{
+    //NSLog(@"Line %d, %@", __LINE__, mMed); // MLMedication
+    MLProduct *product = [[MLProduct alloc] initWithMedication:mMed :packageIndex];
+    //NSLog(@"%@", med);
+    
+    MLPrescriptionViewController * vc = [MLPrescriptionViewController sharedInstance];
+    if (!vc.prescription)
+        vc.prescription = [[MLPrescription alloc] init];
+    
+    if (!vc.prescription.medications)
+        vc.prescription.medications = [[NSMutableArray alloc] init];
+    
+    [vc.prescription.medications addObject:product];
+    vc.editedMedicines = true;
+    [vc.infoView reloadData];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
+{
+#ifdef DEBUG
+    //NSLog(@"%s mCurrentSearchState:%ld", __FUNCTION__, mCurrentSearchState);
+#endif
+    CGPoint p = [gesture locationInView:self.myTableView];
+    NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
+    
+    if (indexPath == nil) {
+        NSLog(@"long press on table view but not on a row");
+        return;
+    }
+    
+    if (gesture.state != UIGestureRecognizerStateBegan) {
+#ifdef DEBUG
+        //NSLog(@"gestureRecognizer.state = %ld", gesture.state);
+#endif
+        return;
+    }
+    
+    NSLog(@"long press began on table view at row %ld", indexPath.row);
+
+    switch (mCurrentSearchState) {
+        case kTitle:    // Can only add medicine from Prep like in AmiKo OSX
+        {
+            NSString *subTitle = [medi[indexPath.row] subTitle];
+            _pickerData = [subTitle componentsSeparatedByString:@"\n"];
+#ifdef DEBUG
+            DataObject *m = medi[indexPath.row];
+            NSLog(@"%@", m);
+            //NSLog(@"listOfPackages: <%@>", _pickerData);
+            //NSLog(@"%ld packages", [_pickerData count]);
+#endif
+            
+#if 1
+            //mCurrentIndexPath = indexPath;  // for drug interaction view
+            long mId = [medi[indexPath.row] medId];
+            mMed = [mDb searchId:mId];  // MLMedication
+            NSLog(@"%@", mMed);
+#endif
+#if 1
+            if ([_pickerData count] < 1) {
+                NSLog(@"No packages to select from");
+            }
+            else if ([_pickerData count] == 1) {
+                NSLog(@"Selected package <%@>", _pickerData[0]);
+                [self addMedicineToPrescription:mMed :0];
+            }
+            else {
+                
+                self.pickerSheet = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Select package", nil)
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+                self.pickerView = [[UIPickerView alloc]initWithFrame:CGRectZero];
+                self.pickerView.dataSource = self;
+                self.pickerView.delegate = self;
+                self.pickerView.showsSelectionIndicator = YES;
+                [self.pickerView selectRow:1 inComponent:0 animated:YES];
+                [self.pickerSheet.view addSubview:self.pickerView];
+                self.pickerView.translatesAutoresizingMaskIntoConstraints = NO;
+                UIView *view = self.pickerView;
+                [self.pickerSheet.view addConstraints:[NSLayoutConstraint
+                                                       constraintsWithVisualFormat:@"V:|[view]|"
+                                                       options:0l
+                                                       metrics:nil
+                                                       views:NSDictionaryOfVariableBindings(view)]];
+                
+                [self.pickerSheet.view addConstraints:[NSLayoutConstraint
+                                                       constraintsWithVisualFormat:@"H:|[view]|"
+                                                       options:0l
+                                                       metrics:nil
+                                                       views:NSDictionaryOfVariableBindings(view)]];
+                
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
+                    self.pickerSheet.popoverPresentationController.sourceView = cell.contentView;
+                }
+                
+                [self presentViewController:self.pickerSheet animated:YES completion:^{
+                }];
+            }
+#endif
+        }
+            break;
+            
+        case kAtcCode:
+        {
+            NSString *subTitle = [medi[indexPath.row] subTitle];
+            NSString *medSubTitle = [NSString stringWithString:subTitle];
+            NSArray *mAtc = [medSubTitle componentsSeparatedByString:@" -"];
+            if (mAtc[0]!=nil && ![[searchField text] isEqualToString:mAtc[0]]) {
+                [searchField setText:mAtc[0]];
+                [self executeSearch:mAtc[0]];
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+#pragma mark - UIPickerViewDelegate
+#pragma mark - UIPickerViewDataSource
+
+// The number of columns of data
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// The number of rows of data
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return _pickerData.count;
+}
+
+#ifdef CUSTOM_FONT_SIZE_PICKER
+- (UIView *)pickerView:(UIPickerView *)pickerView
+            viewForRow:(NSInteger)row
+          forComponent:(NSInteger)component
+           reusingView:(UIView *)view
+{
+    UILabel *pickerLabel = (UILabel *)view;
+    
+    // Reuse the label if possible, otherwise create and configure a new one
+    if ((pickerLabel == nil) || ([pickerLabel class] != [UILabel class])) { //newlabel
+        CGRect frame = CGRectMake(0.0, 0.0, 270, 32.0);
+        pickerLabel = [[UILabel alloc] initWithFrame:frame];
+        pickerLabel.textAlignment = NSTextAlignmentLeft;
+        pickerLabel.backgroundColor = [UIColor clearColor];
+        pickerLabel.font = [UIFont systemFontOfSize:14.0];
+    }
+    
+    //pickerLabel.textColor = [UIColor brownColor];
+    pickerLabel.text = _pickerData[row];
+    //[pickerLabel sizeToFit];
+    return pickerLabel;
+}
+#else
+- (NSString*)pickerView:(UIPickerView *)pickerView
+            titleForRow:(NSInteger)row
+           forComponent:(NSInteger)component
+{
+    return _pickerData[row];
+}
+#endif
+
+// Catpure the picker view selection
+- (void)pickerView:(UIPickerView *)pickerView
+      didSelectRow:(NSInteger)pickerRow
+       inComponent:(NSInteger)component
+{
+#ifdef DEBUG
+    NSLog(@"%s, picker row:%ld", __FUNCTION__, pickerRow);
+    NSLog(@"Selected package <%@>", _pickerData[pickerRow]);
+    //NSLog(@"%ld medicines in table view", [medi count]);
+#endif
+
+    [self.pickerSheet dismissViewControllerAnimated:YES completion:^{
+    }];
+    
+    [self addMedicineToPrescription:mMed :pickerRow];
 }
 
 #pragma mark - helper functions

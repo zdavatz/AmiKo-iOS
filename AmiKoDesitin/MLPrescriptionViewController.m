@@ -65,6 +65,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 @synthesize prescription;
 @synthesize infoView;
+@synthesize editedMedicines;
 
 + (MLPrescriptionViewController *)sharedInstance
 {
@@ -74,6 +75,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     dispatch_once(&onceToken, ^{
         sharedObject = [[self alloc] init];
     });
+    
     return sharedObject;
 }
 
@@ -114,10 +116,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     [super viewDidLoad];
 
-    // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
-    
-    [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
 
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
@@ -163,9 +162,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                     action:aSelector];
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     
-    // PanGestureRecognizer goes here
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
-
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     int statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     int navBarHeight = self.navigationController.navigationBar.frame.size.height;
@@ -174,8 +170,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                            screenBounds.size.width,
                            CGRectGetHeight(screenBounds) - barHeight);
     
-    prescription = [[MLPrescription alloc] init];
-
+    if (!prescription)
+        prescription = [[MLPrescription alloc] init];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
                                                  name:@"AmkFilenameSelectedNotification"
@@ -190,16 +187,32 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                              selector:@selector(patientDbListDidChangeSelection:)
                                                  name:@"PatientSelectedNotification"
                                                object:nil];
+    self.editedMedicines = false;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    if ([[self.view gestureRecognizers] count] == 0)
+        [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    if (editedMedicines) {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
 #endif
-    if (![self loadDefaultPrescription]) {
         [self loadDefaultDoctor];
-        [self loadDefaultPatient];
+    }
+    else {
+#ifdef DEBUG
+        NSLog(@"%s %d", __FUNCTION__, __LINE__);
+#endif
+        // do the following only if we haven't added any medicines yet
+        if (![self loadDefaultPrescription]) {
+            [self loadDefaultDoctor];
+            [self loadDefaultPatient];
+        }
     }
     
     [infoView reloadData];
@@ -220,15 +233,29 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark -
 
-- (void)loadDefaultDoctor
+- (BOOL) checkDefaultDoctor
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    if (doctorDictionary)
+        return TRUE;
+    
+#ifdef DEBUG
+    NSLog(@"Default doctor is not yet defined");
+#endif
+    return FALSE;
+}
+
+- (void) loadDefaultDoctor
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    if (!prescription.doctor)
-        prescription.doctor = [[MLOperator alloc] init];
-    
+#if 0
+    if ([self checkDefaultDoctor])
+        return;
+#else
     // Init from defaults
     // See also MLOperator importFromDict
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -239,10 +266,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
         return;
     }
+#endif
+    
 #ifdef DEBUG
     //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
-    [prescription.doctor importFromDict:doctorDictionary];    
+    if (!prescription.doctor)
+        prescription.doctor = [[MLOperator alloc] init];
+    
+    [prescription.doctor importFromDict:doctorDictionary];
     [prescription.doctor importSignature];
 }
 
@@ -710,6 +742,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) saveNewPrescription
 {
+    if (![self checkDefaultDoctor])
+        return;
+    
+    if ((!self.prescription.medications) ||
+        ([self.prescription.medications count] < 1)) {
+        NSLog(@"Cannot save prescription with no medications");
+        return;
+    }
+    
     NSString *amkDir;
     NSString *uid = [self.prescription.patient uniqueId];
     if (uid)
@@ -727,31 +768,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //        return;
 //    }
     
-    NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
-    [patientDict setObject:[self.prescription.patient uniqueId] forKey:KEY_AMK_PAT_ID];
-    [patientDict setObject:[self.prescription.patient givenName] forKey:KEY_AMK_PAT_NAME];
-    [patientDict setObject:[self.prescription.patient familyName] forKey:KEY_AMK_PAT_SURNAME];
-    [patientDict setObject:[self.prescription.patient birthDate] forKey:KEY_AMK_PAT_BIRTHDATE];
-    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient weightKg]] forKey:KEY_AMK_PAT_WEIGHT];
-    [patientDict setObject:[NSNumber numberWithInt:[self.prescription.patient heightCm]] forKey:KEY_AMK_PAT_HEIGHT];
-    [patientDict setObject:[self.prescription.patient gender] forKey:KEY_AMK_PAT_GENDER];
-    [patientDict setObject:[self.prescription.patient postalAddress] forKey:KEY_AMK_PAT_ADDRESS];
-    [patientDict setObject:[self.prescription.patient zipCode] forKey:KEY_AMK_PAT_ZIP];
-    [patientDict setObject:[self.prescription.patient city] forKey:KEY_AMK_PAT_CITY];
-    [patientDict setObject:[self.prescription.patient country] forKey:KEY_AMK_PAT_COUNTRY];
-    [patientDict setObject:[self.prescription.patient phoneNumber] forKey:KEY_AMK_PAT_PHONE];
-    [patientDict setObject:[self.prescription.patient emailAddress] forKey:KEY_AMK_PAT_EMAIL];
-
-    NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
-    [operatorDict setObject:[self.prescription.doctor title] forKey:KEY_AMK_DOC_TITLE];
-    [operatorDict setObject:[self.prescription.doctor givenName] forKey:KEY_AMK_DOC_NAME];
-    [operatorDict setObject:[self.prescription.doctor familyName] forKey:KEY_AMK_DOC_SURNAME];
-    [operatorDict setObject:[self.prescription.doctor postalAddress] forKey:KEY_AMK_DOC_ADDRESS];
-    [operatorDict setObject:[self.prescription.doctor city] forKey:KEY_AMK_DOC_CITY];
-    [operatorDict setObject:[self.prescription.doctor zipCode] forKey:KEY_AMK_DOC_ZIP];
-    [operatorDict setObject:[self.prescription.doctor phoneNumber] forKey:KEY_AMK_DOC_PHONE];
-    [operatorDict setObject:[self.prescription.doctor emailAddress] forKey:KEY_AMK_DOC_EMAIL];
-
     NSLocale *currentLocale = [NSLocale currentLocale];
     NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
     prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
@@ -759,22 +775,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                               [MLUtility prettyTime]];
     
     prescription.hash = [self makeNewUniqueHash];
-#if 1
+
     NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
-    [prescriptionDict setObject:prescription.hash forKey:@"prescription_hash"];
-    [prescriptionDict setObject:prescription.placeDate forKey:@"place_date"];
-    [prescriptionDict setObject:patientDict forKey:@"patient"];
-    [prescriptionDict setObject:operatorDict forKey:@"operator"];
-    //[prescriptionDict setObject:prescription forKey:@"medications"];
-#else
-    NSDictionary *prescriptionDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      hash, @"prescription_hash",
-                                      prescription.placeDate, @"place_date",
-                                      patientDict, @"patient",
-                                      operatorDict, @"operator",
-                                      //prescription, @"medications",
-                                      nil];
-#endif
+    [prescriptionDict setObject:prescription.hash forKey:KEY_AMK_HASH];
+    [prescriptionDict setObject:prescription.placeDate forKey:KEY_AMK_PLACE_DATE];
+    [prescriptionDict setObject:[prescription makePatientDictionary] forKey:KEY_AMK_PATIENT];
+    [prescriptionDict setObject:[prescription makeOperatorDictionary] forKey:KEY_AMK_OPERATOR];
+    [prescriptionDict setObject:[prescription makeMedicationsArray] forKey:KEY_AMK_MEDICATIONS];
     
     //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 
@@ -872,6 +879,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     [prescription setPatient:[aNotification object]];
     [infoView reloadData];
+    // TODO: (TBC) make sure the right view is back to the AMK list, for the sake of the swiping action
 }
 
 @end

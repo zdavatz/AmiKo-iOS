@@ -22,6 +22,7 @@
  ------------------------------------------------------------------------ */
 
 @import UIKit;
+#import "MLMedication.h"
 
 enum {
     eAips=0,
@@ -36,8 +37,10 @@ enum {
  UITableViewDataSource -> link between data and table view, two required methods: cellForRowAtIndexPath: and numberOfRowsInSection:
 */
 
-@interface MLViewController : UIViewController <UISearchBarDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UITabBarDelegate, UIGestureRecognizerDelegate>
+@interface MLViewController : UIViewController <UISearchBarDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UITabBarDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 {
+    NSArray *_pickerData;
+
     IBOutlet UISearchBar *searchField;
     IBOutlet UITextField *myTextField;
     IBOutlet UILabel *myLabel;
@@ -54,11 +57,15 @@ enum {
 @property (nonatomic, retain) IBOutlet UIToolbar *myToolBar;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *myTableViewHeightConstraint;
 
+@property (nonatomic, retain) UIAlertController *pickerSheet;
+@property (nonatomic, retain) UIPickerView *pickerView;
+
 - (id) initWithLaunchState:(int)state;
 - (void) setLaunchState:(int)state;
 
 - (IBAction) searchAction: (id)sender;
 - (IBAction) onToolBarButtonPressed: (id)sender;
+- (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture;
 
 - (void) switchFrontToPatientEditView;
 - (void) switchToPatientEditView;
@@ -69,6 +76,8 @@ enum {
 
 - (void) switchTabBarItem: (UITabBarItem *)item;
 
-- (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
+- (void) patientDbListDidChangeSelection:(NSNotification *)aNotification;
+- (void) executeSearch:(NSString *)searchText;
+- (void) addMedicineToPrescription:(MLMedication *)medication :(NSInteger)packageIndex;
 
 @end

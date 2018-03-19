@@ -36,11 +36,19 @@
 @synthesize therapy;
 @synthesize application;
 @synthesize indications;
-@synthesize packInfo;
+@synthesize packInfo;        // all the packages, comma separated
 @synthesize addInfo;
 @synthesize sectionIds;
 @synthesize sectionTitles;
 @synthesize styleStr;
 @synthesize contentStr;
+
+@synthesize packages;
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ id:%ld, regnrs:%@ <%@>",
+            NSStringFromClass([self class]), self.medId, self.regnrs, self.title];
+}
 
 @end
