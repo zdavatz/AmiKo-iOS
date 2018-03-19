@@ -666,21 +666,20 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     UIBarButtonItem *btn = (UIBarButtonItem *)sender;
 #ifdef DEBUG
-    NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, btn.tag, btn.title);
+    NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, (long)btn.tag, btn.title);
 #endif
     [self loadDefaultDoctor];
-    
-    if ([self loadDefaultPatient])
-        [infoView reloadData];
-    
-    // TODO: clear medicines
-
+    prescription.patient = nil;
+    [prescription.medications removeAllObjects];
+    [infoView reloadData];
     newPrescriptionFlag = true;
 }
 
 - (IBAction) checkForInteractions:(id)sender
 {
-    // TODO:
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
 }
 
 - (IBAction) savePrescription:(id)sender
