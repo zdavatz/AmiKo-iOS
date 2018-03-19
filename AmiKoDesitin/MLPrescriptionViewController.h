@@ -30,6 +30,8 @@
 
 - (IBAction) myRightRevealToggle:(id)sender;
 
+- (NSURL *) prescriptionUrlWithHash: (NSString *)hash;
+- (BOOL) validatePrescription;
 - (void) overwritePrescription;
 - (void) saveNewPrescription;
 
