@@ -385,7 +385,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             format = NSLocalizedString(@"Medicines", nil);
 
         label.text = [NSString stringWithFormat:@"%@ (%lu)", format, count];
-        [view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        //[view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     }
 
     [view addSubview:label];
@@ -493,7 +493,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
         label.text = @"";  // Initialize for appending
-        cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
+        //cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
         switch (indexPath.row) {
             case 0:
                 label.text = [NSString stringWithFormat:@"%@ %@ %@",
