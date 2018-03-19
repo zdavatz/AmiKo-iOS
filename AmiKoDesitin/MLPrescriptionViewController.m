@@ -61,6 +61,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @implementation MLPrescriptionViewController
 {
     CGRect mainFrame;
+    bool newPrescriptionFlag;
 }
 
 @synthesize prescription;
@@ -188,6 +189,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                  name:@"PatientSelectedNotification"
                                                object:nil];
     self.editedMedicines = false;
+    newPrescriptionFlag = true;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -302,7 +304,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
     [prescription importFromURL:url];
-    NSLog(@"Reopening:%@", fileName);
+    newPrescriptionFlag = false;
+    NSLog(@"Reopened:%@", fileName);
     return TRUE;
 }
 
@@ -671,6 +674,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [infoView reloadData];
     
     // TODO: clear medicines
+
+    newPrescriptionFlag = true;
 }
 
 - (IBAction) checkForInteractions:(id)sender
@@ -687,12 +692,16 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                                              message:alertMessage
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
 
+    if (!newPrescriptionFlag)
+    {
     UIAlertAction *actionOk = [UIAlertAction actionWithTitle:NSLocalizedString(@"Overwrite Prescription", nil)
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction *action) {
                                                          [alertController dismissViewControllerAnimated:YES completion:nil];
                                                          [self overwritePrescription];
                                                      }];
+    [alertController addAction:actionOk];
+    }
     
     UIAlertAction *actionNo = [UIAlertAction actionWithTitle:NSLocalizedString(@"Save as New Prescription", nil)
                                                            style:UIAlertActionStyleDefault
@@ -700,15 +709,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
                                                              [self saveNewPrescription];
                                                          }];
-    
+    [alertController addAction:actionNo];
+
     // Cancel buttons are removed from popovers automatically, because tapping outside the popover represents "cancel", in a popover context
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:^(UIAlertAction *action) {
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
                                                          }];
-    [alertController addAction:actionOk];
-    [alertController addAction:actionNo];
     [alertController addAction:actionCancel];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -728,28 +736,89 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark -
 
-- (void) overwritePrescription
+// Check if any of the prescriptions for the current patient has this hash
+- (NSURL *) prescriptionUrlWithHash: (NSString *)hash
 {
-    NSString *documentsDir = [MLUtility documentsDirectory];
+    NSString *amkDir = [MLUtility amkDirectory];
 #ifdef DEBUG
-    NSLog(@"documentsDir:%@", documentsDir);
+    //NSLog(@"%s %p %@", __FUNCTION__, self, amkDir);
 #endif
+    NSError *error;
+    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
+    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
+    amkFilesArray = [amkFilesArray sortedArrayUsingDescriptors:@[sd]];
+    NSMutableArray *amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
     
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
+    //NSLog(@"documentsDir:%@", amkFiles);
+    MLPrescription *p = [[MLPrescription alloc] init];
+    for (NSString* f in amkFiles) {
+        NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:f];
+
+        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
+        [p importFromURL:url];
+        //NSLog(@"Hash:%@", p.hash);
+        if ([p.hash isEqualToString:hash]) {
+            //NSLog(@"Found:%@", p.hash);
+            return url;
+        }
+    }
+    return nil;
 }
 
-- (void) saveNewPrescription
+- (BOOL) validatePrescription
 {
     if (![self checkDefaultDoctor])
-        return;
+        return FALSE;
     
     if ((!self.prescription.medications) ||
         ([self.prescription.medications count] < 1)) {
         NSLog(@"Cannot save prescription with no medications");
-        return;
+        return FALSE;
     }
+    
+    return TRUE;
+}
+- (void) overwritePrescription
+{
+#ifdef DEBUG
+    //NSLog(@"%s", __FUNCTION__);
+#endif
+    
+    if (![self validatePrescription])
+        return;
+    
+    NSURL *url = [self prescriptionUrlWithHash:prescription.hash];
+
+    //NSLog(@"url:%@", url);
+    if (url) {
+        NSError *error;
+        BOOL success = [[NSFileManager defaultManager] removeItemAtURL:url
+                                                                 error:&error];
+        if (!success)
+            NSLog(@"Error removing file at path: %@", error.localizedDescription);
+
+#ifdef DEBUG
+        // Extra check
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
+            NSLog(@"file <%@> not yet deleted", [url path]);
+#endif
+        
+        // If the right view is a MLAmkListViewController also delete from array and refresh
+        id right = self.revealViewController.rightViewController;
+        if ([right isKindOfClass:[MLAmkListViewController class]] ) {
+            MLAmkListViewController *vc = right;
+            [vc removeFromListByFilename:[url lastPathComponent]];
+        }
+    }
+
+    [self saveNewPrescription];
+}
+
+- (void) saveNewPrescription
+{
+    if (![self validatePrescription])
+        return;
     
     NSString *amkDir;
     NSString *uid = [self.prescription.patient uniqueId];
@@ -797,7 +866,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            error:&error];
     
     NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
-    NSLog(@"Line %d, jsonStr:%@", __LINE__, jsonStr);
+    //NSLog(@"Line %d, jsonStr:%@", __LINE__, jsonStr);
     NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
     
 #if 1
@@ -855,6 +924,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
     [prescription importFromURL:url];
     [infoView reloadData];
+    newPrescriptionFlag = false;
     
     [self.revealViewController rightRevealToggleAnimated:YES];
 }

@@ -57,6 +57,22 @@ static const float kAmkLabelFontSize = 12.0;
     // Dispose of any resources that can be recreated.
 }
 
+- (void) removeFromListByFilename:(NSString *)path
+{
+#ifdef DEBUG
+    //NSLog(@"%s %@", __FUNCTION__, path);
+#endif
+    for (int i=0; i<[amkFiles count]; i++) {
+        //NSLog(@"%d %@", i, amkFiles[i]);
+        if ([amkFiles[i] isEqualToString:path]) {
+            [amkFiles removeObjectAtIndex:i];
+            [myTableView reloadData];
+            return;
+        }
+    }
+}
+
+// Also delete the file
 - (void) removeItem:(NSUInteger)rowIndex
 {
     NSString *amkDir = [MLUtility amkDirectory];

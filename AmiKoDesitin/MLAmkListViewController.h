@@ -17,5 +17,6 @@
 
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
 
+- (void) removeFromListByFilename:(NSString *)path;
 - (void) removeItem:(NSUInteger)rowIndex;
 @end
