@@ -819,6 +819,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (![self validatePrescription])
         return;
     
+    [self loadDefaultDoctor];
+    [infoView reloadData];
+    
     NSString *amkDir;
     NSString *uid = [self.prescription.patient uniqueId];
     if (uid)
