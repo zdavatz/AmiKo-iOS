@@ -314,6 +314,21 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- showPrescriptionId:(NSString *)uniqueId :(NSString *)fileName
+{
+    // Update defaults to be used in other views
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:uniqueId forKey:@"currentPatient"];
+    [defaults setObject:fileName forKey:@"lastUsedPrescription"];
+    [defaults synchronize];
+    
+    // Switch to prescription view to show what we just imported
+    UITabBarItem *item = [[UITabBarItem alloc] init];
+    item.tag = 3;  // Simulate a tap on the tabbar 4th item
+    [mainViewController switchTabBarItem:item];
+    //[mainViewController setLaunchState:ePrescription];
+}
+
 // The file is in "Documents/Inbox/" and needs to be moved to "Documents/amk/"
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
@@ -388,6 +403,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
     BOOL prescriptionNeedsToBeImported = YES;
     MLPrescription *presAmkDir = [[MLPrescription alloc] init];
+    NSString *foundFileName;
+    NSString *foundUniqueId;
     for (NSString *f in amkFilesArray) {
         //NSLog(@"Checking existing amkFile:%@", f);
         NSString *fullFilePath = [amkDir stringByAppendingPathComponent:f];
@@ -395,6 +412,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [presAmkDir importFromURL:url];
         if ([presInbox.hash isEqualToString:presAmkDir.hash]) {
             prescriptionNeedsToBeImported = NO;
+            foundFileName = f;
+            foundUniqueId = presAmkDir.patient.uniqueId;
             //NSLog(@"Line %d, hash %@ exists", __LINE__, presInbox.hash);
             break;
         }
@@ -418,12 +437,11 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
             NSLog(@"Not deletable: %@", [url resourceSpecifier]);
 #endif
         BOOL success = [[NSFileManager defaultManager] removeItemAtURL:url
-                                                                  error:&error];
+                                                                 error:&error];
         if (!success)
             NSLog(@"Error removing file: %@", error.localizedDescription);
 
-        // TODO: show the prescription that was found
-
+        [self showPrescriptionId:foundUniqueId :foundFileName];
         return NO;
     }
 
@@ -435,7 +453,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [[NSFileManager defaultManager] moveItemAtPath:source
                                             toPath:destination
                                              error:&error];
-
     if (!error) {
         NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
         alert = [[MLAlertView alloc] initWithTitle:@"Success!"
@@ -444,18 +461,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [alert show];
     }
     
-    // Update defaults to be used in other views
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:presInbox.patient.uniqueId forKey:@"currentPatient"];
-    [defaults setObject:fileName forKey:@"lastUsedPrescription"];
-    [defaults synchronize];
-    
-    // Switch to prescription view to show what we just imported
-    UITabBarItem *item = [[UITabBarItem alloc] init];
-    item.tag = 3;  // Simulate a tap on the tabbar 4th item
-    [mainViewController switchTabBarItem:item];
-    //[mainViewController setLaunchState:ePrescription];
-
+    [self showPrescriptionId:presInbox.patient.uniqueId :fileName];
     return YES;
 }
 
