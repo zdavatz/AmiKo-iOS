@@ -58,6 +58,7 @@
                     </items>
                 </toolbar>
             </subviews>
+            <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="f9a-IN-dWa" firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Hcn-n2-CoD"/>
                 <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="T7M-4a-Pz6"/>
