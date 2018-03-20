@@ -450,7 +450,7 @@
 
     // Save to PNG file
     NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"op_signature.png"];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
     [UIImagePNGRepresentation(smallImage) writeToFile:filePath atomically:YES];
 
     // Show it

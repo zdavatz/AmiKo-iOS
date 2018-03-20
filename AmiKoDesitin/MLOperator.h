@@ -20,6 +20,9 @@
 #define KEY_AMK_DOC_PHONE       @"phone_number"
 #define KEY_AMK_DOC_EMAIL       @"email_address"
 
+#define KEY_AMK_DOC_SIGNATURE   @"signature"
+#define DOC_SIGNATURE_FILENAME  @"op_signature.png"
+
 @interface MLOperator : NSObject
 
 @property (atomic, copy) NSString *title;

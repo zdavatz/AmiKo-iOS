@@ -586,6 +586,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         UILabel *eanLabel = [self makeLabel:med.eanCode
                                   textColor:[UIColor darkGrayColor]];
 
+#ifdef DEBUG
+        NSLog(@"Line %d <%@>", __LINE__, med.comment);
+        med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
+#endif
         UILabel *commentLabel = [self makeLabel:med.comment
                                       textColor:[UIColor darkGrayColor]];
 
@@ -673,6 +677,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [prescription.medications removeAllObjects];
     [infoView reloadData];
     newPrescriptionFlag = true;
+    // TODO: disable Interactions, Save, Send
 }
 
 - (IBAction) checkForInteractions:(id)sender

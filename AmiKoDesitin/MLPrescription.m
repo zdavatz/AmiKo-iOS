@@ -51,6 +51,7 @@
     [operatorDict setObject:[doctor zipCode]        forKey:KEY_AMK_DOC_ZIP];
     [operatorDict setObject:[doctor phoneNumber]    forKey:KEY_AMK_DOC_PHONE];
     [operatorDict setObject:[doctor emailAddress]   forKey:KEY_AMK_DOC_EMAIL];
+    [operatorDict setObject:[doctor signature]      forKey:KEY_AMK_DOC_SIGNATURE];
     return operatorDict;
 }
 
@@ -141,7 +142,6 @@
         doctor = [[MLOperator alloc] init];
         [doctor importFromDict:operatorDict];
         [doctor importSignatureFromDict:operatorDict];
-        //doctor.signature = [operatorDict objectForKey:@"signature"];
     }
     
     NSDictionary *patientDict = [receiptData objectForKey:KEY_AMK_PATIENT] ? : [NSNull null];

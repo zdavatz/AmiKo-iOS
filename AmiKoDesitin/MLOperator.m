@@ -40,13 +40,13 @@
 
 - (void)importSignatureFromDict:(NSDictionary *)dict
 {
-    signature = [dict objectForKey:@"signature"];
+    signature = [dict objectForKey:KEY_AMK_DOC_SIGNATURE];
 }
 
 - (BOOL)importSignature
 {
     NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"op_signature.png"];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
     if (!filePath)
         return FALSE;
     
