@@ -13,6 +13,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MLPrescriptionViewController">
             <connections>
                 <outlet property="infoView" destination="f9a-IN-dWa" id="GSL-Fj-sHj"/>
+                <outlet property="interactionButton" destination="uB5-ix-Kqj" id="dJm-Vw-cxC"/>
+                <outlet property="saveButton" destination="BG5-Nh-8va" id="9AO-qA-g60"/>
+                <outlet property="sendButton" destination="Idx-b9-089" id="deX-Ix-z3c"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

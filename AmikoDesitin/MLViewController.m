@@ -2341,16 +2341,7 @@ static BOOL mShowReport = false;
     MLProduct *product = [[MLProduct alloc] initWithMedication:mMed :packageIndex];
     //NSLog(@"%@", med);
     
-    MLPrescriptionViewController * vc = [MLPrescriptionViewController sharedInstance];
-    if (!vc.prescription)
-        vc.prescription = [[MLPrescription alloc] init];
-    
-    if (!vc.prescription.medications)
-        vc.prescription.medications = [[NSMutableArray alloc] init];
-    
-    [vc.prescription.medications addObject:product];
-    vc.editedMedicines = true;
-    [vc.infoView reloadData];
+    [[MLPrescriptionViewController sharedInstance] addMedication:product];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

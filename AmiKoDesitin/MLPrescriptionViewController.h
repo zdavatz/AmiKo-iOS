@@ -16,6 +16,10 @@
     IBOutlet UITableView *infoView;
 }
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *interactionButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *sendButton;
+    
 @property (nonatomic, retain) IBOutlet UITableView *infoView;
 @property (atomic) MLPrescription *prescription;
 @property (nonatomic) bool editedMedicines; // "dirty" flag
@@ -41,5 +45,7 @@
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification;
 - (void)amkDeleted:(NSNotification *)aNotification;
 - (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
+
+- (void)addMedication:(MLProduct *)p;
 
 @end

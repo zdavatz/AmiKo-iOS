@@ -419,17 +419,16 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         }
     }
     
-    MLAlertView *alert;
     if (!prescriptionNeedsToBeImported) {
         NSString *message = [NSString stringWithFormat:NSLocalizedString(@"%@ has already been imported",nil), fileName];
         error = [NSError errorWithDomain:@"receipt"
                                     code:99
                                 userInfo:@{NSLocalizedDescriptionKey:message}];
 
-        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Import Error"
+        MLAlertView *alert1 = [[MLAlertView alloc] initWithTitle:@"Import Error"
                                                         message:error.localizedDescription
                                                          button:@"OK"];
-        [alert show];
+        [alert1 show];
         
         // Clean up: discard amk file from Inbox
 #ifdef DEBUG
@@ -455,10 +454,11 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                              error:&error];
     if (!error) {
         NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
-        alert = [[MLAlertView alloc] initWithTitle:@"Success!"
+        MLAlertView *alert2;
+        alert2 = [[MLAlertView alloc] initWithTitle:@"Success!"
                                            message:alertMessage
                                             button:@"OK"];
-        [alert show];
+        [alert2 show];
     }
     
     [self showPrescriptionId:presInbox.patient.uniqueId :fileName];

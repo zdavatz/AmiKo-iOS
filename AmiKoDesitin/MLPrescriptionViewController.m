@@ -54,6 +54,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (BOOL)loadDefaultPrescription;
 - (BOOL)loadDefaultPatient;
 
+- (void) saveButtonOn;
+- (void) saveButtonOff;
 @end
 
 #pragma mark -
@@ -61,7 +63,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @implementation MLPrescriptionViewController
 {
     CGRect mainFrame;
-    bool newPrescriptionFlag;
+    bool possibleToOverwrite;
 }
 
 @synthesize prescription;
@@ -189,7 +191,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                  name:@"PatientSelectedNotification"
                                                object:nil];
     self.editedMedicines = false;
-    newPrescriptionFlag = true;
+    possibleToOverwrite = false;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -304,7 +306,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
     [prescription importFromURL:url];
-    newPrescriptionFlag = false;
+    possibleToOverwrite = true;
     NSLog(@"Reopened:%@", fileName);
     return TRUE;
 }
@@ -587,7 +589,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                   textColor:[UIColor darkGrayColor]];
 
 #ifdef DEBUG
-        NSLog(@"Line %d <%@>", __LINE__, med.comment);
+        NSLog(@"Line %d comment:<%@>", __LINE__, med.comment);
         med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
 #endif
         UILabel *commentLabel = [self makeLabel:med.comment
@@ -676,8 +678,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     prescription.patient = nil;
     [prescription.medications removeAllObjects];
     [infoView reloadData];
-    newPrescriptionFlag = true;
-    // TODO: disable Interactions, Save, Send
+    possibleToOverwrite = false;
+    
+    [self saveButtonOff];
 }
 
 - (IBAction) checkForInteractions:(id)sender
@@ -696,7 +699,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                                              message:alertMessage
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
 
-    if (!newPrescriptionFlag)
+    if (possibleToOverwrite)
     {
     UIAlertAction *actionOk = [UIAlertAction actionWithTitle:NSLocalizedString(@"Overwrite Prescription", nil)
                                                        style:UIAlertActionStyleDefault
@@ -932,7 +935,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
     [prescription importFromURL:url];
     [infoView reloadData];
-    newPrescriptionFlag = false;
+    possibleToOverwrite = true;
     
     [self.revealViewController rightRevealToggleAnimated:YES];
 }
@@ -959,9 +962,42 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [infoView reloadData];
     
     // GitHub issue #21
-    newPrescriptionFlag = true;
+    possibleToOverwrite = false;
     
     // TODO: (TBC) make sure the right view is back to the AMK list, for the sake of the swiping action
+    
+    if ([prescription.medications count] > 0)
+        [self saveButtonOn];
+}
+
+- (void)addMedication:(MLProduct *)p
+{
+    if (!prescription)
+        prescription = [[MLPrescription alloc] init];
+    
+    if (!prescription.medications)
+        prescription.medications = [[NSMutableArray alloc] init];
+    
+    [prescription.medications addObject:p];
+    editedMedicines = true;
+    [infoView reloadData];
+    
+    if (prescription.patient)
+        [self saveButtonOn];
+}
+    
+- (void) saveButtonOn
+{
+    self.interactionButton.enabled = YES;
+    self.saveButton.enabled = YES;
+    self.sendButton.enabled = YES;
+}
+
+- (void) saveButtonOff
+{
+    self.interactionButton.enabled = NO;
+    self.saveButton.enabled = NO;
+    self.sendButton.enabled = NO;
 }
 
 @end
