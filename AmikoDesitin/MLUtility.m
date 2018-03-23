@@ -92,7 +92,6 @@
 + (NSString*) encodeStringToBase64:(NSString*)string
 {
     NSData *plainData = [string dataUsingEncoding:NSUTF8StringEncoding];
-    //return [plainData base64Encoding];
     return [plainData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 

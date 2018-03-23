@@ -861,11 +861,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 
+#ifdef DEBUG
     if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
         NSLog(@"Invalid JSON object:%@", prescriptionDict);
         //return;
     }
-    // TODO:
+#endif
     
     // Map cart array to json
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:prescriptionDict
@@ -956,6 +957,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     [prescription setPatient:[aNotification object]];
     [infoView reloadData];
+    
+    // GitHub issue #21
+    newPrescriptionFlag = true;
+    
     // TODO: (TBC) make sure the right view is back to the AMK list, for the sake of the swiping action
 }
 
