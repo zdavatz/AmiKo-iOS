@@ -54,6 +54,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (BOOL)loadDefaultPrescription;
 - (BOOL)loadDefaultPatient;
 
+- (void) updateSaveButton;
 - (void) saveButtonOn;
 - (void) saveButtonOff;
 @end
@@ -219,6 +220,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     }
     
+    [self updateSaveButton];
     [infoView reloadData];
 }
 
@@ -677,10 +679,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self loadDefaultDoctor];
     prescription.patient = nil;
     [prescription.medications removeAllObjects];
+    [self updateSaveButton];
     [infoView reloadData];
     possibleToOverwrite = false;
-    
-    [self saveButtonOff];
 }
 
 - (IBAction) checkForInteractions:(id)sender
@@ -934,6 +935,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
     [prescription importFromURL:url];
+    [self updateSaveButton];
     [infoView reloadData];
     possibleToOverwrite = true;
     
@@ -966,8 +968,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     // TODO: (TBC) make sure the right view is back to the AMK list, for the sake of the swiping action
     
-    if ([prescription.medications count] > 0)
-        [self saveButtonOn];
+    [self updateSaveButton];
 }
 
 - (void)addMedication:(MLProduct *)p
@@ -981,11 +982,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [prescription.medications addObject:p];
     editedMedicines = true;
     [infoView reloadData];
-    
-    if (prescription.patient)
-        [self saveButtonOn];
+    [self updateSaveButton];
 }
-    
+
+- (void) updateSaveButton
+{
+    if ((prescription.patient) && [prescription.medications count] > 0)
+        [self saveButtonOn];
+    else
+        [self saveButtonOff];
+}
+
 - (void) saveButtonOn
 {
     self.interactionButton.enabled = YES;
