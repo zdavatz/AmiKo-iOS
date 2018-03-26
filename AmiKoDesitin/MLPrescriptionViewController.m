@@ -847,11 +847,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //        NSLog(@"%@", error.localizedDescription);
 //        return;
 //    }
-    
-    NSLocale *currentLocale = [NSLocale currentLocale];
-    NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+
     prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
-                              countryCode, //[defaults stringForKey:KEY_AMK_DOC_CITY],  // TODO:
+                              prescription.doctor.city,
                               [MLUtility prettyTime]];
     
     prescription.hash = [self makeNewUniqueHash];
