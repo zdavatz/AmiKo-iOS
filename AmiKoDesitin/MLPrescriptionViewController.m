@@ -247,7 +247,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return TRUE;
     
 #ifdef DEBUG
-    NSLog(@"Default doctor is not yet defined");
+    NSLog(@"Default doctor is not defined");
 #endif
     return FALSE;
 }
@@ -267,9 +267,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
     if (!doctorDictionary) {
-#ifdef DEBUG
+  #ifdef DEBUG
         NSLog(@"Default doctor is not yet defined");
-#endif
+  #endif
+
+        // Maybe there was a doctor imported from an AMK,
+        // but it's not the default doctor, so clear it.
+        if (prescription.doctor)
+            self.prescription.doctor = nil;
+
         return;
     }
 #endif
@@ -278,7 +284,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
     if (!prescription.doctor)
-        prescription.doctor = [[MLOperator alloc] init];
+        self.prescription.doctor = [[MLOperator alloc] init];
     
     [prescription.doctor importFromDict:doctorDictionary];
     [prescription.doctor importSignature];
@@ -349,8 +355,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (section == kSectionMeta)
         return 1;
 
-    if ((section == kSectionOperator) && (prescription.doctor != nil))
-        return [prescription.doctor entriesCount];
+    if (section == kSectionOperator)
+    {
+        if (prescription.doctor)
+            return [prescription.doctor entriesCount];
+        else
+            return 1; // just a warning message
+    }
     
     if ((section == kSectionPatient) && (prescription.patient != nil))
         return [prescription.patient entriesCount];
@@ -491,7 +502,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     else if (indexPath.section == kSectionOperator) {
         if (!prescription.doctor) {
-            cell.textLabel.text = @"";
+            cell.textLabel.text = NSLocalizedString(@"Please add doctor's address", nil);
             return cell;
         }
 
@@ -624,6 +635,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     
     return cell;
+}
+
+- (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
+{
+    if ((indexPath.section == kSectionOperator) &&
+        !prescription.doctor)
+    {
+        UIViewController *nc_rear = self.revealViewController.rearViewController;
+        MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+        [vc_rear switchToDoctorEditView];
+    }
 }
 
 #pragma mark - Actions

@@ -100,7 +100,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
     if (!doctorDictionary) {
-        NSLog(@"Default doctor details not yet defined");
+        NSLog(@"Default doctor signature not defined");
         [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
         return;
