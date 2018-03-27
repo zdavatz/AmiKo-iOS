@@ -54,7 +54,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (BOOL)loadDefaultPrescription;
 - (BOOL)loadDefaultPatient;
 
-- (void) updateSaveButton;
+- (void) updateButtons;
 - (void) saveButtonOn;
 - (void) saveButtonOff;
 @end
@@ -220,7 +220,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     }
     
-    [self updateSaveButton];
+    [self updateButtons];
     [infoView reloadData];
 }
 
@@ -679,7 +679,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self loadDefaultDoctor];
     prescription.patient = nil;
     [prescription.medications removeAllObjects];
-    [self updateSaveButton];
+    [self updateButtons];
     [infoView reloadData];
     possibleToOverwrite = false;
 }
@@ -933,7 +933,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
     NSURL *url = [NSURL fileURLWithPath:fullFilePath];
     [prescription importFromURL:url];
-    [self updateSaveButton];
+    [self updateButtons];
     [infoView reloadData];
     possibleToOverwrite = true;
     
@@ -966,7 +966,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     // TODO: (TBC) make sure the right view is back to the AMK list, for the sake of the swiping action
     
-    [self updateSaveButton];
+    [self updateButtons];
 }
 
 - (void)addMedication:(MLProduct *)p
@@ -979,28 +979,35 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     [prescription.medications addObject:p];
     editedMedicines = true;
+    [self updateButtons];
     [infoView reloadData];
-    [self updateSaveButton];
 }
 
-- (void) updateSaveButton
+- (void) updateButtons
 {
-    if ((prescription.patient) && [prescription.medications count] > 0)
+    if (prescription.doctor &&
+        prescription.patient &&
+        [prescription.medications count] > 0)
+    {
         [self saveButtonOn];
+    }
     else
         [self saveButtonOff];
+    
+    if ([prescription.medications count] > 1)
+        self.interactionButton.enabled = YES;
+    else
+        self.interactionButton.enabled = NO;
 }
 
 - (void) saveButtonOn
 {
-    self.interactionButton.enabled = YES;
     self.saveButton.enabled = YES;
     self.sendButton.enabled = YES;
 }
 
 - (void) saveButtonOff
 {
-    self.interactionButton.enabled = NO;
     self.saveButton.enabled = NO;
     self.sendButton.enabled = NO;
 }
