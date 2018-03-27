@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, EditMode) {
 @property (strong, nonatomic) SWRevealViewController *revealViewController;
 @property EditMode editMode;
 
-- showPrescriptionId:(NSString *)uniqueId :(NSString *)fileName;
+- (void) showPrescriptionId:(NSString *)uniqueId :(NSString *)fileName;
 - (void) switchRigthToPatientDbList;
 
 @end

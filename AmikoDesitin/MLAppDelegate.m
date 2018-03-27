@@ -314,7 +314,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- showPrescriptionId:(NSString *)uniqueId :(NSString *)fileName
+- (void) showPrescriptionId:(NSString *)uniqueId :(NSString *)fileName
 {
     // Update defaults to be used in other views
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
