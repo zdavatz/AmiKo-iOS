@@ -35,6 +35,16 @@ static const float kAmkLabelFontSize = 12.0;
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [self refreshList];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void) refreshList
+{
     NSString *amkDir = [MLUtility amkDirectory];
 #ifdef DEBUG
     NSLog(@"%s %p %@", __FUNCTION__, self, amkDir);
@@ -50,11 +60,6 @@ static const float kAmkLabelFontSize = 12.0;
         NSLog(@"%@", error.localizedDescription);
     
     [myTableView reloadData];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void) removeFromListByFilename:(NSString *)path

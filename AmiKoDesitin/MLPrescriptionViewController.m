@@ -864,10 +864,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 
 #ifdef DEBUG
-    if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
-        NSLog(@"Invalid JSON object:%@", prescriptionDict);
-        //return;
-    }
+//    if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
+//        NSLog(@"Invalid JSON object:%@", prescriptionDict);
+//        //return;
+//    }
 #endif
     
     // Map cart array to json
@@ -898,6 +898,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      error:&error];
     if (!amkSaved)
         NSLog(@"Error: %@", [error userInfo]);
+
+    // Refresh the AMK list
+    id right = self.revealViewController.rightViewController;
+    if ([right isKindOfClass:[MLAmkListViewController class]] ) {
+        MLAmkListViewController *vc = right;
+        [vc refreshList];
+    }
 }
 
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color
