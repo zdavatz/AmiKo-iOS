@@ -894,6 +894,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
 
 #ifdef DEBUG
+    //NSLog(@"%s hash:%@", __FUNCTION__, prescription.hash);
+
 //    if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
 //        NSLog(@"Invalid JSON object:%@", prescriptionDict);
 //        //return;

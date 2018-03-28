@@ -322,6 +322,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [defaults setObject:fileName forKey:@"lastUsedPrescription"];
     [defaults synchronize];
     
+    MLPrescriptionViewController *vc = [MLPrescriptionViewController sharedInstance];
+    vc.editedMedicines = false;
+    
     // Switch to prescription view to show what we just imported
     UITabBarItem *item = [[UITabBarItem alloc] init];
     item.tag = 3;  // Simulate a tap on the tabbar 4th item
