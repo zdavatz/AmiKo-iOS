@@ -33,6 +33,12 @@
 		43A3851720333355001A5849 /* MLPatientDbListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851520333355001A5849 /* MLPatientDbListViewController.m */; };
 		43A3851820333355001A5849 /* MLPatientDbListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43A3851620333355001A5849 /* MLPatientDbListViewController.xib */; };
 		43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */; };
+		932F883B206BD9EC00B5A77E /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
+		932F883C206BDA0400B5A77E /* MLPrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4387FC3F20189DB4000A5A0F /* MLPrescriptionViewController.xib */; };
+		932F883D206BDA1000B5A77E /* MLPatientDbListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43A3851620333355001A5849 /* MLPatientDbListViewController.xib */; };
+		932F883E206BDA1600B5A77E /* MLContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439EEF44202CBF4900817588 /* MLContactsListViewController.xib */; };
+		932F883F206BDA1D00B5A77E /* MLPatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */; };
+		932F8840206BDA4700B5A77E /* MLAmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* MLAmkListViewController.xib */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
 		D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */; };
@@ -1177,15 +1183,20 @@
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
+				932F8840206BDA4700B5A77E /* MLAmkListViewController.xib in Resources */,
+				932F883F206BDA1D00B5A77E /* MLPatientViewController.xib in Resources */,
 				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,
 				D5A175631A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
+				932F883B206BD9EC00B5A77E /* MLDoctorViewController.xib in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
+				932F883E206BDA1600B5A77E /* MLContactsListViewController.xib in Resources */,
 				D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */,
 				D5FFE1B818B1021B002D6159 /* LICENSE in Resources */,
 				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
+				932F883C206BDA0400B5A77E /* MLPrescriptionViewController.xib in Resources */,
 				D5F6BB6B17E8C87500DCBD16 /* 10-medical.png in Resources */,
 				D551D53C17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */,
@@ -1211,6 +1222,7 @@
 				D5F6BB7717E8C87500DCBD16 /* app_icon_144x144.png in Resources */,
 				D5F6BB7817E8C87500DCBD16 /* app_icon_114x114.png in Resources */,
 				D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */,
+				932F883D206BDA1000B5A77E /* MLPatientDbListViewController.xib in Resources */,
 				D5F6BB7917E8C87500DCBD16 /* app_icon_32x32.png in Resources */,
 				D554575918B3E87D003299E0 /* 905-chat-2@2x.png in Resources */,
 				D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
