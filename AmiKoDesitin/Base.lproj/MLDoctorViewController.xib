@@ -226,6 +226,22 @@
                                         </stackView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9fo-9w-bVa">
                                             <rect key="frame" x="218" y="0.0" width="78" height="104"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="104" id="6SE-g1-OpK"/>
+                                                <constraint firstAttribute="width" constant="78" id="rF5-T4-axD"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="6SE-g1-OpK"/>
+                                                    <exclude reference="rF5-T4-axD"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="6SE-g1-OpK"/>
+                                                    <include reference="rF5-T4-axD"/>
+                                                </mask>
+                                            </variation>
                                         </imageView>
                                     </subviews>
                                 </stackView>
