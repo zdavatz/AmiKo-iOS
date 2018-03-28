@@ -11,7 +11,7 @@
 #import "MLPrescription.h"
 
 @interface MLPrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource>
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 {
     IBOutlet UITableView *infoView;
 }
@@ -47,5 +47,6 @@
 - (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
 
 - (void)addMedication:(MLProduct *)p;
+- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
 
 @end

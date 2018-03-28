@@ -610,8 +610,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                   textColor:[UIColor darkGrayColor]];
 
 #ifdef DEBUG
-        NSLog(@"Line %d comment:<%@>", __LINE__, med.comment);
-        med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
+        //NSLog(@"Line %d comment:<%@>", __LINE__, med.comment);
+        //med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
 #endif
         UILabel *commentLabel = [self makeLabel:med.comment
                                       textColor:[UIColor darkGrayColor]];
@@ -1051,6 +1051,93 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     self.saveButton.enabled = NO;
     self.sendButton.enabled = NO;
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture
+{
+    CGPoint p = [gesture locationInView:infoView];
+    NSIndexPath *indexPath = [infoView indexPathForRowAtPoint:p];
+    
+    if (indexPath == nil) {
+#ifdef DEBUG
+        NSLog(@"long press on table view but not on a row");
+#endif
+        return;
+    }
+    
+    if (gesture.state != UIGestureRecognizerStateBegan) {
+#ifdef DEBUG
+        NSLog(@"gestureRecognizer.state = %ld", gesture.state);
+#endif
+        return;
+    }
+    
+    if (indexPath.section != kSectionMedicines) {
+#ifdef DEBUG
+        NSLog(@"Wrong section %ld", indexPath.section);
+#endif
+        return;
+    }
+
+    NSLog(@"long press at row %ld", indexPath.row);
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
+                                                                             message:nil
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+  
+#if 1
+    MLProduct * med = prescription.medications[indexPath.row];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = med.comment;
+        //textField.secureTextEntry = YES;
+    }];
+#endif
+
+#if 1
+    UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Update Comment", nil)
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction *action) {
+                                                           [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                         
+                                                           //NSLog(@"Save %@", [[alertController textFields][0] text]);
+                                                           [self.prescription.medications[indexPath.row] setComment:[[alertController textFields][0] text]];
+                                                           [infoView reloadData];
+                                                       }];
+    [alertController addAction:actionEdit];
+#endif
+    
+#if 1
+    UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete Package", nil)
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:^(UIAlertAction *action) {
+                                                             [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                             
+                                                             //[self removeItem:indexPath.row];
+                                                             NSLog(@"TODO: delete package");
+                                                         }];
+    [alertController addAction:actionDelete];
+#endif
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction *action) {
+                                                                 [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                             }];
+        [alertController addAction:actionCancel];
+    }
+    
+    [alertController setModalPresentationStyle:UIModalPresentationPopover];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        UITableViewCell *cell = [infoView cellForRowAtIndexPath:indexPath];
+        alertController.popoverPresentationController.sourceView = cell.contentView;
+    }
+    
+    [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
 
 @end

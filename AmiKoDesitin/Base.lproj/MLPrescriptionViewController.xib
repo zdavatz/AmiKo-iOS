@@ -62,6 +62,7 @@
                 </toolbar>
             </subviews>
             <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
+            <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="f9a-IN-dWa" firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Hcn-n2-CoD"/>
                 <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="T7M-4a-Pz6"/>
@@ -72,7 +73,15 @@
                 <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" id="xJl-qQ-mQ2"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="GX8-Pi-xe5"/>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="EQN-vL-17V" appends="YES" id="IdS-mx-t8I"/>
+            </connections>
             <point key="canvasLocation" x="24.5" y="52.5"/>
         </view>
+        <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="EQN-vL-17V">
+            <connections>
+                <action selector="handleLongPress:" destination="-1" id="Nqs-V7-c3R"/>
+            </connections>
+        </pongPressGestureRecognizer>
     </objects>
 </document>
