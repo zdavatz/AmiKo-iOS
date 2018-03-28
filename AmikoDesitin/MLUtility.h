@@ -38,4 +38,5 @@
 + (NSString *) amkDirectory;
 + (NSString *) amkDirectoryForPatient:(NSString*)uid;
 
++ (BOOL) emailValidator:(NSString *)msg;
 @end

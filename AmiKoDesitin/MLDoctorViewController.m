@@ -260,8 +260,10 @@
         valid = FALSE;
     }
     
-    if ([self stringIsNilOrEmpty:doctor.emailAddress]) {
-        // TODO:  check at least that it is like *@*
+    // The email is a required field
+    if ([self stringIsNilOrEmpty:doctor.emailAddress] ||    // must be there
+        ![MLUtility emailValidator:doctor.emailAddress])    // must be valid
+    {
         mEmail.backgroundColor = lightRed;
         valid = FALSE;
     }

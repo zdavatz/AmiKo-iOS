@@ -193,6 +193,7 @@ enum {
     mCity.backgroundColor = nil;
     mZipCode.backgroundColor = nil;
     mSex.backgroundColor = nil;
+    mEmail.backgroundColor = nil;
 }
 
 - (void) checkFields
@@ -378,8 +379,13 @@ enum {
         valid = FALSE;
     }
     
-    // TODO: the email is an optional field,
-    // but if it's there, check at least that it is like *@*
+    // The email is an optional field
+    if (![self stringIsNilOrEmpty:patient.emailAddress] &&  // if used
+        ![MLUtility emailValidator:patient.emailAddress])   // it must be valid
+    {
+        mEmail.backgroundColor = lightRed;
+        valid = FALSE;
+    }
     
     mPatientUUID = [patient generateUniqueID];
     
