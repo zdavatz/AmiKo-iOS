@@ -502,7 +502,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     else if (indexPath.section == kSectionOperator) {
         if (!prescription.doctor) {
-            label.font = [UIFont systemFontOfSize:15.0];
+            label.font = [UIFont systemFontOfSize:13.0];
             label.textAlignment = NSTextAlignmentLeft;
             label.textColor = MAIN_TINT_COLOR;
             label.backgroundColor = [UIColor clearColor];
