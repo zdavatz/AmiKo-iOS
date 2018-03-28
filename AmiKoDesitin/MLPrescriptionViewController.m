@@ -502,7 +502,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     else if (indexPath.section == kSectionOperator) {
         if (!prescription.doctor) {
-            cell.textLabel.text = NSLocalizedString(@"Please add doctor's address", nil);
+            label.font = [UIFont systemFontOfSize:15.0];
+            label.textAlignment = NSTextAlignmentLeft;
+            label.textColor = MAIN_TINT_COLOR;
+            label.backgroundColor = [UIColor clearColor];
+            label.text = NSLocalizedString(@"Please add doctor's address", nil);
+            
+            label.preferredMaxLayoutWidth = frame.size.width;
+            [label sizeToFit];
+            [cell.contentView addSubview:label];
             return cell;
         }
 
