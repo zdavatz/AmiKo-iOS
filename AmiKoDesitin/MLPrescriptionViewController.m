@@ -929,6 +929,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (!amkSaved)
         NSLog(@"Error: %@", [error userInfo]);
 
+    possibleToOverwrite = true;
+
     // Refresh the AMK list
     id right = self.revealViewController.rightViewController;
     if ([right isKindOfClass:[MLAmkListViewController class]] ) {
