@@ -49,6 +49,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 @interface MLPrescriptionViewController ()
 
+#ifdef COMMENT_MULTILINE
+-(IBAction)btnClickedDone:(id)sender;
+#endif
+
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
 - (void)loadDefaultDoctor;
@@ -193,11 +197,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                              selector:@selector(patientDbListDidChangeSelection:)
                                                  name:@"PatientSelectedNotification"
                                                object:nil];
-    self.editedMedicines = false;
-    possibleToOverwrite = false;
-    editingCommentIdx = -1;
-    
-    // Register for notifications
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardDidShow:)
                                                  name:UIKeyboardDidShowNotification
@@ -207,6 +207,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+
+    self.editedMedicines = false;
+    possibleToOverwrite = false;
+    editingCommentIdx = -1;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -637,14 +641,22 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         //med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
 #endif
 
+#ifdef COMMENT_MULTILINE
+        UITextView *commentTextField;
+#else
         UITextField *commentTextField;
+#endif
         UILabel *commentLabel;
         if (editingCommentIdx == indexPath.row) {
             CGRect frame = CGRectMake(kMedCellHorMargin,
                                       kMedCellVerMargin,
                                       mainFrame.size.width - 2*kMedCellHorMargin,
                                       kMedCellHeight);
+#ifdef COMMENT_MULTILINE
+            commentTextField = [[UITextView alloc] initWithFrame:frame];
+#else
             commentTextField = [[UITextField alloc] initWithFrame:frame];
+#endif
             commentTextField.text = med.comment;
             commentTextField.font = [UIFont systemFontOfSize:12.2];
             UIColor *lightRed = [UIColor colorWithRed:1.0
@@ -1026,6 +1038,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
+#ifdef COMMENT_MULTILINE
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect f = self.view.frame;
+        f.origin.y = -keyboardSize.height;
+        self.view.frame = f;
+    }];
+#else
     NSDictionary *info = [notification userInfo];
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
@@ -1034,14 +1055,23 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     contentInset.bottom = keyboardRect.size.height;
     self.infoView.contentInset = contentInset;
     self.infoView.scrollIndicatorInsets = contentInset;
+#endif
 }
 
 -(void)keyboardWillHide:(NSNotification *)notification
 {
+#ifdef COMMENT_MULTILINE
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect f = self.view.frame;
+        f.origin.y = 0.0f;
+        self.view.frame = f;
+    }];
+#else
     UIEdgeInsets contentInset = self.infoView.contentInset;
     contentInset.bottom = 0;
     self.infoView.contentInset = contentInset;
     infoView.scrollIndicatorInsets = contentInset;
+#endif
 }
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification
@@ -1214,13 +1244,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark - UITextFieldDelegate
 
-//- (void)textFieldDidBeginEditing:(UITextField *)textField
-//{
-//#ifdef DEBUG
-//    NSLog(@"%s tag:%ld, %ld medications", __FUNCTION__, textField.tag, [prescription.medications count]);
-//#endif
-//}
-
+#ifndef COMMENT_MULTILINE
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
 #ifdef DEBUG
@@ -1241,14 +1265,78 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
 #endif
     [textField resignFirstResponder];
-    return NO;  // TBC
+    return YES;
 }
 
-//- (BOOL)textFieldShouldClear:(UITextField *)textField
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 //{
+//    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
 //#ifdef DEBUG
-//    NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
+//    NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textField.text, NSStringFromRange(range), string, newString);
 //#endif
+////    [self updateTextLabelsWithText: newString];
+//
 //    return YES;
 //}
+#endif // COMMENT_MULTILINE
+
+#pragma mark - UITextViewDelegate
+
+#ifdef COMMENT_MULTILINE
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+#ifdef DEBUG
+    NSLog(@"%s idx:%ld, tag:%ld <%@>", __FUNCTION__, editingCommentIdx, textView.tag, textView.text);
+#endif
+    MLProduct * med = prescription.medications[editingCommentIdx];
+    med.comment = textView.text;
+    [prescription.medications replaceObjectAtIndex:editingCommentIdx
+                                        withObject:med];
+    editingCommentIdx = -1;
+    editedMedicines = true;
+    [infoView reloadData];
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)]; //toolbar is uitoolbar object
+    toolBar.barStyle = UIBarStyleBlackOpaque;
+    UIBarButtonItem *btnDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                             target:self
+                                                                             action:@selector(btnClickedDone:)];
+    [toolBar setItems:[NSArray arrayWithObject:btnDone]];
+    
+    [textView setInputAccessoryView:toolBar];
+    return YES;
+}
+
+-(IBAction)btnClickedDone:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, [sender class]); // UIBarButtonItem
+#endif
+    [self.view endEditing:YES];
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+#ifdef DEBUG
+    NSLog(@"%s <%@>", __FUNCTION__, textView.text);
+#endif
+    [textView resignFirstResponder];
+    return YES;
+}
+
+//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+//{
+//    NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
+//#ifdef DEBUG
+//    NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textView.text, NSStringFromRange(range), text, newString);
+//#endif
+//    //    [self updateTextLabelsWithText: newString];
+//
+//    return YES;
+//}
+#endif // COMMENT_MULTILINE
+
 @end
