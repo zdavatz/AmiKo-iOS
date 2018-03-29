@@ -2422,6 +2422,8 @@ static BOOL mShowReport = false;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                     UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
                     self.pickerSheet.popoverPresentationController.sourceView = cell.contentView;
+                    self.pickerSheet.popoverPresentationController.sourceRect = cell.contentView.bounds;
+                    self.pickerSheet.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp|UIPopoverArrowDirectionDown;
                 }
                 
                 [self presentViewController:self.pickerSheet animated:YES completion:^{
