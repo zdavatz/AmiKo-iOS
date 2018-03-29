@@ -1165,7 +1165,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
+                                                                      preferredStyle:UIAlertControllerStyleActionSheet];
 
 #if 1
     UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit comment", nil)
@@ -1185,8 +1185,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                          handler:^(UIAlertAction *action) {
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
                                                              
-                                                             //[self removeItem:indexPath.row];
-                                                             NSLog(@"TODO: delete package");
+                                                             [prescription.medications removeObjectAtIndex:indexPath.row];
+                                                             editedMedicines = true;
+                                                             [infoView reloadData];
                                                          }];
     [alertController addAction:actionDelete];
 #endif
@@ -1230,6 +1231,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [prescription.medications replaceObjectAtIndex:editingCommentIdx
                                         withObject:med];
     editingCommentIdx = -1;
+    editedMedicines = true;
     [infoView reloadData];
 }
 
