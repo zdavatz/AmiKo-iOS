@@ -22,6 +22,7 @@ static const float kSectionHeaderHeight = 27.0;
 // Medicine cell layout
 static const float kLabelVerMargin = 2.4;
 static const float kMedCellHorMargin = 12.0;
+static const float kMedCellVerMargin = 8.0;
 static const float kMedCellHeight = 44.0;  // minimum height
 
 enum {
@@ -65,6 +66,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     CGRect mainFrame;
     bool possibleToOverwrite;
+    NSInteger editingCommentIdx;
 }
 
 @synthesize prescription;
@@ -193,13 +195,27 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                object:nil];
     self.editedMedicines = false;
     possibleToOverwrite = false;
+    editingCommentIdx = -1;
+    
+    // Register for notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    // Make sure we have a reveal gesture recognizer (only for "front" controllers)
+
     bool found = false;
     for (id gr in self.view.gestureRecognizers) {
-        if ([gr isKindOfClass:[UIPanGestureRecognizer class]] ) {
+        if ([gr isKindOfClass:[UIPanGestureRecognizer class]] ) { // SWRevealViewController
             found = true;
             break;
         }
@@ -451,22 +467,22 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                textColor:[UIColor clearColor]];
     height += getSizeOfLabel(packLabel, width).height;
     height += kLabelVerMargin;
+
     // ean label
     UILabel *eanLabel = [self makeLabel:med.eanCode
                               textColor:[UIColor clearColor]];
     height += getSizeOfLabel(eanLabel, width).height;
     height += kLabelVerMargin;
-    height += 8.0;
+    height += kMedCellVerMargin;
+
     // comment label
     UILabel *commentLabel = [self makeLabel:med.comment
                                   textColor:[UIColor clearColor]];
     height += getSizeOfLabel(commentLabel, width).height;
     height += kLabelVerMargin;
-    height += 8.0;
-    if (height > kMedCellHeight)
-        return height;
-
-    return kMedCellHeight;
+    height += kMedCellVerMargin;
+    
+    return MAX(kMedCellHeight,height);
 }
 
 - (void)tableView:(UITableView *)tableView
@@ -609,7 +625,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     }
     else {
-
         MLProduct * med = prescription.medications[indexPath.row];
         UILabel *packLabel = [self makeLabel:med.packageInfo
                                    textColor:[UIColor blackColor]];
@@ -621,8 +636,32 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         //NSLog(@"Line %d comment:<%@>", __LINE__, med.comment);
         //med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
 #endif
-        UILabel *commentLabel = [self makeLabel:med.comment
-                                      textColor:[UIColor darkGrayColor]];
+
+        UITextField *commentTextField;
+        UILabel *commentLabel;
+        if (editingCommentIdx == indexPath.row) {
+            CGRect frame = CGRectMake(kMedCellHorMargin,
+                                      kMedCellVerMargin,
+                                      mainFrame.size.width - 2*kMedCellHorMargin,
+                                      kMedCellHeight);
+            commentTextField = [[UITextField alloc] initWithFrame:frame];
+            commentTextField.text = med.comment;
+            commentTextField.font = [UIFont systemFontOfSize:12.2];
+            UIColor *lightRed = [UIColor colorWithRed:1.0
+                                                green:0.0
+                                                 blue:0.0
+                                                alpha:0.3];
+            commentTextField.backgroundColor = lightRed;
+            [commentTextField sizeToFit];
+            commentTextField.delegate = self;
+#ifdef DEBUG
+            commentTextField.tag = 123;
+#endif
+        }
+        else {
+            commentLabel = [self makeLabel:med.comment
+                                 textColor:[UIColor darkGrayColor]];
+        }
 
         // layout
         CGRect eanFrame = CGRectMake(kMedCellHorMargin,
@@ -631,14 +670,27 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      eanLabel.frame.size.height);
         [eanLabel setFrame:eanFrame];
         
-        CGRect commentFrame = CGRectMake(kMedCellHorMargin,
-                                         eanLabel.frame.origin.y + eanLabel.frame.size.height + kLabelVerMargin,
-                                         commentLabel.frame.size.width,
-                                         commentLabel.frame.size.height);
-        [commentLabel setFrame:commentFrame];
+
         [cell.contentView addSubview:packLabel];
         [cell.contentView insertSubview:eanLabel belowSubview:packLabel];
-        [cell.contentView insertSubview:commentLabel belowSubview:eanLabel];
+        if (editingCommentIdx == indexPath.row) {
+            CGRect commentFrame = CGRectMake(kMedCellHorMargin,
+                                             eanLabel.frame.origin.y + eanLabel.frame.size.height + kLabelVerMargin,
+                                             mainFrame.size.width - 2*kMedCellHorMargin,  //commentTextField.frame.size.width
+                                             commentTextField.frame.size.height);
+            [commentTextField setFrame:commentFrame];
+            [cell.contentView insertSubview:commentTextField belowSubview:eanLabel];
+            [commentTextField becomeFirstResponder];
+        }
+        else {
+            CGRect commentFrame = CGRectMake(kMedCellHorMargin,
+                                             eanLabel.frame.origin.y + eanLabel.frame.size.height + kLabelVerMargin,
+                                             commentLabel.frame.size.width,
+                                             commentLabel.frame.size.height);
+            [commentLabel setFrame:commentFrame];
+            [cell.contentView insertSubview:commentLabel belowSubview:eanLabel];
+        }
+
         return cell;
     }
 
@@ -952,7 +1004,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (UILabel *)makeLabel:(NSString *)text textColor:(UIColor *)color
 {
     CGRect frame = CGRectMake(kMedCellHorMargin,
-                              8.0,
+                              kMedCellVerMargin,
                               mainFrame.size.width - 2*kMedCellHorMargin,
                               kMedCellHeight);
     UILabel *label = [[UILabel alloc] initWithFrame:frame];
@@ -971,6 +1023,26 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 }
 
 #pragma mark - Notifications
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+    NSDictionary *info = [notification userInfo];
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    
+    UIEdgeInsets contentInset = self.infoView.contentInset;
+    contentInset.bottom = keyboardRect.size.height;
+    self.infoView.contentInset = contentInset;
+    self.infoView.scrollIndicatorInsets = contentInset;
+}
+
+-(void)keyboardWillHide:(NSNotification *)notification
+{
+    UIEdgeInsets contentInset = self.infoView.contentInset;
+    contentInset.bottom = 0;
+    self.infoView.contentInset = contentInset;
+    infoView.scrollIndicatorInsets = contentInset;
+}
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification
 {
@@ -1094,30 +1166,21 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleAlert];
-  
-#if 1
-    MLProduct * med = prescription.medications[indexPath.row];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = med.comment;
-        //textField.secureTextEntry = YES;
-    }];
-#endif
 
 #if 1
-    UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Update Comment", nil)
+    UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit comment", nil)
                                                          style:UIAlertActionStyleDefault
                                                        handler:^(UIAlertAction *action) {
                                                            [alertController dismissViewControllerAnimated:YES completion:nil];
                                                          
-                                                           //NSLog(@"Save %@", [[alertController textFields][0] text]);
-                                                           [self.prescription.medications[indexPath.row] setComment:[[alertController textFields][0] text]];
+                                                           editingCommentIdx = indexPath.row;
                                                            [infoView reloadData];
                                                        }];
     [alertController addAction:actionEdit];
 #endif
     
 #if 1
-    UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete Package", nil)
+    UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete package", nil)
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction *action) {
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
@@ -1148,4 +1211,42 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
 
+#pragma mark - UITextFieldDelegate
+
+//- (void)textFieldDidBeginEditing:(UITextField *)textField
+//{
+//#ifdef DEBUG
+//    NSLog(@"%s tag:%ld, %ld medications", __FUNCTION__, textField.tag, [prescription.medications count]);
+//#endif
+//}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+#ifdef DEBUG
+    //NSLog(@"%s idx:%ld, tag:%ld <%@>", __FUNCTION__, editingCommentIdx, textField.tag, textField.text);
+#endif
+    MLProduct * med = prescription.medications[editingCommentIdx];
+    med.comment = textField.text;
+    [prescription.medications replaceObjectAtIndex:editingCommentIdx
+                                        withObject:med];
+    editingCommentIdx = -1;
+    [infoView reloadData];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+#ifdef DEBUG
+    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
+#endif
+    [textField resignFirstResponder];
+    return NO;  // TBC
+}
+
+//- (BOOL)textFieldShouldClear:(UITextField *)textField
+//{
+//#ifdef DEBUG
+//    NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
+//#endif
+//    return YES;
+//}
 @end

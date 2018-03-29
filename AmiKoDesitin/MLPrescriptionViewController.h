@@ -11,7 +11,7 @@
 #import "MLPrescription.h"
 
 @interface MLPrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextFieldDelegate>
 {
     IBOutlet UITableView *infoView;
 }
