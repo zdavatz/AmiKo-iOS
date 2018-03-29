@@ -1237,6 +1237,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         UITableViewCell *cell = [infoView cellForRowAtIndexPath:indexPath];
         alertController.popoverPresentationController.sourceView = cell.contentView;
+        alertController.popoverPresentationController.sourceRect = cell.contentView.bounds;
+        alertController.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp|UIPopoverArrowDirectionDown;
     }
     
     [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
