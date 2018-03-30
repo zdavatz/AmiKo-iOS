@@ -1072,7 +1072,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //        NSLog(@"contentSize:%@", NSStringFromCGSize(infoView.contentSize));
 //        NSLog(@"contentOffset:%@", NSStringFromCGPoint(p1));
 
-        CGFloat margin = 100.0;
+        CGFloat margin;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            margin = 100.0;
+        else
+            margin = 30.0;
+
         CGFloat yAdjustment = keyboardRect.origin.y - (r.origin.y + r.size.height + margin - p1.y);
         //NSLog(@"yAdjustment:%f", yAdjustment);
         if (yAdjustment < 0.0)
