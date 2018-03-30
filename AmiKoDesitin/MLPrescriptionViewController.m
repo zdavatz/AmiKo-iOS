@@ -51,6 +51,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
 #ifdef COMMENT_MULTILINE
     UITextView *activeTextView;
+    CGPoint savedOffset;
 #endif
 }
 
@@ -1048,7 +1049,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
 #ifdef COMMENT_MULTILINE
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-
+    
 //    // Convert it to the same view coords as the tableView it might be occluding
 //    CGRect keyboardRect2 = [self.infoView convertRect:keyboardRect fromView:nil];
 //    NSLog(@"keyboardRect2:%@", NSStringFromCGRect(keyboardRect2));
@@ -1066,11 +1067,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     else {
         CGRect r = [infoView convertRect:activeTextView.frame fromView:activeTextView];
-        CGPoint p1 = infoView.contentOffset;
+        CGPoint offset = infoView.contentOffset;
 //        NSLog(@"r:%@", NSStringFromCGRect(r));
 //        NSLog(@"infoView frame:%@", NSStringFromCGRect(infoView.frame));
 //        NSLog(@"contentSize:%@", NSStringFromCGSize(infoView.contentSize));
-//        NSLog(@"contentOffset:%@", NSStringFromCGPoint(p1));
+//        NSLog(@"contentOffset:%@", NSStringFromCGPoint(offset));
 
         CGFloat margin;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -1078,11 +1079,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         else
             margin = 30.0;
 
-        CGFloat yAdjustment = keyboardRect.origin.y - (r.origin.y + r.size.height + margin - p1.y);
+        CGFloat yAdjustment = keyboardRect.origin.y - (r.origin.y + r.size.height + margin - offset.y);
         //NSLog(@"yAdjustment:%f", yAdjustment);
-        if (yAdjustment < 0.0)
-            [self.infoView setContentOffset:CGPointMake(0.0f, p1.y - yAdjustment)
-                                   animated:YES];
+        if (yAdjustment < 0.0) {
+            savedOffset = CGPointMake(0.0f, offset.y - yAdjustment);
+            [self.infoView setContentOffset:savedOffset animated:YES];
+        }
+        else {
+            savedOffset = offset;
+        }
     }
 }
 
@@ -1386,13 +1391,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                         withObject:med];
     
 #if 1
-    CGPoint offset = infoView.contentOffset;
-    
     // Force UITableView to reload cell sizes only, but not cell contents
     [self.infoView beginUpdates];
     [self.infoView endUpdates];
 
-    [self.infoView setContentOffset:offset animated:YES];
+    // Restore offset
+    [self.infoView setContentOffset:savedOffset animated:YES];
 #else
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:editingCommentIdx inSection:kSectionMedicines];
     NSInteger idx = editingCommentIdx;
