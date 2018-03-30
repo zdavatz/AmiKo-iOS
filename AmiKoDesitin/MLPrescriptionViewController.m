@@ -48,6 +48,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #pragma mark -
 
 @interface MLPrescriptionViewController ()
+{
+#ifdef COMMENT_MULTILINE
+    UITextView *activeTextView;
+#endif
+}
 
 #ifdef COMMENT_MULTILINE
 -(IBAction)btnClickedDone:(id)sender;
@@ -660,9 +665,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             commentTextField.text = med.comment;
             commentTextField.font = [UIFont systemFontOfSize:12.2];
             UIColor *lightRed = [UIColor colorWithRed:1.0
-                                                green:0.0
-                                                 blue:0.0
-                                                alpha:0.3];
+                                                green:0.6
+                                                 blue:0.6
+                                                alpha:1.0];
             commentTextField.backgroundColor = lightRed;
             [commentTextField sizeToFit];
             commentTextField.delegate = self;
@@ -1059,7 +1064,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         self.infoView.scrollIndicatorInsets = contentInset;
     }
     else {
+#if 1
         [self.infoView setContentOffset:CGPointMake(0.0f, keyboardRect.size.height) animated:YES];
+#else
+        if (activeTextView) {
+            CGRect textFieldRect = [self.infoView convertRect:activeTextView.bounds fromView:activeTextView];
+            [self.infoView scrollRectToVisible:textFieldRect animated:NO];
+        }
+#endif
     }
 }
 
@@ -1328,12 +1340,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self.view endEditing:YES];
 }
 
-//- (void)textViewDidBeginEditing:(UITextView *)textView
-//{
-//#ifdef DEBUG
-//    NSLog(@"%s", __FUNCTION__);
-//#endif
-//}
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    activeTextView = textView;
+}
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
@@ -1341,11 +1354,39 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textView.text, NSStringFromRange(range), text, newString);
 #endif
-//    // TODO: recalculate frame
-//    CGRect r = textView.frame;
-//    r.size.height++;
-//    textView.frame = r;
-//    // TODO dynamically adjust cell frame
+    
+    // Get current width
+    CGRect r = textView.frame;
+    CGFloat width = r.size.width;
+    
+    // Dynamically adjust cell frame
+    [textView sizeToFit];
+    
+    // Restore width, otherwise it gets too narrow
+    r = textView.frame;
+    r.size.width = width;
+    textView.frame = r;
+    
+    // Update the cell height in the table view
+    MLProduct * med = prescription.medications[editingCommentIdx];
+    med.comment = newString;
+    [prescription.medications replaceObjectAtIndex:editingCommentIdx
+                                        withObject:med];
+    
+#if 1
+    // Force UITableView to reload cell sizes only, but not cell contents
+    [self.infoView beginUpdates];
+    [self.infoView endUpdates];
+#else
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:editingCommentIdx inSection:kSectionMedicines];
+    NSInteger idx = editingCommentIdx;
+    editingCommentIdx = -1;
+
+    [self.infoView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+    editingCommentIdx = idx;
+#endif
+
 
     return YES;
 }
@@ -1371,6 +1412,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     editingCommentIdx = -1;
     editedMedicines = true;
     [infoView reloadData];
+    activeTextView = nil;
 }
 
 #endif // COMMENT_MULTILINE
