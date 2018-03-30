@@ -669,6 +669,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                  blue:0.6
                                                 alpha:1.0];
             commentTextField.backgroundColor = lightRed;
+            commentTextField.tintColor = [UIColor blackColor];
             [commentTextField sizeToFit];
             commentTextField.delegate = self;
 #ifdef DEBUG
@@ -1405,6 +1406,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s idx:%ld, tag:%ld <%@>", __FUNCTION__, editingCommentIdx, textView.tag, textView.text);
 #endif
+    if (editingCommentIdx == -1) {
+        NSLog(@"%s line:%d unespected index value", __FUNCTION__, __LINE__);
+        return; // Prevent crash accessing medications
+    }
+
     MLProduct * med = prescription.medications[editingCommentIdx];
     med.comment = textView.text;
     [prescription.medications replaceObjectAtIndex:editingCommentIdx
