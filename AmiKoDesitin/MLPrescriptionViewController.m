@@ -1048,10 +1048,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
 #ifdef COMMENT_MULTILINE
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-    // Convert it to the same view coords as the tableView it might be occluding
-    // This only affects the Y which we are not using
-    //keyboardRect = [self.infoView convertRect:keyboardRect fromView:nil];
+
+//    // Convert it to the same view coords as the tableView it might be occluding
+//    CGRect keyboardRect2 = [self.infoView convertRect:keyboardRect fromView:nil];
+//    NSLog(@"keyboardRect2:%@", NSStringFromCGRect(keyboardRect2));
 
 #else
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -1065,14 +1065,19 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         self.infoView.scrollIndicatorInsets = contentInset;
     }
     else {
-#if 1
-        [self.infoView setContentOffset:CGPointMake(0.0f, keyboardRect.size.height) animated:YES];
-#else
-        if (activeTextView) {
-            CGRect textFieldRect = [self.infoView convertRect:activeTextView.bounds fromView:activeTextView];
-            [self.infoView scrollRectToVisible:textFieldRect animated:NO];
-        }
-#endif
+        CGRect r = [infoView convertRect:activeTextView.frame fromView:activeTextView];
+        CGPoint p1 = infoView.contentOffset;
+//        NSLog(@"r:%@", NSStringFromCGRect(r));
+//        NSLog(@"infoView frame:%@", NSStringFromCGRect(infoView.frame));
+//        NSLog(@"contentSize:%@", NSStringFromCGSize(infoView.contentSize));
+//        NSLog(@"contentOffset:%@", NSStringFromCGPoint(p1));
+
+        CGFloat margin = 100.0;
+        CGFloat yAdjustment = keyboardRect.origin.y - (r.origin.y + r.size.height + margin - p1.y);
+        //NSLog(@"yAdjustment:%f", yAdjustment);
+        if (yAdjustment < 0.0)
+            [self.infoView setContentOffset:CGPointMake(0.0f, p1.y - yAdjustment)
+                                   animated:YES];
     }
 }
 
@@ -1085,7 +1090,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         self.infoView.scrollIndicatorInsets = contentInset;
     }
     else {
-        [self.infoView setContentOffset:CGPointZero animated:YES];
+        // Comment it out to leave it at the current offset
+        //[self.infoView setContentOffset:CGPointZero animated:YES];
     }
 }
 
@@ -1375,9 +1381,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                         withObject:med];
     
 #if 1
+    CGPoint offset = infoView.contentOffset;
+    
     // Force UITableView to reload cell sizes only, but not cell contents
     [self.infoView beginUpdates];
     [self.infoView endUpdates];
+
+    [self.infoView setContentOffset:offset animated:YES];
 #else
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:editingCommentIdx inSection:kSectionMedicines];
     NSInteger idx = editingCommentIdx;
@@ -1404,10 +1414,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 #ifdef DEBUG
-    NSLog(@"%s idx:%ld, tag:%ld <%@>", __FUNCTION__, editingCommentIdx, textView.tag, textView.text);
+    NSLog(@"%s idx:%ld, <%@>", __FUNCTION__, editingCommentIdx, textView.text);
 #endif
     if (editingCommentIdx == -1) {
-        NSLog(@"%s line:%d unespected index value", __FUNCTION__, __LINE__);
+        NSLog(@"%s line:%d unexpected index value", __FUNCTION__, __LINE__);
         return; // Prevent crash accessing medications
     }
 
@@ -1420,7 +1430,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [infoView reloadData];
     activeTextView = nil;
 }
-
 #endif // COMMENT_MULTILINE
 
 @end
