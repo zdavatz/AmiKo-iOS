@@ -1038,40 +1038,42 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
-#ifdef COMMENT_MULTILINE
-    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect f = self.view.frame;
-        f.origin.y = -keyboardSize.height;
-        self.view.frame = f;
-    }];
-#else
     NSDictionary *info = [notification userInfo];
+    
+#ifdef COMMENT_MULTILINE
+    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    // Convert it to the same view coords as the tableView it might be occluding
+    // This only affects the Y which we are not using
+    //keyboardRect = [self.infoView convertRect:keyboardRect fromView:nil];
+
+#else
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-    
-    UIEdgeInsets contentInset = self.infoView.contentInset;
-    contentInset.bottom = keyboardRect.size.height;
-    self.infoView.contentInset = contentInset;
-    self.infoView.scrollIndicatorInsets = contentInset;
 #endif
+    
+    if (self.infoView.isFirstResponder) {
+        UIEdgeInsets contentInset = self.infoView.contentInset;
+        contentInset.bottom = keyboardRect.size.height;
+        self.infoView.contentInset = contentInset;
+        self.infoView.scrollIndicatorInsets = contentInset;
+    }
+    else {
+        [self.infoView setContentOffset:CGPointMake(0.0f, keyboardRect.size.height) animated:YES];
+    }
 }
 
 -(void)keyboardWillHide:(NSNotification *)notification
 {
-#ifdef COMMENT_MULTILINE
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect f = self.view.frame;
-        f.origin.y = 0.0f;
-        self.view.frame = f;
-    }];
-#else
-    UIEdgeInsets contentInset = self.infoView.contentInset;
-    contentInset.bottom = 0;
-    self.infoView.contentInset = contentInset;
-    infoView.scrollIndicatorInsets = contentInset;
-#endif
+    if (self.infoView.isFirstResponder) {
+        UIEdgeInsets contentInset = self.infoView.contentInset;
+        contentInset.bottom = 0;
+        self.infoView.contentInset = contentInset;
+        self.infoView.scrollIndicatorInsets = contentInset;
+    }
+    else {
+        [self.infoView setContentOffset:CGPointZero animated:YES];
+    }
 }
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification
@@ -1192,6 +1194,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 
     NSLog(@"long press at row %ld", indexPath.row);
+
+    if (editingCommentIdx != -1) {
+#ifdef DEBUG
+        NSLog(@"Already editing comment %ld", editingCommentIdx);
+#endif
+        return;
+    }
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
@@ -1285,6 +1294,71 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #pragma mark - UITextViewDelegate
 
 #ifdef COMMENT_MULTILINE
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+#if 0
+    [textView setReturnKeyType:UIReturnKeyDone];
+#else
+    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    toolBar.barStyle = UIBarStyleBlackOpaque;
+    toolBar.tintColor = MAIN_TINT_COLOR;
+    
+    UIBarButtonItem *flex =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                  target:self
+                                                  action:nil];
+
+    UIBarButtonItem *btnDone =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                  target:self
+                                                  action:@selector(btnClickedDone:)];
+    
+    [toolBar setItems:[NSArray arrayWithObjects:flex, btnDone, nil]];
+    [textView setInputAccessoryView:toolBar];
+#endif
+    
+    return YES;
+}
+
+-(IBAction)btnClickedDone:(id)sender
+{
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, [sender class]); // UIBarButtonItem
+#endif
+    [self.view endEditing:YES];
+}
+
+//- (void)textViewDidBeginEditing:(UITextView *)textView
+//{
+//#ifdef DEBUG
+//    NSLog(@"%s", __FUNCTION__);
+//#endif
+//}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
+#ifdef DEBUG
+    NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textView.text, NSStringFromRange(range), text, newString);
+#endif
+//    // TODO: recalculate frame
+//    CGRect r = textView.frame;
+//    r.size.height++;
+//    textView.frame = r;
+//    // TODO dynamically adjust cell frame
+
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+#ifdef DEBUG
+    NSLog(@"%s <%@>", __FUNCTION__, textView.text);
+#endif
+    [textView resignFirstResponder];
+    return YES;
+}
+
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 #ifdef DEBUG
@@ -1299,46 +1373,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [infoView reloadData];
 }
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-{
-    UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)]; //toolbar is uitoolbar object
-    toolBar.barStyle = UIBarStyleBlackOpaque;
-    UIBarButtonItem *btnDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                             target:self
-                                                                             action:@selector(btnClickedDone:)];
-    [toolBar setItems:[NSArray arrayWithObject:btnDone]];
-    
-    [textView setInputAccessoryView:toolBar];
-    return YES;
-}
-
--(IBAction)btnClickedDone:(id)sender
-{
-#ifdef DEBUG
-    NSLog(@"%s %@", __FUNCTION__, [sender class]); // UIBarButtonItem
-#endif
-    [self.view endEditing:YES];
-}
-
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView
-{
-#ifdef DEBUG
-    NSLog(@"%s <%@>", __FUNCTION__, textView.text);
-#endif
-    [textView resignFirstResponder];
-    return YES;
-}
-
-//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-//{
-//    NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
-//#ifdef DEBUG
-//    NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textView.text, NSStringFromRange(range), text, newString);
-//#endif
-//    //    [self updateTextLabelsWithText: newString];
-//
-//    return YES;
-//}
 #endif // COMMENT_MULTILINE
 
 @end
