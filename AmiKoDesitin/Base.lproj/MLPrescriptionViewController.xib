@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +25,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" sectionIndexMinimumDisplayRowCount="1" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="f9a-IN-dWa">
-                    <rect key="frame" x="44" y="0.0" width="724" height="322"/>
+                    <rect key="frame" x="0.0" y="0.0" width="812" height="322"/>
                     <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="UbI-M0-YSc"/>
@@ -33,7 +33,7 @@
                     </connections>
                 </tableView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEC-AO-gUj">
-                    <rect key="frame" x="44" y="322" width="724" height="32"/>
+                    <rect key="frame" x="0.0" y="322" width="812" height="32"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="Lgx-l7-dbQ"/>
                         <constraint firstAttribute="height" constant="44" id="l78-XT-OIu">
@@ -82,7 +82,7 @@
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="GX8-Pi-xe5" secondAttribute="leading" constant="44" id="7po-3t-akD">
-                    <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
+                    <variation key="heightClass=compact-widthClass=compact" constant="-44"/>
                     <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
                     <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
                 </constraint>
@@ -96,8 +96,11 @@
                 <constraint firstItem="SEC-AO-gUj" firstAttribute="bottom" secondItem="GX8-Pi-xe5" secondAttribute="bottom" id="aI4-Kp-wCb"/>
                 <constraint firstItem="f9a-IN-dWa" firstAttribute="centerX" secondItem="SEC-AO-gUj" secondAttribute="centerX" id="gme-KU-ijD"/>
                 <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="kEZ-AC-V5b"/>
-                <constraint firstItem="SEC-AO-gUj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="pcB-re-iU6"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="pcB-re-iU6">
+                    <variation key="heightClass=compact-widthClass=compact" constant="-44"/>
+                </constraint>
                 <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" constant="44" id="xJl-qQ-mQ2">
+                    <variation key="heightClass=compact-widthClass=compact" constant="0.0"/>
                     <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
                 </constraint>
             </constraints>
