@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina3_5" orientation="landscape">
+    <device id="retina5_9" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -21,19 +21,20 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
+            <rect key="frame" x="0.0" y="0.0" width="812" height="375"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" sectionIndexMinimumDisplayRowCount="1" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="f9a-IN-dWa">
-                    <rect key="frame" x="44" y="0.0" width="392" height="288"/>
+                    <rect key="frame" x="40" y="0.0" width="737" height="322"/>
                     <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <inset key="scrollIndicatorInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="UbI-M0-YSc"/>
                         <outlet property="delegate" destination="-1" id="lK2-cc-x3p"/>
                     </connections>
                 </tableView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEC-AO-gUj">
-                    <rect key="frame" x="44" y="288" width="392" height="32"/>
+                    <rect key="frame" x="40" y="322" width="737" height="32"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="Lgx-l7-dbQ"/>
                         <constraint firstAttribute="height" constant="44" id="l78-XT-OIu">
@@ -81,11 +82,15 @@
             <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" constant="44" id="6VZ-nH-mBh">
+                <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" constant="35" id="6VZ-nH-mBh">
+                    <variation key="heightClass=compact-widthClass=regular" constant="0.0"/>
                     <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                    <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
                 </constraint>
-                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="44" id="AY3-Pv-bQf">
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="AY3-Pv-bQf">
+                    <variation key="heightClass=compact-widthClass=regular" constant="0.0"/>
                     <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                    <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
                 </constraint>
                 <constraint firstItem="f9a-IN-dWa" firstAttribute="top" secondItem="GX8-Pi-xe5" secondAttribute="top" id="CBK-0m-RWd"/>
                 <constraint firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Dt5-y1-ceE"/>
