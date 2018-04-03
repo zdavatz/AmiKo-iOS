@@ -1374,39 +1374,33 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     // Get current width
     CGRect r = textView.frame;
-    CGFloat width = r.size.width;
+    CGSize before = r.size;
     
     // Dynamically adjust cell frame
     [textView sizeToFit];
     
     // Restore width, otherwise it gets too narrow
     r = textView.frame;
-    r.size.width = width;
+    r.size.width = before.width;
     textView.frame = r;
     
-    // Update the cell height in the table view
-    MLProduct * med = prescription.medications[editingCommentIdx];
-    med.comment = newString;
-    [prescription.medications replaceObjectAtIndex:editingCommentIdx
-                                        withObject:med];
-    
-#if 1
-    // Force UITableView to reload cell sizes only, but not cell contents
-    [self.infoView beginUpdates];
-    [self.infoView endUpdates];
+    // Update the cell height in the table view, but do it only if the height
+    // has changed, otherwise we could see an unpleasant "dancing" when
+    // adjusting the offset for each character
+    if (before.height != r.size.height)
+    {
+        MLProduct * med = prescription.medications[editingCommentIdx];
+        med.comment = newString;
+        [prescription.medications replaceObjectAtIndex:editingCommentIdx
+                                            withObject:med];
+        
+        // Force UITableView to reload cell sizes only, but not cell contents
+        [self.infoView beginUpdates];
+        [self.infoView endUpdates];
 
-    // Restore offset
-    [self.infoView setContentOffset:savedOffset animated:YES];
-#else
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:editingCommentIdx inSection:kSectionMedicines];
-    NSInteger idx = editingCommentIdx;
-    editingCommentIdx = -1;
-
-    [self.infoView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    
-    editingCommentIdx = idx;
-#endif
-
+        // Restore offset
+        [self.infoView setContentOffset:savedOffset animated:YES];
+    }
 
     return YES;
 }
