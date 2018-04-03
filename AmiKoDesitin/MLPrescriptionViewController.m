@@ -103,6 +103,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     [self updateMainframeRect];
 
+#if 0
     CGRect infoFrame = self.infoView.frame;
     infoFrame.origin.y = 0.6;
     infoFrame.size.width = self.view.bounds.size.width;
@@ -112,8 +113,32 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                              (kInfoCellHeight * [prescription.patient entriesCount]) +
                              20.8); // margin
     
-    //NSLog(@"%s, infoFrame:%@", __FUNCTION__, NSStringFromCGRect(infoFrame));
+    NSLog(@"%s %d, infoFrame:%@", __FUNCTION__, __LINE__, NSStringFromCGRect(infoFrame));
+    
+
+    CGFloat height = 0.0;
+    for (int i = 0; i < [prescription.medications count]; i++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i
+                                                    inSection:kSectionMedicines];
+        CGFloat rowHeight = [self tableView:infoView heightForRowAtIndexPath:indexPath];
+        height += rowHeight;
+    }
+
+    CGFloat defaultHeight = kMedCellHeight * [prescription.medications count];
+    if (defaultHeight > height) {
+        height = defaultHeight;
+    }
+
+    CGRect itemFrame = CGRectMake(0,
+                                  CGRectGetMaxY(infoFrame) + 8.0,
+                                  self.view.bounds.size.width,
+                                  (kSectionHeaderHeight + height));
+
+    infoFrame.size.height += itemFrame.size.height;
+
     [self.infoView setFrame:infoFrame];
+    [self.view layoutIfNeeded];
+#endif
 }
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell
