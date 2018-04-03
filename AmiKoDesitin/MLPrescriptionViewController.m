@@ -52,6 +52,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef COMMENT_MULTILINE
     UITextView *activeTextView;
     CGPoint savedOffset;
+    CGFloat savedKeyboardY;
+    bool commentEditingActive;
 #endif
 }
 
@@ -68,6 +70,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) updateButtons;
 - (void) saveButtonOn;
 - (void) saveButtonOff;
+- (void) recalculateSavedOffset;
 @end
 
 #pragma mark -
@@ -1066,28 +1069,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         self.infoView.scrollIndicatorInsets = contentInset;
     }
     else {
-        CGRect r = [infoView convertRect:activeTextView.frame fromView:activeTextView];
-        CGPoint offset = infoView.contentOffset;
-//        NSLog(@"r:%@", NSStringFromCGRect(r));
-//        NSLog(@"infoView frame:%@", NSStringFromCGRect(infoView.frame));
-//        NSLog(@"contentSize:%@", NSStringFromCGSize(infoView.contentSize));
-//        NSLog(@"contentOffset:%@", NSStringFromCGPoint(offset));
-
-        CGFloat margin;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            margin = 100.0;
-        else
-            margin = 30.0;
-
-        CGFloat yAdjustment = keyboardRect.origin.y - (r.origin.y + r.size.height + margin - offset.y);
-        //NSLog(@"yAdjustment:%f", yAdjustment);
-        if (yAdjustment < 0.0) {
-            savedOffset = CGPointMake(0.0f, offset.y - yAdjustment);
-            [self.infoView setContentOffset:savedOffset animated:YES];
-        }
-        else {
-            savedOffset = offset;
-        }
+        savedKeyboardY = keyboardRect.origin.y;
+        [self recalculateSavedOffset];
     }
 }
 
@@ -1226,8 +1209,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     if (editingCommentIdx != -1) {
 #ifdef DEBUG
-        NSLog(@"Already editing comment %ld", editingCommentIdx);
+        NSLog(@"Already editing comment %ld. Force termination of edit mode.", editingCommentIdx);
 #endif
+        [self btnClickedDone:nil];
         return;
     }
     
@@ -1354,6 +1338,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s %@", __FUNCTION__, [sender class]); // UIBarButtonItem
 #endif
+
+    commentEditingActive = NO;
     [self.view endEditing:YES];
 }
 
@@ -1362,16 +1348,27 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
+    commentEditingActive = YES;
     activeTextView = textView;
+    
+    //infoView.scrollEnabled = NO;  // Not needed after using commentEditingActive
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+//{
+//    NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
+//#ifdef DEBUG
+//    NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textView.text, NSStringFromRange(range), text, newString);
+//#endif
+//
+//    return YES;
+//}
+
+- (void)textViewDidChange:(UITextView *)textView
 {
-    NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
 #ifdef DEBUG
-    NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textView.text, NSStringFromRange(range), text, newString);
+    NSLog(@"%s", __FUNCTION__);
 #endif
-    
     // Get current width
     CGRect r = textView.frame;
     CGSize before = r.size;
@@ -1389,27 +1386,34 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // adjusting the offset for each character
     if (before.height != r.size.height)
     {
+#ifdef DEBUG
+        //NSLog(@"%s Line:%d height has changed", __FUNCTION__, __LINE__);
+#endif
         MLProduct * med = prescription.medications[editingCommentIdx];
-        med.comment = newString;
+        med.comment = textView.text;
         [prescription.medications replaceObjectAtIndex:editingCommentIdx
                                             withObject:med];
         
         // Force UITableView to reload cell sizes only, but not cell contents
+        // Unfortunately this also changes infoView.contentOffset
         [self.infoView beginUpdates];
         [self.infoView endUpdates];
 
         // Restore offset
-        [self.infoView setContentOffset:savedOffset animated:YES];
+        [self recalculateSavedOffset];
     }
-
-    return YES;
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
 #ifdef DEBUG
-    NSLog(@"%s <%@>", __FUNCTION__, textView.text);
+    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s <%@>", __FUNCTION__, textView.text);
 #endif
+
+    if (commentEditingActive)
+        return NO;
+    
     [textView resignFirstResponder];
     return YES;
 }
@@ -1417,10 +1421,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 #ifdef DEBUG
-    NSLog(@"%s idx:%ld, <%@>", __FUNCTION__, editingCommentIdx, textView.text);
+    NSLog(@"%s idx:%ld", __FUNCTION__, editingCommentIdx);
+    //NSLog(@"%s idx:%ld, <%@>", __FUNCTION__, editingCommentIdx, textView.text);
 #endif
     if (editingCommentIdx == -1) {
         NSLog(@"%s line:%d unexpected index value", __FUNCTION__, __LINE__);
+        // TODO: debug why this happens. It also makes the keyboard disappear ?
         return; // Prevent crash accessing medications
     }
 
@@ -1432,7 +1438,41 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     editedMedicines = true;
     [infoView reloadData];
     activeTextView = nil;
+    
+    //infoView.scrollEnabled = YES;  // Not needed after using commentEditingActive
 }
 #endif // COMMENT_MULTILINE
 
+- (void) recalculateSavedOffset
+{
+#ifdef DEBUG
+    //NSLog(@"%s savedOffset before:%@", __FUNCTION__, NSStringFromCGPoint(savedOffset));
+#endif
+    CGRect r = [infoView convertRect:activeTextView.frame fromView:activeTextView];
+    CGPoint offset = infoView.contentOffset;
+    
+#ifdef DEBUG
+//    NSLog(@"commentView:%@", NSStringFromCGRect(r));
+//    NSLog(@"infoView frame:%@", NSStringFromCGRect(infoView.frame));
+//    NSLog(@"contentSize:%@", NSStringFromCGSize(infoView.contentSize));
+//    NSLog(@"contentOffset:%@", NSStringFromCGPoint(offset));
+#endif
+    
+    CGFloat margin;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        margin = 100.0;
+    else
+        margin = 50.0;
+    
+    CGFloat yAdjustment = savedKeyboardY - (r.origin.y + r.size.height + margin - offset.y);
+    //NSLog(@"yAdjustment:%f, savedKeyboardY:%f", yAdjustment, savedKeyboardY);
+    if (yAdjustment < 0.0)
+    {
+        savedOffset = CGPointMake(0.0f, offset.y - yAdjustment);
+        [self.infoView setContentOffset:savedOffset animated:NO];
+    }
+    else {
+        savedOffset = offset;
+    }
+}
 @end
