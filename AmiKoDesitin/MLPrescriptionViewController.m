@@ -15,6 +15,10 @@
 #import "MLAmkListViewController.h"
 #import "MLPatientDBAdapter.h"
 
+#ifdef DEBUG
+//#define DEBUG_COLOR_BG
+#endif
+
 static const float kInfoCellHeight = 20.0;  // fixed
 
 static const float kSectionHeaderHeight = 27.0;
@@ -67,6 +71,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) saveButtonOn;
 - (void) saveButtonOff;
 - (void) recalculateSavedOffset;
+- (void)updateMainframeRect;
 @end
 
 #pragma mark -
@@ -96,6 +101,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)layoutFrames
 {
+    [self updateMainframeRect];
+
     CGRect infoFrame = self.infoView.frame;
     infoFrame.origin.y = 0.6;
     infoFrame.size.width = self.view.bounds.size.width;
@@ -104,6 +111,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                              (kInfoCellHeight * [prescription.doctor entriesCount]) +
                              (kInfoCellHeight * [prescription.patient entriesCount]) +
                              20.8); // margin
+    
+    //NSLog(@"%s, infoFrame:%@", __FUNCTION__, NSStringFromCGRect(infoFrame));
     [self.infoView setFrame:infoFrame];
 }
 
@@ -125,6 +134,17 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)updateMainframeRect
+{
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    int statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    int navBarHeight = self.navigationController.navigationBar.frame.size.height;
+    int barHeight = statusBarHeight + navBarHeight;
+    mainFrame = CGRectMake(0, barHeight,
+                           screenBounds.size.width,
+                           CGRectGetHeight(screenBounds) - barHeight);
 }
 
 - (void)viewDidLoad
@@ -176,14 +196,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                     target:aTarget
                                     action:aSelector];
     self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
-    
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    int statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-    int navBarHeight = self.navigationController.navigationBar.frame.size.height;
-    int barHeight = statusBarHeight + navBarHeight;
-    mainFrame = CGRectMake(0, barHeight,
-                           screenBounds.size.width,
-                           CGRectGetHeight(screenBounds) - barHeight);
+
+    [self updateMainframeRect];
     
     if (!prescription)
         prescription = [[MLPrescription alloc] init];
@@ -260,6 +274,35 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Rotation
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
+- (void)didRotate:(NSNotification *)notification
+{
+    [self layoutFrames];
+    
+    [self.infoView performSelectorOnMainThread:@selector(reloadData)
+                                    withObject:nil
+                                 waitUntilDone:YES];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    [coordinator animateAlongsideTransition:^(
+                                              id<UIViewControllerTransitionCoordinatorContext> context) {
+        // willRotateToInterfaceOrientation
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        // didRotateFromInterfaceOrientation would go here.
+        [self didRotate:nil];
+    }];
 }
 
 #pragma mark -
@@ -504,8 +547,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
           cellForRowAtIndexPath: (NSIndexPath *)indexPath
 {
 #ifdef DEBUG
-    //NSLog(@"%s section:%ld, row:%ld", __FUNCTION__, indexPath.section, indexPath.row);
-    //NSLog(@"size: %@", NSStringFromCGSize(tableView.frame.size));
+    NSLog(@"%s section:%ld, row:%ld", __FUNCTION__, indexPath.section, indexPath.row);
+    NSLog(@"Line %d, tableView size: %@", __LINE__, NSStringFromCGSize(tableView.frame.size));
+    NSLog(@"Line %d, contentInset: %@", __LINE__, NSStringFromUIEdgeInsets(tableView.contentInset));
+    //NSLog(@"Line %d, safeAreaInsets TLBR: %@", __LINE__, NSStringFromUIEdgeInsets(self.view.safeAreaInsets));
+    NSLog(@"Line %d, contentSize: %@", __LINE__, NSStringFromCGSize(tableView.contentSize));
+#endif
+#ifdef DEBUG_COLOR_BG
+    self.view.backgroundColor = [UIColor blueColor];
 #endif
 
     static NSString *tableIdentifier = @"PrescriptionTableItem";
@@ -552,25 +601,49 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textColor = [UIColor blackColor];
         label.backgroundColor = [UIColor clearColor];
         label.text = @"";  // Initialize for appending
+#ifdef DEBUG_COLOR_BG
+        cell.backgroundColor = [UIColor greenColor];
+#else
         cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
+#endif
         switch (indexPath.row) {
             case 0:
-                label.text = [NSString stringWithFormat:@"%@ %@ %@",
-                              prescription.doctor.title,
-                              prescription.doctor.familyName,
-                              prescription.doctor.givenName];
+                if ([prescription.doctor.title isEqualToString:@""]) {
+                    label.text = [NSString stringWithFormat:@"%@ %@",
+                                  prescription.doctor.familyName,
+                                  prescription.doctor.givenName];
+                }
+                else {
+                    label.text = [NSString stringWithFormat:@"%@ %@ %@",
+                                  prescription.doctor.title,
+                                  prescription.doctor.familyName,
+                                  prescription.doctor.givenName];
+                }
 
                 if (([prescription.doctor signature] != nil) &&
                     ![prescription.doctor.signature isEqualToString:@""])
                 {
                     UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
                     UIImageView *signatureView = [[UIImageView alloc] initWithImage:img];
-                    [signatureView setFrame:CGRectMake(frame.size.width - (DOCTOR_TN_W + 10.0),
-                                                       0,
-                                                       DOCTOR_TN_W,
-                                                       DOCTOR_TN_H)];
+
+                    CGFloat xPos = frame.size.width;
+                    if (@available(iOS 11, *))
+                        xPos -=self.view.safeAreaInsets.right;
+                    
+                    CGRect imageFrame = CGRectMake(xPos - (DOCTOR_TN_W + 20.0),
+                                                   0,
+                                                   DOCTOR_TN_W,
+                                                   DOCTOR_TN_H);
+                    [signatureView setFrame:imageFrame];
+//                    NSLog(@"Line: %d, signatureView:%@", __LINE__, NSStringFromCGRect(imageFrame));
+//                    NSLog(@"Line: %d, cell.frame:%@", __LINE__, NSStringFromCGRect(cell.frame));
+//                    NSLog(@"Line: %d, contentView.frame:%@", __LINE__, NSStringFromCGRect(cell.contentView.frame));
                     signatureView.contentMode = UIViewContentModeTopRight;
                     [cell.contentView addSubview:signatureView];
+#ifdef DEBUG_COLOR_BG
+                    [cell.contentView setBackgroundColor:[UIColor yellowColor]];
+                    label.backgroundColor = [UIColor orangeColor];
+#endif
                 }
                 break;
             case 1:
@@ -681,12 +754,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [eanLabel setFrame:eanFrame];
         
 
+#ifdef DEBUG_COLOR_BG
+        [cell.contentView setBackgroundColor:[UIColor yellowColor]];
+#endif
         [cell.contentView addSubview:packLabel];
         [cell.contentView insertSubview:eanLabel belowSubview:packLabel];
         if (editingCommentIdx == indexPath.row) {
             CGRect commentFrame = CGRectMake(kMedCellHorMargin,
                                              eanLabel.frame.origin.y + eanLabel.frame.size.height + kLabelVerMargin,
-                                             mainFrame.size.width - 2*kMedCellHorMargin,  //commentTextField.frame.size.width
+                                             tableView.bounds.size.width - 2*kMedCellHorMargin,  //commentTextField.frame.size.width
                                              commentTextField.frame.size.height);
             [commentTextField setFrame:commentFrame];
             [cell.contentView insertSubview:commentTextField belowSubview:eanLabel];
@@ -1022,7 +1098,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     label.textAlignment = NSTextAlignmentLeft;
     label.textColor = color;
     label.text = text;
+#ifdef DEBUG_COLOR_BG
+    label.backgroundColor = [UIColor orangeColor];
+#else
     label.backgroundColor = [UIColor clearColor];
+#endif
     label.highlighted = NO;
     // use multiple lines for wrapped text as required
     label.numberOfLines = 0;
