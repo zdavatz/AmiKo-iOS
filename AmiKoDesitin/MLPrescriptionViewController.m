@@ -49,17 +49,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 @interface MLPrescriptionViewController ()
 {
-#ifdef COMMENT_MULTILINE
     UITextView *activeTextView;
     CGPoint savedOffset;
     CGFloat savedKeyboardY;
     bool commentEditingActive;
-#endif
 }
 
-#ifdef COMMENT_MULTILINE
 -(IBAction)btnClickedDone:(id)sender;
-#endif
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
@@ -650,22 +646,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         //med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
 #endif
 
-#ifdef COMMENT_MULTILINE
         UITextView *commentTextField;
-#else
-        UITextField *commentTextField;
-#endif
         UILabel *commentLabel;
         if (editingCommentIdx == indexPath.row) {
             CGRect frame = CGRectMake(kMedCellHorMargin,
                                       kMedCellVerMargin,
                                       mainFrame.size.width - 2*kMedCellHorMargin,
                                       kMedCellHeight);
-#ifdef COMMENT_MULTILINE
             commentTextField = [[UITextView alloc] initWithFrame:frame];
-#else
-            commentTextField = [[UITextField alloc] initWithFrame:frame];
-#endif
             commentTextField.text = med.comment;
             commentTextField.font = [UIFont systemFontOfSize:12.2];
             UIColor *lightRed = [UIColor colorWithRed:1.0
@@ -1050,17 +1038,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     NSDictionary *info = [notification userInfo];
     
-#ifdef COMMENT_MULTILINE
     CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
 //    // Convert it to the same view coords as the tableView it might be occluding
 //    CGRect keyboardRect2 = [self.infoView convertRect:keyboardRect fromView:nil];
 //    NSLog(@"keyboardRect2:%@", NSStringFromCGRect(keyboardRect2));
-
-#else
-    CGRect keyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-#endif
     
     if (self.infoView.isFirstResponder) {
         UIEdgeInsets contentInset = self.infoView.contentInset;
@@ -1266,47 +1248,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self presentViewController:alertController animated:YES completion:nil]; // It returns immediately
 }
 
-#pragma mark - UITextFieldDelegate
-
-#ifndef COMMENT_MULTILINE
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-#ifdef DEBUG
-    //NSLog(@"%s idx:%ld, tag:%ld <%@>", __FUNCTION__, editingCommentIdx, textField.tag, textField.text);
-#endif
-    MLProduct * med = prescription.medications[editingCommentIdx];
-    med.comment = textField.text;
-    [prescription.medications replaceObjectAtIndex:editingCommentIdx
-                                        withObject:med];
-    editingCommentIdx = -1;
-    editedMedicines = true;
-    [infoView reloadData];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-#ifdef DEBUG
-    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
-#endif
-    [textField resignFirstResponder];
-    return YES;
-}
-
-//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-//{
-//    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-//#ifdef DEBUG
-//    NSLog(@"%s <%@> %@ <%@> --> <%@>", __FUNCTION__, textField.text, NSStringFromRange(range), string, newString);
-//#endif
-////    [self updateTextLabelsWithText: newString];
-//
-//    return YES;
-//}
-#endif // COMMENT_MULTILINE
-
 #pragma mark - UITextViewDelegate
 
-#ifdef COMMENT_MULTILINE
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
 #if 0
@@ -1441,7 +1384,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     //infoView.scrollEnabled = YES;  // Not needed after using commentEditingActive
 }
-#endif // COMMENT_MULTILINE
 
 - (void) recalculateSavedOffset
 {

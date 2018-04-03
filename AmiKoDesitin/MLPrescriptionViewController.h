@@ -10,16 +10,8 @@
 
 #import "MLPrescription.h"
 
-#define COMMENT_MULTILINE
-
 @interface MLPrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate
-#ifdef COMMENT_MULTILINE
-, UITextViewDelegate
-#else
-, UITextFieldDelegate
-#endif
->
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate>
 {
     IBOutlet UITableView *infoView;
 }
