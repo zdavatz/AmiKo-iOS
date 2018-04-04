@@ -11,8 +11,6 @@
 #import "MLUtility.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
-//#define SELFIE_EDIT_MODE
-
 @interface MLDoctorViewController ()
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
@@ -113,7 +111,7 @@
     [doctor importFromDict:doctorDictionary];
     [self setAllFields:doctor];
 
-    if ([doctor importSignature]) {
+    if ([doctor importSignatureFromFile]) {
         self.signatureView.image = [doctor thumbnailFromSignature:self.signatureView.frame.size];
     }
     else {
@@ -354,9 +352,7 @@
 
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
-#ifdef SELFIE_EDIT_MODE
-    picker.allowsEditing = YES;
-#endif
+
     //picker.navigationBarHidden = NO;
     //picker.wantsFullScreenLayout = NO;
 
@@ -382,9 +378,7 @@
     
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
-#ifdef SELFIE_EDIT_MODE
-    picker.allowsEditing = YES;
-#endif
+
     //picker.navigationBarHidden = NO;
     //picker.wantsFullScreenLayout = NO;
 
@@ -421,18 +415,17 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 #ifdef DEBUG
-    //NSLog(@"%s %@", __FUNCTION__, info);
+    //NSLog(@"%s", __FUNCTION__);
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        CGFloat screenScale = [UIScreen mainScreen].scale;
+        NSLog(@"screenScale: %f", screenScale);
+    }
+    //NSLog(@"info: %@", info);
 #endif
     
-#ifdef SELFIE_EDIT_MODE
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-#else
     UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-#endif
-    //NSLog(@"chosenImage %@", NSStringFromCGSize(chosenImage.size));
+    //NSLog(@"chosenImage size: %@, scale: %f", NSStringFromCGSize(chosenImage.size), chosenImage.scale);
     
-    // TODO: first resize it for the PNG file, then resize even smaller for the view
-
 #if 0
     // If we want to keep the image for future use:
     // check if the image originated from the camera, store it in the photo album
@@ -441,23 +434,45 @@
     if (!referenceURL) // nil if coming from camera
         UIImageWriteToSavedPhotosAlbum(chosenImage, nil, nil, nil);
 #endif
-    
-    // Resize
-    CGSize size = self.signatureView.frame.size;
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-    [chosenImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    //NSLog(@"smallImage %@", NSStringFromCGSize(smallImage.size));
 
+    // First resize it to 20% for the PNG file
+
+    // Resize to 20% for doctor's profile (PNG file in Documents directory) and for AMK
+    CGSize sizeScaled = CGSizeMake(chosenImage.size.width*0.2, chosenImage.size.height*0.2);
+    //NSLog(@"sizeScaled %@", NSStringFromCGSize(sizeScaled));
+    // Note that a scale parameter of 0.0 means using [UIScreen mainScreen].scale and
+    // ending up with a PNG file with x2 dimensions if the device is a retina display
+    CGFloat scale = 1.0;
+    UIGraphicsBeginImageContextWithOptions(sizeScaled, NO, scale);
+    [chosenImage drawInRect:CGRectMake(0, 0, sizeScaled.width, sizeScaled.height)];
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+#ifdef DEBUG
+    NSLog(@"scaledImage %@ points", NSStringFromCGSize(scaledImage.size));
+#endif
+    
     // Save to PNG file
     NSString *documentsDirectory = [MLUtility documentsDirectory];
     NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
-    [UIImagePNGRepresentation(smallImage) writeToFile:filePath atomically:YES];
+    [UIImagePNGRepresentation(scaledImage) writeToFile:filePath atomically:YES];
+#ifdef DEBUG
+    NSLog(@"Saved to %@", filePath);
+#endif
+    
+    // Resize to signatureView frame for thumbnail
+    CGSize sizeTN = self.signatureView.frame.size;
+    //NSLog(@"signatureView %@", NSStringFromCGSize(sizeTN));
+    UIGraphicsBeginImageContextWithOptions(sizeTN, NO, 0.0);
+    [chosenImage drawInRect:CGRectMake(0, 0, sizeTN.width, sizeTN.height)];
+    UIImage *thumbnailImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+#ifdef DEBUG
+    NSLog(@"thumbnailImage %@", NSStringFromCGSize(thumbnailImage.size));
+#endif
 
     // Show it
     self.signatureView.backgroundColor = nil;
-    self.signatureView.image = smallImage;
+    self.signatureView.image = thumbnailImage;
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
