@@ -92,7 +92,7 @@
 + (NSString*) encodeStringToBase64:(NSString*)string
 {
     NSData *plainData = [string dataUsingEncoding:NSUTF8StringEncoding];
-    return [plainData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [plainData base64EncodedStringWithOptions:0];
 }
 
 // Alternatively the implementation could also use NSHomeDirectory()
