@@ -1609,7 +1609,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    UIActivityTypePostToVimeo];
     
     activityVC.excludedActivityTypes = excludeActivities;
-    [activityVC setValue:@"Your AMK prescription" forKey:@"subject"];  // ok
+    NSString * subjectLine =
+    [NSString stringWithFormat:NSLocalizedString(@"Prescription to patient from doctor",nil),
+                              prescription.patient.givenName,
+                              prescription.patient.familyName,
+                              prescription.patient.birthDate,
+                              prescription.doctor.title,
+                              prescription.doctor.givenName,
+                              prescription.doctor.familyName];
+    [activityVC setValue:subjectLine forKey:@"subject"];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         activityVC.modalPresentationStyle = UIModalPresentationPopover;
