@@ -101,15 +101,11 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="939-download-rectangle.png" translatesAutoresizingMaskIntoConstraints="NO" id="L85-oO-Awd">
-                    <rect key="frame" x="20" y="245" width="32" height="32"/>
+                    <rect key="frame" x="23" y="245" width="32" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1100-list-2.png" translatesAutoresizingMaskIntoConstraints="NO" id="QgI-Rm-3U1">
                     <rect key="frame" x="23" y="202" width="32" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <imageView userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="970-medal.png" translatesAutoresizingMaskIntoConstraints="NO" id="Osa-jg-ebe">
-                    <rect key="frame" x="16" y="158" width="40" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="905-chat-2.png" translatesAutoresizingMaskIntoConstraints="NO" id="2XZ-bp-PI1">
@@ -129,13 +125,17 @@
                         <action selector="showPatients:" destination="-1" eventType="touchUpInside" id="qzq-UA-Qwi"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" image="1025-patient-.png" translatesAutoresizingMaskIntoConstraints="NO" id="3ku-gI-KAt">
-                    <rect key="frame" x="7" y="285" width="58" height="41"/>
-                    <autoresizingMask key="autoresizingMask"/>
+                <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" fixedFrame="YES" image="1026-doctor.png" translatesAutoresizingMaskIntoConstraints="NO" id="g1Q-J3-j7S">
+                    <rect key="frame" x="28" y="333" width="23" height="34"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" image="1026-doctor-.png" translatesAutoresizingMaskIntoConstraints="NO" id="6dX-38-3Al">
-                    <rect key="frame" x="11" y="331" width="51" height="36"/>
-                    <autoresizingMask key="autoresizingMask"/>
+                <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" fixedFrame="YES" image="1025-patient.png" translatesAutoresizingMaskIntoConstraints="NO" id="K4R-Cr-nry">
+                    <rect key="frame" x="28" y="289" width="22" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="970-medal.png" translatesAutoresizingMaskIntoConstraints="NO" id="Osa-jg-ebe">
+                    <rect key="frame" x="19" y="157" width="40" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -143,8 +143,8 @@
     </objects>
     <resources>
         <image name="1024-share.png" width="28" height="22"/>
-        <image name="1025-patient-.png" width="28" height="22"/>
-        <image name="1026-doctor-.png" width="28" height="22"/>
+        <image name="1025-patient.png" width="22" height="32"/>
+        <image name="1026-doctor.png" width="22" height="32"/>
         <image name="1100-list-2.png" width="28" height="22"/>
         <image name="905-chat-2.png" width="28" height="26"/>
         <image name="939-download-rectangle.png" width="22" height="28"/>
