@@ -1591,9 +1591,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSURL *recipient = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", prescription.patient.emailAddress]]; // ng
     //NSURL *recipient = [NSURL URLWithString:prescription.patient.emailAddress];
     //NSArray *objectsToShare = @[mailBody, recipient, urlAttachment];
-    NSArray *objectsToShare = @[mailBody2, urlAttachment];  // ok
+    //NSArray *objectsToShare = @[mailBody2, urlAttachment];  // ok
     //NSArray *objectsToShare = @[recipient, urlAttachment];  // ng
-    //NSArray *objectsToShare = @[urlAttachment]; // ok
+    NSArray *objectsToShare = @[urlAttachment]; // ok
 #endif
     
     UIActivityViewController *activityVC =
