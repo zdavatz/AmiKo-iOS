@@ -112,7 +112,7 @@
     {
         NSLog(@"Error with prescription hash");
 #ifdef DEBUG
-        NSLog(@"JSON: %@\nEnd of JSON file", receiptData);
+        //NSLog(@"JSON: %@\nEnd of JSON file", receiptData);
 #endif
         placeDate = @"";
         doctor = nil;

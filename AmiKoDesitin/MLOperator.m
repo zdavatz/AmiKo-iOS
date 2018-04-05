@@ -53,7 +53,7 @@
     UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
     //NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
     NSData *imgData = UIImagePNGRepresentation(signatureImg);
-    signature = [imgData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    signature = [imgData base64EncodedStringWithOptions:0];
     return TRUE;
 }
 
