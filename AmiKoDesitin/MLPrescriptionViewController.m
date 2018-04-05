@@ -388,7 +388,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         self.prescription.doctor = [[MLOperator alloc] init];
     
     [prescription.doctor importFromDict:doctorDictionary];
-    [prescription.doctor importSignature];
+    [prescription.doctor importSignatureFromFile];
 }
 
 // Try to reopen the last used file
@@ -572,11 +572,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
           cellForRowAtIndexPath: (NSIndexPath *)indexPath
 {
 #ifdef DEBUG
-    NSLog(@"%s section:%ld, row:%ld", __FUNCTION__, indexPath.section, indexPath.row);
-    NSLog(@"Line %d, tableView size: %@", __LINE__, NSStringFromCGSize(tableView.frame.size));
-    NSLog(@"Line %d, contentInset: %@", __LINE__, NSStringFromUIEdgeInsets(tableView.contentInset));
-    //NSLog(@"Line %d, safeAreaInsets TLBR: %@", __LINE__, NSStringFromUIEdgeInsets(self.view.safeAreaInsets));
-    NSLog(@"Line %d, contentSize: %@", __LINE__, NSStringFromCGSize(tableView.contentSize));
+//    NSLog(@"%s section:%ld, row:%ld", __FUNCTION__, indexPath.section, indexPath.row);
+//    NSLog(@"Line %d, tableView size: %@", __LINE__, NSStringFromCGSize(tableView.frame.size));
+//    NSLog(@"Line %d, contentInset: %@", __LINE__, NSStringFromUIEdgeInsets(tableView.contentInset));
+//    //NSLog(@"Line %d, safeAreaInsets TLBR: %@", __LINE__, NSStringFromUIEdgeInsets(self.view.safeAreaInsets));
+//    NSLog(@"Line %d, contentSize: %@", __LINE__, NSStringFromCGSize(tableView.contentSize));
 #endif
 #ifdef DEBUG_COLOR_BG
     self.view.backgroundColor = [UIColor blueColor];
@@ -1079,7 +1079,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            error:&error];
     
     NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
+#ifdef DEBUG
     //NSLog(@"Line %d, jsonStr:%@", __LINE__, jsonStr);
+#endif
     NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
     
 #if 1
@@ -1101,7 +1103,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      error:&error];
     if (!amkSaved)
         NSLog(@"Error: %@", [error userInfo]);
-
+#ifdef DEBUG
+    else
+        NSLog(@"Saved to file <%@>", amkFilePath);
+#endif
+    
     possibleToOverwrite = true;
 
     // Refresh the AMK list

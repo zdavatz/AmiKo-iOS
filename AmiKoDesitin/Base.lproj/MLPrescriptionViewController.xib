@@ -36,7 +36,9 @@
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEC-AO-gUj">
                     <rect key="frame" x="40" y="322" width="737" height="32"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="32" id="Lgx-l7-dbQ"/>
+                        <constraint firstAttribute="height" constant="32" id="Lgx-l7-dbQ">
+                            <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                        </constraint>
                         <constraint firstAttribute="height" constant="44" id="l78-XT-OIu">
                             <variation key="heightClass=compact-widthClass=compact" constant="32"/>
                         </constraint>
@@ -73,7 +75,6 @@
                     </variation>
                     <variation key="heightClass=regular-widthClass=compact">
                         <mask key="constraints">
-                            <include reference="Lgx-l7-dbQ"/>
                             <exclude reference="l78-XT-OIu"/>
                         </mask>
                     </variation>

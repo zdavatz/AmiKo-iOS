@@ -43,7 +43,7 @@
     signature = [dict objectForKey:KEY_AMK_DOC_SIGNATURE];
 }
 
-- (BOOL)importSignature
+- (BOOL)importSignatureFromFile
 {
     NSString *documentsDirectory = [MLUtility documentsDirectory];
     NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
@@ -51,7 +51,7 @@
         return FALSE;
     
     UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
-    NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
+    //NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
     NSData *imgData = UIImagePNGRepresentation(signatureImg);
     signature = [imgData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     return TRUE;
@@ -73,6 +73,9 @@
                     options:NSDataBase64DecodingIgnoreUnknownCharacters];
     // original image
     UIImage* image = [UIImage imageWithData:data];
+#ifdef DEBUG
+    //NSLog(@"signature image size %@", NSStringFromCGSize(image.size));
+#endif
     
     // resize
     CGFloat width = size.width / image.size.width;
@@ -89,6 +92,10 @@
     [image drawInRect:rect];
     UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
+#ifdef DEBUG
+    //NSLog(@"rescaled size %@", NSStringFromCGSize(scaledImage.size));
+#endif
     
     return scaledImage;
 }
