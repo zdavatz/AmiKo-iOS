@@ -125,13 +125,13 @@
                         <action selector="showPatients:" destination="-1" eventType="touchUpInside" id="qzq-UA-Qwi"/>
                     </connections>
                 </button>
-                <imageView multipleTouchEnabled="YES" alpha="0.59999999999999998" contentMode="center" fixedFrame="YES" image="1026-doctor.png" translatesAutoresizingMaskIntoConstraints="NO" id="g1Q-J3-j7S">
-                    <rect key="frame" x="28" y="333" width="22" height="32"/>
-                    <autoresizingMask key="autoresizingMask"/>
+                <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" fixedFrame="YES" image="1026-doctor.png" translatesAutoresizingMaskIntoConstraints="NO" id="g1Q-J3-j7S">
+                    <rect key="frame" x="28" y="333" width="23" height="34"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView multipleTouchEnabled="YES" alpha="0.59999999999999998" contentMode="center" fixedFrame="YES" image="1025-patient.png" translatesAutoresizingMaskIntoConstraints="NO" id="K4R-Cr-nry">
+                <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" fixedFrame="YES" image="1025-patient.png" translatesAutoresizingMaskIntoConstraints="NO" id="K4R-Cr-nry">
                     <rect key="frame" x="28" y="289" width="22" height="32"/>
-                    <autoresizingMask key="autoresizingMask"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="970-medal.png" translatesAutoresizingMaskIntoConstraints="NO" id="Osa-jg-ebe">
                     <rect key="frame" x="19" y="157" width="40" height="32"/>
