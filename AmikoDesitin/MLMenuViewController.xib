@@ -126,11 +126,11 @@
                     </connections>
                 </button>
                 <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" fixedFrame="YES" image="1026-doctor.png" translatesAutoresizingMaskIntoConstraints="NO" id="g1Q-J3-j7S">
-                    <rect key="frame" x="28" y="333" width="23" height="34"/>
+                    <rect key="frame" x="28" y="333" width="26" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" fixedFrame="YES" image="1025-patient.png" translatesAutoresizingMaskIntoConstraints="NO" id="K4R-Cr-nry">
-                    <rect key="frame" x="28" y="289" width="22" height="32"/>
+                    <rect key="frame" x="28" y="289" width="28" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="970-medal.png" translatesAutoresizingMaskIntoConstraints="NO" id="Osa-jg-ebe">
@@ -143,8 +143,8 @@
     </objects>
     <resources>
         <image name="1024-share.png" width="28" height="22"/>
-        <image name="1025-patient.png" width="22" height="32"/>
-        <image name="1026-doctor.png" width="22" height="32"/>
+        <image name="1025-patient.png" width="32" height="36"/>
+        <image name="1026-doctor.png" width="28" height="36"/>
         <image name="1100-list-2.png" width="28" height="22"/>
         <image name="905-chat-2.png" width="28" height="26"/>
         <image name="939-download-rectangle.png" width="22" height="28"/>
