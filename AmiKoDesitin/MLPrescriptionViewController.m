@@ -939,8 +939,18 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) sendPrescription:(id)sender
 {
+#if 0
+    // Offer the choice: overwrite or new
     [self savePrescription:sender];
-    // TODO:
+#else
+    // Handle the choice automatically
+    if (possibleToOverwrite)
+        [self overwritePrescription];
+    else
+        [self saveNewPrescription];
+#endif
+    
+    // TODO: share
 }
 
 #pragma mark -
