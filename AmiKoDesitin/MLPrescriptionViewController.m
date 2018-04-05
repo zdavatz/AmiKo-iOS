@@ -1587,11 +1587,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSArray *objectsToShare = @[urlAttachment, myWebsite];
 #else
     //NSArray *toRecipents = [NSArray arrayWithObject:prescription.patient.emailAddress];
-    //NSURL *recipient = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", prescription.patient.emailAddress]];
-    NSURL *recipient = [NSURL URLWithString:prescription.patient.emailAddress];
+    NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
+    //NSURL *recipient = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", prescription.patient.emailAddress]]; // ng
+    //NSURL *recipient = [NSURL URLWithString:prescription.patient.emailAddress];
     //NSArray *objectsToShare = @[mailBody, recipient, urlAttachment];
+    NSArray *objectsToShare = @[mailBody2, urlAttachment];  // ok
     //NSArray *objectsToShare = @[recipient, urlAttachment];  // ng
-    NSArray *objectsToShare = @[urlAttachment]; // ok
+    //NSArray *objectsToShare = @[urlAttachment]; // ok
 #endif
     
     UIActivityViewController *activityVC =
@@ -1653,7 +1655,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //    if ([activityType isEqualToString:UIActivityTypeMail]) {
 //        return @{@"body":@"mail body 1", @"url":lastUsedURL};
 //    }
-//    
+//
 //    return @{@"body":@"mail body 2", @"url":lastUsedURL};
 //}
 //
