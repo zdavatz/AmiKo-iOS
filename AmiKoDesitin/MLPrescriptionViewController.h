@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+//#import <MessageUI/MessageUI.h>
 
 #import "MLPrescription.h"
 
 @interface MLPrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate>
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate
+//, MFMailComposeViewControllerDelegate
+>
 {
     IBOutlet UITableView *infoView;
 }
@@ -33,6 +36,7 @@
 - (IBAction) showPatientDbList:(id)sender;
 
 - (IBAction) myRightRevealToggle:(id)sender;
+- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
 
 - (NSURL *) prescriptionUrlWithHash: (NSString *)hash;
 - (BOOL) validatePrescription;
@@ -47,6 +51,6 @@
 - (void)patientDbListDidChangeSelection:(NSNotification *)aNotification;
 
 - (void)addMedication:(MLProduct *)p;
-- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
+- (void)sharePrescription:(NSURL *)url;
 
 @end

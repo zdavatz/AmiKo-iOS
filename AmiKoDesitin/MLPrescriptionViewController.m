@@ -49,6 +49,30 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return CGSizeMake(ceil(boundSize.width), ceil(boundSize.height));
 }
 
+//#pragma mark -
+//@interface ItemProvider : UIActivityItemProvider
+//
+//@property (nonatomic, strong) NSURL *filepath;
+//@property (nonatomic, strong) NSString *emailBody;
+//@property (nonatomic, strong) NSString *emailSubject;
+//
+//@end
+//
+//@implementation ItemProvider
+//
+//- (id)initWithPlaceholderItem:(id)placeholderItem
+//{
+//    //Initializes and returns a provider object with the specified placeholder data
+//    return [super initWithPlaceholderItem:placeholderItem];
+//}
+//
+//- (id)item
+//{
+//    //Generates and returns the actual data object
+//    return [NSDictionary dictionary];
+//}
+//@end
+
 #pragma mark -
 
 @interface MLPrescriptionViewController ()
@@ -57,9 +81,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     CGPoint savedOffset;
     CGFloat savedKeyboardY;
     bool commentEditingActive;
+    NSURL *lastUsedURL;
 }
 
--(IBAction)btnClickedDone:(id)sender;
+- (IBAction)btnClickedDone:(id)sender;
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
 - (void)layoutFrames;
@@ -71,7 +96,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) saveButtonOn;
 - (void) saveButtonOff;
 - (void) recalculateSavedOffset;
-- (void)updateMainframeRect;
+- (void) updateMainframeRect;
 @end
 
 #pragma mark -
@@ -255,6 +280,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     self.editedMedicines = false;
     possibleToOverwrite = false;
     editingCommentIdx = -1;
+    lastUsedURL = nil;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -883,6 +909,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self updateButtons];
     [infoView reloadData];
     possibleToOverwrite = false;
+    lastUsedURL = nil;
 }
 
 - (IBAction) checkForInteractions:(id)sender
@@ -944,13 +971,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self savePrescription:sender];
 #else
     // Handle the choice automatically
+    // TODO: (TBC) skip the following if the prescription has not been edited
     if (possibleToOverwrite)
         [self overwritePrescription];
     else
         [self saveNewPrescription];
 #endif
     
-    // TODO: share
+    [self sharePrescription:lastUsedURL];
 }
 
 #pragma mark -
@@ -1113,10 +1141,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      error:&error];
     if (!amkSaved)
         NSLog(@"Error: %@", [error userInfo]);
-#ifdef DEBUG
-    else
+    else {
         NSLog(@"Saved to file <%@>", amkFilePath);
-#endif
+        lastUsedURL = [NSURL fileURLWithPath:amkFilePath];
+    }
     
     possibleToOverwrite = true;
 
@@ -1199,8 +1227,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     NSString *amkDir = [MLUtility amkDirectory];
     NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
-    NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-    [prescription importFromURL:url];
+    lastUsedURL = [NSURL fileURLWithPath:fullFilePath];
+    [prescription importFromURL:lastUsedURL];
     [self updateButtons];
     [infoView reloadData];
     possibleToOverwrite = true;
@@ -1538,4 +1566,108 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         savedOffset = offset;
     }
 }
+
+- (void)sharePrescription:(NSURL *)urlAttachment
+{
+#ifdef DEBUG
+    NSLog(@"%s sharing <%@>", __FUNCTION__, urlAttachment);
+#endif
+    
+    NSString *mailBody = @"My mail body"; // tested ok
+
+#if 0
+    ItemProvider *provider =
+    [[ItemProvider alloc] initWithPlaceholderItem:@{@"body":mailBody, @"url":urlAttachment}];
+    provider.emailBody = mailBody;
+    provider.emailSubject = @"Your AMK prescription (test 2)";
+    provider.filepath = urlAttachment;
+    NSArray *objectsToShare = @[provider];
+    
+    //NSURL *myWebsite = [NSURL URLWithString:@"http://www.ywesee.com/"];
+    //NSArray *objectsToShare = @[urlAttachment, myWebsite];
+#else
+    //NSArray *toRecipents = [NSArray arrayWithObject:prescription.patient.emailAddress];
+    //NSURL *recipient = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", prescription.patient.emailAddress]];
+    NSURL *recipient = [NSURL URLWithString:prescription.patient.emailAddress];
+    //NSArray *objectsToShare = @[mailBody, recipient, urlAttachment];
+    //NSArray *objectsToShare = @[recipient, urlAttachment];  // ng
+    NSArray *objectsToShare = @[urlAttachment]; // ok
+#endif
+    
+    UIActivityViewController *activityVC =
+    [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
+                                      applicationActivities:nil];
+    
+    NSArray *excludeActivities = @[UIActivityTypePrint,
+                                   UIActivityTypeCopyToPasteboard,
+                                   UIActivityTypeAssignToContact,
+                                   UIActivityTypeSaveToCameraRoll,
+                                   UIActivityTypeAddToReadingList,
+                                   UIActivityTypePostToFlickr,
+                                   UIActivityTypePostToVimeo];
+    
+    activityVC.excludedActivityTypes = excludeActivities;
+    [activityVC setValue:@"Your AMK prescription" forKey:@"subject"];  // ok
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        activityVC.modalPresentationStyle = UIModalPresentationPopover;
+
+    [self presentViewController:activityVC animated:YES completion:nil];
+    
+#if 1
+    UIPopoverPresentationController *popController = [activityVC popoverPresentationController];
+    popController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    popController.barButtonItem = self.navigationItem.leftBarButtonItem;
+    
+    // access the completion handler
+    activityVC.completionWithItemsHandler = ^(NSString *activityType,
+                                              BOOL completed,
+                                              NSArray *returnedItems,
+                                              NSError *error){
+        // react to the completion
+        if (completed) {
+            // user shared an item
+            NSLog(@"We used activity type%@", activityType);
+            if ([activityType isEqualToString:UIActivityTypeMail]) {
+                //return @"Your subject goes here";
+            }
+        }
+        else {
+            // user cancelled
+            NSLog(@"We didn't want to share anything after all.");
+        }
+        
+        if (error)
+            NSLog(@"An Error occured: %@, %@", error.localizedDescription, error.localizedFailureReason);
+    };
+#endif
+}
+
+//#pragma mark - MFMailComposeViewControllerDelegate
+
+#pragma mark - UIActivityItemSource
+
+////- Returns the data object to be acted upon. (required)
+//- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
+//{
+//    if ([activityType isEqualToString:UIActivityTypeMail]) {
+//        return @{@"body":@"mail body 1", @"url":lastUsedURL};
+//    }
+//    
+//    return @{@"body":@"mail body 2", @"url":lastUsedURL};
+//}
+//
+////- Returns the placeholder object for the data. (required)
+////- The class of this object must match the class of the object you return from the above method
+//- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
+//{
+//    return @{@"body":@"mail body 3", @"url":lastUsedURL};
+//}
+//
+//-(NSString *) activityViewController:(UIActivityViewController *)activityViewController
+//              subjectForActivityType:(NSString *)activityType
+//{
+//    return @"mail subject 3";
+//}
+
 @end
