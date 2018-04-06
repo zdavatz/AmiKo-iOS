@@ -209,7 +209,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
-#if 0
+#if 1
     // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
 #else
@@ -230,6 +230,23 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [NSArray arrayWithObjects:revealButtonItem, spacer, patientsItem, nil];
 #endif
     
+#if 1
+    // Middle button
+    CGRect frame = CGRectMake(0, 0, 200, 44);
+    UIButton* myButton = [[UIButton alloc] initWithFrame:frame];
+    [myButton setTitle:NSLocalizedString(@"Search Patients", nil) forState:UIControlStateNormal];
+    
+    CGSize stringSize = [myButton.titleLabel.text sizeWithFont:myButton.titleLabel.font];
+    CGRect frame2 = myButton.frame;
+    frame2.size = stringSize;
+    [myButton setFrame:frame2];
+    
+    [myButton setTitleColor:MAIN_TINT_COLOR forState:UIControlStateNormal];
+    [myButton addTarget:self action:@selector(showPatientDbList:) forControlEvents:UIControlEventTouchDown];
+    //myButton.backgroundColor = [UIColor grayColor];
+    self.navigationItem.titleView = myButton;
+#endif
+
     // Right button
 #if 1
     // First ensure the "right" is a MLContactsListViewController
