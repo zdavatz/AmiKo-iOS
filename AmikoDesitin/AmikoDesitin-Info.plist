@@ -50,7 +50,7 @@
 	<key>CFBundleVersion</key>
 	<string>2.8</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
-        <false/>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -68,8 +68,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSContactsUsageDescription</key>
-	<string>$(PRODUCT_NAME) contact use</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ionicons.ttf</string>
@@ -149,6 +147,8 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<string>amk</string>
+				<key>public.mime-type</key>
+				<string>application/octet-stream</string>
 			</dict>
 		</dict>
 	</array>
