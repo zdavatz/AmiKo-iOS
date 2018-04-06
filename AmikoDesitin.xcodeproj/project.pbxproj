@@ -33,6 +33,18 @@
 		43A3851720333355001A5849 /* MLPatientDbListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851520333355001A5849 /* MLPatientDbListViewController.m */; };
 		43A3851820333355001A5849 /* MLPatientDbListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43A3851620333355001A5849 /* MLPatientDbListViewController.xib */; };
 		43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */; };
+		930D94AF2077E50C007E4629 /* MLContactsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439EEF43202CBF4900817588 /* MLContactsListViewController.m */; };
+		930D94B02077E56D007E4629 /* MLAmkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439B6C6320206D210018F922 /* MLAmkListViewController.m */; };
+		930D94B12077E590007E4629 /* MLPrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F25EB20286BF200396C29 /* MLPrescription.m */; };
+		930D94B22077E5A9007E4629 /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
+		930D94B32077E5BC007E4629 /* MLProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* MLProduct.m */; };
+		930D94B42077E5D4007E4629 /* MLPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 43334329201B6488006BFC23 /* MLPatient.m */; };
+		930D94B52077E5D9007E4629 /* MLPatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* MLPatientDBAdapter.m */; };
+		930D94B62077E5DE007E4629 /* MLPatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F26202028C8A700396C29 /* MLPatientViewController.m */; };
+		930D94B72077E5E1007E4629 /* MLPatientDbListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851520333355001A5849 /* MLPatientDbListViewController.m */; };
+		930D94B82077E610007E4629 /* MLBaseListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851220333147001A5849 /* MLBaseListViewController.m */; };
+		930D94B92077E62C007E4629 /* MLPrescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */; };
+		930D94BA2077E641007E4629 /* MLOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4333432C201B64A2006BFC23 /* MLOperator.m */; };
 		93109F8520751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */; };
 		93109F8620751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */; };
 		93109F8820751A5700CEFAA5 /* 1025-patient.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8720751A5600CEFAA5 /* 1025-patient.png */; };
@@ -1343,29 +1355,41 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				930D94B32077E5BC007E4629 /* MLProduct.m in Sources */,
+				930D94B72077E5E1007E4629 /* MLPatientDbListViewController.m in Sources */,
+				930D94B42077E5D4007E4629 /* MLPatient.m in Sources */,
 				D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */,
 				D5A2253619461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
 				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
+				930D94B52077E5D9007E4629 /* MLPatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
+				930D94B22077E5A9007E4629 /* MLDoctorViewController.m in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
+				930D94BA2077E641007E4629 /* MLOperator.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
+				930D94B02077E56D007E4629 /* MLAmkListViewController.m in Sources */,
 				D5A2253F194A435B0078FEFF /* deleterow.js in Sources */,
 				D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */,
+				930D94B12077E590007E4629 /* MLPrescription.m in Sources */,
+				930D94B62077E5DE007E4629 /* MLPatientViewController.m in Sources */,
 				D5F6BB5717E8C87500DCBD16 /* MLTitleViewController.m in Sources */,
 				D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */,
 				D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */,
 				D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */,
 				FA4263702058117A00C2269E /* MLViewController.m in Sources */,
+				930D94B82077E610007E4629 /* MLBaseListViewController.m in Sources */,
+				930D94AF2077E50C007E4629 /* MLContactsListViewController.m in Sources */,
 				D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */,
 				43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */,
 				D5A31F5D18B5207200F56BC5 /* zip.c in Sources */,
+				930D94B92077E62C007E4629 /* MLPrescriptionViewController.m in Sources */,
 				D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */,
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */,
