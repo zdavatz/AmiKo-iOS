@@ -45,6 +45,10 @@
 		930D94B82077E610007E4629 /* MLBaseListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851220333147001A5849 /* MLBaseListViewController.m */; };
 		930D94B92077E62C007E4629 /* MLPrescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 430285BD20160FB1003B2EF3 /* MLPrescriptionViewController.m */; };
 		930D94BA2077E641007E4629 /* MLOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4333432C201B64A2006BFC23 /* MLOperator.m */; };
+		930D94BB2077EC1A007E4629 /* prescription@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F820122665000E82FC /* prescription@2x.png */; };
+		930D94BC2077EC22007E4629 /* prescription@2x-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F720122665000E82FC /* prescription@2x-selected.png */; };
+		930D94BD2077EC26007E4629 /* prescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F620122665000E82FC /* prescription.png */; };
+		930D94BE2077EC2A007E4629 /* prescription-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 439F50F520122665000E82FC /* prescription-selected.png */; };
 		93109F8520751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */; };
 		93109F8620751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */; };
 		93109F8820751A5700CEFAA5 /* 1025-patient.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8720751A5600CEFAA5 /* 1025-patient.png */; };
@@ -1208,8 +1212,10 @@
 			files = (
 				D5990A721BDF42F40040C4C2 /* MLLaunchScreen.storyboard in Resources */,
 				D5A175671A9BC27400E69385 /* favorites@2x.png in Resources */,
+				930D94BC2077EC22007E4629 /* prescription@2x-selected.png in Resources */,
 				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */,
+				930D94BB2077EC1A007E4629 /* prescription@2x.png in Resources */,
 				D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */,
 				D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
@@ -1273,6 +1279,8 @@
 				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
+				930D94BE2077EC2A007E4629 /* prescription-selected.png in Resources */,
+				930D94BD2077EC26007E4629 /* prescription.png in Resources */,
 				D5A1754F1A9A737F00E69385 /* interactions@2x.png in Resources */,
 				D5A175581A9A7A4D00E69385 /* maindb-selected.png in Resources */,
 				D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */,
