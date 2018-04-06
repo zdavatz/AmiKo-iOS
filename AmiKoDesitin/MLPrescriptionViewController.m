@@ -1459,7 +1459,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)textViewDidChange:(UITextView *)textView
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 #endif
     // Get current width
     CGRect r = textView.frame;

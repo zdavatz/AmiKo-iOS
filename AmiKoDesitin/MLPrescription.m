@@ -23,8 +23,8 @@
     [patientDict setObject:[self.patient givenName] forKey:KEY_AMK_PAT_NAME];
     [patientDict setObject:[self.patient familyName] forKey:KEY_AMK_PAT_SURNAME];
     [patientDict setObject:[self.patient birthDate] forKey:KEY_AMK_PAT_BIRTHDATE];
-    [patientDict setObject:[NSNumber numberWithInt:[self.patient weightKg]] forKey:KEY_AMK_PAT_WEIGHT];
-    [patientDict setObject:[NSNumber numberWithInt:[self.patient heightCm]] forKey:KEY_AMK_PAT_HEIGHT];
+    [patientDict setObject:[NSString stringWithFormat:@"%d", patient.weightKg] forKey:KEY_AMK_PAT_WEIGHT];
+    [patientDict setObject:[NSString stringWithFormat:@"%d", patient.heightCm] forKey:KEY_AMK_PAT_HEIGHT];
     [patientDict setObject:[self.patient gender] forKey:KEY_AMK_PAT_GENDER];
     [patientDict setObject:[self.patient postalAddress] forKey:KEY_AMK_PAT_ADDRESS];
     [patientDict setObject:[self.patient zipCode] forKey:KEY_AMK_PAT_ZIP];
