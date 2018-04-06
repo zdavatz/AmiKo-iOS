@@ -209,7 +209,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
-#if 0
+#if 1
     // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
 #else
@@ -230,6 +230,23 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [NSArray arrayWithObjects:revealButtonItem, spacer, patientsItem, nil];
 #endif
     
+#if 1
+    // Middle button
+    CGRect frame = CGRectMake(0, 0, 200, 44);
+    UIButton* myButton = [[UIButton alloc] initWithFrame:frame];
+    [myButton setTitle:NSLocalizedString(@"Search Patients", nil) forState:UIControlStateNormal];
+    
+    CGSize stringSize = [myButton.titleLabel.text sizeWithFont:myButton.titleLabel.font];
+    CGRect frame2 = myButton.frame;
+    frame2.size = stringSize;
+    [myButton setFrame:frame2];
+    
+    [myButton setTitleColor:MAIN_TINT_COLOR forState:UIControlStateNormal];
+    [myButton addTarget:self action:@selector(showPatientDbList:) forControlEvents:UIControlEventTouchDown];
+    //myButton.backgroundColor = [UIColor grayColor];
+    self.navigationItem.titleView = myButton;
+#endif
+
     // Right button
 #if 1
     // First ensure the "right" is a MLContactsListViewController
@@ -943,6 +960,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                             
+                                                             // New hash and new prescription
+                                                             prescription.hash = [self makeNewUniqueHash];
                                                              [self saveNewPrescription];
                                                          }];
     [alertController addAction:actionNo];
@@ -972,10 +992,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #else
     // Handle the choice automatically
     // TODO: (TBC) skip the following if the prescription has not been edited
-    if (possibleToOverwrite)
+    if (possibleToOverwrite) {
         [self overwritePrescription];
-    else
+    }
+    else {
+        // New hash and new prescription
+        prescription.hash = [self makeNewUniqueHash];
         [self saveNewPrescription];
+    }
 #endif
     
     [self sharePrescription:lastUsedURL];
@@ -1026,6 +1050,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     return TRUE;
 }
+
 - (void) overwritePrescription
 {
 #ifdef DEBUG
@@ -1059,9 +1084,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     }
 
+    // Use the same prescription.hash for a new prescription
     [self saveNewPrescription];
 }
 
+// The prescription.hash is defined before calling this function
 - (void) saveNewPrescription
 {
     if (![self validatePrescription])
@@ -1090,8 +1117,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
                               prescription.doctor.city,
                               [MLUtility prettyTime]];
-    
-    prescription.hash = [self makeNewUniqueHash];
 
     NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
     [prescriptionDict setObject:prescription.hash forKey:KEY_AMK_HASH];
@@ -1573,28 +1598,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSLog(@"%s sharing <%@>", __FUNCTION__, urlAttachment);
 #endif
     
-    NSString *mailBody = @"My mail body"; // tested ok
+    //NSString *mailBody = @"My mail body"; // tested ok
+    //NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
 
-#if 0
-    ItemProvider *provider =
-    [[ItemProvider alloc] initWithPlaceholderItem:@{@"body":mailBody, @"url":urlAttachment}];
-    provider.emailBody = mailBody;
-    provider.emailSubject = @"Your AMK prescription (test 2)";
-    provider.filepath = urlAttachment;
-    NSArray *objectsToShare = @[provider];
-    
-    //NSURL *myWebsite = [NSURL URLWithString:@"http://www.ywesee.com/"];
-    //NSArray *objectsToShare = @[urlAttachment, myWebsite];
-#else
-    //NSArray *toRecipents = [NSArray arrayWithObject:prescription.patient.emailAddress];
-    NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
-    //NSURL *recipient = [NSURL URLWithString:[NSString stringWithFormat:@"mailto:%@", prescription.patient.emailAddress]]; // ng
-    //NSURL *recipient = [NSURL URLWithString:prescription.patient.emailAddress];
-    //NSArray *objectsToShare = @[mailBody, recipient, urlAttachment];
-    //NSArray *objectsToShare = @[mailBody2, urlAttachment];  // ok
-    //NSArray *objectsToShare = @[recipient, urlAttachment];  // ng
     NSArray *objectsToShare = @[urlAttachment]; // ok
-#endif
     
     UIActivityViewController *activityVC =
     [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
