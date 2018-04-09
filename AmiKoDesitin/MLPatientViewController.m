@@ -149,6 +149,9 @@ enum {
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    [mSex addTarget:self
+             action:@selector(sexDefined:)
+   forControlEvents:UIControlEventValueChanged];
 }
 
 #ifdef DEBUG
@@ -596,6 +599,11 @@ enum {
 }
 
 #pragma mark - Notifications
+
+- (void)sexDefined:(NSNotification *)notification
+{
+    [self saveCancelOn];
+}
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
