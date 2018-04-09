@@ -157,6 +157,12 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
           [[UIScreen mainScreen] nativeBounds].size.width,
           [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
+    NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
+    NSLog(@"%@ %@ %@",
+          [d objectForKey:@"CFBundleName"],
+          [d objectForKey:@"CFBundleShortVersionString"],
+          [d objectForKey:@"CFBundleVersion"]);
+    NSLog(@"documentsDirectory: %@", [MLUtility documentsDirectory]);
 #endif
     
     // Rear

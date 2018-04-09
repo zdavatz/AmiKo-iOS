@@ -297,6 +297,10 @@
 		FA5FA7F7205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
 		FA5FA7F8205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
 		FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
+		FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
+		FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
+		FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
+		FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -532,6 +536,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */,
 				D59E895918B7C0E100185094 /* libz.1.2.5.dylib in Frameworks */,
 				D59E895818B7C0DB00185094 /* QuartzCore.framework in Frameworks */,
 				D59E895718B7C0D600185094 /* MessageUI.framework in Frameworks */,
@@ -1223,6 +1228,7 @@
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
 				932F8840206BDA4700B5A77E /* MLAmkListViewController.xib in Resources */,
+				FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */,
 				932F883F206BDA1D00B5A77E /* MLPatientViewController.xib in Resources */,
 				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,
 				D5A175631A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
@@ -1269,6 +1275,7 @@
 				D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
 				D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
+				FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5A175651A9BC27400E69385 /* favorites.png in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
@@ -1293,6 +1300,7 @@
 				D5A2251C19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
 				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
+				FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D5A175551A9A741B00E69385 /* maindb@2x.png in Resources */,

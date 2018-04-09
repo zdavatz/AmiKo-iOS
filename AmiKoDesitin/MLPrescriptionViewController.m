@@ -752,7 +752,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 label.text = [NSString stringWithFormat:@"%dkg/%dcm %@ %@",
                               prescription.patient.weightKg,
                               prescription.patient.heightCm,
-                              prescription.patient.gender,
+                              NSLocalizedString(prescription.patient.gender, "Gender"),
                               prescription.patient.birthDate];
                 break;
             case 2:

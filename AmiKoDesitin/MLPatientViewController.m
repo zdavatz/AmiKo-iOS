@@ -293,9 +293,9 @@ enum {
         mPatientUUID = p.uniqueId;
 
     if (p.gender) {
-        if ([p.gender isEqualToString:@"man"])
+        if ([p.gender isEqualToString:KEY_AMK_PAT_GENDER_M])
             [mSex setSelectedSegmentIndex:0];
-        else if ([p.gender isEqualToString:@"woman"])
+        else if ([p.gender isEqualToString:KEY_AMK_PAT_GENDER_F])
             [mSex setSelectedSegmentIndex:1];
     }
 }
@@ -321,10 +321,10 @@ enum {
             patient.gender = @"";
             break;
         case 0:
-            patient.gender = @"man";
+            patient.gender = KEY_AMK_PAT_GENDER_M;
             break;
         case 1:
-            patient.gender = @"woman";
+            patient.gender = KEY_AMK_PAT_GENDER_F;
             break;
     }
 

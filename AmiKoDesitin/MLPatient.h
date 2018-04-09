@@ -15,6 +15,8 @@
 #define KEY_AMK_PAT_WEIGHT      @"weight_kg"
 #define KEY_AMK_PAT_HEIGHT      @"height_cm"
 #define KEY_AMK_PAT_GENDER      @"gender"
+#define KEY_AMK_PAT_GENDER_M    @"man"
+#define KEY_AMK_PAT_GENDER_F    @"woman"
 #define KEY_AMK_PAT_ADDRESS     @"postal_address"
 #define KEY_AMK_PAT_ZIP         @"zip_code"
 #define KEY_AMK_PAT_CITY        @"city"
