@@ -225,7 +225,9 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    [self sendEmailTo:@"zdavatz@ywesee.com" withSubject:[NSString stringWithFormat:@"%@ Feedback", APP_NAME] andBody:@""];
+    [self sendEmailTo:@"zdavatz@ywesee.com"
+          withSubject:[NSString stringWithFormat:@"%@ Feedback", APP_NAME]
+              andBody:@""];
 }
 
 - (IBAction) shareApp:(id)sender
@@ -240,7 +242,8 @@
         body = [NSString stringWithFormat:@"%@: Schweizer Arzneimittelkompendium<br /><br />"
                 "Get it now: <a href=https://itunes.apple.com/us/app/amiko/id%@?mt=8>https://itunes.apple.com/us/app/amiko/id%@?mt=8</a>"
                 "<br /><br />Enjoy!<br />", APP_NAME, APP_ID, APP_ID];
-    } else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"]) {
+    }
+    else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"]) {
         body = [NSString stringWithFormat:@"%@: Compendium des Médicaments Suisse<br /><br />"
                 "Get it now: <a href=https://itunes.apple.com/us/app/amiko/id%@?mt=8>https://itunes.apple.com/us/app/amiko/id%@?mt=8</a>"
                 "<br /><br />Enjoy!<br />", APP_NAME, APP_ID, APP_ID];
@@ -306,7 +309,8 @@
         [reportConn downloadFileWithName:@"amiko_report_de.html" andModal:NO];
         [interConn downloadFileWithName:@"drug_interactions_csv_de.zip" andModal:NO];
         [dbConn downloadFileWithName:@"amiko_db_full_idx_de.zip" andModal:YES];
-    } else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"]) {
+    }
+    else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"]) {
         [reportConn downloadFileWithName:@"amiko_report_fr.html" andModal:NO];
         [interConn downloadFileWithName:@"drug_interactions_csv_fr.zip" andModal:NO];
         [dbConn downloadFileWithName:@"amiko_db_full_idx_fr.zip" andModal:YES];

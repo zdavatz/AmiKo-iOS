@@ -76,32 +76,35 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     bool handled = NO;
 
     // Check which quick action to run
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.aips"]
-        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.aips"]) {
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.aips"] ||
+        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.aips"]) {
 #ifdef DEBUG
         NSLog(@"shortcut tapped: aips");
 #endif
         launchState = eAips;
         handled = YES;
     }
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.favorites"]
-        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.favorites"]) {
+
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.favorites"] ||
+        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.favorites"]) {
 #ifdef DEBUG
         NSLog(@"shortcut tapped: favorites");
 #endif
         launchState = eFavorites;
         handled = YES;
     }
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.interactions"]
-        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.interactions"]) {
+
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.interactions"] ||
+        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.interactions"]) {
 #ifdef DEBUG
         NSLog(@"shortcut tapped: interactions");
 #endif
         launchState = eInteractions;
         handled = YES;
     }
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.desitin"]
-        || [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.desitin"]) {
+
+    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.desitin"] ||
+        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.desitin"]) {
 #ifdef DEBUG
         NSLog(@"shortcut tapped: desitin");
 #endif
@@ -158,8 +161,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
           [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
     NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
-    NSLog(@"%@ %@ %@",
+    NSLog(@"%@, %@, %@, %@",
           [d objectForKey:@"CFBundleName"],
+          [d objectForKey:@"CFBundleExecutable"],
           [d objectForKey:@"CFBundleShortVersionString"],
           [d objectForKey:@"CFBundleVersion"]);
     NSLog(@"documentsDirectory: %@", [MLUtility documentsDirectory]);
@@ -198,13 +202,17 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
     // Make sure the orientation is correct
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft ||
+            orientation == UIInterfaceOrientationLandscapeRight)
+        {
             mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        } else {
+        }
+        else {
             mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
+
         mainRevealController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPad;
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
 
@@ -219,7 +227,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
         self.revealViewController = mainRevealController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
-        
+
         self.window.rootViewController = self.revealViewController; 
     }
     mainRevealController.bounceBackOnOverdraw = YES;
@@ -289,6 +297,11 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     NSSetUncaughtExceptionHandler(&onUncaughtException);
     self.editMode = EDIT_MODE_UNDEFINED;
+    
+#if 1 // Issue 54
+    [mainRevealController revealToggle:nil];
+    [mainRevealController revealToggle:nil];
+#endif
     
     return !launchedFromShortcut;
 }

@@ -378,8 +378,8 @@
 		D554574F18B3E86B003299E0 /* 970-medal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "970-medal@2x.png"; sourceTree = "<group>"; };
 		D554575418B3E87D003299E0 /* 905-chat-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "905-chat-2.png"; sourceTree = "<group>"; };
 		D554575518B3E87D003299E0 /* 905-chat-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "905-chat-2@2x.png"; sourceTree = "<group>"; };
-		D565DA8117B7B48D0002E2CF /* MLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = ../MLConstants.h; sourceTree = "<group>"; };
-		D565DA8217B7B48D0002E2CF /* MLConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLConstants.m; path = ../MLConstants.m; sourceTree = "<group>"; };
+		D565DA8117B7B48D0002E2CF /* MLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = ../AmiKoDesitin/MLConstants.h; sourceTree = "<group>"; };
+		D565DA8217B7B48D0002E2CF /* MLConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLConstants.m; path = ../AmiKoDesitin/MLConstants.m; sourceTree = "<group>"; };
 		D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		D565DA8617B7D8370002E2CF /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait~ipad.png"; path = "../Default-Portrait~ipad.png"; sourceTree = "<group>"; };
 		D565DA8817B7D8580002E2CF /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape~ipad.png"; path = "../Default-Landscape~ipad.png"; sourceTree = "<group>"; };
@@ -506,6 +506,7 @@
 		FA4511CE204EF51700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLDoctorViewController.strings; sourceTree = "<group>"; };
 		FA4511D0204EF52E00899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
 		FA4511D2204EF53700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPatientViewController.strings; sourceTree = "<group>"; };
+		FA5CAC06207CF53B003B32C3 /* MLConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = AmiKoDesitin/MLConstants.h; sourceTree = SOURCE_ROOT; };
 		FA5FA7F1205A743200E0C042 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLViewController.xib; sourceTree = "<group>"; };
 		FA5FA7F4205A744D00E0C042 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = ../AmiKoDesitin/de.lproj/MLViewController.strings; sourceTree = "<group>"; };
 		FA5FA7F6205A744E00E0C042 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = ../AmiKoDesitin/fr.lproj/MLViewController.strings; sourceTree = "<group>"; };
@@ -729,6 +730,7 @@
 		43D3A0DF201F2D1700EA77C6 /* json */ = {
 			isa = PBXGroup;
 			children = (
+				FA5CAC06207CF53B003B32C3 /* MLConstants.h */,
 				43334328201B6488006BFC23 /* MLPatient.h */,
 				43334329201B6488006BFC23 /* MLPatient.m */,
 				4333432B201B64A2006BFC23 /* MLOperator.h */,

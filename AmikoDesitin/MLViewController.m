@@ -2212,8 +2212,9 @@ static BOOL mShowReport = false;
         titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
                                                           sectionIds:listofSectionIds
                                                          andLanguage:[MLConstants appLanguage]];
-    } else {
-        if (mId>-1) {
+    }
+    else {
+        if (mId > -1) {
             [self pushToMedBasket];
         
             // Extract section ids
@@ -2233,9 +2234,11 @@ static BOOL mShowReport = false;
             secondViewController.dbAdapter = mDb;
             secondViewController.titleViewController = titleViewController;
         }
+
         secondViewController.medBasket = mMedBasket;
         secondViewController.htmlStr = @"Interactions";
     }
+
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
     mainRevealController = self.revealViewController;
     mainRevealController.rightViewController = titleViewController;

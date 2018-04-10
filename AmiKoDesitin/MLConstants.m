@@ -23,6 +23,9 @@
 
 #import "MLConstants.h"
 
+// TODO: define APP_NAME from the Info.plist file, like this:
+//NSString *APP_NAME = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+
 #if defined (AMIKO_DESITIN)
 NSString* const APP_NAME = @"AmiKoDesitin";
 NSString* const APP_ID = @"687642725";
@@ -130,22 +133,25 @@ static int HeightInPoints;
 
 + (NSString *) appOwner
 {
-    if ([APP_NAME isEqualToString:@"AmiKoDesitin"]
-        || [APP_NAME isEqualToString:@"CoMedDesitin"])
+    if ([APP_NAME isEqualToString:@"AmiKoDesitin"] ||
+        [APP_NAME isEqualToString:@"CoMedDesitin"])
         return @"desitin";
-    else if ([APP_NAME isEqualToString:@"iAmiKo"]
-             || [APP_NAME isEqualToString:@"iCoMed"])
+
+    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
+        [APP_NAME isEqualToString:@"iCoMed"])
         return @"ywesee";
+
     return nil;
 }
 
 + (NSString *) appLanguage
 {
-    if ([APP_NAME isEqualToString:@"iAmiKo"]
-        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
+        [APP_NAME isEqualToString:@"AmiKoDesitin"])
         return @"de";
-    else if ([APP_NAME isEqualToString:@"iCoMed"]
-             || [APP_NAME isEqualToString:@"CoMedDesitin"])
+    
+    if ([APP_NAME isEqualToString:@"iCoMed"] ||
+        [APP_NAME isEqualToString:@"CoMedDesitin"])
         return @"fr";
     
     return nil;
@@ -153,11 +159,12 @@ static int HeightInPoints;
 
 + (NSString *) notSpecified
 {
-    if ([APP_NAME isEqualToString:@"iAmiKo"]
-        || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
+        [APP_NAME isEqualToString:@"AmiKoDesitin"])
         return @"k.A.";
-    else if ([APP_NAME isEqualToString:@"iCoMed"]
-             || [APP_NAME isEqualToString:@"CoMedDesitin"])
+    
+    if ([APP_NAME isEqualToString:@"iCoMed"] ||
+        [APP_NAME isEqualToString:@"CoMedDesitin"])
         return @"n.s.";
     
     return nil;

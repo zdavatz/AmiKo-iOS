@@ -917,9 +917,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (IBAction) newPrescription:(id)sender
 {
     UIBarButtonItem *btn = (UIBarButtonItem *)sender;
-#ifdef DEBUG
-    NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, (long)btn.tag, btn.title);
-#endif
+    //NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, (long)btn.tag, btn.title);
     [self loadDefaultDoctor];
     prescription.patient = nil;
     [prescription.medications removeAllObjects];
@@ -931,9 +929,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) checkForInteractions:(id)sender
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
+    //NSLog(@"%s", __FUNCTION__);
+    UIViewController *nc_rear = self.revealViewController.rearViewController;
+    MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+    
+    // TODO:
+    // vc_rear.mCurrentIndexPath = -1
+    // pushToMedBasket
+    
+    [vc_rear switchToDrugInteractionView];
 }
 
 - (IBAction) savePrescription:(id)sender
