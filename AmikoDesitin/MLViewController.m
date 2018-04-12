@@ -890,7 +890,7 @@ static BOOL mShowReport = false;
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
             
             // Hides tab bar (bottom)
-            [self hideTabBarWithAnimation:YES];
+            [self showTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 5;
         } else {
@@ -1021,7 +1021,7 @@ static BOOL mShowReport = false;
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
             
             // Hides tab bar
-            [self hideTabBarWithAnimation:YES];
+            [self showTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 5;
             
