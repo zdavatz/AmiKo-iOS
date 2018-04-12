@@ -850,7 +850,7 @@ static BOOL mShowReport = false;
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s to orientation: %ld", __FUNCTION__, interfaceOrientation);
 #endif
     return YES;
 }
@@ -859,7 +859,7 @@ static BOOL mShowReport = false;
                                  duration:(NSTimeInterval)duration
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s to orientation: %ld", __FUNCTION__, toInterfaceOrientation);
 #endif
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -871,7 +871,7 @@ static BOOL mShowReport = false;
         else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
-    }
+    } // iPad
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
@@ -892,14 +892,11 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
             
-            // Hide status bar and navigation bar
+            // Hide status bar and navigation bar (top)
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
             if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
             
-            // Hides tab bar (bottom)
-            [self showTabBarWithAnimation:YES];
-            [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 5;
         }
         else {
@@ -914,20 +911,19 @@ static BOOL mShowReport = false;
             
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f) {
+            if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-            }
-            // Shows tab bar (bottom)
-            [self showTabBarWithAnimation:YES];
-            
-            [myTableView layoutIfNeeded];
+
             self.myTableViewHeightConstraint.constant = 49;
         }
-    }
+
+        [self showTabBarWithAnimation:YES]; // the tab bar is at the bottom of the view
+        [myTableView layoutIfNeeded];
+    } // iPhone
 }
 
 #pragma mark -
-
+     
 - (void) viewWillAppear:(BOOL)animated
 {
 #ifdef DEBUG
@@ -1031,32 +1027,27 @@ static BOOL mShowReport = false;
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
-            // must go in viewdidappear
+            // Hide status bar and navigation bar (top)
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-            
-            // Hides tab bar
-            [self showTabBarWithAnimation:YES];
-            [myTableView layoutIfNeeded];
-
-            self.myTableViewHeightConstraint.constant = 5;
-            
-            // Hides status bar
             if ([MLConstants iosVersion]>=7.0f)
                 [[UIApplication sharedApplication] setStatusBarHidden:YES
                                                         withAnimation:UIStatusBarAnimationSlide];
-
+ 
+            self.myTableViewHeightConstraint.constant = 5;
         }
         else {
-            // Shows navigation bar
+            // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
+            if ([MLConstants iosVersion]>=7.0f)
+                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
             
-            // Displays tab bar
-            [self showTabBarWithAnimation:YES];
-            [myTableView layoutIfNeeded];
-
             self.myTableViewHeightConstraint.constant = 49;
         }
-    }
+        
+        [self showTabBarWithAnimation:YES];
+        [myTableView layoutIfNeeded];
+
+    } // iPhone
     
     [super viewDidLayoutSubviews];
     [self.myTabBar invalidateIntrinsicContentSize];

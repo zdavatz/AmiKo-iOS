@@ -24,6 +24,8 @@
 @import UIKit;
 #import "MLMedication.h"
 
+//#define FIX_ISSUE_38
+
 enum {
     eAips=0,
     eFavorites=1,
@@ -55,7 +57,7 @@ enum {
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
 @property (nonatomic, retain) IBOutlet UITabBar *myTabBar;
 @property (nonatomic, retain) IBOutlet UIToolbar *myToolBar;
-@property (nonatomic, weak) IBOutlet NSLayoutConstraint *myTableViewHeightConstraint;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *myTableViewHeightConstraint;  // Unused ?
 
 @property (nonatomic, retain) UIAlertController *pickerSheet;
 @property (nonatomic, retain) UIPickerView *pickerView;
