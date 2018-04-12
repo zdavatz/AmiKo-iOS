@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_9" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -20,11 +20,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="1">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="812" height="375"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <toolbar clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="404">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="0.0" width="812" height="44"/>
                     <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="494"/>
@@ -61,9 +61,14 @@
                         </barButtonItem>
                     </items>
                     <color key="tintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <variation key="heightClass=regular">
+                        <mask key="constraints">
+                            <exclude reference="494"/>
+                        </mask>
+                    </variation>
                 </toolbar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="41">
-                    <rect key="frame" x="0.0" y="44" width="375" height="523"/>
+                    <rect key="frame" x="0.0" y="44" width="812" height="281"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="55"/>
@@ -71,10 +76,12 @@
                     </connections>
                 </tableView>
                 <tabBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="465" colorLabel="IBBuiltInLabel-Purple">
-                    <rect key="frame" x="0.0" y="567" width="375" height="100"/>
+                    <rect key="frame" x="0.0" y="325" width="812" height="50"/>
                     <color key="backgroundColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="100" id="Udo-66-NqE"/>
+                        <constraint firstAttribute="height" constant="80" id="Udo-66-NqE">
+                            <variation key="heightClass=compact-widthClass=compact" constant="50"/>
+                        </constraint>
                     </constraints>
                     <items>
                         <tabBarItem title="AIPS" image="maindb.png" id="467"/>
@@ -84,6 +91,11 @@
                     </items>
                     <color key="tintColor" red="0.94901960780000005" green="0.77465540129999999" blue="0.2309191005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="barTintColor" red="0.95714530109489049" green="0.95777258211678828" blue="0.95680314781021902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <variation key="heightClass=regular">
+                        <mask key="constraints">
+                            <include reference="Udo-66-NqE"/>
+                        </mask>
+                    </variation>
                     <connections>
                         <outlet property="delegate" destination="-1" id="473"/>
                     </connections>
@@ -102,8 +114,56 @@
                 <constraint firstItem="41" firstAttribute="bottom" secondItem="465" secondAttribute="top" id="480"/>
                 <constraint firstItem="465" firstAttribute="bottom" secondItem="1" secondAttribute="bottom" id="486"/>
                 <constraint firstItem="41" firstAttribute="top" secondItem="404" secondAttribute="bottom" id="491"/>
+                <constraint firstItem="404" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="3OI-ni-S0g"/>
+                <constraint firstAttribute="trailing" secondItem="404" secondAttribute="trailing" id="6Hp-XK-M4e"/>
+                <constraint firstItem="41" firstAttribute="leading" secondItem="465" secondAttribute="leading" id="QkY-Cs-auo"/>
+                <constraint firstItem="404" firstAttribute="leading" secondItem="41" secondAttribute="leading" id="Vlo-au-L9k"/>
+                <constraint firstAttribute="bottom" secondItem="465" secondAttribute="bottom" id="Xta-uQ-htP"/>
+                <constraint firstItem="404" firstAttribute="trailing" secondItem="41" secondAttribute="trailing" id="hBc-7b-yZH"/>
+                <constraint firstItem="41" firstAttribute="top" secondItem="1" secondAttribute="top" id="jqM-xY-EWd"/>
+                <constraint firstItem="41" firstAttribute="top" secondItem="404" secondAttribute="bottom" id="l9S-np-T90"/>
+                <constraint firstItem="465" firstAttribute="top" secondItem="41" secondAttribute="bottom" id="mjk-xq-C8C"/>
+                <constraint firstItem="41" firstAttribute="trailing" secondItem="465" secondAttribute="trailing" id="vJl-ak-4o3"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="6CW-9D-EnN"/>
+            <viewLayoutGuide key="safeArea" id="gn4-z2-AlU"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="3OI-ni-S0g"/>
+                    <exclude reference="6Hp-XK-M4e"/>
+                    <exclude reference="Vlo-au-L9k"/>
+                    <exclude reference="hBc-7b-yZH"/>
+                    <exclude reference="QkY-Cs-auo"/>
+                    <exclude reference="jqM-xY-EWd"/>
+                    <exclude reference="l9S-np-T90"/>
+                    <exclude reference="vJl-ak-4o3"/>
+                    <exclude reference="Xta-uQ-htP"/>
+                    <exclude reference="mjk-xq-C8C"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular">
+                <mask key="constraints">
+                    <exclude reference="451"/>
+                    <exclude reference="452"/>
+                    <exclude reference="457"/>
+                    <include reference="3OI-ni-S0g"/>
+                    <include reference="6Hp-XK-M4e"/>
+                    <include reference="Vlo-au-L9k"/>
+                    <include reference="hBc-7b-yZH"/>
+                    <exclude reference="450"/>
+                    <exclude reference="453"/>
+                    <exclude reference="480"/>
+                    <exclude reference="491"/>
+                    <include reference="QkY-Cs-auo"/>
+                    <include reference="jqM-xY-EWd"/>
+                    <include reference="l9S-np-T90"/>
+                    <include reference="vJl-ak-4o3"/>
+                    <exclude reference="469"/>
+                    <exclude reference="470"/>
+                    <exclude reference="486"/>
+                    <include reference="Xta-uQ-htP"/>
+                    <include reference="mjk-xq-C8C"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="74" y="68"/>
         </view>
     </objects>
