@@ -1957,6 +1957,8 @@ static BOOL mShowReport = false;
     [mMedBasket removeAllObjects];
     mMedBasket = medBasket; // Save the basket so we can keep adding medicines to the interactions later on
 
+    mSearchInteractions = true;
+    
     // right
 #if 1
     // Extract section ids
