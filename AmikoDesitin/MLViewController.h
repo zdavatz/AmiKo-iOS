@@ -60,6 +60,7 @@ enum {
 @property (nonatomic, retain) UIAlertController *pickerSheet;
 @property (nonatomic, retain) UIPickerView *pickerView;
 
+
 - (id) initWithLaunchState:(int)state;
 - (void) setLaunchState:(int)state;
 
@@ -71,6 +72,7 @@ enum {
 - (void) switchToPatientEditView;
 - (void) switchToDoctorEditView;
 - (void) showReport:(id)sender;
+- (void) switchToDrugInteractionViewFromPrescription: (NSMutableDictionary *)medBasket;
 - (void) switchToDrugInteractionView;
 - (void) switchToPrescriptionView;
 

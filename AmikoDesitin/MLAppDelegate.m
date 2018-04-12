@@ -298,10 +298,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSSetUncaughtExceptionHandler(&onUncaughtException);
     self.editMode = EDIT_MODE_UNDEFINED;
     
-#if 1 // Issue 54
+    // Issue #54
     [mainRevealController revealToggle:nil];
     [mainRevealController revealToggle:nil];
-#endif
     
     return !launchedFromShortcut;
 }

@@ -123,6 +123,7 @@ static BOOL mShowReport = false;
     SWRevealViewController *mainRevealController;
     
     MLSecondViewController *secondViewController;
+
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
     MLAmkListViewController *amkListViewController;
@@ -258,7 +259,8 @@ static BOOL mShowReport = false;
             if (b==btn)
                 [b setTintColor:MAIN_TINT_COLOR];
         }
-    } else {
+    }
+    else {
         for (UIBarButtonItem *b in [myToolBar items]) {
             [b setTintColor:nil];   // Default color
             if (b==btn)
@@ -300,9 +302,8 @@ static BOOL mShowReport = false;
     // Used by tableview
     medIdArray = [NSMutableArray array];
     
-    secondViewController = nil;//[[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController" bundle:nil];
-    otherViewNavigationController = nil;//[[UINavigationController alloc] initWithRootViewController:secondView];
-    
+    secondViewController = nil;
+    otherViewNavigationController = nil;
     menuViewController = nil;
     menuViewNavigationController = nil;
     
@@ -414,8 +415,6 @@ static BOOL mShowReport = false;
         case ePrescription:
             goBackToMainView = true;
             mSearchInteractions = false;
-            NSLog(@"TODO: %s, line %i", __FUNCTION__, __LINE__);
-            //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
             break;
             
@@ -691,6 +690,7 @@ static BOOL mShowReport = false;
     for (UIBarButtonItem *b in [myToolBar items]) {
         [b setTintColor:[UIColor lightGrayColor]];   // Default color
     }
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         searchState /= 2;
     
@@ -855,29 +855,37 @@ static BOOL mShowReport = false;
     return YES;
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                 duration:(NSTimeInterval)duration
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        } else {
+        }
+        else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
     }
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
         if ([MLConstants iosVersion]>=7.0f) {
             [self setToolbarItemsFontSize];
         }
         
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        {
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             
+            // Items at index 1,3,5,7 are flexible space
             [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
@@ -893,7 +901,8 @@ static BOOL mShowReport = false;
             [self hideTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
             self.myTableViewHeightConstraint.constant = 5;
-        } else {
+        }
+        else {
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
             
@@ -917,19 +926,12 @@ static BOOL mShowReport = false;
     }
 }
 
-- (void) viewWillDisappear:(BOOL)animated
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);    
-#endif
-    
-    [super viewWillDisappear:animated];
-}
+#pragma mark -
 
 - (void) viewWillAppear:(BOOL)animated
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);    
+    NSLog(@"%s", __FUNCTION__);
 #endif
     
     [super viewWillAppear:animated];
@@ -937,9 +939,12 @@ static BOOL mShowReport = false;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft ||
+            orientation == UIInterfaceOrientationLandscapeRight)
+        {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        } else {
+        }
+        else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
         
@@ -949,14 +954,16 @@ static BOOL mShowReport = false;
         [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
     }
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
         if ([MLConstants iosVersion]>=7.0f) {
             [self setToolbarItemsFontSize];
         }
                 
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
- 
+        if (orientation == UIInterfaceOrientationLandscapeLeft ||
+            orientation == UIInterfaceOrientationLandscapeRight)
+        {
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             
@@ -967,7 +974,8 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
                         
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-        } else {
+        }
+        else {
             //
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
@@ -981,7 +989,7 @@ static BOOL mShowReport = false;
             // [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
         }
     }
-
+    
     if (!mSearchInteractions) {
         if (mUsedDatabase == kAips)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
@@ -1009,40 +1017,49 @@ static BOOL mShowReport = false;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft ||
+            orientation == UIInterfaceOrientationLandscapeRight)
+        {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        } else {
+        }
+        else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
     }
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft ||
+            orientation == UIInterfaceOrientationLandscapeRight)
+        {
             // must go in viewdidappear
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
             
             // Hides tab bar
             [self hideTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
+
             self.myTableViewHeightConstraint.constant = 5;
             
             // Hides status bar
             if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+                [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                        withAnimation:UIStatusBarAnimationSlide];
 
-        } else {
+        }
+        else {
             // Shows navigation bar
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
             
             // Displays tab bar
             [self showTabBarWithAnimation:YES];
             [myTableView layoutIfNeeded];
+
             self.myTableViewHeightConstraint.constant = 49;
         }
     }
     
     [super viewDidLayoutSubviews];
     [self.myTabBar invalidateIntrinsicContentSize];
-    
     [self setBarButtonItemsWith:mCurrentSearchState];
 }
 
@@ -1148,10 +1165,15 @@ static BOOL mShowReport = false;
             searchField.translucent = YES;
         }
     }    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(10.0f, 0.0f, searchFieldWidth-20.0f, 44.0f)];
+        searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        searchField.delegate = self;
+
         // Note: iOS7
         if ([MLConstants iosVersion]>=7.0f) {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(10.0f, 0.0f, searchFieldWidth-20.0f, 44.0f)];
             searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             searchField.barStyle = UIBarStyleDefault;
             searchField.barTintColor = [UIColor clearColor];
@@ -1159,11 +1181,7 @@ static BOOL mShowReport = false;
             searchField.backgroundColor = [UIColor clearColor];
             searchField.tintColor = [UIColor lightGrayColor];    // cursor color
             searchField.translucent = YES;
-        } else {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(10.0f, 0.0f, searchFieldWidth-20.0f, 44.0f)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         }
-        searchField.delegate = self;
         
         UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
         // searchBarView.autoresizingMask = 0;
@@ -1173,6 +1191,11 @@ static BOOL mShowReport = false;
         [searchField becomeFirstResponder];
         
         self.navigationItem.titleView = searchBarView;
+
+#if 1 // issue #22
+        [self.navigationController setNavigationBarHidden:TRUE animated:FALSE];
+        [self.navigationController setNavigationBarHidden:FALSE animated:FALSE];
+#endif
     }
     
     mBarButtonItemName = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Preparation", "Full toolbar")];
@@ -1247,9 +1270,10 @@ static BOOL mShowReport = false;
     if (titleViewController!=nil && secondViewController!=nil) {
         @try {
             [titleViewController removeObserver:secondViewController forKeyPath:@"javaScript"];
-        } @catch (NSException *exception) {
+        }
+        @catch (NSException *exception) {
             // Do nothing, obviously the observer wasn't attached and an exception was thrown
-            NSLog(@"Expection thrown...");
+            NSLog(@"Exception thrown...");
         }
     }
 }
@@ -1588,7 +1612,9 @@ static BOOL mShowReport = false;
     });
 }
 
-- (void) addTitle: (NSString *)title andPackInfo: (NSString *)packinfo andMedId: (long)medId
+- (void) addTitle: (NSString *)title
+      andPackInfo: (NSString *)packinfo
+         andMedId: (long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1611,7 +1637,9 @@ static BOOL mShowReport = false;
     [medi addObject:m];
 }
 
-- (void) addTitle:(NSString *)title andAuthor:(NSString *)author andMedId:(long)medId
+- (void) addTitle:(NSString *)title
+        andAuthor:(NSString *)author
+         andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1631,7 +1659,10 @@ static BOOL mShowReport = false;
     [medi addObject:m];
 }
 
-- (void) addTitle:(NSString *)title andAtcCode:(NSString *)atccode andAtcClass:(NSString *)atcclass andMedId:(long)medId
+- (void) addTitle:(NSString *)title
+       andAtcCode:(NSString *)atccode
+      andAtcClass:(NSString *)atcclass
+         andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1680,7 +1711,10 @@ static BOOL mShowReport = false;
     [medi addObject:m];
 }
 
-- (void) addTitle:(NSString *)title andRegnrs:(NSString *)regnrs andAuthor:(NSString *)author andMedId:(long)medId
+- (void) addTitle:(NSString *)title
+        andRegnrs:(NSString *)regnrs
+        andAuthor:(NSString *)author
+         andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1729,7 +1763,9 @@ static BOOL mShowReport = false;
     [medi addObject:m];
 }
 
-- (void) addTitle:(NSString *)title andApplications:(NSString *)applications andMedId:(long)medId
+- (void) addTitle:(NSString *)title
+  andApplications:(NSString *)applications
+         andMedId:(long)medId
 {
     DataObject *m = [[DataObject alloc] init];
     
@@ -1773,7 +1809,9 @@ static BOOL mShowReport = false;
                 for (MLMedication *m in searchResults) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         [favoriteKeyData addObject:m.regnrs];   
-                        [self addTitle:m.title andPackInfo:m.packInfo andMedId:m.medId];
+                        [self addTitle:m.title
+                           andPackInfo:m.packInfo
+                              andMedId:m.medId];
                     }
                 }
             }
@@ -1782,7 +1820,9 @@ static BOOL mShowReport = false;
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
                             [favoriteKeyData addObject:m.regnrs];       
-                            [self addTitle:m.title andPackInfo:m.packInfo andMedId:m.medId];
+                            [self addTitle:m.title
+                               andPackInfo:m.packInfo
+                                  andMedId:m.medId];
                         }
                     }
                 }
@@ -1793,14 +1833,18 @@ static BOOL mShowReport = false;
                 if (mUsedDatabase == kAips) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         [favoriteKeyData addObject:m.regnrs];   
-                        [self addTitle:m.title andAuthor:m.auth andMedId:m.medId];
+                        [self addTitle:m.title
+                             andAuthor:m.auth
+                              andMedId:m.medId];
                     }
                 }
                 else if (mUsedDatabase == kFavorites) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
                             [favoriteKeyData addObject:m.regnrs];       
-                            [self addTitle:m.title andAuthor:m.auth andMedId:m.medId];
+                            [self addTitle:m.title
+                                 andAuthor:m.auth
+                                  andMedId:m.medId];
                         }
                     }
                 }
@@ -1811,14 +1855,20 @@ static BOOL mShowReport = false;
                 if (mUsedDatabase == kAips) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         [favoriteKeyData addObject:m.regnrs];   
-                        [self addTitle:m.title andAtcCode:m.atccode andAtcClass:m.atcClass andMedId:m.medId];
+                        [self addTitle:m.title
+                            andAtcCode:m.atccode
+                           andAtcClass:m.atcClass
+                              andMedId:m.medId];
                     }
                 }
                 else if (mUsedDatabase == kFavorites) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
                             [favoriteKeyData addObject:m.regnrs];      
-                            [self addTitle:m.title andAtcCode:m.atccode andAtcClass:m.atcClass andMedId:m.medId];
+                            [self addTitle:m.title
+                                andAtcCode:m.atccode
+                               andAtcClass:m.atcClass
+                                  andMedId:m.medId];
                         }
                     }
                 }
@@ -1829,14 +1879,20 @@ static BOOL mShowReport = false;
                 if (mUsedDatabase == kAips) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         [favoriteKeyData addObject:m.regnrs];   
-                        [self addTitle:m.title andRegnrs:m.regnrs andAuthor:m.auth andMedId:m.medId];
+                        [self addTitle:m.title
+                             andRegnrs:m.regnrs
+                             andAuthor:m.auth
+                              andMedId:m.medId];
                     }
                 }
                 else if (mUsedDatabase == kFavorites) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
                             [favoriteKeyData addObject:m.regnrs];      
-                            [self addTitle:m.title andRegnrs:m.regnrs andAuthor:m.auth andMedId:m.medId];
+                            [self addTitle:m.title
+                                 andRegnrs:m.regnrs
+                                 andAuthor:m.auth
+                                  andMedId:m.medId];
                         }
                     }
                 }
@@ -1847,14 +1903,18 @@ static BOOL mShowReport = false;
                 if (mUsedDatabase == kAips) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         [favoriteKeyData addObject:m.regnrs];  
-                        [self addTitle:m.title andApplications:m.application andMedId:m.medId];
+                        [self addTitle:m.title
+                       andApplications:m.application
+                              andMedId:m.medId];
                     }
                 }
                 else if (mUsedDatabase == kFavorites) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
                             [favoriteKeyData addObject:m.regnrs];      
-                            [self addTitle:m.title andApplications:m.application andMedId:m.medId];
+                            [self addTitle:m.title
+                           andApplications:m.application
+                                  andMedId:m.medId];
                         }
                     }
                 }
@@ -1895,12 +1955,76 @@ static BOOL mShowReport = false;
     return YES;
 }
 
-- (void) buttonPressed
-{
-    // TODO
-}
-
 #pragma mark -
+
+- (void) switchToDrugInteractionViewFromPrescription: (NSMutableDictionary *)medBasket
+{
+    mainRevealController = self.revealViewController;
+
+    mShowReport = false;
+    
+    [mMedBasket removeAllObjects];
+    mMedBasket = medBasket; // Save the basket so we can keep adding medicines to the interactions later on
+
+    // right
+#if 1
+    // Extract section ids
+    NSArray *listofSectionIds = [NSArray array];
+    // Extract section titles
+    NSArray *listofSectionTitles = [NSArray array];
+    
+    if (titleViewController!=nil) {
+        [titleViewController removeFromParentViewController];
+        titleViewController = nil;
+    }
+    titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
+                                                           sectionIds:listofSectionIds
+                                                          andLanguage:[MLConstants appLanguage]];
+
+    mainRevealController.rightViewController = titleViewController;
+#endif
+    
+    // front
+#if 1
+    if (secondViewController!=nil) {
+        // [secondViewController removeFromParentViewController];
+        secondViewController = nil;
+    }
+    
+    secondViewController =
+    [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
+                                             bundle:nil
+                                              title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
+                                           andParam:2];
+    
+    // Update medication basket
+    secondViewController.dbAdapter = mDb;
+    secondViewController.titleViewController = titleViewController;
+    
+    secondViewController.medBasket = medBasket;
+    secondViewController.htmlStr = @"Interactions";
+    
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
+    }
+    otherViewNavigationController =
+        [[UINavigationController alloc] initWithRootViewController:secondViewController];
+
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+#endif
+    
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+    
+    // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
+    [titleViewController addObserver:secondViewController
+                          forKeyPath:@"javaScript"
+                             options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                             context:@"javaScriptChanged"];
+#ifdef DEBUG
+    report_memory();
+#endif
+}
 
 - (void) switchToDrugInteractionView
 {
@@ -1929,7 +2053,8 @@ static BOOL mShowReport = false;
         [otherViewNavigationController removeFromParentViewController];
         otherViewNavigationController = nil;
     }
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];    
+    otherViewNavigationController =
+        [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 
     //
@@ -2174,15 +2299,17 @@ static BOOL mShowReport = false;
     }
 
     mShowReport = false;
+    
     if (secondViewController!=nil) {
         // [secondViewController removeFromParentViewController];
         secondViewController = nil;
     }
 
-    secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
-                                                                    bundle:nil
-                                                                     title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
-                                                                  andParam:2];
+    secondViewController =
+    [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
+                                             bundle:nil
+                                              title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
+                                           andParam:2];
 
     if (mSearchInteractions==false) {
         // Load style sheet from file

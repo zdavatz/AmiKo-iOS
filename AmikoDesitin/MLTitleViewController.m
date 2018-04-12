@@ -40,7 +40,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
     // iVars
     NSMutableArray *mSectionTitles;
     NSMutableArray *mSectionIds;
-    NSString *mAppLanguage;
+    NSString *mAppLanguage;     // For section titles
 }
 
 @synthesize myMenuView;
@@ -53,7 +53,9 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
     return self;
 }
 
-- (id) initWithMenu: (NSArray *)sectionTitles sectionIds: (NSArray *)sectionIds andLanguage:(NSString *)appLanguage
+- (id) initWithMenu: (NSArray *)sectionTitles
+         sectionIds: (NSArray *)sectionIds
+        andLanguage: (NSString *)appLanguage
 {
     self = [super init];
     if (self) {
@@ -61,10 +63,12 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
         for (NSString *title in sectionTitles) {
             [mSectionTitles addObject:title];
         }
+
         mSectionIds = [[NSMutableArray alloc] init];
         for (NSString *identifier in sectionIds) {
             [mSectionIds addObject:identifier];
         }
+
         mAppLanguage = appLanguage;
     }
     
@@ -186,7 +190,8 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
                 }
             }
         }
-    } else if ([mAppLanguage isEqualToString:@"fr"]) {
+    }
+    else if ([mAppLanguage isEqualToString:@"fr"]) {
         for (int i=0; i<20; i++) {
             NSString *originalString = [mSectionTitles[indexPath.row] lowercaseString];
             NSString *compareString = [SectionTitle_FR[i] lowercaseString];
@@ -198,6 +203,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
             }
         }
     }
+
     label.text = mSectionTitles[indexPath.row];
     if ([label.text length]>23)
         label.text = [label.text substringToIndex:23];

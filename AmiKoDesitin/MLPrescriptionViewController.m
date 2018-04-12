@@ -320,13 +320,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     if (editedMedicines) {
 #ifdef DEBUG
-        NSLog(@"%s %d", __FUNCTION__, __LINE__);
+        //NSLog(@"%s %d", __FUNCTION__, __LINE__);
 #endif
         [self loadDefaultDoctor];
     }
     else {
 #ifdef DEBUG
-        NSLog(@"%s %d", __FUNCTION__, __LINE__);
+        //NSLog(@"%s %d", __FUNCTION__, __LINE__);
 #endif
         // do the following only if we haven't added any medicines yet
         if (![self loadDefaultPrescription]) {
@@ -927,17 +927,37 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     lastUsedURL = nil;
 }
 
+// See AmiKo OSX onCheckForInteractions
 - (IBAction) checkForInteractions:(id)sender
 {
     //NSLog(@"%s", __FUNCTION__);
+    
+    NSMutableDictionary *medBasket = [[NSMutableDictionary alloc] init];
+    // pushToMedBasket
+    for (MLProduct *p in prescription.medications) {
+        NSString *title = [p title];
+        title = [title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if ([title length]>30) {
+            title = [title substringToIndex:30];
+            title = [title stringByAppendingString:@"..."];
+        }
+        //NSLog(@"%d title. <%@>", __LINE__, title);
+
+        // Add med to medication basket
+        // We must build a dictionary of MLMedication, not of MLProduct
+        MLMedication *m = [[MLMedication alloc] init];
+        m.regnrs = p.regnrs;
+        m.auth = p.auth;        // owner
+        m.atccode = p.atccode;  // We only need this one for interactions
+        m.title = p.title;
+        [medBasket setObject:m forKey:title];
+    }
+    
+    //NSLog(@"%s %d, count:%ld, %@", __FUNCTION__, __LINE__, [medBasket count], medBasket);
+
     UIViewController *nc_rear = self.revealViewController.rearViewController;
     MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
-    
-    // TODO:
-    // vc_rear.mCurrentIndexPath = -1
-    // pushToMedBasket
-    
-    [vc_rear switchToDrugInteractionView];
+    [vc_rear switchToDrugInteractionViewFromPrescription: medBasket];
 }
 
 - (IBAction) savePrescription:(id)sender

@@ -46,7 +46,7 @@
 @property (nonatomic, retain) IBOutlet UIView *findPanel;
 @property (nonatomic, copy) NSString *htmlStr;
 @property (nonatomic, weak) MLDBAdapter *dbAdapter;
-@property (nonatomic, weak) NSMutableDictionary *medBasket;
+@property (nonatomic, strong) NSMutableDictionary *medBasket;   // important: strong
 @property (nonatomic, weak) MLTitleViewController *titleViewController;
 
 - (IBAction) moveToNextHighlight:(id)sender;

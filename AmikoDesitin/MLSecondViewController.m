@@ -78,7 +78,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons
+- (id) initWithNibName:(NSString *)nibNameOrNil
+                bundle:(NSBundle *)nibBundleOrNil
+                 title:(NSString *)title
+              andParam:(int)numRevealButtons
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
@@ -96,7 +99,9 @@
     return self;
 }
 
-- (id) initWithNibName: (NSString *)nibNameOrNil bundle: (NSBundle *)nibBundleOrNil withString: (NSString *)html
+- (id) initWithNibName: (NSString *)nibNameOrNil
+                bundle: (NSBundle *)nibBundleOrNil
+            withString: (NSString *)html
 {
     self = [super init];
 
@@ -175,6 +180,8 @@
     }
 }
 
+#pragma mark -
+
 - (void) viewWillAppear:(BOOL)animated
 {
 #ifdef DEBUG
@@ -186,7 +193,9 @@
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft ||
+            orientation == UIInterfaceOrientationLandscapeRight)
+        {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
         } else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
@@ -198,7 +207,9 @@
         }
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        if (orientation == UIInterfaceOrientationLandscapeLeft ||
+            orientation == UIInterfaceOrientationLandscapeRight)
+        {
             // Add search bar as title view to navigation bar
             self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
             self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -238,6 +249,7 @@
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
         }
+
         if ([MLConstants iosVersion]>=7.0f) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
             searchField.barTintColor = [UIColor clearColor];//[UIColor colorWithWhite:0.9 alpha:0.0];
@@ -279,7 +291,6 @@
 
 - (void) viewDidLoad
 {
-    
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
 #endif
@@ -382,7 +393,8 @@
 - (void) willRotateToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
         else
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
@@ -394,7 +406,9 @@
         }
     }
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+            toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+        {
             // Add search bar as title view to navigation bar
             self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
             self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;

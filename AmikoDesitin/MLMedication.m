@@ -47,8 +47,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@ id:%ld, regnrs:%@ <%@>",
-            NSStringFromClass([self class]), self.medId, self.regnrs, self.title];
+    return [NSString stringWithFormat:@"%@ id:%ld, regnrs:%@, atccode:%@ <%@>",
+            NSStringFromClass([self class]), medId, regnrs, atccode, title];
 }
 
 @end
