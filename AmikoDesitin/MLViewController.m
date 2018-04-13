@@ -875,9 +875,8 @@ static BOOL mShowReport = false;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         
-        if ([MLConstants iosVersion]>=7.0f) {
+        if ([MLConstants iosVersion]>=7.0f)
             [self setToolbarItemsFontSize];
-        }
         
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -1005,7 +1004,8 @@ static BOOL mShowReport = false;
 {
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    //NSLog(@"gestureRecognizers:%ld %@", [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
+//    for (id gr in self.view.gestureRecognizers)
+//        NSLog(@"gestureRecognizer: %@", [gr class]);
 #endif
     
     [super viewDidAppear:animated];
@@ -1155,7 +1155,7 @@ static BOOL mShowReport = false;
             searchField.backgroundColor = [UIColor clearColor];
             searchField.translucent = YES;
         }
-    }    
+    } // iPad
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
@@ -1174,20 +1174,28 @@ static BOOL mShowReport = false;
             searchField.translucent = YES;
         }
         
+#if 1 // issue 58
+        // Add the search field directly, without using an intermediate searchBarView
+        self.navigationItem.titleView = searchField;
+#else // original
         UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
-        // searchBarView.autoresizingMask = 0;
+        //searchBarView.autoresizingMask = UIViewAutoresizingNone;
         [searchBarView addSubview:searchField];
-        
+        self.navigationItem.titleView = searchBarView;
+#endif
+
         // Show keyboard
         [searchField becomeFirstResponder];
         
-        self.navigationItem.titleView = searchBarView;
-
-#if 1 // issue #22
-        [self.navigationController setNavigationBarHidden:TRUE animated:FALSE];
-        [self.navigationController setNavigationBarHidden:FALSE animated:FALSE];
+#if 1 // issue #57
+        UIGestureRecognizer *tapper =
+        [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(handleSingleTap:)];
+        tapper.cancelsTouchesInView = NO;
+        [self.view addGestureRecognizer:tapper];
 #endif
-    }
+    
+    } // iPhone
     
     mBarButtonItemName = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Preparation", "Full toolbar")];
     
@@ -1240,6 +1248,12 @@ static BOOL mShowReport = false;
     favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favoriteData.favMedsSet];
     
     [self checkLastDBSync];
+}
+
+// issue #57 - Removes keyboard on iPhones
+- (void) handleSingleTap:(UITapGestureRecognizer *)sender
+{
+    [searchField resignFirstResponder];
 }
 
 - (void) myShowMenuMethod:(id)sender

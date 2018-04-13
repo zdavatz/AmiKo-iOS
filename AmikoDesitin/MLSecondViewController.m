@@ -197,15 +197,18 @@
             orientation == UIInterfaceOrientationLandscapeRight)
         {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        } else {
+        }
+        else {
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
+
         if ([MLConstants iosVersion]>=7.0f) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
             searchField.barTintColor = [UIColor lightGrayColor];
             searchField.translucent = YES;
         }
-    }
+    } // iPad
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
@@ -256,7 +259,7 @@
             searchField.backgroundImage = [UIImage new];
             searchField.translucent = YES;
         }
-    }
+    } // iPhone
     
     mCurrentSearch = @"";
     // Reset search field place holder
@@ -274,6 +277,8 @@
 {
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
+//    for (id gr in self.view.gestureRecognizers)
+//        NSLog(@"gestureRecognizer: %@", [gr class]);
 #endif
     
     [super viewDidAppear:animated];
@@ -293,6 +298,8 @@
 {
 #ifdef DEBUG
     NSLog(@"%s", __PRETTY_FUNCTION__);
+//    for (id gr in self.view.gestureRecognizers)
+//        NSLog(@"gestureRecognizer: %@", [gr class]);
 #endif
     
     [super viewDidLoad];
@@ -361,7 +368,6 @@
         self.navigationItem.titleView = searchBarView;
     }
     
-    // PanGestureRecognizer goes here
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
