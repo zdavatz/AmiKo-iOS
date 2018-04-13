@@ -524,7 +524,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     CGRect frame = CGRectMake(0, 0, CGRectGetWidth(tableView.frame), 0);
     UIView *view = [[UIView alloc] initWithFrame:frame];
     
-    CGRect labelFrame = CGRectMake(kMedCellHorMargin, 2, 200, kSectionHeaderHeight-2);
+    CGFloat leftMargin = 0.0;
+    if (@available(iOS 11, *))
+        leftMargin = self.view.safeAreaInsets.left;
+
+    CGRect labelFrame = CGRectMake(leftMargin+kMedCellHorMargin, 2, 200, kSectionHeaderHeight-2);
     UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
     label.font = [UIFont systemFontOfSize:13 weight:UIFontWeightLight];
     label.textColor = [UIColor darkGrayColor];
@@ -551,6 +555,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 
     [view addSubview:label];
+
     return view;
 }
 
@@ -696,7 +701,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
                     CGFloat xPos = frame.size.width;
                     if (@available(iOS 11, *))
-                        xPos -=self.view.safeAreaInsets.right;
+                        xPos -= self.view.safeAreaInsets.right;
                     
                     CGRect imageFrame = CGRectMake(xPos - (DOCTOR_TN_W + 20.0),
                                                    0,
