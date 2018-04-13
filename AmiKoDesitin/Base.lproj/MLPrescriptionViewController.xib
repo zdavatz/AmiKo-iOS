@@ -83,16 +83,8 @@
             <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" id="6VZ-nH-mBh">
-                    <variation key="heightClass=compact-widthClass=regular" constant="0.0"/>
-                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
-                    <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
-                </constraint>
-                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="AY3-Pv-bQf">
-                    <variation key="heightClass=compact-widthClass=regular" constant="0.0"/>
-                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
-                    <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
-                </constraint>
+                <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" id="6VZ-nH-mBh"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="AY3-Pv-bQf"/>
                 <constraint firstItem="f9a-IN-dWa" firstAttribute="top" secondItem="GX8-Pi-xe5" secondAttribute="top" id="CBK-0m-RWd"/>
                 <constraint firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Dt5-y1-ceE"/>
                 <constraint firstItem="f9a-IN-dWa" firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Hcn-n2-CoD"/>
