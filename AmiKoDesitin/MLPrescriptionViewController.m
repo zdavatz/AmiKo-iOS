@@ -1626,11 +1626,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s sharing <%@>", __FUNCTION__, urlAttachment);
 #endif
-    
-    //NSString *mailBody = @"My mail body"; // tested ok
+
+    NSString *mailBody = [NSString stringWithFormat:@"%@\n\niOS: %@\nAndroid: %@\n",
+                          NSLocalizedString(@"Open with", nil),
+                          @"https://itunes.apple.com/ch/app/generika/id520038123?mt=8",
+                          @"https://play.google.com/store/apps/details?id=org.oddb.generika"];
     //NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
 
-    NSArray *objectsToShare = @[urlAttachment]; // ok
+    NSArray *objectsToShare = @[mailBody, urlAttachment];
     
     UIActivityViewController *activityVC =
     [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
