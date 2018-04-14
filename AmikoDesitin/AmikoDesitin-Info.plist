@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>NSContactsUsageDescription</key>
-	<string>Bestehende Kunden importieren und im $(PRODUCT_NAME) Adressbuch ihre Rezepte verwalten.</string>
+	<string>Bestehende Kunden für Rezepterstellung ins $(PRODUCT_NAME) Adressbuch importieren.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) camera use.</string>
+	<string>Rezept mit Selfie unterschreiben.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) photos and video use.</string>
+	<string>Mit einem Foto unterschreiben.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
