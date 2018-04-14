@@ -5,9 +5,9 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Bestehende Kunden für Rezepterstellung ins $(PRODUCT_NAME) Adressbuch importieren.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Rezept mit Selfie unterschreiben.</string>
+	<string>Rezeptsignatur mit Selfie erstellen.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Mit einem Foto unterschreiben.</string>
+	<string>Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
