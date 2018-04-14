@@ -5,7 +5,7 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Bestehende Kunden importieren und im $(PRODUCT_NAME) Adressbuch ihre Rezepte verwalten.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) camera use</string>
+	<string>$(PRODUCT_NAME) camera use.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) photos and video use.</string>
 	<key>CFBundleDevelopmentRegion</key>
