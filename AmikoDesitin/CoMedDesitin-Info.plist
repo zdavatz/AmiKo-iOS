@@ -5,9 +5,9 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Import existing customers and manage them in your $(PRODUCT_NAME) address book.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) camera use.</string>
+	<string>Use Camera to sign with a Selfie.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) photos and video use.</string>
+	<string>Access Photo Library to sign with a Photo.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
