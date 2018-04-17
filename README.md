@@ -3,6 +3,9 @@ AmiKo-iPhone
 
 AmiKo for iPhone and iPad.
 
+## Latest Release News
+* https://medium.com/@zdavatz/rezeptfunktion-inkl-patienten-verwaltung-f%C3%BCr-amiko-comed-auf-iphone-ipad-c871723ec4b1
+
 ## Build the App with
 ```
 ./build.sh Release
