@@ -754,11 +754,19 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                               prescription.patient.givenName];
                 break;
             case 1:
+            {
+                NSString *gender = @"";
+                if ([prescription.patient.gender isEqualToString:@"man"])
+                    gender = NSLocalizedString(@"man", "Gender");
+                else if ([prescription.patient.gender isEqualToString:@"woman"])
+                    gender = NSLocalizedString(@"woman", "Gender");
+
                 label.text = [NSString stringWithFormat:@"%dkg/%dcm %@ %@",
                               prescription.patient.weightKg,
                               prescription.patient.heightCm,
-                              NSLocalizedString(prescription.patient.gender, "Gender"),
+                              gender,
                               prescription.patient.birthDate];
+            }
                 break;
             case 2:
                 label.text = prescription.patient.postalAddress;

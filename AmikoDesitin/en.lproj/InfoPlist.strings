@@ -1,3 +1,7 @@
 /* Localized versions of Info.plist keys */
 
+NSCameraUsageDescription = "Use Camera to sign with a Selfie.";
 
+NSContactsUsageDescription = "Import existing customers and manage them in your $(PRODUCT_NAME) address book.";
+
+NSPhotoLibraryUsageDescription = "Access Photo Library to sign with a Photo.";

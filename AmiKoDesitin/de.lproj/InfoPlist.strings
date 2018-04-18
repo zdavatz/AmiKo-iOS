@@ -1,1 +1,7 @@
 /* No Localized Strings */
+
+NSCameraUsageDescription = "Rezeptsignatur mit Selfie erstellen.";
+
+NSContactsUsageDescription = "Bestehende Kunden für Rezepterstellung ins $(PRODUCT_NAME) Adressbuch importieren.";
+
+NSPhotoLibraryUsageDescription = "Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.";

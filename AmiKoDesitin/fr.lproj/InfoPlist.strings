@@ -1,1 +1,7 @@
 /* No Localized Strings */
+
+NSCameraUsageDescription = "Valider la signature d'une ordonnance par un selfie.";
+
+NSContactsUsageDescription = "Importer des clients actuels dans le carnet d‘adresses $(PRODUCT_NAME) en vue de délivrer une ordonnance.";
+
+NSPhotoLibraryUsageDescription = "Valider la signature d'une ordonnance par une foto (p.e. par la signature).";
