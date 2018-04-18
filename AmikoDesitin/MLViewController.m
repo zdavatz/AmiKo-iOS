@@ -55,6 +55,9 @@
 // Requirement to show at least up to the first comma, no line wrapping
 #define CUSTOM_FONT_SIZE_PICKER
 
+// Fix issue #61
+#define TWO_ITEMS_ON_LEFT_NAV_BAR
+
 enum {
     kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
 };
@@ -1085,7 +1088,7 @@ static BOOL mShowReport = false;
     // Add icon (top center)
     // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon_32x32.png"]];
 
-    // Add desitin icon
+    // Left button(s) - Add desitin icon
     UIButton *logoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [logoButton setImage:[UIImage imageNamed:@"desitin_icon_32x32.png"] forState:UIControlStateNormal];
     logoButton.frame = CGRectMake(0.0f, 0.0f, 32.0f, 32.0f);
@@ -1093,18 +1096,23 @@ static BOOL mShowReport = false;
                    action:@selector(myShowMenuMethod:)
          forControlEvents:UIControlEventTouchUpInside];
 
-#if (__clang_major__ == 8) && (__clang_minor__ == 0)    // Xcode 8
-    if ([MLConstants iosVersion] >= 9.0f)
-#else
-    if (@available(iOS 9, *))  // this syntax requires Xcode 9
-#endif
-    {
+    if (@available(iOS 9, *)) {
         [logoButton.widthAnchor constraintEqualToConstant:32.0f].active = YES;
         [logoButton.heightAnchor constraintEqualToConstant:32.0f].active = YES;
     }
     
     UIBarButtonItem *appIconItem = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
-    self.navigationItem.leftBarButtonItem = appIconItem;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        self.navigationItem.leftBarButtonItem = appIconItem;
+
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+#ifndef TWO_ITEMS_ON_LEFT_NAV_BAR
+        // A single button on the left
+        self.navigationItem.leftBarButtonItem = appIconItem;
+#endif
+    }
     
     // Initialize menu view controllers
     if (menuViewController!=nil) {
@@ -1159,29 +1167,27 @@ static BOOL mShowReport = false;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
-        searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(10.0f, 0.0f, searchFieldWidth-20.0f, 44.0f)];
+        searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         searchField.delegate = self;
 
         // Note: iOS7
-        if ([MLConstants iosVersion]>=7.0f) {
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        if ([MLConstants iosVersion] >= 7.0f) {
             searchField.barStyle = UIBarStyleDefault;
             searchField.barTintColor = [UIColor clearColor];
             searchField.backgroundImage = [UIImage new];    // Necessary fo completely transparent search bar...
             searchField.backgroundColor = [UIColor clearColor];
             searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = YES;
+            searchField.translucent = NO;
         }
         
-#if 1 // issue 58
-        // Add the search field directly, without using an intermediate searchBarView
+#ifdef TWO_ITEMS_ON_LEFT_NAV_BAR
+        // Left
+        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchField];
+        self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:appIconItem, searchItem, nil];
+#else
+        // Middle
         self.navigationItem.titleView = searchField;
-#else // original
-        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
-        //searchBarView.autoresizingMask = UIViewAutoresizingNone;
-        [searchBarView addSubview:searchField];
-        self.navigationItem.titleView = searchBarView;
 #endif
 
         // Show keyboard
