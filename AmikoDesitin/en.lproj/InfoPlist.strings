@@ -2,6 +2,6 @@
 
 NSCameraUsageDescription = "Use Camera to sign with a Selfie.";
 
-NSContactsUsageDescription = "Import existing customers and manage them in your $(PRODUCT_NAME) address book.";
+NSContactsUsageDescription = "Import existing customers and manage them in your AmiKo/CoMed address book.";
 
 NSPhotoLibraryUsageDescription = "Access Photo Library to sign with a Photo.";
