@@ -1376,12 +1376,24 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     CGPoint p = [gesture locationInView:infoView];
     NSIndexPath *indexPath = [infoView indexPathForRowAtPoint:p];
-    
+    CGRect r = [infoView rectForSection:kSectionPatient];
+
     if (indexPath == nil) {
+        // TODO: if p is in the header section rect, show the camera, else return
+        if (CGRectContainsPoint(r, p) &&
+            (gesture.state == UIGestureRecognizerStateBegan)) {
+            NSLog(@"%s %d TODO: showCamera", __FUNCTION__, __LINE__);
+            return;
+        }
+        else {
 #ifdef DEBUG
-        NSLog(@"long press on table view but not on a row");
+            NSLog(@"long press on table view but not on a row, point: %@, rect: %@ state:%ld",
+                  NSStringFromCGPoint(p),
+                  NSStringFromCGRect(r),
+                  (long)gesture.state);
 #endif
-        return;
+            return;
+        }
     }
     
     if (gesture.state != UIGestureRecognizerStateBegan) {
@@ -1391,8 +1403,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return;
     }
     
-    if (indexPath.section != kSectionMedicines) {
+    if (indexPath.section == kSectionPatient) {
+        NSLog(@"%s %d TODO: show camera", __FUNCTION__, __LINE__);
+        return;
+    }
+    else if (indexPath.section != kSectionMedicines) {
 #ifdef DEBUG
+        // No long taps for Meta and Operator sections
         NSLog(@"Wrong section %ld", indexPath.section);
 #endif
         return;

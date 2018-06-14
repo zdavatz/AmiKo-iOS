@@ -288,6 +288,8 @@
 		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
+		FA256AB620D2D03200D41353 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = FA256AB520D2D03100D41353 /* camera.png */; };
+		FA256AB720D2D03200D41353 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = FA256AB520D2D03100D41353 /* camera.png */; };
 		FA4263702058117A00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4263712058117B00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
@@ -498,6 +500,7 @@
 		D5FFE1B118B1021B002D6159 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		D5FFE1B218B1021B002D6159 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FA256AB520D2D03100D41353 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = AmiKoDesitin/camera.png; sourceTree = SOURCE_ROOT; };
 		FA4511B6204ECAFD00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLDoctorViewController.xib; sourceTree = "<group>"; };
 		FA4511B9204ECBCB00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLPatientViewController.xib; sourceTree = "<group>"; };
 		FA4511BB204ECF9300899A77 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
@@ -937,6 +940,7 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA256AB520D2D03100D41353 /* camera.png */,
 				439F50F520122665000E82FC /* prescription-selected.png */,
 				439F50F620122665000E82FC /* prescription.png */,
 				439F50F720122665000E82FC /* prescription@2x-selected.png */,
@@ -1123,6 +1127,7 @@
 				D5A6F27617B16AA400EAB24B /* 28-star-gy.png in Resources */,
 				D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */,
 				D5A175621A9BC27400E69385 /* favorites-selected@2x.png in Resources */,
+				FA256AB620D2D03200D41353 /* camera.png in Resources */,
 				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
 				FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
@@ -1230,6 +1235,7 @@
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
 				932F8840206BDA4700B5A77E /* MLAmkListViewController.xib in Resources */,
+				FA256AB720D2D03200D41353 /* camera.png in Resources */,
 				FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */,
 				932F883F206BDA1D00B5A77E /* MLPatientViewController.xib in Resources */,
 				D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */,

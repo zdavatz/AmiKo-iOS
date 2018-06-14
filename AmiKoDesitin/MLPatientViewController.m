@@ -76,12 +76,18 @@ enum {
     // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
 #else
-    // Two buttons on the left (with spacer between them)
+    // Three buttons on the left (with spacer between them)
     UIBarButtonItem *cancelItem =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil)
                                      style:UIBarButtonItemStylePlain
                                     target:self
                                     action:@selector(cancelPatient:)];
+    
+    UIBarButtonItem *cameraItem =
+    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera.png"]
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(showCamera:)];
 #ifdef DYNAMIC_BUTTONS
     //cancelItem.enabled = NO; // Cancel always enabled
 #endif
@@ -93,7 +99,10 @@ enum {
     spacer.width = -15.0f;
     
     self.navigationItem.leftBarButtonItems =
-    [NSArray arrayWithObjects:revealButtonItem, spacer, cancelItem, nil];
+    [NSArray arrayWithObjects:
+                revealButtonItem, spacer,
+                cancelItem, spacer,
+                cameraItem, nil];
 #endif
     
     // Right button(s)
@@ -499,6 +508,11 @@ enum {
         [revealController setFrontViewPosition:FrontViewPositionLeftSide animated:YES];
     else
         [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+- (IBAction) showCamera:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
 }
 
 - (IBAction) cancelPatient:(id)sender
