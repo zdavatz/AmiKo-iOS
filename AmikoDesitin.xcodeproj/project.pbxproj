@@ -299,6 +299,12 @@
 		FA5FA7F7205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
 		FA5FA7F8205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
 		FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* MLDoctorViewController.m */; };
+		FA6A005A20D39B90002D3A33 /* MLPatientViewController+smartCard.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A005920D39B90002D3A33 /* MLPatientViewController+smartCard.m */; };
+		FA6A005B20D39B90002D3A33 /* MLPatientViewController+smartCard.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A005920D39B90002D3A33 /* MLPatientViewController+smartCard.m */; };
+		FA6A005E20D3B184002D3A33 /* MLPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A005C20D3B184002D3A33 /* MLPreviewView.m */; };
+		FA6A005F20D3B184002D3A33 /* MLPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A005C20D3B184002D3A33 /* MLPreviewView.m */; };
+		FA6A006120D3B26F002D3A33 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A006020D3B26F002D3A33 /* Vision.framework */; };
+		FA6A006220D3B27D002D3A33 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A006020D3B26F002D3A33 /* Vision.framework */; };
 		FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
 		FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
 		FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
@@ -518,6 +524,11 @@
 		FA5FA7FE205A745F00E0C042 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "../AmiKoDesitin/fr.lproj/MLViewController~iphone.strings"; sourceTree = "<group>"; };
 		FA662948204D541B0000904A /* MLDoctorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLDoctorViewController.h; path = AmiKoDesitin/MLDoctorViewController.h; sourceTree = SOURCE_ROOT; };
 		FA662949204D541B0000904A /* MLDoctorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLDoctorViewController.m; path = AmiKoDesitin/MLDoctorViewController.m; sourceTree = SOURCE_ROOT; };
+		FA6A005820D39B90002D3A33 /* MLPatientViewController+smartCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MLPatientViewController+smartCard.h"; path = "AmiKoDesitin/MLPatientViewController+smartCard.h"; sourceTree = SOURCE_ROOT; };
+		FA6A005920D39B90002D3A33 /* MLPatientViewController+smartCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "MLPatientViewController+smartCard.m"; path = "AmiKoDesitin/MLPatientViewController+smartCard.m"; sourceTree = SOURCE_ROOT; };
+		FA6A005C20D3B184002D3A33 /* MLPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPreviewView.m; path = AmiKoDesitin/MLPreviewView.m; sourceTree = SOURCE_ROOT; };
+		FA6A005D20D3B184002D3A33 /* MLPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPreviewView.h; path = AmiKoDesitin/MLPreviewView.h; sourceTree = SOURCE_ROOT; };
+		FA6A006020D3B26F002D3A33 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -525,6 +536,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA6A006120D3B26F002D3A33 /* Vision.framework in Frameworks */,
 				435D2E32202DA1B6001A829C /* Contacts.framework in Frameworks */,
 				D59E895618B7C0C100185094 /* MessageUI.framework in Frameworks */,
 				D5A31F6318B5263500F56BC5 /* libz.1.2.5.dylib in Frameworks */,
@@ -540,6 +552,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA6A006220D3B27D002D3A33 /* Vision.framework in Frameworks */,
 				FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */,
 				D59E895918B7C0E100185094 /* libz.1.2.5.dylib in Frameworks */,
 				D59E895818B7C0DB00185094 /* QuartzCore.framework in Frameworks */,
@@ -700,6 +713,10 @@
 		43A385092032CB08001A5849 /* front */ = {
 			isa = PBXGroup;
 			children = (
+				FA6A005D20D3B184002D3A33 /* MLPreviewView.h */,
+				FA6A005C20D3B184002D3A33 /* MLPreviewView.m */,
+				FA6A005820D39B90002D3A33 /* MLPatientViewController+smartCard.h */,
+				FA6A005920D39B90002D3A33 /* MLPatientViewController+smartCard.m */,
 				439F261F2028C8A600396C29 /* MLPatientViewController.h */,
 				439F26202028C8A700396C29 /* MLPatientViewController.m */,
 				FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */,
@@ -824,6 +841,7 @@
 		D5A6F23917B1692F00EAB24B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA6A006020D3B26F002D3A33 /* Vision.framework */,
 				435D2E31202DA1B6001A829C /* Contacts.framework */,
 				D59E895518B7C0C100185094 /* MessageUI.framework */,
 				D5A6F26617B16A2300EAB24B /* libsqlite3.0.dylib */,
@@ -1371,7 +1389,9 @@
 				D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
+				FA6A005E20D3B184002D3A33 /* MLPreviewView.m in Sources */,
 				4333432A201B6488006BFC23 /* MLPatient.m in Sources */,
+				FA6A005A20D39B90002D3A33 /* MLPatientViewController+smartCard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1417,7 +1437,9 @@
 				D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */,
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */,
+				FA6A005F20D3B184002D3A33 /* MLPreviewView.m in Sources */,
 				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
+				FA6A005B20D39B90002D3A33 /* MLPatientViewController+smartCard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

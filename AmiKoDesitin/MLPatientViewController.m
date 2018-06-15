@@ -7,6 +7,7 @@
 //
 
 #import "MLPatientViewController.h"
+#import "MLPatientViewController+smartCard.h"
 #import "SWRevealViewController.h"
 #import "MLContactsListViewController.h"
 #import "MLPatientDBAdapter.h"
@@ -76,18 +77,13 @@ enum {
     // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
 #else
-    // Three buttons on the left (with spacer between them)
+    // Two buttons on the left (with spacer between them)
     UIBarButtonItem *cancelItem =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil)
                                      style:UIBarButtonItemStylePlain
                                     target:self
                                     action:@selector(cancelPatient:)];
     
-    UIBarButtonItem *cameraItem =
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera.png"]
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(showCamera:)];
 #ifdef DYNAMIC_BUTTONS
     //cancelItem.enabled = NO; // Cancel always enabled
 #endif
@@ -100,9 +96,21 @@ enum {
     
     self.navigationItem.leftBarButtonItems =
     [NSArray arrayWithObjects:
-                revealButtonItem, spacer,
-                cancelItem, spacer,
-                cameraItem, nil];
+                revealButtonItem, spacer, cancelItem, nil];
+#endif
+    
+#if 1
+    // Middle button
+    
+    CGRect frame = CGRectMake(0, 0, 32, 32);
+    UIButton* cameraButton = [[UIButton alloc] initWithFrame:frame];
+    [cameraButton setBackgroundImage:[UIImage imageNamed:@"camera.png"]
+                            forState:UIControlStateNormal];
+
+    //[cameraButton setTitleColor:MAIN_TINT_COLOR forState:UIControlStateNormal];
+    [cameraButton addTarget:self action:@selector(handleCameraButton:) forControlEvents:UIControlEventTouchDown];
+//    cameraButton.backgroundColor = [UIColor grayColor];
+    self.navigationItem.titleView = cameraButton;
 #endif
     
     // Right button(s)
@@ -158,9 +166,12 @@ enum {
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+
     [mSex addTarget:self
              action:@selector(sexDefined:)
    forControlEvents:UIControlEventValueChanged];
+
+    [self initCamera];
 }
 
 #ifdef DEBUG
@@ -184,6 +195,8 @@ enum {
     }
     
     [mNotification setText:@""];
+    
+    //[self startCameraStream]; // this would work but we don't want it yet
 }
 
 - (void)didReceiveMemoryWarning {
@@ -510,9 +523,9 @@ enum {
         [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
-- (IBAction) showCamera:(id)sender
+- (IBAction) handleCameraButton:(id)sender
 {
-    NSLog(@"%s", __FUNCTION__);
+    [self toggleCameraLivePreview];
 }
 
 - (IBAction) cancelPatient:(id)sender

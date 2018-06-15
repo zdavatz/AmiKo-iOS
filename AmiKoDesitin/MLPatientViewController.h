@@ -37,7 +37,7 @@
 
 - (IBAction) savePatient:(id)sender;
 - (IBAction) cancelPatient:(id)sender;
-- (IBAction) showCamera:(id)sender;
+- (IBAction) handleCameraButton:(id)sender;
 
 - (IBAction) myRightRevealToggle:(id)sender;
 

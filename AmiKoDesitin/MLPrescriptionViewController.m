@@ -14,6 +14,7 @@
 #import "MLAppDelegate.h"
 #import "MLAmkListViewController.h"
 #import "MLPatientDBAdapter.h"
+#import "MLPatientViewController.h"
 
 #ifdef DEBUG
 //#define DEBUG_COLOR_BG
@@ -97,6 +98,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) saveButtonOff;
 - (void) recalculateSavedOffset;
 - (void) updateMainframeRect;
+- (void) showCamera;
 @end
 
 #pragma mark -
@@ -1370,6 +1372,23 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     self.sendButton.enabled = NO;
 }
 
+- (void) showCamera
+{
+    NSLog(@"%s", __FUNCTION__);
+    // Initialize the patient DB in the singleton ahead of time
+    MLPatientViewController *patientVC = [MLPatientViewController sharedInstance];
+
+    UIViewController *nc_rear = self.revealViewController.rearViewController;
+    MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+
+    [vc_rear switchToPatientEditView :NO]; // No animation so it becomes visible faster
+    
+    // Ideally, wait for patient view to be visible
+    //NSLog(@"Line %d patientVC.isViewLoaded. %d", __LINE__, patientVC.isViewLoaded);
+
+    [patientVC handleCameraButton:nil];
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture
@@ -1379,10 +1398,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     CGRect r = [infoView rectForSection:kSectionPatient];
 
     if (indexPath == nil) {
-        // TODO: if p is in the header section rect, show the camera, else return
+        // If p is in the header section rect, show the camera, else return
         if (CGRectContainsPoint(r, p) &&
             (gesture.state == UIGestureRecognizerStateBegan)) {
-            NSLog(@"%s %d TODO: showCamera", __FUNCTION__, __LINE__);
+            [self showCamera];
             return;
         }
         else {
@@ -1404,7 +1423,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     
     if (indexPath.section == kSectionPatient) {
-        NSLog(@"%s %d TODO: show camera", __FUNCTION__, __LINE__);
+        [self showCamera];
         return;
     }
     else if (indexPath.section != kSectionMedicines) {

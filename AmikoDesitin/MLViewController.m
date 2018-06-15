@@ -2092,7 +2092,7 @@ static BOOL mShowReport = false;
 }
 
 // Front: Patient Edit, Right: Contacts
-- (void) switchToPatientEditView
+- (void) switchToPatientEditView :(BOOL)animated
 {
     mainRevealController = self.revealViewController;
 
@@ -2105,12 +2105,14 @@ static BOOL mShowReport = false;
     // Front
     MLPatientViewController *patientEditViewController = [MLPatientViewController sharedInstance];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientEditViewController];
-    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    [mainRevealController setFrontViewController:otherViewNavigationController
+                                        animated:animated];
 
     //
     //mainRevealController.bounceBackOnOverdraw = NO;
     mainRevealController.rightViewRevealOverdraw = 0;
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft  // Center
+                                      animated:animated];
 }
 
 // Front: Doctor Edit, Right: nil

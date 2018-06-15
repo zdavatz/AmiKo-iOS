@@ -282,7 +282,7 @@
     appDel.editMode = EDIT_MODE_PATIENTS;
 
     if (mParentViewController)
-        [mParentViewController switchToPatientEditView];
+        [mParentViewController switchToPatientEditView: YES];
 }
 
 - (IBAction) showReport:(id)sender
