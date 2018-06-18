@@ -546,7 +546,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         CGRect boundingBoxWord = observation.boundingBox;
 
 #ifdef DISCARD_TOP_RESULTS
-        NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(boundingBoxWord));
+        //NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(boundingBoxWord));
         if (boundingBoxWord.origin.y > 0.352f) {// 0 is bottom of the card, 1 top
             //NSLog(@"line %d discarded on Y", __LINE__);
             continue;
