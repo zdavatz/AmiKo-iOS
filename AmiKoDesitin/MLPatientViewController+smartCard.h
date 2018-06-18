@@ -9,6 +9,8 @@
 #import "MLPatientViewController.h"
 #import "MLPreviewView.h"
 
+#define DISCARD_TOP_RESULTS
+
 typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     AVCamSetupResultSuccess,
     AVCamSetupResultCameraNotAuthorized,
@@ -28,9 +30,6 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 #pragma mark - class extension
 
 @interface MLPatientViewController () <AVCapturePhotoCaptureDelegate, UIGestureRecognizerDelegate>
-{
-    MLPreviewView *previewView;
-}
 
 @property (nonatomic) AVCaptureSession *session;
 

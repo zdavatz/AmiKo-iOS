@@ -14,5 +14,6 @@
 
 @property (nonatomic, readonly) AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) AVCaptureSession *session;
+@property (nonatomic) CGRect cardFramePercent;
 
 @end

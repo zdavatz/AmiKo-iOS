@@ -15,24 +15,23 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-    NSLog(@"bounds %@", NSStringFromCGRect(self.bounds)); // {{0, 0}, {375, 667}}
-#endif
+//    NSLog(@"%s rect: %@", __FUNCTION__, NSStringFromCGRect(rect));
+//    NSLog(@"bounds: %@", NSStringFromCGRect(self.bounds)); // {{0, 0}, {262, 360}}
+//    NSLog(@"frame: %@", NSStringFromCGRect(self.frame));
 
     const CGFloat cardAspectRatio = 85.6f / 53.98f; // w/h 1.585
     CGFloat cardX = 5.0f;
-    CGFloat cardW = self.bounds.size.width - 2*cardX;
+    CGFloat cardW = self.bounds.size.width - 2.0f * cardX;
     CGFloat cardH = cardW / cardAspectRatio;
-    CGFloat cardY = (self.bounds.size.height-cardH)/2;
+    CGFloat cardY = (self.bounds.size.height-cardH) / 2.0f;
     CGRect cardFrame = CGRectMake(cardX, cardY, cardW, cardH);
-    NSLog(@"cardFrame %@", NSStringFromCGRect(cardFrame)); // {{5, 50}, {210, 132.4}}
+    //NSLog(@"overlay card frame %@", NSStringFromCGRect(cardFrame)); // {{5, 100}, {252, 158.9}}
 
-    NSLog(@"percent %.1f%% %.1f%% %.1f%% %.1f%%", // 2.3% 17.5% 95.5% 46.3%
-          100.0f * cardX / self.bounds.size.width,
-          100.0f * cardY / self.bounds.size.height,
-          100.0f * cardW / self.bounds.size.width,
-          100.0f * cardH / self.bounds.size.height);
+    self.cardFramePercent = CGRectMake(100.0f * cardX / self.bounds.size.width,
+                                       100.0f * cardY / self.bounds.size.height,
+                                       100.0f * cardW / self.bounds.size.width,
+                                       100.0f * cardH / self.bounds.size.height);
+    //NSLog(@"self %p, percent %@", self, NSStringFromCGRect(self.cardFramePercent));  // 1.9, 27.9, 96.1, 44.1
 
     CALayer *sublayer = [CALayer layer];
     sublayer.backgroundColor = [UIColor clearColor].CGColor;

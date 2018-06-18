@@ -273,9 +273,8 @@
                                 <constraint firstAttribute="height" constant="470" id="Ra9-2j-0V1"/>
                             </constraints>
                         </stackView>
-                        <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oll-Cd-odl" customClass="MLPreviewView">
-                            <rect key="frame" x="54" y="100" width="262" height="360"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oll-Cd-odl" customClass="MLPreviewView">
+                            <rect key="frame" x="30" y="100" width="300" height="450"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <outletCollection property="gestureRecognizers" destination="9uV-7J-VNB" appends="YES" id="SBk-cd-f86"/>
@@ -285,7 +284,11 @@
                     <constraints>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="14" id="09l-9i-OhZ"/>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="top" secondItem="5Vf-vV-36R" secondAttribute="top" constant="10" id="C2i-CQ-h0O"/>
+                        <constraint firstItem="oll-Cd-odl" firstAttribute="top" secondItem="lyg-cM-u3T" secondAttribute="bottom" constant="60" id="OsI-Rw-kh5"/>
                         <constraint firstAttribute="bottom" secondItem="SYY-Xo-Nso" secondAttribute="bottom" constant="120" id="Tit-OY-bCo"/>
+                        <constraint firstItem="wPZ-rd-mdb" firstAttribute="trailing" secondItem="oll-Cd-odl" secondAttribute="trailing" constant="35" id="dRb-zw-WuO"/>
+                        <constraint firstItem="wPZ-rd-mdb" firstAttribute="bottom" secondItem="oll-Cd-odl" secondAttribute="bottom" constant="97" id="j9Y-qm-1zZ"/>
+                        <constraint firstItem="oll-Cd-odl" firstAttribute="leading" secondItem="wPZ-rd-mdb" secondAttribute="leading" constant="30" id="tyu-qm-gVm"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="leading" secondItem="lyg-cM-u3T" secondAttribute="leading" id="xOa-aC-rZK"/>
                         <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" constant="23" id="yP4-Xs-KBC"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="top" secondItem="lyg-cM-u3T" secondAttribute="bottom" constant="17" id="yTF-6w-Plh"/>

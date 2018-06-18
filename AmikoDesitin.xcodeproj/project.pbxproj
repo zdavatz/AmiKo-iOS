@@ -305,6 +305,8 @@
 		FA6A005F20D3B184002D3A33 /* MLPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A005C20D3B184002D3A33 /* MLPreviewView.m */; };
 		FA6A006120D3B26F002D3A33 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A006020D3B26F002D3A33 /* Vision.framework */; };
 		FA6A006220D3B27D002D3A33 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6A006020D3B26F002D3A33 /* Vision.framework */; };
+		FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */; };
+		FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */; };
 		FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CF20162DEB003B2EF3 /* Localizable.strings */; };
 		FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
 		FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
@@ -529,6 +531,8 @@
 		FA6A005C20D3B184002D3A33 /* MLPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLPreviewView.m; path = AmiKoDesitin/MLPreviewView.m; sourceTree = SOURCE_ROOT; };
 		FA6A005D20D3B184002D3A33 /* MLPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLPreviewView.h; path = AmiKoDesitin/MLPreviewView.h; sourceTree = SOURCE_ROOT; };
 		FA6A006020D3B26F002D3A33 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
+		FA6B630220D7CA8400A54EF9 /* UIImage+Cropping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Cropping.h"; path = "AmiKoDesitin/UIImage+Cropping.h"; sourceTree = SOURCE_ROOT; };
+		FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Cropping.m"; path = "AmiKoDesitin/UIImage+Cropping.m"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -910,6 +914,8 @@
 		D5A6F26117B169B900EAB24B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				FA6B630220D7CA8400A54EF9 /* UIImage+Cropping.h */,
+				FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */,
 				43A3850A2032CB3C001A5849 /* GUI */,
 				439F261A2028B1A400396C29 /* DB */,
 				43334326201B641E006BFC23 /* menu (iPad) */,
@@ -1360,6 +1366,7 @@
 				43D3A0E2201F3CFB00EA77C6 /* MLProduct.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
+				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				439F261D2028B7FF00396C29 /* MLPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* MLDoctorViewController.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
@@ -1408,6 +1415,7 @@
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
 				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
+				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* MLPatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,

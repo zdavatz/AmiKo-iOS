@@ -7,6 +7,8 @@
 //
 
 #import "MLPatientViewController+smartCard.h"
+#import "UIImage+Cropping.h"
+@import Vision;
 
 static void * SessionRunningContext = &SessionRunningContext;
 
@@ -36,7 +38,6 @@ static void * SessionRunningContext = &SessionRunningContext;
         case AVAuthorizationStatusAuthorized:
         {
             // The user has previously granted access to the camera.
-            NSLog(@"=== 2 === AVAuthorizationStatusAuthorized");
             break;
         }
         case AVAuthorizationStatusNotDetermined:
@@ -131,13 +132,12 @@ static void * SessionRunningContext = &SessionRunningContext;
     CGRect frame = self.view.frame;
 #ifdef DEBUG
     NSLog(@"%s frame %@", __FUNCTION__, NSStringFromCGRect(frame));
-    NSLog(@"%s previewView.frame %@", __FUNCTION__, NSStringFromCGRect(previewView.frame)); //            all 0 !
+    NSLog(@"%p, previewView.frame %@",
+          self.previewView, NSStringFromCGRect(self.previewView.frame));
 #endif
     
     if (!self.session.isRunning) {
         self.previewView.hidden = NO;
-        frame = CGRectInset(frame, 10, 20);
-        previewView.frame = frame; // FIXME:
         [self startCameraStream];
     }
 }
@@ -211,19 +211,6 @@ static void * SessionRunningContext = &SessionRunningContext;
         [self.session commitConfiguration];
         return;
     }
-    
-//    // Add audio input.
-//    AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
-//    AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
-//    if ( ! audioDeviceInput ) {
-//        NSLog( @"Could not create audio device input: %@", error );
-//    }
-//    if ( [self.session canAddInput:audioDeviceInput] ) {
-//        [self.session addInput:audioDeviceInput];
-//    }
-//    else {
-//        NSLog( @"Could not add audio device input to the session" );
-//    }
     
     // Add photo output.
     AVCapturePhotoOutput *photoOutput = [[AVCapturePhotoOutput alloc] init];
@@ -470,13 +457,110 @@ monitorSubjectAreaChange:NO];
 
 - (IBAction) handleTap:(UITapGestureRecognizer *)gesture
 {
-    if (self.session.isRunning) {
-#if 1
-        self.previewView.hidden = YES;
-#endif
-        [self stopCameraStream];
-        // TODO: OCR
+    if (!self.session.isRunning)
+        return;
+
+    NSLog(@"%s orient: %ld", __FUNCTION__, (long)[[UIDevice currentDevice] orientation]);
+    
+    // Acquire image
+    AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
+    [self.photoOutput capturePhotoWithSettings:photoSettings
+                                      delegate:self];
+}
+
+#pragma mark - AVCapturePhotoCaptureDelegate
+
+- (void)captureOutput:(AVCapturePhotoOutput *)captureOutput
+didFinishProcessingPhoto:(AVCapturePhoto *)photo
+                error:(nullable NSError *)error
+{
+    //NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+
+    if ( error ) {
+        NSLog( @"Error capturing photo: %@", error );
+        return;
     }
+    
+    NSData *data = [photo fileDataRepresentation];
+    UIImage *image = [UIImage imageWithData:data];
+    UIImage *imageCard;
+    
+    //NSLog(@"line %d cardFramePercent %@", __LINE__, NSStringFromCGRect(self.previewView.cardFramePercent));
+
+    CGFloat xPercent = self.previewView.cardFramePercent.origin.x;
+    CGFloat yPercent = self.previewView.cardFramePercent.origin.y;
+    CGFloat wPercent = self.previewView.cardFramePercent.size.width;
+    CGFloat hPercent = self.previewView.cardFramePercent.size.height;
+    // Crop the image to the health card outline
+    CGRect cg_rectCropCard = CGRectMake((xPercent / 100.0f) * image.size.width,
+                                        (yPercent / 100.0f) * image.size.height,
+                                        (wPercent / 100.0f) * image.size.width,
+                                        (hPercent / 100.0f) * image.size.height);
+    
+    //NSLog(@"line %d cropCard %@", __LINE__, NSStringFromCGRect(cg_rectCropCard));
+//    NSLog(@"line %d im size %@, ar %.3f", __LINE__,
+//          NSStringFromCGSize(image.size),
+//          image.size.width/image.size.height);
+    imageCard = [image cropRectangle:cg_rectCropCard inFrame:image.size];
+//    NSLog(@"line %d card size WH: %@, ar %.3f", __LINE__,
+//          NSStringFromCGSize(imageCard.size),
+//          imageCard.size.width/imageCard.size.height);
+    
+    // Vision, text detection
+    CIImage* ciimage = [[CIImage alloc] initWithCGImage:imageCard.CGImage];
+    NSLog(@"line %d card size WH: %@", __LINE__, NSStringFromCGSize(imageCard.size));
+
+    // Dismiss camera
+    self.previewView.hidden = YES;
+    [self stopCameraStream];
+
+    NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
+    NSLog(@"line %d text boxes: %ld", __LINE__, [boxes count]);
+
+    // TODO: OCR with tesseract
+}
+
+# pragma mark Text Detection
+// Returns an array with the word bounding boxes with y > 0.3
+- (NSArray *)detectTextBoundingBoxes:(CIImage*)image
+{
+    NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(image.extent));
+    NSLog(@"WH: %.0f %.0f", image.extent.size.width, image.extent.size.height);
+    NSMutableArray *words = [[NSMutableArray alloc] init];
+    
+    VNDetectTextRectanglesRequest *textRequest = [VNDetectTextRectanglesRequest new];
+    textRequest.reportCharacterBoxes = NO;
+    NSLog(@"%s reportCharacterBoxes %d", __FUNCTION__, textRequest.reportCharacterBoxes);
+    
+    // Performs requests on a single image.
+    VNImageRequestHandler *handler = [[VNImageRequestHandler alloc] initWithCIImage:image
+                                                                        orientation:kCGImagePropertyOrientationRight
+                                                                            options:@{}];
+    BOOL allOk = [handler performRequests:@[textRequest] error:nil];
+    NSLog(@"%s line %d, all requests were scheduled and performed: %d", __FUNCTION__, __LINE__, allOk);
+    
+    NSLog(@"request %@, observations: %ld", textRequest, [textRequest.results count]);
+    
+    for (VNTextObservation *observation in textRequest.results){
+        
+        CGRect boundingBoxWord = observation.boundingBox;
+
+#ifdef DISCARD_TOP_RESULTS
+        NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(boundingBoxWord));
+        if (boundingBoxWord.origin.y > 0.352f) {// 0 is bottom of the card, 1 top
+            //NSLog(@"line %d discarded on Y", __LINE__);
+            continue;
+        }
+        
+        if (boundingBoxWord.origin.x > 0.3) {// discard text in the right part of the card
+            //NSLog(@"line %d discarded on X", __LINE__);
+            continue;
+        }
+#endif
+        [words addObject:[NSValue valueWithCGRect: boundingBoxWord]];
+    }
+    
+    return words;
 }
 
 @end
