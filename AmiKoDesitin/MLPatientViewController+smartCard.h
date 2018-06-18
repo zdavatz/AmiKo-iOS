@@ -27,7 +27,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 
 #pragma mark - class extension
 
-@interface MLPatientViewController () <AVCapturePhotoCaptureDelegate>
+@interface MLPatientViewController () <AVCapturePhotoCaptureDelegate, UIGestureRecognizerDelegate>
 {
     MLPreviewView *previewView;
 }

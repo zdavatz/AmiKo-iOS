@@ -277,6 +277,9 @@
                             <rect key="frame" x="54" y="100" width="262" height="360"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="9uV-7J-VNB" appends="YES" id="SBk-cd-f86"/>
+                            </connections>
                         </view>
                     </subviews>
                     <constraints>
@@ -301,5 +304,10 @@
             <viewLayoutGuide key="safeArea" id="HCI-et-oSQ"/>
             <point key="canvasLocation" x="33.5" y="70.5"/>
         </view>
+        <tapGestureRecognizer id="9uV-7J-VNB">
+            <connections>
+                <action selector="handleTap:" destination="-1" id="au9-oz-i5q"/>
+            </connections>
+        </tapGestureRecognizer>
     </objects>
 </document>

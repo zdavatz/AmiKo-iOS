@@ -15,9 +15,8 @@ static void * SessionRunningContext = &SessionRunningContext;
 - (void) initCamera
 {
     NSLog(@"%s", __FUNCTION__);
+
     // Create the AVCaptureSession.
-    
-    NSLog(@"=== 1 === session");
     self.session = [[AVCaptureSession alloc] init];
     
     // Create a device discovery session.
@@ -135,13 +134,7 @@ static void * SessionRunningContext = &SessionRunningContext;
     NSLog(@"%s previewView.frame %@", __FUNCTION__, NSStringFromCGRect(previewView.frame)); //            all 0 !
 #endif
     
-    if (self.session.isRunning) {
-#if 1
-        self.previewView.hidden = YES;
-#endif
-        [self stopCameraStream];
-    }
-    else {
+    if (!self.session.isRunning) {
         self.previewView.hidden = NO;
         frame = CGRectInset(frame, 10, 20);
         previewView.frame = frame; // FIXME:
@@ -471,6 +464,19 @@ monitorSubjectAreaChange:NO];
                          }];
     }
 #endif
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (IBAction) handleTap:(UITapGestureRecognizer *)gesture
+{
+    if (self.session.isRunning) {
+#if 1
+        self.previewView.hidden = YES;
+#endif
+        [self stopCameraStream];
+        // TODO: OCR
+    }
 }
 
 @end
