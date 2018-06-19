@@ -517,6 +517,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
     if ([boxes count] != 7) {
         NSLog(@"line %d text boxes: %ld, expected 7", __LINE__, [boxes count]);
+        [self resetAllFields];
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
@@ -581,6 +582,12 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
     NSArray* name = [ocrStrings[0] componentsSeparatedByString:@", "];
     NSArray* date = [ocrStrings[2] componentsSeparatedByString:@" "];
+
+    if ([name count] < 2 || [date count] < 2) {
+        [self resetAllFields];
+        [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
+        return;
+    }
 
     NSLog(@"Family name <%@>", name[0]);
     NSLog(@"First name <%@>", name[1]);
