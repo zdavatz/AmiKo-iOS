@@ -583,16 +583,16 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSArray* name = [ocrStrings[0] componentsSeparatedByString:@", "];
     NSArray* date = [ocrStrings[2] componentsSeparatedByString:@" "];
 
-    NSLog(@"Family name <%@>", name[0]);
-    NSLog(@"First name <%@>", name[1]);
-    NSLog(@"Birthday <%@>", date[0]);
-    NSLog(@"Sex <%@>", date[1]);
-    
     if ([name count] < 2 || [date count] < 2) {
         [self resetAllFields];
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
+
+    NSLog(@"Family name <%@>", name[0]);
+    NSLog(@"First name <%@>", name[1]);
+    NSLog(@"Birthday <%@>", date[0]);
+    NSLog(@"Sex <%@>", date[1]);
     
     // TODO: create a MLPatient and fill up the edit fields
 
