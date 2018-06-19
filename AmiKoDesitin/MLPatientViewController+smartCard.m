@@ -542,7 +542,11 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     CGSize cg_size = ui_img3.size;
     
     // Use only 3 boxes of the 7 detected
-    NSArray *goodBoxes = [NSArray arrayWithObjects:boxes[0], boxes[2], boxes[4], nil];
+    NSArray *goodBoxes = [NSArray arrayWithObjects:
+                          boxes[0], // Name
+                          boxes[2], // card number (unused)
+                          boxes[4], // birthday, sex
+                          nil];
 
     NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
     
@@ -568,14 +572,37 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 //              cg_r.origin.x, cg_r.origin.y,
 //              [tesseract recognizedText]);
 
-        // Add to result array
-        [ocrStrings addObject:[tesseract recognizedText]];
+        // Add to result array, trimming off the trailing "\n\n"
+        [ocrStrings addObject:[[tesseract recognizedText] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]];
     }
     
     NSLog(@"OCR result <%@>", ocrStrings);
 #endif
+
+    NSArray* name = [ocrStrings[0] componentsSeparatedByString:@", "];
+    NSArray* date = [ocrStrings[2] componentsSeparatedByString:@" "];
+
+    NSLog(@"Family name <%@>", name[0]);
+    NSLog(@"First name <%@>", name[1]);
+    NSLog(@"Birthday <%@>", date[0]);
+    NSLog(@"Sex <%@>", date[1]);
     
     // TODO: create a MLPatient and fill up the edit fields
+
+    MLPatient *patient = [[MLPatient alloc] init];
+    patient.familyName = name[0];
+    patient.givenName = name[1];
+    patient.birthDate = date[0];
+    
+    if ([date[1] isEqualToString:@"M"])
+        patient.gender = KEY_AMK_PAT_GENDER_M;
+    else if ([date[1] isEqualToString:@"F"])
+        patient.gender = KEY_AMK_PAT_GENDER_F;
+
+    // TODO: check it the patient is already in the database
+
+    [self resetAllFields];
+    [self setAllFields:patient];
 }
 
 # pragma mark Text Detection
