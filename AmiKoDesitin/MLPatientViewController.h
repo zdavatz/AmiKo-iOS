@@ -43,6 +43,7 @@
 
 - (void) setAllFields:(MLPatient *)p;
 - (void) resetAllFields;
+- (void) friendlyNote:(NSString*)str;
 
 - (void)sexDefined:(NSNotification *)notification;
 - (void)keyboardDidShow:(NSNotification *)notification;
