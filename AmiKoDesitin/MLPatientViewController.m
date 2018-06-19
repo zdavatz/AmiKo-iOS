@@ -32,7 +32,6 @@ enum {
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(MLPatient *)patient;
 - (MLPatient *) getAllFields;
-- (void) friendlyNote:(NSString*)str;
 #ifdef DYNAMIC_BUTTONS
 - (void) saveCancelOn;
 - (void) saveCancelOff;

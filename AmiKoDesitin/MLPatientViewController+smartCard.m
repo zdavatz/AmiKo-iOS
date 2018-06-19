@@ -460,7 +460,7 @@ monitorSubjectAreaChange:NO];
     if (!self.session.isRunning)
         return;
 
-    NSLog(@"%s orient: %ld", __FUNCTION__, (long)[[UIDevice currentDevice] orientation]);
+    //NSLog(@"%s orient: %ld", __FUNCTION__, (long)[[UIDevice currentDevice] orientation]);
     
     // Acquire image
     AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
@@ -508,14 +508,20 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     
     // Vision, text detection
     CIImage* ciimage = [[CIImage alloc] initWithCGImage:imageCard.CGImage];
-    NSLog(@"line %d card size WH: %@", __LINE__, NSStringFromCGSize(imageCard.size));
+    //NSLog(@"line %d card size WH: %@", __LINE__, NSStringFromCGSize(imageCard.size));
 
     // Dismiss camera
     self.previewView.hidden = YES;
     [self stopCameraStream];
 
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
-    NSLog(@"line %d text boxes: %ld", __LINE__, [boxes count]);
+    if ([boxes count] != 7) {
+        NSLog(@"line %d text boxes: %ld, expected 7", __LINE__, [boxes count]);
+        [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
+        return;
+    }
+
+    [self friendlyNote:@""];
 
 #if 1
     // OCR with tesseract
@@ -535,7 +541,12 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     CIImage* ci_img3 = [[CIImage alloc] initWithCGImage:ui_img3.CGImage];
     CGSize cg_size = ui_img3.size;
     
-    for (id box in boxes){
+    // Use only 3 boxes of the 7 detected
+    NSArray *goodBoxes = [NSArray arrayWithObjects:boxes[0], boxes[2], boxes[4], nil];
+
+    NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
+    
+    for (id box in goodBoxes){
         const CGFloat margin = 2.0f;
         CGRect cg_r = [box CGRectValue];
         CGRect cg_imageRect = CGRectMake(cg_r.origin.x * cg_size.width - margin, // XYWH
@@ -553,10 +564,15 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         
         [tesseract recognize];    // Start the recognition
 
-        NSLog(@"Tesseract %.3f %.3f <%@>",
-              cg_r.origin.x, cg_r.origin.y,
-              [tesseract recognizedText]);
+//        NSLog(@"Tesseract %.3f %.3f <%@>",
+//              cg_r.origin.x, cg_r.origin.y,
+//              [tesseract recognizedText]);
+
+        // Add to result array
+        [ocrStrings addObject:[tesseract recognizedText]];
     }
+    
+    NSLog(@"OCR result <%@>", ocrStrings);
 #endif
     
     // TODO: create a MLPatient and fill up the edit fields
@@ -566,22 +582,22 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 // Returns an array with the word bounding boxes with y > 0.3
 - (NSArray *)detectTextBoundingBoxes:(CIImage*)image
 {
-    NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(image.extent));
-    NSLog(@"WH: %.0f %.0f", image.extent.size.width, image.extent.size.height);
+//    NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(image.extent));
+//    NSLog(@"WH: %.0f %.0f", image.extent.size.width, image.extent.size.height);
     NSMutableArray *words = [[NSMutableArray alloc] init];
     
     VNDetectTextRectanglesRequest *textRequest = [VNDetectTextRectanglesRequest new];
     textRequest.reportCharacterBoxes = NO;
-    NSLog(@"%s reportCharacterBoxes %d", __FUNCTION__, textRequest.reportCharacterBoxes);
+    //NSLog(@"%s reportCharacterBoxes %d", __FUNCTION__, textRequest.reportCharacterBoxes);
     
     // Performs requests on a single image.
     VNImageRequestHandler *handler = [[VNImageRequestHandler alloc] initWithCIImage:image
                                                                         orientation:kCGImagePropertyOrientationRight
                                                                             options:@{}];
     BOOL allOk = [handler performRequests:@[textRequest] error:nil];
-    NSLog(@"%s line %d, all requests were scheduled and performed: %d", __FUNCTION__, __LINE__, allOk);
+    //NSLog(@"%s line %d, all requests were scheduled and performed: %d", __FUNCTION__, __LINE__, allOk);
     
-    NSLog(@"request %@, observations: %ld", textRequest, [textRequest.results count]);
+    //NSLog(@"request %@, observations: %ld", textRequest, [textRequest.results count]);
     
     for (VNTextObservation *observation in textRequest.results){
         
