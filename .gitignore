@@ -6,7 +6,10 @@ xcuserdata
 AmiKoDesitin/amiko_db_full_idx_de.db
 AmiKoDesitin/amiko_db_full_idx_fr.db
 AmiKoDesitin/amiko_db_full_idx_de.zip
+AmiKoDesitin/drug_interactions_csv_de.zip
 DerivedData/
 build/
-AmiKoDesitin/drug_interactions_csv_de.zip
 build_comed.sh
+Podfile.lock
+Pods/
+tessdata/

@@ -517,7 +517,49 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
     NSLog(@"line %d text boxes: %ld", __LINE__, [boxes count]);
 
-    // TODO: OCR with tesseract
+#if 1
+    // OCR with tesseract
+    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng"];
+    tesseract.delegate = self;
+    tesseract.maximumRecognitionTime = 2.0;
+    
+    UIImage *ui_img3 = imageCard;
+    
+    UIGraphicsBeginImageContextWithOptions(ui_img3.size, NO, ui_img3.scale);
+    CGContextRef cg_context = UIGraphicsGetCurrentContext();
+    UIGraphicsPushContext(cg_context);
+    
+    CGContextSetLineWidth(cg_context, 10.0f);
+    CGContextSetStrokeColorWithColor(cg_context, [UIColor blueColor].CGColor);
+    
+    CIImage* ci_img3 = [[CIImage alloc] initWithCGImage:ui_img3.CGImage];
+    CGSize cg_size = ui_img3.size;
+    
+    for (id box in boxes){
+        const CGFloat margin = 2.0f;
+        CGRect cg_r = [box CGRectValue];
+        CGRect cg_imageRect = CGRectMake(cg_r.origin.x * cg_size.width - margin, // XYWH
+                                         cg_r.origin.y * cg_size.height - margin,
+                                         cg_r.size.width * cg_size.width + 2*margin,
+                                         cg_r.size.height * cg_size.height + 2*margin);
+        CGContextStrokeRect(cg_context, cg_imageRect);
+        
+        CGRect cg_imageRect2 = CGRectMake(cg_imageRect.origin.x,
+                                          ui_img3.size.height - (cg_imageRect.origin.y+cg_imageRect.size.height),
+                                          cg_imageRect.size.width,
+                                          cg_imageRect.size.height);
+        UIImage *tesseractSubImage = [ui_img3 cropRectangle:cg_imageRect2 inFrame:ui_img3.size];
+        tesseract.image = tesseractSubImage;
+        
+        [tesseract recognize];    // Start the recognition
+
+        NSLog(@"Tesseract %.3f %.3f <%@>",
+              cg_r.origin.x, cg_r.origin.y,
+              [tesseract recognizedText]);
+    }
+#endif
+    
+    // TODO: create a MLPatient and fill up the edit fields
 }
 
 # pragma mark Text Detection
@@ -545,8 +587,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         
         CGRect boundingBoxWord = observation.boundingBox;
 
-#ifdef DISCARD_TOP_RESULTS
-        //NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(boundingBoxWord));
+#if 1 // Keep only the results in the bottom left area
         if (boundingBoxWord.origin.y > 0.352f) {// 0 is bottom of the card, 1 top
             //NSLog(@"line %d discarded on Y", __LINE__);
             continue;

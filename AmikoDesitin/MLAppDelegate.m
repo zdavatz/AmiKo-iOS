@@ -35,6 +35,8 @@
 #import "MLPatientDbListViewController.h"
 #import "MLPatientDBAdapter.h"
 
+#import <TesseractOCR/TesseractOCR.h>
+
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
 @end
@@ -167,6 +169,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
           [d objectForKey:@"CFBundleShortVersionString"],
           [d objectForKey:@"CFBundleVersion"]);
     NSLog(@"documentsDirectory: %@", [MLUtility documentsDirectory]);
+    NSLog(@"Tesseract version %@", [G8Tesseract version]);
 #endif
     
     // Rear

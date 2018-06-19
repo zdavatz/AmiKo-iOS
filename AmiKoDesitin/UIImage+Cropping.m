@@ -111,8 +111,6 @@
  */
 -(UIImage*)scaleBitmapToSize:(CGSize)scaleSize
 {
-    NSLog(@"%s line %d, cg_size: %@", __FUNCTION__, __LINE__, NSStringFromCGSize(scaleSize));
-
     /* round the size of the underlying CGImage and the input size.
      */
     scaleSize = CGSizeMake(round(scaleSize.width), round(scaleSize.height));
@@ -229,16 +227,13 @@
 }
 /* cropRectangle:inFrame returns a new UIImage cut from the cropArea of the underlying image.  It first scales the underlying image to the scale size before cutting the crop area from it. The returned CGImage is in the dimensions of the cropArea and it is oriented the same as the underlying CGImage as is the imageOrientation.
  */
--(UIImage*)cropRectangle:(CGRect)cropRect inFrame:(CGSize)frameSize {
-    
-    NSLog(@"%s line %d, cg_size: %@", __FUNCTION__, __LINE__, NSStringFromCGSize(frameSize));
+-(UIImage*)cropRectangle:(CGRect)cropRect inFrame:(CGSize)frameSize
+{
     frameSize = CGSizeMake(round(frameSize.width), round(frameSize.height));
     
     /* resize the image to match the zoomed content size
      */
     UIImage* img = [self scaleBitmapToSize:frameSize];
-    NSLog(@"%s line %d, img.size: %@", __FUNCTION__, __LINE__,
-          NSStringFromCGSize(img.size));
     
     /* crop the resized image to the crop rectangle.
      */
@@ -248,8 +243,6 @@
                                                                forOrientation:self.imageOrientation]);
     
     UIImage* croppedImg = [UIImage imageWithCGImage:cropRef scale:1.0 orientation:self.imageOrientation];
-    NSLog(@"%s line %d, croppedImg.size: %@", __FUNCTION__, __LINE__,
-          NSStringFromCGSize(croppedImg.size));
     
     return croppedImg;
 }

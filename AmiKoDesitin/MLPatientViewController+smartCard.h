@@ -8,8 +8,7 @@
 
 #import "MLPatientViewController.h"
 #import "MLPreviewView.h"
-
-#define DISCARD_TOP_RESULTS
+#import <TesseractOCR/TesseractOCR.h>
 
 typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
     AVCamSetupResultSuccess,
@@ -29,7 +28,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 
 #pragma mark - class extension
 
-@interface MLPatientViewController () <AVCapturePhotoCaptureDelegate, UIGestureRecognizerDelegate>
+@interface MLPatientViewController () <AVCapturePhotoCaptureDelegate, UIGestureRecognizerDelegate, G8TesseractDelegate>
 
 @property (nonatomic) AVCaptureSession *session;
 
