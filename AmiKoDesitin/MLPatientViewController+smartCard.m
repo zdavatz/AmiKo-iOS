@@ -515,8 +515,8 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     [self stopCameraStream];
 
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
-    if ([boxes count] != 7) {
-        NSLog(@"line %d text boxes: %ld, expected 7", __LINE__, [boxes count]);
+    if ([boxes count] < 5) {
+        NSLog(@"line %d text boxes: %ld, usually 7", __LINE__, [boxes count]);
         [self resetAllFields];
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
