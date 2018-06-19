@@ -6,6 +6,13 @@ AmiKo for iPhone and iPad.
 ## Latest Release News
 * https://medium.com/@zdavatz/rezeptfunktion-inkl-patienten-verwaltung-f%C3%BCr-amiko-comed-auf-iphone-ipad-c871723ec4b1
 
+## Tesseract
+For tesseract Support do
+```
+pod install
+```
+then open the _.xcworkspace_ directory.
+
 ## Build the App with
 ```
 ./build.sh Release
