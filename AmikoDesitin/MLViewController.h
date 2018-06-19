@@ -71,7 +71,7 @@ enum {
 - (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture;
 
 - (void) switchFrontToPatientEditView;
-- (void) switchToPatientEditView;
+- (void) switchToPatientEditView :(BOOL)animated;
 - (void) switchToDoctorEditView;
 - (void) showReport:(id)sender;
 - (void) switchToDrugInteractionViewFromPrescription: (NSMutableDictionary *)medBasket;

@@ -14,6 +14,7 @@
 #import "MLAppDelegate.h"
 #import "MLAmkListViewController.h"
 #import "MLPatientDBAdapter.h"
+#import "MLPatientViewController.h"
 
 #ifdef DEBUG
 //#define DEBUG_COLOR_BG
@@ -97,6 +98,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) saveButtonOff;
 - (void) recalculateSavedOffset;
 - (void) updateMainframeRect;
+- (void) showCamera;
 @end
 
 #pragma mark -
@@ -1370,18 +1372,47 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     self.sendButton.enabled = NO;
 }
 
+- (void) showCamera
+{
+    NSLog(@"%s", __FUNCTION__);
+    // Initialize the patient DB in the singleton ahead of time
+    MLPatientViewController *patientVC = [MLPatientViewController sharedInstance];
+
+    UIViewController *nc_rear = self.revealViewController.rearViewController;
+    MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+
+    [vc_rear switchToPatientEditView :NO]; // No animation so it becomes visible faster
+    
+    // Ideally, wait for patient view to be visible
+    //NSLog(@"Line %d patientVC.isViewLoaded. %d", __LINE__, patientVC.isViewLoaded);
+
+    [patientVC handleCameraButton:nil];
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture
 {
     CGPoint p = [gesture locationInView:infoView];
     NSIndexPath *indexPath = [infoView indexPathForRowAtPoint:p];
-    
+    CGRect r = [infoView rectForSection:kSectionPatient];
+
     if (indexPath == nil) {
+        // If p is in the header section rect, show the camera, else return
+        if (CGRectContainsPoint(r, p) &&
+            (gesture.state == UIGestureRecognizerStateBegan)) {
+            [self showCamera];
+            return;
+        }
+        else {
 #ifdef DEBUG
-        NSLog(@"long press on table view but not on a row");
+            NSLog(@"long press on table view but not on a row, point: %@, rect: %@ state:%ld",
+                  NSStringFromCGPoint(p),
+                  NSStringFromCGRect(r),
+                  (long)gesture.state);
 #endif
-        return;
+            return;
+        }
     }
     
     if (gesture.state != UIGestureRecognizerStateBegan) {
@@ -1391,8 +1422,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return;
     }
     
-    if (indexPath.section != kSectionMedicines) {
+    if (indexPath.section == kSectionPatient) {
+        [self showCamera];
+        return;
+    }
+    else if (indexPath.section != kSectionMedicines) {
 #ifdef DEBUG
+        // No long taps for Meta and Operator sections
         NSLog(@"Wrong section %ld", indexPath.section);
 #endif
         return;

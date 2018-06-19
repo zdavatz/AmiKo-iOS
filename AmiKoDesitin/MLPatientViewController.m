@@ -7,6 +7,7 @@
 //
 
 #import "MLPatientViewController.h"
+#import "MLPatientViewController+smartCard.h"
 #import "SWRevealViewController.h"
 #import "MLContactsListViewController.h"
 #import "MLPatientDBAdapter.h"
@@ -82,6 +83,7 @@ enum {
                                      style:UIBarButtonItemStylePlain
                                     target:self
                                     action:@selector(cancelPatient:)];
+    
 #ifdef DYNAMIC_BUTTONS
     //cancelItem.enabled = NO; // Cancel always enabled
 #endif
@@ -93,7 +95,22 @@ enum {
     spacer.width = -15.0f;
     
     self.navigationItem.leftBarButtonItems =
-    [NSArray arrayWithObjects:revealButtonItem, spacer, cancelItem, nil];
+    [NSArray arrayWithObjects:
+                revealButtonItem, spacer, cancelItem, nil];
+#endif
+    
+#if 1
+    // Middle button
+    
+    CGRect frame = CGRectMake(0, 0, 32, 32);
+    UIButton* cameraButton = [[UIButton alloc] initWithFrame:frame];
+    [cameraButton setBackgroundImage:[UIImage imageNamed:@"camera.png"]
+                            forState:UIControlStateNormal];
+
+    //[cameraButton setTitleColor:MAIN_TINT_COLOR forState:UIControlStateNormal];
+    [cameraButton addTarget:self action:@selector(handleCameraButton:) forControlEvents:UIControlEventTouchDown];
+//    cameraButton.backgroundColor = [UIColor grayColor];
+    self.navigationItem.titleView = cameraButton;
 #endif
     
     // Right button(s)
@@ -149,9 +166,12 @@ enum {
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+
     [mSex addTarget:self
              action:@selector(sexDefined:)
    forControlEvents:UIControlEventValueChanged];
+
+    [self initCamera];
 }
 
 #ifdef DEBUG
@@ -175,6 +195,8 @@ enum {
     }
     
     [mNotification setText:@""];
+    
+    //[self startCameraStream]; // this would work but we don't want it yet
 }
 
 - (void)didReceiveMemoryWarning {
@@ -499,6 +521,11 @@ enum {
         [revealController setFrontViewPosition:FrontViewPositionLeftSide animated:YES];
     else
         [revealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+- (IBAction) handleCameraButton:(id)sender
+{
+    [self toggleCameraLivePreview];
 }
 
 - (IBAction) cancelPatient:(id)sender

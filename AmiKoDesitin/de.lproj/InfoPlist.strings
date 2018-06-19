@@ -2,6 +2,6 @@
 
 NSCameraUsageDescription = "Rezeptsignatur mit Selfie erstellen.";
 
-NSContactsUsageDescription = "Bestehende Kunden für Rezepterstellung ins $(PRODUCT_NAME) Adressbuch importieren.";
+NSContactsUsageDescription = "Bestehende Kunden für Rezepterstellung ins AmiKo/CoMed Adressbuch importieren.";
 
 NSPhotoLibraryUsageDescription = "Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.";
