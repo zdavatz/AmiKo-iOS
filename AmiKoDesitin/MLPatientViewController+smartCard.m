@@ -517,6 +517,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
     if ([boxes count] != 7) {
         NSLog(@"line %d text boxes: %ld, expected 7", __LINE__, [boxes count]);
+        [self resetAllFields];
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
@@ -586,6 +587,12 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSLog(@"First name <%@>", name[1]);
     NSLog(@"Birthday <%@>", date[0]);
     NSLog(@"Sex <%@>", date[1]);
+    
+    if ([name count] < 2 || [date count] < 2) {
+        [self resetAllFields];
+        [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
+        return;
+    }
     
     // TODO: create a MLPatient and fill up the edit fields
 
