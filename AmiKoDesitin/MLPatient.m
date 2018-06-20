@@ -50,8 +50,14 @@
 - (NSString *) generateUniqueID
 {
     // The UUID should be unique and should be based on familyname, givenname, and birthday
-    NSUInteger uniqueHash = [[NSString stringWithFormat:@"%@.%@.%@", familyName , givenName, birthDate] hash];
+    NSUInteger uniqueHash = [[NSString stringWithFormat:@"%@.%@.%@", familyName, givenName, birthDate] hash];
     return [NSString stringWithFormat:@"%lu", uniqueHash];    // e.g. 3466684318797166812
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ givenName:%@, familyName:%@, birthDate:%@, uniqueId:%@",
+            NSStringFromClass([self class]), givenName, familyName, birthDate, uniqueId];
 }
 
 @end

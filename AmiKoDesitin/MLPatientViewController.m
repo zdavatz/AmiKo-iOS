@@ -10,7 +10,6 @@
 #import "MLPatientViewController+smartCard.h"
 #import "SWRevealViewController.h"
 #import "MLContactsListViewController.h"
-#import "MLPatientDBAdapter.h"
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
 #import "MLUtility.h"
@@ -43,7 +42,6 @@ enum {
 
 @implementation MLPatientViewController
 {
-    MLPatientDBAdapter *mPatientDb;
     NSString *mPatientUUID;
 }
 

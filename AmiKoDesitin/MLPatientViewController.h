@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "MLPatient.h"
+#import "MLPatientDBAdapter.h"
 
 @interface MLPatientViewController : UIViewController <UITextFieldDelegate>
 {
+    MLPatientDBAdapter *mPatientDb;
+
 //    IBOutlet NSWindow *mPanel;
 //    IBOutlet NSTableView *mTableView;
 //    IBOutlet NSTextField *mNumPatients;
