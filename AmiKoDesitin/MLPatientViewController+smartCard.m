@@ -526,7 +526,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
 #if 1
     // OCR with tesseract
-    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"fra"];
+    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
     
@@ -594,22 +594,29 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSLog(@"Birthday <%@>", date[0]);
     NSLog(@"Sex <%@>", date[1]);
     
-    // TODO: create a MLPatient and fill up the edit fields
+    // Create a MLPatient and fill up the edit fields
 
-    MLPatient *patient = [[MLPatient alloc] init];
-    patient.familyName = name[0];
-    patient.givenName = name[1];
-    patient.birthDate = date[0];
+    MLPatient *incompletePatient = [[MLPatient alloc] init];
+    incompletePatient.familyName = name[0];
+    incompletePatient.givenName = name[1];
+    incompletePatient.birthDate = date[0];
+    incompletePatient.uniqueId = [incompletePatient generateUniqueID];
     
     if ([date[1] isEqualToString:@"M"])
-        patient.gender = KEY_AMK_PAT_GENDER_M;
+        incompletePatient.gender = KEY_AMK_PAT_GENDER_M;
     else if ([date[1] isEqualToString:@"F"])
-        patient.gender = KEY_AMK_PAT_GENDER_F;
-
-    // TODO: check it the patient is already in the database
+        incompletePatient.gender = KEY_AMK_PAT_GENDER_F;
 
     [self resetAllFields];
-    [self setAllFields:patient];
+
+    // Check it the patient is already in the database
+    //NSLog(@"uniqueId %@", incompletePatient.uniqueId);
+    
+    MLPatient *existingPatient = [mPatientDb getPatientWithUniqueID:incompletePatient.uniqueId];
+    if (existingPatient)
+        [self setAllFields:existingPatient];
+    else
+        [self setAllFields:incompletePatient];
 }
 
 # pragma mark Text Detection
