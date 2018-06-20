@@ -526,7 +526,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
 #if 1
     // OCR with tesseract
-    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng"];
+    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"fra"];
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
     
@@ -539,7 +539,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     CGContextSetLineWidth(cg_context, 10.0f);
     CGContextSetStrokeColorWithColor(cg_context, [UIColor blueColor].CGColor);
     
-    CIImage* ci_img3 = [[CIImage alloc] initWithCGImage:ui_img3.CGImage];
+    //CIImage* ci_img3 = [[CIImage alloc] initWithCGImage:ui_img3.CGImage];
     CGSize cg_size = ui_img3.size;
     
     // Use only 3 boxes of the 7 detected
