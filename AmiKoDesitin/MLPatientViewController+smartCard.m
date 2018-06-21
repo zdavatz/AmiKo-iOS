@@ -548,7 +548,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
 #if 1
     // OCR with tesseract
-    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"deu+fra"];
+    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
     
