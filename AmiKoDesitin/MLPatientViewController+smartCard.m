@@ -10,6 +10,8 @@
 #import "UIImage+Cropping.h"
 @import Vision;
 
+#define REQUIRED_NUM_BOXES  5
+
 static void * SessionRunningContext = &SessionRunningContext;
 
 @implementation MLPatientViewController (smartCard)
@@ -23,7 +25,11 @@ static void * SessionRunningContext = &SessionRunningContext;
     
     // Create a device discovery session.
     NSArray<AVCaptureDeviceType> *deviceTypes = @[AVCaptureDeviceTypeBuiltInWideAngleCamera, AVCaptureDeviceTypeBuiltInDualCamera];
-    self.videoDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:deviceTypes mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionUnspecified];
+
+    self.videoDeviceDiscoverySession = [AVCaptureDeviceDiscoverySession
+            discoverySessionWithDeviceTypes:deviceTypes
+                                  mediaType:AVMediaTypeVideo
+                                   position:AVCaptureDevicePositionUnspecified];
     
     // Set up the preview view.
     self.previewView.session = self.session;
@@ -164,16 +170,32 @@ static void * SessionRunningContext = &SessionRunningContext;
     // Add video input.
     
     // Choose the back dual camera if available, otherwise default to a wide angle camera.
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInDualCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    AVCaptureDevice *videoDevice = nil;
+#if 0
+    videoDevice = [AVCaptureDevice
+            defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInDualCamera
+                              mediaType:AVMediaTypeVideo
+                               position:AVCaptureDevicePositionBack];
+#endif
     if ( ! videoDevice ) {
         // If the back dual camera is not available, default to the back wide angle camera.
         videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
         
+#if 1
+        if ( ! videoDevice ) {
+            NSLog(@"Could not create video device");
+            self.setupResult = AVCamSetupResultSessionConfigurationFailed;
+            [self.session commitConfiguration];
+            return;
+        }
+#else
         // In some cases where users break their phones, the back wide angle camera is not available. In this case, we should default to the front wide angle camera.
         if ( ! videoDevice ) {
             videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionFront];
         }
+#endif
     }
+
     AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
     if ( ! videoDeviceInput ) {
         NSLog( @"Could not create video device input: %@", error );
@@ -515,7 +537,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     [self stopCameraStream];
 
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
-    if ([boxes count] < 5) {
+    if ([boxes count] < REQUIRED_NUM_BOXES) {
         NSLog(@"line %d text boxes: %ld, usually 7", __LINE__, [boxes count]);
         [self resetAllFields];
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
@@ -613,8 +635,10 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     //NSLog(@"uniqueId %@", incompletePatient.uniqueId);
     
     MLPatient *existingPatient = [mPatientDb getPatientWithUniqueID:incompletePatient.uniqueId];
-    if (existingPatient)
+    if (existingPatient) {
         [self setAllFields:existingPatient];
+        // TODO: open the prescription view instead
+    }
     else
         [self setAllFields:incompletePatient];
 }
