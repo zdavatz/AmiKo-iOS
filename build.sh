@@ -23,7 +23,7 @@ echo "Target is $TARGET"
 xcodebuild archive \
   -verbose \
   -jobs 2 \
-  -project AmiKoDesitin.xcodeproj \
+  -workspace AmiKoDesitin.xcworkspace \
     CONFIGURATION_BUILD_DIR=$(PWD)/build \
     -scheme AmiKoDesitin \
     -configuration $TARGET \
