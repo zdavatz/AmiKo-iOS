@@ -39,24 +39,11 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 @property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
 
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
-
-// 65
 @property (nonatomic) AVCaptureDeviceDiscoverySession *videoDeviceDiscoverySession;
-
-// 68
 @property (nonatomic) AVCamLivePhotoMode livePhotoMode;
 @property (nonatomic) AVCamDepthDataDeliveryMode depthDataDeliveryMode;
-
-// 71
 @property (nonatomic) AVCapturePhotoOutput *photoOutput;
-
 @property (nonatomic) NSInteger inProgressLivePhotoCapturesCount;
-
-// Recording movies.
-@property (nonatomic, weak) IBOutlet UIButton *recordButton; // TODO: remove
-@property (nonatomic, weak) IBOutlet UIButton *resumeButton; // TODO: remove
-
-// 79
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
 @end
@@ -69,6 +56,6 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 - (void) startCameraStream;
 - (void) stopCameraStream;
 
-- (void) toggleCameraLivePreview;
+- (void) startCameraLivePreview;
 
 @end

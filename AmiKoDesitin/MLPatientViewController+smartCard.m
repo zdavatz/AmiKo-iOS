@@ -133,7 +133,7 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 }
 
-- (void) toggleCameraLivePreview
+- (void) startCameraLivePreview
 {
     CGRect frame = self.view.frame;
 #ifdef DEBUG
@@ -304,13 +304,16 @@ static void * SessionRunningContext = &SessionRunningContext;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    //NSLog(@"%s", __FUNCTION__);
     if ( context == SessionRunningContext ) {
+#ifdef DEBUG
         BOOL isSessionRunning = [change[NSKeyValueChangeNewKey] boolValue];
         BOOL livePhotoCaptureSupported = self.photoOutput.livePhotoCaptureSupported;
         BOOL livePhotoCaptureEnabled = self.photoOutput.livePhotoCaptureEnabled;
         BOOL depthDataDeliverySupported = self.photoOutput.depthDataDeliverySupported;
         BOOL depthDataDeliveryEnabled = self.photoOutput.depthDataDeliveryEnabled;
+        NSLog(@"%s %d %d %d %d %d", __FUNCTION__,
+              isSessionRunning, livePhotoCaptureSupported, livePhotoCaptureEnabled, depthDataDeliverySupported, depthDataDeliveryEnabled);
+#endif
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -370,21 +373,13 @@ monitorSubjectAreaChange:NO];
             if ( self.isSessionRunning ) {
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
-#if 1 // @@@
+#if 1
                 AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
                 [self.photoOutput capturePhotoWithSettings:photoSettings
                                                   delegate:self];
 #endif
             }
-            else {
-                dispatch_async( dispatch_get_main_queue(), ^{
-                    self.resumeButton.hidden = NO;
-                } );
-            }
         } );
-    }
-    else {
-        self.resumeButton.hidden = NO;
     }
 }
 
@@ -407,18 +402,6 @@ monitorSubjectAreaChange:NO];
 - (void)sessionInterruptionEnded:(NSNotification *)notification
 {
     NSLog( @"Capture session interruption ended" );
-    
-    if ( ! self.resumeButton.hidden ) {
-        [UIView animateWithDuration:0.25
-                         animations:^{
-                             self.resumeButton.alpha = 0.0;
-                             
-                         }
-                         completion:^( BOOL finished ) {
-                             self.resumeButton.hidden = YES;
-                             
-                         }];
-    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -442,8 +425,6 @@ monitorSubjectAreaChange:NO];
 didFinishProcessingPhoto:(AVCapturePhoto *)photo
                 error:(nullable NSError *)error
 {
-    //NSLog(@"%s line %d", __FUNCTION__, __LINE__);
-
     if ( error ) {
         NSLog( @"Error capturing photo: %@", error );
         return;
@@ -536,15 +517,13 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         
         [tesseract recognize];    // Start the recognition
 
-//        NSLog(@"Tesseract %.3f %.3f <%@>",
-//              cg_r.origin.x, cg_r.origin.y,
-//              [tesseract recognizedText]);
-
         // Add to result array, trimming off the trailing "\n\n"
         [ocrStrings addObject:[[tesseract recognizedText] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]];
     }
     
+#ifdef DEBUG
     NSLog(@"OCR result <%@>", ocrStrings);
+#endif
 #endif
 
     NSArray* name = [ocrStrings[0] componentsSeparatedByString:@", "];
@@ -556,10 +535,12 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         return;
     }
 
+#ifdef DEBUG
     NSLog(@"Family name <%@>", name[0]);
     NSLog(@"First name <%@>", name[1]);
     NSLog(@"Birthday <%@>", date[0]);
     NSLog(@"Sex <%@>", date[1]);
+#endif
     
     // Create a MLPatient and fill up the edit fields
 
@@ -592,13 +573,10 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 // Returns an array with the word bounding boxes with x < 0.3 and y < 0.3
 - (NSArray *)detectTextBoundingBoxes:(CIImage*)image
 {
-//    NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(image.extent));
-//    NSLog(@"WH: %.0f %.0f", image.extent.size.width, image.extent.size.height);
     NSMutableArray *words = [[NSMutableArray alloc] init];
     
     VNDetectTextRectanglesRequest *textRequest = [VNDetectTextRectanglesRequest new];
     textRequest.reportCharacterBoxes = NO;
-    //NSLog(@"%s reportCharacterBoxes %d", __FUNCTION__, textRequest.reportCharacterBoxes);
     
     // Performs requests on a single image.
     VNImageRequestHandler *handler =
@@ -606,8 +584,6 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
                                            orientation:kCGImagePropertyOrientationRight
                                                options:@{}];
     [handler performRequests:@[textRequest] error:nil];
-    
-    //NSLog(@"request %@, observations: %ld", textRequest, [textRequest.results count]);
     
     for (VNTextObservation *observation in textRequest.results) {
         

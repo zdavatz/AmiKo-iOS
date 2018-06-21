@@ -522,7 +522,7 @@ enum {
 
 - (IBAction) handleCameraButton:(id)sender
 {
-    [self toggleCameraLivePreview];
+    [self startCameraLivePreview];
 }
 
 - (IBAction) cancelPatient:(id)sender
