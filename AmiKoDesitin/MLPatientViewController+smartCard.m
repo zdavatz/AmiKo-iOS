@@ -94,8 +94,8 @@ static void * SessionRunningContext = &SessionRunningContext;
             case AVCamSetupResultCameraNotAuthorized:
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
-                    NSString *message = NSLocalizedString( @"AVCam doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                    NSString *message = NSLocalizedString( @"AmiKoDesitin doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AmiKoDesitin" message:message preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
                     [alertController addAction:cancelAction];
                     // Provide quick access to Settings.
@@ -111,7 +111,7 @@ static void * SessionRunningContext = &SessionRunningContext;
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
                     NSString *message = NSLocalizedString( @"Unable to capture media", @"Alert message when something goes wrong during capture session configuration" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AmiKoDesitin" message:message preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
                     [alertController addAction:cancelAction];
                     [self presentViewController:alertController animated:YES completion:nil];
@@ -169,31 +169,16 @@ static void * SessionRunningContext = &SessionRunningContext;
     
     // Add video input.
     
-    // Choose the back dual camera if available, otherwise default to a wide angle camera.
-    AVCaptureDevice *videoDevice = nil;
-#if 0
-    videoDevice = [AVCaptureDevice
-            defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInDualCamera
+    AVCaptureDevice *videoDevice = [AVCaptureDevice
+            defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
                               mediaType:AVMediaTypeVideo
-                               position:AVCaptureDevicePositionBack];
-#endif
+                              position:AVCaptureDevicePositionBack];
+
     if ( ! videoDevice ) {
-        // If the back dual camera is not available, default to the back wide angle camera.
-        videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
-        
-#if 1
-        if ( ! videoDevice ) {
-            NSLog(@"Could not create video device");
-            self.setupResult = AVCamSetupResultSessionConfigurationFailed;
-            [self.session commitConfiguration];
-            return;
-        }
-#else
-        // In some cases where users break their phones, the back wide angle camera is not available. In this case, we should default to the front wide angle camera.
-        if ( ! videoDevice ) {
-            videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionFront];
-        }
-#endif
+        NSLog(@"Could not create video device");
+        self.setupResult = AVCamSetupResultSessionConfigurationFailed;
+        [self.session commitConfiguration];
+        return;
     }
 
     AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
@@ -203,6 +188,7 @@ static void * SessionRunningContext = &SessionRunningContext;
         [self.session commitConfiguration];
         return;
     }
+
     if ( [self.session canAddInput:videoDeviceInput] ) {
         [self.session addInput:videoDeviceInput];
         self.videoDeviceInput = videoDeviceInput;
@@ -407,41 +393,15 @@ monitorSubjectAreaChange:NO];
     /*
      In some scenarios we want to enable the user to resume the session running.
      For example, if music playback is initiated via control center while
-     using AVCam, then the user can let AVCam resume
+     using AmiKoDesitin, then the user can let AmiKoDesitin resume
      the session running, which will stop music playback. Note that stopping
      music playback in control center will not automatically resume the session
      running. Also note that it is not always possible to resume, see -[resumeInterruptedSession:].
      */
-    BOOL showResumeButton = NO;
     
     AVCaptureSessionInterruptionReason reason = [notification.userInfo[AVCaptureSessionInterruptionReasonKey] integerValue];
+
     NSLog( @"Capture session was interrupted with reason %ld", (long)reason );
-    
-    if ( reason == AVCaptureSessionInterruptionReasonAudioDeviceInUseByAnotherClient ||
-        reason == AVCaptureSessionInterruptionReasonVideoDeviceInUseByAnotherClient ) {
-        showResumeButton = YES;
-    }
-    else if ( reason == AVCaptureSessionInterruptionReasonVideoDeviceNotAvailableWithMultipleForegroundApps ) {
-#if 0
-        // Simply fade-in a label to inform the user that the camera is unavailable.
-        self.cameraUnavailableLabel.alpha = 0.0;
-        self.cameraUnavailableLabel.hidden = NO;
-        [UIView animateWithDuration:0.25 animations:^{
-            self.cameraUnavailableLabel.alpha = 1.0;
-        }];
-#endif
-    }
-    
-#if 0
-    if ( showResumeButton ) {
-        // Simply fade-in a button to enable the user to try to resume the session running.
-        self.resumeButton.alpha = 0.0;
-        self.resumeButton.hidden = NO;
-        [UIView animateWithDuration:0.25 animations:^{
-            self.resumeButton.alpha = 1.0;
-        }];
-    }
-#endif
 }
 
 - (void)sessionInterruptionEnded:(NSNotification *)notification
@@ -459,20 +419,6 @@ monitorSubjectAreaChange:NO];
                              
                          }];
     }
-    
-#if 0
-    if ( ! self.cameraUnavailableLabel.hidden ) {
-        [UIView animateWithDuration:0.25
-                         animations:^{
-                             self.cameraUnavailableLabel.alpha = 0.0;
-                             
-                         }
-                         completion:^( BOOL finished ) {
-                             self.cameraUnavailableLabel.hidden = YES;
-                             
-                         }];
-    }
-#endif
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -561,7 +507,6 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     CGContextSetLineWidth(cg_context, 10.0f);
     CGContextSetStrokeColorWithColor(cg_context, [UIColor blueColor].CGColor);
     
-    //CIImage* ci_img3 = [[CIImage alloc] initWithCGImage:ui_img3.CGImage];
     CGSize cg_size = ui_img3.size;
     
     // Use only 3 boxes of the 7 detected
@@ -644,7 +589,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 }
 
 # pragma mark Text Detection
-// Returns an array with the word bounding boxes with y > 0.3
+// Returns an array with the word bounding boxes with x < 0.3 and y < 0.3
 - (NSArray *)detectTextBoundingBoxes:(CIImage*)image
 {
 //    NSLog(@"%s line %d %@", __FUNCTION__, __LINE__, NSStringFromCGRect(image.extent));
@@ -656,29 +601,26 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     //NSLog(@"%s reportCharacterBoxes %d", __FUNCTION__, textRequest.reportCharacterBoxes);
     
     // Performs requests on a single image.
-    VNImageRequestHandler *handler = [[VNImageRequestHandler alloc] initWithCIImage:image
-                                                                        orientation:kCGImagePropertyOrientationRight
-                                                                            options:@{}];
-    BOOL allOk = [handler performRequests:@[textRequest] error:nil];
-    //NSLog(@"%s line %d, all requests were scheduled and performed: %d", __FUNCTION__, __LINE__, allOk);
+    VNImageRequestHandler *handler =
+        [[VNImageRequestHandler alloc] initWithCIImage:image
+                                           orientation:kCGImagePropertyOrientationRight
+                                               options:@{}];
+    [handler performRequests:@[textRequest] error:nil];
     
     //NSLog(@"request %@, observations: %ld", textRequest, [textRequest.results count]);
     
-    for (VNTextObservation *observation in textRequest.results){
+    for (VNTextObservation *observation in textRequest.results) {
         
         CGRect boundingBoxWord = observation.boundingBox;
 
-#if 1 // Keep only the results in the bottom left area
-        if (boundingBoxWord.origin.y > 0.352f) {// 0 is bottom of the card, 1 top
-            //NSLog(@"line %d discarded on Y", __LINE__);
+        // Discards text in the top area of the card
+        if (boundingBoxWord.origin.y > 0.352f)   // 0 is bottom of the card, 1 top
             continue;
-        }
         
-        if (boundingBoxWord.origin.x > 0.3) {// discard text in the right part of the card
-            //NSLog(@"line %d discarded on X", __LINE__);
+        // Discard text in the right area of the card
+        if (boundingBoxWord.origin.x > 0.3)
             continue;
-        }
-#endif
+
         [words addObject:[NSValue valueWithCGRect: boundingBoxWord]];
     }
     
