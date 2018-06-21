@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -274,7 +273,7 @@
                             </constraints>
                         </stackView>
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oll-Cd-odl" customClass="MLPreviewView">
-                            <rect key="frame" x="30" y="100" width="300" height="450"/>
+                            <rect key="frame" x="0.0" y="0.0" width="365" height="567"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <outletCollection property="gestureRecognizers" destination="9uV-7J-VNB" appends="YES" id="SBk-cd-f86"/>
@@ -284,16 +283,16 @@
                     <constraints>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="leading" secondItem="5Vf-vV-36R" secondAttribute="leading" constant="14" id="09l-9i-OhZ"/>
                         <constraint firstItem="lyg-cM-u3T" firstAttribute="top" secondItem="5Vf-vV-36R" secondAttribute="top" constant="10" id="C2i-CQ-h0O"/>
-                        <constraint firstItem="oll-Cd-odl" firstAttribute="top" secondItem="lyg-cM-u3T" secondAttribute="bottom" constant="60" id="OsI-Rw-kh5"/>
                         <constraint firstAttribute="bottom" secondItem="SYY-Xo-Nso" secondAttribute="bottom" constant="120" id="Tit-OY-bCo"/>
-                        <constraint firstItem="wPZ-rd-mdb" firstAttribute="trailing" secondItem="oll-Cd-odl" secondAttribute="trailing" constant="35" id="dRb-zw-WuO"/>
-                        <constraint firstItem="wPZ-rd-mdb" firstAttribute="bottom" secondItem="oll-Cd-odl" secondAttribute="bottom" constant="97" id="j9Y-qm-1zZ"/>
-                        <constraint firstItem="oll-Cd-odl" firstAttribute="leading" secondItem="wPZ-rd-mdb" secondAttribute="leading" constant="30" id="tyu-qm-gVm"/>
+                        <constraint firstItem="oll-Cd-odl" firstAttribute="top" secondItem="wPZ-rd-mdb" secondAttribute="top" id="bQA-XM-lgo"/>
+                        <constraint firstItem="wPZ-rd-mdb" firstAttribute="trailing" secondItem="oll-Cd-odl" secondAttribute="trailing" id="dRb-zw-WuO"/>
+                        <constraint firstItem="wPZ-rd-mdb" firstAttribute="bottom" secondItem="oll-Cd-odl" secondAttribute="bottom" constant="80" id="q10-Kp-wKN"/>
+                        <constraint firstItem="oll-Cd-odl" firstAttribute="leading" secondItem="wPZ-rd-mdb" secondAttribute="leading" id="tyu-qm-gVm"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="leading" secondItem="lyg-cM-u3T" secondAttribute="leading" id="xOa-aC-rZK"/>
                         <constraint firstAttribute="trailing" secondItem="SYY-Xo-Nso" secondAttribute="trailing" constant="23" id="yP4-Xs-KBC"/>
                         <constraint firstItem="SYY-Xo-Nso" firstAttribute="top" secondItem="lyg-cM-u3T" secondAttribute="bottom" constant="17" id="yTF-6w-Plh"/>
                     </constraints>
-                    <viewLayoutGuide key="safeArea" id="wPZ-rd-mdb"/>
+                    <viewLayoutGuide key="safeArea" id="wPZ-rd-mdb" userLabel="Safe Area2"/>
                 </scrollView>
             </subviews>
             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
@@ -304,7 +303,7 @@
                 <constraint firstItem="5Vf-vV-36R" firstAttribute="top" secondItem="HCI-et-oSQ" secondAttribute="top" id="l4u-Wh-7ZW"/>
             </constraints>
             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-            <viewLayoutGuide key="safeArea" id="HCI-et-oSQ"/>
+            <viewLayoutGuide key="safeArea" id="HCI-et-oSQ" userLabel="Safe Area1"/>
             <point key="canvasLocation" x="33.5" y="70.5"/>
         </view>
         <tapGestureRecognizer id="9uV-7J-VNB">

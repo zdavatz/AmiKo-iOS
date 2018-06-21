@@ -20,6 +20,10 @@ static void * SessionRunningContext = &SessionRunningContext;
 {
     NSLog(@"%s", __FUNCTION__);
 
+#ifdef DEBUG
+    [self.previewView setBackgroundColor:[UIColor magentaColor]];
+#endif
+    
     // Create the AVCaptureSession.
     self.session = [[AVCaptureSession alloc] init];
     
@@ -211,6 +215,7 @@ static void * SessionRunningContext = &SessionRunningContext;
             }
             
             self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
+            self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         } );
     }
     else {
