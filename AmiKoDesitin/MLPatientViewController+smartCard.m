@@ -317,8 +317,7 @@ static void * SessionRunningContext = &SessionRunningContext;
         BOOL livePhotoCaptureEnabled = self.photoOutput.livePhotoCaptureEnabled;
         BOOL depthDataDeliverySupported = self.photoOutput.depthDataDeliverySupported;
         BOOL depthDataDeliveryEnabled = self.photoOutput.depthDataDeliveryEnabled;
-        NSLog(@"%s %d %d %d %d %d", __FUNCTION__,
-              isSessionRunning, livePhotoCaptureSupported, livePhotoCaptureEnabled, depthDataDeliverySupported, depthDataDeliveryEnabled);
+        //NSLog(@"%s %d %d %d %d %d", __FUNCTION__, isSessionRunning, livePhotoCaptureSupported, livePhotoCaptureEnabled, depthDataDeliverySupported, depthDataDeliveryEnabled);
 #endif
     }
     else {
@@ -530,6 +529,8 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSLog(@"OCR result <%@>", ocrStrings);
 #endif
 #endif
+
+    // Fixup OCR results
 
     // In some cases instead of the comma it detects a period
     NSString *nameString = [ocrStrings[0] stringByReplacingOccurrencesOfString:@"." withString:@","];
