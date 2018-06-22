@@ -531,38 +531,45 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 #endif
 #endif
 
-    NSArray* name = [ocrStrings[0] componentsSeparatedByString:@","]; // sometimes we get ",_" instead of ", "
-    NSArray* date = [ocrStrings[2] componentsSeparatedByString:@" "];
+    // In some cases instead of the comma it detects a period
+    NSString *nameString = [ocrStrings[0] stringByReplacingOccurrencesOfString:@"." withString:@","];
 
-    if ([name count] < 2 || [date count] < 2) {
+    NSArray *nameArray = [nameString componentsSeparatedByString:@","]; // sometimes we get ",_" instead of ", "
+    NSArray *dateArray = [ocrStrings[2] componentsSeparatedByString:@" "];
+
+    if ([nameArray count] < 2 || [dateArray count] < 2) {
         [self resetAllFields];
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
 
-    // trim leading space from given name
-    NSString *giveName = name[1];
+    // Trim leading space from given name
+    NSString *giveName = nameArray[1];
     if ([[NSCharacterSet whitespaceCharacterSet] characterIsMember:[giveName characterAtIndex:0]])
         giveName = [giveName substringFromIndex:1];
 
+    // Trim trailing '-' from given name
+    if (([giveName length] > 0) && [giveName hasSuffix:@"-"])
+        giveName = [giveName substringToIndex:[giveName length]-1];
+
 #ifdef DEBUG
-    NSLog(@"Family name <%@>", name[0]);
+    NSLog(@"Family name <%@>", nameArray[0]);
     NSLog(@"First name <%@>", giveName);
-    NSLog(@"Birthday <%@>", date[0]);
-    NSLog(@"Sex <%@>", date[1]);
+    NSLog(@"Birthday <%@>", dateArray[0]);
+    NSLog(@"Sex <%@>", dateArray[1]);
 #endif
     
     // Create a MLPatient and fill up the edit fields
 
     MLPatient *incompletePatient = [[MLPatient alloc] init];
-    incompletePatient.familyName = name[0];
+    incompletePatient.familyName = nameArray[0];
     incompletePatient.givenName = giveName;
-    incompletePatient.birthDate = date[0];
+    incompletePatient.birthDate = dateArray[0];
     incompletePatient.uniqueId = [incompletePatient generateUniqueID];
     
-    if ([date[1] isEqualToString:@"M"])
+    if ([dateArray[1] isEqualToString:@"M"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_M;
-    else if ([date[1] isEqualToString:@"F"])
+    else if ([dateArray[1] isEqualToString:@"F"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_F;
 
     [self resetAllFields];
