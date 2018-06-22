@@ -10,8 +10,6 @@
 #import "UIImage+Cropping.h"
 @import Vision;
 
-#define REQUIRED_NUM_BOXES  5
-
 static void * SessionRunningContext = &SessionRunningContext;
 
 @implementation MLPatientViewController (smartCard)
@@ -193,7 +191,8 @@ static void * SessionRunningContext = &SessionRunningContext;
         return;
     }
 
-    if ( [self.session canAddInput:videoDeviceInput] ) {
+    if ( [self.session canAddInput:videoDeviceInput] )
+    {
         [self.session addInput:videoDeviceInput];
         self.videoDeviceInput = videoDeviceInput;
         
@@ -215,6 +214,8 @@ static void * SessionRunningContext = &SessionRunningContext;
             }
             
             self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
+            
+            // Rather than resizing the view to fit the camera aspect ratio, we tell the camera to fit the view
             self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         } );
     }
@@ -468,21 +469,27 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     self.previewView.hidden = YES;
     [self stopCameraStream];
 
+    [self resetAllFields];
+
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
-    if ([boxes count] < REQUIRED_NUM_BOXES) {
-        NSLog(@"line %d text boxes: %ld, usually 7", __LINE__, [boxes count]);
-        [self resetAllFields];
+    NSArray *goodBoxes = [self analyzeVisionBoxes:boxes];
+    // We expect to have
+    //  goodBoxes[0] FamilyName, GivenName
+    //  goodBoxes[1] CardNumber (unused)
+    //  goodBoxes[2] Birthday Sex
+    if ([goodBoxes count] < 3) {
+        NSLog(@"line %d only %ld boxes", __LINE__, [goodBoxes count]);
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
-
-    [self friendlyNote:@""];
-
+    
 #if 1
     // OCR with tesseract
     G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
+    tesseract.charBlacklist = @"_";
+    tesseract.engineMode = G8OCREngineModeTesseractCubeCombined; //G8OCREngineModeTesseractOnly;
     
     UIImage *ui_img3 = imageCard;
     
@@ -494,18 +501,11 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     CGContextSetStrokeColorWithColor(cg_context, [UIColor blueColor].CGColor);
     
     CGSize cg_size = ui_img3.size;
-    
-    // Use only 3 boxes of the 7 detected
-    NSArray *goodBoxes = [NSArray arrayWithObjects:
-                          boxes[0], // Name
-                          boxes[2], // card number (unused)
-                          boxes[4], // birthday, sex
-                          nil];
 
     NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
     
     for (id box in goodBoxes){
-        const CGFloat margin = 2.0f;
+        const CGFloat margin = 1.0f;
         CGRect cg_r = [box CGRectValue];
         CGRect cg_imageRect = CGRectMake(cg_r.origin.x * cg_size.width - margin, // XYWH
                                          cg_r.origin.y * cg_size.height - margin,
@@ -531,7 +531,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 #endif
 #endif
 
-    NSArray* name = [ocrStrings[0] componentsSeparatedByString:@", "];
+    NSArray* name = [ocrStrings[0] componentsSeparatedByString:@","]; // sometimes we get ",_" instead of ", "
     NSArray* date = [ocrStrings[2] componentsSeparatedByString:@" "];
 
     if ([name count] < 2 || [date count] < 2) {
@@ -540,9 +540,14 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         return;
     }
 
+    // trim leading space from given name
+    NSString *giveName = name[1];
+    if ([[NSCharacterSet whitespaceCharacterSet] characterIsMember:[giveName characterAtIndex:0]])
+        giveName = [giveName substringFromIndex:1];
+
 #ifdef DEBUG
     NSLog(@"Family name <%@>", name[0]);
-    NSLog(@"First name <%@>", name[1]);
+    NSLog(@"First name <%@>", giveName);
     NSLog(@"Birthday <%@>", date[0]);
     NSLog(@"Sex <%@>", date[1]);
 #endif
@@ -551,7 +556,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
     MLPatient *incompletePatient = [[MLPatient alloc] init];
     incompletePatient.familyName = name[0];
-    incompletePatient.givenName = name[1];
+    incompletePatient.givenName = giveName;
     incompletePatient.birthDate = date[0];
     incompletePatient.uniqueId = [incompletePatient generateUniqueID];
     
@@ -606,6 +611,40 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     }
     
     return words;
+}
+
+- (NSArray *)analyzeVisionBoxes:(NSArray *)allBoxes
+{
+    //NSLog(@"%s %@, class: %@", __FUNCTION__, allBoxes, [allBoxes[0] class]); // NSConcreteValue
+
+    // Sort boxes by height
+    NSArray *boxes = [allBoxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
+        CGRect p1 = [obj1 CGRectValue];
+        CGRect p2 = [obj2 CGRectValue];
+        if (p1.size.height == p2.size.height)
+            return NSOrderedSame;
+        
+        return p1.size.height < p2.size.height;
+    }];
+
+    //NSLog(@"sorted by height %@", boxes);
+    
+    // Keep only the first 3
+    boxes = [boxes subarrayWithRange:NSMakeRange(0, 3)];
+    //NSLog(@"Keep first 3 %@", boxes);
+
+    // Sort them back by Y
+    boxes = [boxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
+        CGRect p1 = [obj1 CGRectValue];
+        CGRect p2 = [obj2 CGRectValue];
+        if (p1.origin.y == p2.origin.y)
+            return NSOrderedSame;
+        
+        return p1.origin.y < p2.origin.y;
+    }];
+    //NSLog(@"Sort by Y %@", boxes);
+
+    return boxes;
 }
 
 @end
