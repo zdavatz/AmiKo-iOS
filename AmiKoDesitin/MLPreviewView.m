@@ -11,6 +11,24 @@
 
 @implementation MLPreviewView
 
+- (CALayer *)getBox:(CGRect)rect
+          thickness:(CGFloat)thickness
+{
+    CALayer *sublayer = [CALayer layer];
+    sublayer.backgroundColor = [UIColor clearColor].CGColor;
+    sublayer.shadowOffset = CGSizeMake(0, 3);
+    sublayer.shadowRadius = 5.0;
+    sublayer.shadowColor = [UIColor blackColor].CGColor;
+    sublayer.shadowOpacity = 0.8;
+    sublayer.frame = rect;
+    
+    sublayer.borderColor = [UIColor greenColor].CGColor;
+    sublayer.borderWidth = thickness;
+    sublayer.cornerRadius = 10.0;
+    
+    return sublayer;
+}
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
@@ -33,19 +51,12 @@
                                        100.0f * cardH / self.bounds.size.height);
     //NSLog(@"self %p, percent %@", self, NSStringFromCGRect(self.cardFramePercent));  // 1.9, 27.9, 96.1, 44.1
 
-    CALayer *sublayer = [CALayer layer];
-    sublayer.backgroundColor = [UIColor clearColor].CGColor;
-    sublayer.shadowOffset = CGSizeMake(0, 3);
-    sublayer.shadowRadius = 5.0;
-    sublayer.shadowColor = [UIColor blackColor].CGColor;
-    sublayer.shadowOpacity = 0.8;
-    sublayer.frame = cardFrame;
-    
-    sublayer.borderColor = [UIColor greenColor].CGColor;
-    sublayer.borderWidth = 2.0;
-    sublayer.cornerRadius = 10.0;
-    
+    CALayer *sublayer = [self getBox:cardFrame thickness:2.0];
     [self.layer addSublayer:sublayer];
+    
+    CGRect innerCardFrame = CGRectInset(cardFrame, 18, 18);
+    CALayer *sublayer2 = [self getBox:innerCardFrame thickness:1.0];
+    [self.layer addSublayer:sublayer2];
 }
 
 + (Class)layerClass
