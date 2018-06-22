@@ -99,7 +99,7 @@ enum {
 #if 1
     // Middle button
     
-    CGRect frame = CGRectMake(0, 0, 32, 32);
+    CGRect frame = CGRectMake(0, 0, 28, 21);
     UIButton* cameraButton = [[UIButton alloc] initWithFrame:frame];
     [cameraButton setBackgroundImage:[UIImage imageNamed:@"camera.png"]
                             forState:UIControlStateNormal];
