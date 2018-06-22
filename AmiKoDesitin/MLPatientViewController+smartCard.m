@@ -489,7 +489,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
     tesseract.charBlacklist = @"_";
-    tesseract.engineMode = G8OCREngineModeTesseractCubeCombined; //G8OCREngineModeTesseractOnly;
+    //tesseract.engineMode = G8OCREngineModeTesseractCubeCombined; // G8OCREngineModeTesseractOnly
     
     UIImage *ui_img3 = imageCard;
     
@@ -617,8 +617,15 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 {
     //NSLog(@"%s %@, class: %@", __FUNCTION__, allBoxes, [allBoxes[0] class]); // NSConcreteValue
 
+    NSArray *boxes = allBoxes;
+    // Keep only the first 5 (sorted by Y)
+    if ([allBoxes count] > 5) {
+        boxes = [allBoxes subarrayWithRange:NSMakeRange(0, 5)];
+        //NSLog(@"Keep first 5 %@", boxes);
+    }
+    
     // Sort boxes by height
-    NSArray *boxes = [allBoxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
+    boxes = [boxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
         CGRect p1 = [obj1 CGRectValue];
         CGRect p2 = [obj2 CGRectValue];
         if (p1.size.height == p2.size.height)
@@ -626,7 +633,6 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         
         return p1.size.height < p2.size.height;
     }];
-
     //NSLog(@"sorted by height %@", boxes);
     
     // Keep only the first 3
