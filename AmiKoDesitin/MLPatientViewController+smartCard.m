@@ -10,6 +10,8 @@
 #import "UIImage+Cropping.h"
 @import Vision;
 #import <time.h>
+#import "MLViewController.h"
+#import "SWRevealViewController.h"
 
 static void * SessionRunningContext = &SessionRunningContext;
 
@@ -587,8 +589,14 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     
     MLPatient *existingPatient = [mPatientDb getPatientWithUniqueID:incompletePatient.uniqueId];
     if (existingPatient) {
-        [self setAllFields:existingPatient];
-        // TODO: open the prescription view instead
+        // Set as default patient for prescriptions
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:existingPatient.uniqueId forKey:@"currentPatient"];
+        [defaults synchronize];
+
+        UIViewController *nc = self.revealViewController.rearViewController;
+        MLViewController *vc = [nc.childViewControllers firstObject];
+        [vc switchToPrescriptionView];
     }
     else
         [self setAllFields:incompletePatient];
