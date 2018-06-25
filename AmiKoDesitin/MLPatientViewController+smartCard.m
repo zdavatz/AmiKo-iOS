@@ -12,6 +12,7 @@
 #import <time.h>
 #import "MLViewController.h"
 #import "SWRevealViewController.h"
+#import "MLAppDelegate.h"
 
 static void * SessionRunningContext = &SessionRunningContext;
 
@@ -594,6 +595,9 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         [defaults setObject:existingPatient.uniqueId forKey:@"currentPatient"];
         [defaults synchronize];
 
+        MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+        appDel.editMode = EDIT_MODE_PRESCRIPTION;
+        
         UIViewController *nc = self.revealViewController.rearViewController;
         MLViewController *vc = [nc.childViewControllers firstObject];
         [vc switchToPrescriptionView];
