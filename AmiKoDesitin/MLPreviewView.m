@@ -14,19 +14,19 @@
 - (CALayer *)getBox:(CGRect)rect
           thickness:(CGFloat)thickness
 {
-    CALayer *sublayer = [CALayer layer];
-    sublayer.backgroundColor = [UIColor clearColor].CGColor;
-    sublayer.shadowOffset = CGSizeMake(0, 3);
-    sublayer.shadowRadius = 5.0;
-    sublayer.shadowColor = [UIColor blackColor].CGColor;
-    sublayer.shadowOpacity = 0.8;
-    sublayer.frame = rect;
+    CALayer *layer = [CALayer layer];
+    layer.backgroundColor = [UIColor clearColor].CGColor;
+    layer.shadowOffset = CGSizeMake(0, 3);
+    layer.shadowRadius = 5.0;
+    layer.shadowColor = [UIColor blackColor].CGColor;
+    layer.shadowOpacity = 0.8;
+    layer.frame = rect;
     
-    sublayer.borderColor = [UIColor greenColor].CGColor;
-    sublayer.borderWidth = thickness;
-    sublayer.cornerRadius = 10.0;
+    layer.borderColor = [UIColor greenColor].CGColor;
+    layer.borderWidth = thickness;
+    layer.cornerRadius = 10.0;
     
-    return sublayer;
+    return layer;
 }
 
 // Only override drawRect: if you perform custom drawing.

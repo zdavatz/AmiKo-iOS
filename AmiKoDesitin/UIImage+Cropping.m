@@ -244,6 +244,8 @@
     
     UIImage* croppedImg = [UIImage imageWithCGImage:cropRef scale:1.0 orientation:self.imageOrientation];
     
+    CGImageRelease(cropRef);
+
     return croppedImg;
 }
 

@@ -9,6 +9,7 @@
 #import "MLPatientViewController+smartCard.h"
 #import "UIImage+Cropping.h"
 @import Vision;
+#import <time.h>
 
 static void * SessionRunningContext = &SessionRunningContext;
 
@@ -438,7 +439,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSData *data = [photo fileDataRepresentation];
     UIImage *image = [UIImage imageWithData:data];
     UIImage *imageCard;
-    
+
     //NSLog(@"line %d cardFramePercent %@", __LINE__, NSStringFromCGRect(self.previewView.cardFramePercent));
 
     CGFloat xPercent = self.previewView.cardFramePercent.origin.x;
@@ -459,7 +460,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 //    NSLog(@"line %d card size WH: %@, ar %.3f", __LINE__,
 //          NSStringFromCGSize(imageCard.size),
 //          imageCard.size.width/imageCard.size.height);
-    
+
     // Vision, text detection
     CIImage* ciimage = [[CIImage alloc] initWithCGImage:imageCard.CGImage];
     //NSLog(@"line %d card size WH: %@", __LINE__, NSStringFromCGSize(imageCard.size));
@@ -481,9 +482,14 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
-    
+
+    @autoreleasepool {
+
+    NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
+
 #if 1
     // OCR with tesseract
+
     G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
@@ -501,34 +507,35 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     
     CGSize cg_size = ui_img3.size;
 
-    NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
-    
     for (id box in goodBoxes){
-        const CGFloat margin = 1.0f;
-        CGRect cg_r = [box CGRectValue];
-        CGRect cg_imageRect = CGRectMake(cg_r.origin.x * cg_size.width - margin, // XYWH
-                                         cg_r.origin.y * cg_size.height - margin,
-                                         cg_r.size.width * cg_size.width + 2*margin,
-                                         cg_r.size.height * cg_size.height + 2*margin);
-        CGContextStrokeRect(cg_context, cg_imageRect);
-        
-        CGRect cg_imageRect2 = CGRectMake(cg_imageRect.origin.x,
-                                          ui_img3.size.height - (cg_imageRect.origin.y+cg_imageRect.size.height),
-                                          cg_imageRect.size.width,
-                                          cg_imageRect.size.height);
-        UIImage *tesseractSubImage = [ui_img3 cropRectangle:cg_imageRect2 inFrame:ui_img3.size];
-        tesseract.image = tesseractSubImage;
-        
-        [tesseract recognize];    // Start the recognition
+        @autoreleasepool {
 
-        // Add to result array, trimming off the trailing "\n\n"
-        [ocrStrings addObject:[[tesseract recognizedText] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]];
+            const CGFloat margin = 1.0f;
+            CGRect cg_r = [box CGRectValue];
+            CGRect cg_imageRect = CGRectMake(cg_r.origin.x * cg_size.width - margin, // XYWH
+                                             cg_r.origin.y * cg_size.height - margin,
+                                             cg_r.size.width * cg_size.width + 2*margin,
+                                             cg_r.size.height * cg_size.height + 2*margin);
+            CGContextStrokeRect(cg_context, cg_imageRect);
+            
+            CGRect cg_imageRect2 = CGRectMake(cg_imageRect.origin.x,
+                                              ui_img3.size.height - (cg_imageRect.origin.y+cg_imageRect.size.height),
+                                              cg_imageRect.size.width,
+                                              cg_imageRect.size.height);
+            UIImage *tesseractSubImage = [ui_img3 cropRectangle:cg_imageRect2 inFrame:ui_img3.size];
+            tesseract.image = tesseractSubImage;
+            
+            [tesseract recognize];    // Start the recognition
+
+            // Add to result array, trimming off the trailing "\n\n"
+            [ocrStrings addObject:[[tesseract recognizedText] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]];
+        }   // autoreleasepool
     }
     
 #ifdef DEBUG
     NSLog(@"OCR result <%@>", ocrStrings);
 #endif
-#endif
+#endif // OCR with tesseract
 
     // Fixup OCR results
 
@@ -585,6 +592,24 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     }
     else
         [self setAllFields:incompletePatient];
+
+        
+    // Clean up
+
+    //ciimage = nil;
+
+    tesseract = nil;
+    // Try to call 'clearCache' after all the tesseract instances are completely deallocated
+    double delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^{
+        [G8Tesseract clearCache];
+    });
+
+    [ocrStrings removeAllObjects];
+    ocrStrings = nil;
+        
+    } // autoreleasepool
 }
 
 # pragma mark Text Detection
@@ -592,7 +617,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 - (NSArray *)detectTextBoundingBoxes:(CIImage*)image
 {
     NSMutableArray *words = [[NSMutableArray alloc] init];
-    
+
     VNDetectTextRectanglesRequest *textRequest = [VNDetectTextRectanglesRequest new];
     textRequest.reportCharacterBoxes = NO;
     
@@ -625,9 +650,16 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 {
     //NSLog(@"%s %@, class: %@", __FUNCTION__, allBoxes, [allBoxes[0] class]); // NSConcreteValue
 
+    NSUInteger n = [allBoxes count];
+    if (n <= 3) {
+        NSLog(@"Nothing to do with only %lu boxes", (unsigned long)n);
+        return allBoxes;
+    }
+
     NSArray *boxes = allBoxes;
+
     // Keep only the first 5 (sorted by Y)
-    if ([allBoxes count] > 5) {
+    if (n > 5) {
         boxes = [allBoxes subarrayWithRange:NSMakeRange(0, 5)];
         //NSLog(@"Keep first 5 %@", boxes);
     }
