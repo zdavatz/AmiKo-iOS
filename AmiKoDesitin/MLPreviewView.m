@@ -54,7 +54,11 @@
     CALayer *sublayer = [self getBox:cardFrame thickness:2.0];
     [self.layer addSublayer:sublayer];
     
-    CGRect innerCardFrame = CGRectInset(cardFrame, 18, 18);
+    CGFloat scaleFactor = 0.05f;
+    CGFloat dx = cardW * scaleFactor;
+    CGFloat dy = cardH * scaleFactor;
+    //NSLog(@"dx dy %.1f %.1f", dx, dy);
+    CGRect innerCardFrame = CGRectInset(cardFrame, dx, dy);
     CALayer *sublayer2 = [self getBox:innerCardFrame thickness:1.0];
     [self.layer addSublayer:sublayer2];
 }
