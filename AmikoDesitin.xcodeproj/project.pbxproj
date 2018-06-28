@@ -296,6 +296,8 @@
 		FA4263712058117B00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4511B5204ECAFD00899A77 /* MLDoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* MLDoctorViewController.xib */; };
 		FA4511B8204ECBCB00899A77 /* MLPatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* MLPatientViewController.xib */; };
+		FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
+		FA4FB4A120E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
 		FA528CF220D8F1590066CE89 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
 		FA528CF320D8F1590066CE89 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
 		FA5FA7EF205A743200E0C042 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7F2205A743200E0C042 /* MLViewController.xib */; };
@@ -315,8 +317,6 @@
 		FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
 		FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
 		FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
-		FA7D750320E3EEFB005E49FE /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7D750120E3EEFB005E49FE /* CameraViewController.xib */; };
-		FA7D750420E3EEFB005E49FE /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7D750120E3EEFB005E49FE /* CameraViewController.xib */; };
 		FA7D750520E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
 		FA7D750620E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
 /* End PBXBuildFile section */
@@ -530,6 +530,9 @@
 		FA4511CE204EF51700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLDoctorViewController.strings; sourceTree = "<group>"; };
 		FA4511D0204EF52E00899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPrescriptionViewController.strings; sourceTree = "<group>"; };
 		FA4511D2204EF53700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MLPatientViewController.strings; sourceTree = "<group>"; };
+		FA4FB4A220E4BF030084F656 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/CameraViewController.xib; sourceTree = "<group>"; };
+		FA4FB4A520E4BF060084F656 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/CameraViewController.strings; sourceTree = "<group>"; };
+		FA4FB4A720E4BF070084F656 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CameraViewController.strings; sourceTree = "<group>"; };
 		FA528CF120D8F1590066CE89 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tessdata; path = AmiKoDesitin/tessdata; sourceTree = "<group>"; };
 		FA5CAC06207CF53B003B32C3 /* MLConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = AmiKoDesitin/MLConstants.h; sourceTree = SOURCE_ROOT; };
 		FA5FA7F1205A743200E0C042 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLViewController.xib; sourceTree = "<group>"; };
@@ -548,7 +551,6 @@
 		FA6B630220D7CA8400A54EF9 /* UIImage+Cropping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Cropping.h"; path = "AmiKoDesitin/UIImage+Cropping.h"; sourceTree = SOURCE_ROOT; };
 		FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Cropping.m"; path = "AmiKoDesitin/UIImage+Cropping.m"; sourceTree = SOURCE_ROOT; };
 		FA7D750020E3EEFB005E49FE /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraViewController.h; path = AmiKoDesitin/CameraViewController.h; sourceTree = SOURCE_ROOT; };
-		FA7D750120E3EEFB005E49FE /* CameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CameraViewController.xib; path = AmiKoDesitin/CameraViewController.xib; sourceTree = SOURCE_ROOT; };
 		FA7D750220E3EEFB005E49FE /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraViewController.m; path = AmiKoDesitin/CameraViewController.m; sourceTree = SOURCE_ROOT; };
 		FB4AE407B2573357E5DBB181 /* Pods-CoMedDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoMedDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoMedDesitin/Pods-CoMedDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1097,7 +1099,7 @@
 			children = (
 				FA7D750020E3EEFB005E49FE /* CameraViewController.h */,
 				FA7D750220E3EEFB005E49FE /* CameraViewController.m */,
-				FA7D750120E3EEFB005E49FE /* CameraViewController.xib */,
+				FA4FB4A320E4BF030084F656 /* CameraViewController.xib */,
 			);
 			name = camera;
 			sourceTree = "<group>";
@@ -1207,7 +1209,7 @@
 				D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5A225181945FC880078FEFF /* 938-connections.png in Resources */,
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
-				FA7D750320E3EEFB005E49FE /* CameraViewController.xib in Resources */,
+				FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */,
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */,
@@ -1317,7 +1319,7 @@
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
-				FA7D750420E3EEFB005E49FE /* CameraViewController.xib in Resources */,
+				FA4FB4A120E4BF030084F656 /* CameraViewController.xib in Resources */,
 				932F883B206BD9EC00B5A77E /* MLDoctorViewController.xib in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				932F883E206BDA1600B5A77E /* MLContactsListViewController.xib in Resources */,
@@ -1611,6 +1613,17 @@
 				FA4511D2204EF53700899A77 /* fr */,
 			);
 			name = MLPatientViewController.xib;
+			path = AmiKoDesitin;
+			sourceTree = SOURCE_ROOT;
+		};
+		FA4FB4A320E4BF030084F656 /* CameraViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA4FB4A220E4BF030084F656 /* Base */,
+				FA4FB4A520E4BF060084F656 /* de */,
+				FA4FB4A720E4BF070084F656 /* fr */,
+			);
+			name = CameraViewController.xib;
 			path = AmiKoDesitin;
 			sourceTree = SOURCE_ROOT;
 		};
