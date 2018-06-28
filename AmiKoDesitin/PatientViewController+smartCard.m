@@ -32,11 +32,11 @@
     NSLog(@"nc_front %@", [nc_front class]);
     NSLog(@"vc_front %@", [vc_front class]);
     
-    if (!self.camVC)
-        self.camVC = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
+    if (!self.cameraVC)
+        self.cameraVC = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
                                                             bundle:nil];
     
-    [vc_front presentViewController:self.camVC
+    [vc_front presentViewController:self.cameraVC
                            animated:NO
                          completion:NULL];
 }
@@ -58,10 +58,10 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
     //NSLog(@"line %d cardFramePercent %@", __LINE__, NSStringFromCGRect(self.previewView.cardFramePercent));
 
-    CGFloat xPercent = self.camVC.previewView.cardFramePercent.origin.x;
-    CGFloat yPercent = self.camVC.previewView.cardFramePercent.origin.y;
-    CGFloat wPercent = self.camVC.previewView.cardFramePercent.size.width;
-    CGFloat hPercent = self.camVC.previewView.cardFramePercent.size.height;
+    CGFloat xPercent = self.cameraVC.previewView.cardFramePercent.origin.x;
+    CGFloat yPercent = self.cameraVC.previewView.cardFramePercent.origin.y;
+    CGFloat wPercent = self.cameraVC.previewView.cardFramePercent.size.width;
+    CGFloat hPercent = self.cameraVC.previewView.cardFramePercent.size.height;
     // Crop the image to the health card outline
     CGRect cg_rectCropCard = CGRectMake((xPercent / 100.0f) * image.size.width,
                                         (yPercent / 100.0f) * image.size.height,

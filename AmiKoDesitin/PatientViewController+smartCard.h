@@ -16,7 +16,7 @@
 
 @interface PatientViewController () <AVCapturePhotoCaptureDelegate, UIGestureRecognizerDelegate, G8TesseractDelegate>
 
-@property (nonatomic) CameraViewController *camVC;
+@property (nonatomic) CameraViewController *cameraVC;
 
 @end
 

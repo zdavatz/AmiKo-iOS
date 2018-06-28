@@ -58,9 +58,17 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 
 @implementation CameraViewController
 
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 - (void)viewDidLoad
 {
-    //NSLog(@"%s self %p", __FUNCTION__, self);
+    //NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
     
     self.session = [[AVCaptureSession alloc] init];
