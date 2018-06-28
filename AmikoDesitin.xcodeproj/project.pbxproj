@@ -315,6 +315,10 @@
 		FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285CB20162DA1003B2EF3 /* Localizable.strings */; };
 		FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430285C620162C72003B2EF3 /* Localizable.strings */; };
 		FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
+		FA7D750320E3EEFB005E49FE /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7D750120E3EEFB005E49FE /* CameraViewController.xib */; };
+		FA7D750420E3EEFB005E49FE /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7D750120E3EEFB005E49FE /* CameraViewController.xib */; };
+		FA7D750520E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
+		FA7D750620E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -543,6 +547,9 @@
 		FA6A006020D3B26F002D3A33 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 		FA6B630220D7CA8400A54EF9 /* UIImage+Cropping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Cropping.h"; path = "AmiKoDesitin/UIImage+Cropping.h"; sourceTree = SOURCE_ROOT; };
 		FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Cropping.m"; path = "AmiKoDesitin/UIImage+Cropping.m"; sourceTree = SOURCE_ROOT; };
+		FA7D750020E3EEFB005E49FE /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraViewController.h; path = AmiKoDesitin/CameraViewController.h; sourceTree = SOURCE_ROOT; };
+		FA7D750120E3EEFB005E49FE /* CameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CameraViewController.xib; path = AmiKoDesitin/CameraViewController.xib; sourceTree = SOURCE_ROOT; };
+		FA7D750220E3EEFB005E49FE /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraViewController.m; path = AmiKoDesitin/CameraViewController.m; sourceTree = SOURCE_ROOT; };
 		FB4AE407B2573357E5DBB181 /* Pods-CoMedDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoMedDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoMedDesitin/Pods-CoMedDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -730,6 +737,7 @@
 		43A385092032CB08001A5849 /* front */ = {
 			isa = PBXGroup;
 			children = (
+				FA7D74FF20E3EEC5005E49FE /* camera */,
 				FA6A005D20D3B184002D3A33 /* MLPreviewView.h */,
 				FA6A005C20D3B184002D3A33 /* MLPreviewView.m */,
 				FA6A005820D39B90002D3A33 /* MLPatientViewController+smartCard.h */,
@@ -1084,6 +1092,16 @@
 			name = front;
 			sourceTree = "<group>";
 		};
+		FA7D74FF20E3EEC5005E49FE /* camera */ = {
+			isa = PBXGroup;
+			children = (
+				FA7D750020E3EEFB005E49FE /* CameraViewController.h */,
+				FA7D750220E3EEFB005E49FE /* CameraViewController.m */,
+				FA7D750120E3EEFB005E49FE /* CameraViewController.xib */,
+			);
+			name = camera;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1189,6 +1207,7 @@
 				D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5A225181945FC880078FEFF /* 938-connections.png in Resources */,
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
+				FA7D750320E3EEFB005E49FE /* CameraViewController.xib in Resources */,
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */,
@@ -1298,6 +1317,7 @@
 				D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */,
 				D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */,
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
+				FA7D750420E3EEFB005E49FE /* CameraViewController.xib in Resources */,
 				932F883B206BD9EC00B5A77E /* MLDoctorViewController.xib in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				932F883E206BDA1600B5A77E /* MLContactsListViewController.xib in Resources */,
@@ -1457,6 +1477,7 @@
 				D5A6F29417B16C1D00EAB24B /* MLTitleViewController.m in Sources */,
 				439EEF45202CBF4900817588 /* MLContactsListViewController.m in Sources */,
 				D5A6F29717B16C2F00EAB24B /* MLSearchWebView.m in Sources */,
+				FA7D750520E3EEFB005E49FE /* CameraViewController.m in Sources */,
 				D5A6F29A17B16C3A00EAB24B /* MLSecondViewController.m in Sources */,
 				D5A6F2A117B16C4B00EAB24B /* MLSimpleTableCell.m in Sources */,
 				D5A6F2A217B16C4B00EAB24B /* MLSQLiteDatabase.m in Sources */,
@@ -1506,6 +1527,7 @@
 				D5F6BB5817E8C87500DCBD16 /* MLSearchWebView.m in Sources */,
 				D5F6BB5917E8C87500DCBD16 /* MLSecondViewController.m in Sources */,
 				D5F6BB5A17E8C87500DCBD16 /* MLSimpleTableCell.m in Sources */,
+				FA7D750620E3EEFB005E49FE /* CameraViewController.m in Sources */,
 				FA4263702058117A00C2269E /* MLViewController.m in Sources */,
 				930D94B82077E610007E4629 /* MLBaseListViewController.m in Sources */,
 				930D94AF2077E50C007E4629 /* MLContactsListViewController.m in Sources */,

@@ -167,8 +167,6 @@ enum {
     [mSex addTarget:self
              action:@selector(sexDefined:)
    forControlEvents:UIControlEventValueChanged];
-
-    [self initCamera];
 }
 
 #ifdef DEBUG
