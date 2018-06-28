@@ -2098,7 +2098,7 @@ static BOOL mShowReport = false;
 
     // Right
     ContactsListViewController *contactsListViewController =
-    [[ContactsListViewController alloc] initWithNibName:@"ContactsListViewControllerContactsListViewController"
+    [[ContactsListViewController alloc] initWithNibName:@"ContactsListViewController"
                                                    bundle:nil];
     [mainRevealController setRightViewController:contactsListViewController];
 
