@@ -501,7 +501,7 @@ enum {
     if (![vc_right isKindOfClass:[ContactsListViewController class]] ) {
         // Replace right controller
         ContactsListViewController *contactsListViewController =
-        [[ContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
+        [[ContactsListViewController alloc] initWithNibName:@"ContactsListViewController"
                                                        bundle:nil];
         [revealController setRightViewController:contactsListViewController];
         NSLog(@"Replaced right VC");
