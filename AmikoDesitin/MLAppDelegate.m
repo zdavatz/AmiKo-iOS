@@ -27,13 +27,13 @@
 #import "SWRevealViewController.h"
 #import "MLViewController.h"
 #import "MLSecondViewController.h"
-#import "MLPrescriptionViewController.h"
+#import "PrescriptionViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 #import "MLUtility.h"
 #import "MLAlertView.h"
-#import "MLPatientDbListViewController.h"
-#import "MLPatientDBAdapter.h"
+#import "PatientDbListViewController.h"
+#import "PatientDBAdapter.h"
 
 #import <TesseractOCR/TesseractOCR.h>
 
@@ -343,7 +343,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [defaults setObject:fileName forKey:@"lastUsedPrescription"];
     [defaults synchronize];
     
-    MLPrescriptionViewController *vc = [MLPrescriptionViewController sharedInstance];
+    PrescriptionViewController *vc = [PrescriptionViewController sharedInstance];
     vc.editedMedicines = false;
     
     // Switch to prescription view to show what we just imported
@@ -382,7 +382,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
 
     // Load the prescription from the file in Inbox
-    MLPrescription *presInbox = [[MLPrescription alloc] init];
+    Prescription *presInbox = [[Prescription alloc] init];
     [presInbox importFromURL:url];
     
     // Check if the patient subdirectory exists and possibly create it
@@ -407,8 +407,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
 
     // Check if the patient is already in the DB and possibly add it.
-    MLPatientDBAdapter *patientDb;
-    patientDb = [[MLPatientDBAdapter alloc] init];
+    PatientDBAdapter *patientDb = [[PatientDBAdapter alloc] init];
     if (![patientDb openDatabase:@"patient_db"]) {
         NSLog(@"Could not open patient DB!");
         return NO;
@@ -426,7 +425,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
 
     BOOL prescriptionNeedsToBeImported = YES;
-    MLPrescription *presAmkDir = [[MLPrescription alloc] init];
+    Prescription *presAmkDir = [[Prescription alloc] init];
     NSString *foundFileName;
     NSString *foundUniqueId;
     for (NSString *f in amkFilesArray) {
@@ -492,8 +491,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 - (void) switchRigthToPatientDbList
 {
     id right = self.revealViewController.rightViewController;
-    if (![right isKindOfClass:[MLPatientDbListViewController class]] ) {
-        UIViewController *listViewController = [MLPatientDbListViewController sharedInstance];
+    if (![right isKindOfClass:[PatientDbListViewController class]] ) {
+        UIViewController *listViewController = [PatientDbListViewController sharedInstance];
         [self.revealViewController setRightViewController:listViewController];
 #ifdef DEBUG
         //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);

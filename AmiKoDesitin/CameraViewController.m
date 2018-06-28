@@ -1,13 +1,13 @@
 //
 //  CameraViewController.m
-//  ocrTest
+//  AmiKoDesitin
 //
 //  Created by Alex Bettarini on 26 Jun 2018
 //  Copyright © 2018 Alex Bettarini. All rights reserved.
 //
 
 #import "CameraViewController.h"
-#import "MLPatientViewController+smartCard.h" // use this class as photo delegate
+#import "PatientViewController+smartCard.h" // use this class as photo delegate
 
 static void * SessionRunningContext = &SessionRunningContext;
 
@@ -435,7 +435,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         return;
 
     // Find the delegate that will handle 'captureOutput'
-    MLPatientViewController *vc = [MLPatientViewController sharedInstance];
+    PatientViewController *vc = [PatientViewController sharedInstance];
     
     // Acquire image
     AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];

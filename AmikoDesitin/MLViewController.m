@@ -30,12 +30,12 @@
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 
-#import "MLPrescriptionViewController.h"
-#import "MLAmkListViewController.h"
+#import "PrescriptionViewController.h"
+#import "AmkListViewController.h"
 
-#import "MLDoctorViewController.h"
-#import "MLPatientViewController.h"
-#import "MLContactsListViewController.h"
+#import "DoctorViewController.h"
+#import "PatientViewController.h"
+#import "ContactsListViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -129,7 +129,7 @@ static BOOL mShowReport = false;
 
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
-    MLAmkListViewController *amkListViewController;
+    AmkListViewController *amkListViewController;
 
     UINavigationController *otherViewNavigationController;
     UINavigationController *menuViewNavigationController;
@@ -476,7 +476,7 @@ static BOOL mShowReport = false;
     NSLog(@"%s %@", __FUNCTION__, aNotification);
 #endif
     // Set as default patient for prescriptions
-    MLPatient *p = [aNotification object];
+    Patient *p = [aNotification object];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:p.uniqueId forKey:@"currentPatient"];
     [defaults synchronize];
@@ -494,13 +494,13 @@ static BOOL mShowReport = false;
     switch (appDel.editMode) {
         case EDIT_MODE_PRESCRIPTION:
             // There is only one case when we need to replace the front view
-            if ([vc_front isKindOfClass:[MLPatientViewController class]])
+            if ([vc_front isKindOfClass:[PatientViewController class]])
                 [self switchToPrescriptionView];
             break;
 
         case EDIT_MODE_PATIENTS:
-            if ([vc_front isKindOfClass:[MLPatientViewController class]]) {
-                MLPatientViewController *pvc = (MLPatientViewController *)vc_front;
+            if ([vc_front isKindOfClass:[PatientViewController class]]) {
+                PatientViewController *pvc = (PatientViewController *)vc_front;
                 [pvc resetAllFields];
                 [pvc setAllFields:p];
             }
@@ -2055,12 +2055,12 @@ static BOOL mShowReport = false;
         amkListViewController = nil;
     }
     
-    amkListViewController = [[MLAmkListViewController alloc] initWithNibName:@"MLAmkListViewController"
+    amkListViewController = [[AmkListViewController alloc] initWithNibName:@"AmkListViewController"
                                                                       bundle:nil];
     [mainRevealController setRightViewController:amkListViewController];
 
     // Front
-    MLPrescriptionViewController *prescriptionViewController = [MLPrescriptionViewController sharedInstance];
+    PrescriptionViewController *prescriptionViewController = [PrescriptionViewController sharedInstance];
     
     if (otherViewNavigationController!=nil) {
         [otherViewNavigationController removeFromParentViewController];
@@ -2084,7 +2084,7 @@ static BOOL mShowReport = false;
 {
     mainRevealController = self.revealViewController;
     
-    MLPatientViewController *patientListViewController = [MLPatientViewController sharedInstance];
+    PatientViewController *patientListViewController = [PatientViewController sharedInstance];
 
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientListViewController];
 
@@ -2097,13 +2097,13 @@ static BOOL mShowReport = false;
     mainRevealController = self.revealViewController;
 
     // Right
-    MLContactsListViewController *contactsListViewController =
-    [[MLContactsListViewController alloc] initWithNibName:@"MLContactsListViewController"
+    ContactsListViewController *contactsListViewController =
+    [[ContactsListViewController alloc] initWithNibName:@"ContactsListViewControllerContactsListViewController"
                                                    bundle:nil];
     [mainRevealController setRightViewController:contactsListViewController];
 
     // Front
-    MLPatientViewController *patientEditViewController = [MLPatientViewController sharedInstance];
+    PatientViewController *patientEditViewController = [PatientViewController sharedInstance];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:patientEditViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController
                                         animated:animated];
@@ -2124,7 +2124,7 @@ static BOOL mShowReport = false;
     mainRevealController.rightViewController = nil;
 
     // Front
-    MLDoctorViewController *doctorEditViewController = [MLDoctorViewController sharedInstance];
+    DoctorViewController *doctorEditViewController = [DoctorViewController sharedInstance];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:doctorEditViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     
@@ -2483,10 +2483,10 @@ static BOOL mShowReport = false;
 - (void) addMedicineToPrescription:(MLMedication *)medication :(NSInteger)packageIndex
 {
     //NSLog(@"Line %d, %@", __LINE__, mMed); // MLMedication
-    MLProduct *product = [[MLProduct alloc] initWithMedication:mMed :packageIndex];
+    Product *product = [[Product alloc] initWithMedication:mMed :packageIndex];
     //NSLog(@"%@", med);
     
-    [[MLPrescriptionViewController sharedInstance] addMedication:product];
+    [[PrescriptionViewController sharedInstance] addMedication:product];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

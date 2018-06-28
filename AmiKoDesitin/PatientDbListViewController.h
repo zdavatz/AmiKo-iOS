@@ -1,0 +1,17 @@
+//
+//  PatientDbListViewController.h
+//  AmikoDesitin
+//
+//  Created by Alex Bettarini on 13 Feb 2018
+//  Copyright © 2018 Ywesee GmbH. All rights reserved.
+//
+
+#import "BaseListViewController.h"
+
+@interface PatientDbListViewController : BaseListViewController <UIGestureRecognizerDelegate>
+
++ (PatientDbListViewController *)sharedInstance;
+- (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
+- (void) removeItem:(NSUInteger)rowIndex;
+
+@end

@@ -28,7 +28,7 @@
 #import "MLCustomURLConnection.h"
 #import "MLAlertView.h"
 #import "SWRevealViewController.h"
-#import "MLPatientViewController.h"
+#import "PatientViewController.h"
 
 #import "MLAppDelegate.h"
 

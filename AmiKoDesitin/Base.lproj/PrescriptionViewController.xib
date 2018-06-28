@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PrescriptionViewController">
+            <connections>
+                <outlet property="infoView" destination="f9a-IN-dWa" id="GSL-Fj-sHj"/>
+                <outlet property="interactionButton" destination="uB5-ix-Kqj" id="dJm-Vw-cxC"/>
+                <outlet property="saveButton" destination="BG5-Nh-8va" id="9AO-qA-g60"/>
+                <outlet property="sendButton" destination="Idx-b9-089" id="deX-Ix-z3c"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="812" height="375"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" sectionIndexMinimumDisplayRowCount="1" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="f9a-IN-dWa">
+                    <rect key="frame" x="0.0" y="0.0" width="812" height="322"/>
+                    <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <inset key="scrollIndicatorInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="UbI-M0-YSc"/>
+                        <outlet property="delegate" destination="-1" id="lK2-cc-x3p"/>
+                    </connections>
+                </tableView>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEC-AO-gUj">
+                    <rect key="frame" x="0.0" y="322" width="812" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="Lgx-l7-dbQ">
+                            <variation key="heightClass=regular-widthClass=compact" constant="44"/>
+                        </constraint>
+                        <constraint firstAttribute="height" constant="44" id="l78-XT-OIu">
+                            <variation key="heightClass=compact-widthClass=compact" constant="32"/>
+                        </constraint>
+                    </constraints>
+                    <items>
+                        <barButtonItem title="New" id="QUd-Rl-hna">
+                            <connections>
+                                <action selector="newPrescription:" destination="-1" id="XBA-Pc-oYQ"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Fku-2J-woe"/>
+                        <barButtonItem tag="1" title="Interaction" id="uB5-ix-Kqj">
+                            <connections>
+                                <action selector="checkForInteractions:" destination="-1" id="9TF-Tk-4oT"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="7NW-JX-z5F"/>
+                        <barButtonItem tag="2" title="Save" id="BG5-Nh-8va">
+                            <connections>
+                                <action selector="savePrescription:" destination="-1" id="94O-3w-lQa"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="g9g-bS-anR"/>
+                        <barButtonItem tag="3" title="Send" id="Idx-b9-089">
+                            <connections>
+                                <action selector="sendPrescription:" destination="-1" id="wKd-e1-1Nx"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Lgx-l7-dbQ"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <exclude reference="l78-XT-OIu"/>
+                        </mask>
+                    </variation>
+                </toolbar>
+            </subviews>
+            <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="f9a-IN-dWa" secondAttribute="trailing" id="6VZ-nH-mBh"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="AY3-Pv-bQf"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="top" secondItem="GX8-Pi-xe5" secondAttribute="top" id="CBK-0m-RWd"/>
+                <constraint firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Dt5-y1-ceE"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="trailing" secondItem="SEC-AO-gUj" secondAttribute="trailing" id="Hcn-n2-CoD"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="T7M-4a-Pz6"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="leading" secondItem="SEC-AO-gUj" secondAttribute="leading" id="UjD-Hk-9O2"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="bottom" secondItem="GX8-Pi-xe5" secondAttribute="bottom" id="W8e-2D-bWu"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="top" secondItem="GX8-Pi-xe5" secondAttribute="top" id="Zi8-Hl-N9t"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="bottom" secondItem="GX8-Pi-xe5" secondAttribute="bottom" id="aI4-Kp-wCb"/>
+                <constraint firstItem="f9a-IN-dWa" firstAttribute="centerX" secondItem="SEC-AO-gUj" secondAttribute="centerX" id="gme-KU-ijD"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="top" secondItem="f9a-IN-dWa" secondAttribute="bottom" id="kEZ-AC-V5b"/>
+                <constraint firstItem="SEC-AO-gUj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="pcB-re-iU6">
+                    <variation key="heightClass=compact-widthClass=compact" constant="-44"/>
+                </constraint>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="GX8-Pi-xe5"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="CBK-0m-RWd"/>
+                    <exclude reference="gme-KU-ijD"/>
+                    <exclude reference="Dt5-y1-ceE"/>
+                    <exclude reference="W8e-2D-bWu"/>
+                    <exclude reference="kEZ-AC-V5b"/>
+                    <exclude reference="pcB-re-iU6"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="constraints">
+                    <include reference="CBK-0m-RWd"/>
+                    <exclude reference="Hcn-n2-CoD"/>
+                    <exclude reference="UjD-Hk-9O2"/>
+                    <exclude reference="Zi8-Hl-N9t"/>
+                    <include reference="gme-KU-ijD"/>
+                    <include reference="Dt5-y1-ceE"/>
+                    <exclude reference="T7M-4a-Pz6"/>
+                    <include reference="W8e-2D-bWu"/>
+                    <exclude reference="aI4-Kp-wCb"/>
+                    <include reference="kEZ-AC-V5b"/>
+                    <include reference="pcB-re-iU6"/>
+                </mask>
+            </variation>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="EQN-vL-17V" appends="YES" id="IdS-mx-t8I"/>
+            </connections>
+            <point key="canvasLocation" x="24" y="52.5"/>
+        </view>
+        <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="EQN-vL-17V">
+            <connections>
+                <action selector="handleLongPress:" destination="-1" id="Nqs-V7-c3R"/>
+            </connections>
+        </pongPressGestureRecognizer>
+    </objects>
+</document>
