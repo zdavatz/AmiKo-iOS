@@ -53,12 +53,12 @@
         NSLog(@"layer frame: %@", NSStringFromCGRect(layer.frame));
 //    NSLog(@"bounds: %@", NSStringFromCGRect(self.bounds)); // {{0, 0}, {262, 360}}
 //    NSLog(@"frame: %@", NSStringFromCGRect(self.frame));
+#endif
 
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     NSLog(@"orientation: %ld", (long)orientation);
     // 1 UIInterfaceOrientationPortrait
     // 4 UIInterfaceOrientationLandscapeRight
-#endif
 
     const CGFloat cardAspectRatio = 85.6f / 53.98f; // w/h 1.585
 
