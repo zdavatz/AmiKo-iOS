@@ -21,10 +21,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6F-g0-MPd" customClass="PreviewView">
-                    <rect key="frame" x="0.0" y="44" width="375" height="703"/>
+                    <rect key="frame" x="0.0" y="44" width="375" height="690"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place Insurance card within outer frame, possible within inner frame." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pro-2f-tbq">
-                            <rect key="frame" x="48.333333333333343" y="331.33333333333331" width="280" height="40.666666666666686"/>
+                            <rect key="frame" x="48" y="325.33333333333331" width="280" height="40.666666666666686"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="280" id="yW5-67-rr5"/>
                             </constraints>
@@ -42,7 +42,7 @@
                     </connections>
                 </view>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VIb-7s-6Vz">
-                    <rect key="frame" x="0.0" y="747" width="375" height="31"/>
+                    <rect key="frame" x="0.0" y="734" width="375" height="44"/>
                     <items>
                         <barButtonItem systemItem="cancel" id="heL-8q-X0i">
                             <connections>
@@ -54,10 +54,6 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="p6F-g0-MPd" secondAttribute="bottom" constant="44" id="E5b-vR-AKM">
-                    <variation key="heightClass=compact-widthClass=compact" constant="55"/>
-                    <variation key="heightClass=regular-widthClass=compact" constant="65"/>
-                </constraint>
                 <constraint firstItem="p6F-g0-MPd" firstAttribute="bottom" secondItem="VIb-7s-6Vz" secondAttribute="top" id="Emm-Iz-URa"/>
                 <constraint firstItem="p6F-g0-MPd" firstAttribute="leading" secondItem="VIb-7s-6Vz" secondAttribute="leading" id="U3w-Hw-GWe"/>
                 <constraint firstAttribute="trailing" secondItem="p6F-g0-MPd" secondAttribute="trailing" id="aIW-cV-hJs"/>
