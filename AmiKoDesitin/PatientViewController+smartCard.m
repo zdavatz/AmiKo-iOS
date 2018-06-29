@@ -29,11 +29,13 @@
     // Make sure front is PatientViewController
     UIViewController *nc_front = self.revealViewController.frontViewController; // UINavigationController
     UIViewController *vc_front = [nc_front.childViewControllers firstObject];   // PatientViewController
-    NSLog(@"nc_front %@", [nc_front class]);
-    NSLog(@"vc_front %@", [vc_front class]);
+    //NSLog(@"nc_front %@", [nc_front class]);
+    //NSLog(@"vc_front %@", [vc_front class]);
     
     if (!self.cameraVC)
-        self.cameraVC = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
+        self.cameraVC = nil; // So that it will be reinitialized with the current orientation
+
+    self.cameraVC = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
                                                             bundle:nil];
     
     [vc_front presentViewController:self.cameraVC
@@ -57,6 +59,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     UIImage *imageCard;
 
     //NSLog(@"line %d cardFramePercent %@", __LINE__, NSStringFromCGRect(self.previewView.cardFramePercent));
+    NSLog(@"line %d imageOrientation %ld", __LINE__, (long)image.imageOrientation);
 
     CGFloat xPercent = self.cameraVC.previewView.cardFramePercent.origin.x;
     CGFloat yPercent = self.cameraVC.previewView.cardFramePercent.origin.y;

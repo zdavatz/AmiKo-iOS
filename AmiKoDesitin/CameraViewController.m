@@ -58,14 +58,6 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 
 @implementation CameraViewController
 
-- (BOOL)shouldAutorotate {
-    return NO;
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return YES;
-}
-
 - (void)viewDidLoad
 {
     //NSLog(@"%s", __FUNCTION__);
@@ -125,6 +117,52 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
+#pragma mark - Rotation
+
+- (BOOL)shouldAutorotate {
+    NSLog(@"%s", __FUNCTION__);
+    return YES;
+}
+
+- (void)didRotate:(NSNotification *)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    [self.view layoutIfNeeded];
+    
+#if 1
+    // Update the camera rotation
+    UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    AVCaptureVideoOrientation initialVideoOrientation = AVCaptureVideoOrientationPortrait;
+    if ( statusBarOrientation != UIInterfaceOrientationUnknown ) {
+        initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
+        self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
+    }
+#endif
+    
+    NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+    [self.previewView setNeedsDisplay]; // Will call drawRect
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    NSLog(@"%s", __FUNCTION__);
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    [coordinator animateAlongsideTransition:^(
+                                              id<UIViewControllerTransitionCoordinatorContext> context) {
+        // willRotateToInterfaceOrientation
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        // didRotateFromInterfaceOrientation would go here.
+        [self didRotate:nil];
+    }];
+}
+
 
 #pragma mark -
 

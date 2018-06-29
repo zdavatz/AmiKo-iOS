@@ -23,17 +23,19 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6F-g0-MPd" customClass="PreviewView">
                     <rect key="frame" x="0.0" y="20" width="375" height="603"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Place Insurance card within outer frame, possible within inner frame." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pro-2f-tbq">
-                            <rect key="frame" x="90" y="90" width="195" height="107"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place Insurance card within outer frame, possible within inner frame." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pro-2f-tbq">
+                            <rect key="frame" x="47" y="281" width="280" height="41"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="280" id="yW5-67-rr5"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="pro-2f-tbq" firstAttribute="top" secondItem="p6F-g0-MPd" secondAttribute="top" constant="90" id="0ID-8I-0oC"/>
-                        <constraint firstItem="pro-2f-tbq" firstAttribute="leading" secondItem="p6F-g0-MPd" secondAttribute="leading" constant="90" id="SO9-gx-4XZ"/>
-                        <constraint firstAttribute="trailing" secondItem="pro-2f-tbq" secondAttribute="trailing" constant="90" id="pI2-0h-0C9"/>
+                        <constraint firstItem="pro-2f-tbq" firstAttribute="centerY" secondItem="p6F-g0-MPd" secondAttribute="centerY" id="AhR-K7-XB5"/>
+                        <constraint firstItem="pro-2f-tbq" firstAttribute="centerX" secondItem="p6F-g0-MPd" secondAttribute="centerX" id="EHF-h8-Vab"/>
                     </constraints>
                     <connections>
                         <outletCollection property="gestureRecognizers" destination="UY0-er-low" appends="YES" id="rUr-zA-phk"/>
@@ -58,6 +60,7 @@
                 <constraint firstAttribute="trailing" secondItem="p6F-g0-MPd" secondAttribute="trailing" id="aIW-cV-hJs"/>
                 <constraint firstItem="p6F-g0-MPd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="l04-Uf-oX8"/>
                 <constraint firstItem="p6F-g0-MPd" firstAttribute="trailing" secondItem="VIb-7s-6Vz" secondAttribute="trailing" id="qxo-Hi-POv"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="VIb-7s-6Vz" secondAttribute="bottom" id="vFK-hK-EkF"/>
                 <constraint firstItem="p6F-g0-MPd" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="zkZ-CU-fsH"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>

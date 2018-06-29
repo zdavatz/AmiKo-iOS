@@ -12,8 +12,12 @@
 
 @interface PreviewView : UIView
 
+@property (nonatomic) CALayer *sublayer1;
+@property (nonatomic) CALayer *sublayer2;
+
 @property (nonatomic, readonly) AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic) CGRect cardFramePercent;
 
+- (CALayer *)getBox:(CGRect)rect thickness:(CGFloat)thickness;
 @end
