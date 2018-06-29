@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina5_9" orientation="landscape">
+    <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -17,14 +17,14 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="812" height="375"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6F-g0-MPd" customClass="PreviewView">
-                    <rect key="frame" x="0.0" y="0.0" width="812" height="320"/>
+                    <rect key="frame" x="0.0" y="44" width="375" height="703"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place Insurance card within outer frame, possible within inner frame." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pro-2f-tbq">
-                            <rect key="frame" x="265.66666666666669" y="140" width="280.00000000000006" height="40.666666666666657"/>
+                            <rect key="frame" x="48.333333333333343" y="331.33333333333331" width="280" height="40.666666666666686"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="280" id="yW5-67-rr5"/>
                             </constraints>
@@ -42,7 +42,7 @@
                     </connections>
                 </view>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VIb-7s-6Vz">
-                    <rect key="frame" x="0.0" y="320" width="812" height="34"/>
+                    <rect key="frame" x="0.0" y="747" width="375" height="31"/>
                     <items>
                         <barButtonItem systemItem="cancel" id="heL-8q-X0i">
                             <connections>
@@ -56,6 +56,7 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="p6F-g0-MPd" secondAttribute="bottom" constant="44" id="E5b-vR-AKM">
                     <variation key="heightClass=compact-widthClass=compact" constant="55"/>
+                    <variation key="heightClass=regular-widthClass=compact" constant="65"/>
                 </constraint>
                 <constraint firstItem="p6F-g0-MPd" firstAttribute="bottom" secondItem="VIb-7s-6Vz" secondAttribute="top" id="Emm-Iz-URa"/>
                 <constraint firstItem="p6F-g0-MPd" firstAttribute="leading" secondItem="VIb-7s-6Vz" secondAttribute="leading" id="U3w-Hw-GWe"/>
