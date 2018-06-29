@@ -176,6 +176,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
             {
                 // Only setup observers and start the session running if setup succeeded.
                 [self addObservers];
+                [self.session commitConfiguration]; // To prevent crash with the simulator
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
                 break;
@@ -421,6 +422,7 @@ monitorSubjectAreaChange:NO];
     if ( error.code == AVErrorMediaServicesWereReset ) {
         dispatch_async( self.sessionQueue, ^{
             if ( self.isSessionRunning ) {
+                [self.session commitConfiguration]; // To prevent crash with the simulator
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
 #if 1
