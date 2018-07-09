@@ -20,11 +20,11 @@
 {
     NSLog(@"%s", __FUNCTION__);
     
-    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-    UINavigationController *nc = self.navigationController;  // nil
-    NSLog(@"%s self %p, class %@", __FUNCTION__, self, [self class]);
-    NSLog(@"navigationController %@", nc);
-    NSLog(@"rootVC %@ class %@, rootVC.nc %@", rootVC, [rootVC class], rootVC.navigationController);
+//    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+//    UINavigationController *nc = self.navigationController;  // nil
+//    NSLog(@"%s self %p, class %@", __FUNCTION__, self, [self class]);
+//    NSLog(@"navigationController %@", nc);
+//    NSLog(@"rootVC %@ class %@, rootVC.nc %@", rootVC, [rootVC class], rootVC.navigationController);
     
     // Make sure front is PatientViewController
     UIViewController *nc_front = self.revealViewController.frontViewController; // UINavigationController
@@ -54,9 +54,11 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         return;
     }
     
+    [self.cameraVC.previewView updatePoiCornerPosition];
+    [self.cameraVC.previewView updateCardFrameFraction];  // from outerCardOutline
+    
     NSData *data = [photo fileDataRepresentation];
     UIImage *image = [UIImage imageWithData:data];
-    UIImage *imageCard;
 
     //NSLog(@"line %d cardFrameFraction %@", __LINE__, NSStringFromCGRect(self.previewView.cardFrameFraction));
     NSLog(@"line %d imageOrientation %ld", __LINE__, (long)image.imageOrientation);
@@ -65,6 +67,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     CGFloat y = self.cameraVC.previewView.cardFrameFraction.origin.y;
     CGFloat w = self.cameraVC.previewView.cardFrameFraction.size.width;
     CGFloat h = self.cameraVC.previewView.cardFrameFraction.size.height;
+
     // Crop the image to the health card outline
     CGRect cg_rectCropCard = CGRectMake(x * image.size.width,
                                         y * image.size.height,
@@ -75,18 +78,31 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 //    NSLog(@"line %d im size %@, ar %.3f", __LINE__,
 //          NSStringFromCGSize(image.size),
 //          image.size.width/image.size.height);
-    imageCard = [image cropRectangle:cg_rectCropCard inFrame:image.size];
+
+    UIImage *imageCard = [image cropRectangle:cg_rectCropCard inFrame:image.size];
 //    NSLog(@"line %d card size WH: %@, ar %.3f", __LINE__,
 //          NSStringFromCGSize(imageCard.size),
 //          imageCard.size.width/imageCard.size.height);
 
+    [self resetAllFields];
+    
     // Vision, text detection
     CIImage* ciimage = [[CIImage alloc] initWithCGImage:imageCard.CGImage];
     //NSLog(@"line %d card size WH: %@", __LINE__, NSStringFromCGSize(imageCard.size));
 
-    [self resetAllFields];
+    CGImagePropertyOrientation orient;
+    
+    if (imageCard.imageOrientation == UIImageOrientationRight) {
+        orient = kCGImagePropertyOrientationRight; // for portrait
+    }
+    else if (imageCard.imageOrientation == UIImageOrientationUp) {
+        orient = kCGImagePropertyOrientationUp; // for landscape L
+    }
+    else { //if (imageCard.imageOrientation == UIImageOrientationDown) {
+        orient = kCGImagePropertyOrientationDown; // for landscape R
+    }
 
-    NSArray *boxes = [self detectTextBoundingBoxes:ciimage];
+    NSArray *boxes = [self detectTextBoundingBoxes:ciimage orientation:orient];
     NSArray *goodBoxes = [self analyzeVisionBoxes:boxes];
     // We expect to have
     //  goodBoxes[0] FamilyName, GivenName
@@ -102,7 +118,6 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
     NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
 
-#if 1
     // OCR with tesseract
 
     G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
@@ -150,7 +165,6 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 #ifdef DEBUG
     NSLog(@"OCR result <%@>", ocrStrings);
 #endif
-#endif // OCR with tesseract
 
     // Fixup OCR results
 
@@ -220,8 +234,6 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         
     // Clean up
 
-    //ciimage = nil;
-
     tesseract = nil;
     // Try to call 'clearCache' after all the tesseract instances are completely deallocated
     double delayInSeconds = 0.1;
@@ -239,6 +251,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 # pragma mark Text Detection
 // Returns an array with the word bounding boxes with x < 0.3 and y < 0.3
 - (NSArray *)detectTextBoundingBoxes:(CIImage*)image
+                         orientation:(CGImagePropertyOrientation)orientation
 {
     NSMutableArray *words = [[NSMutableArray alloc] init];
 
@@ -248,7 +261,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     // Performs requests on a single image.
     VNImageRequestHandler *handler =
         [[VNImageRequestHandler alloc] initWithCIImage:image
-                                           orientation:kCGImagePropertyOrientationRight
+                                           orientation:orientation
                                                options:@{}];
     [handler performRequests:@[textRequest] error:nil];
     

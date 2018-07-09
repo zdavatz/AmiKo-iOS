@@ -10,7 +10,7 @@
 @import AVFoundation;
 #import "PreviewView.h"
 
-@interface CameraViewController : UIViewController <AVCapturePhotoCaptureDelegate, UIGestureRecognizerDelegate>
+@interface CameraViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet PreviewView *previewView;
 
@@ -18,7 +18,7 @@
 - (void) startCameraStream;
 - (void) stopCameraStream;
 
-- (IBAction)cancelCamera:(id)sender;
+- (IBAction) cancelCamera:(id)sender;
 - (IBAction) handleTap:(UITapGestureRecognizer *)gesture;
 
 @end

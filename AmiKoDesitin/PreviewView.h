@@ -12,12 +12,17 @@
 
 @interface PreviewView : UIView
 
-@property (nonatomic) CALayer *sublayer1;
-@property (nonatomic) CALayer *sublayer2;
+@property (nonatomic) CGPoint zeroZero;
+@property (nonatomic) CGPoint oneOne;
+
+@property (nonatomic) CALayer *outerCardOutline;
+@property (nonatomic) CALayer *innerCardOutline;
 
 @property (nonatomic, readonly) AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic) CGRect cardFrameFraction; // range 0..1
 
-- (CALayer *)getBox:(CGRect)rect thickness:(CGFloat)thickness;
+- (CALayer *) getBox:(CGRect)rect thickness:(CGFloat)thickness;
+- (void) updatePoiCornerPosition;
+- (void) updateCardFrameFraction;
 @end

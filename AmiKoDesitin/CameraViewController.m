@@ -36,27 +36,22 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
-
 @property (nonatomic) AVCamLivePhotoMode livePhotoMode;
 @property (nonatomic) AVCamDepthDataDeliveryMode depthDataDeliveryMode;
-
 @property (nonatomic) AVCapturePhotoOutput *photoOutput;
-//@property (nonatomic) NSMutableDictionary<NSNumber *, AVCamPhotoCaptureDelegate *> *inProgressPhotoCaptureDelegates;
 @property (nonatomic) NSInteger inProgressLivePhotoCapturesCount;
-
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
 @end
 
 #pragma mark -
 
-@interface CameraViewController (AVCaptureFileOutputRecordingDelegate)
-
-@end
-
-#pragma mark -
-
 @implementation CameraViewController
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
 
 - (void)viewDidLoad
 {
@@ -97,6 +92,8 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     dispatch_async( self.sessionQueue, ^{
         [self configureSession];
     } );
+    
+    [self.previewView setSession:self.session];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -118,10 +115,6 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)prefersStatusBarHidden {
-    return YES;
-}
-
 #pragma mark - Rotation
 
 - (BOOL)shouldAutorotate {
@@ -131,10 +124,9 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 
 - (void)didRotate:(NSNotification *)notification
 {
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s %@", __FUNCTION__, notification);
     [self.view layoutIfNeeded];
     
-#if 1
     // Update the camera rotation
     UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
     AVCaptureVideoOrientation initialVideoOrientation = AVCaptureVideoOrientationPortrait;
@@ -142,25 +134,25 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
         initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
         self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
     }
-#endif
     
-    NSLog(@"%s line %d", __FUNCTION__, __LINE__);
     [self.previewView setNeedsDisplay]; // Will call drawRect
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    [coordinator animateAlongsideTransition:^(
-                                              id<UIViewControllerTransitionCoordinatorContext> context) {
+    [coordinator animateAlongsideTransition:
+     ^(id<UIViewControllerTransitionCoordinatorContext> context) {
         // willRotateToInterfaceOrientation
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+     }
+                                 completion:
+     ^(id<UIViewControllerTransitionCoordinatorContext> context) {
         // didRotateFromInterfaceOrientation would go here.
         [self didRotate:nil];
-    }];
+     }];
 }
 
 #pragma mark -
@@ -183,12 +175,23 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
             case AVCamSetupResultCameraNotAuthorized:
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
-                    NSString *message = NSLocalizedString( @"AVCam doesn't have permission to use the camera, please change privacy settings", @"Alert message when the user has denied access to the camera" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
+                    NSString *bundleName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+
+                    NSString *message = [NSString stringWithFormat:NSLocalizedString( @"%@ doesn't have permission to use the camera, please change privacy settings", "Alert message when the user has denied access to the camera" ), bundleName];
+
+                    UIAlertController *alertController =
+                    [UIAlertController alertControllerWithTitle:bundleName
+                                                        message:message
+                                                 preferredStyle:UIAlertControllerStyleAlert];
+
+                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", "Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
                     [alertController addAction:cancelAction];
+
                     // Provide quick access to Settings.
-                    UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"Settings", @"Alert button to open Settings" ) style:UIAlertActionStyleDefault handler:^( UIAlertAction *action ) {
+                    UIAlertAction *settingsAction =
+                    [UIAlertAction actionWithTitle:NSLocalizedString( @"Settings", "Alert button to open Settings" )
+                                             style:UIAlertActionStyleDefault
+                                           handler:^( UIAlertAction *action ) {
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
                     }];
                     [alertController addAction:settingsAction];
@@ -199,9 +202,15 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
             case AVCamSetupResultSessionConfigurationFailed:
             {
                 dispatch_async( dispatch_get_main_queue(), ^{
-                    NSString *message = NSLocalizedString( @"Unable to capture media", @"Alert message when something goes wrong during capture session configuration" );
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"AVCam" message:message preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", @"Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
+                    NSString *message = NSLocalizedString( @"Unable to capture media", "Alert message when something goes wrong during capture session configuration" );
+
+                    UIAlertController *alertController =
+                    [UIAlertController alertControllerWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"]
+                                                        message:message
+                                                 preferredStyle:UIAlertControllerStyleAlert];
+
+                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString( @"OK", "Alert OK button" ) style:UIAlertActionStyleCancel handler:nil];
+
                     [alertController addAction:cancelAction];
                     [self presentViewController:alertController animated:YES completion:nil];
                 } );
@@ -315,7 +324,10 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 
 - (void)addObservers
 {
-    [self.session addObserver:self forKeyPath:@"running" options:NSKeyValueObservingOptionNew context:SessionRunningContext];
+    [self.session addObserver:self
+                   forKeyPath:@"running"
+                      options:NSKeyValueObservingOptionNew
+                      context:SessionRunningContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(subjectAreaDidChange:)
@@ -349,10 +361,16 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [self.session removeObserver:self forKeyPath:@"running" context:SessionRunningContext];
+    [self.session
+     removeObserver:self
+     forKeyPath:@"running"
+     context:SessionRunningContext];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
 {
     if ( context == SessionRunningContext ) {
 //        BOOL isSessionRunning = [change[NSKeyValueChangeNewKey] boolValue];
@@ -370,7 +388,10 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     }
 }
 
-- (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
+- (void)focusWithMode:(AVCaptureFocusMode)focusMode
+       exposeWithMode:(AVCaptureExposureMode)exposureMode
+        atDevicePoint:(CGPoint)point
+monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
 {
     dispatch_async( self.sessionQueue, ^{
         AVCaptureDevice *device = self.videoDeviceInput.device;
@@ -424,7 +445,7 @@ monitorSubjectAreaChange:NO];
                 [self.session commitConfiguration]; // To prevent crash with the simulator
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
-#if 1
+#if 0
                 AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
                 [self.photoOutput capturePhotoWithSettings:photoSettings
                                                   delegate:self];
@@ -455,15 +476,6 @@ monitorSubjectAreaChange:NO];
     NSLog( @"Capture session interruption ended" );
 }
 
-#pragma mark - AVCapturePhotoCaptureDelegate
-
-- (void)captureOutput:(AVCapturePhotoOutput *)captureOutput
-didFinishProcessingPhoto:(AVCapturePhoto *)photo
-                error:(nullable NSError *)error
-{
-    NSLog(@"%s", __FUNCTION__);
-}
-
 #pragma mark - IBAction
 
 - (IBAction)cancelCamera:(id)sender
@@ -477,17 +489,27 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 - (IBAction) handleTap:(UITapGestureRecognizer *)gesture
 {
     //NSLog(@"%s", __FUNCTION__);
-    
-    if (!self.session.isRunning)
-        return;
 
-    // Find the delegate that will handle 'captureOutput'
-    PatientViewController *vc = [PatientViewController sharedInstance];
-    
-    // Acquire image
-    AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
-    [self.photoOutput capturePhotoWithSettings:photoSettings
-                                      delegate:vc];
+    if (self.session.isRunning) {
+        // Find the delegate that will handle 'captureOutput'
+        PatientViewController *vc = [PatientViewController sharedInstance];
+        
+        // Acquire image
+        AVCaptureVideoOrientation videoPreviewLayerVideoOrientation = self.previewView.videoPreviewLayer.connection.videoOrientation;
+        
+        // Update the photo output's connection to match the video orientation of the video preview layer.
+        AVCaptureConnection *photoOutputConnection = [self.photoOutput connectionWithMediaType:AVMediaTypeVideo];
+        photoOutputConnection.videoOrientation = videoPreviewLayerVideoOrientation; // very important !
+        
+        AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
+        if ( self.videoDeviceInput.device.isFlashAvailable )
+            photoSettings.flashMode = AVCaptureFlashModeAuto;
+
+        photoSettings.highResolutionPhotoEnabled = YES;
+
+        [self.photoOutput capturePhotoWithSettings:photoSettings
+                                          delegate:vc];
+    }
     
      [self dismissViewControllerAnimated:NO completion:NULL];
 }
