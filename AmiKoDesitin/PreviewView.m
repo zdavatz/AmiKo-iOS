@@ -16,10 +16,10 @@
     //NSLog(@"%s", __FUNCTION__);
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.sublayer1 = [self getBox:CGRectNull thickness:2.0];
+        self.sublayer1 = [self getBox:CGRectZero thickness:2.0];
         [self.layer addSublayer:self.sublayer1];
         
-        self.sublayer2 = [self getBox:CGRectNull thickness:1.0];
+        self.sublayer2 = [self getBox:CGRectZero thickness:1.0];
         [self.layer addSublayer:self.sublayer2];
     }
 
@@ -71,7 +71,7 @@
     }
     else {
         cardY = self.bounds.size.height / 10.0f;        // 10% of the height
-        cardH = self.bounds.size.height - 2.0f * cardY;
+        cardH = self.bounds.size.height - 2.0f * cardY; // same margin from the bottom
         cardW = cardH * cardAspectRatio;
         cardX = (self.bounds.size.width-cardW) / 2.0f;
     }
@@ -79,11 +79,11 @@
     CGRect cardFrame = CGRectMake(cardX, cardY, cardW, cardH);
     NSLog(@"overlay card frame %@", NSStringFromCGRect(cardFrame));
 
-    self.cardFramePercent = CGRectMake(100.0f * cardX / self.bounds.size.width,
-                                       100.0f * cardY / self.bounds.size.height,
-                                       100.0f * cardW / self.bounds.size.width,
-                                       100.0f * cardH / self.bounds.size.height);
-    //NSLog(@"self %p, percent %@", self, NSStringFromCGRect(self.cardFramePercent));
+    self.cardFrameFraction = CGRectMake(cardX / self.bounds.size.width,
+                                        cardY / self.bounds.size.height,
+                                        cardW / self.bounds.size.width,
+                                        cardH / self.bounds.size.height);
+    //NSLog(@"self %p, fraction %@", self, NSStringFromCGRect(self.cardFrameFraction));
 
     self.sublayer1.frame = cardFrame;
     

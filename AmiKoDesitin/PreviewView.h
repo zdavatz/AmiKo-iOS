@@ -17,7 +17,7 @@
 
 @property (nonatomic, readonly) AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) AVCaptureSession *session;
-@property (nonatomic) CGRect cardFramePercent;
+@property (nonatomic) CGRect cardFrameFraction; // range 0..1
 
 - (CALayer *)getBox:(CGRect)rect thickness:(CGFloat)thickness;
 @end

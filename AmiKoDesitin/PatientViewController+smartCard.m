@@ -58,18 +58,18 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     UIImage *image = [UIImage imageWithData:data];
     UIImage *imageCard;
 
-    //NSLog(@"line %d cardFramePercent %@", __LINE__, NSStringFromCGRect(self.previewView.cardFramePercent));
+    //NSLog(@"line %d cardFrameFraction %@", __LINE__, NSStringFromCGRect(self.previewView.cardFrameFraction));
     NSLog(@"line %d imageOrientation %ld", __LINE__, (long)image.imageOrientation);
 
-    CGFloat xPercent = self.cameraVC.previewView.cardFramePercent.origin.x;
-    CGFloat yPercent = self.cameraVC.previewView.cardFramePercent.origin.y;
-    CGFloat wPercent = self.cameraVC.previewView.cardFramePercent.size.width;
-    CGFloat hPercent = self.cameraVC.previewView.cardFramePercent.size.height;
+    CGFloat x = self.cameraVC.previewView.cardFrameFraction.origin.x;
+    CGFloat y = self.cameraVC.previewView.cardFrameFraction.origin.y;
+    CGFloat w = self.cameraVC.previewView.cardFrameFraction.size.width;
+    CGFloat h = self.cameraVC.previewView.cardFrameFraction.size.height;
     // Crop the image to the health card outline
-    CGRect cg_rectCropCard = CGRectMake((xPercent / 100.0f) * image.size.width,
-                                        (yPercent / 100.0f) * image.size.height,
-                                        (wPercent / 100.0f) * image.size.width,
-                                        (hPercent / 100.0f) * image.size.height);
+    CGRect cg_rectCropCard = CGRectMake(x * image.size.width,
+                                        y * image.size.height,
+                                        w * image.size.width,
+                                        h * image.size.height);
     
     //NSLog(@"line %d cropCard %@", __LINE__, NSStringFromCGRect(cg_rectCropCard));
 //    NSLog(@"line %d im size %@, ar %.3f", __LINE__,

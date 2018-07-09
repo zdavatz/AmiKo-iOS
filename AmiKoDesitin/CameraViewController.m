@@ -163,7 +163,6 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     }];
 }
 
-
 #pragma mark -
 
 - (void) startCameraStream
