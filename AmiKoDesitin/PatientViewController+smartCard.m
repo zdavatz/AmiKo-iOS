@@ -14,6 +14,9 @@
 #import "SWRevealViewController.h"
 #import "MLAppDelegate.h"
 
+#define NUMBER_OF_BOXES_FOR_TESSERACT   3
+//#define WITH_ARRAY_OF_BLACKLISTS
+
 @implementation PatientViewController (smartCard)
 
 - (void) startCameraLivePreview
@@ -104,12 +107,14 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
     NSArray *boxes = [self detectTextBoundingBoxes:ciimage orientation:orient];
     NSArray *goodBoxes = [self analyzeVisionBoxes:boxes];
+
     // We expect to have
     //  goodBoxes[0] FamilyName, GivenName
     //  goodBoxes[1] CardNumber (unused)
     //  goodBoxes[2] Birthday Sex
-    if ([goodBoxes count] < 3) {
-        NSLog(@"line %d only %ld boxes", __LINE__, [goodBoxes count]);
+
+    if ([goodBoxes count] != NUMBER_OF_BOXES_FOR_TESSERACT) {
+        NSLog(@"Detected %ld boxes instead of %d", [goodBoxes count], NUMBER_OF_BOXES_FOR_TESSERACT);
         [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
@@ -117,15 +122,29 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     @autoreleasepool {
 
     NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
+#ifdef WITH_ARRAY_OF_BLACKLISTS
+    NSArray *blacklist = [NSArray arrayWithObjects:
+                          @"_}\".[]':",
+                          @"", //   [NSNull null] will crash
+                          @"",
+                          nil];
+    NSArray *whitelist = [NSArray arrayWithObjects:
+                          @"",
+                          @"0123456789",
+                          @"0123456789. MF",
+                          nil];
+#endif
 
     // OCR with tesseract
 
     G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
-    tesseract.charBlacklist = @"_";
     //tesseract.engineMode = G8OCREngineModeTesseractCubeCombined; // G8OCREngineModeTesseractOnly
-    
+#ifndef WITH_ARRAY_OF_BLACKLISTS
+    tesseract.charBlacklist = @"_";
+#endif
+
     UIImage *ui_img3 = imageCard;
     
     UIGraphicsBeginImageContextWithOptions(ui_img3.size, NO, ui_img3.scale);
@@ -137,7 +156,8 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     
     CGSize cg_size = ui_img3.size;
 
-    for (id box in goodBoxes){
+        int i = 0;
+        for (id box in goodBoxes) { // We know we have these many: NUMBER_OF_BOXES_FOR_TESSERACT
         @autoreleasepool {
 
             const CGFloat margin = 1.0f;
@@ -154,13 +174,20 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
                                               cg_imageRect.size.height);
             UIImage *tesseractSubImage = [ui_img3 cropRectangle:cg_imageRect2 inFrame:ui_img3.size];
             tesseract.image = tesseractSubImage;
-            
+
+#ifdef WITH_ARRAY_OF_BLACKLISTS
+            tesseract.charWhitelist = whitelist[i];
+            tesseract.charBlacklist = blacklist[i];
+#endif
+
             [tesseract recognize];    // Start the recognition
 
             // Add to result array, trimming off the trailing "\n\n"
             [ocrStrings addObject:[[tesseract recognizedText] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]];
+            
+            i++;
         }   // autoreleasepool
-    }
+    } // for
     
 #ifdef DEBUG
     NSLog(@"OCR result <%@>", ocrStrings);
@@ -288,7 +315,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     //NSLog(@"%s %@, class: %@", __FUNCTION__, allBoxes, [allBoxes[0] class]); // NSConcreteValue
 
     NSUInteger n = [allBoxes count];
-    if (n <= 3) {
+    if (n <= NUMBER_OF_BOXES_FOR_TESSERACT) {
         NSLog(@"%s Nothing to do with only %lu boxes", __FUNCTION__, (unsigned long)n);
         return allBoxes;
     }
@@ -312,9 +339,9 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     }];
     //NSLog(@"sorted by height %@", boxes);
     
-    // Keep only the first 3
-    boxes = [boxes subarrayWithRange:NSMakeRange(0, 3)];
-    //NSLog(@"Keep first 3 %@", boxes);
+    // Keep only the first NUMBER_OF_BOXES_FOR_TESSERACT
+    boxes = [boxes subarrayWithRange:NSMakeRange(0, NUMBER_OF_BOXES_FOR_TESSERACT)];
+    //NSLog(@"Keep first %d %@", NUMBER_OF_BOXES_FOR_TESSERACT, boxes);
 
     // Sort them back by Y
     boxes = [boxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
