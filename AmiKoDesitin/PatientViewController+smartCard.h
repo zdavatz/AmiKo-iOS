@@ -14,9 +14,7 @@
 
 #pragma mark - class extension
 
-@interface PatientViewController () <AVCapturePhotoCaptureDelegate,
-        //UIGestureRecognizerDelegate,  // to be obsoleted
-        G8TesseractDelegate>
+@interface PatientViewController () <AVCapturePhotoCaptureDelegate, G8TesseractDelegate>
 
 @property (nonatomic) CameraViewController *cameraVC;
 

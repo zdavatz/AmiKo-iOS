@@ -117,7 +117,8 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 
 #pragma mark - Rotation
 
-- (BOOL)shouldAutorotate {
+- (BOOL)shouldAutorotate
+{
     NSLog(@"%s", __FUNCTION__);
     return YES;
 }
@@ -244,12 +245,14 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     [self.session beginConfiguration];
     self.session.sessionPreset = AVCaptureSessionPresetPhoto;
     
+    ////////////////////////////////////////////////////////////////////////////
     AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
         NSLog(@"No videoDevice");
         return;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
     if ( ! videoDeviceInput ) {
         NSLog( @"Could not create video device input: %@", error );
@@ -291,6 +294,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
         return;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     // Add photo output.
     AVCapturePhotoOutput *photoOutput = [[AVCapturePhotoOutput alloc] init];
     if ( [self.session canAddOutput:photoOutput] )
@@ -317,6 +321,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     
     self.backgroundRecordingID = UIBackgroundTaskInvalid;
     
+    ////////////////////////////////////////////////////////////////////////////
     [self.session commitConfiguration];
 }
 
@@ -491,9 +496,6 @@ monitorSubjectAreaChange:NO];
     //NSLog(@"%s", __FUNCTION__);
 
     if (self.session.isRunning) {
-        // Find the delegate that will handle 'captureOutput'
-        PatientViewController *vc = [PatientViewController sharedInstance];
-        
         // Acquire image
         AVCaptureVideoOrientation videoPreviewLayerVideoOrientation = self.previewView.videoPreviewLayer.connection.videoOrientation;
         
@@ -508,7 +510,7 @@ monitorSubjectAreaChange:NO];
         photoSettings.highResolutionPhotoEnabled = YES;
 
         [self.photoOutput capturePhotoWithSettings:photoSettings
-                                          delegate:vc];
+                                          delegate:self.delegate];
     }
     
      [self dismissViewControllerAnimated:NO completion:NULL];

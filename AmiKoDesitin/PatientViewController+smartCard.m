@@ -40,7 +40,8 @@
 
     self.cameraVC = [[CameraViewController alloc] initWithNibName:@"CameraViewController"
                                                             bundle:nil];
-    
+    self.cameraVC.delegate = self;
+
     [vc_front presentViewController:self.cameraVC
                            animated:NO
                          completion:NULL];

@@ -2,20 +2,23 @@
 //  PrescriptionViewController.h
 //  AmikoDesitin
 //
-//  Created by Alex Bettarini on 22 Jan 2018.
+//  Created by Alex Bettarini on 22 Jan 2018
 //  Copyright © 2018 Ywesee GmbH. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-//#import <MessageUI/MessageUI.h>
 
 #import "Prescription.h"
+@import AVFoundation;
+#import "videoViewController.h"
 
 @interface PrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate
-//, MFMailComposeViewControllerDelegate
->
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate, AVCaptureVideoDataOutputSampleBufferDelegate>
 {
+    AVCaptureSession *captureSession;
+    AVCaptureVideoDataOutput *captureOutput;
+    dispatch_queue_t queue;
+
     IBOutlet UITableView *infoView;
 }
 
@@ -26,6 +29,8 @@
 @property (nonatomic, retain) IBOutlet UITableView *infoView;
 @property (atomic) Prescription *prescription;
 @property (nonatomic) bool editedMedicines; // "dirty" flag
+
+@property (nonatomic) videoViewController *videoVC;
 
 + (PrescriptionViewController *)sharedInstance;
 

@@ -2,7 +2,7 @@
 //  PrescriptionViewController.m
 //  AmikoDesitin
 //
-//  Created by Alex Bettarini on 22 Jan 2018.
+//  Created by Alex Bettarini on 22 Jan 2018
 //  Copyright © 2018 Ywesee GmbH. All rights reserved.
 //
 
@@ -98,7 +98,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) saveButtonOff;
 - (void) recalculateSavedOffset;
 - (void) updateMainframeRect;
-- (void) showCamera;
+- (void) showCameraForHealthCardOCR;
+- (void) showCameraForBarcodeAcquisition;
 @end
 
 #pragma mark -
@@ -1372,7 +1373,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     self.sendButton.enabled = NO;
 }
 
-- (void) showCamera
+- (void) showCameraForHealthCardOCR
 {
     NSLog(@"%s", __FUNCTION__);
     // Initialize the patient DB in the singleton ahead of time
@@ -1389,41 +1390,98 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [patientVC handleCameraButton:nil];
 }
 
+- (void) showCameraForBarcodeAcquisition
+{
+    NSLog(@"%s", __FUNCTION__);
+
+#if 1 // with VC
+    // Make sure front is PrescriptiopnViewController
+    UIViewController *nc_front = self.revealViewController.frontViewController; // UINavigationController
+    UIViewController *vc_front = [nc_front.childViewControllers firstObject];   // PrescriptionViewController
+//    NSLog(@"nc_front %@", [nc_front class]);
+//    NSLog(@"vc_front %@", [vc_front class]);
+    
+    if (!self.videoVC)
+        self.videoVC = nil; // So that it will be reinitialized with the current orientation
+    
+    self.videoVC = [[videoViewController alloc] initWithNibName:@"videoViewController"
+                                                         bundle:nil];
+
+    self.videoVC.delegate = self;
+    
+    [vc_front presentViewController:self.videoVC
+                           animated:NO
+                         completion:NULL];
+#else
+    captureSession = [AVCaptureSession new];
+    NSError *error;
+    AVCaptureDeviceInput *cameraDeviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:[AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo] error:&error];
+    
+    if(error){
+        NSLog(@"error configuring camera input: %@", [error localizedDescription]);
+        return;
+    }
+
+    if ([captureSession canAddInput:cameraDeviceInput]) {
+        [captureSession addInput:cameraDeviceInput];
+    }
+
+    #if 0
+    AVCaptureMovieFileOutput *movieFileOutput = [AVCaptureMovieFileOutput new];
+    if ([captureSession canAddOutput:movieFileOutput]) {
+        [captureSession addOutput:movieFileOutput];
+    }
+    #else
+    self.videoDataOutput = [AVCaptureVideoDataOutput new];
+    _videoDataOutput.videoSettings = nil;
+    _videoDataOutput.alwaysDiscardsLateVideoFrames = NO;
+    [_videoDataOutput setSampleBufferDelegate:self queue:_videoDataOutputQueue];
+    [captureSession addOutput:self.videoDataOutput]; // @@@
+    #endif
+
+    NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+    [captureSession startRunning];
+#endif
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture
 {
+    if (gesture.state != UIGestureRecognizerStateBegan)
+        return;
+    
     CGPoint p = [gesture locationInView:infoView];
     NSIndexPath *indexPath = [infoView indexPathForRowAtPoint:p];
-    CGRect r = [infoView rectForSection:kSectionPatient];
+    CGRect rectPatientSection = [infoView rectForSection:kSectionPatient];
+    CGRect rectMedicineSection = [infoView rectForSection:kSectionMedicines];
 
     if (indexPath == nil) {
-        // If p is in the header section rect, show the camera, else return
-        if (CGRectContainsPoint(r, p) &&
-            (gesture.state == UIGestureRecognizerStateBegan)) {
-            [self showCamera];
+        // If p is in the patient header section rect, show the camera, else return
+        if (CGRectContainsPoint(rectPatientSection, p))
+        {
+            [self showCameraForHealthCardOCR];
+            return;
+        }
+        else if (CGRectContainsPoint(rectMedicineSection, p))
+        {
+            [self showCameraForBarcodeAcquisition];
             return;
         }
         else {
 #ifdef DEBUG
             NSLog(@"long press on table view but not on a row, point: %@, rect: %@ state:%ld",
                   NSStringFromCGPoint(p),
-                  NSStringFromCGRect(r),
+                  NSStringFromCGRect(rectPatientSection),
                   (long)gesture.state);
 #endif
             return;
         }
     }
     
-    if (gesture.state != UIGestureRecognizerStateBegan) {
-#ifdef DEBUG
-        NSLog(@"gestureRecognizer.state = %ld", gesture.state);
-#endif
-        return;
-    }
-    
     if (indexPath.section == kSectionPatient) {
-        [self showCamera];
+        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+        [self showCameraForHealthCardOCR];
         return;
     }
     else if (indexPath.section != kSectionMedicines) {
@@ -1736,31 +1794,19 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
 }
 
-//#pragma mark - MFMailComposeViewControllerDelegate
+#pragma mark - SampleBufferDelegate methods
+#pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
 
-#pragma mark - UIActivityItemSource
-
-////- Returns the data object to be acted upon. (required)
-//- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
-//{
-//    if ([activityType isEqualToString:UIActivityTypeMail]) {
-//        return @{@"body":@"mail body 1", @"url":lastUsedURL};
-//    }
-//
-//    return @{@"body":@"mail body 2", @"url":lastUsedURL};
-//}
-//
-////- Returns the placeholder object for the data. (required)
-////- The class of this object must match the class of the object you return from the above method
-//- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
-//{
-//    return @{@"body":@"mail body 3", @"url":lastUsedURL};
-//}
-//
-//-(NSString *) activityViewController:(UIActivityViewController *)activityViewController
-//              subjectForActivityType:(NSString *)activityType
-//{
-//    return @"mail subject 3";
-//}
+// See videoCaptureDemo and Generika
+- (void)captureOutput:(AVCaptureOutput *)captureOutput
+didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+       fromConnection:(AVCaptureConnection *)connection
+{
+    static int frameNUmber = 1;
+    NSLog(@"%s frame %d", __FUNCTION__, frameNUmber++);
+    CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
+    
+    // TODO: detection of barcode with Vision framework
+}
 
 @end

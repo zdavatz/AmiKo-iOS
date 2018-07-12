@@ -13,6 +13,7 @@
 @interface CameraViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet PreviewView *previewView;
+@property (nonatomic, weak) id<AVCapturePhotoCaptureDelegate> delegate;
 
 - (void) addObservers;
 - (void) startCameraStream;
