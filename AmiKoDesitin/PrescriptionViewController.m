@@ -16,6 +16,8 @@
 #import "PatientDBAdapter.h"
 #import "PatientViewController.h"
 
+@import Vision;
+
 #ifdef DEBUG
 //#define DEBUG_COLOR_BG
 #endif
@@ -1802,11 +1804,81 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection
 {
-    static int frameNUmber = 1;
-    NSLog(@"%s frame %d", __FUNCTION__, frameNUmber++);
-    CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
+//    static int frameNumber = 1;
+//    NSLog(@"%s frame %d", __FUNCTION__, frameNumber++);
+    // TODO: maybe find a way of reducing the video frame rate
+
+    //CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
+    //NSLog(@"formatDescription %@", formatDescription);
+
+    CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)CMSampleBufferGetImageBuffer(sampleBuffer);
+    //NSLog(@"pixelBuffer %@", pixelBuffer);
+
+    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
     
-    // TODO: detection of barcode with Vision framework
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef myImage = [context
+                          createCGImage:ciImage
+                          fromRect:CGRectMake(0, 0,
+                                              CVPixelBufferGetWidth(pixelBuffer),
+                                              CVPixelBufferGetHeight(pixelBuffer))];
+    
+    UIImage *image = [UIImage imageWithCGImage:myImage];
+    CGImageRelease(myImage);
+    
+    if (!image) {
+        NSLog(@"line %d: image is nil", __LINE__);
+        return;
+    }
+
+    // Detection of barcode with Vision framework
+    
+    VNDetectBarcodesRequest *barcodeRequest = [VNDetectBarcodesRequest new];
+    
+    CIImage *ciimage = [[CIImage alloc] initWithCGImage:image.CGImage];
+    
+    CGImagePropertyOrientation orient;
+    if (image.imageOrientation == UIImageOrientationRight) {
+        orient = kCGImagePropertyOrientationRight; // for portrait
+    }
+    else if (image.imageOrientation == UIImageOrientationUp) {
+        orient = kCGImagePropertyOrientationUp; // for landscape L
+    }
+    else { //if (imageCard.imageOrientation == UIImageOrientationDown) {
+        orient = kCGImagePropertyOrientationDown; // for landscape R
+    }
+    
+    VNImageRequestHandler *handler =
+    [[VNImageRequestHandler alloc] initWithCIImage:ciimage
+                                       orientation:orient
+                                           options:@{}];
+    [handler performRequests:@[barcodeRequest] error:nil];
+    
+    if (barcodeRequest.results.count == 0) {
+        return;
+    }
+
+#if 0 //def DEBUG
+    for (VNBarcodeObservation *observation in barcodeRequest.results) {
+        NSLog(@"line %d \n\t rect %@ \n\t string %@ \n\t observation: %@", __LINE__,
+              NSStringFromCGRect(observation.boundingBox),
+              observation.payloadStringValue,
+              observation);
+    }
+#endif
+
+    // We know we have at least one barcode, use the first one
+    VNBarcodeObservation *firstObservation = barcodeRequest.results[0];
+    NSString *s = firstObservation.payloadStringValue;
+    NSLog(@"%@", s);
+
+    // TODO: stop video and dismiss video view controller
+
+    // TODO: look up the code in the DB
+    // TODO: add medicine to prescription
+
+    // Cleanup
+    ciimage = nil;
 }
 
 @end
