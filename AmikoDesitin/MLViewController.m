@@ -2525,13 +2525,12 @@ static BOOL mShowReport = false;
             //NSLog(@"listOfPackages: <%@>", _pickerData);
             //NSLog(@"%ld packages", [_pickerData count]);
 #endif
-            
-#if 1
+
             //mCurrentIndexPath = indexPath;  // for drug interaction view
             long mId = [medi[indexPath.row] medId];
             mMed = [mDb searchId:mId];  // MLMedication
             NSLog(@"%@", mMed);
-#endif
+
 #if 1
             if ([_pickerData count] < 1) {
                 NSLog(@"No packages to select from");

@@ -53,30 +53,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return CGSizeMake(ceil(boundSize.width), ceil(boundSize.height));
 }
 
-//#pragma mark -
-//@interface ItemProvider : UIActivityItemProvider
-//
-//@property (nonatomic, strong) NSURL *filepath;
-//@property (nonatomic, strong) NSString *emailBody;
-//@property (nonatomic, strong) NSString *emailSubject;
-//
-//@end
-//
-//@implementation ItemProvider
-//
-//- (id)initWithPlaceholderItem:(id)placeholderItem
-//{
-//    //Initializes and returns a provider object with the specified placeholder data
-//    return [super initWithPlaceholderItem:placeholderItem];
-//}
-//
-//- (id)item
-//{
-//    //Generates and returns the actual data object
-//    return [NSDictionary dictionary];
-//}
-//@end
-
 #pragma mark -
 
 @interface PrescriptionViewController ()
@@ -104,6 +80,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) updateMainframeRect;
 - (void) showCameraForHealthCardOCR;
 - (void) showCameraForBarcodeAcquisition;
+- (void) showAlertForBarcodeNotFound;
 @end
 
 #pragma mark -
@@ -1894,14 +1871,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     // [self.videoVC stopRunning]; // FIXME: crash
     [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
 
+    if (firstObservation.symbology != VNBarcodeSymbologyEAN13) {
+        NSLog(@"%s line %d, barcode type is not EAN13", __FUNCTION__, __LINE__);
+        [self showAlertForBarcodeNotFound];
+        return;
+    }
     // Look up the code in the DB
     
     MLDBAdapter *db = [MLDBAdapter sharedInstance];
     NSString *dbTitle, *dbAuth, *dbAtc, *dbRegnrs, *dbPackInfo, *dbPackages;
     NSString *packageInfo;  // 1st line in table infoView
     NSString *eancode;      // 2nd line in table infoView
-    NSArray *queryResult = [db searchEan :s];    // "title, auth, atc, regnrs, packages"
-    //NSLog(@"result %@", result);          // There should be only one result
+    NSArray *queryResult = [db searchEan :s];
+    //NSLog(@"result %@", queryResult);          // There should be only one result
 
     BOOL found = FALSE;
     for (NSArray *cursor in queryResult) {
@@ -1964,9 +1946,29 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         [[PrescriptionViewController sharedInstance] addMedication:product];
     }
+    else {
+        [self showAlertForBarcodeNotFound];
+    }
     
     // Cleanup
     ciimage = nil;
 }
 
+- (void) showAlertForBarcodeNotFound
+{
+    dispatch_async( dispatch_get_main_queue(), ^{
+        NSString *bundleName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+        NSString *message = NSLocalizedString(@"No package found with this barcode. Please contact zdavatz@ywesee.com", nil);
+        
+        UIAlertController *alertController =
+        [UIAlertController alertControllerWithTitle:bundleName
+                                            message:message
+                                     preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:okAction];
+      
+        [self presentViewController:alertController animated:YES completion:nil];
+    } );
+}
 @end
