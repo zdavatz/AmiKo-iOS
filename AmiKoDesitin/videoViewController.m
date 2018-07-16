@@ -79,21 +79,39 @@
     self.captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
     
     ////////////////////////////////////////////////////////////////////////////
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    AVCaptureDevice *videoDevice =
+    [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
+                                       mediaType:AVMediaTypeVideo
+                                        position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
         NSLog(@"No videoDevice");
         return;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-#if 0
-    AVCaptureDeviceInput *cameraDeviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:[AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo] error:&error];
-    
-    if (error) {
-        NSLog(@"error configuring camera input: %@", [error localizedDescription]);
-        return;
+#ifdef DEBUG
+    NSLog(@"videoSupportedFrameRateRanges %@", videoDevice.activeFormat.videoSupportedFrameRateRanges);
+    NSLog(@"Line %d, min %f, max %f", __LINE__,
+          CMTimeGetSeconds(videoDevice.activeVideoMinFrameDuration),
+          CMTimeGetSeconds(videoDevice.activeVideoMaxFrameDuration));
+#endif
+
+    // Lower the frame rate
+    if ( [videoDevice lockForConfiguration:&error] ) {
+        [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(1, 8)];
+        [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(1, 4)];
+        [videoDevice unlockForConfiguration];
     }
-#else
+    else {
+        NSLog( @"Could not lock video device for configuration: %@", error );
+    }
+
+#ifdef DEBUG
+    NSLog(@"Line %d, min %f, max %f", __LINE__,
+          CMTimeGetSeconds(videoDevice.activeVideoMinFrameDuration),
+          CMTimeGetSeconds(videoDevice.activeVideoMaxFrameDuration));
+#endif
+
+    ////////////////////////////////////////////////////////////////////////////
     AVCaptureDeviceInput *cameraDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
     if ( ! cameraDeviceInput ) {
         NSLog( @"Could not create video device input: %@", error );
@@ -101,7 +119,6 @@
         [self.captureSession commitConfiguration];
         return;
     }
-#endif
     
     if ([self.captureSession canAddInput:cameraDeviceInput]) {
         [self.captureSession addInput:cameraDeviceInput];

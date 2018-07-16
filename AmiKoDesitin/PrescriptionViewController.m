@@ -780,7 +780,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                   textColor:[UIColor darkGrayColor]];
 
 #ifdef DEBUG
-        //NSLog(@"Line %d comment:<%@>", __LINE__, med.comment);
+        //NSLog(@"cellForRowAtIndexPath Line %d comment before:<%@>", __LINE__, med.comment);
         //med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
 #endif
 
@@ -1496,7 +1496,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            [alertController dismissViewControllerAnimated:YES completion:nil];
                                                          
                                                            editingCommentIdx = indexPath.row;
-                                                           [infoView reloadData];
+                                                           [self.infoView reloadData];
                                                        }];
     [alertController addAction:actionEdit];
 #endif
@@ -1507,9 +1507,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                          handler:^(UIAlertAction *action) {
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
                                                              
-                                                             [prescription.medications removeObjectAtIndex:indexPath.row];
-                                                             editedMedicines = true;
-                                                             [infoView reloadData];
+                                                             [self.prescription.medications removeObjectAtIndex:indexPath.row];
+                                                             self.editedMedicines = true;
+                                                             [self.infoView reloadData];
                                                          }];
     [alertController addAction:actionDelete];
 #endif
@@ -1785,11 +1785,33 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection
 {
-//    static int frameNumber = 1;
-//    NSLog(@"%s frame %d", __FUNCTION__, frameNumber++);
+    if (barcodeHandled) {
+#ifdef DEBUG
+        static int frameNumber = 1;
+        NSLog(@"%s frame %d", __FUNCTION__, frameNumber++);
+        
+        NSLog(@"line %d, already handled", __LINE__);
+#endif
 
-    // TODO: maybe find a way of reducing the video frame rate
-
+//        if (self.videoVC) {
+//            [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
+//            self.videoVC = nil;
+//        }
+        
+//#if 1
+//        NSLog(@"%d", __LINE__);
+//        [self.view setNeedsDisplay];
+//#else
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
+//            [self.infoView reloadData];
+//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
+//        });
+//#endif
+        
+        return;
+    }
+    
     //CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
     //NSLog(@"formatDescription %@", formatDescription);
 
@@ -1840,16 +1862,17 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         return;
     }
 
-    if (barcodeHandled) {
-#if 0 //def DEBUG
-        NSLog(@"%s line %d, already handled", __FUNCTION__, __LINE__);
-#endif
-        
-        // Stop the video stream
-        //[self.videoVC stopRunning]; // FIXME: crash
-        [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
-        return;
-    }
+//    if (barcodeHandled) {
+//#ifdef DEBUG
+//        NSLog(@"line %d, already handled", __LINE__);
+//#endif
+//
+//        if (self.videoVC) {
+//            [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
+//            self.videoVC = nil;
+//        }
+//        return;
+//    }
 
 #if 0 //def DEBUG
     for (VNBarcodeObservation *observation in barcodeRequest.results) {
@@ -1867,9 +1890,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     NSLog(@"%@ %@", s, firstObservation.symbology);
 #endif
 
-    // Stop the video stream
-    // [self.videoVC stopRunning]; // FIXME: crash
-    [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
+    // Dismisss the video
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+        if (self.videoVC) {
+            [self.videoVC dismissViewControllerAnimated:NO completion:NULL]; // ok
+            self.videoVC = nil;
+        }
+    });
+    
+#ifdef DEBUG
+    NSLog(@"%s line %d, set already handled", __FUNCTION__, __LINE__);
+#endif
+    barcodeHandled = true;
 
     if (firstObservation.symbology != VNBarcodeSymbologyEAN13) {
         NSLog(@"%s line %d, barcode type is not EAN13", __FUNCTION__, __LINE__);
@@ -1920,7 +1953,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             eancode = [p objectAtIndex:INDEX_EAN_CODE_IN_PACK];
             if ([eancode isEqualToString:s]) {
                 found = TRUE;
-                barcodeHandled = true;
                 //NSLog(@"Line %d found at index %d", __LINE__, i);
                 
                 if (packInfoArray.count > i)
@@ -1935,15 +1967,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (found) {
         NSMutableDictionary *medicationDict = [[NSMutableDictionary alloc] init];
         [medicationDict setObject:packageInfo forKey:KEY_AMK_MED_PACKAGE];
-        [medicationDict setObject:eancode forKey:KEY_AMK_MED_EAN];
+        [medicationDict setObject:eancode     forKey:KEY_AMK_MED_EAN];
 
-        [medicationDict setObject:dbTitle forKey:KEY_AMK_MED_TITLE];
-        [medicationDict setObject:dbAuth forKey:KEY_AMK_MED_OWNER];
-        [medicationDict setObject:dbRegnrs forKey:KEY_AMK_MED_REGNRS];
-        [medicationDict setObject:dbAtc forKey:KEY_AMK_MED_ATC];
+        [medicationDict setObject:dbTitle     forKey:KEY_AMK_MED_TITLE];
+        [medicationDict setObject:dbAuth      forKey:KEY_AMK_MED_OWNER];
+        [medicationDict setObject:dbRegnrs    forKey:KEY_AMK_MED_REGNRS];
+        [medicationDict setObject:dbAtc       forKey:KEY_AMK_MED_ATC];
         Product *product = [[Product alloc] initWithDict:medicationDict]; // See Product initWithMedication
-        //NSLog(@"%@", product);
+        //NSLog(@"line %d, product %@", __LINE__, product);
         
+        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
         [[PrescriptionViewController sharedInstance] addMedication:product];
     }
     else {
