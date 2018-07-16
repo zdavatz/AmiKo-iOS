@@ -615,7 +615,8 @@ static BOOL mShowReport = false;
 
 - (void) openSQLiteDatabase
 {
-    mDb = [[MLDBAdapter alloc] init];
+    mDb = [MLDBAdapter sharedInstance];
+
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
         if (![mDb openDatabase:@"amiko_db_full_idx_de"]) {
             NSLog(@"No German database!");

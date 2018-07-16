@@ -26,6 +26,8 @@
 
 @interface MLDBAdapter : NSObject
 
++ (MLDBAdapter *)sharedInstance;
+
 - (BOOL) openInteractionsCsvFile: (NSString *)name;
 - (void) closeInteractionsCsvFile;
 - (NSInteger) getNumInteractions;
@@ -36,6 +38,9 @@
 - (NSInteger) getNumRecords;
 - (MLMedication *) searchId: (long)rowId;
 - (NSArray *) getRecord: (long)rowId;
+
+- (NSArray *) searchEan: (NSString *)ean;
+
 - (NSArray *) searchWithQuery: (NSString *)query;
 - (NSArray *) searchTitle: (NSString *)title;
 - (NSArray *) searchAuthor: (NSString *)author;

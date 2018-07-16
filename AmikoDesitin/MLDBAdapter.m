@@ -56,19 +56,17 @@ static NSString *DATABASE_TABLE = @"amikodb";
 static NSString *SHORT_TABLE = nil;
 static NSString *FULL_TABLE = nil;
 
-
 @implementation MLDBAdapter
 {
     MLSQLiteDatabase *mySqliteDb;
     NSMutableDictionary *myDrugInteractionMap;
 }
 
-/** Class functions
- */
 #pragma mark Class functions
 
 + (void) initialize
 {
+    //NSLog(@"%s %@", __FUNCTION__, self);  // Called first
     if (self == [MLDBAdapter class]) {
         if (SHORT_TABLE == nil) {
             SHORT_TABLE = [[NSString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
@@ -81,8 +79,18 @@ static NSString *FULL_TABLE = nil;
     }
 }
 
-/** Instance functions
- */
++ (MLDBAdapter *)sharedInstance
+{
+    //NSLog(@"%s", __FUNCTION__);
+    __strong static id sharedObject = nil;
+    
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedObject = [[self alloc] init];
+    });
+    return sharedObject;
+}
+
 #pragma mark Instance functions
 
 - (void) listDirectoriesAtPath:(NSString*)dir
@@ -171,6 +179,8 @@ static NSString *FULL_TABLE = nil;
 
 - (void) openDatabase
 {
+    NSLog(@"%s", __FUNCTION__);
+
     NSString *filePath = nil;
 
     if ([APP_NAME isEqualToString:@"iAmiKo"] || [APP_NAME isEqualToString:@"AmiKoDesitin"])
@@ -186,6 +196,8 @@ static NSString *FULL_TABLE = nil;
 // Drugs database
 - (BOOL) openDatabase: (NSString *)dbName
 {
+    NSLog(@"%s", __FUNCTION__);
+
     // Check first users documents folder
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -245,6 +257,19 @@ static NSString *FULL_TABLE = nil;
 - (NSArray *) searchWithQuery: (NSString *)query;
 {
     return [mySqliteDb performQuery:query];
+}
+
+- (NSArray *) searchEan: (NSString *)ean
+{
+    NSString *resultColumns = @"title, auth, atc, regnrs, pack_info_str, packages";
+    NSString *searchColumn = @"packages";
+    NSString *tableName = @"amikodb";
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%%@%%'",
+                       resultColumns, tableName, searchColumn, ean];
+    //NSLog(@"%s query <%@>", __FUNCTION__, query);
+
+    NSArray *results = [mySqliteDb performQuery:query];
+    return results;
 }
 
 /** Search Präparat

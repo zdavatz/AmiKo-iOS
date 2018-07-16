@@ -15,6 +15,7 @@
 #import "AmkListViewController.h"
 #import "PatientDBAdapter.h"
 #import "PatientViewController.h"
+#import "MLDBAdapter.h"
 
 @import Vision;
 
@@ -85,6 +86,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     CGFloat savedKeyboardY;
     bool commentEditingActive;
     NSURL *lastUsedURL;
+    bool barcodeHandled; // prevent processing the same scan multiple times
 }
 
 - (IBAction)btnClickedDone:(id)sender;
@@ -1342,8 +1344,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     [prescription.medications addObject:p];
     editedMedicines = true;
-    [self updateButtons];
-    [infoView reloadData];
+    
+    // Update GUI
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateButtons];
+        [self.infoView reloadData];
+    });
 }
 
 - (void) updateButtons
@@ -1394,7 +1400,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) showCameraForBarcodeAcquisition
 {
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
 
 #if 1 // with VC
     // Make sure front is PrescriptiopnViewController
@@ -1403,14 +1409,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //    NSLog(@"nc_front %@", [nc_front class]);
 //    NSLog(@"vc_front %@", [vc_front class]);
     
+    barcodeHandled = false;
+
     if (!self.videoVC)
         self.videoVC = nil; // So that it will be reinitialized with the current orientation
     
     self.videoVC = [[videoViewController alloc] initWithNibName:@"videoViewController"
                                                          bundle:nil];
-
     self.videoVC.delegate = self;
-    
     [vc_front presentViewController:self.videoVC
                            animated:NO
                          completion:NULL];
@@ -1456,29 +1462,26 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     CGPoint p = [gesture locationInView:infoView];
     NSIndexPath *indexPath = [infoView indexPathForRowAtPoint:p];
     CGRect rectPatientSection = [infoView rectForSection:kSectionPatient];
-    CGRect rectMedicineSection = [infoView rectForSection:kSectionMedicines];
+    CGRect rectMedicineHeader = [infoView rectForHeaderInSection:kSectionMedicines];
 
-    if (indexPath == nil) {
-        // If p is in the patient header section rect, show the camera, else return
-        if (CGRectContainsPoint(rectPatientSection, p))
-        {
-            [self showCameraForHealthCardOCR];
-            return;
-        }
-        else if (CGRectContainsPoint(rectMedicineSection, p))
-        {
-            [self showCameraForBarcodeAcquisition];
-            return;
-        }
-        else {
-#ifdef DEBUG
-            NSLog(@"long press on table view but not on a row, point: %@, rect: %@ state:%ld",
-                  NSStringFromCGPoint(p),
-                  NSStringFromCGRect(rectPatientSection),
-                  (long)gesture.state);
-#endif
-            return;
-        }
+//    NSLog(@"%s line %d, indexPath %@, section %ld", __FUNCTION__, __LINE__,
+//          indexPath, (long)indexPath.section);
+
+    if (CGRectContainsPoint(rectPatientSection, p))
+    {
+        [self showCameraForHealthCardOCR];
+        return;
+    }
+
+    if (CGRectContainsPoint(rectMedicineHeader, p))
+    {
+        [self showCameraForBarcodeAcquisition];
+        return;
+    }
+ 
+    if (!indexPath) {
+        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+        return;
     }
     
     if (indexPath.section == kSectionPatient) {
@@ -1486,7 +1489,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [self showCameraForHealthCardOCR];
         return;
     }
-    else if (indexPath.section != kSectionMedicines) {
+
+    if (indexPath.section != kSectionMedicines) {
 #ifdef DEBUG
         // No long taps for Meta and Operator sections
         NSLog(@"Wrong section %ld", indexPath.section);
@@ -1806,6 +1810,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
 //    static int frameNumber = 1;
 //    NSLog(@"%s frame %d", __FUNCTION__, frameNumber++);
+
     // TODO: maybe find a way of reducing the video frame rate
 
     //CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
@@ -1858,6 +1863,17 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         return;
     }
 
+    if (barcodeHandled) {
+#if 0 //def DEBUG
+        NSLog(@"%s line %d, already handled", __FUNCTION__, __LINE__);
+#endif
+        
+        // Stop the video stream
+        //[self.videoVC stopRunning]; // FIXME: crash
+        [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
+        return;
+    }
+
 #if 0 //def DEBUG
     for (VNBarcodeObservation *observation in barcodeRequest.results) {
         NSLog(@"line %d \n\t rect %@ \n\t string %@ \n\t observation: %@", __LINE__,
@@ -1870,13 +1886,86 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     // We know we have at least one barcode, use the first one
     VNBarcodeObservation *firstObservation = barcodeRequest.results[0];
     NSString *s = firstObservation.payloadStringValue;
-    NSLog(@"%@", s);
+#ifdef DEBUG
+    NSLog(@"%@ %@", s, firstObservation.symbology);
+#endif
 
-    // TODO: stop video and dismiss video view controller
+    // Stop the video stream
+    // [self.videoVC stopRunning]; // FIXME: crash
+    [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
 
-    // TODO: look up the code in the DB
-    // TODO: add medicine to prescription
+    // Look up the code in the DB
+    
+    MLDBAdapter *db = [MLDBAdapter sharedInstance];
+    NSString *dbTitle, *dbAuth, *dbAtc, *dbRegnrs, *dbPackInfo, *dbPackages;
+    NSString *packageInfo;  // 1st line in table infoView
+    NSString *eancode;      // 2nd line in table infoView
+    NSArray *queryResult = [db searchEan :s];    // "title, auth, atc, regnrs, packages"
+    //NSLog(@"result %@", result);          // There should be only one result
 
+    BOOL found = FALSE;
+    for (NSArray *cursor in queryResult) {
+        dbTitle = (NSString *)[cursor objectAtIndex:0];
+        dbAuth = (NSString *)[cursor objectAtIndex:1];
+        dbAtc = (NSString *)[cursor objectAtIndex:2];
+        dbRegnrs = (NSString *)[cursor objectAtIndex:3];
+        dbPackInfo = (NSString *)[cursor objectAtIndex:4];
+        dbPackages = (NSString *)[cursor objectAtIndex:5];
+
+//        NSLog(@"Line %d Title <%@>", __LINE__, dbTitle);
+//        NSLog(@"Line %d auth <%@>", __LINE__, dbAuth);
+//        NSLog(@"Line %d atc <%@>", __LINE__, dbAtc);
+//        NSLog(@"Line %d regnrs <%@>", __LINE__, dbRegnrs);
+
+        // Some fields have multiple lines: split them into arrays
+        // Note: there is also a \n after the last line, so the count is one more (last array element is empty)
+        NSArray *packInfoArray = [dbPackInfo componentsSeparatedByString:@"\n"];
+        NSArray *packArray = [dbPackages componentsSeparatedByString:@"\n"];
+
+#if 0 //def DEBUG
+        NSLog(@"Line %d pack info array %lu <%@>", __LINE__,
+              (unsigned long)[packInfoArray count], packInfoArray);
+        
+        NSLog(@"Line %d, pack array %lu, %@", __LINE__,
+              (unsigned long)[packArray count], packArray);
+#endif
+
+        // Each line contains one EAN code (9th component)
+        for (int i=0; i < [packArray count]; i++) {
+            NSArray *p = [packArray[i] componentsSeparatedByString:@"|"];
+            if ([p count] <= INDEX_EAN_CODE_IN_PACK)
+                break;
+
+            eancode = [p objectAtIndex:INDEX_EAN_CODE_IN_PACK];
+            if ([eancode isEqualToString:s]) {
+                found = TRUE;
+                barcodeHandled = true;
+                //NSLog(@"Line %d found at index %d", __LINE__, i);
+                
+                if (packInfoArray.count <= packArray.count) // check, in case the DB is not as expected
+                    packageInfo = packInfoArray[i];
+
+                break;
+            }
+        }
+    }
+
+    // Add medicine to prescription
+    if (found) {
+        NSMutableDictionary *medicationDict = [[NSMutableDictionary alloc] init];
+        [medicationDict setObject:packageInfo forKey:KEY_AMK_MED_PACKAGE];
+        [medicationDict setObject:eancode forKey:KEY_AMK_MED_EAN];
+
+        [medicationDict setObject:dbTitle forKey:KEY_AMK_MED_TITLE];
+        [medicationDict setObject:dbAuth forKey:KEY_AMK_MED_OWNER];
+        [medicationDict setObject:dbRegnrs forKey:KEY_AMK_MED_REGNRS];
+        [medicationDict setObject:dbAtc forKey:KEY_AMK_MED_ATC];
+        Product *product = [[Product alloc] initWithDict:medicationDict]; // See Product initWithMedication
+        //NSLog(@"%@", product);
+        
+        [[PrescriptionViewController sharedInstance] addMedication:product];
+    }
+    
     // Cleanup
     ciimage = nil;
 }

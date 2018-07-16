@@ -8,8 +8,6 @@
 
 #import "Product.h"
 
-#define INDEX_EAN_CODE_IN_PACK   9
-
 @implementation Product
 
 @synthesize eanCode;
@@ -70,8 +68,8 @@
 
         self.title = m.title;
         self.auth = m.auth;
-        self.regnrs = m.regnrs;
         self.atccode = m.atccode;
+        self.regnrs = m.regnrs;
     }
 
     return self;

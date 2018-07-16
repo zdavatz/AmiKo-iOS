@@ -19,6 +19,8 @@
 #define KEY_AMK_MED_REGNRS          @"regnrs"
 #define KEY_AMK_MED_ATC             @"atccode"
 
+#define INDEX_EAN_CODE_IN_PACK   9
+
 @interface Product : NSObject
 
 @property (atomic, copy) NSString *eanCode;                 // eancode
