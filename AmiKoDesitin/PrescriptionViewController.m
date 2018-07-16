@@ -1918,9 +1918,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 //        NSLog(@"Line %d regnrs <%@>", __LINE__, dbRegnrs);
 
         // Some fields have multiple lines: split them into arrays
-        // Note: there is also a \n after the last line, so the count is one more (last array element is empty)
         NSArray *packInfoArray = [dbPackInfo componentsSeparatedByString:@"\n"];
-        NSArray *packArray = [dbPackages componentsSeparatedByString:@"\n"];
+        NSArray *packArray = [dbPackages componentsSeparatedByString:@"\n"];  // Note: there is also a \n after the last line, so the count is one more (last array element is empty)
 
 #if 0 //def DEBUG
         NSLog(@"Line %d pack info array %lu <%@>", __LINE__,
@@ -1942,7 +1941,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 barcodeHandled = true;
                 //NSLog(@"Line %d found at index %d", __LINE__, i);
                 
-                if (packInfoArray.count <= packArray.count) // check, in case the DB is not as expected
+                if (packInfoArray.count > i)
                     packageInfo = packInfoArray[i];
 
                 break;
