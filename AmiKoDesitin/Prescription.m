@@ -63,7 +63,9 @@
         
         [dict setObject:item.title       forKey:KEY_AMK_MED_PROD_NAME];
         [dict setObject:item.packageInfo forKey:KEY_AMK_MED_PACKAGE];
-        [dict setObject:item.comment     forKey:KEY_AMK_MED_COMMENT];
+        if (item.comment)
+            [dict setObject:item.comment forKey:KEY_AMK_MED_COMMENT];
+
         if (item.eanCode)
             [dict setObject:item.eanCode forKey:KEY_AMK_MED_EAN];
         

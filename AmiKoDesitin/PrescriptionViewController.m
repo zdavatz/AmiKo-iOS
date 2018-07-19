@@ -428,7 +428,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
     if (!fileName) {
-        NSLog(@"%s %d Default prescription not yet defined", __FUNCTION__, __LINE__);
+        NSLog(@"%s Default prescription not yet defined", __FUNCTION__);
         return FALSE;
     }
     
