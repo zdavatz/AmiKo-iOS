@@ -1976,7 +1976,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         Product *product = [[Product alloc] initWithDict:medicationDict]; // See Product initWithMedication
         //NSLog(@"line %d, product %@", __LINE__, product);
         
-        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
         [[PrescriptionViewController sharedInstance] addMedication:product];
     }
     else {

@@ -38,7 +38,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
     
 #if 1 // see configureInterface
@@ -52,7 +52,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
     [self stopRunning];
     [super viewDidDisappear:animated];
 }
@@ -72,7 +72,6 @@
 
 - (void)configureSession
 {
-    //NSLog(@"%s", __FUNCTION__);
     NSError *error = nil;
     
     [self.captureSession beginConfiguration];
@@ -88,13 +87,6 @@
         return;
     }
 
-#ifdef DEBUG
-    NSLog(@"videoSupportedFrameRateRanges %@", videoDevice.activeFormat.videoSupportedFrameRateRanges);
-    NSLog(@"Line %d, min %f, max %f", __LINE__,
-          CMTimeGetSeconds(videoDevice.activeVideoMinFrameDuration),
-          CMTimeGetSeconds(videoDevice.activeVideoMaxFrameDuration));
-#endif
-
     // Lower the frame rate
     if ( [videoDevice lockForConfiguration:&error] ) {
         [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(1, 8)];
@@ -105,12 +97,6 @@
         NSLog( @"Could not lock video device for configuration: %@", error );
     }
 
-#ifdef DEBUG
-    NSLog(@"Line %d, min %f, max %f", __LINE__,
-          CMTimeGetSeconds(videoDevice.activeVideoMinFrameDuration),
-          CMTimeGetSeconds(videoDevice.activeVideoMaxFrameDuration));
-#endif
-
     ////////////////////////////////////////////////////////////////////////////
     AVCaptureDeviceInput *cameraDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
     if ( ! cameraDeviceInput ) {
@@ -120,21 +106,21 @@
         return;
     }
     
-    if ([self.captureSession canAddInput:cameraDeviceInput]) {
+    if ([self.captureSession canAddInput:cameraDeviceInput])
+    {
         [self.captureSession addInput:cameraDeviceInput];
-
-        self.cameraDevice = cameraDeviceInput.device;  // TBC
+        self.cameraDevice = cameraDeviceInput.device;
         
-        // FIXME:
-//        dispatch_async( dispatch_get_main_queue(), ^{
-//            self.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-//        });
+        dispatch_async( dispatch_get_main_queue(), ^{
+            self.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        });
     }
     
     ////////////////////////////////////////////////////////////////////////////
     self.videoDataOutput = [AVCaptureVideoDataOutput new];
     
-    if ( [self.captureSession canAddOutput:self.videoDataOutput] ) {
+    if ( [self.captureSession canAddOutput:self.videoDataOutput] )
+    {
         [self.captureSession addOutput:self.videoDataOutput];
 
         _videoDataOutput.videoSettings = nil;
