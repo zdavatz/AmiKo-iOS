@@ -84,6 +84,7 @@
                                         position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
         NSLog(@"No videoDevice");
+        [self.session commitConfiguration];
         return;
     }
 

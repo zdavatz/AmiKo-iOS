@@ -168,7 +168,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
             {
                 // Only setup observers and start the session running if setup succeeded.
                 [self addObservers];
-                [self.session commitConfiguration]; // To prevent crash with the simulator
+                //[self.session commitConfiguration]; // To prevent crash with the simulator
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
                 break;
@@ -249,6 +249,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
         NSLog(@"No videoDevice");
+        [self.session commitConfiguration]; // To prevent crash with the simulator
         return;
     }
     
@@ -447,7 +448,7 @@ monitorSubjectAreaChange:NO];
     if ( error.code == AVErrorMediaServicesWereReset ) {
         dispatch_async( self.sessionQueue, ^{
             if ( self.isSessionRunning ) {
-                [self.session commitConfiguration]; // To prevent crash with the simulator
+                //[self.session commitConfiguration]; // To prevent crash with the simulator
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
 #if 0
