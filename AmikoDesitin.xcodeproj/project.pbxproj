@@ -538,6 +538,7 @@
 		FA4FB4A520E4BF060084F656 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/CameraViewController.strings; sourceTree = "<group>"; };
 		FA4FB4A720E4BF070084F656 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CameraViewController.strings; sourceTree = "<group>"; };
 		FA528CF120D8F1590066CE89 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tessdata; path = AmiKoDesitin/tessdata; sourceTree = "<group>"; };
+		FA577A4E2109CC1E00BE3732 /* avcamtypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = avcamtypes.h; sourceTree = "<group>"; };
 		FA5CAC06207CF53B003B32C3 /* MLConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = AmiKoDesitin/MLConstants.h; sourceTree = SOURCE_ROOT; };
 		FA5E5E4620F5F71B00CDB6C6 /* videoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = videoViewController.h; path = AmiKoDesitin/videoViewController.h; sourceTree = SOURCE_ROOT; };
 		FA5E5E4720F5F71B00CDB6C6 /* videoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = videoViewController.m; path = AmiKoDesitin/videoViewController.m; sourceTree = SOURCE_ROOT; };
@@ -1118,6 +1119,7 @@
 				FA7D750020E3EEFB005E49FE /* CameraViewController.h */,
 				FA7D750220E3EEFB005E49FE /* CameraViewController.m */,
 				FA4FB4A320E4BF030084F656 /* CameraViewController.xib */,
+				FA577A4E2109CC1E00BE3732 /* avcamtypes.h */,
 			);
 			name = camera;
 			sourceTree = "<group>";

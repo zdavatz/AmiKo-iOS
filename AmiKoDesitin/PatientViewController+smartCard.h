@@ -7,7 +7,6 @@
 //
 
 #import "PatientViewController.h"
-#import "PreviewView.h"
 #import <TesseractOCR/TesseractOCR.h>
 
 #import "CameraViewController.h"

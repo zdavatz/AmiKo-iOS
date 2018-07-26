@@ -8,24 +8,9 @@
 
 #import "CameraViewController.h"
 #import "PatientViewController+smartCard.h" // use this class as photo delegate
+#import "avcamtypes.h"
 
 static void * SessionRunningContext = &SessionRunningContext;
-
-typedef NS_ENUM( NSInteger, AVCamSetupResult ) {
-    AVCamSetupResultSuccess,
-    AVCamSetupResultCameraNotAuthorized,
-    AVCamSetupResultSessionConfigurationFailed
-};
-
-typedef NS_ENUM( NSInteger, AVCamLivePhotoMode ) {
-    AVCamLivePhotoModeOn,
-    AVCamLivePhotoModeOff
-};
-
-typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
-    AVCamDepthDataDeliveryModeOn,
-    AVCamDepthDataDeliveryModeOff
-};
 
 #pragma mark -
 
@@ -35,11 +20,10 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
 @property (nonatomic) dispatch_queue_t sessionQueue;
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
-@property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
+@property (nonatomic) AVCaptureDeviceInput *videoDeviceInput; // .device
 @property (nonatomic) AVCamLivePhotoMode livePhotoMode;
 @property (nonatomic) AVCamDepthDataDeliveryMode depthDataDeliveryMode;
 @property (nonatomic) AVCapturePhotoOutput *photoOutput;
-@property (nonatomic) NSInteger inProgressLivePhotoCapturesCount;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
 @end
@@ -246,7 +230,10 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     self.session.sessionPreset = AVCaptureSessionPresetPhoto;
     
     ////////////////////////////////////////////////////////////////////////////
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    AVCaptureDevice *videoDevice =
+    [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
+                                       mediaType:AVMediaTypeVideo
+                                        position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
         NSLog(@"No videoDevice");
         [self.session commitConfiguration]; // To prevent crash with the simulator
@@ -254,18 +241,20 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
-    if ( ! videoDeviceInput ) {
+    AVCaptureDeviceInput *cameraDeviceInput =
+    [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
+                                          error:&error];
+    if ( ! cameraDeviceInput ) {
         NSLog( @"Could not create video device input: %@", error );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
     }
     
-    if ( [self.session canAddInput:videoDeviceInput] )
+    if ( [self.session canAddInput:cameraDeviceInput] )
     {
-        [self.session addInput:videoDeviceInput];
-        self.videoDeviceInput = videoDeviceInput;
+        [self.session addInput:cameraDeviceInput];
+        self.videoDeviceInput = cameraDeviceInput;
         
         dispatch_async( dispatch_get_main_queue(), ^{
             /*
@@ -289,7 +278,7 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
         } );
     }
     else {
-        NSLog( @"Could not add video device input to the session" );
+        NSLog( @"Could not add camera device input to the session" );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
@@ -311,7 +300,6 @@ typedef NS_ENUM( NSInteger, AVCamDepthDataDeliveryMode ) {
         self.depthDataDeliveryMode = self.photoOutput.depthDataDeliverySupported ? AVCamDepthDataDeliveryModeOn : AVCamDepthDataDeliveryModeOff;
         
         //self.inProgressPhotoCaptureDelegates = [NSMutableDictionary dictionary];
-        self.inProgressLivePhotoCapturesCount = 0;
     }
     else {
         NSLog( @"Could not add photo output to the session" );

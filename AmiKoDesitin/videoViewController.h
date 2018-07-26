@@ -9,22 +9,27 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
+#pragma mark -
+////////////////////////////////////////////////////////////////////////////////
+
+@interface VideoPreviewView : UIView
+
+@property (nonatomic, readonly) AVCaptureVideoPreviewLayer *videoPreviewLayer;
+@property (nonatomic) AVCaptureSession *session;
+
+@end
+
+#pragma mark -
+////////////////////////////////////////////////////////////////////////////////
+
 @interface videoViewController : UIViewController
 
-@property (nonatomic, strong) AVCaptureSession *captureSession;
-@property (nonatomic, strong) AVCaptureDevice *cameraDevice;
-
-@property (nonatomic, strong) AVCaptureVideoDataOutput *videoDataOutput;
-
+@property (nonatomic, strong) AVCaptureDevice *videoDevice;
+@property (weak, nonatomic) IBOutlet VideoPreviewView *previewView;
 @property (nonatomic, weak) id<AVCaptureVideoDataOutputSampleBufferDelegate> delegate;
-
-//@property (weak, nonatomic) IBOutlet UIView *previewView;
 
 - (void)startRunning;
 - (void)stopRunning;
-
-- (AVCaptureVideoPreviewLayer *)videoPreviewLayer;
-
 - (IBAction)cancelCamera:(id)sender;
 
 @end
