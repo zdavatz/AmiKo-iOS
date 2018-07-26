@@ -9,6 +9,8 @@
 #import "videoViewController.h"
 #import "avcamtypes.h"
 
+static void * SessionRunningContext = &SessionRunningContext;
+
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -41,11 +43,11 @@
 
 @interface videoViewController ()
 
-@property (nonatomic, strong) dispatch_queue_t videoDataOutputQueue;
 @property (nonatomic) AVCamSetupResult setupResult;
 @property (nonatomic, strong) dispatch_queue_t sessionQueue;
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
+@property (nonatomic) AVCaptureDeviceInput *videoDeviceInput; // .device
 @property (nonatomic, strong) AVCaptureVideoDataOutput *videoDataOutput;
 
 @end
@@ -62,9 +64,6 @@
     self.previewView.session = self.session;
     self.sessionQueue = dispatch_queue_create( "video session queue", DISPATCH_QUEUE_SERIAL );
     self.setupResult = AVCamSetupResultSuccess;
-    
-    self.videoDataOutputQueue = dispatch_queue_create( "capturesession.videodata", DISPATCH_QUEUE_SERIAL );
-    
     
     switch ( [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] )
     {
@@ -103,13 +102,13 @@
 {
     //NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
-    [self startRunning];
+    [self startVideoStream];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     //NSLog(@"%s", __FUNCTION__);
-    [self stopRunning];
+    [self stopVideoStream];
     [super viewDidDisappear:animated];
 }
 
@@ -163,6 +162,7 @@
 - (void)configureSession
 {
     if ( self.setupResult != AVCamSetupResultSuccess ) {
+        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
         return;
     }
     
@@ -177,7 +177,7 @@
                                        mediaType:AVMediaTypeVideo
                                         position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
-        NSLog(@"No videoDevice");
+        NSLog(@"No videoDevice\n%s:%d", __FILE__, __LINE__);
         [self.session commitConfiguration];
         return;
     }
@@ -193,7 +193,9 @@
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
+    AVCaptureDeviceInput *videoDeviceInput =
+    [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
+                                          error:&error];
     if ( ! videoDeviceInput ) {
         NSLog( @"Could not create video device input: %@", error );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
@@ -204,7 +206,7 @@
     if ([self.session canAddInput:videoDeviceInput])
     {
         [self.session addInput:videoDeviceInput];
-        self.videoDevice = videoDeviceInput.device;
+        self.videoDeviceInput = videoDeviceInput;
         
         dispatch_async( dispatch_get_main_queue(), ^{
             UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -248,13 +250,15 @@
     [self.session commitConfiguration];
 }
 
-- (void)startRunning
+- (void)startVideoStream
 {
     dispatch_sync( self.sessionQueue, ^{
         switch ( self.setupResult )
         {
             case AVCamSetupResultSuccess:
             {
+                // Only setup observers and start the session running if setup succeeded.
+                [self addObservers];
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
                 break;
@@ -276,13 +280,164 @@
     } );
 }
 
-- (void)stopRunning
+- (void)stopVideoStream
 {
     dispatch_sync( self.sessionQueue, ^{
         if ( self.setupResult == AVCamSetupResultSuccess ) {
             [self.session stopRunning];
+            [self removeObservers];
         }
     } );
+}
+
+#pragma mark KVO and Notifications
+
+- (void)addObservers
+{
+    [self.session addObserver:self
+                   forKeyPath:@"running"
+                      options:NSKeyValueObservingOptionNew
+                      context:SessionRunningContext];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(subjectAreaDidChange:)
+                                                 name:AVCaptureDeviceSubjectAreaDidChangeNotification
+                                               object:self.videoDeviceInput.device];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sessionRuntimeError:)
+                                                 name:AVCaptureSessionRuntimeErrorNotification
+                                               object:self.session];
+    
+    /*
+     A session can only run when the app is full screen. It will be interrupted
+     in a multi-app layout, introduced in iOS 9, see also the documentation of
+     AVCaptureSessionInterruptionReason. Add observers to handle these session
+     interruptions and show a preview is paused message. See the documentation
+     of AVCaptureSessionWasInterruptedNotification for other interruption reasons.
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sessionWasInterrupted:)
+                                                 name:AVCaptureSessionWasInterruptedNotification
+                                               object:self.session];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sessionInterruptionEnded:)
+                                                 name:AVCaptureSessionInterruptionEndedNotification
+                                               object:self.session];
+}
+
+- (void)removeObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [self.session
+     removeObserver:self
+     forKeyPath:@"running"
+     context:SessionRunningContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if ( context == SessionRunningContext ) {
+//        BOOL isSessionRunning = [change[NSKeyValueChangeNewKey] boolValue];
+//        BOOL livePhotoCaptureSupported = self.photoOutput.livePhotoCaptureSupported;
+//        BOOL livePhotoCaptureEnabled = self.photoOutput.livePhotoCaptureEnabled;
+//        BOOL depthDataDeliverySupported = self.photoOutput.depthDataDeliverySupported;
+//        BOOL depthDataDeliveryEnabled = self.photoOutput.depthDataDeliveryEnabled;
+//
+//        dispatch_async( dispatch_get_main_queue(), ^{
+//
+//        } );
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)focusWithMode:(AVCaptureFocusMode)focusMode
+       exposeWithMode:(AVCaptureExposureMode)exposureMode
+        atDevicePoint:(CGPoint)point
+monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
+{
+    dispatch_async( self.sessionQueue, ^{
+        AVCaptureDevice *device = self.videoDeviceInput.device;
+        NSError *error = nil;
+        if ( [device lockForConfiguration:&error] ) {
+            /*
+             Setting (focus/exposure)PointOfInterest alone does not initiate a (focus/exposure) operation.
+             Call set(Focus/Exposure)Mode() to apply the new point of interest.
+             */
+            if ( device.isFocusPointOfInterestSupported && [device isFocusModeSupported:focusMode] ) {
+                device.focusPointOfInterest = point;
+                device.focusMode = focusMode;
+            }
+            
+            if ( device.isExposurePointOfInterestSupported && [device isExposureModeSupported:exposureMode] ) {
+                device.exposurePointOfInterest = point;
+                device.exposureMode = exposureMode;
+            }
+            
+            device.subjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange;
+            [device unlockForConfiguration];
+        }
+        else {
+            NSLog( @"Could not lock device for configuration: %@", error );
+        }
+    } );
+}
+
+- (void)subjectAreaDidChange:(NSNotification *)notification
+{
+    CGPoint devicePoint = CGPointMake( 0.5, 0.5 );
+    [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus
+         exposeWithMode:AVCaptureExposureModeContinuousAutoExposure
+          atDevicePoint:devicePoint
+monitorSubjectAreaChange:NO];
+}
+
+- (void)sessionRuntimeError:(NSNotification *)notification
+{
+    NSError *error = notification.userInfo[AVCaptureSessionErrorKey];
+    NSLog( @"Capture session runtime error: %@", error );
+    
+    /*
+     Automatically try to restart the session running if media services were
+     reset and the last start running succeeded. Otherwise, enable the user
+     to try to resume the session running.
+     */
+    if ( error.code == AVErrorMediaServicesWereReset ) {
+        dispatch_async( self.sessionQueue, ^{
+            if ( self.isSessionRunning ) {
+                [self.session startRunning];
+                self.sessionRunning = self.session.isRunning;
+            }
+        } );
+    }
+}
+
+- (void)sessionWasInterrupted:(NSNotification *)notification
+{
+    /*
+     In some scenarios we want to enable the user to resume the session running.
+     For example, if music playback is initiated via control center while
+     using AmiKoDesitin, then the user can let AmiKoDesitin resume
+     the session running, which will stop music playback. Note that stopping
+     music playback in control center will not automatically resume the session
+     running. Also note that it is not always possible to resume, see -[resumeInterruptedSession:].
+     */
+    
+    AVCaptureSessionInterruptionReason reason = [notification.userInfo[AVCaptureSessionInterruptionReasonKey] integerValue];
+    
+    NSLog( @"Capture session was interrupted with reason %ld", (long)reason );
+}
+
+- (void)sessionInterruptionEnded:(NSNotification *)notification
+{
+    NSLog( @"Capture session interruption ended" );
 }
 
 #pragma mark - IBAction

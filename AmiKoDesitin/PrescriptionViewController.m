@@ -1379,8 +1379,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     //NSLog(@"%s", __FUNCTION__);
 
-#if 1 // with VC
-    // Make sure front is PrescriptiopnViewController
+    // Make sure front is PrescriptionViewController
     UIViewController *nc_front = self.revealViewController.frontViewController; // UINavigationController
     UIViewController *vc_front = [nc_front.childViewControllers firstObject];   // PrescriptionViewController
 //    NSLog(@"nc_front %@", [nc_front class]);
@@ -1397,36 +1396,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [vc_front presentViewController:self.videoVC
                            animated:NO
                          completion:NULL];
-#else
-    captureSession = [AVCaptureSession new];
-    NSError *error;
-    AVCaptureDeviceInput *cameraDeviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:[AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo] error:&error];
-    
-    if(error){
-        NSLog(@"error configuring camera input: %@", [error localizedDescription]);
-        return;
-    }
-
-    if ([captureSession canAddInput:cameraDeviceInput]) {
-        [captureSession addInput:cameraDeviceInput];
-    }
-
-    #if 0
-    AVCaptureMovieFileOutput *movieFileOutput = [AVCaptureMovieFileOutput new];
-    if ([captureSession canAddOutput:movieFileOutput]) {
-        [captureSession addOutput:movieFileOutput];
-    }
-    #else
-    self.videoDataOutput = [AVCaptureVideoDataOutput new];
-    _videoDataOutput.videoSettings = nil;
-    _videoDataOutput.alwaysDiscardsLateVideoFrames = NO;
-    [_videoDataOutput setSampleBufferDelegate:self queue:_videoDataOutputQueue];
-    [captureSession addOutput:self.videoDataOutput]; // @@@
-    #endif
-
-    NSLog(@"%s line %d", __FUNCTION__, __LINE__);
-    [captureSession startRunning];
-#endif
 }
 
 #pragma mark - UIGestureRecognizerDelegate

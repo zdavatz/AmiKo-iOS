@@ -24,12 +24,11 @@
 
 @interface videoViewController : UIViewController
 
-@property (nonatomic, strong) AVCaptureDevice *videoDevice;
 @property (weak, nonatomic) IBOutlet VideoPreviewView *previewView;
 @property (nonatomic, weak) id<AVCaptureVideoDataOutputSampleBufferDelegate> delegate;
 
-- (void)startRunning;
-- (void)stopRunning;
+- (void)startVideoStream;
+- (void)stopVideoStream;
 - (IBAction)cancelCamera:(id)sender;
 
 @end

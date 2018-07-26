@@ -144,7 +144,6 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void) startCameraStream
 {
-    //NSLog(@"%s", __FUNCTION__);
     dispatch_async( self.sessionQueue, ^{
         switch ( self.setupResult )
         {
@@ -152,7 +151,6 @@ static void * SessionRunningContext = &SessionRunningContext;
             {
                 // Only setup observers and start the session running if setup succeeded.
                 [self addObservers];
-                //[self.session commitConfiguration]; // To prevent crash with the simulator
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
                 break;
@@ -218,9 +216,10 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)configureSession
 {
-    //NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s setupResult %ld", __FUNCTION__, (long)self.setupResult);
     
     if ( self.setupResult != AVCamSetupResultSuccess ) {
+        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
         return;
     }
     
@@ -235,7 +234,7 @@ static void * SessionRunningContext = &SessionRunningContext;
                                        mediaType:AVMediaTypeVideo
                                         position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
-        NSLog(@"No videoDevice");
+        //NSLog(@"No videoDevice\n%s:%d", __FILE__, __LINE__);
         [self.session commitConfiguration]; // To prevent crash with the simulator
         return;
     }
@@ -245,7 +244,7 @@ static void * SessionRunningContext = &SessionRunningContext;
     [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
                                           error:&error];
     if ( ! cameraDeviceInput ) {
-        NSLog( @"Could not create video device input: %@", error );
+        NSLog( @"Could not create camera device input: %@", error );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
@@ -436,7 +435,6 @@ monitorSubjectAreaChange:NO];
     if ( error.code == AVErrorMediaServicesWereReset ) {
         dispatch_async( self.sessionQueue, ^{
             if ( self.isSessionRunning ) {
-                //[self.session commitConfiguration]; // To prevent crash with the simulator
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
 #if 0
