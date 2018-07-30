@@ -1780,6 +1780,22 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         return;
     }
+
+    if (!self.videoVC) {
+#ifdef DEBUG
+        NSLog(@"line %d, video view controller is nil", __LINE__);
+#endif
+        return;
+    }
+    
+    if (self.videoVC &&
+        !self.videoVC.isSessionRunning) {
+        
+#ifdef DEBUG
+        NSLog(@"line %d, session not running", __LINE__); // Maybe we hit the Cancel button
+#endif
+        return;
+    }
     
     //CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
     //NSLog(@"formatDescription %@", formatDescription);

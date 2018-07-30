@@ -46,7 +46,6 @@ static void * SessionRunningContext = &SessionRunningContext;
 @property (nonatomic) AVCamSetupResult setupResult;
 @property (nonatomic, strong) dispatch_queue_t sessionQueue;
 @property (nonatomic) AVCaptureSession *session;
-@property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput; // .device
 @property (nonatomic, strong) AVCaptureVideoDataOutput *videoDataOutput;
 
@@ -285,6 +284,7 @@ static void * SessionRunningContext = &SessionRunningContext;
     dispatch_sync( self.sessionQueue, ^{
         if ( self.setupResult == AVCamSetupResultSuccess ) {
             [self.session stopRunning];
+            self.sessionRunning = self.session.isRunning;
             [self removeObservers];
         }
     } );

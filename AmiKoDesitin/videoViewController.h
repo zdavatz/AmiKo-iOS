@@ -26,6 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet VideoPreviewView *previewView;
 @property (nonatomic, weak) id<AVCaptureVideoDataOutputSampleBufferDelegate> delegate;
+@property (nonatomic, getter=isSessionRunning) BOOL sessionRunning;
 
 - (void)startVideoStream;
 - (void)stopVideoStream;
