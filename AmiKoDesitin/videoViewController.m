@@ -281,13 +281,13 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)stopVideoStream
 {
-    dispatch_sync( self.sessionQueue, ^{
+    //dispatch_sync( self.sessionQueue, ^{
         if ( self.setupResult == AVCamSetupResultSuccess ) {
             [self.session stopRunning];
             self.sessionRunning = self.session.isRunning;
             [self removeObservers];
         }
-    } );
+    //} );
 }
 
 #pragma mark KVO and Notifications
