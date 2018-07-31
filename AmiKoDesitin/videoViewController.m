@@ -136,6 +136,12 @@ static void * SessionRunningContext = &SessionRunningContext;
         self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
     }
     
+//#ifdef DEBUG
+//    NSLog(@"%s line %d, videoPreviewLayer.frame %@, frame %@", __FUNCTION__, __LINE__,
+//          NSStringFromCGRect(self.previewView.videoPreviewLayer.frame),
+//          NSStringFromCGRect(self.previewView.frame));
+//#endif
+    
     [self.previewView setNeedsDisplay];
 }
 
@@ -213,9 +219,16 @@ static void * SessionRunningContext = &SessionRunningContext;
             if ( statusBarOrientation != UIInterfaceOrientationUnknown ) {
                 initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
             }
-
             self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
+#if 1
+            // The image is stretched, but at least we get the toolbar.
+            // Luckily, barcode recognition still works with a distorted image
+            self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResize;
+#else
+            // It fills the screen, and the toolbar is no longer visible.
+            // (Strange thing is that it works for the card OCR preview)
             self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+#endif
         });
     }
     else {
