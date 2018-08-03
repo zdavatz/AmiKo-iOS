@@ -12,8 +12,13 @@
 @import AVFoundation;
 #import "videoViewController.h"
 
+#define ppi             72.0
+#define mm2inch         (1/25.4)
+#define inch2pix(x)     (x * ppi)
+#define mm2pix(x)       inch2pix(x*mm2inch)
+
 @interface PrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate, AVCaptureVideoDataOutputSampleBufferDelegate>
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIPrintInteractionControllerDelegate>
 {
     AVCaptureSession *captureSession;
     AVCaptureVideoDataOutput *captureOutput;
@@ -32,6 +37,14 @@
 
 @property (nonatomic) videoViewController *videoVC;
 
+@property (nonatomic, retain) IBOutlet UIView *medicineLabelView;
+@property (nonatomic, retain) IBOutlet UILabel *labelDoctor;
+@property (nonatomic, retain) IBOutlet UILabel *labelPatient;
+@property (nonatomic, retain) IBOutlet UILabel *labelMedicine;
+@property (nonatomic, retain) IBOutlet UILabel *labelComment;
+@property (nonatomic, retain) IBOutlet UILabel *labelPrice;
+@property (nonatomic, retain) IBOutlet UILabel *labelSwissmed;
+
 + (PrescriptionViewController *)sharedInstance;
 
 - (IBAction) newPrescription:(id)sender;
@@ -42,6 +55,8 @@
 
 - (IBAction) myRightRevealToggle:(id)sender;
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
+
+- (void) printMedicineLabel:(NSIndexPath *)indexPath;
 
 - (NSURL *) prescriptionUrlWithHash: (NSString *)hash;
 - (BOOL) validatePrescription;

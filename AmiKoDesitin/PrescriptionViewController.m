@@ -23,6 +23,8 @@
 //#define DEBUG_COLOR_BG
 #endif
 
+#define LABEL_PRINT_VIEW_WORKAROUND
+
 static const float kInfoCellHeight = 20.0;  // fixed
 
 static const float kSectionHeaderHeight = 27.0;
@@ -95,6 +97,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @synthesize prescription;
 @synthesize infoView;
 @synthesize editedMedicines;
+@synthesize medicineLabelView, labelDoctor, labelPatient, labelMedicine, labelComment, labelPrice, labelSwissmed;
 
 + (PrescriptionViewController *)sharedInstance
 {
@@ -1026,6 +1029,200 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self sharePrescription:lastUsedURL];
 }
 
+#pragma mark - Printing
+
+// If we get here we already checked that printing is available
+- (void) printMedicineLabel:(NSIndexPath *)indexPath
+{
+    NSInteger row = indexPath.row;
+    //NSLog(@"%s row:%ld", __FUNCTION__, (long)row);
+    UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
+    if (!pic) {
+        NSLog(@"Couldn't get shared UIPrintInteractionController!");
+        return;
+    }
+    
+    pic.delegate = self;
+#ifdef DEBUG
+    NSLog(@"line %d, pic %@, printPaper %@", __LINE__, pic, pic.printPaper);
+#endif
+    
+    void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
+    ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
+        if (!completed && error) {
+            NSLog(@"Printing could not complete because of error: %@", error);
+        }
+    };
+
+    ////////////////////////////////////////////////////////////////////////////
+    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+    NSLog(@"line %d, printInfo %@", __LINE__, printInfo);
+
+    printInfo.outputType = UIPrintInfoOutputGrayscale;
+    printInfo.orientation = UIPrintInfoOrientationLandscape;
+#ifdef DEBUG
+    printInfo.jobName = @"AirPrint label";
+#endif
+    pic.printInfo = printInfo;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // Setup print content
+
+    Operator *d = prescription.doctor;
+    NSString * firstLine = @"";
+    if (d.title.length > 0)
+        firstLine = [NSString stringWithFormat:@"%@ ", d.title];
+    
+    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ ", d.givenName]];
+    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ - ", d.familyName]];
+    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ ", d.zipCode]];
+    //firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ ", d.city]]; // included in placeDate
+    
+    NSString *placeDate = prescription.placeDate;// placeDateField.stringValue;
+    NSArray *placeDateArray = [placeDate componentsSeparatedByString:@" ("];
+    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@", [placeDateArray objectAtIndex:0]]];
+    self.labelDoctor.text = firstLine;
+
+    self.labelPatient.text = [NSString stringWithFormat:@"%@ %@, %@ %@",
+                              prescription.patient.givenName,
+                              prescription.patient.familyName,
+                              NSLocalizedString(@"born", nil),
+                              prescription.patient.birthDate];
+    
+    Product * med = prescription.medications[row];
+    NSString *package = [med packageInfo];
+    NSArray *packageArray = [package componentsSeparatedByString:@", "];
+    labelMedicine.text = [packageArray objectAtIndex:0];
+
+    labelComment.text = [prescription.medications[row] comment];
+    
+    NSArray *swissmedArray = [package componentsSeparatedByString:@" ["];
+    labelSwissmed.text = @"";
+    if (swissmedArray.count >= 2)
+        labelSwissmed.text = [NSString stringWithFormat:@"[%@", [swissmedArray objectAtIndex:1]];
+    
+    labelPrice.text = @"";
+    if (packageArray.count >= 2) {
+        NSArray *priceArray = [[packageArray objectAtIndex:2] componentsSeparatedByString:@" "];
+        if ([[priceArray objectAtIndex:0] isEqualToString:@"PP"])
+            labelPrice.text = [NSString stringWithFormat:@"CHF\t%@", [priceArray objectAtIndex:1]];
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // Built-in formatters. Alternatively implement your subclass of UIPrintPageRenderer
+    
+#ifndef LABEL_PRINT_VIEW_WORKAROUND
+    UIViewPrintFormatter *formatter = [self.medicineLabelView viewPrintFormatter];
+    NSLog(@"line %d, formatter %@, startPage %ld, frame %@", __LINE__,
+          formatter,
+          (long)formatter.startPage, // -1 = 0x7FFF FFFF FFFF FFFF = 9223372036854775807
+          NSStringFromCGRect(formatter.view.frame));
+  #if 0
+    UIPrintPageRenderer *myRenderer = [[UIPrintPageRenderer alloc] init];
+    [myRenderer addPrintFormatter:formatter startingAtPageAtIndex:0];
+    NSLog(@"line %d, numberOfPages %ld", __LINE__, (long)myRenderer.numberOfPages);
+    pic.printPageRenderer = myRenderer;
+  #else
+    pic.printFormatter = formatter;
+  #endif
+#endif
+
+#ifdef LABEL_PRINT_VIEW_WORKAROUND
+    // https://stackoverflow.com/questions/19725033/air-printing-of-a-uiview-generates-white-pages
+    UIGraphicsBeginImageContextWithOptions(self.medicineLabelView.bounds.size, NO, 0.0);
+    
+    #if 1 // ok
+    [self.medicineLabelView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    #else // ng
+    [self.medicineLabelView drawViewHierarchyInRect:self.medicineLabelView.bounds afterScreenUpdates:NO];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    #endif
+
+    UIGraphicsEndImageContext();
+    pic.printingItem = snapshotImage;
+#endif
+
+    //formatter.startPage = 1;
+    //formatter.perPageContentInsets = UIEdgeInsetsMake(0, 0, 0, 0); // TLBR
+
+    ////////////////////////////////////////////////////////////////////////////
+    
+    // TODO: see if there is a "savedPrinter" in the defaults
+    // if yes do B) otherwise A)
+
+#if 1
+    // A)
+    // No AirPrint Printers Found
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        CGRect r = [infoView rectForRowAtIndexPath:indexPath];
+        [pic presentFromRect:r inView:infoView animated:YES completionHandler:completionHandler];
+    }
+    else {
+        [pic presentAnimated:YES completionHandler:completionHandler];
+    }
+
+    [pic presentAnimated:YES completionHandler:completionHandler];
+    NSString *printerID = pic.printInfo.printerID;
+    NSLog(@"line %d, printerID %@", __LINE__, printerID); /// null
+    UIPrinter *printer;
+    NSLog(@"line %d, printer displayName:%@, makeAndModel:%@, URL:%@", __LINE__,
+          printer.displayName,
+          printer.makeAndModel,
+          printer.URL);
+#else
+    // B)
+    // Print directly to the specified printer
+    // IPP: Internet Printing Protocol
+    NSString *printerName = @"DYMO LabelWriter 450"; // @"._ipp._tcp.local"
+    NSURL *printerURL = [NSURL fileURLWithPath:printerName];
+    UIPrinter *printer = [UIPrinter printerWithURL:printerURL];
+    NSLog(@"line %d, printer %@", __LINE__, printer);
+    [printer contactPrinter:^(BOOL available) {
+        NSLog(@"printer available: %d", available);
+        if (available)
+            [pic printToPrinter:printer completionHandler:completionHandler];
+    }];
+#endif
+}
+
+#pragma mark UIPrintInteractionControllerDelegate
+
+- (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)pic
+{
+    NSLog(@"%s", __func__);
+    NSLog(@"line %d, using paper size: %@\n\t printable rect: %@", __LINE__,
+          NSStringFromCGSize(pic.printPaper.paperSize), // 841 x 595
+          NSStringFromCGRect(pic.printPaper.printableRect));
+}
+
+// called after user selects a printer
+- (UIPrintPaper *)printInteractionController:(UIPrintInteractionController *)pIC
+                                 choosePaper:(NSArray *)paperList
+{
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"line %d paperList count:%lu", __LINE__, (unsigned long)paperList.count);
+    for (UIPrintPaper *aPaper in paperList) {
+        NSLog(@"line %d paper size: %@\n\t printable rect: %@", __LINE__,
+              NSStringFromCGSize(aPaper.paperSize),
+              NSStringFromCGRect(aPaper.printableRect));
+    }
+    
+    CGSize desiredSize = CGSizeMake(mm2pix(36), mm2pix(89));
+    NSLog(@"line %d, desired size %@ pixels", __LINE__, NSStringFromCGSize(desiredSize)); // 102 x 252
+    UIPrintPaper *printPaper = [UIPrintPaper bestPaperForPageSize:desiredSize
+                                              withPapersFromArray:paperList];
+    NSLog(@"line %d, best paper size %@", __LINE__, NSStringFromCGSize(printPaper.paperSize));
+    return printPaper;
+}
+
+// https://stackoverflow.com/questions/28321679/custom-print-size-in-ios
+//- (CGFloat)printInteractionController:(UIPrintInteractionController *)printInteractionController
+//                    cutLengthForPaper:(UIPrintPaper *)paper
+//{
+//    NSLog(@"%s", __FUNCTION__);
+//    return 89.0;
+//}
 #pragma mark -
 
 // Check if any of the prescriptions for the current patient has this hash
@@ -1458,13 +1655,29 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
 
+    if ([UIPrintInteractionController isPrintingAvailable]) {
+        UIAlertAction *actionPrintLabel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Print Label", nil)
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction *action) {
+                                                                     [alertController dismissViewControllerAnimated:YES completion:nil];
+                                                                     
+                                                                     [self printMedicineLabel:indexPath];
+                                                                 }];
+        [alertController addAction:actionPrintLabel];
+    }
+#ifdef DEBUG
+    else {
+        NSLog(@"%s line %d,  printing not available", __FUNCTION__, __LINE__);
+    }
+#endif
+    
 #if 1
     UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit comment", nil)
                                                          style:UIAlertActionStyleDefault
                                                        handler:^(UIAlertAction *action) {
                                                            [alertController dismissViewControllerAnimated:YES completion:nil];
                                                          
-                                                           editingCommentIdx = indexPath.row;
+                                                           self->editingCommentIdx = indexPath.row;
                                                            [self.infoView reloadData];
                                                        }];
     [alertController addAction:actionEdit];
@@ -1982,7 +2195,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                                             message:message
                                      preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction* okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        UIAlertAction* okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:nil];
         [alertController addAction:okAction];
       
         [self presentViewController:alertController animated:YES completion:nil];

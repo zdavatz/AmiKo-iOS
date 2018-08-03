@@ -222,10 +222,11 @@ static void * SessionRunningContext = &SessionRunningContext;
             self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
 #if 1
             // The image is stretched, but at least we get the toolbar.
-            // Luckily, barcode recognition still works with a distorted image
+            // Luckily, barcode recognition still works with a distorted image.
             self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResize;
 #else
-            // It fills the screen, and the toolbar is no longer visible.
+            // Fill the screen
+            // In landscape orientation the toolbar is no longer visible.
             // (Strange thing is that it works for the card OCR preview)
             self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 #endif
