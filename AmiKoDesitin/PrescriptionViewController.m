@@ -25,6 +25,14 @@
 
 #define LABEL_PRINT_VIEW_WORKAROUND
 
+//#define DEFAULTS_PRINTER_WITH_URL
+
+#ifdef DEFAULTS_PRINTER_WITH_URL
+#define DEFAULTS_PRINTER_URL            @"printer.url"
+#else
+#define DEFAULTS_PRINTER_ID             @"printer.id"
+#endif
+
 static const float kInfoCellHeight = 20.0;  // fixed
 
 static const float kSectionHeaderHeight = 27.0;
@@ -1052,6 +1060,32 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         if (!completed && error) {
             NSLog(@"Printing could not complete because of error: %@", error);
         }
+        else {
+#if 1
+            // If printer has changed, save it to defaults
+            //NSString *newPrinterName = [NSString stringWithFormat:@"%@._ipp._tcp.local", pic.printInfo.printerID];
+            NSString *newPrinterName = pic.printInfo.printerID;
+            NSLog(@"line %d, printer name <%@>", __LINE__, newPrinterName);
+
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+  #ifdef DEFAULTS_PRINTER_WITH_URL
+            NSURL *newPrinterURL = [NSURL URLWithString:newPrinterName];
+            NSLog(@"line %d, printer URL %@", __LINE__, newPrinterURL); // null
+            if (![[newPrinterURL relativeString] isEqualToString:[defaults URLForKey:DEFAULTS_PRINTER_URL].relativeString])
+            {
+                [defaults setURL:newPrinterURL forKey:DEFAULTS_PRINTER_URL];
+                [defaults synchronize];
+            }
+  #else
+            if (![newPrinterName isEqualToString:[defaults stringForKey:DEFAULTS_PRINTER_ID]]) {
+                [defaults setObject:newPrinterName forKey:DEFAULTS_PRINTER_ID];
+                [defaults synchronize];
+            }
+  #endif
+
+#endif
+        }
     };
 
     ////////////////////////////////////////////////////////////////////////////
@@ -1059,7 +1093,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSLog(@"line %d, printInfo %@", __LINE__, printInfo);
 
     printInfo.outputType = UIPrintInfoOutputGrayscale;
-    printInfo.orientation = UIPrintInfoOrientationLandscape;
+    printInfo.orientation = UIPrintInfoOrientationLandscape; // same result as UIPrintInfoOrientationPortrait
+    // The orientation seems to be handled only from the handyPrint settings
 #ifdef DEBUG
     printInfo.jobName = @"AirPrint label";
 #endif
@@ -1147,43 +1182,66 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //formatter.perPageContentInsets = UIEdgeInsetsMake(0, 0, 0, 0); // TLBR
 
     ////////////////////////////////////////////////////////////////////////////
-    
-    // TODO: see if there is a "savedPrinter" in the defaults
-    // if yes do B) otherwise A)
 
-#if 1
-    // A)
-    // No AirPrint Printers Found
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        CGRect r = [infoView rectForRowAtIndexPath:indexPath];
-        [pic presentFromRect:r inView:infoView animated:YES completionHandler:completionHandler];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    __block BOOL needPrinterSelection = TRUE;
+#ifdef DEFAULTS_PRINTER_WITH_URL
+    NSURL *printerURL = [defaults URLForKey:DEFAULTS_PRINTER_URL];
+    if (!printerURL) {
+        needPrinterSelection = TRUE;
+        NSLog(@"No printer URL in defaults");
     }
-    else {
+#else
+    NSString *printerID = [defaults stringForKey:DEFAULTS_PRINTER_ID];
+    if (!printerID) {
+        needPrinterSelection = TRUE;
+        NSLog(@"No printer ID in defaults");
+    }
+#endif
+    else
+    {
+#ifndef DEFAULTS_PRINTER_WITH_URL
+        NSURL *printerURL = [NSURL URLWithString:printerID];
+#endif
+        UIPrinter *printer = [UIPrinter printerWithURL:printerURL]; // nil
+        NSLog(@"line %d, printer %@", __LINE__, printer);
+        // TODO: wait for the block to terminate before proceeding
+        [printer contactPrinter:^(BOOL available) {
+            if (!available) {
+                needPrinterSelection = TRUE;
+                NSLog(@"line %d, printer NOT available", __LINE__);
+            }
+            else {
+                needPrinterSelection = FALSE;
+                NSLog(@"line %d, printer available", __LINE__);
+            }
+        }];
+    }
+    
+    if (needPrinterSelection) { // TODO: use UIPrinterPickerController
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            CGRect r = [infoView rectForRowAtIndexPath:indexPath];
+            [pic presentFromRect:r inView:infoView animated:YES completionHandler:completionHandler];
+        }
+        else {
+            [pic presentAnimated:YES completionHandler:completionHandler];
+        }
+        
         [pic presentAnimated:YES completionHandler:completionHandler];
     }
-
-    [pic presentAnimated:YES completionHandler:completionHandler];
-    NSString *printerID = pic.printInfo.printerID;
-    NSLog(@"line %d, printerID %@", __LINE__, printerID); /// null
-    UIPrinter *printer;
-    NSLog(@"line %d, printer displayName:%@, makeAndModel:%@, URL:%@", __LINE__,
-          printer.displayName,
-          printer.makeAndModel,
-          printer.URL);
-#else
-    // B)
-    // Print directly to the specified printer
-    // IPP: Internet Printing Protocol
-    NSString *printerName = @"DYMO LabelWriter 450"; // @"._ipp._tcp.local"
-    NSURL *printerURL = [NSURL fileURLWithPath:printerName];
-    UIPrinter *printer = [UIPrinter printerWithURL:printerURL];
-    NSLog(@"line %d, printer %@", __LINE__, printer);
-    [printer contactPrinter:^(BOOL available) {
-        NSLog(@"printer available: %d", available);
-        if (available)
-            [pic printToPrinter:printer completionHandler:completionHandler];
-    }];
+    else {
+        // Print directly to the specified printer
+#ifndef DEFAULTS_PRINTER_WITH_URL
+        NSURL *printerURL = [NSURL URLWithString:printerID];
 #endif
+        UIPrinter *printer = [UIPrinter printerWithURL:printerURL];
+        NSLog(@"line %d, printer displayName:%@, makeAndModel:%@, URL:%@", __LINE__,
+                  printer.displayName,
+                  printer.makeAndModel,
+                  printer.URL);
+
+        [pic printToPrinter:printer completionHandler:completionHandler];
+    }
 }
 
 #pragma mark UIPrintInteractionControllerDelegate
@@ -1667,7 +1725,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 #ifdef DEBUG
     else {
-        NSLog(@"%s line %d,  printing not available", __FUNCTION__, __LINE__);
+        NSLog(@"%s line %d, printing not available", __FUNCTION__, __LINE__);
     }
 #endif
     
