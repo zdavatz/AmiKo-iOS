@@ -36,6 +36,8 @@
 @property (nonatomic) bool editedMedicines; // "dirty" flag
 
 @property (nonatomic) videoViewController *videoVC;
+@property (nonatomic, retain) UIPrinter *SavedPrinter;
+
 
 @property (nonatomic, retain) IBOutlet UIView *medicineLabelView;
 @property (nonatomic, retain) IBOutlet UILabel *labelDoctor;
