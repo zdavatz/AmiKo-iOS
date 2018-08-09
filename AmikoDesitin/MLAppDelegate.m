@@ -168,7 +168,14 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
           [d objectForKey:@"CFBundleExecutable"],
           [d objectForKey:@"CFBundleShortVersionString"],
           [d objectForKey:@"CFBundleVersion"]);
-    NSLog(@"documentsDirectory: %@", [MLUtility documentsDirectory]);
+    NSString *bundleIdentifier = [d objectForKey:@"CFBundleIdentifier"];
+//    NSLog(@"bundle identifier <%@>, display name <%@>",
+//          bundleIdentifier,
+//          [d objectForKey:@"CFBundleDisplayName"]);
+//    NSLog(@"documents dir:\n\t%@", [MLUtility documentsDirectory]);
+    NSLog(@"Defaults file:\n\t%@/Preferences/%@.plist",
+          NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject,
+          bundleIdentifier);
     NSLog(@"Tesseract version %@", [G8Tesseract version]);
 #endif
     
@@ -267,31 +274,24 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Register the applications defaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *appDefaults = [NSMutableDictionary dictionary];
+    NSString *keyDBLastUpdate;
     if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        [appDefaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
-        [defaults registerDefaults:appDefaults];
+        keyDBLastUpdate = @"germanDBLastUpdate";
     }
     else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        [appDefaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
-        [defaults registerDefaults:appDefaults];
+        keyDBLastUpdate = @"frenchDBLastUpdate";
     }
-    
+
+    [appDefaults setValue:[NSDate date] forKey:keyDBLastUpdate];
+    [defaults registerDefaults:appDefaults];
+
     // Initialize user defaults first time app is run
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        NSDate* lastUpdated = [defaults objectForKey:@"germanDBLastUpdate"];
-        if (lastUpdated==nil) {
-            [lastUpdated setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
-            NSLog(@"Initializing defaults...");
-        }
+    NSDate* lastUpdated = [defaults objectForKey:keyDBLastUpdate];
+    if (!lastUpdated) {
+        [lastUpdated setValue:[NSDate date] forKey:keyDBLastUpdate];
+        NSLog(@"Initializing defaults...");
     }
-    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        NSDate* lastUpdated = [defaults objectForKey:@"frenchDBLastUpdate"];
-        if (lastUpdated==nil) {
-            [lastUpdated setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
-            NSLog(@"Initializing defaults...");
-        }
-    }
-    
+
     [defaults removeObjectForKey:@"lastUsedPrescription"];
     [defaults synchronize];
     

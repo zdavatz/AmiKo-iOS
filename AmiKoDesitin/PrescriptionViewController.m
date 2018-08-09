@@ -25,13 +25,9 @@
 
 #define LABEL_PRINT_VIEW_WORKAROUND
 
-//#define DEFAULTS_PRINTER_WITH_URL
-
-#ifdef DEFAULTS_PRINTER_WITH_URL
-#define DEFAULTS_PRINTER_URL            @"printer.url"
-#else
-#define DEFAULTS_PRINTER_ID             @"printer.id"
-#endif
+#define DEFAULTS_KEY_PRINTER_URL            @"printer.url"
+#define DEFAULTS_KEY_PRINTER_URL_STRING     @"printer.url_string"
+//#define DEBUG_SAVE_PRINTER_URL_BY_STRING
 
 static const float kInfoCellHeight = 20.0;  // fixed
 
@@ -73,6 +69,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     bool commentEditingActive;
     NSURL *lastUsedURL;
     bool barcodeHandled; // prevent processing the same scan multiple times
+
+    UIPrintInteractionController *pic;
+    NSIndexPath *indexPath; // for iPad
 }
 
 - (IBAction)btnClickedDone:(id)sender;
@@ -91,6 +90,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) showCameraForHealthCardOCR;
 - (void) showCameraForBarcodeAcquisition;
 - (void) showAlertForBarcodeNotFound;
+
+- (void) selectLabelPrinterAndPrint;
+- (void) checkPrinterAndPrint:(UIPrinter *)printer;
 @end
 
 #pragma mark -
@@ -289,6 +291,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newLabelPrinterWasSelected:)
+                                                 name:@"labelPrinterSelection"
+                                               object:nil];
     self.editedMedicines = false;
     possibleToOverwrite = false;
     editingCommentIdx = -1;
@@ -1040,68 +1046,32 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #pragma mark - Printing
 
 // If we get here we already checked that printing is available
-- (void) printMedicineLabel:(NSIndexPath *)indexPath
+- (void) printMedicineLabel
 {
-    NSInteger row = indexPath.row;
+    NSInteger row = self->indexPath.row;
     //NSLog(@"%s row:%ld", __FUNCTION__, (long)row);
-    UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
+    pic = [UIPrintInteractionController sharedPrintController];
     if (!pic) {
         NSLog(@"Couldn't get shared UIPrintInteractionController!");
         return;
     }
     
     pic.delegate = self;
-#ifdef DEBUG
-    NSLog(@"line %d, pic %@, printPaper %@", __LINE__, pic, pic.printPaper);
-#endif
-    
-    void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
-    ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-        if (!completed && error) {
-            NSLog(@"Printing could not complete because of error: %@", error);
-        }
-        else {
-#if 1
-            // If printer has changed, save it to defaults
-            //NSString *newPrinterName = [NSString stringWithFormat:@"%@._ipp._tcp.local", pic.printInfo.printerID];
-            NSString *newPrinterName = pic.printInfo.printerID;
-            NSLog(@"line %d, printer name <%@>", __LINE__, newPrinterName);
-
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-  #ifdef DEFAULTS_PRINTER_WITH_URL
-            NSURL *newPrinterURL = [NSURL URLWithString:newPrinterName];
-            NSLog(@"line %d, printer URL %@", __LINE__, newPrinterURL); // null
-            if (![[newPrinterURL relativeString] isEqualToString:[defaults URLForKey:DEFAULTS_PRINTER_URL].relativeString])
-            {
-                [defaults setURL:newPrinterURL forKey:DEFAULTS_PRINTER_URL];
-                [defaults synchronize];
-            }
-  #else
-            if (![newPrinterName isEqualToString:[defaults stringForKey:DEFAULTS_PRINTER_ID]]) {
-                [defaults setObject:newPrinterName forKey:DEFAULTS_PRINTER_ID];
-                [defaults synchronize];
-            }
-  #endif
-
-#endif
-        }
-    };
 
     ////////////////////////////////////////////////////////////////////////////
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-    NSLog(@"line %d, printInfo %@", __LINE__, printInfo);
+    NSLog(@"line %d, printInfo.jobName %@", __LINE__, printInfo.jobName);
 
     printInfo.outputType = UIPrintInfoOutputGrayscale;
     printInfo.orientation = UIPrintInfoOrientationLandscape; // same result as UIPrintInfoOrientationPortrait
     // The orientation seems to be handled only from the handyPrint settings
-#ifdef DEBUG
-    printInfo.jobName = @"AirPrint label";
-#endif
+//#ifdef DEBUG
+//    printInfo.jobName = @"AirPrint label";
+//#endif
     pic.printInfo = printInfo;
     
     ////////////////////////////////////////////////////////////////////////////
-    // Setup print content
+    // Setup print contents
 
     Operator *d = prescription.doctor;
     NSString * firstLine = @"";
@@ -1160,88 +1130,191 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
   #else
     pic.printFormatter = formatter;
   #endif
+    //formatter.startPage = 1;
+    //formatter.perPageContentInsets = UIEdgeInsetsMake(0, 0, 0, 0); // TLBR
 #endif
 
 #ifdef LABEL_PRINT_VIEW_WORKAROUND
     // https://stackoverflow.com/questions/19725033/air-printing-of-a-uiview-generates-white-pages
     UIGraphicsBeginImageContextWithOptions(self.medicineLabelView.bounds.size, NO, 0.0);
     
-    #if 1 // ok
+  #if 1 // ok
     [self.medicineLabelView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
-    #else // ng
+  #else // ng
     [self.medicineLabelView drawViewHierarchyInRect:self.medicineLabelView.bounds afterScreenUpdates:NO];
     UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
-    #endif
+  #endif
 
     UIGraphicsEndImageContext();
     pic.printingItem = snapshotImage;
 #endif
 
-    //formatter.startPage = 1;
-    //formatter.perPageContentInsets = UIEdgeInsetsMake(0, 0, 0, 0); // TLBR
+    //pic.showsNumberOfCopies = FALSE;
+    //pic.showsPaperSelectionForLoadedPapers = TRUE;
 
     ////////////////////////////////////////////////////////////////////////////
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    __block BOOL needPrinterSelection = TRUE;
-#ifdef DEFAULTS_PRINTER_WITH_URL
-    NSURL *printerURL = [defaults URLForKey:DEFAULTS_PRINTER_URL];
-    if (!printerURL) {
-        needPrinterSelection = TRUE;
-        NSLog(@"No printer URL in defaults");
-    }
-#else
-    NSString *printerID = [defaults stringForKey:DEFAULTS_PRINTER_ID];
-    if (!printerID) {
-        needPrinterSelection = TRUE;
-        NSLog(@"No printer ID in defaults");
-    }
-#endif
-    else
-    {
-#ifndef DEFAULTS_PRINTER_WITH_URL
-        NSURL *printerURL = [NSURL URLWithString:printerID];
-#endif
-        UIPrinter *printer = [UIPrinter printerWithURL:printerURL]; // nil
-        NSLog(@"line %d, printer %@", __LINE__, printer);
-        // TODO: wait for the block to terminate before proceeding
-        [printer contactPrinter:^(BOOL available) {
-            if (!available) {
-                needPrinterSelection = TRUE;
-                NSLog(@"line %d, printer NOT available", __LINE__);
-            }
-            else {
-                needPrinterSelection = FALSE;
-                NSLog(@"line %d, printer available", __LINE__);
-            }
-        }];
-    }
     
-    if (needPrinterSelection) { // TODO: use UIPrinterPickerController
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            CGRect r = [infoView rectForRowAtIndexPath:indexPath];
-            [pic presentFromRect:r inView:infoView animated:YES completionHandler:completionHandler];
-        }
-        else {
-            [pic presentAnimated:YES completionHandler:completionHandler];
-        }
-        
-        [pic presentAnimated:YES completionHandler:completionHandler];
+#if DEBUG_SAVE_PRINTER_URL_BY_STRING
+    NSURL *printerURL = [NSURL URLWithString:[defaults stringForKey:DEFAULTS_KEY_PRINTER_URL_STRING]];
+#else
+    NSURL *printerURL = [defaults URLForKey:DEFAULTS_KEY_PRINTER_URL];
+#endif
+    
+    if (printerURL) {
+        UIPrinter *printer = [UIPrinter printerWithURL:printerURL];
+
+#ifdef DEBUG
+        NSLog(@"line %d defaults printer URL\n\t rel: %@\n\t abs: %@\n\t abs: %@", __LINE__,
+              printerURL.relativeString,
+              printerURL.absoluteString,
+              [printerURL.absoluteString stringByRemovingPercentEncoding]); // change %2520 to %20
+#endif
+
+#if 0   // workaround:
+        //  try to print in any case, without first checking if the printer can be contacted
+        // comment:
+        //  it doesn't work because the printer name is not set, and it gets set only by contacting the printer
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"labelPrinterSelection"
+                                                            object:printer];
+#else
+        [self checkPrinterAndPrint:printer];
+#endif
     }
     else {
-        // Print directly to the specified printer
-#ifndef DEFAULTS_PRINTER_WITH_URL
-        NSURL *printerURL = [NSURL URLWithString:printerID];
+#ifdef DEBUG
+        NSLog(@"No printer URL in defaults");
 #endif
-        UIPrinter *printer = [UIPrinter printerWithURL:printerURL];
-        NSLog(@"line %d, printer displayName:%@, makeAndModel:%@, URL:%@", __LINE__,
-                  printer.displayName,
-                  printer.makeAndModel,
-                  printer.URL);
-
-        [pic printToPrinter:printer completionHandler:completionHandler];
+        [self selectLabelPrinterAndPrint];
     }
+}
+
+- (void) selectLabelPrinterAndPrint
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+#if 0 //def DEBUG
+    // Show a preview from which we can select the printer and print
+    void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
+    ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
+        if (!completed && error) {
+            NSLog(@"Printing could not complete because of error: %@", error);
+        }
+        else {
+            NSString *pid = [NSString stringWithFormat:@"%@", printController.printInfo.printerID];
+            NSURL *url = [NSURL URLWithString:pid];  // nil
+            // "My\032virtual\032printer._ipp._tcp.local."
+            NSLog(@"%s %d, pid: %@, url: <%@", __FUNCTION__, __LINE__, pid, url);
+            // FIXME: the url of the printer is nil, which means we cannot save the printer selection
+//            [[NSUserDefaults standardUserDefaults] setURL:url
+//                                                   forKey:DEFAULTS_KEY_PRINTER_URL];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    };
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        CGRect r = [infoView rectForRowAtIndexPath:indexPath];
+        [pic presentFromRect:r inView:infoView animated:YES completionHandler:completionHandler];
+    }
+    else {
+        [pic presentAnimated:YES completionHandler:completionHandler];
+    }
+    
+    [pic presentAnimated:YES completionHandler:completionHandler];
+#else
+    // Show a printer selection picker, without preview
+    
+    __block UIPrinter *SavedPrinter = nil; // TODO: maybe use printer from URL saved in defaults instead of nil
+    
+    UIPrinterPickerController *picker = [UIPrinterPickerController printerPickerControllerWithInitiallySelectedPrinter:SavedPrinter];
+    
+    //[picker presentFromRect:self.settingsButton.frame inView:self.view animated:YES
+    [picker presentAnimated:YES
+          completionHandler:^(UIPrinterPickerController *controller, BOOL userDidSelect, NSError *err) {
+              if (userDidSelect) {
+                  SavedPrinter = controller.selectedPrinter;
+                  
+#ifdef DEBUG
+                  // Test if the selected printer can be contacted (YES)
+                  [self tryContactPrinter:SavedPrinter message:@"selected"];
+
+                  // Test if the printer from just the URL can be contacted (NO)
+                  UIPrinter *testPrinter = [UIPrinter printerWithURL:SavedPrinter.URL];
+                  [self tryContactPrinter:testPrinter message:@"test"];
+#endif
+                  // ipp://ywesee.local.:49276/printers/DYMO%2520LabelWriter%2520450
+                  // ipp://ywesee.local.:51053/printers/My%2520virtual%2520printer
+            
+//                  [self saveCustomObject:SavedPrinter key:@"SavedPrinter"];
+
+                  [[NSUserDefaults standardUserDefaults] setURL:SavedPrinter.URL
+                                                         forKey:DEFAULTS_KEY_PRINTER_URL];
+#ifdef DEBUG_SAVE_PRINTER_URL_BY_STRING
+                  [[NSUserDefaults standardUserDefaults] setObject:[SavedPrinter.URL absoluteString]
+                                                         forKey:DEFAULTS_KEY_PRINTER_URL_STRING];
+#endif
+
+                  [[NSUserDefaults standardUserDefaults] synchronize];
+
+                  // The notification handler will print the label without preview
+                  [[NSNotificationCenter defaultCenter] postNotificationName:@"labelPrinterSelection"
+                                                                      object:SavedPrinter];
+              }
+          }
+     ];
+
+    // Note: without semaphore it returns immediately and SavePrinter is null at this time
+    // with semaphore it deadlocks
+#endif
+
+    NSLog(@"%s %d [END]", __FUNCTION__, __LINE__);
+}
+
+#ifdef DEBUG
+- (void) tryContactPrinter:(UIPrinter *)printer
+                   message:(NSString *)aMessage
+{
+    NSLog(@"%s line %d, %@ printer\n\t displayName:<%@>\n\t displayLocation:<%@>\n\t makeAndModel:<%@>\n\t URL:<%@>", __FUNCTION__, __LINE__, aMessage,
+          printer.displayName,
+          printer.displayLocation,
+          printer.makeAndModel,
+          printer.URL);
+
+    [printer contactPrinter:^(BOOL available) {  // up to 30 sseconds
+        if (available)
+            NSLog(@"line %d, %@ printer available", __LINE__, aMessage);
+        else
+            NSLog(@"%s line %d, %@ printer NOT available", __FUNCTION__, __LINE__, aMessage);
+    }
+     ];
+}
+#endif
+
+- (void) checkPrinterAndPrint:(UIPrinter *)printer
+{
+    NSLog(@"%s line %d\n\t displayName:<%@>\n\t displayLocation:<%@>\n\t makeAndModel:<%@>\n\t URL:<%@>", __FUNCTION__, __LINE__,
+          printer.displayName, // read only
+          printer.displayLocation,
+          printer.makeAndModel, // undefined until successful contactPrinter
+          printer.URL);
+
+    // FIXME: the printer from defaults is always unavailable
+    [printer contactPrinter:^(BOOL available) {  // up to 30 sseconds
+        if (available) {
+            NSLog(@"line %d, printer available, %@", __LINE__,
+                  printer.makeAndModel);
+            // The notification handler will print the label without preview
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"labelPrinterSelection"
+                                                                object:printer];
+        }
+        else {
+            NSLog(@"%s line %d, printer NOT available", __FUNCTION__, __LINE__);
+            [self selectLabelPrinterAndPrint];
+        }
+    }
+     ];
 }
 
 #pragma mark UIPrintInteractionControllerDelegate
@@ -1484,6 +1557,34 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark - Notifications
 
+- (void) newLabelPrinterWasSelected:(NSNotification *)notification
+{
+    UIPrinter *printer = notification.object;
+    NSURL *printerURL = printer.URL;
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, printerURL);
+    
+    NSLog(@"line %d, notification with printer\n\t displayName:<%@>,\n\t makeAndModel:<%@>,\n\t URL:<%@>", __LINE__,
+          printer.displayName,
+          printer.makeAndModel,
+          printer.URL);
+#endif
+
+    void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
+    ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
+        if (!completed && error) {
+            NSLog(@"Printing could not complete because of error: %@", error);
+        }
+    };
+    
+    if (!pic) {
+        NSLog(@"%s PrintInteractionController not yet defined", __FUNCTION__);
+        return;
+    }
+
+    [pic printToPrinter:printer completionHandler:completionHandler];
+}
+
 - (void)keyboardDidShow:(NSNotification *)notification
 {
     NSDictionary *info = [notification userInfo];
@@ -1719,7 +1820,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                                  handler:^(UIAlertAction *action) {
                                                                      [alertController dismissViewControllerAnimated:YES completion:nil];
                                                                      
-                                                                     [self printMedicineLabel:indexPath];
+                                                                     self->indexPath = indexPath;
+                                                                     [self printMedicineLabel];
                                                                  }];
         [alertController addAction:actionPrintLabel];
     }
