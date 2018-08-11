@@ -23,13 +23,24 @@
 //#define DEBUG_COLOR_BG
 #endif
 
-#define LABEL_PRINT_VIEW_WORKAROUND
+////////////////////////////////////////////////////////////////////////////////
+// Label Printing
+
+// Mutually exclusive:
+//#define LABEL_PRINT_PIC_USES_FORMATTER        // NG using UIView
+//#define LABEL_PRINT_PIC_USES_PAGE_RENDERER    // NG
+//#define LABEL_PRINT_PIC_USES_PRINTING_ITEM    // OK UIImage derived from UIView
+#define LABEL_PRINT_PIC_USES_PRINTING_ITEM_PDF  // OK PDF derived from UIView
+
+// Use UIPrintInteractionController, or UIPrinterPickerController if commented out
+#define LABEL_PRINTER_SELECTION_WITH_PREVIEW
 
 //#define USE_DEFAULTS_FOR_SELECTED_PRINTER
-
 #ifdef USE_DEFAULTS_FOR_SELECTED_PRINTER
 #define DEFAULTS_KEY_PRINTER_URL            @"printer.url"
 #endif
+
+////////////////////////////////////////////////////////////////////////////////
 
 static const float kInfoCellHeight = 20.0;  // fixed
 
@@ -1096,7 +1107,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                               NSLocalizedString(@"born", nil),
                               prescription.patient.birthDate];
     
-    Product * med = prescription.medications[row];
+    Product *med = prescription.medications[row];
     NSString *package = [med packageInfo];
     NSArray *packageArray = [package componentsSeparatedByString:@", "];
     labelMedicine.text = [packageArray objectAtIndex:0];
@@ -1116,33 +1127,57 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    // Built-in formatters. Alternatively implement your subclass of UIPrintPageRenderer
     
-#ifndef LABEL_PRINT_VIEW_WORKAROUND
+#ifdef LABEL_PRINT_PIC_USES_FORMATTER
     UIViewPrintFormatter *formatter = [self.medicineLabelView viewPrintFormatter];
     NSLog(@"line %d, formatter %@, startPage %ld, frame %@", __LINE__,
           formatter,
           (long)formatter.startPage, // -1 = 0x7FFF FFFF FFFF FFFF = 9223372036854775807
           NSStringFromCGRect(formatter.view.frame));
-  #if 0
-    UIPrintPageRenderer *myRenderer = [[UIPrintPageRenderer alloc] init];
-    [myRenderer addPrintFormatter:formatter startingAtPageAtIndex:0];
-    NSLog(@"line %d, numberOfPages %ld", __LINE__, (long)myRenderer.numberOfPages);
-    pic.printPageRenderer = myRenderer;
-  #else
-    pic.printFormatter = formatter;
-  #endif
+
     //formatter.startPage = 1;
     //formatter.perPageContentInsets = UIEdgeInsetsMake(0, 0, 0, 0); // TLBR
+    pic.printFormatter = formatter;
 #endif
+    
+#ifdef LABEL_PRINT_PIC_USES_PAGE_RENDERER
+    UIViewPrintFormatter *formatter = [self.medicineLabelView viewPrintFormatter];
+    NSLog(@"line %d, formatter %@, startPage %ld, frame %@", __LINE__,
+          formatter,
+          (long)formatter.startPage, // -1 = 0x7FFF FFFF FFFF FFFF = 9223372036854775807
+          NSStringFromCGRect(formatter.view.frame));
+    //formatter.startPage = 1;
+    formatter.perPageContentInsets = UIEdgeInsetsMake(0, 0, 0, 0); // TLBR
 
-#ifdef LABEL_PRINT_VIEW_WORKAROUND
+    UIPrintPageRenderer *myRenderer = [UIPrintPageRenderer new];
+    [myRenderer addPrintFormatter:formatter startingAtPageAtIndex:0];
+    [myRenderer prepareForDrawingPages:NSMakeRange(0, 1)]; // loc len
+    //[myRenderer drawPrintFormatter:formatter forPageAtIndex:0];
+    NSLog(@"line %d, numberOfPages %ld, printableRect%@", __LINE__,
+          (long)myRenderer.numberOfPages,                   // FIXME: 0 pages
+          NSStringFromCGRect(myRenderer.printableRect));    // FIXME: null rect
+    pic.printPageRenderer = myRenderer;
+#endif
+    
+#ifdef LABEL_PRINT_PIC_USES_PRINTING_ITEM
     // https://stackoverflow.com/questions/19725033/air-printing-of-a-uiview-generates-white-pages
     UIGraphicsBeginImageContextWithOptions(self.medicineLabelView.bounds.size, NO, 0.0);
     [self.medicineLabelView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     pic.printingItem = snapshotImage;
+#endif
+
+#ifdef LABEL_PRINT_PIC_USES_PRINTING_ITEM_PDF
+    // https://stackoverflow.com/questions/5443166/how-to-convert-uiview-to-pdf-within-ios
+    NSMutableData *pdfData = [NSMutableData data];
+    UIGraphicsBeginPDFContextToData(pdfData, medicineLabelView.bounds, nil);
+    UIGraphicsBeginPDFPage();
+    CGContextRef pdfContext = UIGraphicsGetCurrentContext();
+    [medicineLabelView.layer renderInContext:pdfContext];
+    UIGraphicsEndPDFContext();
+
+    pic.printingItem = pdfData;
 #endif
 
     //pic.showsNumberOfCopies = FALSE;
@@ -1180,7 +1215,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     NSLog(@"%s", __FUNCTION__);
     
-#if 0 //def DEBUG
+#ifdef LABEL_PRINTER_SELECTION_WITH_PREVIEW
     // Show a preview from which we can select the printer and print
     void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
     ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
@@ -1241,7 +1276,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         CGRect r = [infoView rectForRowAtIndexPath:indexPath];
-        NSLog(@"%s %d, rect: %@", __FUNCTION__, __LINE__, NSStringFromCGRect(r));
+        //NSLog(@"%s %d, rect: %@", __FUNCTION__, __LINE__, NSStringFromCGRect(r));
         [picker presentFromRect:r
                          inView:infoView
                        animated:YES
@@ -1303,6 +1338,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 #pragma mark UIPrintInteractionControllerDelegate
 
+#ifdef DEBUG
 - (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)pic
 {
     NSLog(@"%s", __func__);
@@ -1310,11 +1346,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
           NSStringFromCGSize(pic.printPaper.paperSize), // 841 x 595
           NSStringFromCGRect(pic.printPaper.printableRect));
 }
+#endif
 
 // called after user selects a printer
 - (UIPrintPaper *)printInteractionController:(UIPrintInteractionController *)pIC
                                  choosePaper:(NSArray *)paperList
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
     NSLog(@"line %d paperList count:%lu", __LINE__, (unsigned long)paperList.count);
     for (UIPrintPaper *aPaper in paperList) {
@@ -1322,12 +1360,16 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
               NSStringFromCGSize(aPaper.paperSize),
               NSStringFromCGRect(aPaper.printableRect));
     }
+#endif
     
     CGSize desiredSize = CGSizeMake(mm2pix(36), mm2pix(89));
-    NSLog(@"line %d, desired size %@ pixels", __LINE__, NSStringFromCGSize(desiredSize)); // 102 x 252
     UIPrintPaper *printPaper = [UIPrintPaper bestPaperForPageSize:desiredSize
                                               withPapersFromArray:paperList];
-    NSLog(@"line %d, best paper size %@", __LINE__, NSStringFromCGSize(printPaper.paperSize));
+#ifdef DEBUG
+    NSLog(@"line %d, desired size %@ pixels, best paper size %@", __LINE__,
+          NSStringFromCGSize(desiredSize),       // 102 x 252
+          NSStringFromCGSize(printPaper.paperSize));
+#endif
     return printPaper;
 }
 
