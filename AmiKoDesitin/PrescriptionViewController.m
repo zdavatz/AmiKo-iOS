@@ -2086,14 +2086,51 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                           @"https://play.google.com/store/apps/details?id=org.oddb.generika"];
     //NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
 
-    NSArray *objectsToShare = @[mailBody, urlAttachment];
+#if 1 // multipage
+    // Adapted from Swift code at
+    // https://stackoverflow.com/questions/39288559/one-of-the-best-way-to-convert-tableview-into-mutiple-pages-pdf-in-swift-ios
+    CGRect priorBounds = infoView.bounds;
+    CGSize fittedSize = [infoView sizeThatFits:CGSizeMake(priorBounds.size.width, infoView.contentSize.height)];
+    infoView.bounds = CGRectMake(0, 0, fittedSize.width, fittedSize.height);
+    CGRect pdfPageBounds = CGRectMake(0, 0, infoView.frame.size.width, self.view.frame.size.height);
+    NSMutableData *printFormatter = [NSMutableData data];  // TODO: rename pdfData
+    UIGraphicsBeginPDFContextToData(printFormatter, pdfPageBounds,nil);
+    CGFloat pageOriginY = 0;
+    while (pageOriginY < fittedSize.height) {
+        UIGraphicsBeginPDFPageWithInfo(pdfPageBounds, nil);
+        CGContextSaveGState(UIGraphicsGetCurrentContext());
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
+        [infoView.layer renderInContext: UIGraphicsGetCurrentContext()];
+        CGContextRestoreGState(UIGraphicsGetCurrentContext());
+        pageOriginY += pdfPageBounds.size.height;
+    }
+    UIGraphicsEndPDFContext();
+    infoView.bounds = priorBounds;
+#endif
+#if 0 //single page
+    NSMutableData *printFormatter = [NSMutableData data];
+    CGPoint p = CGPointZero;
+    CGSize s = infoView.contentSize;
+    CGRect r = {p, s};
+    UIGraphicsBeginPDFContextToData(printFormatter, r, nil);
+    UIGraphicsBeginPDFPage();
+    CGContextRef pdfContext = UIGraphicsGetCurrentContext();
+    [infoView.layer renderInContext:pdfContext];
+    UIGraphicsEndPDFContext();
+#endif
+#if 0
+    UIViewPrintFormatter *printFormatter = [infoView viewPrintFormatter];
+#endif
+    
+    // 'printFormatter' is added only for print activity
+    // 'mailBody' and 'urlAttachment' are used by others such as 'mail'
+    NSArray *objectsToShare = @[mailBody, urlAttachment, printFormatter];
     
     UIActivityViewController *activityVC =
     [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
                                       applicationActivities:nil];
-    
-    NSArray *excludeActivities = @[UIActivityTypePrint,
-                                   UIActivityTypeCopyToPasteboard,
+
+    NSArray *excludeActivities = @[UIActivityTypeCopyToPasteboard,
                                    UIActivityTypeAssignToContact,
                                    UIActivityTypeSaveToCameraRoll,
                                    UIActivityTypeAddToReadingList,
