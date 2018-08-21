@@ -44,4 +44,7 @@
 - (NSInteger)entriesCount;
 - (NSString *) generateUniqueID;
 
+- (NSString *)getStringForPrescriptionPrinting;
+- (NSString *)getStringForLabelPrinting;
+
 @end

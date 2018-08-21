@@ -49,5 +49,7 @@
 
 - (UIImage *)thumbnailFromSignature:(CGSize) size;
 - (NSInteger)entriesCount;
+- (NSString *)getStringForPrescriptionPrinting;
+- (NSString *)getStringForLabelPrinting;
 
 @end

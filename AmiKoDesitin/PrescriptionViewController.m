@@ -24,6 +24,18 @@
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
+// Prescription Printing
+
+// Mutually exclusive:
+//#define MED_PRINT_USES_FORMATTER
+//#define MED_PRINT_USES_PDF_SINGLE_PAGE
+#define MED_PRINT_USES_PDF_MULTIPAGE
+//#define MED_PRINT_USES_PAGE_RENDERER
+
+#define MED_PRINT_WITH_PAGE_HEADER
+//#define MED_PRINT_CONTENTS_FROM_TABLEVIEW
+
+////////////////////////////////////////////////////////////////////////////////
 // Label Printing
 
 // Mutually exclusive:
@@ -39,6 +51,10 @@
 #ifdef USE_DEFAULTS_FOR_SELECTED_PRINTER
 #define DEFAULTS_KEY_PRINTER_URL            @"printer.url"
 #endif
+
+#define kSizeA4                 CGSizeMake(595.2,841.8)
+//#define kSizeA4                 CGSizeMake(612, 792)
+#define kSizeDymoLabel          CGSizeMake(mm2pix(36),mm2pix(89))
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -106,6 +122,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) selectLabelPrinterAndPrint;
 - (void) checkPrinterAndPrint:(UIPrinter *)printer;
+- (NSMutableData *)renderPdfForPrinting;
 @end
 
 #pragma mark -
@@ -1086,26 +1103,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     ////////////////////////////////////////////////////////////////////////////
     // Setup print contents
 
-    Operator *d = prescription.doctor;
-    NSString * firstLine = @"";
-    if (d.title.length > 0)
-        firstLine = [NSString stringWithFormat:@"%@ ", d.title];
-    
-    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ ", d.givenName]];
-    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ - ", d.familyName]];
-    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ ", d.zipCode]];
-    //firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@ ", d.city]]; // included in placeDate
-    
-    NSString *placeDate = prescription.placeDate;// placeDateField.stringValue;
-    NSArray *placeDateArray = [placeDate componentsSeparatedByString:@" ("];
-    firstLine = [firstLine stringByAppendingString:[NSString stringWithFormat:@"%@", [placeDateArray objectAtIndex:0]]];
+    NSString *firstLine = [prescription.doctor getStringForLabelPrinting];
+    firstLine = [firstLine stringByAppendingString:[self getPlaceDateForPrinting]];
     self.labelDoctor.text = firstLine;
 
-    self.labelPatient.text = [NSString stringWithFormat:@"%@ %@, %@ %@",
-                              prescription.patient.givenName,
-                              prescription.patient.familyName,
-                              NSLocalizedString(@"born", nil),
-                              prescription.patient.birthDate];
+    self.labelPatient.text = [prescription.patient getStringForLabelPrinting];
     
     Product *med = prescription.medications[row];
     NSString *package = [med packageInfo];
@@ -1150,6 +1152,21 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     formatter.perPageContentInsets = UIEdgeInsetsMake(0, 0, 0, 0); // TLBR
 
     UIPrintPageRenderer *myRenderer = [UIPrintPageRenderer new];
+
+    /*
+    float topPadding = 0.0f;
+    float bottomPadding = 0.0f;
+    float leftPadding = 0.0f;
+    float rightPadding = 0.0f;
+    CGRect printableRect = CGRectMake(leftPadding,
+                                      topPadding,
+                                      kSizeDymoLabel.width-leftPadding-rightPadding,
+                                      kSizeDymoLabel.height-topPadding-bottomPadding);
+    CGRect paperRect = CGRectMake(0, 0, kSizeDymoLabel.width, kSizeDymoLabel.height);
+    [myRenderer setValue:[NSValue valueWithCGRect:paperRect] forKey:@"paperRect"];
+    [myRenderer setValue:[NSValue valueWithCGRect:printableRect] forKey:@"printableRect"];
+     */
+
     [myRenderer addPrintFormatter:formatter startingAtPageAtIndex:0];
     [myRenderer prepareForDrawingPages:NSMakeRange(0, 1)]; // loc len
     //[myRenderer drawPrintFormatter:formatter forPageAtIndex:0];
@@ -1362,7 +1379,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 #endif
     
-    CGSize desiredSize = CGSizeMake(mm2pix(36), mm2pix(89));
+    CGSize desiredSize = kSizeDymoLabel;
     UIPrintPaper *printPaper = [UIPrintPaper bestPaperForPageSize:desiredSize
                                               withPapersFromArray:paperList];
 #ifdef DEBUG
@@ -2074,6 +2091,133 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 }
 
+- (NSString *)getPlaceDateForPrinting
+{
+    NSString *placeDate = prescription.placeDate;// placeDateField.stringValue;
+    NSArray *placeDateArray = [placeDate componentsSeparatedByString:@" ("];
+    return [NSString stringWithFormat:@"%@", [placeDateArray objectAtIndex:0]];
+}
+
+// Adapted from Swift code at
+// https://stackoverflow.com/questions/39288559/one-of-the-best-way-to-convert-tableview-into-mutiple-pages-pdf-in-swift-ios
+- (NSMutableData *)renderPdfForPrinting
+{
+#ifdef MED_PRINT_USES_PDF_MULTIPAGE
+    const CGFloat margin = 50.0;
+    const CGFloat fontSize = 11.0;
+
+    const CGFloat docY = 100.0;
+    const CGFloat patY = 100.0;
+    const CGFloat placeDateY = 180.0;
+    const CGFloat medY = 250.0;
+
+#ifdef MED_PRINT_CONTENTS_FROM_TABLEVIEW
+    CGRect priorBounds = infoView.bounds;
+    CGSize fittedSize = [infoView sizeThatFits:CGSizeMake(priorBounds.size.width, infoView.contentSize.height)];
+    infoView.bounds = CGRectMake(0, 0, fittedSize.width, fittedSize.height);
+    CGRect pdfPageBounds = CGRectMake(0, 0, infoView.frame.size.width, self.view.frame.size.height);
+#else
+    CGSize fittedSize = kSizeA4; //[infoView sizeThatFits:kSizeA4];
+    CGRect pdfPageBounds = CGRectMake(0, 0, kSizeA4.width, kSizeA4.height);
+    NSInteger nMed = [prescription.medications count];
+#endif
+    CGRect rectMedicine = [infoView rectForSection:kSectionMedicines];
+
+    NSMutableData *pdfData = [NSMutableData data];
+    UIGraphicsBeginPDFContextToData(pdfData, pdfPageBounds,nil);
+    CGFloat pageOriginY = 0;
+    while (pageOriginY < fittedSize.height) {
+        UIGraphicsBeginPDFPageWithInfo(pdfPageBounds, nil);
+        CGContextSaveGState(UIGraphicsGetCurrentContext());
+        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
+        
+#ifdef MED_PRINT_CONTENTS_FROM_TABLEVIEW
+        [infoView.layer renderInContext: UIGraphicsGetCurrentContext()];
+#endif
+        
+#ifdef MED_PRINT_WITH_PAGE_HEADER
+        // doctor
+        NSString *strDoc = [prescription.doctor getStringForPrescriptionPrinting];
+        //strDoc = [strDoc stringByAppendingString:[self getPlaceDateForPrinting]];
+        
+        NSMutableParagraphStyle *paragraphStyleRight = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyleRight.lineBreakMode = NSLineBreakByWordWrapping;
+        paragraphStyleRight.alignment = NSTextAlignmentRight;
+        
+        NSDictionary * attrDoc = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+    #if 0 //def DEBUG
+                                   NSBackgroundColorAttributeName:[UIColor greenColor],
+    #endif
+                                   NSParagraphStyleAttributeName: paragraphStyleRight};
+        CGSize sizeDoc = [strDoc sizeWithAttributes:attrDoc];
+        [strDoc drawAtPoint:CGPointMake(kSizeA4.width - sizeDoc.width - margin,
+                                        pageOriginY+docY)
+             withAttributes:attrDoc];
+        
+        // patient
+        NSString *strPat = [prescription.patient getStringForPrescriptionPrinting];
+        
+        NSMutableParagraphStyle *paragraphStyleLeft = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyleRight.lineBreakMode = NSLineBreakByWordWrapping;
+        paragraphStyleRight.alignment = NSTextAlignmentLeft;
+        
+        NSDictionary *attrPat = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                                  NSParagraphStyleAttributeName: paragraphStyleLeft};
+        [strPat drawAtPoint:CGPointMake(margin, pageOriginY + patY)
+             withAttributes:attrPat];
+        
+        // signature
+        UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
+        [img drawInRect:CGRectMake(kSizeA4.width - img.size.width - margin,
+                                   pageOriginY+docY+sizeDoc.height,
+                                   img.size.width,
+                                   img.size.height)];
+        
+        // place date
+        [prescription.placeDate drawAtPoint:CGPointMake(margin, pageOriginY + placeDateY)
+                             withAttributes:attrPat];
+#endif  // MED_PRINT_WITH_PAGE_HEADER
+
+        // medicine
+        Product *med = prescription.medications[0];
+
+        NSDictionary *attrMedPackage = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                                        NSForegroundColorAttributeName:[UIColor blueColor],
+                                        NSParagraphStyleAttributeName: paragraphStyleLeft};
+
+        NSString *packInfo = med.packageInfo;
+        CGSize sizePackInfo = [packInfo sizeWithAttributes:attrMedPackage];
+
+        NSString *ean = med.eanCode;
+        CGSize sizeEan = [packInfo sizeWithAttributes:attrPat];
+        
+        NSDictionary *attrMedComment = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                                         NSForegroundColorAttributeName:[UIColor grayColor],
+                                         NSParagraphStyleAttributeName: paragraphStyleLeft};
+        NSString *comment = med.comment;
+        CGSize sizeComment = [packInfo sizeWithAttributes:attrMedComment];
+
+        CGFloat medYOffset = medY;
+        [packInfo drawAtPoint:CGPointMake(margin, pageOriginY + medYOffset) withAttributes:attrMedPackage];
+        medYOffset += sizePackInfo.height;
+        [ean      drawAtPoint:CGPointMake(margin, pageOriginY + medYOffset) withAttributes:attrPat];
+        medYOffset += sizeEan.height;
+        [comment  drawAtPoint:CGPointMake(margin, pageOriginY + medYOffset) withAttributes:attrMedComment];
+        
+        CGContextRestoreGState(UIGraphicsGetCurrentContext());
+        pageOriginY += pdfPageBounds.size.height;
+    }
+
+    UIGraphicsEndPDFContext();
+    
+#ifdef MED_PRINT_CONTENTS_FROM_TABLEVIEW
+    infoView.bounds = priorBounds;
+#endif
+    
+    return pdfData;
+#endif // MED_PRINT_USES_PDF_MULTIPAGE
+}
+
 - (void)sharePrescription:(NSURL *)urlAttachment
 {
 #ifdef DEBUG
@@ -2086,28 +2230,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                           @"https://play.google.com/store/apps/details?id=org.oddb.generika"];
     //NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
 
-#if 1 // multipage
-    // Adapted from Swift code at
-    // https://stackoverflow.com/questions/39288559/one-of-the-best-way-to-convert-tableview-into-mutiple-pages-pdf-in-swift-ios
-    CGRect priorBounds = infoView.bounds;
-    CGSize fittedSize = [infoView sizeThatFits:CGSizeMake(priorBounds.size.width, infoView.contentSize.height)];
-    infoView.bounds = CGRectMake(0, 0, fittedSize.width, fittedSize.height);
-    CGRect pdfPageBounds = CGRectMake(0, 0, infoView.frame.size.width, self.view.frame.size.height);
-    NSMutableData *printFormatter = [NSMutableData data];  // TODO: rename pdfData
-    UIGraphicsBeginPDFContextToData(printFormatter, pdfPageBounds,nil);
-    CGFloat pageOriginY = 0;
-    while (pageOriginY < fittedSize.height) {
-        UIGraphicsBeginPDFPageWithInfo(pdfPageBounds, nil);
-        CGContextSaveGState(UIGraphicsGetCurrentContext());
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
-        [infoView.layer renderInContext: UIGraphicsGetCurrentContext()];
-        CGContextRestoreGState(UIGraphicsGetCurrentContext());
-        pageOriginY += pdfPageBounds.size.height;
-    }
-    UIGraphicsEndPDFContext();
-    infoView.bounds = priorBounds;
+#ifdef MED_PRINT_USES_PAGE_RENDERER
+    UIPrintPageRenderer *printFormatter = [UIPrintPageRenderer new];
 #endif
-#if 0 //single page
+#ifdef MED_PRINT_USES_PDF_MULTIPAGE
+    NSMutableData *printFormatter = [self renderPdfForPrinting];
+#endif
+#ifdef MED_PRINT_USES_PDF_SINGLE_PAGE
     NSMutableData *printFormatter = [NSMutableData data];
     CGPoint p = CGPointZero;
     CGSize s = infoView.contentSize;
@@ -2118,7 +2247,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [infoView.layer renderInContext:pdfContext];
     UIGraphicsEndPDFContext();
 #endif
-#if 0
+#ifdef MED_PRINT_USES_FORMATTER
     UIViewPrintFormatter *printFormatter = [infoView viewPrintFormatter];
 #endif
     

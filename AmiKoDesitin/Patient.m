@@ -54,6 +54,26 @@
     return [NSString stringWithFormat:@"%lu", uniqueHash];    // e.g. 3466684318797166812
 }
 
+- (NSString *)getStringForPrescriptionPrinting
+{
+    NSString *s = @"";
+    
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ %@\n", givenName, familyName]];
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@\n", postalAddress]];
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ %@\n", zipCode, city]];
+    
+    return s;
+}
+
+- (NSString *)getStringForLabelPrinting
+{
+    return [NSString stringWithFormat:@"%@ %@, %@ %@",
+                              givenName,
+                              familyName,
+                              NSLocalizedString(@"born", nil),
+                              birthDate];
+}
+
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"%@ givenName:%@, familyName:%@, birthDate:%@, uniqueId:%@",

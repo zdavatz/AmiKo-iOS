@@ -58,7 +58,8 @@
 - (IBAction) myRightRevealToggle:(id)sender;
 - (IBAction) handleLongPress:(UILongPressGestureRecognizer *)gesture;
 
-- (void) printMedicineLabel:(NSIndexPath *)indexPath;
+- (NSString *)getPlaceDateForPrinting;
+- (void) printMedicineLabel; //:(NSIndexPath *)indexPath;
 
 - (NSURL *) prescriptionUrlWithHash: (NSString *)hash;
 - (BOOL) validatePrescription;

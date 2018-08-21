@@ -100,6 +100,36 @@
     return scaledImage;
 }
 
+- (NSString *)getStringForPrescriptionPrinting
+{
+    NSString *s = @"";
+    
+    if (title.length > 0)
+        s = [NSString stringWithFormat:@"%@ ", title];
+    
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ %@\n", givenName, familyName]];
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@\n", postalAddress]];
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ %@\n", zipCode, city]];
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@", emailAddress]];
+
+    return s;
+}
+
+- (NSString *)getStringForLabelPrinting
+{
+    NSString *s = @"";
+    
+    if (title.length > 0)
+        s = [NSString stringWithFormat:@"%@ ", title];
+    
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ ", givenName]];
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ - ", familyName]];
+    s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ ", zipCode]];
+    //s = [s stringByAppendingString:[NSString stringWithFormat:@"%@ ", city]]; // included in placeDate
+    
+    return s;
+}
+
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"%@ title:%@, name:%@, surname:%@",
