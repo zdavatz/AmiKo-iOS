@@ -2090,8 +2090,70 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return [NSString stringWithFormat:@"%@", [placeDateArray objectAtIndex:0]];
 }
 
-// Adapted from Swift code at
-// https://stackoverflow.com/questions/39288559/one-of-the-best-way-to-convert-tableview-into-mutiple-pages-pdf-in-swift-ios
+- (void)drawPdfHeader:(CGFloat)pageOriginY
+{
+    const CGFloat margin = 50.0;
+    const CGFloat fontSize = 11.0;
+    
+    const CGFloat docY = 100.0;
+    const CGFloat patY = 100.0;
+    const CGFloat placeDateY = 180.0;
+    
+    // Doctor
+    NSString *strDoctor = [prescription.doctor getStringForPrescriptionPrinting];
+    //strDoc = [strDoc stringByAppendingString:[self getPlaceDateForPrinting]];
+    
+    NSMutableParagraphStyle *paragraphStyleRight = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyleRight.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraphStyleRight.alignment = NSTextAlignmentRight;
+    
+    NSDictionary * attrDoc = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+#if 0 //def DEBUG
+                               NSBackgroundColorAttributeName:[UIColor greenColor],
+#endif
+                               NSParagraphStyleAttributeName: paragraphStyleRight};
+    CGSize sizeDoc = [strDoctor sizeWithAttributes:attrDoc];
+    CGFloat doctorX = kSizeA4.width - sizeDoc.width - margin;
+    [strDoctor drawAtPoint:CGPointMake(doctorX,
+                                       pageOriginY+docY)
+            withAttributes:attrDoc];
+    
+    // Patient
+    NSString *strPat = [prescription.patient getStringForPrescriptionPrinting];
+    
+    NSMutableParagraphStyle *paragraphStylePatient = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStylePatient.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraphStylePatient.alignment = NSTextAlignmentLeft;
+    
+    NSDictionary *attrPat = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                              NSParagraphStyleAttributeName: paragraphStylePatient};
+    [strPat drawAtPoint:CGPointMake(margin, pageOriginY + patY)
+         withAttributes:attrPat];
+    
+    // Signature
+    UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
+    //CGFloat signatureX = kSizeA4.width - img.size.width - margin; // right aligned with margin
+    CGFloat signatureX = doctorX; // left aligned with doctor
+    CGRect signatureRect = CGRectMake(signatureX,
+                                      pageOriginY+docY+sizeDoc.height,
+                                      img.size.width,
+                                      img.size.height);
+    [img drawInRect:signatureRect];
+#if 1 //def DEBUG
+    // Show a border to verify the alignment
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, 1);
+    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextStrokeRect(context, signatureRect);
+#endif
+    
+    // Place and date
+    [prescription.placeDate drawAtPoint:CGPointMake(margin, pageOriginY + placeDateY)
+                         withAttributes:attrPat];
+    
+    // TODO: add document filename
+}
+
 - (NSMutableData *)renderPdfForPrinting
 {
 #ifdef MED_PRINT_CONTENTS_FROM_TABLEVIEW
@@ -2124,9 +2186,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     const CGFloat margin = 50.0;
     const CGFloat fontSize = 11.0;
 
-    const CGFloat docY = 100.0;
-    const CGFloat patY = 100.0;
-    const CGFloat placeDateY = 180.0;
     const CGFloat medY = 250.0;
     const CGFloat medSpacing = 20.0;
 
@@ -2137,68 +2196,39 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSMutableData *pdfData = [NSMutableData data];
     UIGraphicsBeginPDFContextToData(pdfData, pdfPageBounds,nil);
     CGFloat pageOriginY = 0;
-    while (pageOriginY < fittedSize.height) {
+    NSInteger pageNumber = 1;
+    while (pageOriginY < fittedSize.height) // TODO: obsolete this while loop
+    {
+        // Start a new page
         UIGraphicsBeginPDFPageWithInfo(pdfPageBounds, nil);
         CGContextSaveGState(UIGraphicsGetCurrentContext());
         CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
-        
-#if 1 // header
 
-        // doctor
-        NSString *strDoctor = [prescription.doctor getStringForPrescriptionPrinting];
-        //strDoc = [strDoc stringByAppendingString:[self getPlaceDateForPrinting]];
-        
-        NSMutableParagraphStyle *paragraphStyleRight = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        paragraphStyleRight.lineBreakMode = NSLineBreakByWordWrapping;
-        paragraphStyleRight.alignment = NSTextAlignmentRight;
-        
-        NSDictionary * attrDoc = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-    #if 0 //def DEBUG
-                                   NSBackgroundColorAttributeName:[UIColor greenColor],
-    #endif
-                                   NSParagraphStyleAttributeName: paragraphStyleRight};
-        CGSize sizeDoc = [strDoctor sizeWithAttributes:attrDoc];
-        CGFloat doctorX = kSizeA4.width - sizeDoc.width - margin;
-        [strDoctor drawAtPoint:CGPointMake(doctorX,
-                                        pageOriginY+docY)
-             withAttributes:attrDoc];
-        
-        // patient
-        NSString *strPat = [prescription.patient getStringForPrescriptionPrinting];
-        
-        NSMutableParagraphStyle *paragraphStyleLeft = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        paragraphStyleRight.lineBreakMode = NSLineBreakByWordWrapping;
-        paragraphStyleRight.alignment = NSTextAlignmentLeft;
-        
-        NSDictionary *attrPat = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-                                  NSParagraphStyleAttributeName: paragraphStyleLeft};
-        [strPat drawAtPoint:CGPointMake(margin, pageOriginY + patY)
-             withAttributes:attrPat];
-        
-        // signature
-        UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
-        //CGFloat signatureX = kSizeA4.width - img.size.width - margin; // right aligned with doctor
-        CGFloat signatureX = doctorX; // left aligned with doctor
-        CGRect signatureRect = CGRectMake(signatureX,
-                                          pageOriginY+docY+sizeDoc.height,
-                                          img.size.width,
-                                          img.size.height);
-        [img drawInRect:signatureRect];
-    #ifdef DEBUG
-        // Show a border to verify the alignment
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetLineWidth(context, 1);
-        CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
-        CGContextStrokeRect(context, signatureRect);
-    #endif
-        
-        // place date
-        [prescription.placeDate drawAtPoint:CGPointMake(margin, pageOriginY + placeDateY)
-                             withAttributes:attrPat];
-#endif
+        [self drawPdfHeader: pageOriginY];
 
-        // medicines
+        // Medicines
         CGFloat medYOffset = medY;
+
+        NSMutableParagraphStyle *paragraphStyleLeft = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyleLeft.lineBreakMode = NSLineBreakByWordWrapping;
+        paragraphStyleLeft.alignment = NSTextAlignmentLeft;
+
+        NSMutableParagraphStyle *paragraphStyleComment = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        paragraphStyleComment.lineBreakMode = NSLineBreakByWordWrapping;
+        paragraphStyleComment.alignment = NSTextAlignmentLeft;
+        
+        NSDictionary *attrEan = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                                  NSForegroundColorAttributeName:[UIColor grayColor],
+                                  NSParagraphStyleAttributeName: paragraphStyleLeft};
+
+        NSDictionary *attrMedPackage = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                                         NSForegroundColorAttributeName:[UIColor blueColor],
+                                         NSParagraphStyleAttributeName: paragraphStyleLeft};
+        
+        NSDictionary *attrMedComment = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                                         NSForegroundColorAttributeName:[UIColor grayColor],
+                                         NSParagraphStyleAttributeName: paragraphStyleComment};
+
         for (NSInteger i=0; i<nMed; i++) {
             Product *med = prescription.medications[i];
 
@@ -2206,22 +2236,53 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             NSString *ean = med.eanCode;
             NSString *comment = med.comment;
 
-            NSDictionary *attrMedPackage = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-                                             NSForegroundColorAttributeName:[UIColor blueColor],
-                                             NSParagraphStyleAttributeName: paragraphStyleLeft};
             CGSize sizePackInfo = [packInfo sizeWithAttributes:attrMedPackage];
+            CGSize sizeEan = [ean sizeWithAttributes:attrEan];
+            CGSize sizeComment = CGSizeZero;
+
+            if (comment.length > 0) {
+#if 0
+                // single line
+                sizeComment = [packInfo sizeWithAttributes:attrMedComment];
+#else
+                // multi-line
+                CGFloat desiredWidth = kSizeA4.width - 2*margin;
+                CGRect neededRect =
+                [comment boundingRectWithSize:CGSizeMake(desiredWidth, CGFLOAT_MAX)
+                                      options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                   attributes:attrMedComment
+                                      context:nil];
+                sizeComment = CGSizeMake(desiredWidth, neededRect.size.height);
+#endif
+            }
             
-            NSDictionary *attrEan = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-                                             NSForegroundColorAttributeName:[UIColor grayColor],
-                                             NSParagraphStyleAttributeName: paragraphStyleLeft};
-            CGSize sizeEan = [packInfo sizeWithAttributes:attrEan];
-            
-            NSDictionary *attrMedComment = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-                                             NSForegroundColorAttributeName:[UIColor grayColor],
-                                             NSParagraphStyleAttributeName: paragraphStyleLeft};
-            CGSize sizeComment = [packInfo sizeWithAttributes:attrMedComment];
-            
-            // TODO: check if the total size fits the page
+            CGFloat currentY = medYOffset + sizePackInfo.height + sizeEan.height + sizeComment.height;
+#ifdef DEBUG
+            NSLog(@"PDF page %ld, med[%ld], pageY: %f, currentY: %f",
+                  (long)pageNumber, (long)i,
+                  pdfPageBounds.size.height,
+                  currentY);
+#endif
+            // Check if the total size fits the page
+            if (currentY > (pdfPageBounds.size.height - margin)) {
+#if 1
+                // TODO add page number to current page
+
+                // Terminate current page
+                CGContextRestoreGState(UIGraphicsGetCurrentContext());
+                pageOriginY += pdfPageBounds.size.height;
+                
+                // Start new page
+                UIGraphicsBeginPDFPageWithInfo(pdfPageBounds, nil);
+                CGContextSaveGState(UIGraphicsGetCurrentContext());
+                CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
+                
+                // TODO: draw header
+                [self drawPdfHeader: pageOriginY];
+                medYOffset = medY;
+                pageNumber++;
+#endif
+            }
 
             [packInfo drawAtPoint:CGPointMake(margin, pageOriginY + medYOffset) withAttributes:attrMedPackage];
             medYOffset += sizePackInfo.height;
@@ -2230,16 +2291,24 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             medYOffset += sizeEan.height;
 
             if (comment.length > 0) {
-                [comment drawAtPoint:CGPointMake(margin, pageOriginY + medYOffset) withAttributes:attrMedComment];
+                CGPoint commentPoint = CGPointMake(margin, pageOriginY + medYOffset);
+#if 0
+                // drawAtPoint does no line wrapping
+                [comment drawAtPoint:commentPoint withAttributes:attrMedComment];
+#else
+                CGRect commentRect = {commentPoint, sizeComment};
+                [comment drawInRect:commentRect withAttributes:attrMedComment];
+#endif
                 medYOffset += sizeComment.height;
             }
 
             medYOffset += medSpacing;
-        }
+        }   // nMed for loop
         
+        // Terminate current page
         CGContextRestoreGState(UIGraphicsGetCurrentContext());
         pageOriginY += pdfPageBounds.size.height;
-    }
+    } // while loop (to be obsoleted)
 
     UIGraphicsEndPDFContext();
     

@@ -63,7 +63,9 @@
     return 5; // TODO
 }
 
-- (UIImage *)thumbnailFromSignature:(CGSize) size
+// If the aspect ratio of the signature doesn't match the aspect ratio of the
+// desiredSize, empty margins will be included in the returned image.
+- (UIImage *)thumbnailFromSignature:(CGSize) desiredSize
 {
     if (self.signature == nil)
         return nil;
@@ -78,17 +80,24 @@
 #endif
     
     // resize
-    CGFloat width = size.width / image.size.width;
-    CGFloat height = size.height / image.size.height;
+    CGFloat width = desiredSize.width / image.size.width;
+    CGFloat height = desiredSize.height / image.size.height;
     CGFloat ratio = MIN(width, height);
     
     CGRect rect = CGRectZero;
     rect.size.width = image.size.width * ratio;
     rect.size.height = image.size.height * ratio;
-    rect.origin.x = (size.width - rect.size.width) / 2.0f;
-    rect.origin.y = (size.height - rect.size.height) / 2.0f;
+    rect.origin.x = (desiredSize.width - rect.size.width) / 2.0f;
+    rect.origin.y = (desiredSize.height - rect.size.height) / 2.0f;
     
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0 );
+    
+    UIGraphicsBeginImageContextWithOptions(desiredSize, NO, 0 );
+#ifdef DEBUG
+    UIColor *bgColor = [UIColor lightGrayColor];
+    [bgColor setFill];
+    CGRect bgRect = {CGPointZero, desiredSize};
+    UIRectFill(bgRect);
+#endif
     [image drawInRect:rect];
     UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
