@@ -2095,13 +2095,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     const CGFloat margin = 50.0;
     const CGFloat fontSize = 11.0;
     
-    const CGFloat docY = 100.0;
-    const CGFloat patY = 100.0;
-    const CGFloat placeDateY = 180.0;
+    const CGFloat docY = mm2pix(60);
+    const CGFloat patY = mm2pix(60);
     
     // Doctor
     NSString *strDoctor = [prescription.doctor getStringForPrescriptionPrinting];
-    //strDoc = [strDoc stringByAppendingString:[self getPlaceDateForPrinting]];
     
     NSMutableParagraphStyle *paragraphStyleRight = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyleRight.lineBreakMode = NSLineBreakByWordWrapping;
@@ -2112,10 +2110,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                NSBackgroundColorAttributeName:[UIColor greenColor],
 #endif
                                NSParagraphStyleAttributeName: paragraphStyleRight};
-    CGSize sizeDoc = [strDoctor sizeWithAttributes:attrDoc];
+    CGSize sizeDoc = [strDoctor sizeWithAttributes:attrDoc]; // FIXME: single line
     CGFloat doctorX = kSizeA4.width - sizeDoc.width - margin;
-    [strDoctor drawAtPoint:CGPointMake(doctorX,
-                                       pageOriginY+docY)
+    [strDoctor drawAtPoint:CGPointMake(doctorX, pageOriginY+docY)
             withAttributes:attrDoc];
     
     // Patient
@@ -2148,6 +2145,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
     
     // Place and date
+    const CGFloat placeDateY = mm2pix(95);
     [prescription.placeDate drawAtPoint:CGPointMake(margin, pageOriginY + placeDateY)
                          withAttributes:attrPat];
     
@@ -2183,11 +2181,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
 #else // MED_PRINT_CONTENTS_FROM_TABLEVIEW
     
-    const CGFloat margin = 50.0;
+    const CGFloat margin = mm2pix(18);
     const CGFloat fontSize = 11.0;
 
-    const CGFloat medY = 250.0;
-    const CGFloat medSpacing = 20.0;
+    const CGFloat medY = mm2pix(110);
+    const CGFloat medSpacing = mm2pix(8);
 
     CGSize fittedSize = kSizeA4;
     CGRect pdfPageBounds = CGRectMake(0, 0, kSizeA4.width, kSizeA4.height);
