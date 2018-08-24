@@ -45,8 +45,7 @@
 #define DEFAULTS_KEY_PRINTER_URL            @"printer.url"
 #endif
 
-#define kSizeA4                 CGSizeMake(595.2,841.8)
-//#define kSizeA4                 CGSizeMake(612, 792)
+#define kSizeA4                 CGSizeMake(mm2pix(210),mm2pix(297))
 #define kSizeDymoLabel          CGSizeMake(mm2pix(36),mm2pix(89))
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2146,7 +2145,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #if 1 // header
 
         // doctor
-        NSString *strDoc = [prescription.doctor getStringForPrescriptionPrinting];
+        NSString *strDoctor = [prescription.doctor getStringForPrescriptionPrinting];
         //strDoc = [strDoc stringByAppendingString:[self getPlaceDateForPrinting]];
         
         NSMutableParagraphStyle *paragraphStyleRight = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -2158,8 +2157,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    NSBackgroundColorAttributeName:[UIColor greenColor],
     #endif
                                    NSParagraphStyleAttributeName: paragraphStyleRight};
-        CGSize sizeDoc = [strDoc sizeWithAttributes:attrDoc];
-        [strDoc drawAtPoint:CGPointMake(kSizeA4.width - sizeDoc.width - margin,
+        CGSize sizeDoc = [strDoctor sizeWithAttributes:attrDoc];
+        CGFloat doctorX = kSizeA4.width - sizeDoc.width - margin;
+        [strDoctor drawAtPoint:CGPointMake(doctorX,
                                         pageOriginY+docY)
              withAttributes:attrDoc];
         
@@ -2177,10 +2177,20 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         
         // signature
         UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
-        [img drawInRect:CGRectMake(kSizeA4.width - img.size.width - margin,
-                                   pageOriginY+docY+sizeDoc.height,
-                                   img.size.width,
-                                   img.size.height)];
+        //CGFloat signatureX = kSizeA4.width - img.size.width - margin; // right aligned with doctor
+        CGFloat signatureX = doctorX; // left aligned with doctor
+        CGRect signatureRect = CGRectMake(signatureX,
+                                          pageOriginY+docY+sizeDoc.height,
+                                          img.size.width,
+                                          img.size.height);
+        [img drawInRect:signatureRect];
+    #ifdef DEBUG
+        // Show a border to verify the alignment
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetLineWidth(context, 1);
+        CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+        CGContextStrokeRect(context, signatureRect);
+    #endif
         
         // place date
         [prescription.placeDate drawAtPoint:CGPointMake(margin, pageOriginY + placeDateY)
