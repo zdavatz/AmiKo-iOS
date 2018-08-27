@@ -2106,7 +2106,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     paragraphStyleRight.alignment = NSTextAlignmentRight;
     
     NSDictionary * attrDoc = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-#if 0 //def DEBUG
+#ifdef DEBUG
                                NSBackgroundColorAttributeName:[UIColor greenColor],
 #endif
                                NSParagraphStyleAttributeName: paragraphStyleRight};
@@ -2136,7 +2136,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                       img.size.width,
                                       img.size.height);
     [img drawInRect:signatureRect];
-#if 1 //def DEBUG
+#ifdef DEBUG
     // Show a border to verify the alignment
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 1);

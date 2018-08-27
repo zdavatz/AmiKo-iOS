@@ -209,17 +209,19 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     }
 
     // Trim leading space from given name
-    NSString *giveName = nameArray[1];
-    if ([[NSCharacterSet whitespaceCharacterSet] characterIsMember:[giveName characterAtIndex:0]])
-        giveName = [giveName substringFromIndex:1];
-
-    // Trim trailing '-' from given name
-    if (([giveName length] > 0) && [giveName hasSuffix:@"-"])
-        giveName = [giveName substringToIndex:[giveName length]-1];
+    NSString *givenName = nameArray[1];
+    if ([givenName length] > 0) {
+        if ([[NSCharacterSet whitespaceCharacterSet] characterIsMember:[givenName characterAtIndex:0]])
+            givenName = [givenName substringFromIndex:1];
+        
+        // Trim trailing '-' from given name
+        if ([givenName hasSuffix:@"-"])
+            givenName = [givenName substringToIndex:[givenName length]-1];
+    }
 
 #ifdef DEBUG
     NSLog(@"Family name <%@>", nameArray[0]);
-    NSLog(@"First name <%@>", giveName);
+    NSLog(@"First name <%@>", givenName);
     NSLog(@"Birthday <%@>", dateArray[0]);
     NSLog(@"Sex <%@>", dateArray[1]);
 #endif
@@ -228,7 +230,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
     Patient *incompletePatient = [[Patient alloc] init];
     incompletePatient.familyName = nameArray[0];
-    incompletePatient.givenName = giveName;
+    incompletePatient.givenName = givenName;
     incompletePatient.birthDate = dateArray[0];
     incompletePatient.uniqueId = [incompletePatient generateUniqueID];
     
