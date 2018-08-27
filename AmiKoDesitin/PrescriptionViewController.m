@@ -2090,13 +2090,38 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return [NSString stringWithFormat:@"%@", [placeDateArray objectAtIndex:0]];
 }
 
+- (void)addPdfPageNumber:(CGFloat)pageOriginY pageNumber:(NSInteger)pn
+{
+    const CGFloat margin = 50.0;
+    const CGFloat fontSize = 11.0;
+
+    const CGFloat pageNumberY = mm2pix(50);
+    
+    NSMutableParagraphStyle *paragraphStyleRight = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyleRight.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraphStyleRight.alignment = NSTextAlignmentRight;
+    
+    NSDictionary * attrPN = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
+                               NSParagraphStyleAttributeName: paragraphStyleRight};
+    
+    NSString *strPage = [NSString stringWithFormat:@"Page %ld", (long)pn]; // TODO: localize
+
+    CGSize sizePN = [strPage sizeWithAttributes:attrPN];
+    CGFloat pageNumberX = kSizeA4.width - sizePN.width - margin;
+    
+    [strPage drawAtPoint:CGPointMake(pageNumberX, pageOriginY + pageNumberY)
+          withAttributes:attrPN];
+}
+
 - (void)drawPdfHeader:(CGFloat)pageOriginY
 {
     const CGFloat margin = 50.0;
     const CGFloat fontSize = 11.0;
     
+    const CGFloat filenameY = mm2pix(50);
     const CGFloat docY = mm2pix(60);
     const CGFloat patY = mm2pix(60);
+    const CGFloat placeDateY = mm2pix(95);
     
     // Doctor
     NSString *strDoctor = [prescription.doctor getStringForPrescriptionPrinting];
@@ -2145,11 +2170,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
     
     // Place and date
-    const CGFloat placeDateY = mm2pix(95);
     [prescription.placeDate drawAtPoint:CGPointMake(margin, pageOriginY + placeDateY)
                          withAttributes:attrPat];
     
-    // TODO: add document filename
+    // Document filename
+    NSString *fileName = [[NSUserDefaults standardUserDefaults] stringForKey:@"lastUsedPrescription"];
+    fileName = [fileName stringByDeletingPathExtension]; // drop .amk
+    [fileName drawAtPoint:CGPointMake(margin, pageOriginY + filenameY)
+           withAttributes:attrPat];
 }
 
 - (NSMutableData *)renderPdfForPrinting
@@ -2264,7 +2292,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             // Check if the total size fits the page
             if (currentY > (pdfPageBounds.size.height - margin)) {
 #if 1
-                // TODO add page number to current page
+                // Add page number to current page
+                [self addPdfPageNumber:pageOriginY pageNumber:pageNumber];
 
                 // Terminate current page
                 CGContextRestoreGState(UIGraphicsGetCurrentContext());
@@ -2304,6 +2333,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }   // nMed for loop
         
         // Terminate current page
+
+        // Add page number to last page
+        if (pageNumber > 1)
+            [self addPdfPageNumber:pageOriginY pageNumber:pageNumber];
+
         CGContextRestoreGState(UIGraphicsGetCurrentContext());
         pageOriginY += pdfPageBounds.size.height;
     } // while loop (to be obsoleted)
