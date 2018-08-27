@@ -2104,7 +2104,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSDictionary * attrPN = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
                                NSParagraphStyleAttributeName: paragraphStyleRight};
     
-    NSString *strPage = [NSString stringWithFormat:@"Page %ld", (long)pn]; // TODO: localize
+    NSString *strPage = [NSString stringWithFormat:@"%@ %ld",
+                         NSLocalizedString(@"Page", nil),
+                         (long)pn];
 
     CGSize sizePN = [strPage sizeWithAttributes:attrPN];
     CGFloat pageNumberX = kSizeA4.width - sizePN.width - margin;
