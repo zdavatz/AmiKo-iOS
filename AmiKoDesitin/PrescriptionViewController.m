@@ -80,6 +80,156 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return CGSizeMake(ceil(boundSize.width), ceil(boundSize.height));
 }
 
+////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+
+@interface PrintItemProvider: UIActivityItemProvider
+@property (nonatomic, strong) NSMutableData *pdfData;
+@end
+
+@implementation PrintItemProvider
+- (id)initWithPlaceholderItem:(id)placeholderItem
+{
+    return [super initWithPlaceholderItem:placeholderItem];
+}
+
+#pragma mark UIActivityItemSource
+
+// (required)
+- (id)activityViewController:(UIActivityViewController *)activityViewController
+         itemForActivityType:(UIActivityType)activityType
+{
+    if (([self.activityType isEqualToString:UIActivityTypePrint]) ||        // Print
+        ([self.activityType isEqualToString:UIActivityTypeMarkupAsPDF]))    // Create PDF
+    {
+        return self.pdfData;
+    }
+    
+    return nil;
+}
+
+// (required)
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
+{
+    if (self.placeholderItem == nil)
+        return @"";
+    
+    return self.placeholderItem;
+}
+
+- (id)item
+{
+    if (([self.activityType isEqualToString:UIActivityTypePrint]) ||        // Print
+        ([self.activityType isEqualToString:UIActivityTypeMarkupAsPDF]))    // Create PDF
+    {
+        return [self.pdfData class];
+    }
+    
+    return nil;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+
+@interface AttachmentItemProvider: UIActivityItemProvider
+@property (nonatomic, strong) NSURL *filepath;
+@end
+
+@implementation AttachmentItemProvider
+
+- (id)initWithPlaceholderItem:(id)placeholderItem
+{
+    return [super initWithPlaceholderItem:placeholderItem];
+}
+
+#pragma mark UIActivityItemSource
+
+// (required)
+- (id)activityViewController:(UIActivityViewController *)activityViewController
+         itemForActivityType:(UIActivityType)activityType
+{
+    if ([activityType isEqualToString:UIActivityTypeMail])
+        return self.filepath;
+
+    return nil;
+}
+
+// (required)
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
+{
+    if (self.placeholderItem == nil)
+        return @"";
+    
+    return self.placeholderItem;
+}
+
+- (id)item
+{
+    if ([self.activityType isEqualToString:UIActivityTypeMail])
+        return self.filepath;
+
+    return nil;
+}
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+
+@interface EmailItemProvider: UIActivityItemProvider <UIActivityItemSource>
+@property (nonatomic, strong) NSString *emailBody;
+@property (nonatomic, strong) NSString *emailSubject;
+@end
+
+@implementation EmailItemProvider
+
+- (id)initWithPlaceholderItem:(id)placeholderItem
+{
+    return [super initWithPlaceholderItem:placeholderItem];
+}
+
+#pragma mark UIActivityItemSource
+
+// (required)
+- (id)activityViewController:(UIActivityViewController *)activityViewController
+         itemForActivityType:(UIActivityType)activityType
+{
+    if ([activityType isEqualToString:UIActivityTypeMail])
+        return self.emailBody;
+    
+    return @"No provider";
+}
+
+// (required)
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
+{
+    if (self.placeholderItem == nil)
+        return @"";
+
+    return self.placeholderItem;
+}
+
+- (NSString *)activityViewController:(UIActivityViewController *)activityViewController
+              subjectForActivityType:(nullable UIActivityType)activityType
+{
+    if ( [activityType isEqualToString:UIActivityTypeMail] )
+        return self.emailSubject;
+    
+    return nil;
+}
+
+- (id)item
+{
+    if ([self.activityType isEqualToString:UIActivityTypeMail])
+        return [NSString class];
+
+    return nil;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 
 @interface PrescriptionViewController ()
@@ -2362,12 +2512,30 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                           @"https://itunes.apple.com/ch/app/generika/id520038123?mt=8",
                           @"https://play.google.com/store/apps/details?id=org.oddb.generika"];
     //NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
+    
+    NSString * subjectLine =
+    [NSString stringWithFormat:NSLocalizedString(@"Prescription to patient from doctor",nil),
+     prescription.patient.givenName,
+     prescription.patient.familyName,
+     prescription.patient.birthDate,
+     prescription.doctor.title,
+     prescription.doctor.givenName,
+     prescription.doctor.familyName];
 
     NSMutableData *pdfData = [self renderPdfForPrinting];
     
-    // 'printFormatter' is added only for print activity
-    // 'mailBody' and 'urlAttachment' are used by others such as 'mail'
-    NSArray *objectsToShare = @[mailBody, urlAttachment, pdfData];
+    // Prepare the objects to be shared
+    EmailItemProvider *source1 = [[EmailItemProvider alloc] initWithPlaceholderItem:mailBody];
+    source1.emailBody = mailBody;
+    source1.emailSubject = subjectLine;
+
+    AttachmentItemProvider *source2 = [[AttachmentItemProvider alloc] initWithPlaceholderItem:urlAttachment];
+    source2.filepath = urlAttachment;
+
+    PrintItemProvider *source3 = [[PrintItemProvider alloc] initWithPlaceholderItem:pdfData];
+    source3.pdfData = pdfData;
+
+    NSArray *objectsToShare = @[source1, source2, source3];
     
     UIActivityViewController *activityVC =
     [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
@@ -2379,24 +2547,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    UIActivityTypeAddToReadingList,
                                    UIActivityTypePostToFlickr,
                                    UIActivityTypePostToVimeo];
-    
     activityVC.excludedActivityTypes = excludeActivities;
-    NSString * subjectLine =
-    [NSString stringWithFormat:NSLocalizedString(@"Prescription to patient from doctor",nil),
-                              prescription.patient.givenName,
-                              prescription.patient.familyName,
-                              prescription.patient.birthDate,
-                              prescription.doctor.title,
-                              prescription.doctor.givenName,
-                              prescription.doctor.familyName];
-    [activityVC setValue:subjectLine forKey:@"subject"];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         activityVC.modalPresentationStyle = UIModalPresentationPopover;
 
     [self presentViewController:activityVC animated:YES completion:nil];
     
-#if 1
     UIPopoverPresentationController *popController = [activityVC popoverPresentationController];
     popController.permittedArrowDirections = UIPopoverArrowDirectionAny;
     popController.barButtonItem = self.navigationItem.leftBarButtonItem;
@@ -2406,6 +2563,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                               BOOL completed,
                                               NSArray *returnedItems,
                                               NSError *error){
+#ifdef DEBUG
         // react to the completion
         if (completed) {
             // user shared an item
@@ -2418,11 +2576,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             // user cancelled
             NSLog(@"We didn't want to share anything after all.");
         }
+#endif
         
         if (error)
             NSLog(@"An Error occured: %@, %@", error.localizedDescription, error.localizedFailureReason);
     };
-#endif
 }
 
 #pragma mark - SampleBufferDelegate methods
