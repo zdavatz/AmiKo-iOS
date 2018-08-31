@@ -23,13 +23,6 @@
 //#define DEBUG_COLOR_BG
 #endif
 
-#define WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
-
-////////////////////////////////////////////////////////////////////////////////
-// Prescription Printing
-
-//#define MED_PRINT_CONTENTS_FROM_TABLEVIEW
-
 ////////////////////////////////////////////////////////////////////////////////
 // Label Printing
 
@@ -92,6 +85,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @implementation PrintItemProvider
 - (id)initWithPlaceholderItem:(id)placeholderItem
 {
+    self.pdfData = placeholderItem;
     return [super initWithPlaceholderItem:placeholderItem];
 }
 
@@ -127,115 +121,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return [self.pdfData class];
     }
     
-    return nil;
+    return nil; // email won't get this attachment
 }
 
 @end
-
-#ifndef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
-////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-
-// TODO: also use it with activities:
-//  - RemoteOpenInApplication-ByCopy
-//  - Message
-
-@interface AttachmentItemProvider: UIActivityItemProvider
-@property (nonatomic, strong) NSURL *filepath;
-@end
-
-@implementation AttachmentItemProvider
-
-- (id)initWithPlaceholderItem:(id)placeholderItem
-{
-    return [super initWithPlaceholderItem:placeholderItem];
-}
-
-#pragma mark UIActivityItemSource
-
-// (required)
-- (id)activityViewController:(UIActivityViewController *)activityViewController
-         itemForActivityType:(UIActivityType)activityType
-{
-    if ([activityType isEqualToString:UIActivityTypeMail])
-        return self.filepath;
-
-    return nil;
-}
-
-// (required)
-- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
-{
-    if (self.placeholderItem == nil)
-        return @"";
-    
-    return self.placeholderItem;
-}
-
-- (id)item
-{
-    if ([self.activityType isEqualToString:UIActivityTypeMail])
-        return self.filepath;
-
-    return nil;
-}
-@end
-
-////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-
-@interface EmailItemProvider: UIActivityItemProvider <UIActivityItemSource>
-@property (nonatomic, strong) NSString *emailBody;
-@property (nonatomic, strong) NSString *emailSubject;
-@end
-
-@implementation EmailItemProvider
-
-- (id)initWithPlaceholderItem:(id)placeholderItem
-{
-    return [super initWithPlaceholderItem:placeholderItem];
-}
-
-#pragma mark UIActivityItemSource
-
-// (required)
-- (id)activityViewController:(UIActivityViewController *)activityViewController
-         itemForActivityType:(UIActivityType)activityType
-{
-    if ([activityType isEqualToString:UIActivityTypeMail])
-        return self.emailBody;
-    
-    return @"No provider";
-}
-
-// (required)
-- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
-{
-    if (self.placeholderItem == nil)
-        return @"";
-
-    return self.placeholderItem;
-}
-
-- (NSString *)activityViewController:(UIActivityViewController *)activityViewController
-              subjectForActivityType:(nullable UIActivityType)activityType
-{
-    if ( [activityType isEqualToString:UIActivityTypeMail] )
-        return self.emailSubject;
-    
-    return nil;
-}
-
-- (id)item
-{
-    if ([self.activityType isEqualToString:UIActivityTypeMail])
-        return [NSString class];
-
-    return nil;
-}
-
-@end
-#endif // WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
 
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -2342,33 +2231,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (NSMutableData *)renderPdfForPrinting
 {
-#ifdef MED_PRINT_CONTENTS_FROM_TABLEVIEW
-    CGRect priorBounds = infoView.bounds;
-    CGSize fittedSize = [infoView sizeThatFits:CGSizeMake(priorBounds.size.width, infoView.contentSize.height)];
-    infoView.bounds = CGRectMake(0, 0, fittedSize.width, fittedSize.height);
-    CGRect pdfPageBounds = CGRectMake(0, 0, infoView.frame.size.width, self.view.frame.size.height);
-    //CGRect rectMedicine = [infoView rectForSection:kSectionMedicines];
-    
-    NSMutableData *pdfData = [NSMutableData data];
-    UIGraphicsBeginPDFContextToData(pdfData, pdfPageBounds,nil);
-    CGFloat pageOriginY = 0;
-    while (pageOriginY < fittedSize.height) {
-        UIGraphicsBeginPDFPageWithInfo(pdfPageBounds, nil);
-        CGContextSaveGState(UIGraphicsGetCurrentContext());
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
-        
-        [infoView.layer renderInContext: UIGraphicsGetCurrentContext()];
-        
-        CGContextRestoreGState(UIGraphicsGetCurrentContext());
-        pageOriginY += pdfPageBounds.size.height;
-    }
-    
-    UIGraphicsEndPDFContext();
-    
-    infoView.bounds = priorBounds;
-    
-#else // MED_PRINT_CONTENTS_FROM_TABLEVIEW
-    
     const CGFloat margin = mm2pix(18);
     const CGFloat fontSize = 11.0;
 
@@ -2504,8 +2366,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     UIGraphicsEndPDFContext();
     
-#endif // MED_PRINT_CONTENTS_FROM_TABLEVIEW
-    
     return pdfData;
 }
 
@@ -2534,23 +2394,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     // Prepare the objects to be shared
 
-#ifndef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
-    EmailItemProvider *source1 = [[EmailItemProvider alloc] initWithPlaceholderItem:mailBody];
-    source1.emailBody = mailBody;
-    source1.emailSubject = subjectLine;
-
-    AttachmentItemProvider *source2 = [[AttachmentItemProvider alloc] initWithPlaceholderItem:urlAttachment];
-    source2.filepath = urlAttachment;
-#endif
-
+    // If we use the PDF object directly into the array it also gets added as a second attachment to the email.
+    // Instead, we use it through an item provider so that we can make it return nil for email activity.
     PrintItemProvider *source3 = [[PrintItemProvider alloc] initWithPlaceholderItem:pdfData];
-    source3.pdfData = pdfData;
 
-#ifdef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
     NSArray *objectsToShare = @[mailBody, urlAttachment, source3];
-#else
-    NSArray *objectsToShare = @[source1, source2, source3];
-#endif
 
     UIActivityViewController *activityVC =
     [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
@@ -2564,9 +2412,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    UIActivityTypePostToVimeo];
     activityVC.excludedActivityTypes = excludeActivities;
 
-#ifdef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
     [activityVC setValue:subjectLine forKey:@"subject"];
-#endif
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         activityVC.modalPresentationStyle = UIModalPresentationPopover;
