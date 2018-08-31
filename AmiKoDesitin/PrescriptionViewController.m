@@ -23,6 +23,8 @@
 //#define DEBUG_COLOR_BG
 #endif
 
+#define WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
+
 ////////////////////////////////////////////////////////////////////////////////
 // Prescription Printing
 
@@ -130,8 +132,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 @end
 
+#ifndef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
+
+// TODO: also use it with activities:
+//  - RemoteOpenInApplication-ByCopy
+//  - Message
 
 @interface AttachmentItemProvider: UIActivityItemProvider
 @property (nonatomic, strong) NSURL *filepath;
@@ -228,6 +235,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 }
 
 @end
+#endif // WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
 
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -2525,18 +2533,25 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSMutableData *pdfData = [self renderPdfForPrinting];
     
     // Prepare the objects to be shared
+
+#ifndef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
     EmailItemProvider *source1 = [[EmailItemProvider alloc] initWithPlaceholderItem:mailBody];
     source1.emailBody = mailBody;
     source1.emailSubject = subjectLine;
 
     AttachmentItemProvider *source2 = [[AttachmentItemProvider alloc] initWithPlaceholderItem:urlAttachment];
     source2.filepath = urlAttachment;
+#endif
 
     PrintItemProvider *source3 = [[PrintItemProvider alloc] initWithPlaceholderItem:pdfData];
     source3.pdfData = pdfData;
 
+#ifdef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
+    NSArray *objectsToShare = @[mailBody, urlAttachment, source3];
+#else
     NSArray *objectsToShare = @[source1, source2, source3];
-    
+#endif
+
     UIActivityViewController *activityVC =
     [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
                                       applicationActivities:nil];
@@ -2548,6 +2563,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    UIActivityTypePostToFlickr,
                                    UIActivityTypePostToVimeo];
     activityVC.excludedActivityTypes = excludeActivities;
+
+#ifdef WITH_MIXED_ACTIVITY_ITEM_PROVIDERS
+    [activityVC setValue:subjectLine forKey:@"subject"];
+#endif
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         activityVC.modalPresentationStyle = UIModalPresentationPopover;
@@ -2567,7 +2586,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         // react to the completion
         if (completed) {
             // user shared an item
-            NSLog(@"We used activity type%@", activityType);
+            NSLog(@"We used activity type: <%@>", activityType);
             if ([activityType isEqualToString:UIActivityTypeMail]) {
                 //return @"Your subject goes here";
             }
