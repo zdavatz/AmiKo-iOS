@@ -116,6 +116,10 @@
     [defaults removeObjectForKey:@"currentPatient"];
     [defaults synchronize];
     
+#ifdef DEBUG_ISSUE_86
+    NSLog(@"%s %d cleared currentPatient", __FUNCTION__, __LINE__);
+#endif
+    
     // (Instead of removing one item from a NSMutableArray) reassign the whole NSArray
     self.mArray = [mPatientDb getAllPatients];
 

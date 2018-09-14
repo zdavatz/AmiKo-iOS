@@ -1788,9 +1788,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					AMIKO_DESITIN,
 					"$(inherited)",
+					"DEBUG_ISSUE_86=1",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
@@ -1842,7 +1842,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmikoDesitin/AmikoDesitin-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					COMED_DESITIN,
 					"$(inherited)",
 				);

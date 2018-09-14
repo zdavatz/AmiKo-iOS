@@ -599,6 +599,10 @@ enum {
     [defaults setObject:mPatientUUID forKey:@"currentPatient"];
     [defaults synchronize];
     
+#ifdef DEBUG_ISSUE_86
+    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, mPatientUUID);
+#endif
+    
     // Create patient subdirectory for prescriptions
 #if 0 //def DEBUG
     NSString *amkDir = [MLUtility amkDirectory];

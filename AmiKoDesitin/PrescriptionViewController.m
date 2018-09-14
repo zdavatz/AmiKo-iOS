@@ -389,14 +389,21 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) viewDidAppear:(BOOL)animated
 {
     if (editedMedicines) {
-#ifdef DEBUG
-        //NSLog(@"%s %d", __FUNCTION__, __LINE__);
+#ifdef DEBUG_ISSUE_86
+        NSLog(@"%s %d edited", __FUNCTION__, __LINE__);
 #endif
         [self loadDefaultDoctor];
+
+        // GitHub issue #86: from now on we allow changing the patient even if the
+        // prescription is in an unsaved state.
+        //
+        // Note that for the case of changing the patient from the patient list
+        // we don't come here, because there is no reloading of this view.
+        [self loadDefaultPatient];
     }
     else {
-#ifdef DEBUG
-        //NSLog(@"%s %d", __FUNCTION__, __LINE__);
+#ifdef DEBUG_ISSUE_86
+        NSLog(@"%s %d not edited", __FUNCTION__, __LINE__);
 #endif
         // do the following only if we haven't added any medicines yet
         if (![self loadDefaultPrescription]) {
@@ -535,6 +542,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (BOOL)loadDefaultPatient
 {
+#ifdef DEBUG_ISSUE_86
+    NSLog(@"%s", __FUNCTION__);
+#endif
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *patientId = [defaults stringForKey:@"currentPatient"];
     if (!patientId) {
@@ -551,6 +561,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 
     Patient *pat = [patientDb getPatientWithUniqueID:patientId];
+#ifdef DEBUG_ISSUE_86
+    NSLog(@"Restoring patient into prescription %@", pat);
+#endif
     [prescription setPatient:pat];
     [patientDb closeDatabase];
     return TRUE;
@@ -1758,7 +1771,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         prescription.medications = [[NSMutableArray alloc] init];
     
     [prescription.medications addObject:p];
-    editedMedicines = true;
+    self.editedMedicines = true;
     
     // Update GUI
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -2090,7 +2103,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [prescription.medications replaceObjectAtIndex:editingCommentIdx
                                         withObject:med];
     editingCommentIdx = -1;
-    editedMedicines = true;
+    self.editedMedicines = true;
     [infoView reloadData];
     activeTextView = nil;
     
@@ -2223,6 +2236,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                          withAttributes:attrPat];
     
     // Document filename
+    // FIXME: if the prescription is shared a second time this filename is nil
+    //  hint: why is fileExistsAtPath returning false in loadDefaultPrescription ?
     NSString *fileName = [[NSUserDefaults standardUserDefaults] stringForKey:@"lastUsedPrescription"];
     fileName = [fileName stringByDeletingPathExtension]; // drop .amk
     [fileName drawAtPoint:CGPointMake(margin, pageOriginY + filenameY)

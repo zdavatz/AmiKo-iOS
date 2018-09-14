@@ -480,6 +480,10 @@ static BOOL mShowReport = false;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:p.uniqueId forKey:@"currentPatient"];
     [defaults synchronize];
+    
+#ifdef DEBUG_ISSUE_86
+    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, p.uniqueId);
+#endif
 
     UIViewController *nc_front = self.revealViewController.frontViewController;
     UIViewController *vc_front = [nc_front.childViewControllers firstObject];

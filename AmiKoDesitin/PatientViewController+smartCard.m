@@ -250,6 +250,10 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:existingPatient.uniqueId forKey:@"currentPatient"];
         [defaults synchronize];
+        
+#ifdef DEBUG_ISSUE_86
+        NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, existingPatient.uniqueId);
+#endif
 
         MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
         appDel.editMode = EDIT_MODE_PRESCRIPTION;

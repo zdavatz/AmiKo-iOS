@@ -343,6 +343,10 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [defaults setObject:fileName forKey:@"lastUsedPrescription"];
     [defaults synchronize];
     
+#ifdef DEBUG_ISSUE_86
+    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, uniqueId);
+#endif
+    
     PrescriptionViewController *vc = [PrescriptionViewController sharedInstance];
     vc.editedMedicines = false;
     
