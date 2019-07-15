@@ -1848,6 +1848,7 @@
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
+				SKIP_INSTALL = NO;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1870,6 +1871,7 @@
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
+				SKIP_INSTALL = NO;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
