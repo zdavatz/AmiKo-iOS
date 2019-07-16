@@ -106,12 +106,8 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
     [super viewDidLoad];
 
     self.title = NSLocalizedString(@"Chapter", nil);
-    
-    // Note: iOS7
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-        myMenuView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    }
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    myMenuView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     
     // NSLog(@"# %s", __FUNCTION__);
     

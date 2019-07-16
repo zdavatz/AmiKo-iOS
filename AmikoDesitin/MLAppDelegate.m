@@ -243,7 +243,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     mainRevealController.bounceBackOnOverdraw = YES;
     
     // Note: iOS7 - sets the global TINT color!!
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
+    {
         [application setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];  // WHITE
         // [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
         // [application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];    // BLACK

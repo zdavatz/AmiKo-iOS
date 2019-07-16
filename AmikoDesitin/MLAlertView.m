@@ -38,38 +38,27 @@
                        message: (NSString *)message
                         button: (NSString *)buttonTitle
 {
-    if ([MLConstants iosVersion]>=8.0f) {
-        mAlertController = [UIAlertController
-                            alertControllerWithTitle:alertTitle
-                            message:message
-                            preferredStyle: UIAlertControllerStyleAlert];
-        // Add button
-        mAction = [UIAlertAction actionWithTitle:buttonTitle style:UIAlertActionStyleDefault handler:nil];
-        [mAlertController addAction:mAction];
-    }
-    else {
-        mAlertView = [[UIAlertView alloc] initWithTitle:alertTitle
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:buttonTitle
-                                              otherButtonTitles:nil];
-    }
+    mAlertController = [UIAlertController
+                        alertControllerWithTitle:alertTitle
+                        message:message
+                        preferredStyle: UIAlertControllerStyleAlert];
+    // Add button
+    mAction = [UIAlertAction actionWithTitle:buttonTitle style:UIAlertActionStyleDefault handler:nil];
+    [mAlertController addAction:mAction];
+
     return self;
 }
 
 - (void) show
 {
-    if ([MLConstants iosVersion]>=8.0f) {
-        // Get pointer to app delegate, its main window and eventually to the rootViewController
-        UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([presentingController presentedViewController]!=nil)
-                [presentingController dismissViewControllerAnimated:YES completion:nil];
-            [presentingController presentViewController:mAlertController animated:YES completion:nil];
-        });
-    } else {
-        [mAlertView show];
-    }
+    // Get pointer to app delegate, its main window and eventually to the rootViewController
+    UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([presentingController presentedViewController]!=nil)
+            [presentingController dismissViewControllerAnimated:YES completion:nil];
+        [presentingController presentViewController:mAlertController animated:YES completion:nil];
+    });
 }
 
 @end

@@ -40,7 +40,7 @@
     self = [super init];
     
     if (self) {
-        if ([MLConstants iosVersion]>=8.0f) {
+        {
             mAlertController = [UIAlertController
                                 alertControllerWithTitle:@"Updating AIPS database"
                                 message:@""
@@ -58,23 +58,6 @@
             [v.view addSubview:mProgressBar];
             [mProgressBar setFrame:CGRectMake(0, 0, 240, 20)];
             [mAlertController setValue:v forKey:@"contentViewController"];
-        } else {
-            mAlertView = [[UIAlertView alloc] initWithTitle:@"Updating AIPS database"
-                                                    message:@""
-                                                   delegate:self
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:nil];
-        
-            mAlertView.tag = 1;
-        
-            mProgressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-        
-            UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 30)];
-            [v addSubview:mProgressBar];
-
-            // Little trick
-            [mAlertView setValue:v forKey:@"accessoryView"];
-            [mProgressBar setFrame:CGRectMake(0, 0, 160, 30)];
         }
         
         mProgressBar.progress = 0.0;
@@ -85,24 +68,16 @@
 
 - (void) setMessage:(NSString *)msg
 {
-    if ([MLConstants iosVersion]>=8.0f) {
-        [mAlertController setMessage:msg];
-    } else {
-        [mAlertView setMessage:msg];
-    }
+    [mAlertController setMessage:msg];
 }
 
 - (void) start
 {
     mDownloadInProgress = YES;
 
-    if ([MLConstants iosVersion]>=8.0) {
-        // Get pointer to app delegate, its main window and eventually to the rootViewController
-        UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-        [presentingController presentViewController:mAlertController animated:YES completion:nil];
-    } else {
-        [mAlertView show];
-    }
+    // Get pointer to app delegate, its main window and eventually to the rootViewController
+    UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [presentingController presentViewController:mAlertController animated:YES completion:nil];
 }
 
 - (void) updateWith:(long)downloadedBytes andWith:(long)expectedBytes;
@@ -124,23 +99,19 @@
 
 - (void) remove
 {
-    if ([MLConstants iosVersion]>8.0f) {
+    {
         dispatch_async(dispatch_get_main_queue(), ^{
             [mAlertController dismissViewControllerAnimated:YES completion:nil];
         });
-    } else {
-        [mAlertView dismissWithClickedButtonIndex:-1 animated:NO];
     }
+
     // Alternative in case the previous line causes a crash!
     // [mAlertView removeFromSuperview];
 }
 
 - (void) setCancelButtonTitle:(NSString *)title
 {
-    if ([MLConstants iosVersion]>=8.0f)
-        [mAlertController setTitle:@"Update cancelled!"];
-    else
-        [mAlertView setTitle:@"Update cancelled!"];
+    [mAlertController setTitle:@"Update cancelled!"];
 }
 
 #pragma mark - UIAlertViewDelegate

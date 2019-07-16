@@ -96,10 +96,10 @@ static int HeightInPoints;
     HeightInPoints = [[UIScreen mainScreen] bounds].size.height;
 }
 
-+ (float) iosVersion
-{
-    return [[UIDevice currentDevice].systemVersion floatValue];
-}
+//+ (float) iosVersion
+//{
+//    return [[UIDevice currentDevice].systemVersion floatValue];
+//}
 
 + (int) displayWidthInPoints
 {

@@ -256,19 +256,11 @@ static BOOL mShowReport = false;
         }
     }
 
-    if ([MLConstants iosVersion]>=7.0f) {
-        for (UIBarButtonItem *b in [myToolBar items]) {
+    for (UIBarButtonItem *b in [myToolBar items]) {
+        if (b==btn)
+            [b setTintColor:MAIN_TINT_COLOR];
+        else
             [b setTintColor:[UIColor lightGrayColor]];   // Default color
-            if (b==btn)
-                [b setTintColor:MAIN_TINT_COLOR];
-        }
-    }
-    else {
-        for (UIBarButtonItem *b in [myToolBar items]) {
-            [b setTintColor:nil];   // Default color
-            if (b==btn)
-                [b setTintColor:[UIColor lightGrayColor]];
-        }
     }
 
     if (searchResults) {
@@ -310,10 +302,7 @@ static BOOL mShowReport = false;
     menuViewController = nil;
     menuViewNavigationController = nil;
     
-    // Note: iOS7 or above
-    if ([MLConstants iosVersion]>=7.0f) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     
     runningActivityIndicator = NO;
     
@@ -531,7 +520,7 @@ static BOOL mShowReport = false;
         if (mDb!=nil && fileCnt==2) {
             // Reset file counter
             fileCnt=0;
-            // Make sure downloaded files cannot be backuped
+            // Make sure downloaded files cannot be backed up
             [self doNotBackupDocumentsDir];
             // Close sqlite database
             [mDb closeDatabase];
@@ -680,10 +669,7 @@ static BOOL mShowReport = false;
     for (UIBarButtonItem *b in [myToolBar items])
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
 
-    if ([MLConstants iosVersion]>=7.0f)
-        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
-    else
-        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
+    [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
 
     [searchField setText:@""];
     [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -702,10 +688,7 @@ static BOOL mShowReport = false;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         searchState /= 2;
     
-    if ([MLConstants iosVersion]>=7.0f)
-        [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
-    else
-        [[[myToolBar items] objectAtIndex:searchState] setTintColor:[UIColor lightGrayColor]];
+    [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
 
     [searchField setText:@""];
     switch(searchState)
@@ -778,9 +761,8 @@ static BOOL mShowReport = false;
         
         [UIView commitAnimations];
     }
-    
-    if ([MLConstants iosVersion]>=7.0f)
-        [self setTabbarItemFont];
+
+    [self setTabbarItemFont];
 }
 
 - (void) hideTabBarWithAnimation:(BOOL)withAnimation
@@ -881,10 +863,9 @@ static BOOL mShowReport = false;
         }
     } // iPad
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        
-        if ([MLConstants iosVersion]>=7.0f)
-            [self setToolbarItemsFontSize];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        [self setToolbarItemsFontSize];
         
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -901,8 +882,9 @@ static BOOL mShowReport = false;
             
             // Hide status bar and navigation bar (top)
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                    withAnimation:UIStatusBarAnimationSlide];
             
             self.myTableViewHeightConstraint.constant = 5;
         }
@@ -918,8 +900,9 @@ static BOOL mShowReport = false;
             
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                    withAnimation:UIStatusBarAnimationSlide];
 
             self.myTableViewHeightConstraint.constant = 49;
         }
@@ -958,12 +941,10 @@ static BOOL mShowReport = false;
         [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
     }
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        [self setToolbarItemsFontSize];
         
-        if ([MLConstants iosVersion]>=7.0f) {
-            [self setToolbarItemsFontSize];
-        }
-                
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -1037,17 +1018,18 @@ static BOOL mShowReport = false;
         {
             // Hide status bar and navigation bar (top)
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES
-                                                        withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                    withAnimation:UIStatusBarAnimationSlide];
  
             self.myTableViewHeightConstraint.constant = 5;
         }
         else {
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                    withAnimation:UIStatusBarAnimationSlide];
             
             self.myTableViewHeightConstraint.constant = 49;
         }
@@ -1134,7 +1116,7 @@ static BOOL mShowReport = false;
     menuViewNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
     
     // Background color of navigation bar
-    if ([MLConstants iosVersion]>=7.0f) {
+    {
         self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
         self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
         self.navigationController.navigationBar.translucent = NO;
@@ -1163,11 +1145,9 @@ static BOOL mShowReport = false;
     
     // Add search bar as title view to navigation bar
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if ([MLConstants iosVersion]>=7.0f) {
-            searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.translucent = YES;
-        }
+        searchField.barTintColor = [UIColor lightGrayColor];
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.translucent = YES;
     } // iPad
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -1176,15 +1156,12 @@ static BOOL mShowReport = false;
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         searchField.delegate = self;
 
-        // Note: iOS7
-        if ([MLConstants iosVersion] >= 7.0f) {
-            searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = [UIColor clearColor];
-            searchField.backgroundImage = [UIImage new];    // Necessary fo completely transparent search bar...
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = NO;
-        }
+        searchField.barStyle = UIBarStyleDefault;
+        searchField.barTintColor = [UIColor clearColor];
+        searchField.backgroundImage = [UIImage new];    // Necessary fo completely transparent search bar...
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+        searchField.translucent = NO;
         
 #ifdef TWO_ITEMS_ON_LEFT_NAV_BAR
         // Left
@@ -1344,11 +1321,8 @@ static BOOL mShowReport = false;
                                                                      title:@"About"
                                                                   andParam:1];
     
-    if ([MLConstants iosVersion]>=7.0f) {
+    {
         UIFont *font = [UIFont fontWithName:@"Arial" size:14];
-        secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
-    } else {
-        UIFont *font = [UIFont fontWithName:@"Arial" size:15];
         secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     }
 
@@ -1488,6 +1462,7 @@ static BOOL mShowReport = false;
             }
             break;
         }
+
         case 1:
         {
 #ifdef DEBUG
@@ -1523,6 +1498,7 @@ static BOOL mShowReport = false;
             });
             break;
         }
+
         case 2:
 #ifdef DEBUG
             NSLog(@"TabBar - Interactions");
@@ -1534,6 +1510,7 @@ static BOOL mShowReport = false;
             // Switch view
             [self switchToDrugInteractionView];
             break;
+
         case 3:
 #ifdef DEBUG
             NSLog(@"TabBar - Prescription");
@@ -1548,10 +1525,18 @@ static BOOL mShowReport = false;
             [self stopActivityIndicator];
             [self switchToPrescriptionView];
             break;
+
         case 4:
             NSLog(@"TabBar - Developer Info");
             // TODO
             break;
+
+        case 6:
+#if 1 //def DEBUG
+            NSLog(@"TabBar - Full Text Search");
+#endif
+            break;
+
         default:
             break;
     }
@@ -2424,7 +2409,7 @@ static BOOL mShowReport = false;
     
     float frameWidth = self.myTableView.frame.size.width;
     
-    if ([MLConstants iosVersion]>=7.0f) {
+    {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)
                                           options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
@@ -2435,7 +2420,8 @@ static BOOL mShowReport = false;
                                              attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14.0]}
                                                 context:nil];
             retVal = textRect.size.height + subTextRect.size.height + PADDING_IPAD * 0.25;
-        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        }
+        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)
                                           options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
                                        attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0]}
@@ -2446,29 +2432,8 @@ static BOOL mShowReport = false;
                                                 context:nil];
             retVal = textRect.size.height + subTextRect.size.height + PADDING_IPHONE * 0.3;
         }
-    } else {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)
-                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0]}
-                                          context:nil];
-            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)
-                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                             attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0]}
-                                                context:nil];
-            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPAD * 0.25;
-        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)
-                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0]}
-                                          context:nil];
-            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)
-                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                             attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0]}
-                                                context:nil];
-            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPHONE * 0.4;
-        }
     }
+
     return retVal;
 }
 
