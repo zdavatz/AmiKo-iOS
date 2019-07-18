@@ -274,13 +274,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Register the applications defaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *appDefaults = [NSMutableDictionary dictionary];
-    NSString *keyDBLastUpdate;
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        keyDBLastUpdate = @"germanDBLastUpdate";
-    }
-    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        keyDBLastUpdate = @"frenchDBLastUpdate";
-    }
+    NSString *keyDBLastUpdate = [MLConstants databaseUpdateKey];
 
     [appDefaults setValue:[NSDate date] forKey:keyDBLastUpdate];
     [defaults registerDefaults:appDefaults];

@@ -84,6 +84,7 @@ extern const int RearViewRevealOverdraw_Landscape_iPhone_Retina;
 + (int) rearViewRevealOverdrawPortrait;
 + (int) rearViewRevealOverdrawLandscape;
 + (NSString *) appOwner;
-+ (NSString *) appLanguage;
++ (NSString *) databaseLanguage;
++ (NSString *) databaseUpdateKey;
 + (NSString *) notSpecified;
 @end

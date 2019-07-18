@@ -710,9 +710,10 @@
             }
         }
         if ([sectionTitles count]<2) {
-            if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            // TODO: proper localization, not based on the database language
+            if ([[MLConstants databaseLanguage] isEqualToString:@"de"])
                 [interactionStr appendString:@"<p class=\"paragraph0\">Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten in der EPha.ch-Datenbank vorhanden. Weitere Informationen finden Sie in der Fachinformation.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Interaktion melden\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
-            else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"])
                 [interactionStr appendString:@"<p class=\"paragraph0\">Il n’y a aucune information dans la banque de données EPha.ch à propos d’une interaction entre les médicaments sélectionnés. Veuillez consulter les informations professionelles.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Signaler une interaction\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
         }
         else if ([sectionTitles count]>2) {
@@ -721,10 +722,11 @@
     }
     
     if ([medBasket count]>0) {
+        // TODO: proper localization, not based on the database language
         [sectionIds addObject:@"Farblegende"];
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+        if ([[MLConstants databaseLanguage] isEqualToString:@"de"])
             [sectionTitles addObject:@"Farblegende"];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+        else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"])
             [sectionTitles addObject:@"Légende des couleurs"];
     }
     
@@ -749,7 +751,8 @@
      0: Keine Angaben (grau)
      */
     if ([medBasket count]>0) {
-        if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+        // TODO: proper localization, not based on the database language
+        if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
             NSString *legend = {
                 @"<fieldset><legend>Fussnoten</legend></fieldset>"
                 @"<p class=\"footnote\">1. Farblegende: </p>"
@@ -764,7 +767,8 @@
                 @"<p class=\"footnote\">3. Unterstützt durch:  IBSA Institut Biochimique SA.</p>"
             };
             return legend;
-        } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+        }
+        else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
             NSString *legend = {
                 @"<fieldset><legend>Notes</legend></fieldset>"
                 @"<p class=\"footnote\">1. Légende des couleurs: </p>"

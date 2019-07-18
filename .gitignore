@@ -3,6 +3,8 @@
 __MACOSX/
 *.xcscheme
 xcuserdata
+AmiKoDesitin/amiko_frequency_de.db
+AmiKoDesitin/amiko_frequency_fr.db
 AmiKoDesitin/amiko_db_full_idx_de.db
 AmiKoDesitin/amiko_db_full_idx_fr.db
 AmiKoDesitin/amiko_db_full_idx_de.zip

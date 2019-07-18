@@ -296,6 +296,8 @@
 		FA4263712058117B00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4511B5204ECAFD00899A77 /* DoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* DoctorViewController.xib */; };
 		FA4511B8204ECBCB00899A77 /* PatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* PatientViewController.xib */; };
+		FA4827EE22DF8618005135BE /* amiko_frequency_fr.db in Resources */ = {isa = PBXBuildFile; fileRef = FA4827ED22DF8614005135BE /* amiko_frequency_fr.db */; };
+		FA4827EF22DF861D005135BE /* amiko_frequency_de.db in Resources */ = {isa = PBXBuildFile; fileRef = FA4827EC22DF8613005135BE /* amiko_frequency_de.db */; };
 		FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
 		FA4FB4A120E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
 		FA528CF220D8F1590066CE89 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
@@ -323,6 +325,12 @@
 		FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
 		FA7D750520E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
 		FA7D750620E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
+		FAD0664A22DF29DC0078E28B /* FullTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664922DF29DC0078E28B /* FullTextEntry.m */; };
+		FAD0664D22DF2A080078E28B /* FullTextSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664C22DF2A080078E28B /* FullTextSearch.m */; };
+		FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664C22DF2A080078E28B /* FullTextSearch.m */; };
+		FAD0664F22DF2A140078E28B /* FullTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664922DF29DC0078E28B /* FullTextEntry.m */; };
+		FAD0665222DF2A350078E28B /* FullTextDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */; };
+		FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -534,6 +542,8 @@
 		FA4511CE204EF51700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/DoctorViewController.strings; sourceTree = "<group>"; };
 		FA4511D0204EF52E00899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/PrescriptionViewController.strings; sourceTree = "<group>"; };
 		FA4511D2204EF53700899A77 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/PatientViewController.strings; sourceTree = "<group>"; };
+		FA4827EC22DF8613005135BE /* amiko_frequency_de.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = amiko_frequency_de.db; path = AmiKoDesitin/amiko_frequency_de.db; sourceTree = SOURCE_ROOT; };
+		FA4827ED22DF8614005135BE /* amiko_frequency_fr.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = amiko_frequency_fr.db; path = AmiKoDesitin/amiko_frequency_fr.db; sourceTree = SOURCE_ROOT; };
 		FA4FB4A220E4BF030084F656 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/CameraViewController.xib; sourceTree = "<group>"; };
 		FA4FB4A520E4BF060084F656 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/CameraViewController.strings; sourceTree = "<group>"; };
 		FA4FB4A720E4BF070084F656 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CameraViewController.strings; sourceTree = "<group>"; };
@@ -560,6 +570,12 @@
 		FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Cropping.m"; path = "AmiKoDesitin/UIImage+Cropping.m"; sourceTree = SOURCE_ROOT; };
 		FA7D750020E3EEFB005E49FE /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraViewController.h; path = AmiKoDesitin/CameraViewController.h; sourceTree = SOURCE_ROOT; };
 		FA7D750220E3EEFB005E49FE /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraViewController.m; path = AmiKoDesitin/CameraViewController.m; sourceTree = SOURCE_ROOT; };
+		FAD0664822DF29DC0078E28B /* FullTextEntry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextEntry.h; path = AmiKoDesitin/FullTextEntry.h; sourceTree = SOURCE_ROOT; };
+		FAD0664922DF29DC0078E28B /* FullTextEntry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextEntry.m; path = AmiKoDesitin/FullTextEntry.m; sourceTree = SOURCE_ROOT; };
+		FAD0664B22DF2A080078E28B /* FullTextSearch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextSearch.h; path = AmiKoDesitin/FullTextSearch.h; sourceTree = SOURCE_ROOT; };
+		FAD0664C22DF2A080078E28B /* FullTextSearch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextSearch.m; path = AmiKoDesitin/FullTextSearch.m; sourceTree = SOURCE_ROOT; };
+		FAD0665022DF2A350078E28B /* FullTextDBAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextDBAdapter.h; path = AmiKoDesitin/FullTextDBAdapter.h; sourceTree = SOURCE_ROOT; };
+		FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextDBAdapter.m; path = AmiKoDesitin/FullTextDBAdapter.m; sourceTree = SOURCE_ROOT; };
 		FB4AE407B2573357E5DBB181 /* Pods-CoMedDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoMedDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoMedDesitin/Pods-CoMedDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -970,6 +986,12 @@
 				D5A31F7018B52D3E00F56BC5 /* MLProgressViewController.m */,
 				D573F4541A990E9900C4F589 /* MLAlertView.h */,
 				D573F4511A990E8600C4F589 /* MLAlertView.m */,
+				FAD0664822DF29DC0078E28B /* FullTextEntry.h */,
+				FAD0664922DF29DC0078E28B /* FullTextEntry.m */,
+				FAD0665022DF2A350078E28B /* FullTextDBAdapter.h */,
+				FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */,
+				FAD0664B22DF2A080078E28B /* FullTextSearch.h */,
+				FAD0664C22DF2A080078E28B /* FullTextSearch.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -987,6 +1009,8 @@
 		D5A6F26317B169E300EAB24B /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				FA4827EC22DF8613005135BE /* amiko_frequency_de.db */,
+				FA4827ED22DF8614005135BE /* amiko_frequency_fr.db */,
 				D5A6F28F17B16C1D00EAB24B /* MLMedication.h */,
 				D5A6F29017B16C1D00EAB24B /* MLMedication.m */,
 				D5A2250C1945EA890078FEFF /* drug_interactions_csv_fr.csv */,
@@ -1187,6 +1211,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				de,
 				fr,
@@ -1279,6 +1304,7 @@
 				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
 				430285C820162C72003B2EF3 /* Localizable.strings in Resources */,
 				439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */,
+				FA4827EF22DF861D005135BE /* amiko_frequency_de.db in Resources */,
 				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D533DAAA17B434FF00199C38 /* Default-Portrait@2x~ipad.png in Resources */,
 				D5A1754E1A9A737F00E69385 /* interactions@2x.png in Resources */,
@@ -1393,6 +1419,7 @@
 				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
+				FA4827EE22DF8618005135BE /* amiko_frequency_fr.db in Resources */,
 				930D94BE2077EC2A007E4629 /* prescription-selected.png in Resources */,
 				930D94BD2077EC26007E4629 /* prescription.png in Resources */,
 				D5A1754F1A9A737F00E69385 /* interactions@2x.png in Resources */,
@@ -1477,6 +1504,8 @@
 				FA5E5E4920F5F71B00CDB6C6 /* videoViewController.m in Sources */,
 				43A385062032B930001A5849 /* MLMenuViewController.m in Sources */,
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
+				FAD0664A22DF29DC0078E28B /* FullTextEntry.m in Sources */,
+				FAD0665222DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
 				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
 				43D3A0E2201F3CFB00EA77C6 /* Product.m in Sources */,
@@ -1496,6 +1525,7 @@
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
 				43A3851720333355001A5849 /* PatientDbListViewController.m in Sources */,
 				D5A2253E194A435B0078FEFF /* deleterow.js in Sources */,
+				FAD0664D22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				430285BF20160FB1003B2EF3 /* PrescriptionViewController.m in Sources */,
 				439F26222028C8A700396C29 /* PatientViewController.m in Sources */,
 				D5A6F29317B16C1D00EAB24B /* MLMedication.m in Sources */,
@@ -1523,11 +1553,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAD0664F22DF2A140078E28B /* FullTextEntry.m in Sources */,
 				930D94B32077E5BC007E4629 /* Product.m in Sources */,
 				930D94B72077E5E1007E4629 /* PatientDbListViewController.m in Sources */,
 				FA5E5E4A20F5F71B00CDB6C6 /* videoViewController.m in Sources */,
 				930D94B42077E5D4007E4629 /* Patient.m in Sources */,
 				D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */,
+				FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
 				D5A2253619461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
@@ -1536,6 +1568,7 @@
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* PatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
+				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
 				930D94B22077E5A9007E4629 /* DoctorViewController.m in Sources */,

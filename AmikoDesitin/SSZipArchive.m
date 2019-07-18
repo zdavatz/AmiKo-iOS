@@ -39,7 +39,13 @@
 }
 
 
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination delegate:(id<SSZipArchiveDelegate>)delegate {
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+               delegate:(id<SSZipArchiveDelegate>)delegate
+{
+#ifdef DEBUG
+    NSLog(@"%s %d\n\t path %@\n\t destination %@", __FUNCTION__, __LINE__, path, destination);
+#endif
 	return [self unzipFileAtPath:path toDestination:destination overwrite:YES password:nil error:nil delegate:delegate];
 }
 

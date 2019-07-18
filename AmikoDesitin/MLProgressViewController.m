@@ -41,8 +41,12 @@
     
     if (self) {
         {
+            NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
+            NSString *bundleName = [d objectForKey:@"CFBundleName"];
+            NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Updating %@ database", nil), bundleName];
+
             mAlertController = [UIAlertController
-                                alertControllerWithTitle:@"Updating AIPS database"
+                                alertControllerWithTitle:title
                                 message:@""
                                 preferredStyle: UIAlertControllerStyleAlert];
             // float width = [mAlertController.view bounds].size.width;
@@ -80,19 +84,24 @@
     [presentingController presentViewController:mAlertController animated:YES completion:nil];
 }
 
-- (void) updateWith:(long)downloadedBytes andWith:(long)expectedBytes;
+- (void) updateWith:(long)downloadedBytes
+            andWith:(long)expectedBytes;
 {
     float progress = 100*(float)downloadedBytes/expectedBytes;
     /*
      Given the blocking nature of the update mechanism we use a little trick here.
      We change the message before the unzipping does start.
     */
-    if (progress<99) {
-        [self setMessage:[NSString stringWithFormat:@"%d%% (%ldkb out of %ldkb)",
-                                (int)(progress), downloadedBytes/1000, expectedBytes/1000]];
-    } else {
+    if (progress < 99) {
+        [self setMessage:[NSString stringWithFormat:@"%ld MiB out of %ld MiB\n%d%% ",
+                          (long)(downloadedBytes/1e6),
+                          (long)(expectedBytes/1e6),
+                          (int)(progress)]];
+    }
+    else {
         [self setMessage:[NSString stringWithFormat:@"Unzipping..."]];
     }
+
     if (mProgressBar!=nil)
         mProgressBar.progress = progress/100.0f;
 }

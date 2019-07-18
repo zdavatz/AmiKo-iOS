@@ -304,15 +304,20 @@
     MLCustomURLConnection *reportConn = [[MLCustomURLConnection alloc] init];
     MLCustomURLConnection *dbConn = [[MLCustomURLConnection alloc] init];
     MLCustomURLConnection *interConn = [[MLCustomURLConnection alloc] init];
+    MLCustomURLConnection *fulltextConn = [[MLCustomURLConnection alloc] init];
 
-    if ([APP_NAME isEqualToString:@"iAmiKo"] || [APP_NAME isEqualToString:@"AmiKoDesitin"]) {
+    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
+        [APP_NAME isEqualToString:@"AmiKoDesitin"]) {
         [reportConn downloadFileWithName:@"amiko_report_de.html" andModal:NO];
         [interConn downloadFileWithName:@"drug_interactions_csv_de.zip" andModal:NO];
+        [fulltextConn downloadFileWithName:@"amiko_frequency_de.db.zip" andModal:NO];
         [dbConn downloadFileWithName:@"amiko_db_full_idx_de.zip" andModal:YES];
     }
-    else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"]) {
+    else if ([APP_NAME isEqualToString:@"iCoMed"] ||
+             [APP_NAME isEqualToString:@"CoMedDesitin"]) {
         [reportConn downloadFileWithName:@"amiko_report_fr.html" andModal:NO];
         [interConn downloadFileWithName:@"drug_interactions_csv_fr.zip" andModal:NO];
+        [fulltextConn downloadFileWithName:@"amiko_frequency_fr.db.zip" andModal:NO];
         [dbConn downloadFileWithName:@"amiko_db_full_idx_fr.zip" andModal:YES];
     }
 }

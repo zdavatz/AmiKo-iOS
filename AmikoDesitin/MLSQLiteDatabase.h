@@ -28,6 +28,7 @@
 
 + (void) createEditableCopyOfDatabaseIfNeeded: (NSString *)dbName;
 
+- (id) initReadOnlyWithPath:(NSString *)path;
 - (id) initWithPath: (NSString *)path;
 - (NSArray *) performQuery: (NSString *)query;
 - (NSInteger) numberRecordsForTable: (NSString *)table;

@@ -59,16 +59,9 @@
 {
     double timeInterval = 0.0;
     
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"germanDBLastUpdate"];
-        if (lastUpdated!=nil)
-            timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
-    }
-    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:@"frenchDBLastUpdate"];
-        if (lastUpdated!=nil)
-            timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
-    }
+    NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:[MLConstants databaseUpdateKey]];
+    if (lastUpdated)
+        timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
     
     return timeInterval;
 }
