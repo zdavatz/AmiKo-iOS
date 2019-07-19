@@ -5,6 +5,9 @@
 "ATC Code" = "Wirkstoff/ATC";
 
 /* No comment provided by engineer. */
+"born" = "Gebr.";
+
+/* No comment provided by engineer. */
 "Cancel" = "Abbrechen";
 
 /* No comment provided by engineer. */
@@ -166,4 +169,3 @@
 /* Gender */
 "woman" = "w";
 
-"born" = "Gebr.";

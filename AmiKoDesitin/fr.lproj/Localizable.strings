@@ -5,6 +5,9 @@
 "ATC Code" = "Principe/ATC";
 
 /* No comment provided by engineer. */
+"born" = "Anniv.";
+
+/* No comment provided by engineer. */
 "Cancel" = "Annuler";
 
 /* No comment provided by engineer. */
@@ -165,5 +168,3 @@
 
 /* Gender */
 "woman" = "f";
-
-"born" = "Anniv.";
