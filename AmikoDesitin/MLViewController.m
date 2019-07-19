@@ -890,6 +890,7 @@ static BOOL mShowReport = false;
     return YES;
 }
 
+// TODO: use "viewWillTransitionToSize:withTransitionCoordinator:" instead
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                  duration:(NSTimeInterval)duration
 {

@@ -94,8 +94,8 @@
     */
     if (progress < 99) {
         [self setMessage:[NSString stringWithFormat:@"%ld MiB out of %ld MiB\n%d%% ",
-                          (long)(downloadedBytes/1e6),
-                          (long)(expectedBytes/1e6),
+                          (long)(downloadedBytes/(1024*1024)),
+                          (long)(expectedBytes/(1024*1024)),
                           (int)(progress)]];
     }
     else {
