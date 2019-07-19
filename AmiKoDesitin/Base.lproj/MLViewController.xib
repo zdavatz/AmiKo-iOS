@@ -59,7 +59,11 @@
                                 <action selector="onToolBarButtonPressed:" destination="-1" id="61"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="Full Text" id="pNM-GM-K4Y"/>
+                        <barButtonItem title="Full Text" id="pNM-GM-K4Y">
+                            <connections>
+                                <action selector="onToolBarButtonPressed:" destination="-1" id="3f9-kh-swy"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="68"/>
                         <barButtonItem style="plain" id="37">
                             <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="36">
