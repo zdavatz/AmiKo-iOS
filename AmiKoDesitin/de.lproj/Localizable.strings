@@ -1,0 +1,169 @@
+/* Short toolbar */
+"ATC" = "Wirk/Atc";
+
+/* Full toolbar */
+"ATC Code" = "Wirkstoff/ATC";
+
+/* No comment provided by engineer. */
+"Cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"Chapter" = "Kapitel";
+
+/* No comment provided by engineer. */
+"Confirm delete %@" = "Confirm delete %@";
+
+/* No comment provided by engineer. */
+"Contact was saved in the AmiKo address book" = "Kontakt wurde im AmiKo Addressbuch gespeichert.";
+
+/* No comment provided by engineer. */
+"Delete" = "Alle Rezepte von/und PatientIn löschen?";
+
+/* No comment provided by engineer. */
+"Delete everything" = "Korb leeren";
+
+/* No comment provided by engineer. */
+"Delete package" = "Packung/Bemerkung löschen";
+
+/* No comment provided by engineer. */
+"Doctor" = "Arzt";
+
+/* Button */
+"Doctor Signature" = "Arzt";
+
+/* No comment provided by engineer. */
+"Drugs Basket" = "Medikamentenkorb";
+
+/* No comment provided by engineer. */
+"Edit" = "Edit";
+
+/* No comment provided by engineer. */
+"Edit comment" = "Bemerkung bearbeiten";
+
+/* Button */
+"Feedback" = "Feedback";
+
+/* No comment provided by engineer. */
+"%@ has already been imported" = "%@ wurde bereits importiert.";
+
+/* No comment provided by engineer. */
+"Hit" = "Treffer";
+
+/* No comment provided by engineer. */
+"If no interactions are displayed, no interactions known" = "Werden keine Interaktionen angezeigt, sind z.Z. keine Interaktionen bekannt";
+
+/* No comment provided by engineer. */
+"Imported %@" = "Imported %@";
+
+/* No comment provided by engineer. */
+"Known interactions" = "Bekannte Interaktionen";
+
+/* Gender */
+"man" = "m";
+
+/* No comment provided by engineer. */
+"Medicine" = "Medikament";
+
+/* No comment provided by engineer. */
+"Medicines" = "Medikamente";
+
+/* No comment provided by engineer. */
+"No package found with this barcode. Please contact zdavatz@ywesee.com" = "Keine Packung mit diesem Barcode gefunden. Bitte kontaktieren Sie zdavatz@ywesee.com";
+
+/* No comment provided by engineer. */
+"Open with" = "Öffnen mit:";
+
+/* No comment provided by engineer. */
+"Overwrite Prescription" = "besteh. Rezept überschreiben";
+
+/* Short toolbar */
+"Own" = "Inh";
+
+/* Full toolbar */
+"Owner" = "Inhaber";
+
+/* No comment provided by engineer. */
+"Page" = "Seite";
+
+/* No comment provided by engineer. */
+"Patient" = "Patient";
+
+/* Button */
+"Patients" = "Patienten";
+
+/* No comment provided by engineer. */
+"Please add doctor's address" = "Bitte Arztadresse hinzufügen.";
+
+/* Short toolbar */
+"Prep" = "Prä";
+
+/* Full toolbar */
+"Preparation" = "Präparat";
+
+/* No comment provided by engineer. */
+"Prescription Info" = "Fachinformation";
+
+/* No comment provided by engineer. */
+"Prescription to patient from doctor" = "Rezept: %1$@ %2$@, %3$@ von %4$@ %5$@ %6$@";
+
+/* No comment provided by engineer. */
+"Print Label" = "Etikette drucken";
+
+/* Button */
+"Rate" = "Rate";
+
+/* Short toolbar */
+"Reg" = "Reg";
+
+/* Full toolbar */
+"Reg. No" = "Reg. Nr.";
+
+/* Button */
+"Report" = "Report";
+
+/* No comment provided by engineer. */
+"Save" = "Speichern";
+
+/* No comment provided by engineer. */
+"Save as New Prescription" = "als neues Rezept speichern";
+
+/* No comment provided by engineer. */
+"Search" = "Suche";
+
+/* No comment provided by engineer. */
+"Search in interactions" = "Suche in Interaktionen";
+
+/* No comment provided by engineer. */
+"Search in report" = "Suche in Report";
+
+/* No comment provided by engineer. */
+"Search in technical info" = "Suche in Fachinfo";
+
+/* No comment provided by engineer. */
+"Search Patients" = "Patienten";
+
+/* No comment provided by engineer. */
+"Select package" = "Select package";
+
+/* Button */
+"Share" = "Share";
+
+/* No comment provided by engineer. */
+"The entry has been updated" = "Der Eintrag wurde aktualisiert.";
+
+/* Short toolbar */
+"Ther" = "Ther";
+
+/* Full toolbar */
+"Therapy" = "Therapie";
+
+/* Button */
+"Update" = "Update";
+
+/* No comment provided by engineer. */
+"Your medicine basket is empty" = "Ihr Medikamentenkorb ist leer.";
+
+/* Gender */
+"woman" = "w";
+
+"born" = "Gebr.";

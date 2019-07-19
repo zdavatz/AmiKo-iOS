@@ -1,0 +1,169 @@
+/* Short toolbar */
+"ATC" = "ATC";
+
+/* Full toolbar */
+"ATC Code" = "ATC Code";
+
+/* No comment provided by engineer. */
+"Cancel" = "Cancel";
+
+/* No comment provided by engineer. */
+"Chapter" = "Chapter";
+
+/* No comment provided by engineer. */
+"Confirm delete %@" = "Confirm delete %@";
+
+/* No comment provided by engineer. */
+"Contact was saved in the AmiKo address book" = "Contact was saved in the AmiKo address book.";
+
+/* No comment provided by engineer. */
+"Delete" = "Delete patient & all prescriptions ?";
+
+/* No comment provided by engineer. */
+"Delete everything" = "Delete everything";
+
+/* No comment provided by engineer. */
+"Delete package" = "Delete Package and Comment";
+
+/* No comment provided by engineer. */
+"Doctor" = "Doctor";
+
+/* Button */
+"Doctor Signature" = "Doctor";
+
+/* No comment provided by engineer. */
+"Drugs Basket" = "Drugs Basket";
+
+/* No comment provided by engineer. */
+"Edit" = "Edit";
+
+/* No comment provided by engineer. */
+"Edit comment" = "Edit Comment";
+
+/* Button */
+"Feedback" = "Feedback";
+
+/* Gender */
+"man" = "m";
+
+/* No comment provided by engineer. */
+"%@ has already been imported" = "%@ has already been imported";
+
+/* No comment provided by engineer. */
+"Hit" = "Hit";
+
+/* No comment provided by engineer. */
+"If no interactions are displayed, no interactions known" = "If no interactions are displayed, no interactions known";
+
+/* No comment provided by engineer. */
+"Imported %@" = "Imported %@";
+
+/* No comment provided by engineer. */
+"Known interactions" = "Known interactions";
+
+/* No comment provided by engineer. */
+"Medicine" = "Medicine";
+
+/* No comment provided by engineer. */
+"Medicines" = "Medicines";
+
+/* No comment provided by engineer. */
+"No package found with this barcode. Please contact zdavatz@ywesee.com" = "No package found with this barcode. Please contact zdavatz@ywesee.com";
+
+/* No comment provided by engineer. */
+"Open with" = "Open with:";
+
+/* No comment provided by engineer. */
+"Overwrite Prescription" = "Overwrite Prescription";
+
+/* Short toolbar */
+"Own" = "Own";
+
+/* Full toolbar */
+"Owner" = "Owner";
+
+/* No comment provided by engineer. */
+"Page" = "Page";
+
+/* No comment provided by engineer. */
+"Patient" = "Patient";
+
+/* Button */
+"Patients" = "Patients";
+
+/* No comment provided by engineer. */
+"Please add doctor's address" = "Please add doctor's address.";
+
+/* Short toolbar */
+"Prep" = "Prep";
+
+/* Full toolbar */
+"Preparation" = "Medicines";
+
+/* No comment provided by engineer. */
+"Prescription Info" = "Prescription Info";
+
+/* No comment provided by engineer. */
+"Prescription to patient from doctor" = "Prescription: %1$@ %2$@, %3$@ from %4$@ %5$@ %6$@";
+
+/* No comment provided by engineer. */
+"Print Label" = "Print Label";
+
+/* Button */
+"Rate" = "Rate";
+
+/* Short toolbar */
+"Reg" = "Reg";
+
+/* Full toolbar */
+"Reg. No" = "Reg. No.";
+
+/* Button */
+"Report" = "Report";
+
+/* No comment provided by engineer. */
+"Save" = "Save";
+
+/* No comment provided by engineer. */
+"Save as New Prescription" = "Save as New Prescription";
+
+/* No comment provided by engineer. */
+"Search" = "Search";
+
+/* No comment provided by engineer. */
+"Search in interactions" = "Search in interactions";
+
+/* No comment provided by engineer. */
+"Search in report" = "Search in report";
+
+/* No comment provided by engineer. */
+"Search in technical info" = "Search in technical info";
+
+/* No comment provided by engineer. */
+"Search Patients" = "Patients";
+
+/* No comment provided by engineer. */
+"Select package" = "Select package";
+
+/* Button */
+"Share" = "Share";
+
+/* No comment provided by engineer. */
+"The entry has been updated" = "The entry has been updated.";
+
+/* Short toolbar */
+"Ther" = "Ther";
+
+/* Full toolbar */
+"Therapy" = "Therapy";
+
+/* Button */
+"Update" = "Update";
+
+/* No comment provided by engineer. */
+"Your medicine basket is empty" = "Your medicine basket is empty.";
+
+/* Gender */
+"woman" = "f";
+
+"born" = "born";

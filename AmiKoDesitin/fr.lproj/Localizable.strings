@@ -1,0 +1,169 @@
+/* Short toolbar */
+"ATC" = "Prin/Atc";
+
+/* Full toolbar */
+"ATC Code" = "Principe/ATC";
+
+/* No comment provided by engineer. */
+"Cancel" = "Annuler";
+
+/* No comment provided by engineer. */
+"Chapter" = "Chapter";
+
+/* No comment provided by engineer. */
+"Confirm delete %@" = "Confirm delete %@";
+
+/* No comment provided by engineer. */
+"Contact was saved in the AmiKo address book" = "Contact enregistré dans le carnet d'adresses CoMed.";
+
+/* No comment provided by engineer. */
+"Delete" = "Supprimer patient/compris ordonnances";
+
+/* No comment provided by engineer. */
+"Delete everything" = "Tout supprimer";
+
+/* No comment provided by engineer. */
+"Delete package" = "Effacer l’emballage prescrit/annot.";
+
+/* No comment provided by engineer. */
+"Doctor" = "Médecin";
+
+/* Button */
+"Doctor Signature" = "Médecin";
+
+/* No comment provided by engineer. */
+"Drugs Basket" = "Panier des Médicaments";
+
+/* No comment provided by engineer. */
+"Edit" = "Edit";
+
+/* No comment provided by engineer. */
+"Edit comment" = "Traiter votre annotation";
+
+/* Button */
+"Feedback" = "Feedback";
+
+/* No comment provided by engineer. */
+"%@ has already been imported" = "%@ déjà était importé";
+
+/* No comment provided by engineer. */
+"Hit" = "Réponse(s)";
+
+/* No comment provided by engineer. */
+"If no interactions are displayed, no interactions known" = "Werden keine Interaktionen angezeigt, sind z.Z. keine Interaktionen bekannt";
+
+/* No comment provided by engineer. */
+"Imported %@" = "Importé %@";
+
+/* No comment provided by engineer. */
+"Known interactions" = "Interactions Connues";
+
+/* Gender */
+"man" = "m";
+
+/* No comment provided by engineer. */
+"Medicine" = "Medicine";
+
+/* No comment provided by engineer. */
+"Medicines" = "Préparation";
+
+/* No comment provided by engineer. */
+"No package found with this barcode. Please contact zdavatz@ywesee.com" = "Aucun paquet avec ce code-barres n'a été trouvé. Veuillez contacter zdavatz@ywesee.com";
+
+/* No comment provided by engineer. */
+"Open with" = "Ouvrir avec:";
+
+/* No comment provided by engineer. */
+"Overwrite Prescription" = "Rédiger la prescription";
+
+/* Short toolbar */
+"Own" = "Tit";
+
+/* Full toolbar */
+"Owner" = "Titulaire";
+
+/* No comment provided by engineer. */
+"Page" = "Page";
+
+/* No comment provided by engineer. */
+"Patient" = "Patient";
+
+/* Button */
+"Patients" = "Patients";
+
+/* No comment provided by engineer. */
+"Please add doctor's address" = "Rajoutez l’adresse du médecin svp.";
+
+/* Short toolbar */
+"Prep" = "Pré";
+
+/* Full toolbar */
+"Preparation" = "Préparation";
+
+/* No comment provided by engineer. */
+"Prescription Info" = "Notice Infopro";
+
+/* No comment provided by engineer. */
+"Prescription to patient from doctor" = "Ordon.: %1$@ %2$@, %3$@ von %4$@ %5$@ %6$@";
+
+/* No comment provided by engineer. */
+"Print Label" = "Imprimer l'étiquette";
+
+/* Button */
+"Rate" = "Rate";
+
+/* Short toolbar */
+"Reg" = "Aut";
+
+/* Full toolbar */
+"Reg. No" = "No d'Autor";
+
+/* Button */
+"Report" = "Report";
+
+/* No comment provided by engineer. */
+"Save" = "Sauver";
+
+/* No comment provided by engineer. */
+"Save as New Prescription" = "Sauvegarder une nouvelle prescription";
+
+/* No comment provided by engineer. */
+"Search" = "Recherche";
+
+/* No comment provided by engineer. */
+"Search in interactions" = "Recherche d'Interactions";
+
+/* No comment provided by engineer. */
+"Search in report" = "Recherche de Rapport";
+
+/* No comment provided by engineer. */
+"Search in technical info" = "Recherche de Note Infopro";
+
+/* No comment provided by engineer. */
+"Search Patients" = "Patients";
+
+/* No comment provided by engineer. */
+"Select package" = "Select package";
+
+/* Button */
+"Share" = "Share";
+
+/* No comment provided by engineer. */
+"The entry has been updated" = "La saisie disponible est mise à jour.";
+
+/* Short toolbar */
+"Ther" = "Thér";
+
+/* Full toolbar */
+"Therapy" = "Thérapie";
+
+/* Button */
+"Update" = "Update";
+
+/* No comment provided by engineer. */
+"Your medicine basket is empty" = "Votre panier des médicaments est vide.";
+
+/* Gender */
+"woman" = "f";
+
+"born" = "Anniv.";
