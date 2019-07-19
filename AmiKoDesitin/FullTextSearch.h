@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FullTextSearch : NSObject
 
+@property (atomic) NSArray *listOfSectionIds;
+@property (atomic) NSArray *listOfSectionTitles;
+
+- (NSString *) tableWithArticles:(NSArray *)listOfArticles andRegChaptersDict:(NSDictionary *)dict andFilter:(NSString *)filter;
+
 @end
 
 NS_ASSUME_NONNULL_END

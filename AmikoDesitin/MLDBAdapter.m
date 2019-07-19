@@ -271,6 +271,9 @@ static NSString *FULL_TABLE = nil;
 
 - (MLMedication *) searchId: (long)rowId
 {
+#ifdef DEBUG
+    NSLog(@"%s %d, rowId %ld", __FUNCTION__, __LINE__, rowId);
+#endif
     // getRecord returns an NSArray* hence the objectAtIndex  
     return [self cursorToFullMedInfo:[[self getRecord:rowId] objectAtIndex:0]];
 }
@@ -369,6 +372,74 @@ static NSString *FULL_TABLE = nil;
     
     return [self extractShortMedInfoFrom:results];
 }
+
+/** Search Reg. Nrs. given a list of reg. nr.
+ */
+- (NSArray *) searchRegnrsFromList:(NSArray *)listOfRegnrs
+{
+    const unsigned int N = 40;
+    NSMutableArray *listOfMedis = [[NSMutableArray alloc] init];
+    
+    NSUInteger C = [listOfRegnrs count];    // E.g. 100
+    NSUInteger capacityA = (C / N) * N;     // E.g. 100/40 * 40 = 80
+    NSUInteger capacityB = C - capacityA;   // 100 - 80 = 20
+    NSMutableArray *listA = [NSMutableArray arrayWithCapacity:capacityA];
+    NSMutableArray *listB = [NSMutableArray arrayWithCapacity:capacityB];
+    
+    [listOfRegnrs enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
+        NSMutableArray *output = (index < capacityA) ? listA : listB;
+        [output addObject:object];
+    }];
+    
+    NSString *subQuery = @"";
+    int count = 0;
+    // Loop through first (long) list
+    for (NSString *reg in listA) {
+        subQuery = [subQuery stringByAppendingString:[NSString stringWithFormat:@"%@ like '%%, %@%%' or %@ like '%@%%'", KEY_REGNRS, reg, KEY_REGNRS, reg]];
+        count++;
+        if (count % N == 0) {
+            NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@", FULL_TABLE, DATABASE_TABLE, subQuery];
+            NSArray *results = [mySqliteDb performQuery:query];
+            for (NSArray *cursor in results) {
+                MLMedication *m = [self cursorToVeryShortMedInfo:cursor];
+                [listOfMedis addObject:m];
+            }
+            subQuery = @"";
+        } else {
+            subQuery = [subQuery stringByAppendingString:@" or "];
+        }
+    }
+    // Loop through second (short) list
+    for (NSString *reg in listB) {
+        subQuery = [subQuery stringByAppendingString:[NSString stringWithFormat:@"%@ like '%%, %@%%' or %@ like '%@%%' or ", KEY_REGNRS, reg, KEY_REGNRS, reg]];
+    }
+    if ([subQuery length] > 4) {
+        subQuery = [subQuery substringWithRange:NSMakeRange(0, [subQuery length]-4)];   // Remove last 'or'
+        NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@", FULL_TABLE, DATABASE_TABLE, subQuery];
+        NSArray *results = [mySqliteDb performQuery:query];
+        for (NSArray *cursor in results) {
+            MLMedication *m = [self cursorToVeryShortMedInfo:cursor];
+            [listOfMedis addObject:m];
+        }
+    }
+    
+    return listOfMedis;
+}
+
+- (MLMedication *) cursorToVeryShortMedInfo:(NSArray *)cursor
+{
+    MLMedication *medi = [[MLMedication alloc] init];
+    
+    [medi setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
+    [medi setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
+    [medi setAuth:(NSString *)[cursor objectAtIndex:kAuth]];
+    [medi setRegnrs:(NSString *)[cursor objectAtIndex:kRegnrs]];
+    [medi setSectionIds:(NSString *)[cursor objectAtIndex:kIdsStr]];
+    [medi setSectionTitles:(NSString *)[cursor objectAtIndex:kSectionsStr]];
+    
+    return medi;
+}
+
 - (MLMedication *) cursorToShortMedInfo: (NSArray *)cursor
 {
     MLMedication *m = [[MLMedication alloc] init];

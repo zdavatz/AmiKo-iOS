@@ -22,6 +22,16 @@
     regChaptersDict = [NSDictionary dictionaryWithDictionary:dict];
 }
 
+- (NSDictionary *) getRegChaptersDict
+{
+    return regChaptersDict;
+}
+
+- (NSArray *) getRegnrsAsArray
+{
+    return [regChaptersDict allKeys];
+}
+
 - (unsigned long) numHits
 {
     return [regChaptersDict count];

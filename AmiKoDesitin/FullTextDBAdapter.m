@@ -17,6 +17,7 @@ enum {
     kRegnrs
 };
 
+static NSString *KEY_ROWID = @"id";
 static NSString *KEY_KEYWORD = @"keyword";
 static NSString *DATABASE_TABLE = @"frequency";
 
@@ -64,20 +65,40 @@ static NSString *DATABASE_TABLE = @"frequency";
     return [myFullTextDb numberRecordsForTable:DATABASE_TABLE];
 }
 
+/** Get full text from hash
+ */
+- (FullTextEntry *) searchHash:(NSString *)hash
+{
+    NSString *query = [NSString stringWithFormat:@"select * from %@ where %@ like '%@'", DATABASE_TABLE, KEY_ROWID, hash];
+    NSArray *results = [myFullTextDb performQuery:query];
+    
+    return [self cursorToFullTextEntry:[results firstObject]];
+}
+
 /** Search fulltext containing keyword
  */
 - (NSArray *) searchKeyword:(NSString *)keyword
 {
-#ifdef DEBUG
-    NSLog(@"%s %d", __FUNCTION__, __LINE__);
-#endif
     NSString *query = [NSString stringWithFormat:@"select * from %@ where %@ like '%@%%'", DATABASE_TABLE, KEY_KEYWORD, keyword];
     NSArray *results = [myFullTextDb performQuery:query];
-#ifdef DEBUG
-    NSLog(@"%s %d, results count:%lu", __FUNCTION__, __LINE__, (unsigned long)[results count]);
-#endif
     
     return [self extractFullTextEntryFrom:results];
+}
+
+- (FullTextEntry *) cursorToFullTextEntry:(NSArray *)cursor
+{
+    FullTextEntry *entry = [[FullTextEntry alloc] init];
+    
+    [entry setHash:(NSString *)[cursor objectAtIndex:kRowId]];
+    [entry setKeyword:(NSString *)[cursor objectAtIndex:kKeyword]];
+    NSString *regnrsAndChapters = (NSString *)[cursor objectAtIndex:kRegnrs];
+    if (regnrsAndChapters!=nil) {
+        NSMutableDictionary *dict = [self regChapterDict:regnrsAndChapters];
+        [entry setRegChaptersDict:dict];
+    }
+    [entry setRegnrs:regnrsAndChapters];
+    
+    return entry;
 }
 
 - (NSArray *) extractFullTextEntryFrom:(NSArray *)results

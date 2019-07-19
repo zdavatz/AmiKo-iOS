@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FullTextEntry.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) openDatabase: (NSString *)dbName;
 - (void) closeDatabase;
 - (NSInteger) getNumRecords;
+- (FullTextEntry *) searchHash:(NSString *)hash;
 - (NSArray *) searchKeyword: (NSString *)keyword;
 - (NSArray *) extractFullTextEntryFrom:(NSArray *)results;
 

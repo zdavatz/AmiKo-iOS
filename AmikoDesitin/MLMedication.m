@@ -22,6 +22,16 @@
  ------------------------------------------------------------------------ */
 
 #import "MLMedication.h"
+#import "MLConstants.h"
+
+// TODO: prevent duplication of following arrays, see MLTitleViewController.mm
+static NSString* SectionTitle_DE[] = {@"Zusammensetzung", @"Galenische Form", @"Kontraindikationen", @"Indikationen", @"Dosierung/Anwendung",
+    @"Vorsichtsmassnahmen", @"Interaktionen", @"Schwangerschaft", @"Fahrtüchtigkeit", @"Unerwünschte Wirk.", @"Überdosierung", @"Eig./Wirkung",
+    @"Kinetik", @"Präklinik", @"Sonstige Hinweise", @"Zulassungsnummer", @"Packungen", @"Inhaberin", @"Stand der Information"};
+
+static NSString* SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Contre-indications", @"Indications", @"Posologie", @"Précautions",
+    @"Interactions", @"Grossesse/All.", @"Conduite", @"Effets indésir.", @"Surdosage", @"Propriétés/Effets", @"Cinétique", @"Préclinique", @"Remarques",
+    @"Numéro d'autorisation", @"Présentation", @"Titulaire", @"Mise à jour"};
 
 @implementation MLMedication
 
@@ -44,6 +54,71 @@
 @synthesize contentStr;
 
 @synthesize packages;
+
+- (NSArray *) listOfSectionIds
+{
+    return [sectionIds componentsSeparatedByString:@","];
+}
+
+- (NSArray *) listOfSectionTitles
+{
+    NSMutableArray *titles = [[sectionTitles componentsSeparatedByString:@";"] mutableCopy];
+    NSUInteger n = [titles count];
+    for (int i=0; i<n; ++i) {
+        titles[i] = [self shortTitle:titles[i]];
+    }
+    return titles;
+}
+
+- (NSDictionary *) indexToTitlesDict
+{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    NSArray *ids = [self listOfSectionIds];
+    NSArray *titles = [self listOfSectionTitles];
+    
+    NSUInteger n1 = [ids count];
+    NSUInteger n2 = [titles count];
+    NSUInteger n = n1 < n2 ? n1 : n2;
+    for (NSUInteger i=0; i<n; ++i) {
+        NSString *id = ids[i];
+        id = [id stringByReplacingOccurrencesOfString:@"section" withString:@""];
+        id = [id stringByReplacingOccurrencesOfString:@"Section" withString:@""];
+        if ([id length]>0) {
+            dict[id] = [self shortTitle:titles[i]];
+        }
+    }
+    
+    return dict;
+}
+
+- (NSString *) shortTitle:(NSString *)longTitle
+{
+    NSString *t = [longTitle lowercaseString];
+    if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
+        for (int i=0; i<19; i++) {
+            NSString *compareString = [SectionTitle_DE[i] lowercaseString];
+            if (compareString!=nil) {
+                if ([t rangeOfString:compareString].location != NSNotFound) {
+                    t = SectionTitle_DE[i];
+                    return t;
+                }
+            }
+        }
+    }
+    else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
+        for (int i=0; i<19; i++) {
+            NSString *compareString = [SectionTitle_FR[i] lowercaseString];
+            if (compareString!=nil) {
+                if ([t rangeOfString:compareString].location != NSNotFound) {
+                    t = SectionTitle_FR[i];
+                    return t;
+                }
+            }
+        }
+    }
+    return longTitle;
+}
 
 - (NSString *)description
 {

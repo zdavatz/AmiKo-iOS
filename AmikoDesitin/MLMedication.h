@@ -46,4 +46,8 @@
 
 @property (nonatomic, copy) NSString *packages;
 
+- (NSArray *) listOfSectionIds;
+- (NSArray *) listOfSectionTitles;
+- (NSDictionary *) indexToTitlesDict;
+
 @end

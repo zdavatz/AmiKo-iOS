@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *regnrs;
 
 - (void) setRegChaptersDict:(NSMutableDictionary *)dict;
+- (NSDictionary *) getRegChaptersDict;
+
+- (NSArray *) getRegnrsAsArray;
 - (unsigned long) numHits;
 
 @end

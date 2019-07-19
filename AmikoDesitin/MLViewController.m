@@ -158,6 +158,8 @@ static BOOL mShowReport = false;
     struct timeval end_tv;
     
     BOOL runningActivityIndicator;
+
+    NSString *mFullTextContentStr;
     
     dispatch_queue_t mSearchQueue;
 }
@@ -1394,6 +1396,9 @@ static BOOL mShowReport = false;
 
 - (void) genSearchResultsWith:(NSString *)searchQuery
 {
+#ifdef DEBUG
+    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+#endif
     if (mCurrentSearchState == kTitle) {
         searchResults = [mDb searchTitle:searchQuery];
     } else if (mCurrentSearchState == kAuthor) {
@@ -1427,16 +1432,8 @@ static BOOL mShowReport = false;
     } else if (mCurrentSearchState == kTherapy) {
         searchRes = [mDb searchApplication:searchQuery];
     } else if (mCurrentSearchState == kFullText) {
-#ifdef DEBUG
-        NSLog(@"%s %d mFullTextDb:%p", __FUNCTION__, __LINE__, mFullTextDb);
-#endif
         if ([searchQuery length] > 2) {
             searchRes = [mFullTextDb searchKeyword:searchQuery];    // NSArray of FullTextEntry
-#ifdef DEBUG
-            NSLog(@"%s %d, searchRes count:%lu", __FUNCTION__, __LINE__, (unsigned long)[searchRes count]);
-            if ([searchRes count] > 0)
-                NSLog(@"First result:<%@>", searchRes[0]);
-#endif
         }
     }
     
@@ -2401,17 +2398,48 @@ static BOOL mShowReport = false;
 
     long mId = -1;
     
-    if (mCurrentIndexPath) {
-        mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
-        mMed = [mDb searchId:mId];
+    if (mCurrentSearchState!=kFullText) {
+        /* Search in Aips DB or Interactions DB
+         */
+        if (mCurrentIndexPath) {
+            mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
+            mMed = [mDb searchId:mId];
+        }
+        
+        if (!mShowReport) {
+            [self invalidateObserver];
+        }
+        
+        mShowReport = false;
     }
-  
-    if (!mShowReport) {
-        [self invalidateObserver];
+    else {
+        /* Search in full text search DB
+         */
+        NSString *hashId = [medi[indexPath.row] hashId];
+        NSLog(@"%s %d, hashId: %@", __FUNCTION__, __LINE__, hashId);
+
+        // Get entry
+        mFullTextEntry = [mFullTextDb searchHash:hashId];
+        //NSLog(@"%s %d, mFullTextEntry: %@", __FUNCTION__, __LINE__, mFullTextEntry);
+        
+        // TODO: Hide text finder ?
+        
+        NSArray *listOfRegnrs = [mFullTextEntry getRegnrsAsArray];
+        //NSLog(@"%s %d, listOfRegnrs: %@", __FUNCTION__, __LINE__, listOfRegnrs);
+        
+        NSArray *listOfArticles = [mDb searchRegnrsFromList:listOfRegnrs];
+        //NSLog(@"%s %d, listOfArticles: %@", __FUNCTION__, __LINE__, listOfArticles);
+
+        NSDictionary *dict = [mFullTextEntry getRegChaptersDict];
+        NSLog(@"%s %d, dict: %@", __FUNCTION__, __LINE__, dict);
+        
+        mFullTextContentStr = [mFullTextSearch tableWithArticles:listOfArticles
+                                              andRegChaptersDict:dict
+                                                       andFilter:@""];
+
+        // TODO
     }
 
-    mShowReport = false;
-    
     if (secondViewController!=nil) {
         // [secondViewController removeFromParentViewController];
         secondViewController = nil;
@@ -2423,7 +2451,7 @@ static BOOL mShowReport = false;
                                               title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
                                            andParam:2];
 
-    if (mSearchInteractions==false) {
+    if (mSearchInteractions == false) {
         // Load style sheet from file
         NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
         NSString *amikoCss = nil;
@@ -2496,7 +2524,7 @@ static BOOL mShowReport = false;
     }
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
-    // Show SecondViewController! (UIWebView)
+    // Show SecondViewController (UIWebView)
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 
