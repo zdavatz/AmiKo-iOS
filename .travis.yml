@@ -1,6 +1,6 @@
 language: objective-c
+osx_image: xcode10
 notifications:
  email:
     recipients:
-      - cybrmx@gmail.com
       - zdavatz@ywesee.com
