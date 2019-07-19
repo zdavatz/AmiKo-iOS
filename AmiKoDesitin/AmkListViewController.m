@@ -27,10 +27,8 @@ static const float kAmkLabelFontSize = 12.0;
 {
     [super viewDidLoad];
    
-    if (IOS_NEWER_OR_EQUAL_TO_7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-        myTableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    }
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    myTableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
 - (void)viewDidAppear:(BOOL)animated

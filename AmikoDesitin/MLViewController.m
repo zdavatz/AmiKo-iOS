@@ -52,6 +52,10 @@
 
 #import "MLAppDelegate.h"
 
+#import "FullTextDBAdapter.h"
+#import "FullTextSearch.h"
+#import "FullTextEntry.h"
+
 // Requirement to show at least up to the first comma, no line wrapping
 #define CUSTOM_FONT_SIZE_PICKER
 
@@ -63,7 +67,12 @@ enum {
 };
 
 enum {
-    kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kTherapy=8
+    kTitle=0,
+    kAuthor=2,
+    kAtcCode=4,
+    kRegNr=6,
+    kTherapy=8,
+    kFullText=10
 };
 
 static NSInteger mUsedDatabase = kNone;
@@ -81,6 +90,7 @@ static BOOL mShowReport = false;
 @property NSString *title;
 @property NSString *subTitle;
 @property long medId;
+@property NSString *hashId;
 
 @end
 
@@ -91,6 +101,7 @@ static BOOL mShowReport = false;
 @synthesize title;
 @synthesize subTitle;
 @synthesize medId;
+@synthesize hashId;
 
 - (NSString *)description
 {
@@ -114,6 +125,9 @@ static BOOL mShowReport = false;
     
     MLDBAdapter *mDb;
     MLMedication *mMed;
+    FullTextDBAdapter *mFullTextDb;
+    FullTextEntry *mFullTextEntry;
+    FullTextSearch *mFullTextSearch;
     NSMutableString *mBarButtonItemName;
     NSMutableSet *favoriteMedsSet;
     NSMutableArray *items;
@@ -165,7 +179,10 @@ static BOOL mShowReport = false;
 }
 
 - (IBAction) onToolBarButtonPressed:(id)sender
-{  
+{
+#ifdef DEBUG
+    NSLog(@"%s %d Button tag: %ld, title: %@", __FUNCTION__, __LINE__, (long)[sender tag], [sender title]);
+#endif
     UIBarButtonItem *btn = (UIBarButtonItem *)sender;
 
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -215,6 +232,12 @@ static BOOL mShowReport = false;
             [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
             mCurrentSearchState = kTherapy;
         }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"Full Text", "Full toolbar")]) {
+            [myTextField setText:NSLocalizedString(@"Full Text", "Full toolbar")];
+            [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
+            [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
+            mCurrentSearchState = kFullText;
+        }
     }
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
@@ -254,21 +277,18 @@ static BOOL mShowReport = false;
             [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
             mCurrentSearchState = kTherapy;
         }
+        else if ([btn.title isEqualToString:NSLocalizedString(@"FTS", "Short toolbar")]) {
+            [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
+            [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
+            mCurrentSearchState = kFullText;
+        }
     }
 
-    if ([MLConstants iosVersion]>=7.0f) {
-        for (UIBarButtonItem *b in [myToolBar items]) {
+    for (UIBarButtonItem *b in [myToolBar items]) {
+        if (b==btn)
+            [b setTintColor:MAIN_TINT_COLOR];
+        else
             [b setTintColor:[UIColor lightGrayColor]];   // Default color
-            if (b==btn)
-                [b setTintColor:MAIN_TINT_COLOR];
-        }
-    }
-    else {
-        for (UIBarButtonItem *b in [myToolBar items]) {
-            [b setTintColor:nil];   // Default color
-            if (b==btn)
-                [b setTintColor:[UIColor lightGrayColor]];
-        }
     }
 
     if (searchResults) {
@@ -297,23 +317,17 @@ static BOOL mShowReport = false;
     [MLUtility checkVersion];
     
     medi = [NSMutableArray array];
-    
     titleData = [NSMutableArray array];
     subTitleData = [NSMutableArray array];
-    // Saved to persistent store
     favoriteKeyData = [NSMutableArray array];   // equivalent to [[alloc] init]
-    // Used by tableview
-    medIdArray = [NSMutableArray array];
+    medIdArray = [NSMutableArray array];        // Used by tableview
     
     secondViewController = nil;
     otherViewNavigationController = nil;
     menuViewController = nil;
     menuViewNavigationController = nil;
     
-    // Note: iOS7 or above
-    if ([MLConstants iosVersion]>=7.0f) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     
     runningActivityIndicator = NO;
     
@@ -331,7 +345,7 @@ static BOOL mShowReport = false;
                                                  name:@"MLStatusCode404"
                                                object:nil];
 
-    // Regisger observer tto check if we are back from the background
+    // Regisger observer to check if we are back from the background
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(dbSyncNotification:)
                                                  name:UIApplicationWillEnterForegroundNotification
@@ -524,51 +538,53 @@ static BOOL mShowReport = false;
     
     if ([[notification name] isEqualToString:@"MLDidFinishLoading"]) {
         fileCnt++;
-        if (fileCnt==1)
-            NSLog(@"Finished downloading first file");
-        else if (fileCnt==2)
-            NSLog(@"Finished downloading second file");
-        if (mDb!=nil && fileCnt==2) {
+        NSLog(@"Finished downloading file %d", fileCnt);
+
+        if (mDb!=nil && mFullTextDb!=nil && fileCnt==3) {
             // Reset file counter
             fileCnt=0;
-            // Make sure downloaded files cannot be backuped
+            // Make sure downloaded files cannot be backed up
             [self doNotBackupDocumentsDir];
-            // Close sqlite database
+
+            // Sqlite database
             [mDb closeDatabase];
-            // Re-open sqlite database
             [self openSQLiteDatabase];
-            // Close interaction database
+
+            // Fulltext database
+            [mFullTextDb closeDatabase];
+            [self openFullTextDatabase];
+
+            // Interaction database
             [mDb closeInteractionsCsvFile];
-            // Re-open interaction database
             [self openInteractionsCsvFile];
+
             // Reload table
             [self resetDataInTableView];
             
             // Display friendly message
-            long numSearchRes = [searchResults count];
+            long numProducts = [mDb getNumProducts];
+            long numSearchRes = [searchResults count]; // numFachinfos
+            long numSearchTerms = [mFullTextDb getNumRecords];
             int numInteractions = (int)[mDb getNumInteractions];
+
+            NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
+            NSString *bundleName = [d objectForKey:@"CFBundleName"];
+            NSString *title = [NSString stringWithFormat:NSLocalizedString(@"%@ Database Updated!",nil), bundleName];
             
-            if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-                MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"AIPS Datenbank aktualisiert!"
-                                                                message:[NSString stringWithFormat:@"Die Datenbank enthält %ld Fachinfos \nund %d Interaktionen.", numSearchRes, numInteractions]
-                                                                 button:@"OK"];
-                [alert show];
-                // Store update date, this variable is set very first time app is set up
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                [defaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
-                // Make sure it's saved to file immediately
-                [defaults synchronize];
-            } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-                MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Banque des donnees AIPS mises à jour!"
-                                                                message:[NSString stringWithFormat:@"La banque des données contien %ld notices infopro \net %d interactions.", numSearchRes, numInteractions]
-                                                                 button:@"OK"];
-                [alert show];
-                // Store update date, this variable is set very first time app is set up
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                [defaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
-                // Make sure it's saved to file immediately
-                [defaults synchronize];
-            }
+            NSString *message = [NSString stringWithFormat:NSLocalizedString(@"The database contains:\n- %ld Products\n- %ld Specialist information\n- %ld Keywords\n- %d Interactions", nil), numProducts, numSearchRes, numSearchTerms, numInteractions];
+
+            MLAlertView *alert = [[MLAlertView alloc] initWithTitle:title
+                                                            message:message
+                                                             button:@"OK"];
+            [alert show];
+
+            // Store update date, this variable is set very first time app is set up
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSString *key = [MLConstants databaseUpdateKey];
+            [defaults setValue:[NSDate date] forKey:key];
+
+            // Make sure it's saved to file immediately
+            [defaults synchronize];
         }
     } else if ([[notification name] isEqualToString:@"MLStatusCode404"]) {
         NSLog(@"Status Code 404");
@@ -591,42 +607,36 @@ static BOOL mShowReport = false;
 - (void) checkLastDBSync
 {
     // Nag user all 30 days! = 60 x 60 x 24 x 30 seconds
-    if ([MLUtility timeIntervalSinceLastDBSync]>60*60*24*30) {
-        // Show alert with OK button
-        if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-            MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Datenbank Aktualisierung"
-                                                            message:@"Ihre Datenbank ist älter als 30 Tage. Wir empfehlen eine Aktualisierung auf die tagesaktuellen Daten. Das Update kann jederzeit auch manuell durch das Klicken auf die Pille oben links ausgeführt werden."
-                                                             button:@"OK"];
-            [alert show];
-            // Store current date, and bother user again in a month
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setValue:[NSDate date] forKey:@"germanDBLastUpdate"];
-            // Make sure it's saved to file immediately
-            [defaults synchronize];
-        } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-            MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Mise à jour de la banque des données"
-                                                            message:@"Votre banque des données est âgé de plus de 30 jours. Nous vous recommandons une mise à jour. La mise à jour peut également être effectuée manuellement à tout moment en cliquant sur la pilule en haut à gauche."
-                                                             button:@"OK"];
-            [alert show];
-            // Store current date, and bother user again in a month
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setValue:[NSDate date] forKey:@"frenchDBLastUpdate"];
-            // Make sure it's saved to file immediately
-            [defaults synchronize];
-        }
-    }
+    if ([MLUtility timeIntervalSinceLastDBSync] <= 60*60*24*30)
+        return;
+
+    // Show alert with OK button
+    NSString *title = NSLocalizedString(@"Database Update", nil);
+    NSString *message = NSLocalizedString(@"Your database is older than 30 days. We recommend an update. The update can also be done manually at any time by clicking on the pill in the upper left corner.", nil);
+
+    MLAlertView *alert = [[MLAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                     button:@"OK"];
+    [alert show];
+
+    // Store current date, and bother user again in a month
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:[NSDate date] forKey:[MLConstants databaseUpdateKey]];
+
+    // Make sure it's saved to file immediately
+    [defaults synchronize];
 }
 
 - (void) openSQLiteDatabase
 {
     mDb = [MLDBAdapter sharedInstance];
 
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+    if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
         if (![mDb openDatabase:@"amiko_db_full_idx_de"]) {
             NSLog(@"No German database!");
             mDb = nil;
         }
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    } else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
         if (![mDb openDatabase:@"amiko_db_full_idx_fr"]) {
             NSLog(@"No French database!");
             mDb = nil;
@@ -634,13 +644,30 @@ static BOOL mShowReport = false;
     }
 }
 
+- (void) openFullTextDatabase
+{
+    mFullTextDb = [[FullTextDBAdapter alloc] init];
+    if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
+        if (![mFullTextDb openDatabase:@"amiko_frequency_de"]) {
+            NSLog(@"No German Fulltext database!");
+            mFullTextDb = nil;
+        }
+    }
+    else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
+        if (![mFullTextDb openDatabase:@"amiko_frequency_fr"]) {
+            NSLog(@"No French Fulltext database!");
+            mFullTextDb = nil;
+        }
+    }
+}
+
 - (void) openInteractionsCsvFile
 {
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+    if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
         if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_de"]) {
             NSLog(@"No German drug interactions file!");
         }
-    } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+    } else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
         if (![mDb openInteractionsCsvFile:@"drug_interactions_csv_fr"]) {
             NSLog(@"No French drug interactions file!");
         }
@@ -680,10 +707,7 @@ static BOOL mShowReport = false;
     for (UIBarButtonItem *b in [myToolBar items])
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
 
-    if ([MLConstants iosVersion]>=7.0f)
-        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
-    else
-        [[[myToolBar items] objectAtIndex:kTitle] setTintColor:[UIColor lightGrayColor]];
+    [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
 
     [searchField setText:@""];
     [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -694,48 +718,52 @@ static BOOL mShowReport = false;
 
 - (void) setBarButtonItemsWith:(NSInteger)searchState
 {
-    // kTitle=0, kAuthor=2, kAtcCode=4, kRegNr=6, kTherapy=8
-    for (UIBarButtonItem *b in [myToolBar items]) {
+    for (UIBarButtonItem *b in [myToolBar items])
         [b setTintColor:[UIColor lightGrayColor]];   // Default color
-    }
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         searchState /= 2;
     
-    if ([MLConstants iosVersion]>=7.0f)
-        [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
-    else
-        [[[myToolBar items] objectAtIndex:searchState] setTintColor:[UIColor lightGrayColor]];
+    [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
 
     [searchField setText:@""];
-    switch(searchState)
+    switch (searchState)
     {
         case kTitle:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Preparation", "Full toolbar")]];
             break;
+
         case kAuthor:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Owner", "Full toolbar")]];
             break;
+
         case kAtcCode:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"ATC Code", "Full toolbar")]];
             break;
+
         case kRegNr:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Reg. No", "Full toolbar")]];
             break;
+
         case kTherapy:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Therapy", "Full toolbar")]];
             break;
+
+        case kFullText:
+            [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
+            break;
     }
+
     mCurrentSearchState = searchState;
 }
 
@@ -778,9 +806,8 @@ static BOOL mShowReport = false;
         
         [UIView commitAnimations];
     }
-    
-    if ([MLConstants iosVersion]>=7.0f)
-        [self setTabbarItemFont];
+
+    [self setTabbarItemFont];
 }
 
 - (void) hideTabBarWithAnimation:(BOOL)withAnimation
@@ -881,10 +908,9 @@ static BOOL mShowReport = false;
         }
     } // iPad
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        
-        if ([MLConstants iosVersion]>=7.0f)
-            [self setToolbarItemsFontSize];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        [self setToolbarItemsFontSize];
         
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -898,11 +924,13 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
-            
+            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"Full Text", "Full toolbar")];
+
             // Hide status bar and navigation bar (top)
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                    withAnimation:UIStatusBarAnimationSlide];
             
             self.myTableViewHeightConstraint.constant = 5;
         }
@@ -915,11 +943,13 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC", "Short toolbar")];
             [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg", "Short toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Ther", "Short toolbar")];
-            
+            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"FTS", "Short toolbar")];
+
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                    withAnimation:UIStatusBarAnimationSlide];
 
             self.myTableViewHeightConstraint.constant = 49;
         }
@@ -956,14 +986,12 @@ static BOOL mShowReport = false;
         [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
+        [[[myToolBar items] objectAtIndex:5] setTitle:NSLocalizedString(@"Full Text", "Full toolbar")];
     }
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        [self setToolbarItemsFontSize];
         
-        if ([MLConstants iosVersion]>=7.0f) {
-            [self setToolbarItemsFontSize];
-        }
-                
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -975,7 +1003,8 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
-                        
+            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"Full Text", "Full toolbar")];
+
             // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
         }
         else {
@@ -988,7 +1017,8 @@ static BOOL mShowReport = false;
             [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC", "Short toolbar")];
             [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg", "Short toolbar")];
             [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Ther", "Short toolbar")];
-            
+            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"FTS", "Short toolbar")];
+
             // [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
         }
     }
@@ -1037,17 +1067,18 @@ static BOOL mShowReport = false;
         {
             // Hide status bar and navigation bar (top)
             [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES
-                                                        withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                    withAnimation:UIStatusBarAnimationSlide];
  
             self.myTableViewHeightConstraint.constant = 5;
         }
         else {
             // Display status and navigation bar (top)
             [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                    withAnimation:UIStatusBarAnimationSlide];
             
             self.myTableViewHeightConstraint.constant = 49;
         }
@@ -1134,7 +1165,7 @@ static BOOL mShowReport = false;
     menuViewNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
     
     // Background color of navigation bar
-    if ([MLConstants iosVersion]>=7.0f) {
+    {
         self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
         self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
         self.navigationController.navigationBar.translucent = NO;
@@ -1163,11 +1194,9 @@ static BOOL mShowReport = false;
     
     // Add search bar as title view to navigation bar
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if ([MLConstants iosVersion]>=7.0f) {
-            searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.translucent = YES;
-        }
+        searchField.barTintColor = [UIColor lightGrayColor];
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.translucent = YES;
     } // iPad
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -1176,15 +1205,12 @@ static BOOL mShowReport = false;
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         searchField.delegate = self;
 
-        // Note: iOS7
-        if ([MLConstants iosVersion] >= 7.0f) {
-            searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = [UIColor clearColor];
-            searchField.backgroundImage = [UIImage new];    // Necessary fo completely transparent search bar...
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = NO;
-        }
+        searchField.barStyle = UIBarStyleDefault;
+        searchField.barTintColor = [UIColor clearColor];
+        searchField.backgroundImage = [UIImage new];    // Necessary fo completely transparent search bar...
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+        searchField.translucent = NO;
         
 #ifdef TWO_ITEMS_ON_LEFT_NAV_BAR
         // Left
@@ -1220,6 +1246,12 @@ static BOOL mShowReport = false;
     [self openSQLiteDatabase];
 #ifdef DEBUG
     NSLog(@"Number of Records = %ld", (long)[mDb getNumRecords]);
+#endif
+
+    // Open fulltext database
+    [self openFullTextDatabase];
+#ifdef DEBUG
+    NSLog(@"Number of records in fulltext database = %ld", (long)[mFullTextDb getNumRecords]);
 #endif
 
     // Open drug interactions csv file
@@ -1304,24 +1336,21 @@ static BOOL mShowReport = false;
     
     // Load style sheet from file
     NSString *amikoReportFile = nil;
-    
-    if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
-        NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_de"] stringByAppendingPathExtension:@"html"];
-        if ([fileManager fileExistsAtPath:filePath])
-            amikoReportFile = filePath;
-        else
-            amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_de" ofType:@"html"];
-    }
-    else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
-        NSString *filePath = [[documentsDir stringByAppendingPathComponent:@"amiko_report_fr"] stringByAppendingPathExtension:@"html"];
-        if ([fileManager fileExistsAtPath:filePath])
-            amikoReportFile = filePath;
-        else
-            amikoReportFile = [[NSBundle mainBundle] pathForResource:@"amiko_report_fr" ofType:@"html"];
-    }
+
+    NSString *reportFilename = [NSString stringWithFormat:@"amiko_report_%@", [MLConstants databaseLanguage]];
+
+    NSString *filePath = [[documentsDir stringByAppendingPathComponent:reportFilename] stringByAppendingPathExtension:@"html"];
+
+    if ([fileManager fileExistsAtPath:filePath])
+        amikoReportFile = filePath;
+    else
+        amikoReportFile = [[NSBundle mainBundle] pathForResource:reportFilename
+                                                          ofType:@"html"];
 
     NSError *error = nil;
-    NSString *amikoReport = [NSString stringWithContentsOfFile:amikoReportFile encoding:NSUTF8StringEncoding error:&error];
+    NSString *amikoReport = [NSString stringWithContentsOfFile:amikoReportFile
+                                                      encoding:NSUTF8StringEncoding
+                                                         error:&error];
 
     if (amikoReport==nil)
         amikoReport = @"";
@@ -1344,11 +1373,8 @@ static BOOL mShowReport = false;
                                                                      title:@"About"
                                                                   andParam:1];
     
-    if ([MLConstants iosVersion]>=7.0f) {
+    {
         UIFont *font = [UIFont fontWithName:@"Arial" size:14];
-        secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
-    } else {
-        UIFont *font = [UIFont fontWithName:@"Arial" size:15];
         secondViewController.htmlStr = [NSString stringWithFormat:@"<span style=\"font-family: %@; font-size: %i\">%@</span>", font.fontName, (int)font.pointSize, amikoReport];
     }
 
@@ -1382,6 +1408,9 @@ static BOOL mShowReport = false;
 
 - (NSArray *) searchAipsDatabaseWith:(NSString *)searchQuery
 {
+#ifdef DEBUG
+    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+#endif
     NSArray *searchRes = [NSArray array];
     
     NSDate *startTime = [NSDate date];
@@ -1396,6 +1425,18 @@ static BOOL mShowReport = false;
         searchRes = [mDb searchRegNr:searchQuery];
     } else if (mCurrentSearchState == kTherapy) {
         searchRes = [mDb searchApplication:searchQuery];
+    } else if (mCurrentSearchState == kFullText) {
+#ifdef DEBUG
+        NSLog(@"%s %d mFullTextDb:%p", __FUNCTION__, __LINE__, mFullTextDb);
+#endif
+        if ([searchQuery length] > 2) {
+            searchRes = [mFullTextDb searchKeyword:searchQuery];    // NSArray of FullTextEntry
+#ifdef DEBUG
+            NSLog(@"%s %d, searchRes count:%lu", __FUNCTION__, __LINE__, (unsigned long)[searchRes count]);
+            if ([searchRes count] > 0)
+                NSLog(@"First result:<%@>", searchRes[0]);
+#endif
+        }
     }
     
     NSDate *endTime = [NSDate date];
@@ -1488,6 +1529,7 @@ static BOOL mShowReport = false;
             }
             break;
         }
+
         case 1:
         {
 #ifdef DEBUG
@@ -1523,6 +1565,7 @@ static BOOL mShowReport = false;
             });
             break;
         }
+
         case 2:
 #ifdef DEBUG
             NSLog(@"TabBar - Interactions");
@@ -1534,6 +1577,7 @@ static BOOL mShowReport = false;
             // Switch view
             [self switchToDrugInteractionView];
             break;
+
         case 3:
 #ifdef DEBUG
             NSLog(@"TabBar - Prescription");
@@ -1548,10 +1592,18 @@ static BOOL mShowReport = false;
             [self stopActivityIndicator];
             [self switchToPrescriptionView];
             break;
+
         case 4:
             NSLog(@"TabBar - Developer Info");
             // TODO
             break;
+
+        case 6:
+#ifdef DEBUG
+            NSLog(@"TabBar - Full Text Search");
+#endif
+            break;
+
         default:
             break;
     }
@@ -1580,6 +1632,7 @@ static BOOL mShowReport = false;
     int minSearchChars = 0;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         minSearchChars = 0;
+
     if (mCurrentSearchState == kTherapy)
         minSearchChars = 1;
     
@@ -1603,23 +1656,32 @@ static BOOL mShowReport = false;
         while (inProgress) {
             [NSThread sleepForTimeInterval:0.01];   // Wait 10ms
         }
+
         if (!inProgress) {
             @synchronized(self) {
                 inProgress = true;
             }
             if ([searchText length] > minSearchChars) {
-                searchResults = [scopeSelf searchAipsDatabaseWith:searchText];
-            } else {
+                self->searchResults = [scopeSelf searchAipsDatabaseWith:searchText];
+            }
+            else {
                 if (mUsedDatabase == kFavorites) {
-                    searchResults = [weakSelf retrieveAllFavorites];
+                    self->searchResults = [weakSelf retrieveAllFavorites];
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (mUsedDatabase == kFavorites && [searchText length] <= minSearchChars)
-                    [searchField resignFirstResponder];
+                if (mUsedDatabase == kFavorites &&
+                    [searchText length] <= minSearchChars)
+                {
+                    [self->searchField resignFirstResponder];
+                }
+
                 [scopeSelf updateTableView];
-                [myTableView reloadData];
-                [myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[searchResults count], NSLocalizedString(@"Hit",nil), timeForSearch_ms]];
+                [self->myTableView reloadData];
+                [self->myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms",
+                                            (unsigned long)[self->searchResults count],
+                                            NSLocalizedString(@"Hit", nil),
+                                            self->timeForSearch_ms]];
                 @synchronized(self) {
                     inProgress = false;
                 }
@@ -1810,6 +1872,23 @@ static BOOL mShowReport = false;
     [medi addObject:m];
 }
 
+- (void) addKeyword: (NSString *)keyword
+         andNumHits: (unsigned long)numHits
+            andHash: (NSString *)hash
+{
+    DataObject *m = [[DataObject alloc] init];
+    
+    if (![keyword isEqual:[NSNull null]])
+        m.title = keyword;
+    else
+        m.title = NSLocalizedString(@"Not specified", nil);
+    
+    m.subTitle = [NSString stringWithFormat:@"%ld Treffer", numHits];  // TODO: localize
+    m.hashId = hash;
+    
+    [medi addObject:m];
+}
+
 - (void) updateTableView
 {
     if (searchResults) {
@@ -1936,6 +2015,17 @@ static BOOL mShowReport = false;
                 }
             }
         }
+        else if (mCurrentSearchState == kFullText) {
+            for (FullTextEntry *e in searchResults) {
+                if (mUsedDatabase == kAips || mUsedDatabase == kFavorites) {
+                    if (![e.hash isEqual:[NSNull null]]) {
+                        [favoriteKeyData addObject:e.hash];
+                        [self addKeyword:e.keyword andNumHits:e.numHits andHash:e.hash];
+                    }
+                }
+            }
+        }
+
         // Sort array alphabetically
         if (mUsedDatabase == kFavorites) {
             /*
@@ -1997,7 +2087,7 @@ static BOOL mShowReport = false;
     }
     titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
                                                            sectionIds:listofSectionIds
-                                                          andLanguage:[MLConstants appLanguage]];
+                                                          andLanguage:[MLConstants databaseLanguage]];
 
     mainRevealController.rightViewController = titleViewController;
 #endif
@@ -2211,7 +2301,8 @@ static BOOL mShowReport = false;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0];
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    }
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:13.0];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
     }
@@ -2358,7 +2449,7 @@ static BOOL mShowReport = false;
         }
         titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
                                                           sectionIds:listofSectionIds
-                                                         andLanguage:[MLConstants appLanguage]];
+                                                         andLanguage:[MLConstants databaseLanguage]];
     }
     else {
         if (mId > -1) {
@@ -2375,7 +2466,7 @@ static BOOL mShowReport = false;
             }
             titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
                                                                    sectionIds:listofSectionIds
-                                                                  andLanguage:[MLConstants appLanguage]];
+                                                                  andLanguage:[MLConstants databaseLanguage]];
         
             // Update medication basket
             secondViewController.dbAdapter = mDb;
@@ -2424,7 +2515,7 @@ static BOOL mShowReport = false;
     
     float frameWidth = self.myTableView.frame.size.width;
     
-    if ([MLConstants iosVersion]>=7.0f) {
+    {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)
                                           options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
@@ -2435,7 +2526,8 @@ static BOOL mShowReport = false;
                                              attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14.0]}
                                                 context:nil];
             retVal = textRect.size.height + subTextRect.size.height + PADDING_IPAD * 0.25;
-        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        }
+        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)
                                           options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
                                        attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0]}
@@ -2446,29 +2538,8 @@ static BOOL mShowReport = false;
                                                 context:nil];
             retVal = textRect.size.height + subTextRect.size.height + PADDING_IPHONE * 0.3;
         }
-    } else {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)
-                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0]}
-                                          context:nil];
-            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.2*PADDING_IPAD, CGFLOAT_MAX)
-                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                             attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0]}
-                                                context:nil];
-            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPAD * 0.25;
-        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPHONE, CGFLOAT_MAX)
-                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                       attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0]}
-                                          context:nil];
-            subTextRect = [subText boundingRectWithSize:CGSizeMake(frameWidth - 1.4*PADDING_IPHONE, CGFLOAT_MAX)
-                                                options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                             attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.0]}
-                                                context:nil];
-            retVal = textRect.size.height + subTextRect.size.height + PADDING_IPHONE * 0.4;
-        }
     }
+
     return retVal;
 }
 

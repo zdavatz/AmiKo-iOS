@@ -53,6 +53,7 @@
     if (modal) {
         if (!myProgressView)
             myProgressView = [[MLProgressViewController alloc] init];
+
         [myProgressView start];
     }
 
@@ -130,7 +131,7 @@
     if (mFile)
         [mFile closeFile];
 
-    if (mStatusCode==404) {
+    if (mStatusCode == 404) {
         // Notify status code 404 (file not found)
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MLStatusCode404" object:self];
         return;
@@ -146,30 +147,64 @@
 
 - (void) unzipDatabase
 {
-    if ([[mFileName pathExtension] isEqualToString:@"zip"])  {
-        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:mFileName];
-        
-        NSString *filePath;
-        if ([mFileName isEqualToString:@"amiko_db_full_idx_de.zip"] || [mFileName isEqualToString:@"amiko_db_full_idx_zr_de.zip"])
-            filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
-        if ([mFileName isEqualToString:@"amiko_db_full_idx_fr.zip"] || [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"])
-            filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
-        if ([mFileName isEqualToString:@"drug_interactions_csv_de.zip"])
-            filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_de" ofType:@"csv"];
-        if ([mFileName isEqualToString:@"drug_interactions_csv_fr.zip"])
-            filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_fr" ofType:@"csv"];
-        
-        if (filePath!=nil) {
-            // NSLog(@"Filepath = %@", filePath);
-            NSString *output = [documentsDirectory stringByAppendingPathComponent:@"."];
-            // NSLog(@"Output = %@", output);
-            BOOL unzipped = [SSZipArchive unzipFileAtPath:zipFilePath toDestination:output delegate:self];
-            // Unzip data success, post notification
-            if (unzipped == YES)
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"MLDidFinishLoading" object:self];
-        }
+    if (![[mFileName pathExtension] isEqualToString:@"zip"])
+        return;
+    
+#ifdef DEBUG
+    NSLog(@"%s %d, mFileName: %@", __FUNCTION__, __LINE__, mFileName);
+#endif
+
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:mFileName];
+
+#ifdef DEBUG
+    NSLog(@"%s %d, zipFilePath: %@", __FUNCTION__, __LINE__, zipFilePath);
+#endif
+
+    // Why are we checking if these files are already in the bundle ?
+
+    NSString *filePath;
+    if ([mFileName isEqualToString:@"amiko_db_full_idx_de.zip"] ||
+        [mFileName isEqualToString:@"amiko_db_full_idx_zr_de.zip"]) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
     }
+    else if ([mFileName isEqualToString:@"amiko_db_full_idx_fr.zip"] ||
+        [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"]) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
+    }
+
+    if ([mFileName isEqualToString:@"drug_interactions_csv_de.zip"]) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_de" ofType:@"csv"];
+    }
+    else if ([mFileName isEqualToString:@"drug_interactions_csv_fr.zip"]) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_fr" ofType:@"csv"];
+    }
+    
+    if ([mFileName isEqualToString:@"amiko_frequency_de.db.zip"]) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_de" ofType:@"db"];
+    }
+    else if ([mFileName isEqualToString:@"amiko_frequency_fr.db.zip"]) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_fr" ofType:@"db"];
+    }
+    
+#ifdef DEBUG
+    NSLog(@"%s %d, filePath: %@", __FUNCTION__, __LINE__, filePath);
+#endif
+    
+    if (filePath == nil) {
+#ifdef DEBUG
+        NSLog(@"%s %d, filePath was nil", __FUNCTION__, __LINE__);
+#endif
+        return;
+    }
+
+    // NSLog(@"Filepath = %@", filePath);
+    NSString *output = [documentsDirectory stringByAppendingPathComponent:@"."];
+    // NSLog(@"Output = %@", output);
+    BOOL unzipped = [SSZipArchive unzipFileAtPath:zipFilePath toDestination:output delegate:self];
+    // Unzip data success, post notification
+    if (unzipped)
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MLDidFinishLoading" object:self];
 }
 
 #pragma mark - SSZipArchiveDelegate

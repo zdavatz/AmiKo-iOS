@@ -162,7 +162,7 @@ static NSString *FULL_TABLE = nil;
 
 - (NSInteger) getNumInteractions
 {
-    if (myDrugInteractionMap!=nil)
+    if (myDrugInteractionMap)
         return [myDrugInteractionMap count];
     
     return 0;
@@ -183,12 +183,17 @@ static NSString *FULL_TABLE = nil;
 
     NSString *filePath = nil;
 
-    if ([APP_NAME isEqualToString:@"iAmiKo"] || [APP_NAME isEqualToString:@"AmiKoDesitin"])
+    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
+        [APP_NAME isEqualToString:@"AmiKoDesitin"]) {
         filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
-    else if ([APP_NAME isEqualToString:@"iCoMed"] || [APP_NAME isEqualToString:@"CoMedDesitin"])
+    }
+    else if ([APP_NAME isEqualToString:@"iCoMed"] ||
+             [APP_NAME isEqualToString:@"CoMedDesitin"]) {
         filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
-    else
+    }
+    else {
        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
+    }
 
     mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
 }
@@ -196,7 +201,7 @@ static NSString *FULL_TABLE = nil;
 // Drugs database
 - (BOOL) openDatabase: (NSString *)dbName
 {
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s %@", __FUNCTION__, dbName);
 
     // Check first users documents folder
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -205,6 +210,10 @@ static NSString *FULL_TABLE = nil;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDir = [paths lastObject];
     NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:@"db"];
+    
+#ifdef DEBUG
+    NSLog(@"%s %d  filePath: %@", __FUNCTION__, __LINE__, filePath);
+#endif
     
     // Check if database exists
     if (filePath!=nil) {
@@ -237,6 +246,18 @@ static NSString *FULL_TABLE = nil;
     NSInteger numRecords = [mySqliteDb numberRecordsForTable:DATABASE_TABLE];
     
     return numRecords;
+}
+
+- (NSInteger) getNumProducts
+{
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@", KEY_PACK_INFO, DATABASE_TABLE];
+    NSArray *results = [mySqliteDb performQuery:query];
+    NSInteger numProducts = 0;
+    for (NSArray *cursor in results)  {
+        numProducts += [[[cursor firstObject] componentsSeparatedByString:@"\n"] count];
+    }
+    
+    return numProducts;
 }
 
 - (NSArray *) getRecord: (long)rowId

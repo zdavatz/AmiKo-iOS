@@ -13,7 +13,7 @@
     #import <Foundation/Foundation.h>
 #endif
 
-#define IOS_NEWER_OR_EQUAL_TO_7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+//#define IOS_NEWER_OR_EQUAL_TO_7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 
 #define VERY_LIGHT_GRAY_COLOR ([UIColor colorWithWhite:0.9 alpha:1.0])
 #define DESITIN_TINT_COLOR ([UIColor colorWithRed:242/255.0 green:198/255.0 blue:59/255.0 alpha:1.0])

@@ -5,7 +5,7 @@ target 'AmiKoDesitin' do
   # use_frameworks!
 
   # Pods for AmiKoDesitin
-  pod 'TesseractOCRiOS', '4.0.0'
+  pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
 
 end
 
@@ -14,6 +14,6 @@ target 'CoMedDesitin' do
   # use_frameworks!
 
   # Pods for CoMedDesitin
-  pod 'TesseractOCRiOS', '4.0.0'
+  pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
 
 end

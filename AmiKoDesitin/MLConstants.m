@@ -96,10 +96,10 @@ static int HeightInPoints;
     HeightInPoints = [[UIScreen mainScreen] bounds].size.height;
 }
 
-+ (float) iosVersion
-{
-    return [[UIDevice currentDevice].systemVersion floatValue];
-}
+//+ (float) iosVersion
+//{
+//    return [[UIDevice currentDevice].systemVersion floatValue];
+//}
 
 + (int) displayWidthInPoints
 {
@@ -144,7 +144,7 @@ static int HeightInPoints;
     return nil;
 }
 
-+ (NSString *) appLanguage
++ (NSString *) databaseLanguage
 {
     if ([APP_NAME isEqualToString:@"iAmiKo"] ||
         [APP_NAME isEqualToString:@"AmiKoDesitin"])
@@ -155,6 +155,18 @@ static int HeightInPoints;
         return @"fr";
     
     return nil;
+}
+
++ (NSString *) databaseUpdateKey
+{
+    if ([[MLConstants databaseLanguage] isEqualToString:@"de"])  // AmiKoDesitin
+        return @"germanDBLastUpdate";
+
+    if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) // CoMedDesitin
+        return @"frenchDBLastUpdate";
+
+    NSLog(@"Invalid DB update key");
+    return @"noLanguageDBLastUpdate";
 }
 
 + (NSString *) notSpecified

@@ -75,7 +75,7 @@ extern const int RearViewRevealWidth_Landscape_iPhone_Retina;
 extern const int RearViewRevealOverdraw_Landscape_iPhone_Retina;
 
 @interface MLConstants : NSObject
-+ (float) iosVersion;
+//+ (float) iosVersion;
 + (void) start;
 + (int) displayWidthInPoints;
 + (int) displayHeightInPoints;
@@ -84,6 +84,7 @@ extern const int RearViewRevealOverdraw_Landscape_iPhone_Retina;
 + (int) rearViewRevealOverdrawPortrait;
 + (int) rearViewRevealOverdrawLandscape;
 + (NSString *) appOwner;
-+ (NSString *) appLanguage;
++ (NSString *) databaseLanguage;
++ (NSString *) databaseUpdateKey;
 + (NSString *) notSpecified;
 @end

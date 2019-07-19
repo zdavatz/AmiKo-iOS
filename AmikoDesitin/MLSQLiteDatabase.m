@@ -77,6 +77,36 @@
     //
 }
 
+- (id) initReadOnlyWithPath:(NSString *)path
+{
+    if (self = [super init]) {
+        // Setup database object
+        sqlite3 *dbConnection;
+        // Open database from users filesystem
+        NSFileManager *fileMgr = [[NSFileManager alloc] init];
+        
+        NSArray *content = [fileMgr contentsOfDirectoryAtPath:path error:nil];
+        for (NSString *p in content) {
+            NSLog(@"%@\n", p);
+        }
+        
+        int rc;
+        rc = sqlite3_open_v2([path UTF8String], &dbConnection, SQLITE_OPEN_READONLY, NULL);
+        if (rc != SQLITE_OK) {
+            NSLog(@"%s Unable to open database!", __FUNCTION__);
+            return nil;
+        }
+        database = dbConnection;
+        // Force using disk for temp storage to reduce memory footprint
+        rc = sqlite3_exec(database, "PRAGMA temp_store=1", nil, nil, nil);
+        if (rc != SQLITE_OK)
+            NSLog(@"%s:%i, rc %d", __FUNCTION__, __LINE__, rc);
+    }
+    
+    return self;
+}
+
+// Read-write
 - (id) initWithPath: (NSString *)path
 {
     if (self = [super init]) {

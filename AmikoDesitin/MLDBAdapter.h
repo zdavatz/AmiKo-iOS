@@ -36,6 +36,7 @@
 - (BOOL) openDatabase: (NSString *)dbName;
 - (void) closeDatabase;
 - (NSInteger) getNumRecords;
+- (NSInteger) getNumProducts;
 - (MLMedication *) searchId: (long)rowId;
 - (NSArray *) getRecord: (long)rowId;
 

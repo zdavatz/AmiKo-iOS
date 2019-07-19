@@ -202,11 +202,9 @@
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         }
 
-        if ([MLConstants iosVersion]>=7.0f) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-            searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.translucent = YES;
-        }
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        searchField.barTintColor = [UIColor lightGrayColor];
+        searchField.translucent = YES;
     } // iPad
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -229,9 +227,9 @@
             self.navigationItem.titleView = searchBarView;
             //
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
-            // Hides status bar
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                    withAnimation:UIStatusBarAnimationSlide];
         }
         else {
             // Add search bar as title view to navigation bar
@@ -253,12 +251,10 @@
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
         }
 
-        if ([MLConstants iosVersion]>=7.0f) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-            searchField.barTintColor = [UIColor clearColor];//[UIColor colorWithWhite:0.9 alpha:0.0];
-            searchField.backgroundImage = [UIImage new];
-            searchField.translucent = YES;
-        }
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        searchField.barTintColor = [UIColor clearColor]; //[UIColor colorWithWhite:0.9 alpha:0.0];
+        searchField.backgroundImage = [UIImage new];
+        searchField.translucent = YES;
     } // iPhone
     
     mCurrentSearch = @"";
@@ -312,11 +308,9 @@
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
-    if ([MLConstants iosVersion]>=7.0f) {
-        self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
-        self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
-        self.navigationController.navigationBar.translucent = NO;
-    }
+    self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
+    self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+    self.navigationController.navigationBar.translucent = NO;
     
     UIBarButtonItem *revealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
@@ -338,27 +332,21 @@
     // [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if ([MLConstants iosVersion]>=7.0f) {
-            searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.translucent = YES;
-        }
+        searchField.barTintColor = [UIColor lightGrayColor];
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.translucent = YES;
     }
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         // Add search bar as title view to navigation bar
-        if ([MLConstants iosVersion]>=7.0f) {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = [UIColor clearColor];
-            searchField.backgroundImage = [UIImage new];
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = YES;
-        } else {
-            searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(-5.0, 0.0, 320.0, 44.0)];
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        }
+        searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
+        searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        searchField.barStyle = UIBarStyleDefault;
+        searchField.barTintColor = [UIColor clearColor];
+        searchField.backgroundImage = [UIImage new];
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+        searchField.translucent = YES;
         searchField.delegate = self;
         
         UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
@@ -405,12 +393,11 @@
         else
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         
-        if ([MLConstants iosVersion]>=7.0f) {
-            searchField.barTintColor = [UIColor lightGrayColor];
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.translucent = YES;
-        }
+        searchField.barTintColor = [UIColor lightGrayColor];
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.translucent = YES;
     }
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -433,9 +420,9 @@
             //            
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
-            // Hides status bar
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                    withAnimation:UIStatusBarAnimationSlide];
         }
         else {
             // Add search bar as title view to navigation bar
@@ -455,20 +442,20 @@
             self.navigationItem.titleView = searchBarView;
             //
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
+
             // Shows status bar
-            if ([MLConstants iosVersion]>=7.0f)
-                [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+            [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                    withAnimation:UIStatusBarAnimationSlide];
         }
-        if ([MLConstants iosVersion]>=7.0f) {
-            // Sets colors in toolbar and searchfield - modify with care!
-            searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            searchField.barStyle = UIBarStyleDefault;
-            searchField.barTintColor = [UIColor clearColor];
-            searchField.backgroundImage = [UIImage new];
-            searchField.backgroundColor = [UIColor clearColor];
-            searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-            searchField.translucent = YES;
-        }
+
+        // Sets colors in toolbar and searchfield - modify with care!
+        searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        searchField.barStyle = UIBarStyleDefault;
+        searchField.barTintColor = [UIColor clearColor];
+        searchField.backgroundImage = [UIImage new];
+        searchField.backgroundColor = [UIColor clearColor];
+        searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+        searchField.translucent = YES;
     }
 
     [self resetSearchField];
@@ -531,7 +518,8 @@
         // It's important to use the presenting root view controller...
         UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [presentingController presentViewController:mailer animated:YES completion:nil];
-    } else {
+    }
+    else {
         MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Failure"
                                                         message:@"Your device is not configured to send emails."
                                                          button:@"OK"];
@@ -722,9 +710,10 @@
             }
         }
         if ([sectionTitles count]<2) {
-            if ([[MLConstants appLanguage] isEqualToString:@"de"])
+            // TODO: proper localization, not based on the database language
+            if ([[MLConstants databaseLanguage] isEqualToString:@"de"])
                 [interactionStr appendString:@"<p class=\"paragraph0\">Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten in der EPha.ch-Datenbank vorhanden. Weitere Informationen finden Sie in der Fachinformation.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Interaktion melden\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
-            else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+            else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"])
                 [interactionStr appendString:@"<p class=\"paragraph0\">Il n’y a aucune information dans la banque de données EPha.ch à propos d’une interaction entre les médicaments sélectionnés. Veuillez consulter les informations professionelles.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Signaler une interaction\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
         }
         else if ([sectionTitles count]>2) {
@@ -733,10 +722,11 @@
     }
     
     if ([medBasket count]>0) {
+        // TODO: proper localization, not based on the database language
         [sectionIds addObject:@"Farblegende"];
-        if ([[MLConstants appLanguage] isEqualToString:@"de"])
+        if ([[MLConstants databaseLanguage] isEqualToString:@"de"])
             [sectionTitles addObject:@"Farblegende"];
-        else if ([[MLConstants appLanguage] isEqualToString:@"fr"])
+        else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"])
             [sectionTitles addObject:@"Légende des couleurs"];
     }
     
@@ -761,7 +751,8 @@
      0: Keine Angaben (grau)
      */
     if ([medBasket count]>0) {
-        if ([[MLConstants appLanguage] isEqualToString:@"de"]) {
+        // TODO: proper localization, not based on the database language
+        if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
             NSString *legend = {
                 @"<fieldset><legend>Fussnoten</legend></fieldset>"
                 @"<p class=\"footnote\">1. Farblegende: </p>"
@@ -776,7 +767,8 @@
                 @"<p class=\"footnote\">3. Unterstützt durch:  IBSA Institut Biochimique SA.</p>"
             };
             return legend;
-        } else if ([[MLConstants appLanguage] isEqualToString:@"fr"]) {
+        }
+        else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
             NSString *legend = {
                 @"<fieldset><legend>Notes</legend></fieldset>"
                 @"<p class=\"footnote\">1. Légende des couleurs: </p>"

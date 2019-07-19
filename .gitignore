@@ -3,11 +3,15 @@
 __MACOSX/
 *.xcscheme
 xcuserdata
+AmiKoDesitin/amiko_frequency_de.db
+AmiKoDesitin/amiko_frequency_fr.db
 AmiKoDesitin/amiko_db_full_idx_de.db
 AmiKoDesitin/amiko_db_full_idx_fr.db
 AmiKoDesitin/amiko_db_full_idx_de.zip
 AmiKoDesitin/drug_interactions_csv_de.zip
 AmiKoDesitin/amiko_db_full_idx_fr.zip
+AmiKoDesitin/amiko_frequency_de.db.zip
+AmiKoDesitin/amiko_frequency_fr.db.zip
 DerivedData/
 build/
 build_comed.sh
