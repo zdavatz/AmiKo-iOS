@@ -4,7 +4,7 @@
  
  Created on 14/02/2014.
  
- This file is part of AMiKoDesitin.
+ This file is part of AmiKoDesitin.
  
  AmiKoDesitin is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

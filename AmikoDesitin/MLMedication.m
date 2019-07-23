@@ -4,7 +4,7 @@
  
  Created on 11/08/2013.
  
- This file is part of AMiKoDesitin.
+ This file is part of AmiKoDesitin.
  
  AmiKoDesitin is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -57,6 +57,9 @@ static NSString* SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 
 - (NSArray *) listOfSectionIds
 {
+#ifdef DEBUG
+    //NSLog(@"%s %d, sectionIds %@", __FUNCTION__, __LINE__, sectionIds);
+#endif
     return [sectionIds componentsSeparatedByString:@","];
 }
 

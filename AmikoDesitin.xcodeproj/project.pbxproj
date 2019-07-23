@@ -325,6 +325,12 @@
 		FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
 		FA7D750520E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
 		FA7D750620E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
+		FA98749B22E6F7AC008B778F /* FullTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA98749922E6F7AC008B778F /* FullTextViewController.m */; };
+		FA98749C22E6F7AC008B778F /* FullTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA98749922E6F7AC008B778F /* FullTextViewController.m */; };
+		FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA98749A22E6F7AC008B778F /* FullTextViewController.xib */; };
+		FA98749E22E6F7AC008B778F /* FullTextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA98749A22E6F7AC008B778F /* FullTextViewController.xib */; };
+		FA9874A022E6FC53008B778F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA98749F22E6FC53008B778F /* WebKit.framework */; };
+		FA9874A122E6FC68008B778F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA98749F22E6FC53008B778F /* WebKit.framework */; };
 		FAD0664A22DF29DC0078E28B /* FullTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664922DF29DC0078E28B /* FullTextEntry.m */; };
 		FAD0664D22DF2A080078E28B /* FullTextSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664C22DF2A080078E28B /* FullTextSearch.m */; };
 		FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664C22DF2A080078E28B /* FullTextSearch.m */; };
@@ -570,6 +576,10 @@
 		FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Cropping.m"; path = "AmiKoDesitin/UIImage+Cropping.m"; sourceTree = SOURCE_ROOT; };
 		FA7D750020E3EEFB005E49FE /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraViewController.h; path = AmiKoDesitin/CameraViewController.h; sourceTree = SOURCE_ROOT; };
 		FA7D750220E3EEFB005E49FE /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CameraViewController.m; path = AmiKoDesitin/CameraViewController.m; sourceTree = SOURCE_ROOT; };
+		FA98749822E6F7AC008B778F /* FullTextViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextViewController.h; path = AmiKoDesitin/FullTextViewController.h; sourceTree = SOURCE_ROOT; };
+		FA98749922E6F7AC008B778F /* FullTextViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextViewController.m; path = AmiKoDesitin/FullTextViewController.m; sourceTree = SOURCE_ROOT; };
+		FA98749A22E6F7AC008B778F /* FullTextViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FullTextViewController.xib; path = AmiKoDesitin/FullTextViewController.xib; sourceTree = SOURCE_ROOT; };
+		FA98749F22E6FC53008B778F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		FAD0664822DF29DC0078E28B /* FullTextEntry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextEntry.h; path = AmiKoDesitin/FullTextEntry.h; sourceTree = SOURCE_ROOT; };
 		FAD0664922DF29DC0078E28B /* FullTextEntry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextEntry.m; path = AmiKoDesitin/FullTextEntry.m; sourceTree = SOURCE_ROOT; };
 		FAD0664B22DF2A080078E28B /* FullTextSearch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextSearch.h; path = AmiKoDesitin/FullTextSearch.h; sourceTree = SOURCE_ROOT; };
@@ -584,6 +594,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA9874A022E6FC53008B778F /* WebKit.framework in Frameworks */,
 				FA6A006120D3B26F002D3A33 /* Vision.framework in Frameworks */,
 				435D2E32202DA1B6001A829C /* Contacts.framework in Frameworks */,
 				D59E895618B7C0C100185094 /* MessageUI.framework in Frameworks */,
@@ -601,6 +612,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA9874A122E6FC68008B778F /* WebKit.framework in Frameworks */,
 				FA6A006220D3B27D002D3A33 /* Vision.framework in Frameworks */,
 				FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */,
 				D59E895918B7C0E100185094 /* libz.1.2.5.dylib in Frameworks */,
@@ -685,6 +697,7 @@
 		4387FC3C20188ECE000A5A0F /* main */ = {
 			isa = PBXGroup;
 			children = (
+				FABC077A22E5F0C300B21A36 /* New Group */,
 				430285C120161232003B2EF3 /* right */,
 				430285C22016124A003B2EF3 /* front */,
 				43A385082032CAB8001A5849 /* rear */,
@@ -779,6 +792,7 @@
 		43A3850A2032CB3C001A5849 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				FABC077B22E5F0D400B21A36 /* full text */,
 				FA662946204D532D0000904A /* doctor */,
 				D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */,
 				D5A6F26817B16A5900EAB24B /* SWRevealViewController.h */,
@@ -894,6 +908,7 @@
 		D5A6F23917B1692F00EAB24B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA98749F22E6FC53008B778F /* WebKit.framework */,
 				FA528CF120D8F1590066CE89 /* tessdata */,
 				FA6A006020D3B26F002D3A33 /* Vision.framework */,
 				435D2E31202DA1B6001A829C /* Contacts.framework */,
@@ -1148,6 +1163,31 @@
 			name = camera;
 			sourceTree = "<group>";
 		};
+		FABC077A22E5F0C300B21A36 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
+		FABC077B22E5F0D400B21A36 /* full text */ = {
+			isa = PBXGroup;
+			children = (
+				FABC077C22E5F10400B21A36 /* front */,
+			);
+			name = "full text";
+			sourceTree = "<group>";
+		};
+		FABC077C22E5F10400B21A36 /* front */ = {
+			isa = PBXGroup;
+			children = (
+				FA98749822E6F7AC008B778F /* FullTextViewController.h */,
+				FA98749922E6F7AC008B778F /* FullTextViewController.m */,
+				FA98749A22E6F7AC008B778F /* FullTextViewController.xib */,
+			);
+			name = front;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1297,6 +1337,7 @@
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
+				FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */,
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
@@ -1409,6 +1450,7 @@
 				D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
 				FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */,
+				FA98749E22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5A175651A9BC27400E69385 /* favorites.png in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
@@ -1541,6 +1583,7 @@
 				D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */,
 				43A3851320333147001A5849 /* BaseListViewController.m in Sources */,
 				D5A31F7118B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
+				FA98749B22E6F7AC008B778F /* FullTextViewController.m in Sources */,
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
 				FA6A005E20D3B184002D3A33 /* PreviewView.m in Sources */,
@@ -1595,6 +1638,7 @@
 				D5A31F5D18B5207200F56BC5 /* zip.c in Sources */,
 				930D94B92077E62C007E4629 /* PrescriptionViewController.m in Sources */,
 				D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */,
+				FA98749C22E6F7AC008B778F /* FullTextViewController.m in Sources */,
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */,
 				FA6A005F20D3B184002D3A33 /* PreviewView.m in Sources */,

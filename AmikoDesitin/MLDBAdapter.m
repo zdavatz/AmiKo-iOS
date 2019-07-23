@@ -4,7 +4,7 @@
  
  Created on 11/08/2013.
  
- This file is part of AMiKoDesitin.
+ This file is part of AmiKoDesitin.
  
  AmiKoDesitin is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@
 #import "MLSQLiteDatabase.h"
 #import "MLConstants.h"
 
-enum {
+// Used for 'objectAtIndex:'
+typedef NS_ENUM(NSInteger, ObjectIdx) {
     kMedId = 0, kTitle, kAuth, kAtcCode, kSubstances, kRegnrs, kAtcClass, kTherapy, kApplication, kIndications, kCustomerId, kPackInfo, kPackages, kAddInfo, kIdsStr, kSectionsStr, kContentStr, kStyleStr
 };
 

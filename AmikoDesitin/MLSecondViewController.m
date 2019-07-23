@@ -4,7 +4,7 @@
  
  Created on 11/08/2013.
  
- This file is part of AMiKoDesitin.
+ This file is part of AmiKoDesitin.
  
  AmiKoDesitin is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -262,7 +262,7 @@
     [self resetSearchField];
     
     // Update webview which is either "Fachinfo" or "medication basket"
-    if (self.htmlStr!=nil)
+    if (self.htmlStr)
         [self updateWebView];
     
     // Create objc - js bridge
@@ -532,6 +532,9 @@
  */
 - (void) updateInteractionBasketView
 {
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
     // TODO --> OPTIMIZE!! Pre-load the following files!
     
     // Load style sheet from file
@@ -561,21 +564,47 @@
  */
 - (void) updateWebView
 {
-    // NSLog(@"%s", __PRETTY_FUNCTION__);
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
     
     if ([self.htmlStr isEqualToString:@"Interactions"])
         [self updateInteractionBasketView];
 
     NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
     // Loads html directly into webview
-    [self.webView loadHTMLString:self.htmlStr baseURL:mainBundleURL];
+    [self.webView loadHTMLString:self.htmlStr
+                         baseURL:mainBundleURL];
     /*
      [self.webView stopLoading];
      [self.webView reload];
      */
 }
 
-#pragma mark medication basket methods
+#if 0
+- (void) updateFullTextSearchView:(NSString *)contentStr
+{
+    NSString *colorCss; // TODO: = [MLUtility getColorCss];
+
+    // TODO: Load style sheet from file
+    NSString *fullTextCss;
+    
+    // TODO: Load javascript from file
+    NSString *jscriptStr;
+    
+    NSString *htmlStr = [NSString stringWithFormat:@"<html><head><meta charset=\"utf-8\" /><meta name=\"supported-color-schemes\" content=\"light dark\" />"];
+    htmlStr = [htmlStr stringByAppendingFormat:@"<script type=\"text/javascript\">%@</script><style type=\"text/css\">%@</style><style type=\"text/css\">%@</style></head><body><div id=\"fulltext\">%@</body></div></html>",
+               jscriptStr,
+               colorCss,
+               fullTextCss,
+               contentStr];
+    
+    [self.webView loadHTMLString:htmlStr
+                         baseURL:[[NSBundle mainBundle] resourceURL]];
+}
+#endif
+
+#pragma mark - medication basket methods
 
 /** 
  Creates interaction basket html string
@@ -819,38 +848,40 @@
 
 - (void) showFindPanel:(BOOL)visible
 {
-    if (visible!=mIsFindPanelVisible) {
-        
-        mIsFindPanelVisible = visible;
-        
-        CGRect newFrame = self.findPanel.frame;
-        
-        if (visible) {
-            // newFrame.origin.x = x - 200;
-            newFrame.origin.y = mFramePosA;
-        } else {
-            // newFrame.origin.x = x + 200;
-            newFrame.origin.y = mFramePosB;
+    if (visible == mIsFindPanelVisible)
+        return;
+
+    mIsFindPanelVisible = visible;
+    
+    CGRect newFrame = self.findPanel.frame;
+    
+    if (visible) {
+        // newFrame.origin.x = x - 200;
+        newFrame.origin.y = mFramePosA;
+    }
+    else {
+        // newFrame.origin.x = x + 200;
+        newFrame.origin.y = mFramePosB;
+    }
+    
+    [UIView animateWithDuration:0.5f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.findPanel.frame = newFrame;
+    } completion:^(BOOL finished){
+        if (visible==NO) {
+            [self.findPanel setHidden:YES];
         }
-        
-        [UIView animateWithDuration:0.5f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.findPanel.frame = newFrame;
-        } completion:^(BOOL finished){
-            if (visible==NO) {
-                [self.findPanel setHidden:YES];
-            }
-        }];
-        
-        if (visible==YES) {
-            [self.findPanel setHidden:NO];
-            [self.findCounter setHidden:NO];
-        } else {
-            [self.findCounter setHidden:YES];
-        }
+    }];
+    
+    if (visible==YES) {
+        [self.findPanel setHidden:NO];
+        [self.findCounter setHidden:NO];
+    }
+    else {
+        [self.findCounter setHidden:YES];
     }
 }
 
-#pragma mark UIWebViewDelegate methods
+#pragma mark - UIWebViewDelegate methods
 
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {

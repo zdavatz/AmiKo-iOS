@@ -4,7 +4,7 @@
  
  Created on 11/08/2013.
  
- This file is part of AMiKoDesitin.
+ This file is part of AmiKoDesitin.
  
  AmiKoDesitin is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -48,8 +48,8 @@ enum {
     IBOutlet UILabel *myLabel;
     IBOutlet UIButton *myButton;
     IBOutlet UITableView *myTableView;
-    IBOutlet UITabBar *myTabBar;
-    IBOutlet UIToolbar *myToolBar;
+    IBOutlet UITabBar *myTabBar;    // bottom of the screen
+    IBOutlet UIToolbar *myToolBar;  // top of the screen
 }
 
 @property (nonatomic, retain) IBOutlet UISearchBar *searchField;
@@ -73,6 +73,7 @@ enum {
 - (void) switchFrontToPatientEditView;
 - (void) switchToPatientEditView :(BOOL)animated;
 - (void) switchToDoctorEditView;
+- (void) switchToFullTextView :(NSString *)hashId;
 - (void) showReport:(id)sender;
 - (void) switchToDrugInteractionViewFromPrescription: (NSMutableDictionary *)medBasket;
 - (void) switchToDrugInteractionView;

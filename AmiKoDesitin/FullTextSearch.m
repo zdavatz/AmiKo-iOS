@@ -22,6 +22,10 @@
               andRegChaptersDict:(NSDictionary *)dict
                        andFilter:(NSString *)filter
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+
     int rows = 0;
     NSMutableDictionary *chaptersCountDict = [[NSMutableDictionary alloc] init];
     NSString *htmlStr = @"<ul>";
@@ -34,7 +38,11 @@
         mListOfArticles = [mListOfArticles sortedArrayUsingDescriptors:@[sort]];
     }
 
-    if (dict!=nil)
+#ifdef DEBUG
+    NSLog(@"%s %d, mListOfArticles count: %lu", __FUNCTION__, __LINE__, (unsigned long)[mListOfArticles count]);
+#endif
+
+    if (dict)
         mDict = dict;
     
     // Loop through all articles
@@ -52,8 +60,9 @@
         NSString *contentChapters = @"";
         NSArray *regnrs = [m.regnrs componentsSeparatedByString:@","];
         NSDictionary *indexToTitlesDict = [m indexToTitlesDict];    // id -> chapter title
+
         // List of chapters
-        if ([regnrs count]>0) {
+        if ([regnrs count] > 0) {
             NSString *r = [regnrs objectAtIndex:0];
             if ([mDict objectForKey:r]) {
                 NSSet *chapters = mDict[r];
@@ -71,6 +80,7 @@
                         int count = 0;
                         if ([chaptersCountDict objectForKey:cStr])
                             count = [chaptersCountDict[cStr] intValue];
+
                         chaptersCountDict[cStr] = [NSNumber numberWithInt:count+1];
                         if ([filter length]==0 || [filter isEqualToString:cStr]) {
                             contentChapters = [contentChapters stringByAppendingFormat:@"<span style=\"font-size:0.75em; color:#0088BB\"> <a onclick=\"displayFachinfo('%@','%@')\">%@</a></span><br>", m.regnrs, anchor, cStr];
@@ -80,6 +90,7 @@
                 }
             }
         }
+
         if (!filtered) {
             htmlStr = [htmlStr stringByAppendingFormat:@"%@%@%@</li>", contentStyle, contentTitle, contentChapters];
             rows++;
@@ -94,8 +105,10 @@
         [listOfIds addObject:cStr];
         [listOfTitles addObject:[NSString stringWithFormat:@"%@ (%@)", cStr, chaptersCountDict[cStr]]];
     }
+
     // Update section ids (anchors)
     listOfSectionIds = [NSArray arrayWithArray:listOfIds];
+
     // Update section titles
     listOfSectionTitles = [NSArray arrayWithArray:listOfTitles];
     

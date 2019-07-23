@@ -4,7 +4,7 @@
  
  Created on 11/08/2013.
  
- This file is part of AMiKoDesitin.
+ This file is part of AmiKoDesitin.
  
  AmiKoDesitin is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@
 #import "MLSecondViewController.h"
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
+
+#import "FullTextViewController.h"
 
 #import "PrescriptionViewController.h"
 #import "AmkListViewController.h"
@@ -62,21 +64,36 @@
 // Fix issue #61
 #define TWO_ITEMS_ON_LEFT_NAV_BAR
 
-enum {
-    kAips=0, kHospital=1, kFavorites=2, kInteractions=3, kPrescription, kNone=100
+typedef NS_ENUM(NSInteger, DatabaseTypes) {
+    DB_TYPE_AIPS=0,
+    DB_TYPE_HOSPITAL=1,        // unused ?
+    DB_TYPE_FAVORITES=2,
+    DB_TYPE_INTERACTIONS=3,    // unused ?
+    DB_TYPE_PRESCRIPTION,
+    DB_TYPE_FULL_TEXT,
+    DB_TYPE_NONE=100
 };
 
-enum {
-    kTitle=0,
-    kAuthor=2,
-    kAtcCode=4,
-    kRegNr=6,
-    kTherapy=8,
-    kFullText=10
+// They are also used in objectAtIndex
+// for iPad they get divided by 2 in setBarButtonItemsWith !
+typedef NS_ENUM(NSInteger, SearchStates) {
+    SEARCH_TITLE=0,
+    SEARCH_AUTHOR=2,
+    SEARCH_ATC_CODE=4,
+    SEARCH_REG_NR=6,
+    SEARCH_THERAPY=8,
+    SEARCH_FULL_TEXT=10
 };
 
-static NSInteger mUsedDatabase = kNone;
-static NSInteger mCurrentSearchState = kTitle;
+//typedef NS_ENUM(NSInteger, WebviewModes) {
+//    kExpertInfoView=0,
+//    kFullTextSearchView=1,
+//    kInteractionsCartView=2
+//};
+
+static DatabaseTypes mUsedDatabase = DB_TYPE_NONE;
+static SearchStates mCurrentSearchState = SEARCH_TITLE;
+//static WebviewModes mCurrentWebView = kExpertInfoView;
 
 static CGFloat searchFieldWidth = 320.0f;
 
@@ -140,6 +157,7 @@ static BOOL mShowReport = false;
     SWRevealViewController *mainRevealController;
     
     MLSecondViewController *secondViewController;
+    FullTextViewController *fullTextVC;
 
     MLTitleViewController *titleViewController;
     MLMenuViewController *menuViewController;
@@ -186,8 +204,9 @@ static BOOL mShowReport = false;
     NSLog(@"%s %d Button tag: %ld, title: %@", __FUNCTION__, __LINE__, (long)[sender tag], [sender title]);
 #endif
     UIBarButtonItem *btn = (UIBarButtonItem *)sender;
-
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    mUsedDatabase = DB_TYPE_AIPS;  // default for all, except full text
+    searchResults = [NSArray array];
     
     if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ||
         (orientation == UIInterfaceOrientationLandscapeLeft) ||
@@ -200,7 +219,7 @@ static BOOL mShowReport = false;
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Preparation", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Preparation", "Full toolbar")];
-            mCurrentSearchState = kTitle;
+            mCurrentSearchState = SEARCH_TITLE;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Owner", "Full toolbar")]) {
             [myTextField setText:NSLocalizedString(@"Owner", "Full toolbar")];
@@ -208,7 +227,7 @@ static BOOL mShowReport = false;
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Owner", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Owner", "Full toolbar")];
-            mCurrentSearchState = kAuthor;
+            mCurrentSearchState = SEARCH_AUTHOR;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"ATC Code", "Full toolbar")]) {
             [myTextField setText:NSLocalizedString(@"ATC Code", "Full toolbar")];
@@ -216,7 +235,7 @@ static BOOL mShowReport = false;
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"ATC Code", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            mCurrentSearchState = kAtcCode;
+            mCurrentSearchState = SEARCH_ATC_CODE;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Reg. No", "Full toolbar")]) {
             [myTextField setText:NSLocalizedString(@"Reg. No", "Full toolbar")];
@@ -224,7 +243,7 @@ static BOOL mShowReport = false;
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Reg. No", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
-            mCurrentSearchState = kRegNr;
+            mCurrentSearchState = SEARCH_REG_NR;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Therapy", "Full toolbar")]) {
             [myTextField setText:NSLocalizedString(@"Therapy", "Full toolbar")];
@@ -232,13 +251,15 @@ static BOOL mShowReport = false;
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Therapy", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
-            mCurrentSearchState = kTherapy;
+            mCurrentSearchState = SEARCH_THERAPY;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Full Text", "Full toolbar")]) {
             [myTextField setText:NSLocalizedString(@"Full Text", "Full toolbar")];
             [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
             [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
-            mCurrentSearchState = kFullText;
+            mCurrentSearchState = SEARCH_FULL_TEXT;
+            mUsedDatabase = DB_TYPE_FULL_TEXT;
+            //searchResults = [NSArray array];
         }
     }
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -249,42 +270,49 @@ static BOOL mShowReport = false;
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Preparation", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Preparation", "Full toolbar")];
-            mCurrentSearchState = kTitle;
+            mCurrentSearchState = SEARCH_TITLE;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Own", "Short toolbar")]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Owner", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Owner", "Full toolbar")];
-            mCurrentSearchState = kAuthor;
+            mCurrentSearchState = SEARCH_AUTHOR;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"ATC", "Short toolbar")]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"ATC Code", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            mCurrentSearchState = kAtcCode;
+            mCurrentSearchState = SEARCH_ATC_CODE;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Reg", "Short toolbar")]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Reg. No", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
-            mCurrentSearchState = kRegNr;
+            mCurrentSearchState = SEARCH_REG_NR;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"Ther", "Short toolbar")]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Therapy", "Full toolbar")]];
             [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
-            mCurrentSearchState = kTherapy;
+            mCurrentSearchState = SEARCH_THERAPY;
         }
         else if ([btn.title isEqualToString:NSLocalizedString(@"FTS", "Short toolbar")]) {
             [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
             [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
-            mCurrentSearchState = kFullText;
+            mCurrentSearchState = SEARCH_FULL_TEXT;
+            mUsedDatabase = DB_TYPE_FULL_TEXT;
+            
         }
     }
+    
+#ifdef DEBUG
+    NSLog(@"%s %d, mUsedDatabase: %ld, mCurrentSearchState: %ld", __FUNCTION__, __LINE__,
+          (long)mUsedDatabase, mCurrentSearchState);
+#endif
 
     for (UIBarButtonItem *b in [myToolBar items]) {
         if (b==btn)
@@ -358,9 +386,10 @@ static BOOL mShowReport = false;
                                                  name:@"PatientSelectedNotification"
                                                object:nil];
     // Set default database
-    mUsedDatabase = kAips;
+    mUsedDatabase = DB_TYPE_AIPS;
+
     // Set current search state
-    mCurrentSearchState = kTitle;
+    mCurrentSearchState = SEARCH_TITLE;
     
     return self;
 }
@@ -387,7 +416,7 @@ static BOOL mShowReport = false;
     switch (state) {
         case eAips:
             goBackToMainView = true;
-            mUsedDatabase = kAips;
+            mUsedDatabase = DB_TYPE_AIPS;
             mSearchInteractions = false;
             mCurrentIndexPath = nil;
             // Reset searchfield
@@ -400,8 +429,8 @@ static BOOL mShowReport = false;
             
         case eFavorites:
             goBackToMainView = true;
-            mUsedDatabase = kFavorites;
-            mCurrentSearchState = kTitle;
+            mUsedDatabase = DB_TYPE_FAVORITES;
+            mCurrentSearchState = SEARCH_TITLE;
             mSearchInteractions = false;
             // The following programmatical call takes care of everything...
             [self switchTabBarItem:[myTabBar.items objectAtIndex:1]];
@@ -411,8 +440,8 @@ static BOOL mShowReport = false;
             
         case eInteractions:
             goBackToMainView = true;
-            mUsedDatabase = kAips;
-            mCurrentSearchState = kTitle;
+            mUsedDatabase = DB_TYPE_AIPS;
+            mCurrentSearchState = SEARCH_TITLE;
             mSearchInteractions = true;
             // Reset searchfield
             [self resetBarButtonItems];
@@ -422,8 +451,8 @@ static BOOL mShowReport = false;
             
         case eDesitin:
             goBackToMainView = true;
-            mUsedDatabase = kAips;
-            mCurrentSearchState = kAuthor;
+            mUsedDatabase = DB_TYPE_AIPS;
+            mCurrentSearchState = SEARCH_AUTHOR;
             mSearchInteractions = false;
             [self executeSearch:@"desitin"];
             //
@@ -684,16 +713,16 @@ static BOOL mShowReport = false;
     searchResults = [NSArray array];
     [medi removeAllObjects];
     [self.myTableView reloadData];
-    mCurrentSearchState = kTitle;
+    mCurrentSearchState = SEARCH_TITLE;
     [self setBarButtonItemsWith:mCurrentSearchState];
 }
 
 - (void) resetDataInTableView
 {
     // Reset search state
-    mCurrentSearchState = kTitle;
+    mCurrentSearchState = SEARCH_TITLE;
     
-    searchResults = [self searchAipsDatabaseWith:@""];
+    searchResults = [self searchDatabaseWith:@""];
     if (searchResults) {
         [self updateTableView];
         [self.myTableView reloadData];
@@ -709,16 +738,17 @@ static BOOL mShowReport = false;
     for (UIBarButtonItem *b in [myToolBar items])
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
 
-    [[[myToolBar items] objectAtIndex:kTitle] setTintColor:MAIN_TINT_COLOR];
+    // Highlight first button in toolbar at the top of the screen
+    [[[myToolBar items] objectAtIndex:SEARCH_TITLE] setTintColor:MAIN_TINT_COLOR];
 
     [searchField setText:@""];
     [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                  NSLocalizedString(@"Search",nil),
                                  NSLocalizedString(@"Preparation", "Full toolbar")]];
-    mCurrentSearchState = kTitle;
+    mCurrentSearchState = SEARCH_TITLE;
 }
 
-- (void) setBarButtonItemsWith:(NSInteger)searchState
+- (void) setBarButtonItemsWith:(SearchStates)searchState
 {
     for (UIBarButtonItem *b in [myToolBar items])
         [b setTintColor:[UIColor lightGrayColor]];   // Default color
@@ -731,37 +761,37 @@ static BOOL mShowReport = false;
     [searchField setText:@""];
     switch (searchState)
     {
-        case kTitle:
+        case SEARCH_TITLE:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Preparation", "Full toolbar")]];
             break;
 
-        case kAuthor:
+        case SEARCH_AUTHOR:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Owner", "Full toolbar")]];
             break;
 
-        case kAtcCode:
+        case SEARCH_ATC_CODE:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"ATC Code", "Full toolbar")]];
             break;
 
-        case kRegNr:
+        case SEARCH_REG_NR:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Reg. No", "Full toolbar")]];
             break;
 
-        case kTherapy:
+        case SEARCH_THERAPY:
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
                                          NSLocalizedString(@"Search",nil),
                                          NSLocalizedString(@"Therapy", "Full toolbar")]];
             break;
 
-        case kFullText:
+        case SEARCH_FULL_TEXT:
             [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
             break;
     }
@@ -1027,13 +1057,13 @@ static BOOL mShowReport = false;
     }
     
     if (!mSearchInteractions) {
-        if (mUsedDatabase == kAips)
+        if (mUsedDatabase == DB_TYPE_AIPS)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
-        else if (mUsedDatabase == kFavorites)
+        else if (mUsedDatabase == DB_TYPE_FAVORITES)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:1]];
-        else if (mUsedDatabase == kPrescription)
+        else if (mUsedDatabase == DB_TYPE_PRESCRIPTION)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
-        else if (mUsedDatabase == kNone)
+        else if (mUsedDatabase == DB_TYPE_NONE)
             [myTabBar setSelectedItem:nil]; // Clears all cells
     }
     else {
@@ -1094,6 +1124,9 @@ static BOOL mShowReport = false;
     [super viewDidLayoutSubviews];
     [self.myTabBar invalidateIntrinsicContentSize];
     [self setBarButtonItemsWith:mCurrentSearchState];
+    
+    // Initialize full text search
+    mFullTextSearch = [[FullTextSearch alloc] init];
 }
 
 - (void) viewDidUnload
@@ -1394,25 +1427,29 @@ static BOOL mShowReport = false;
     report_memory();
 }
 
-- (void) genSearchResultsWith:(NSString *)searchQuery
-{
-#ifdef DEBUG
-    NSLog(@"%s %d", __FUNCTION__, __LINE__);
-#endif
-    if (mCurrentSearchState == kTitle) {
-        searchResults = [mDb searchTitle:searchQuery];
-    } else if (mCurrentSearchState == kAuthor) {
-        searchResults = [mDb searchAuthor:searchQuery];
-    } else if (mCurrentSearchState == kAtcCode) {
-        searchResults = [mDb searchATCCode:searchQuery];
-    } else if (mCurrentSearchState == kRegNr) {
-        searchResults = [mDb searchRegNr:searchQuery];
-    } else if (mCurrentSearchState == kTherapy) {
-        searchResults = [mDb searchApplication:searchQuery];
-    }
-}
+//- (void) genSearchResultsWith:(NSString *)searchQuery
+//{
+//#ifdef DEBUG
+//    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+//#endif
+//    if (mCurrentSearchState == SEARCH_TITLE) {
+//        searchResults = [mDb searchTitle:searchQuery];
+//    }
+//    else if (mCurrentSearchState == SEARCH_AUTHOR) {
+//        searchResults = [mDb searchAuthor:searchQuery];
+//    }
+//    else if (mCurrentSearchState == SEARCH_ATC_CODE) {
+//        searchResults = [mDb searchATCCode:searchQuery];
+//    }
+//    else if (mCurrentSearchState == SEARCH_REG_NR) {
+//        searchResults = [mDb searchRegNr:searchQuery];
+//    }
+//    else if (mCurrentSearchState == SEARCH_THERAPY) {
+//        searchResults = [mDb searchApplication:searchQuery];
+//    }
+//}
 
-- (NSArray *) searchAipsDatabaseWith:(NSString *)searchQuery
+- (NSArray *) searchDatabaseWith:(NSString *)searchQuery
 {
 #ifdef DEBUG
     NSLog(@"%s %d", __FUNCTION__, __LINE__);
@@ -1421,17 +1458,22 @@ static BOOL mShowReport = false;
     
     NSDate *startTime = [NSDate date];
 
-    if (mCurrentSearchState == kTitle) {
+    if (mCurrentSearchState == SEARCH_TITLE) {
         searchRes = [mDb searchTitle:searchQuery];
-    } else if (mCurrentSearchState == kAuthor) {
+    }
+    else if (mCurrentSearchState == SEARCH_AUTHOR) {
         searchRes = [mDb searchAuthor:searchQuery];
-    } else if (mCurrentSearchState == kAtcCode) {
+    }
+    else if (mCurrentSearchState == SEARCH_ATC_CODE) {
         searchRes = [mDb searchATCCode:searchQuery];
-    } else if (mCurrentSearchState == kRegNr) {
+    }
+    else if (mCurrentSearchState == SEARCH_REG_NR) {
         searchRes = [mDb searchRegNr:searchQuery];
-    } else if (mCurrentSearchState == kTherapy) {
+    }
+    else if (mCurrentSearchState == SEARCH_THERAPY) {
         searchRes = [mDb searchApplication:searchQuery];
-    } else if (mCurrentSearchState == kFullText) {
+    }
+    else if (mCurrentSearchState == SEARCH_FULL_TEXT) {
         if ([searchQuery length] > 2) {
             searchRes = [mFullTextDb searchKeyword:searchQuery];    // NSArray of FullTextEntry
         }
@@ -1475,6 +1517,7 @@ static BOOL mShowReport = false;
     [self performSelector:@selector(switchTabBarItem:) withObject:item afterDelay:0.01];
 }
 
+// TabBar at the bottom of the screen
 - (void) switchTabBarItem: (UITabBarItem *)item
 {
     static bool inProgress = false;
@@ -1489,18 +1532,19 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
             NSLog(@"TabBar - Aips Database");
 #endif
-            if (mUsedDatabase==kFavorites || mSearchInteractions==true) {
-                mUsedDatabase = kAips;
+            if (mUsedDatabase==DB_TYPE_FAVORITES || mSearchInteractions==true) {
+                mUsedDatabase = DB_TYPE_AIPS;
                 mSearchInteractions = false;
                 mCurrentIndexPath = nil;
                 [self stopActivityIndicator];
                 [self clearDataInTableView];
                 // Show keyboard
                 [searchField becomeFirstResponder];
-                // Reset searchfield
+                // Reset search field
                 [self resetBarButtonItems];
-            } else {
-                // Empty searchfield
+            }
+            else {
+                // Empty search field
                 [searchField setText:@""];
                 // 
                 MLViewController* __weak weakSelf = self;
@@ -1510,9 +1554,9 @@ static BOOL mShowReport = false;
                     MLViewController* scopeSelf = weakSelf;
                     if (!inProgress) {
                         inProgress = true;
-                        mCurrentSearchState = kTitle;
+                        mCurrentSearchState = SEARCH_TITLE;
                         // @synchronized(searchResults) {
-                        searchResults = [scopeSelf searchAipsDatabaseWith:@""];
+                        searchResults = [scopeSelf searchDatabaseWith:@""];
                         // Update tableview
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [scopeSelf updateTableView];
@@ -1533,7 +1577,7 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
             NSLog(@"TabBar - Favorite Database");
 #endif
-            mUsedDatabase = kFavorites;
+            mUsedDatabase = DB_TYPE_FAVORITES;
             mSearchInteractions = false;
             mCurrentIndexPath = nil;
             // Reset searchfield
@@ -1547,7 +1591,7 @@ static BOOL mShowReport = false;
                 MLViewController* scopeSelf = weakSelf;
                 if (!inProgress) {
                     inProgress = true;
-                    mCurrentSearchState = kTitle;
+                    mCurrentSearchState = SEARCH_TITLE;
                     // @synchronized(searchResults) {
                     searchResults = [scopeSelf retrieveAllFavorites];
                     // Update tableview
@@ -1568,10 +1612,10 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
             NSLog(@"TabBar - Interactions");
 #endif
-            mUsedDatabase = kAips;
+            mUsedDatabase = DB_TYPE_AIPS;
             mSearchInteractions = true;
             [self stopActivityIndicator];
-            [self setBarButtonItemsWith:kTitle];
+            [self setBarButtonItemsWith:SEARCH_TITLE];
             // Switch view
             [self switchToDrugInteractionView];
             break;
@@ -1580,7 +1624,7 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
             NSLog(@"TabBar - Prescription");
 #endif
-            mUsedDatabase = kAips; // tabbar in rear view selects AIPS
+            mUsedDatabase = DB_TYPE_AIPS; // tabbar in rear view selects AIPS
             //mUsedDatabase = kPrescription;
             mSearchInteractions = false;
             {
@@ -1594,12 +1638,6 @@ static BOOL mShowReport = false;
         case 4:
             NSLog(@"TabBar - Developer Info");
             // TODO
-            break;
-
-        case 6:
-#ifdef DEBUG
-            NSLog(@"TabBar - Full Text Search");
-#endif
             break;
 
         default:
@@ -1631,7 +1669,7 @@ static BOOL mShowReport = false;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         minSearchChars = 0;
 
-    if (mCurrentSearchState == kTherapy)
+    if (mCurrentSearchState == SEARCH_THERAPY)
         minSearchChars = 1;
     
     // Causes searchResults to be released if there are no strong references to it.
@@ -1660,15 +1698,15 @@ static BOOL mShowReport = false;
                 inProgress = true;
             }
             if ([searchText length] > minSearchChars) {
-                self->searchResults = [scopeSelf searchAipsDatabaseWith:searchText];
+                self->searchResults = [scopeSelf searchDatabaseWith:searchText];
             }
             else {
-                if (mUsedDatabase == kFavorites) {
+                if (mUsedDatabase == DB_TYPE_FAVORITES) {
                     self->searchResults = [weakSelf retrieveAllFavorites];
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (mUsedDatabase == kFavorites &&
+                if (mUsedDatabase == DB_TYPE_FAVORITES &&
                     [searchText length] <= minSearchChars)
                 {
                     [self->searchField resignFirstResponder];
@@ -1889,30 +1927,34 @@ static BOOL mShowReport = false;
 
 - (void) updateTableView
 {
-    if (searchResults) {
-
-        if (medi != nil)
-            [medi removeAllObjects];
-        
-        if (favoriteKeyData != nil)
-            [favoriteKeyData removeAllObjects];
-        
-        if (mCurrentSearchState == kTitle) {
-            if (mUsedDatabase == kAips) {
+    if (!searchResults) {
+        [self stopActivityIndicator];
+        return;
+    }
+    
+    if (medi != nil)
+        [medi removeAllObjects];
+    
+    if (favoriteKeyData != nil)
+        [favoriteKeyData removeAllObjects];
+    
+    switch (mCurrentSearchState) {
+        case SEARCH_TITLE:
+            if (mUsedDatabase == DB_TYPE_AIPS) {
                 for (MLMedication *m in searchResults) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
-                        [favoriteKeyData addObject:m.regnrs];   
+                        [favoriteKeyData addObject:m.regnrs];
                         [self addTitle:m.title
                            andPackInfo:m.packInfo
                               andMedId:m.medId];
                     }
                 }
             }
-            else if (mUsedDatabase == kFavorites) {
+            else if (mUsedDatabase == DB_TYPE_FAVORITES) {
                 for (MLMedication *m in searchResults) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
-                            [favoriteKeyData addObject:m.regnrs];       
+                            [favoriteKeyData addObject:m.regnrs];
                             [self addTitle:m.title
                                andPackInfo:m.packInfo
                                   andMedId:m.medId];
@@ -1920,21 +1962,22 @@ static BOOL mShowReport = false;
                     }
                 }
             }
-        }
-        else if (mCurrentSearchState == kAuthor) {
+            break;
+            
+        case SEARCH_AUTHOR:
             for (MLMedication *m in searchResults) {
-                if (mUsedDatabase == kAips) {
+                if (mUsedDatabase == DB_TYPE_AIPS) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
-                        [favoriteKeyData addObject:m.regnrs];   
+                        [favoriteKeyData addObject:m.regnrs];
                         [self addTitle:m.title
                              andAuthor:m.auth
                               andMedId:m.medId];
                     }
                 }
-                else if (mUsedDatabase == kFavorites) {
+                else if (mUsedDatabase == DB_TYPE_FAVORITES) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
-                            [favoriteKeyData addObject:m.regnrs];       
+                            [favoriteKeyData addObject:m.regnrs];
                             [self addTitle:m.title
                                  andAuthor:m.auth
                                   andMedId:m.medId];
@@ -1942,22 +1985,23 @@ static BOOL mShowReport = false;
                     }
                 }
             }
-        }
-        else if (mCurrentSearchState == kAtcCode) {
+            break;
+            
+        case SEARCH_ATC_CODE:
             for (MLMedication *m in searchResults) {
-                if (mUsedDatabase == kAips) {
+                if (mUsedDatabase == DB_TYPE_AIPS) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
-                        [favoriteKeyData addObject:m.regnrs];   
+                        [favoriteKeyData addObject:m.regnrs];
                         [self addTitle:m.title
                             andAtcCode:m.atccode
                            andAtcClass:m.atcClass
                               andMedId:m.medId];
                     }
                 }
-                else if (mUsedDatabase == kFavorites) {
+                else if (mUsedDatabase == DB_TYPE_FAVORITES) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
-                            [favoriteKeyData addObject:m.regnrs];      
+                            [favoriteKeyData addObject:m.regnrs];
                             [self addTitle:m.title
                                 andAtcCode:m.atccode
                                andAtcClass:m.atcClass
@@ -1966,22 +2010,23 @@ static BOOL mShowReport = false;
                     }
                 }
             }
-        }
-        else if (mCurrentSearchState == kRegNr) {
+            break;
+            
+        case SEARCH_REG_NR:
             for (MLMedication *m in searchResults) {
-                if (mUsedDatabase == kAips) {
+                if (mUsedDatabase == DB_TYPE_AIPS) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
-                        [favoriteKeyData addObject:m.regnrs];   
+                        [favoriteKeyData addObject:m.regnrs];
                         [self addTitle:m.title
                              andRegnrs:m.regnrs
                              andAuthor:m.auth
                               andMedId:m.medId];
                     }
                 }
-                else if (mUsedDatabase == kFavorites) {
+                else if (mUsedDatabase == DB_TYPE_FAVORITES) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
-                            [favoriteKeyData addObject:m.regnrs];      
+                            [favoriteKeyData addObject:m.regnrs];
                             [self addTitle:m.title
                                  andRegnrs:m.regnrs
                                  andAuthor:m.auth
@@ -1990,21 +2035,22 @@ static BOOL mShowReport = false;
                     }
                 }
             }
-        }
-        else if (mCurrentSearchState == kTherapy) {
+            break;
+            
+        case SEARCH_THERAPY:
             for (MLMedication *m in searchResults) {
-                if (mUsedDatabase == kAips) {
+                if (mUsedDatabase == DB_TYPE_AIPS) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
-                        [favoriteKeyData addObject:m.regnrs];  
+                        [favoriteKeyData addObject:m.regnrs];
                         [self addTitle:m.title
                        andApplications:m.application
                               andMedId:m.medId];
                     }
                 }
-                else if (mUsedDatabase == kFavorites) {
+                else if (mUsedDatabase == DB_TYPE_FAVORITES) {
                     if (![m.regnrs isEqual:[NSNull null]]) {
                         if ([favoriteMedsSet containsObject:m.regnrs]) {
-                            [favoriteKeyData addObject:m.regnrs];      
+                            [favoriteKeyData addObject:m.regnrs];
                             [self addTitle:m.title
                            andApplications:m.application
                                   andMedId:m.medId];
@@ -2012,28 +2058,30 @@ static BOOL mShowReport = false;
                     }
                 }
             }
-        }
-        else if (mCurrentSearchState == kFullText) {
+            break;
+            
+        case SEARCH_FULL_TEXT:
             for (FullTextEntry *e in searchResults) {
-                if (mUsedDatabase == kAips || mUsedDatabase == kFavorites) {
+                if (mUsedDatabase == DB_TYPE_FULL_TEXT)
+                {
                     if (![e.hash isEqual:[NSNull null]]) {
                         [favoriteKeyData addObject:e.hash];
                         [self addKeyword:e.keyword andNumHits:e.numHits andHash:e.hash];
                     }
                 }
             }
-        }
+            break;
+    }
 
-        // Sort array alphabetically
-        if (mUsedDatabase == kFavorites) {
-            /*
-            NSSortDescriptor *titleSort = [NSSortDescriptor sortDescriptorWithKey:nil ascending:YES comparator:
-                                           ^(id obj1, id obj2) { return [obj1 compare:obj2 options:NSNumericSearch]; }];
-            */
+    // Sort array alphabetically
+    if (mUsedDatabase == DB_TYPE_FAVORITES) {
+        /*
+        NSSortDescriptor *titleSort = [NSSortDescriptor sortDescriptorWithKey:nil ascending:YES comparator:
+                                       ^(id obj1, id obj2) { return [obj1 compare:obj2 options:NSNumericSearch]; }];
+        */
 
-            NSSortDescriptor *titleSort = [NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES];
-            [medi sortUsingDescriptors:[NSArray arrayWithObject:titleSort]];
-        }
+        NSSortDescriptor *titleSort = [NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES];
+        [medi sortUsingDescriptors:[NSArray arrayWithObject:titleSort]];
     }
     
     [self stopActivityIndicator];
@@ -2227,6 +2275,84 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
+// Front: FullTeaxt, Right: TODO
+- (void) switchToFullTextView :(NSString *)hashId
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    /* Search in full text search DB
+     */
+    
+    NSLog(@"%s %d, hashId: %@", __FUNCTION__, __LINE__, hashId);
+    
+    // Get entry
+    mFullTextEntry = [mFullTextDb searchHash:hashId];
+    //NSLog(@"%s %d, mFullTextEntry: %@", __FUNCTION__, __LINE__, mFullTextEntry);
+    
+    // TODO: Hide text finder ?
+    
+    NSArray *listOfRegnrs = [mFullTextEntry getRegnrsAsArray];
+    //NSLog(@"%s %d, listOfRegnrs: %@", __FUNCTION__, __LINE__, listOfRegnrs);
+    
+    NSArray *listOfArticles = [mDb searchRegnrsFromList:listOfRegnrs];
+    //NSLog(@"%s %d, listOfArticles: %@", __FUNCTION__, __LINE__, listOfArticles);
+    
+    NSDictionary *dict = [mFullTextEntry getRegChaptersDict];
+    NSLog(@"%s %d, dict: %@", __FUNCTION__, __LINE__, dict);
+    
+    //NSLog(@"%s %d, mFullTextSearch: %@", __FUNCTION__, __LINE__, mFullTextSearch);
+    
+    mFullTextContentStr = [mFullTextSearch tableWithArticles:listOfArticles
+                                          andRegChaptersDict:dict
+                                                   andFilter:@""];
+
+    NSLog(@"%s %d, mFullTextContentStr: %@", __FUNCTION__, __LINE__, mFullTextContentStr);
+
+    //mCurrentWebView = kFullTextSearchView;
+
+    //[self updateFullTextSearchView:mFullTextContentStr];
+    
+    if (fullTextVC != nil) {
+        // [fullTextVC removeFromParentViewController];
+        fullTextVC = nil;
+    }
+    
+#if 1
+    FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
+    fullTextVC.htmlStr = mFullTextContentStr;
+#else
+    fullTextVC =
+    [[FullTextViewController alloc] initWithNibName:@"FullTextViewController"
+                                             bundle:nil
+                                              title:NSLocalizedString(@"Full Text", nil)//FACHINFO_STRING
+                                           andParam:2];
+#endif
+    
+#if 1
+    UIViewController *nc_rear = self.revealViewController.rearViewController;
+    MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+#endif
+
+    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    mainRevealController = self.revealViewController;
+    //mainRevealController.rightViewController = titleViewController;
+    
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
+    }
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:fullTextVC];
+    
+    // Show SecondViewController (UIWebView)
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+    
+#ifdef DEBUG
+    report_memory();
+#endif
+}
+
 /**
  Add med in the buffer to the interaction basket
  */
@@ -2251,13 +2377,21 @@ static BOOL mShowReport = false;
  */
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (mUsedDatabase == kAips) {
+#ifdef DEBUG
+    NSLog(@"%s %d, mUsedDatabase: %ld, mCurrentSearchState: %ld", __FUNCTION__, __LINE__,
+          (long)mUsedDatabase, mCurrentSearchState);
+#endif
+
+    if (mUsedDatabase == DB_TYPE_AIPS) {
         return [medi count];
         // return [titleData count];
     }
     
-    if (mUsedDatabase == kFavorites)
+    if (mUsedDatabase == DB_TYPE_FAVORITES)
         return [favoriteKeyData count];
+    
+    if (mUsedDatabase == DB_TYPE_FULL_TEXT)
+        return [searchResults count];
 
     return 0;
 }
@@ -2398,7 +2532,7 @@ static BOOL mShowReport = false;
 
     long mId = -1;
     
-    if (mCurrentSearchState!=kFullText) {
+    if (mCurrentSearchState != SEARCH_FULL_TEXT) {
         /* Search in Aips DB or Interactions DB
          */
         if (mCurrentIndexPath) {
@@ -2416,31 +2550,11 @@ static BOOL mShowReport = false;
         /* Search in full text search DB
          */
         NSString *hashId = [medi[indexPath.row] hashId];
-        NSLog(@"%s %d, hashId: %@", __FUNCTION__, __LINE__, hashId);
-
-        // Get entry
-        mFullTextEntry = [mFullTextDb searchHash:hashId];
-        //NSLog(@"%s %d, mFullTextEntry: %@", __FUNCTION__, __LINE__, mFullTextEntry);
-        
-        // TODO: Hide text finder ?
-        
-        NSArray *listOfRegnrs = [mFullTextEntry getRegnrsAsArray];
-        //NSLog(@"%s %d, listOfRegnrs: %@", __FUNCTION__, __LINE__, listOfRegnrs);
-        
-        NSArray *listOfArticles = [mDb searchRegnrsFromList:listOfRegnrs];
-        //NSLog(@"%s %d, listOfArticles: %@", __FUNCTION__, __LINE__, listOfArticles);
-
-        NSDictionary *dict = [mFullTextEntry getRegChaptersDict];
-        NSLog(@"%s %d, dict: %@", __FUNCTION__, __LINE__, dict);
-        
-        mFullTextContentStr = [mFullTextSearch tableWithArticles:listOfArticles
-                                              andRegChaptersDict:dict
-                                                       andFilter:@""];
-
-        // TODO
+        [self switchToFullTextView: hashId];
+        return;
     }
 
-    if (secondViewController!=nil) {
+    if (secondViewController != nil) {
         // [secondViewController removeFromParentViewController];
         secondViewController = nil;
     }
@@ -2619,7 +2733,7 @@ static BOOL mShowReport = false;
     NSLog(@"long press began on table view at row %ld", indexPath.row);
 
     switch (mCurrentSearchState) {
-        case kTitle:    // Can only add medicine from Prep like in AmiKo OSX
+        case SEARCH_TITLE:    // Can only add medicine from Prep like in AmiKo OSX
         {
             NSString *subTitle = [medi[indexPath.row] subTitle];
             _pickerData = [subTitle componentsSeparatedByString:@"\n"];
@@ -2682,7 +2796,7 @@ static BOOL mShowReport = false;
         }
             break;
             
-        case kAtcCode:
+        case SEARCH_ATC_CODE:
         {
             NSString *subTitle = [medi[indexPath.row] subTitle];
             NSString *medSubTitle = [NSString stringWithString:subTitle];
