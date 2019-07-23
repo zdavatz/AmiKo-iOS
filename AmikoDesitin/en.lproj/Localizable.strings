@@ -20,6 +20,12 @@
 "Contact was saved in the AmiKo address book" = "Contact was saved in the AmiKo address book.";
 
 /* No comment provided by engineer. */
+"Database Update" = "Database Update";
+
+/* No comment provided by engineer. */
+"%@ Database Updated!" = "%@ Database Updated!";
+
+/* No comment provided by engineer. */
 "Delete" = "Delete patient & all prescriptions ?";
 
 /* No comment provided by engineer. */
@@ -46,8 +52,14 @@
 /* Button */
 "Feedback" = "Feedback";
 
-/* Gender */
-"man" = "m";
+/* Short toolbar */
+"FTS" = "FTS";
+
+/* Full toolbar */
+"Full Text" = "Fulltext";
+
+/* Search placeholder */
+"Full Text Search" = "Fulltext Search";
 
 /* No comment provided by engineer. */
 "%@ has already been imported" = "%@ has already been imported";
@@ -63,6 +75,9 @@
 
 /* No comment provided by engineer. */
 "Known interactions" = "Known interactions";
+
+/* Gender */
+"man" = "m";
 
 /* No comment provided by engineer. */
 "Medicine" = "Medicine";
@@ -152,6 +167,9 @@
 "Share" = "Share";
 
 /* No comment provided by engineer. */
+"The database contains:\n- %ld Products\n- %ld Specialist information\n- %ld Keywords\n- %d Interactions" = "The database contains:\n- %ld Products\n- %ld Specialist information\n- %ld Keywords\n- %d Interactions";
+
+/* No comment provided by engineer. */
 "The entry has been updated" = "The entry has been updated.";
 
 /* Short toolbar */
@@ -162,6 +180,12 @@
 
 /* Button */
 "Update" = "Update";
+
+/* No comment provided by engineer. */
+"Updating %@ database" = "Updating %@ database";
+
+/* No comment provided by engineer. */
+"Your database is older than 30 days. We recommend an update. The update can also be done manually at any time by clicking on the pill in the upper left corner." = "Your database is older than 30 days. We recommend an update. The update can also be done manually at any time by clicking on the pill in the upper left corner.";
 
 /* No comment provided by engineer. */
 "Your medicine basket is empty" = "Your medicine basket is empty.";
