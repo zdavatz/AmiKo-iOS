@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons;
 
+- (void) updateFullTextSearchView:(NSString *)contentStr;
+
 @end
 
 NS_ASSUME_NONNULL_END

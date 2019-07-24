@@ -170,4 +170,20 @@
     NSString *regex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     return [[NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex] evaluateWithObject:[msg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 }
+
++ (NSString *) getColorCss
+{
+    NSString *osMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    //NSLog(@"%s %d AppleInterfaceStyle:%@", __FUNCTION__, __LINE__, osMode);  // null, Dark
+    
+    NSString *colorSchemeFilename = @"color-scheme-light";
+    if (@available(iOS 13, *))
+        if ([osMode isEqualToString:@"Dark"])
+            colorSchemeFilename = @"color-scheme-dark";
+    
+    NSString *colorCssPath = [[NSBundle mainBundle] pathForResource:colorSchemeFilename ofType:@"css"];
+    NSString *colorCss = [NSString stringWithContentsOfFile:colorCssPath encoding:NSUTF8StringEncoding error:nil];
+    return colorCss;
+}
+
 @end

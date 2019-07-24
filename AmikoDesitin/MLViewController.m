@@ -93,7 +93,6 @@ typedef NS_ENUM(NSInteger, SearchStates) {
 
 static DatabaseTypes mUsedDatabase = DB_TYPE_NONE;
 static SearchStates mCurrentSearchState = SEARCH_TITLE;
-//static WebviewModes mCurrentWebView = kExpertInfoView;
 
 static CGFloat searchFieldWidth = 320.0f;
 
@@ -2394,21 +2393,18 @@ static BOOL mShowReport = false;
 
     //NSLog(@"%s %d, mFullTextContentStr: %@", __FUNCTION__, __LINE__, mFullTextContentStr);
 
-    //mCurrentWebView = kFullTextSearchView;
-
-    //[self updateFullTextSearchView:mFullTextContentStr];
-    
-    if (fullTextVC != nil) {
-        // [fullTextVC removeFromParentViewController];
-        fullTextVC = nil;
-    }
-
+    // Update front pane
     FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
-    fullTextVC.htmlStr = mFullTextContentStr;
+    [fullTextVC updateFullTextSearchView: mFullTextContentStr];
     
 #if 0
-    UIViewController *nc_rear = self.revealViewController.rearViewController;
-    MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+    // TODO: Update right pane (section titles)
+    if (![mFullTextSearch.listOfSectionIds isEqual:[NSNull null]])
+        mListOfSectionIds = mFullTextSearch.listOfSectionIds;
+    if (![mFullTextSearch.listOfSectionTitles isEqual:[NSNull null]])
+        mListOfSectionTitles = mFullTextSearch.listOfSectionTitles;
+    
+    [mySectionTitles reloadData];
 #endif
 
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.

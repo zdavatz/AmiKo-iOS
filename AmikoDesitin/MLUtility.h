@@ -39,4 +39,6 @@
 + (NSString *) amkDirectoryForPatient:(NSString*)uid;
 
 + (BOOL) emailValidator:(NSString *)msg;
+
++ (NSString *) getColorCss;
 @end
