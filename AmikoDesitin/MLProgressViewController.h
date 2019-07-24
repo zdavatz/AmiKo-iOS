@@ -24,7 +24,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLProgressViewController : UIViewController <UIAlertViewDelegate>
+@interface MLProgressViewController : UIViewController
 {
     BOOL mDownloadInProgress;
 }

@@ -27,13 +27,10 @@
 
 @implementation MLAlertView
 {
-    UIAlertView *mAlertView;
     UIAlertController *mAlertController;
     UIAlertAction *mAction;
 }
 
-/** Instance functions
- */
 - (instancetype) initWithTitle: (NSString *)alertTitle
                        message: (NSString *)message
                         button: (NSString *)buttonTitle
@@ -57,7 +54,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([presentingController presentedViewController]!=nil)
             [presentingController dismissViewControllerAnimated:YES completion:nil];
-        [presentingController presentViewController:mAlertController animated:YES completion:nil];
+
+        [presentingController presentViewController:self->mAlertController
+                                           animated:YES
+                                         completion:nil];
     });
 }
 

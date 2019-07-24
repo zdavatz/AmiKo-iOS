@@ -28,7 +28,6 @@
 
 @implementation MLProgressViewController
 {
-    UIAlertView *mAlertView;
     UIAlertController *mAlertController;
     UIProgressView *mProgressBar;
 }
@@ -121,15 +120,6 @@
 - (void) setCancelButtonTitle:(NSString *)title
 {
     [mAlertController setTitle:@"Update cancelled!"];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-	if (buttonIndex == alertView.cancelButtonIndex) {
-        mDownloadInProgress = NO;
-	}
 }
 
 @end
