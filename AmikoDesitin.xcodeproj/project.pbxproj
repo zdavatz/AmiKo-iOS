@@ -300,6 +300,10 @@
 		FA3B621D22E8527500A80296 /* color-scheme-dark.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621B22E8527500A80296 /* color-scheme-dark.css */; };
 		FA3B621F22E8528000A80296 /* color-scheme-light.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621E22E8527F00A80296 /* color-scheme-light.css */; };
 		FA3B622022E8528000A80296 /* color-scheme-light.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621E22E8527F00A80296 /* color-scheme-light.css */; };
+		FA3B622522E88E6600A80296 /* FullTextOverviewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3B622322E88E6500A80296 /* FullTextOverviewVC.m */; };
+		FA3B622622E88E6600A80296 /* FullTextOverviewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3B622322E88E6500A80296 /* FullTextOverviewVC.m */; };
+		FA3B622722E88E6600A80296 /* FullTextOverviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA3B622422E88E6600A80296 /* FullTextOverviewVC.xib */; };
+		FA3B622822E88E6600A80296 /* FullTextOverviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA3B622422E88E6600A80296 /* FullTextOverviewVC.xib */; };
 		FA4263702058117A00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4263712058117B00C2269E /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F2A017B16C4B00EAB24B /* MLViewController.m */; };
 		FA4511B5204ECAFD00899A77 /* DoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* DoctorViewController.xib */; };
@@ -552,6 +556,9 @@
 		FA3B621822E851CC00A80296 /* main_callbacks.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = main_callbacks.js; path = AmiKoDesitin/main_callbacks.js; sourceTree = SOURCE_ROOT; };
 		FA3B621B22E8527500A80296 /* color-scheme-dark.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-dark.css"; path = "AmiKoDesitin/color-scheme-dark.css"; sourceTree = SOURCE_ROOT; };
 		FA3B621E22E8527F00A80296 /* color-scheme-light.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-light.css"; path = "AmiKoDesitin/color-scheme-light.css"; sourceTree = SOURCE_ROOT; };
+		FA3B622222E88E6500A80296 /* FullTextOverviewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextOverviewVC.h; path = AmiKoDesitin/FullTextOverviewVC.h; sourceTree = SOURCE_ROOT; };
+		FA3B622322E88E6500A80296 /* FullTextOverviewVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextOverviewVC.m; path = AmiKoDesitin/FullTextOverviewVC.m; sourceTree = SOURCE_ROOT; };
+		FA3B622422E88E6600A80296 /* FullTextOverviewVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FullTextOverviewVC.xib; path = AmiKoDesitin/FullTextOverviewVC.xib; sourceTree = SOURCE_ROOT; };
 		FA4511B6204ECAFD00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/DoctorViewController.xib; sourceTree = "<group>"; };
 		FA4511B9204ECBCB00899A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PatientViewController.xib; sourceTree = "<group>"; };
 		FA4511BB204ECF9300899A77 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/PrescriptionViewController.strings; sourceTree = "<group>"; };
@@ -1155,6 +1162,16 @@
 			name = JavaScript;
 			sourceTree = "<group>";
 		};
+		FA3B622122E88D9B00A80296 /* right */ = {
+			isa = PBXGroup;
+			children = (
+				FA3B622222E88E6500A80296 /* FullTextOverviewVC.h */,
+				FA3B622322E88E6500A80296 /* FullTextOverviewVC.m */,
+				FA3B622422E88E6600A80296 /* FullTextOverviewVC.xib */,
+			);
+			name = right;
+			sourceTree = "<group>";
+		};
 		FA5E5E4520F5F55C00CDB6C6 /* video */ = {
 			isa = PBXGroup;
 			children = (
@@ -1197,6 +1214,7 @@
 		FABC077B22E5F0D400B21A36 /* full text */ = {
 			isa = PBXGroup;
 			children = (
+				FA3B622122E88D9B00A80296 /* right */,
 				FABC077C22E5F10400B21A36 /* front */,
 			);
 			name = "full text";
@@ -1388,6 +1406,7 @@
 				D5A2251B19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */,
 				D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */,
+				FA3B622722E88E6600A80296 /* FullTextOverviewVC.xib in Resources */,
 				D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */,
 				439F50FC20122665000E82FC /* prescription@2x.png in Resources */,
 				FA3B621922E851CC00A80296 /* main_callbacks.js in Resources */,
@@ -1505,6 +1524,7 @@
 				93109F8F20751A7100CEFAA5 /* 1026-doctor.png in Resources */,
 				D554574718B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D5A2251C19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
+				FA3B622822E88E6600A80296 /* FullTextOverviewVC.xib in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
 				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				FA3B621A22E851CC00A80296 /* main_callbacks.js in Resources */,
@@ -1598,6 +1618,7 @@
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
 				43A3851720333355001A5849 /* PatientDbListViewController.m in Sources */,
+				FA3B622522E88E6600A80296 /* FullTextOverviewVC.m in Sources */,
 				D5A2253E194A435B0078FEFF /* deleterow.js in Sources */,
 				FAD0664D22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				430285BF20160FB1003B2EF3 /* PrescriptionViewController.m in Sources */,
@@ -1653,6 +1674,7 @@
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
 				930D94B02077E56D007E4629 /* AmkListViewController.m in Sources */,
+				FA3B622622E88E6600A80296 /* FullTextOverviewVC.m in Sources */,
 				D5A2253F194A435B0078FEFF /* deleterow.js in Sources */,
 				D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */,
 				930D94B12077E590007E4629 /* Prescription.m in Sources */,

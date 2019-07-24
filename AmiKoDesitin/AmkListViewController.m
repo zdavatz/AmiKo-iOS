@@ -133,11 +133,11 @@ static const float kAmkLabelFontSize = 12.0;
 
     //NSLog(@"long press on table view at row %ld", indexPath.row);
 
-    NSString *actionTitle = [NSString stringWithFormat:NSLocalizedString(@"Confirm delete %@",nil), amkFiles[indexPath.row]];
-    
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
+
+    NSString *actionTitle = [NSString stringWithFormat:NSLocalizedString(@"Confirm delete %@",nil), amkFiles[indexPath.row]];
     
     UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:actionTitle
                                                            style:UIAlertActionStyleDestructive
@@ -226,4 +226,5 @@ static const float kAmkLabelFontSize = 12.0;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"AmkFilenameSelectedNotification"
                                                         object:filename];
 }
+
 @end

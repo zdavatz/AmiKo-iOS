@@ -31,6 +31,7 @@
 #import "MLMenuViewController.h"
 
 #import "FullTextViewController.h"
+#import "FullTextOverviewVC.h"
 
 #import "PrescriptionViewController.h"
 #import "AmkListViewController.h"
@@ -2210,7 +2211,7 @@ static BOOL mShowReport = false;
 
     mSearchInteractions = true;
     
-    // right
+    // Right
 #if 1
     // Extract section ids
     NSArray *listofSectionIds = [NSArray array];
@@ -2228,7 +2229,7 @@ static BOOL mShowReport = false;
     mainRevealController.rightViewController = titleViewController;
 #endif
     
-    // front
+    // Front
 #if 1
     if (secondViewController!=nil) {
         // [secondViewController removeFromParentViewController];
@@ -2377,8 +2378,6 @@ static BOOL mShowReport = false;
     // Get entry
     mFullTextEntry = [mFullTextDb searchHash:hashId];
     
-    // TODO: Hide text finder ?
-    
     NSArray *listOfRegnrs = [mFullTextEntry getRegnrsAsArray];
     NSArray *listOfArticles = [mDb searchRegnrsFromList:listOfRegnrs];
     NSDictionary *dict = [mFullTextEntry getRegChaptersDict];
@@ -2389,32 +2388,38 @@ static BOOL mShowReport = false;
 
     //NSLog(@"%s %d, mFullTextContentStr: %@", __FUNCTION__, __LINE__, mFullTextContentStr);
 
-    // Update front pane
-    FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
-    [fullTextVC updateFullTextSearchView: mFullTextContentStr];
-    
-#if 0
-    // TODO: Update right pane (section titles)
-    if (![mFullTextSearch.listOfSectionIds isEqual:[NSNull null]])
-        mListOfSectionIds = mFullTextSearch.listOfSectionIds;
-    if (![mFullTextSearch.listOfSectionTitles isEqual:[NSNull null]])
-        mListOfSectionTitles = mFullTextSearch.listOfSectionTitles;
-    
-    [mySectionTitles reloadData];
-#endif
-
-    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    // Grab a handle to the reveal controller
     mainRevealController = self.revealViewController;
-    //mainRevealController.rightViewController = titleViewController;
-    
-    if (otherViewNavigationController!=nil) {
-        [otherViewNavigationController removeFromParentViewController];
-        otherViewNavigationController = nil;
+
+    // Front
+    {
+        FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
+        [fullTextVC updateFullTextSearchView: mFullTextContentStr];
+
+        if (otherViewNavigationController!=nil) {
+            [otherViewNavigationController removeFromParentViewController];
+            otherViewNavigationController = nil;
+        }
+        otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:fullTextVC];
+
+        // Show FullTextViewController (WKWebView)
+        [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     }
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:fullTextVC];
-    
-    // Show SecondViewController (WKWebView)
-    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+
+    // Right
+    {
+        FullTextOverviewVC *fullTextOverviewVC = [FullTextOverviewVC sharedInstance];
+        fullTextOverviewVC.ftResults = mFullTextSearch.listOfSectionTitles;
+        
+#ifdef DEBUG
+        NSLog(@"%s %d, listOfSectionIds: %@", __FUNCTION__, __LINE__, mFullTextSearch.listOfSectionIds);
+        NSLog(@"%s %d, listOfSectionTitles: %@", __FUNCTION__, __LINE__, mFullTextSearch.listOfSectionTitles);
+#endif
+        
+        mainRevealController.rightViewController = fullTextOverviewVC;
+    }
+
+    mainRevealController.rightViewRevealOverdraw = 0;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
 #ifdef DEBUG

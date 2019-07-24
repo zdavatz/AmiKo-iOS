@@ -96,6 +96,11 @@
     }
     
     // TODO: see MLSecondViewController
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(ftOverviewDidChangeSelection:)
+                                                 name:@"ftOverviewSelectedNotification"
+                                               object:nil];
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil
@@ -189,45 +194,17 @@
 
 #pragma mark - WKNavigationDelegate methods
 
-#if 0
-#pragma mark - UIWebViewDelegate methods
+#pragma mark - Notifications
 
-- (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+- (void)ftOverviewDidChangeSelection:(NSNotification *)aNotification
 {
-    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-        [[UIApplication sharedApplication] openURL:[request URL]];
-        return NO;
-    }
-    
-    return YES;
-}
-
-- (void) webViewDidStartLoad:(UIWebView *)webView
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
-- (void) webViewDidFinishLoad:(UIWebView *)webView
-{
-#if 0
-    // Check this out!
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        int fontSize = 80;
-        NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", fontSize];
-        [self.webView stringByEvaluatingJavaScriptFromString:jsString];
-    }
-    // NSString *res =
-    [self.webView stringByEvaluatingJavaScriptFromString:htmlAnchor];
-    // int height =
-    [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] intValue];
-    
-    self.webView.scalesPageToFit = NO;  // YES
-    self.webView.scrollView.zoomScale = 3.0;
-    
-    // Hide find panel (webview is the superview of the panel)
-    [self showFindPanel:NO];
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
 #endif
+
+    // TODO: resort results in webView
+    
+    [self.revealViewController rightRevealToggleAnimated:YES];
 }
-#endif
 
 @end

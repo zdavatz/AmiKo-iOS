@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
                         andParam:(int)numRevealButtons;
 
 - (void) updateFullTextSearchView:(NSString *)contentStr;
+- (void) ftOverviewDidChangeSelection:(NSNotification *)aNotification;
 
 @end
 
