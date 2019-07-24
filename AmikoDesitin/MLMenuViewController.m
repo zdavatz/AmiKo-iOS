@@ -63,7 +63,9 @@
     return YES;
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+// TODO: Implement "viewWillTransitionToSize:withTransitionCoordinator:" instead
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                 duration:(NSTimeInterval)duration
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
@@ -268,7 +270,7 @@
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
-    MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    //MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if (mParentViewController)
         [mParentViewController switchToDoctorEditView];

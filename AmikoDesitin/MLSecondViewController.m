@@ -374,10 +374,10 @@
     [searchField resignFirstResponder];
 }
 
-- (void) viewDidUnload
-{
-    self.webView = nil;
-}
+//- (void) viewDidUnload
+//{
+//    self.webView = nil;
+//}
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {

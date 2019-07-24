@@ -1013,7 +1013,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) newPrescription:(id)sender
 {
-    UIBarButtonItem *btn = (UIBarButtonItem *)sender;
+    //UIBarButtonItem *btn = (UIBarButtonItem *)sender;
     //NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, (long)btn.tag, btn.title);
     [self loadDefaultDoctor];
     prescription.patient = nil;

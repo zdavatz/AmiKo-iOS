@@ -1128,14 +1128,10 @@ static BOOL mShowReport = false;
     mFullTextSearch = [[FullTextSearch alloc] init];
 }
 
-- (void) viewDidUnload
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
-    [super viewDidUnload];
-}
+//- (void) viewDidUnload
+//{
+//    [super viewDidUnload];
+//}
 
 - (void) viewDidLoad
 {
@@ -2739,7 +2735,6 @@ static BOOL mShowReport = false;
                 [self addMedicineToPrescription:mMed :0];
             }
             else {
-                
                 self.pickerSheet = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Select package", nil)
                                                                        message:nil
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
