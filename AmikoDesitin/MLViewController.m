@@ -393,7 +393,7 @@ static BOOL mShowReport = false;
     return self;
 }
 
-- (id) initWithLaunchState:(int)state
+- (instancetype) initWithLaunchState:(int)state
 {
     id handle = [self init];
     

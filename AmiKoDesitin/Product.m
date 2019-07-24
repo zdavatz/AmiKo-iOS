@@ -23,7 +23,7 @@
             NSStringFromClass([self class]), self.eanCode, self.regnrs, self.title];
 }
 
-- (id)initWithDict:(NSDictionary *)dict
+- (instancetype)initWithDict:(NSDictionary *)dict
 {
     self = [super init];
     if (self) {
@@ -40,7 +40,7 @@
     return self;
 }
 
-- (id)initWithMedication:(MLMedication *)m :(NSInteger)packageIndex
+- (instancetype)initWithMedication:(MLMedication *)m :(NSInteger)packageIndex
 {
 #ifdef DEBUG
     NSLog(@"%s idx:%ld", __FUNCTION__, packageIndex);

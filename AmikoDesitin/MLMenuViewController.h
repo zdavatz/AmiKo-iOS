@@ -37,7 +37,9 @@
 - (IBAction) rateApp:(id)sender;
 - (IBAction) sendFeedback:(id)sender;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil parent:(MLViewController*)parentViewController;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                          parent:(MLViewController*)parentViewController;
 - (void) showMenu;
 
 @end

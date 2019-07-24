@@ -43,7 +43,9 @@
     UIActionSheet *mMenuActionSheet;
 }
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil parent:(MLViewController *)parentViewController
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                          parent:(MLViewController *)parentViewController
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
  

@@ -46,16 +46,17 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 @synthesize myMenuView;
 @synthesize javaScript;
 
-- (id) initWithNibName: (NSString *)nibNameOrNil bundle: (NSBundle *)nibBundleOrNil withMenu: (NSArray *)sectionTitles
+- (instancetype) initWithNibName: (NSString *)nibNameOrNil
+                          bundle: (NSBundle *)nibBundleOrNil
+                        withMenu: (NSArray *)sectionTitles
 {
     self = [super init];
-    
     return self;
 }
 
-- (id) initWithMenu: (NSArray *)sectionTitles
-         sectionIds: (NSArray *)sectionIds
-        andLanguage: (NSString *)appLanguage
+- (instancetype) initWithMenu: (NSArray *)sectionTitles
+                   sectionIds: (NSArray *)sectionIds
+                  andLanguage: (NSString *)appLanguage
 {
     self = [super init];
     if (self) {

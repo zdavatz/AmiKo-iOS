@@ -83,7 +83,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 @end
 
 @implementation PrintItemProvider
-- (id)initWithPlaceholderItem:(id)placeholderItem
+
+- (instancetype)initWithPlaceholderItem:(id)placeholderItem
 {
     self.pdfData = placeholderItem;
     return [super initWithPlaceholderItem:placeholderItem];

@@ -52,7 +52,13 @@
 - (IBAction) moveToNextHighlight:(id)sender;
 - (IBAction) moveToPrevHighlight:(id)sender;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil title:(NSString *)title andParam:(int)numRevealButtons;
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withString:(NSString *)html;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                           title:(NSString *)title
+                        andParam:(int)numRevealButtons;
+
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                      withString:(NSString *)html;
 
 @end

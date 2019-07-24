@@ -78,10 +78,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (id) initWithNibName:(NSString *)nibNameOrNil
-                bundle:(NSBundle *)nibBundleOrNil
-                 title:(NSString *)title
-              andParam:(int)numRevealButtons
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                           title:(NSString *)title
+                        andParam:(int)numRevealButtons
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
@@ -99,9 +99,9 @@
     return self;
 }
 
-- (id) initWithNibName: (NSString *)nibNameOrNil
-                bundle: (NSBundle *)nibBundleOrNil
-            withString: (NSString *)html
+- (instancetype) initWithNibName: (NSString *)nibNameOrNil
+                          bundle: (NSBundle *)nibBundleOrNil
+                      withString: (NSString *)html
 {
     self = [super init];
 

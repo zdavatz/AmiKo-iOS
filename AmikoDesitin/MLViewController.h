@@ -63,7 +63,7 @@ enum {
 @property (nonatomic, retain) UIPickerView *pickerView;
 
 
-- (id) initWithLaunchState:(int)state;
+- (instancetype) initWithLaunchState:(int)state;
 - (void) setLaunchState:(int)state;
 
 - (IBAction) searchAction: (id)sender;

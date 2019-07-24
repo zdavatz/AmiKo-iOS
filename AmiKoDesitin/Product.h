@@ -34,7 +34,7 @@
 @property (atomic, copy) NSString *regnrs;                  // regnrs
 @property (atomic, copy) NSString *atccode;                 // atccode
 
-- (id) initWithMedication:(MLMedication *)m  :(NSInteger)packageIndex;
-- (id) initWithDict:(NSDictionary *)dict;
+- (instancetype) initWithMedication:(MLMedication *)m  :(NSInteger)packageIndex;
+- (instancetype) initWithDict:(NSDictionary *)dict;
 
 @end

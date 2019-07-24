@@ -32,8 +32,13 @@
 @property (nonatomic, retain) IBOutlet UITableView *myMenuView;
 @property (nonatomic, copy) NSString *javaScript;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withMenu:(NSArray *)sectionTitles;
-- (id) initWithMenu:(NSArray *)sectionTitles sectionIds:(NSArray *)sectionIds andLanguage:(NSString *)appLanguage;
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+                        withMenu:(NSArray *)sectionTitles;
+
+- (instancetype) initWithMenu:(NSArray *)sectionTitles
+                   sectionIds:(NSArray *)sectionIds
+                  andLanguage:(NSString *)appLanguage;
 
 - (void) setSectionTitles:(NSArray *)titles andIds:(NSArray *)ids;
 
