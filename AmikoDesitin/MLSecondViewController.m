@@ -300,9 +300,9 @@
     
     [super viewDidLoad];
     
-    self.title = mTitle;
     // Do any additional setup after loading the view from its nib.
-    
+    self.title = mTitle;
+
     // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
     

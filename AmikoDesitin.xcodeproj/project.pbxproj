@@ -697,7 +697,6 @@
 		4387FC3C20188ECE000A5A0F /* main */ = {
 			isa = PBXGroup;
 			children = (
-				FABC077A22E5F0C300B21A36 /* New Group */,
 				430285C120161232003B2EF3 /* right */,
 				430285C22016124A003B2EF3 /* front */,
 				43A385082032CAB8001A5849 /* rear */,
@@ -1161,13 +1160,6 @@
 				FA577A4E2109CC1E00BE3732 /* avcamtypes.h */,
 			);
 			name = camera;
-			sourceTree = "<group>";
-		};
-		FABC077A22E5F0C300B21A36 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "New Group";
 			sourceTree = "<group>";
 		};
 		FABC077B22E5F0D400B21A36 /* full text */ = {

@@ -7,6 +7,7 @@
 //
 
 #import "FullTextViewController.h"
+#import "SWRevealViewController.h"
 
 @interface FullTextViewController ()
 
@@ -76,17 +77,36 @@
     [super viewDidLoad];
 
     // Do any additional setup after loading the view from its nib.
-#if 0
-    self.productURL = @"https://ywesee.slack.com";
+    self.title = mTitle;
     
-    NSURL *url = [NSURL URLWithString:self.productURL];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    // SWRevealViewController extends UIViewController!
+    SWRevealViewController *revealController = [self revealViewController];
     
-    //_webView = [[WKWebView alloc] initWithFrame:self.view.frame];
-    [_webView loadRequest:request];
-    //_webView.frame = CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
-    //[self.view addSubview:_webView];
-#endif
+    [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
+    
+    self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
+    self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+    self.navigationController.navigationBar.translucent = NO;
+
+    {
+        UIBarButtonItem *revealButtonItem =
+        [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                         style:UIBarButtonItemStylePlain
+                                        target:revealController
+                                        action:@selector(revealToggle:)];
+        self.navigationItem.leftBarButtonItem = revealButtonItem;
+    }
+    
+    {
+        UIBarButtonItem *rightRevealButtonItem =
+        [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                         style:UIBarButtonItemStylePlain
+                                        target:revealController
+                                        action:@selector(rightRevealToggle:)];
+        self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
+    }
+    
+    // TODO: see MLSecondViewController
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil

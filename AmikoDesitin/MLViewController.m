@@ -2109,6 +2109,101 @@ static BOOL mShowReport = false;
 
 #pragma mark -
 
+- (void) switchToAipsView :(long int)mId
+{
+    if (secondViewController != nil) {
+        // [secondViewController removeFromParentViewController];
+        secondViewController = nil;
+    }
+    
+    secondViewController =
+    [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
+                                             bundle:nil
+                                              title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
+                                           andParam:2];
+    
+    if (mSearchInteractions == false) {
+        // Load style sheet from file
+        NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
+        NSString *amikoCss = nil;
+        if (amikoCssPath)
+            amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
+        else
+            amikoCss = [NSString stringWithString:mMed.styleStr];
+        
+        secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, mMed.contentStr];
+        NSArray *listofSectionIds = @[[MLConstants notSpecified]];
+        NSArray *listofSectionTitles = @[[MLConstants notSpecified]];
+        // Extract section ids
+        if (![mMed.sectionIds isEqual:[NSNull null]]) {
+            listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+        }
+        // Extract section titles
+        if (![mMed.sectionTitles isEqual:[NSNull null]]) {
+            listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
+        }
+        
+        if (titleViewController!=nil) {
+            [titleViewController removeFromParentViewController];
+            titleViewController = nil;
+        }
+        titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
+                                                               sectionIds:listofSectionIds
+                                                              andLanguage:[MLConstants databaseLanguage]];
+    }
+    else {
+        if (mId > -1) {
+            [self pushToMedBasket];
+            
+            // Extract section ids
+            NSArray *listofSectionIds = [NSArray array];
+            // Extract section titles
+            NSArray *listofSectionTitles = [NSArray array];
+            
+            if (titleViewController!=nil) {
+                [titleViewController removeFromParentViewController];
+                titleViewController = nil;
+            }
+            titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
+                                                                   sectionIds:listofSectionIds
+                                                                  andLanguage:[MLConstants databaseLanguage]];
+            
+            // Update medication basket
+            secondViewController.dbAdapter = mDb;
+            secondViewController.titleViewController = titleViewController;
+        }
+        
+        secondViewController.medBasket = mMedBasket;
+        secondViewController.htmlStr = @"Interactions";
+    }
+    
+    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
+    mainRevealController = self.revealViewController;
+    mainRevealController.rightViewController = titleViewController;
+    
+    // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
+    [titleViewController addObserver:secondViewController
+                          forKeyPath:@"javaScript"
+                             options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                             context:@"javaScriptChanged"];
+    
+    // UINavigationController *otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
+    
+    if (otherViewNavigationController!=nil) {
+        [otherViewNavigationController removeFromParentViewController];
+        otherViewNavigationController = nil;
+    }
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
+    
+    // Show SecondViewController (UIWebView)
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+    
+#ifdef DEBUG
+    report_memory();
+#endif
+}
+
 - (void) switchToDrugInteractionViewFromPrescription: (NSMutableDictionary *)medBasket
 {
     mainRevealController = self.revealViewController;
@@ -2275,7 +2370,7 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
-// Front: FullTeaxt, Right: TODO
+// Front: FullText, Right: TODO
 - (void) switchToFullTextView :(NSString *)hashId
 {
 #ifdef DEBUG
@@ -2284,30 +2379,20 @@ static BOOL mShowReport = false;
     /* Search in full text search DB
      */
     
-    NSLog(@"%s %d, hashId: %@", __FUNCTION__, __LINE__, hashId);
-    
     // Get entry
     mFullTextEntry = [mFullTextDb searchHash:hashId];
-    //NSLog(@"%s %d, mFullTextEntry: %@", __FUNCTION__, __LINE__, mFullTextEntry);
     
     // TODO: Hide text finder ?
     
     NSArray *listOfRegnrs = [mFullTextEntry getRegnrsAsArray];
-    //NSLog(@"%s %d, listOfRegnrs: %@", __FUNCTION__, __LINE__, listOfRegnrs);
-    
     NSArray *listOfArticles = [mDb searchRegnrsFromList:listOfRegnrs];
-    //NSLog(@"%s %d, listOfArticles: %@", __FUNCTION__, __LINE__, listOfArticles);
-    
     NSDictionary *dict = [mFullTextEntry getRegChaptersDict];
-    NSLog(@"%s %d, dict: %@", __FUNCTION__, __LINE__, dict);
-    
-    //NSLog(@"%s %d, mFullTextSearch: %@", __FUNCTION__, __LINE__, mFullTextSearch);
     
     mFullTextContentStr = [mFullTextSearch tableWithArticles:listOfArticles
                                           andRegChaptersDict:dict
                                                    andFilter:@""];
 
-    NSLog(@"%s %d, mFullTextContentStr: %@", __FUNCTION__, __LINE__, mFullTextContentStr);
+    //NSLog(@"%s %d, mFullTextContentStr: %@", __FUNCTION__, __LINE__, mFullTextContentStr);
 
     //mCurrentWebView = kFullTextSearchView;
 
@@ -2317,19 +2402,11 @@ static BOOL mShowReport = false;
         // [fullTextVC removeFromParentViewController];
         fullTextVC = nil;
     }
-    
-#if 1
+
     FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
     fullTextVC.htmlStr = mFullTextContentStr;
-#else
-    fullTextVC =
-    [[FullTextViewController alloc] initWithNibName:@"FullTextViewController"
-                                             bundle:nil
-                                              title:NSLocalizedString(@"Full Text", nil)//FACHINFO_STRING
-                                           andParam:2];
-#endif
     
-#if 1
+#if 0
     UIViewController *nc_rear = self.revealViewController.rearViewController;
     MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
 #endif
@@ -2344,7 +2421,7 @@ static BOOL mShowReport = false;
     }
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:fullTextVC];
     
-    // Show SecondViewController (UIWebView)
+    // Show SecondViewController (WKWebView)
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
@@ -2529,12 +2606,12 @@ static BOOL mShowReport = false;
     NSLog(@"%@ Selected medicine or favourite at row %ld", NSStringFromSelector(_cmd), [indexPath row]);
 #endif
     mCurrentIndexPath = indexPath;
-
-    long mId = -1;
     
     if (mCurrentSearchState != SEARCH_FULL_TEXT) {
         /* Search in Aips DB or Interactions DB
          */
+        long int mId = -1;
+
         if (mCurrentIndexPath) {
             mId = [medi[indexPath.row] medId];  // [[medIdArray objectAtIndex:row] longValue];
             mMed = [mDb searchId:mId];
@@ -2545,106 +2622,14 @@ static BOOL mShowReport = false;
         }
         
         mShowReport = false;
+        [self switchToAipsView:mId];
     }
     else {
         /* Search in full text search DB
          */
         NSString *hashId = [medi[indexPath.row] hashId];
         [self switchToFullTextView: hashId];
-        return;
     }
-
-    if (secondViewController != nil) {
-        // [secondViewController removeFromParentViewController];
-        secondViewController = nil;
-    }
-
-    secondViewController =
-    [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
-                                             bundle:nil
-                                              title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
-                                           andParam:2];
-
-    if (mSearchInteractions == false) {
-        // Load style sheet from file
-        NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
-        NSString *amikoCss = nil;
-        if (amikoCssPath)
-            amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
-        else
-            amikoCss = [NSString stringWithString:mMed.styleStr];
- 
-        secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, mMed.contentStr];
-        NSArray *listofSectionIds = @[[MLConstants notSpecified]];
-        NSArray *listofSectionTitles = @[[MLConstants notSpecified]];
-        // Extract section ids
-        if (![mMed.sectionIds isEqual:[NSNull null]]) {
-            listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
-        }
-        // Extract section titles
-        if (![mMed.sectionTitles isEqual:[NSNull null]]) {
-            listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
-        }
-        
-        if (titleViewController!=nil) {
-            [titleViewController removeFromParentViewController];
-            titleViewController = nil;
-        }
-        titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
-                                                          sectionIds:listofSectionIds
-                                                         andLanguage:[MLConstants databaseLanguage]];
-    }
-    else {
-        if (mId > -1) {
-            [self pushToMedBasket];
-        
-            // Extract section ids
-            NSArray *listofSectionIds = [NSArray array];
-            // Extract section titles
-            NSArray *listofSectionTitles = [NSArray array];
-        
-            if (titleViewController!=nil) {
-                [titleViewController removeFromParentViewController];
-                titleViewController = nil;
-            }
-            titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
-                                                                   sectionIds:listofSectionIds
-                                                                  andLanguage:[MLConstants databaseLanguage]];
-        
-            // Update medication basket
-            secondViewController.dbAdapter = mDb;
-            secondViewController.titleViewController = titleViewController;
-        }
-
-        secondViewController.medBasket = mMedBasket;
-        secondViewController.htmlStr = @"Interactions";
-    }
-
-    // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
-    mainRevealController = self.revealViewController;
-    mainRevealController.rightViewController = titleViewController;
-    
-    // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
-    [titleViewController addObserver:secondViewController
-                          forKeyPath:@"javaScript"
-                             options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-                             context:@"javaScriptChanged"];
-    
-    // UINavigationController *otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondView];
-    
-    if (otherViewNavigationController!=nil) {
-        [otherViewNavigationController removeFromParentViewController];
-        otherViewNavigationController = nil;
-    }
-    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
-
-    // Show SecondViewController (UIWebView)
-    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
-
-#ifdef DEBUG
-    report_memory();
-#endif
 }
 
 #define PADDING_IPAD 50.0f

@@ -70,6 +70,7 @@ enum {
 - (IBAction) onToolBarButtonPressed: (id)sender;
 - (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture;
 
+- (void) switchToAipsView :(long int)mId;
 - (void) switchFrontToPatientEditView;
 - (void) switchToPatientEditView :(BOOL)animated;
 - (void) switchToDoctorEditView;

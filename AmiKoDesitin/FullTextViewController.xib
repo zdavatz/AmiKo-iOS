@@ -17,13 +17,12 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+        <view contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w20-0B-pJQ">
-                    <rect key="frame" x="20" y="117" width="374" height="446"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w20-0B-pJQ">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                     <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <wkWebViewConfiguration key="configuration">
                         <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -31,7 +30,12 @@
                     </wkWebViewConfiguration>
                 </wkWebView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="w20-0B-pJQ" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="17o-bs-shc"/>
+                <constraint firstItem="w20-0B-pJQ" firstAttribute="bottom" secondItem="Q5M-cg-NOt" secondAttribute="bottom" id="ASS-Tz-gc4"/>
+                <constraint firstItem="w20-0B-pJQ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="fkq-pb-gwC"/>
+                <constraint firstAttribute="trailing" secondItem="w20-0B-pJQ" secondAttribute="trailing" id="u8h-pM-435"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <point key="canvasLocation" x="131.8840579710145" y="135.9375"/>
         </view>
