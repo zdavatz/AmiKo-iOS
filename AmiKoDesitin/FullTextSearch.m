@@ -18,12 +18,14 @@
 @synthesize listOfSectionIds;
 @synthesize listOfSectionTitles;
 
-- (NSString *) tableWithArticles:(NSArray *)listOfArticles
-              andRegChaptersDict:(NSDictionary *)dict
+- (NSString *) tableWithArticles:(nullable NSArray *)listOfArticles
+              andRegChaptersDict:(nullable NSDictionary *)dict
                        andFilter:(NSString *)filter
 {
 #ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s, listOfArticles count: %lu, dict count: %lu", __FUNCTION__,
+          (unsigned long)[listOfArticles count],
+          (unsigned long)[dict count]);
 #endif
 
     int rows = 0;
@@ -39,7 +41,7 @@
     }
 
 #ifdef DEBUG
-    NSLog(@"%s %d, mListOfArticles count: %lu", __FUNCTION__, __LINE__, (unsigned long)[mListOfArticles count]);
+    //NSLog(@"%s %d, mListOfArticles count: %lu", __FUNCTION__, __LINE__, (unsigned long)[mListOfArticles count]);
 #endif
 
     if (dict)
@@ -54,12 +56,21 @@
             contentStyle = [NSString stringWithFormat:@"<li style=\"background-color:var(--background-color-gray);\" id=\"{firstLetter}\">"];
         else
             contentStyle = [NSString stringWithFormat:@"<li style=\"background-color:transparent;\" id=\"{firstLetter}\">"];
-        
-        NSString *contentTitle = [NSString stringWithFormat:@"<a onclick=\"displayFachinfo('%@','{anchor}')\"><span style=\"font-size:0.8em\"><b>%@</b></span></a> <span style=\"font-size:0.7em\"> | %@</span><br>", m.regnrs, m.title, m.auth];
+
+        // TODO: use size from .css
+        NSString *span1 = [NSString stringWithFormat:@"<span style=\"font-size:0.8em\"><b>%@</b></span>", m.title];
+        NSString *span2 = [NSString stringWithFormat:@"<span style=\"font-size:0.7em\"> | %@</span>", m.auth];
+        NSString *contentTitle = [NSString stringWithFormat:@"<a onclick=\"displayFachinfo('%@','{anchor}')\">%@</a> %@<br>", m.regnrs, span1, span2];
         
         NSString *contentChapters = @"";
         NSArray *regnrs = [m.regnrs componentsSeparatedByString:@","];
         NSDictionary *indexToTitlesDict = [m indexToTitlesDict];    // id -> chapter title
+
+//#ifdef DEBUG
+//        NSLog(@"%s %d, regnrs count %lu, indexToTitlesDict %@", __FUNCTION__, __LINE__,
+//              (unsigned long)[regnrs count],
+//              indexToTitlesDict);
+//#endif
 
         // List of chapters
         if ([regnrs count] > 0) {
@@ -83,11 +94,13 @@
 
                         chaptersCountDict[cStr] = [NSNumber numberWithInt:count+1];
                         if ([filter length]==0 || [filter isEqualToString:cStr]) {
-                            contentChapters = [contentChapters stringByAppendingFormat:@"<span style=\"font-size:0.75em; color:#0088BB\"> <a onclick=\"displayFachinfo('%@','%@')\">%@</a></span><br>", m.regnrs, anchor, cStr];
+                            // TODO: use size from .css
+                            contentChapters = [contentChapters stringByAppendingFormat:@"<span style=\"font-size:0.75em; color:#0088BB\"> <a onclick=\"displayFachinfo('%@','%@')\">%@</a></span><br>",
+                                               m.regnrs, anchor, cStr];
                             filtered = false;
                         }
                     }
-                }
+                } // for
             }
         }
 
@@ -95,7 +108,7 @@
             htmlStr = [htmlStr stringByAppendingFormat:@"%@%@%@</li>", contentStyle, contentTitle, contentChapters];
             rows++;
         }
-    }
+    } // for
     
     htmlStr = [htmlStr stringByAppendingFormat:@"</ul>"];
     

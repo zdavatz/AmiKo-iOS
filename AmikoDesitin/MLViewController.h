@@ -86,4 +86,6 @@ enum {
 - (void) executeSearch:(NSString *)searchText;
 - (void) addMedicineToPrescription:(MLMedication *)medication :(NSInteger)packageIndex;
 
+- (void) ftOverviewDidChangeSelection:(NSNotification *)aNotification;
+
 @end

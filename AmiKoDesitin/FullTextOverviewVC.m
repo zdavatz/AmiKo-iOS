@@ -7,6 +7,7 @@
 //
 
 #import "FullTextOverviewVC.h"
+#import "SWRevealViewController.h"
 
 static const float kFtLabelFontSize = 12.0;
 
@@ -106,19 +107,38 @@ static const float kFtLabelFontSize = 12.0;
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kFtLabelFontSize;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return kFtLabelFontSize;
+//}
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    // TODO: check that ftResults has more than 1 item, otherwise there is no point in resorting
-
+    // Check that ftResults has more than 1 item, otherwise there is no point in resorting
+    if ([ftResults count] < 2) {
+        // Close the right pane and return
+        [self.revealViewController rightRevealToggleAnimated:YES];
+        return;
+    }
+    
+#ifdef DEBUG
     NSString *selectedText = ftResults[indexPath.row];
+    NSLog(@"%s, ftResults count: %lu, selectedText: %@", __FUNCTION__,
+          (unsigned long)[ftResults count], selectedText);
+#endif
 
+    NSDictionary *patientDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSNumber numberWithInt: indexPath.row], KEY_FT_ROW,
+                                 selectedText,     KEY_FT_TEXT,
+                                 nil];
+
+#if 0
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ftOverviewSelectedNotification"
-                                                        object:selectedText];
+                                                        object:[NSNumber numberWithInt: indexPath.row]];
+#else
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ftOverviewSelectedNotification"
+                                                        object:patientDict];
+#endif
 }
 
 @end

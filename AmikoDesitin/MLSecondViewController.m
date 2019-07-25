@@ -572,7 +572,7 @@
         [self updateInteractionBasketView];
 
     NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-    // Loads html directly into webview
+    // Loads HTML directly into webview
     [self.webView loadHTMLString:self.htmlStr
                          baseURL:mainBundleURL];
     /*
@@ -580,29 +580,6 @@
      [self.webView reload];
      */
 }
-
-#if 0
-- (void) updateFullTextSearchView:(NSString *)contentStr
-{
-    NSString *colorCss; // TODO: = [MLUtility getColorCss];
-
-    // TODO: Load style sheet from file
-    NSString *fullTextCss;
-    
-    // TODO: Load javascript from file
-    NSString *jscriptStr;
-    
-    NSString *htmlStr = [NSString stringWithFormat:@"<html><head><meta charset=\"utf-8\" /><meta name=\"supported-color-schemes\" content=\"light dark\" />"];
-    htmlStr = [htmlStr stringByAppendingFormat:@"<script type=\"text/javascript\">%@</script><style type=\"text/css\">%@</style><style type=\"text/css\">%@</style></head><body><div id=\"fulltext\">%@</body></div></html>",
-               jscriptStr,
-               colorCss,
-               fullTextCss,
-               contentStr];
-    
-    [self.webView loadHTMLString:htmlStr
-                         baseURL:[[NSBundle mainBundle] resourceURL]];
-}
-#endif
 
 #pragma mark - medication basket methods
 

@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (atomic) NSArray *listOfSectionIds;
 @property (atomic) NSArray *listOfSectionTitles;
 
-- (NSString *) tableWithArticles:(NSArray *)listOfArticles andRegChaptersDict:(NSDictionary *)dict andFilter:(NSString *)filter;
+- (NSString *) tableWithArticles:(nullable NSArray *)listOfArticles
+              andRegChaptersDict:(nullable NSDictionary *)dict
+                       andFilter:(NSString *)filter;
 
 @end
 

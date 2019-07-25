@@ -44,14 +44,12 @@
     NSLog(@"%s %s", __FILE__, __FUNCTION__);
 #endif
     
-#if 1
     if (self.htmlStr) {
         NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-        // Loads html directly into webview
+        // Loads HTML directly into webview
         [self.webView loadHTMLString:self.htmlStr
                              baseURL:mainBundleURL];
     }
-#endif
     
     // Create objc - js bridge
     //[self createJSBridge];
@@ -94,13 +92,6 @@
                                         action:@selector(rightRevealToggle:)];
         self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     }
-    
-    // TODO: see MLSecondViewController
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(ftOverviewDidChangeSelection:)
-                                                 name:@"ftOverviewSelectedNotification"
-                                               object:nil];
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil
@@ -165,14 +156,9 @@
                fullTextCss,
                contentStr];
     
-#if 0
-    if (htmlStr) {
-        NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-        // Loads html directly into webview
-        [self.webView loadHTMLString:htmlStr
-                             baseURL:mainBundleURL];
-    }
-#endif
+    // Loads HTML directly into webview
+    //NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+    [self.webView loadHTMLString:htmlStr baseURL:nil];
 }
 
 /*
@@ -190,21 +176,6 @@
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
-}
-
-#pragma mark - WKNavigationDelegate methods
-
-#pragma mark - Notifications
-
-- (void)ftOverviewDidChangeSelection:(NSNotification *)aNotification
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-
-    // TODO: resort results in webView
-    
-    [self.revealViewController rightRevealToggleAnimated:YES];
 }
 
 @end

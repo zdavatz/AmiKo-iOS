@@ -10,6 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// Used in Notification dictionary
+#define KEY_FT_ROW           @"key_row"
+#define KEY_FT_TEXT          @"key_text"   // Unused: we need the shorter one instead
+
 @interface FullTextOverviewVC : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
     //NSMutableArray *ftResults;

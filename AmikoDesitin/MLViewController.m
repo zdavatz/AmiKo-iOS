@@ -154,6 +154,9 @@ static BOOL mShowReport = false;
     
     __block NSArray *searchResults;
     
+    NSArray *mListOfSectionIds;  // full paths
+    NSArray *mListOfSectionTitles;
+    
     SWRevealViewController *mainRevealController;
     
     MLSecondViewController *secondViewController;
@@ -384,6 +387,11 @@ static BOOL mShowReport = false;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(patientDbListDidChangeSelection:)
                                                  name:@"PatientSelectedNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(ftOverviewDidChangeSelection:)
+                                                 name:@"ftOverviewSelectedNotification"
                                                object:nil];
     // Set default database
     mUsedDatabase = DB_TYPE_AIPS;
@@ -635,6 +643,34 @@ static BOOL mShowReport = false;
     if ([[notification name] isEqualToString:UIApplicationWillEnterForegroundNotification]) {
         [self checkLastDBSync];
     }
+}
+
+- (void)ftOverviewDidChangeSelection:(NSNotification *)aNotification
+{
+#if 0
+    NSInteger row = [aNotification.object integerValue];
+    //NSString *filter = [aNotification.object stringValue];
+#else
+    NSDictionary *d = [aNotification object];
+    NSInteger row = [d[KEY_FT_ROW] integerValue];
+    //NSString *filter = d[KEY_FT_TEXT];
+#endif
+
+    if (![mFullTextSearch.listOfSectionIds isEqual:[NSNull null]])
+        mListOfSectionIds = mFullTextSearch.listOfSectionIds;
+
+    if (![mFullTextSearch.listOfSectionTitles isEqual:[NSNull null]])
+        mListOfSectionTitles = mFullTextSearch.listOfSectionTitles;
+
+    // Re-sort results in webView
+    NSString *contentStr = [mFullTextSearch tableWithArticles:nil
+                                           andRegChaptersDict:nil
+                                                    andFilter:mListOfSectionIds[row]];
+
+    FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
+    [fullTextVC updateFullTextSearchView:contentStr];
+    
+    [self.revealViewController rightRevealToggleAnimated:YES];
 }
 
 #pragma mark -
@@ -2379,14 +2415,17 @@ static BOOL mShowReport = false;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
 }
 
-// Front: FullText, Right: TODO
+// Front: FullText, Right: FullTextResultsOverview
 - (void) switchToFullTextView :(NSString *)hashId
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
     /* Search in full text search DB
      */
+    
+    if (![mFullTextSearch.listOfSectionIds isEqual:[NSNull null]])
+        mListOfSectionIds = mFullTextSearch.listOfSectionIds;
+
+    if (![mFullTextSearch.listOfSectionTitles isEqual:[NSNull null]])
+        mListOfSectionTitles = mFullTextSearch.listOfSectionTitles;
     
     // Get entry
     mFullTextEntry = [mFullTextDb searchHash:hashId];
@@ -2398,8 +2437,6 @@ static BOOL mShowReport = false;
     mFullTextContentStr = [mFullTextSearch tableWithArticles:listOfArticles
                                           andRegChaptersDict:dict
                                                    andFilter:@""];
-
-    //NSLog(@"%s %d, mFullTextContentStr: %@", __FUNCTION__, __LINE__, mFullTextContentStr);
 
     // Grab a handle to the reveal controller
     mainRevealController = self.revealViewController;
@@ -2423,12 +2460,6 @@ static BOOL mShowReport = false;
     {
         FullTextOverviewVC *fullTextOverviewVC = [FullTextOverviewVC sharedInstance];
         fullTextOverviewVC.ftResults = mFullTextSearch.listOfSectionTitles;
-        
-#ifdef DEBUG
-        NSLog(@"%s %d, listOfSectionIds: %@", __FUNCTION__, __LINE__, mFullTextSearch.listOfSectionIds);
-        NSLog(@"%s %d, listOfSectionTitles: %@", __FUNCTION__, __LINE__, mFullTextSearch.listOfSectionTitles);
-#endif
-        
         mainRevealController.rightViewController = fullTextOverviewVC;
     }
 
