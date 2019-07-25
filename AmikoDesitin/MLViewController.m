@@ -571,7 +571,10 @@ static BOOL mShowReport = false;
         fileCnt++;
         NSLog(@"Finished downloading file %d", fileCnt);
 
-        if (mDb!=nil && mFullTextDb!=nil && fileCnt==3) {
+        if (mDb != nil &&
+            mFullTextDb != nil &&
+            fileCnt==3)
+        {
             // Reset file counter
             fileCnt=0;
             // Make sure downloaded files cannot be backed up
@@ -590,6 +593,7 @@ static BOOL mShowReport = false;
             [self openInteractionsCsvFile];
 
             // Reload table
+            [self resetBarButtonItems];
             [self resetDataInTableView];
             
             // Display friendly message
@@ -713,16 +717,21 @@ static BOOL mShowReport = false;
     searchResults = [NSArray array];
     [medi removeAllObjects];
     [self.myTableView reloadData];
+    mUsedDatabase = DB_TYPE_AIPS;
     mCurrentSearchState = SEARCH_TITLE;
     [self setBarButtonItemsWith:mCurrentSearchState];
 }
 
 - (void) resetDataInTableView
 {
-    // Reset search state
-    mCurrentSearchState = SEARCH_TITLE;
-    
+#ifdef DEBUG
+    NSLog(@"%s %d, mUsedDatabase: %ld, mCurrentSearchState: %ld", __FUNCTION__, __LINE__,
+          (long)mUsedDatabase, (long)mCurrentSearchState);
+#endif
     searchResults = [self searchDatabaseWith:@""];
+#ifdef DEBUG
+    NSLog(@"%s %d, searchResults count: %ld", __FUNCTION__, __LINE__, [searchResults count]);
+#endif
     if (searchResults) {
         [self updateTableView];
         [self.myTableView reloadData];
@@ -735,6 +744,10 @@ static BOOL mShowReport = false;
     NSLog(@"%s", __FUNCTION__);
 #endif
     
+    // Reset search state
+    mUsedDatabase = DB_TYPE_AIPS;
+    mCurrentSearchState = SEARCH_TITLE;
+
     for (UIBarButtonItem *b in [myToolBar items])
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
 
@@ -1448,7 +1461,7 @@ static BOOL mShowReport = false;
 - (NSArray *) searchDatabaseWith:(NSString *)searchQuery
 {
 #ifdef DEBUG
-    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+    NSLog(@"%s %d, mCurrentSearchState: %ld", __FUNCTION__, __LINE__, (long)mCurrentSearchState);
 #endif
     NSArray *searchRes = [NSArray array];
     
@@ -2449,7 +2462,8 @@ static BOOL mShowReport = false;
 
 /** UITableViewDataSource
  */
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView
+  numberOfRowsInSection:(NSInteger)section
 {
 #ifdef DEBUG
     NSLog(@"%s %d, mUsedDatabase: %ld, mCurrentSearchState: %ld", __FUNCTION__, __LINE__,
