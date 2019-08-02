@@ -75,7 +75,7 @@ static NSString* SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 
 - (NSDictionary *) indexToTitlesDict
 {
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *dict = [NSMutableDictionary new];
     
     NSArray *ids = [self listOfSectionIds];
     NSArray *titles = [self listOfSectionTitles];

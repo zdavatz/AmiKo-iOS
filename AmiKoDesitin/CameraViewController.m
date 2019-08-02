@@ -42,7 +42,7 @@ static void * SessionRunningContext = &SessionRunningContext;
     //NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
     
-    self.session = [[AVCaptureSession alloc] init];
+    self.session = [AVCaptureSession new];
     self.previewView.session = self.session;
     self.sessionQueue = dispatch_queue_create( "session queue", DISPATCH_QUEUE_SERIAL );
     self.setupResult = AVCamSetupResultSuccess;
@@ -285,7 +285,7 @@ static void * SessionRunningContext = &SessionRunningContext;
     
     ////////////////////////////////////////////////////////////////////////////
     // Add photo output.
-    AVCapturePhotoOutput *photoOutput = [[AVCapturePhotoOutput alloc] init];
+    AVCapturePhotoOutput *photoOutput = [AVCapturePhotoOutput new];
     if ( [self.session canAddOutput:photoOutput] )
     {
         [self.session addOutput:photoOutput];

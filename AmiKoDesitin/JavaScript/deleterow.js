@@ -1,3 +1,4 @@
+
 function deleteRow(msg,tableID,currentRow) {
     // var myfunc = window.RemoveMeds;
     try {

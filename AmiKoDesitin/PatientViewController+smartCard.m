@@ -122,7 +122,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 
     @autoreleasepool {
 
-    NSMutableArray *ocrStrings = [[NSMutableArray alloc] init];
+    NSMutableArray *ocrStrings = [NSMutableArray new];
 #ifdef WITH_ARRAY_OF_BLACKLISTS
     NSArray *blacklist = [NSArray arrayWithObjects:
                           @"_}\".[]':",
@@ -228,7 +228,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     
     // Create a Patient and fill up the edit fields
 
-    Patient *incompletePatient = [[Patient alloc] init];
+    Patient *incompletePatient = [Patient new];
     incompletePatient.familyName = nameArray[0];
     incompletePatient.givenName = givenName;
     incompletePatient.birthDate = dateArray[0];
@@ -287,7 +287,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
 - (NSArray *)detectTextBoundingBoxes:(CIImage*)image
                          orientation:(CGImagePropertyOrientation)orientation
 {
-    NSMutableArray *words = [[NSMutableArray alloc] init];
+    NSMutableArray *words = [NSMutableArray new];
 
     VNDetectTextRectanglesRequest *textRequest = [VNDetectTextRectanglesRequest new];
     textRequest.reportCharacterBoxes = NO;

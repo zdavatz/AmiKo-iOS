@@ -27,7 +27,7 @@
 
 - (NSInteger) highlightAllOccurencesOfString: (NSString*)str
 {
-    // Load Javascript file
+    // Load JavaScript file
     NSString *path = [[NSBundle mainBundle] pathForResource:@"MLSearchWebView" ofType:@"js"];
     NSString *jsCode = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
 

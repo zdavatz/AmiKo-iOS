@@ -180,6 +180,7 @@ static BOOL mShowReport = false;
     
     BOOL runningActivityIndicator;
 
+    NSString *mAnchor;
     NSString *mFullTextContentStr;
     
     dispatch_queue_t mSearchQueue;
@@ -352,7 +353,7 @@ static BOOL mShowReport = false;
     medi = [NSMutableArray array];
     titleData = [NSMutableArray array];
     subTitleData = [NSMutableArray array];
-    favoriteKeyData = [NSMutableArray array];   // equivalent to [[alloc] init]
+    favoriteKeyData = [NSMutableArray array];   // equivalent to [[alloc] init] and [new]
     medIdArray = [NSMutableArray array];        // Used by tableview
     
     secondViewController = nil;
@@ -717,7 +718,7 @@ static BOOL mShowReport = false;
 
 - (void) openFullTextDatabase
 {
-    mFullTextDb = [[FullTextDBAdapter alloc] init];
+    mFullTextDb = [FullTextDBAdapter new];
     if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
         if (![mFullTextDb openDatabase:@"amiko_frequency_de"]) {
             NSLog(@"No German Fulltext database!");
@@ -1175,7 +1176,7 @@ static BOOL mShowReport = false;
     [self setBarButtonItemsWith:mCurrentSearchState];
     
     // Initialize full text search
-    mFullTextSearch = [[FullTextSearch alloc] init];
+    mFullTextSearch = [FullTextSearch new];
 }
 
 //- (void) viewDidUnload
@@ -1342,10 +1343,10 @@ static BOOL mShowReport = false;
 #endif
 
     // Init medication basket
-    mMedBasket = [[NSMutableDictionary alloc] init];
+    mMedBasket = [NSMutableDictionary new];
     
     // Load favorites
-    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    NSFileManager *fileManager = [NSFileManager new];
     NSArray *urls = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
     if ([urls count] > 0) {
         NSURL *libraryFolder = urls[0];
@@ -1366,7 +1367,7 @@ static BOOL mShowReport = false;
         NSLog(@"Could not find the Library folder.");
     }
     
-    favoriteData = [[MLDataStore alloc] init];
+    favoriteData = [MLDataStore new];
     [self loadData];
     
     favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favoriteData.favMedsSet];
@@ -1775,7 +1776,7 @@ static BOOL mShowReport = false;
       andPackInfo: (NSString *)packinfo
          andMedId: (long)medId
 {
-    DataObject *m = [[DataObject alloc] init];
+    DataObject *m = [DataObject new];
     
     if (![title isEqual:[NSNull null]])
         m.title = title;
@@ -1800,7 +1801,7 @@ static BOOL mShowReport = false;
         andAuthor:(NSString *)author
          andMedId:(long)medId
 {
-    DataObject *m = [[DataObject alloc] init];
+    DataObject *m = [DataObject new];
     
     if (![title isEqual:[NSNull null]])
         m.title = title;
@@ -1823,7 +1824,7 @@ static BOOL mShowReport = false;
       andAtcClass:(NSString *)atcclass
          andMedId:(long)medId
 {
-    DataObject *m = [[DataObject alloc] init];
+    DataObject *m = [DataObject new];
     
     if (![title isEqual:[NSNull null]])
         m.title = title;
@@ -1875,7 +1876,7 @@ static BOOL mShowReport = false;
         andAuthor:(NSString *)author
          andMedId:(long)medId
 {
-    DataObject *m = [[DataObject alloc] init];
+    DataObject *m = [DataObject new];
     
     if (![title isEqual:[NSNull null]])
         m.title = title;
@@ -1898,7 +1899,7 @@ static BOOL mShowReport = false;
 
 - (void) addSubstances:(NSString *)substances andTitle:(NSString *)title andAuthor:(NSString *)author andMedId:(long)medId
 {
-    DataObject *m = [[DataObject alloc] init];
+    DataObject *m = [DataObject new];
     
     if (![substances isEqual:[NSNull null]]) {
         // Unicode for character 'alpha' = &#593;
@@ -1926,7 +1927,7 @@ static BOOL mShowReport = false;
   andApplications:(NSString *)applications
          andMedId:(long)medId
 {
-    DataObject *m = [[DataObject alloc] init];
+    DataObject *m = [DataObject new];
     
     if (![title isEqual:[NSNull null]])
         m.title = title;
@@ -1957,7 +1958,7 @@ static BOOL mShowReport = false;
          andNumHits: (unsigned long)numHits
             andHash: (NSString *)hash
 {
-    DataObject *m = [[DataObject alloc] init];
+    DataObject *m = [DataObject new];
     
     if (![keyword isEqual:[NSNull null]])
         m.title = keyword;
@@ -2156,6 +2157,9 @@ static BOOL mShowReport = false;
 
 - (void) switchToAipsView :(long int)mId
 {
+#ifdef DEBUG
+    NSLog(@"%s, mId: %ld", __FUNCTION__, mId);
+#endif
     if (secondViewController != nil) {
         // [secondViewController removeFromParentViewController];
         secondViewController = nil;
@@ -2167,34 +2171,105 @@ static BOOL mShowReport = false;
                                               title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
                                            andParam:2];
     
-    if (mSearchInteractions == false) {
-        // Load style sheet from file
-        NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
-        NSString *amikoCss = nil;
-        if (amikoCssPath)
-            amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
-        else
-            amikoCss = [NSString stringWithString:mMed.styleStr];
-        
-        secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, mMed.contentStr];
-        NSArray *listofSectionIds = @[[MLConstants notSpecified]];
-        NSArray *listofSectionTitles = @[[MLConstants notSpecified]];
-        // Extract section ids
-        if (![mMed.sectionIds isEqual:[NSNull null]]) {
-            listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+    if (!mSearchInteractions) {
+        {
+            // Load style sheet from file
+            NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
+            NSString *amikoCss;
+            if (amikoCssPath)
+                amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
+            else
+                amikoCss = [NSString stringWithString:mMed.styleStr];
+            
+            if (mCurrentSearchState == SEARCH_FULL_TEXT) {
+
+                NSString *colorCss = [MLUtility getColorCss];
+                NSString *colorHtml =
+                    [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", colorCss];
+                
+                // Load JavaScript from file
+                NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"main_callbacks" ofType:@"js"];
+                NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath
+                                                                 encoding:NSUTF8StringEncoding
+                                                                    error:nil];
+                NSString *jscriptHtml = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
+
+                NSString *headHtml = [NSString stringWithFormat:@"<head>%@%@<style>%@</style></head>",
+                                      jscriptHtml,
+                                      colorHtml,
+                                      amikoCss];
+#ifdef DEBUG
+                NSLog(@"%s line %d, mMed.contentStr:\n\n%@", __FUNCTION__, __LINE__,
+                      [mMed.contentStr substringToIndex:MIN(500,[mMed.contentStr length])]);
+#endif
+
+                secondViewController.htmlStr =
+                [mMed.contentStr stringByReplacingOccurrencesOfString:@"<head></head>"
+                                                           withString:headHtml];
+//                secondViewController.htmlStr =
+//                    [NSString stringWithFormat:@"<head>%@<style>%@</style></head>%@",
+//                     jscriptHtml,
+//                     amikoCss,
+//                     mMed.contentStr];
+
+                NSString *keyword = [mFullTextEntry keyword];
+                if (keyword) {
+#ifdef DEBUG
+                    NSLog(@"%s line %d, keyword: %@, mAnchor: %@", __FUNCTION__, __LINE__, keyword, mAnchor);
+#endif
+
+                    NSString *jsCode =
+                    [NSString stringWithFormat:@"highlightText(document.body,'%@');moveToHighlight('%@')",
+                     keyword, mAnchor];
+
+                    // Instead of appending like in the Windows version,
+                    // insert before "</body>"
+                    NSString *extraHtmlCode = [NSString stringWithFormat:@"<script>%@</script>\n </body>", jsCode];
+                    secondViewController.htmlStr = [secondViewController.htmlStr stringByReplacingOccurrencesOfString:@"</body>"
+                                                                 withString:extraHtmlCode];
+                    
+#ifdef DEBUG
+                    NSUInteger length = [secondViewController.htmlStr length];
+                    
+                    NSLog(@"%s line %d, htmlStr head :\n\n%@", __FUNCTION__, __LINE__,
+                          [secondViewController.htmlStr substringToIndex:MIN(500,length)]);
+                    
+                    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
+                          [secondViewController.htmlStr substringFromIndex:length - MIN(200,length)]);
+#endif
+                }
+                
+                // Inject JS into webview
+                if (mAnchor) {
+                    NSString *jsCallback = [NSString stringWithFormat:@"moveToHighlight('%@')", mAnchor];
+                    [secondViewController.webView stringByEvaluatingJavaScriptFromString:jsCallback];
+                }
+            }
+            else {
+                secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, mMed.contentStr];
+            }
         }
-        // Extract section titles
-        if (![mMed.sectionTitles isEqual:[NSNull null]]) {
-            listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
+
+        {
+            NSArray *listofSectionIds = @[[MLConstants notSpecified]];
+            NSArray *listofSectionTitles = @[[MLConstants notSpecified]];
+            // Extract section ids
+            if (![mMed.sectionIds isEqual:[NSNull null]]) {
+                listofSectionIds = [mMed.sectionIds componentsSeparatedByString:@","];
+            }
+            // Extract section titles
+            if (![mMed.sectionTitles isEqual:[NSNull null]]) {
+                listofSectionTitles = [mMed.sectionTitles componentsSeparatedByString:@";"];
+            }
+            
+            if (titleViewController!=nil) {
+                [titleViewController removeFromParentViewController];
+                titleViewController = nil;
+            }
+            titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
+                                                                   sectionIds:listofSectionIds
+                                                                  andLanguage:[MLConstants databaseLanguage]];
         }
-        
-        if (titleViewController!=nil) {
-            [titleViewController removeFromParentViewController];
-            titleViewController = nil;
-        }
-        titleViewController = [[MLTitleViewController alloc] initWithMenu:listofSectionTitles
-                                                               sectionIds:listofSectionIds
-                                                              andLanguage:[MLConstants databaseLanguage]];
     }
     else {
         if (mId > -1) {
@@ -2226,7 +2301,8 @@ static BOOL mShowReport = false;
     mainRevealController = self.revealViewController;
     mainRevealController.rightViewController = titleViewController;
     
-    // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
+    // Class MLSecondViewController is now registered as an observer
+    // so that when the string 'javaScript' is modified, the observer will execute the script
     [titleViewController addObserver:secondViewController
                           forKeyPath:@"javaScript"
                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
@@ -2310,7 +2386,8 @@ static BOOL mShowReport = false;
     
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
-    // Class MLSecondViewController is now registered as an observer of class MLMenuViewController
+    // Class MLSecondViewController is now registered as an observer
+    // so that when the string 'javaScript' is modified, the observer will execute the script
     [titleViewController addObserver:secondViewController
                           forKeyPath:@"javaScript"
                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
@@ -2469,6 +2546,22 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
     report_memory();
 #endif
+}
+
+- (void) switchToAipsViewFromFulltext: (NSDictionary *)message
+{
+#ifdef DEBUG
+    NSLog(@"%s, message: %@", __FUNCTION__, message);
+#endif
+
+    NSString *ean = message[@"EanCode"];
+    NSString *anchor = message[@"Anchor"];
+    mMed = [mDb getMediWithRegnr:ean];
+    //[self updateExpertInfoView:anchor]; // TODO: highlight
+
+    mAnchor = anchor;
+    mSearchInteractions = false;
+    [self switchToAipsView:-1];
 }
 
 /**

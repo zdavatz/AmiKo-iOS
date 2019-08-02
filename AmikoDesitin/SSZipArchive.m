@@ -77,7 +77,7 @@
 	int ret = 0;
 	unsigned char buffer[4096] = {0};
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSMutableSet *directoriesModificationDates = [[NSMutableSet alloc] init];
+	NSMutableSet *directoriesModificationDates = [NSMutableSet new];
 	
 	// Message delegate
 	if ([delegate respondsToSelector:@selector(zipArchiveWillUnzipArchiveAtPath:zipInfo:)]) {
@@ -403,7 +403,7 @@
 	static const UInt32 kSecondMask = 0x1F;
 	
 	NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *components = [[NSDateComponents alloc] init];
+    NSDateComponents *components = [NSDateComponents new];
 
     NSAssert(0xFFFFFFFF == (kYearMask | kMonthMask | kDayMask | kHourMask | kMinuteMask | kSecondMask), @"[SSZipArchive] MSDOS date masks don't add up");
 	    

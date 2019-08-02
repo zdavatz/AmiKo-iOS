@@ -49,7 +49,7 @@ static bool logging = false;
 
 + (instancetype)bridgeForWebView:(WVJB_WEBVIEW_TYPE*)webView webViewDelegate:(WVJB_WEBVIEW_DELEGATE_TYPE*)webViewDelegate handler:(WVJBHandler)messageHandler resourceBundle:(NSBundle*)bundle
 {
-    WebViewJavascriptBridge* bridge = [[WebViewJavascriptBridge alloc] init];
+    WebViewJavascriptBridge* bridge = [WebViewJavascriptBridge new];
     [bridge _platformSpecificSetup:webView webViewDelegate:webViewDelegate handler:messageHandler resourceBundle:bundle];
     [bridge reset];
     return bridge;

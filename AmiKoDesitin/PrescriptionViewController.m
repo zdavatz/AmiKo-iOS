@@ -67,7 +67,7 @@ enum {
 CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     CGSize constraint = CGSizeMake(width, CGFLOAT_MAX);
-    NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
+    NSStringDrawingContext *context = [NSStringDrawingContext new];
     CGSize boundSize = [label.text boundingRectWithSize:constraint
                                                 options:NSStringDrawingUsesLineFragmentOrigin
                                              attributes:@{NSFontAttributeName:label.font}
@@ -185,7 +185,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [[self alloc] init];
+        sharedObject = [self new];
     });
     
     return sharedObject;
@@ -334,7 +334,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self updateMainframeRect];
     
     if (!prescription)
-        prescription = [[Prescription alloc] init];
+        prescription = [Prescription new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
@@ -506,7 +506,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
     if (!prescription.doctor)
-        self.prescription.doctor = [[Operator alloc] init];
+        self.prescription.doctor = [Operator new];
     
     [prescription.doctor importFromDict:doctorDictionary];
     [prescription.doctor importSignatureFromFile];
@@ -555,7 +555,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         return FALSE;
     }
     
-    PatientDBAdapter *patientDb = [[PatientDBAdapter alloc] init];
+    PatientDBAdapter *patientDb = [PatientDBAdapter new];
     if (![patientDb openDatabase:@"patient_db"]) {
         NSLog(@"Could not open patient DB!");
         return FALSE;
@@ -1029,7 +1029,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     //NSLog(@"%s", __FUNCTION__);
     
-    NSMutableDictionary *medBasket = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *medBasket = [NSMutableDictionary new];
     // pushToMedBasket
     for (Product *p in prescription.medications) {
         NSString *title = [p title];
@@ -1042,7 +1042,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
         // Add med to medication basket
         // We must build a dictionary of MLMedication, not of Product
-        MLMedication *m = [[MLMedication alloc] init];
+        MLMedication *m = [MLMedication new];
         m.regnrs = p.regnrs;
         m.auth = p.auth;        // owner
         m.atccode = p.atccode;  // We only need this one for interactions
@@ -1467,7 +1467,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSMutableArray *amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
     
     //NSLog(@"documentsDir:%@", amkFiles);
-    Prescription *p = [[Prescription alloc] init];
+    Prescription *p = [Prescription new];
     for (NSString* f in amkFiles) {
         NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:f];
 
@@ -1563,7 +1563,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                               prescription.doctor.city,
                               [MLUtility prettyTime]];
 
-    NSMutableDictionary *prescriptionDict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *prescriptionDict = [NSMutableDictionary new];
     [prescriptionDict setObject:prescription.hash forKey:KEY_AMK_HASH];
     [prescriptionDict setObject:prescription.placeDate forKey:KEY_AMK_PLACE_DATE];
     [prescriptionDict setObject:[prescription makePatientDictionary] forKey:KEY_AMK_PATIENT];
@@ -1766,10 +1766,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)addMedication:(Product *)p
 {
     if (!prescription)
-        prescription = [[Prescription alloc] init];
+        prescription = [Prescription new];
     
     if (!prescription.medications)
-        prescription.medications = [[NSMutableArray alloc] init];
+        prescription.medications = [NSMutableArray new];
     
     [prescription.medications addObject:p];
     self.editedMedicines = true;
@@ -2668,7 +2668,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
     // Add medicine to prescription
     if (found) {
-        NSMutableDictionary *medicationDict = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *medicationDict = [NSMutableDictionary new];
         [medicationDict setObject:packageInfo forKey:KEY_AMK_MED_PACKAGE];
         [medicationDict setObject:eancode     forKey:KEY_AMK_MED_EAN];
 

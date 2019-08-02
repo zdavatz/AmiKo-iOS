@@ -6,7 +6,8 @@ target 'AmiKoDesitin' do
 
   # Pods for AmiKoDesitin
   pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
-
+  #pod 'WebViewJavascriptBridge', '4.1.4'
+  #pod SWRevealViewController
 end
 
 target 'CoMedDesitin' do
@@ -15,5 +16,6 @@ target 'CoMedDesitin' do
 
   # Pods for CoMedDesitin
   pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
-
+  #pod 'WebViewJavascriptBridge', '4.1.4'
+  #pod SWRevealViewController
 end

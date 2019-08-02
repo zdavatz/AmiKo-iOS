@@ -83,7 +83,7 @@
         // Setup database object
         sqlite3 *dbConnection;
         // Open database from users filesystem
-        NSFileManager *fileMgr = [[NSFileManager alloc] init];
+        NSFileManager *fileMgr = [NSFileManager new];
         
         NSArray *content = [fileMgr contentsOfDirectoryAtPath:path error:nil];
         for (NSString *p in content) {
@@ -113,7 +113,7 @@
         // Setup database object
         sqlite3 *dbConnection;
         // Open database from users filesystem
-        NSFileManager *fileMgr = [[NSFileManager alloc] init];
+        NSFileManager *fileMgr = [NSFileManager new];
         NSLog(@"%@", path);
         NSArray *content = [fileMgr contentsOfDirectoryAtPath:path error:nil];
         for (NSString *p in content) {
@@ -135,7 +135,7 @@
                andTable:(NSString *)table
              andColumns:(NSString *)columns
 {
-    NSFileManager *fileMgr = [[NSFileManager alloc] init];
+    NSFileManager *fileMgr = [NSFileManager new];
     
     if ([fileMgr fileExistsAtPath:path]) {
         NSLog(@"Patient DB file already created");

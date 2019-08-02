@@ -190,7 +190,7 @@
     // Check if device is configured to send email
     if ([MFMailComposeViewController canSendMail]) {
         // Init mail view controller
-        MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+        MFMailComposeViewController *mailer = [MFMailComposeViewController new];
         mailer.mailComposeDelegate = self;
         
         // Subject
@@ -305,10 +305,10 @@
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    MLCustomURLConnection *reportConn = [[MLCustomURLConnection alloc] init];
-    MLCustomURLConnection *dbConn = [[MLCustomURLConnection alloc] init];
-    MLCustomURLConnection *interConn = [[MLCustomURLConnection alloc] init];
-    MLCustomURLConnection *fulltextConn = [[MLCustomURLConnection alloc] init];
+    MLCustomURLConnection *reportConn = [MLCustomURLConnection new];
+    MLCustomURLConnection *dbConn = [MLCustomURLConnection new];
+    MLCustomURLConnection *interConn = [MLCustomURLConnection new];
+    MLCustomURLConnection *fulltextConn = [MLCustomURLConnection new];
 
     if ([APP_NAME isEqualToString:@"iAmiKo"] ||
         [APP_NAME isEqualToString:@"AmiKoDesitin"]) {

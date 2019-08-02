@@ -79,6 +79,7 @@ enum {
 - (void) switchToDrugInteractionViewFromPrescription: (NSMutableDictionary *)medBasket;
 - (void) switchToDrugInteractionView;
 - (void) switchToPrescriptionView;
+- (void) switchToAipsViewFromFulltext: (NSDictionary *)message;
 
 - (void) switchTabBarItem: (UITabBarItem *)item;
 

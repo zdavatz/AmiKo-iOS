@@ -51,7 +51,7 @@
     
     if (modal) {
         if (!myProgressView)
-            myProgressView = [[MLProgressViewController alloc] init];
+            myProgressView = [MLProgressViewController new];
 
         [myProgressView start];
     }

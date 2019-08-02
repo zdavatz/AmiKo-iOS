@@ -31,7 +31,7 @@
 
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [[self alloc] init];
+        sharedObject = [self new];
     });
     return sharedObject;
 }
@@ -61,7 +61,7 @@
     
     // Retrieves contacts from address DB
     // Open patient DB
-    mPatientDb = [[PatientDBAdapter alloc] init];
+    mPatientDb = [PatientDBAdapter new];
     if (![mPatientDb openDatabase:@"patient_db"]) {
         NSLog(@"Could not open patient DB!");
         mPatientDb = nil;

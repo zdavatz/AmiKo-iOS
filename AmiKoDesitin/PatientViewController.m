@@ -53,7 +53,7 @@ enum {
     
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [[self alloc] init];
+        sharedObject = [self new];
     });
     return sharedObject;
 }
@@ -183,7 +183,7 @@ enum {
         [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
     
     // Open patient DB
-    mPatientDb = [[PatientDBAdapter alloc] init];
+    mPatientDb = [PatientDBAdapter new];
     if (![mPatientDb openDatabase:@"patient_db"]) {
         NSLog(@"Could not open patient DB!");
         mPatientDb = nil;
@@ -319,7 +319,7 @@ enum {
 
 - (Patient *) getAllFields
 {
-    Patient *patient = [[Patient alloc] init];
+    Patient *patient = [Patient new];
     patient.familyName = [mFamilyName text];
     
     patient.givenName = [mGivenName text];

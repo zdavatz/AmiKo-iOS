@@ -17,7 +17,7 @@
 
 - (NSDictionary *) makePatientDictionary
 {
-    NSMutableDictionary *patientDict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *patientDict = [NSMutableDictionary new];
     
     [patientDict setObject:[self.patient uniqueId] forKey:KEY_AMK_PAT_ID];
     [patientDict setObject:[self.patient givenName] forKey:KEY_AMK_PAT_NAME];
@@ -37,7 +37,7 @@
 
 - (NSDictionary *) makeOperatorDictionary
 {
-    NSMutableDictionary *operatorDict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *operatorDict = [NSMutableDictionary new];
 
     if ([doctor title])  // optional field
         [operatorDict setObject:[doctor title] forKey:KEY_AMK_DOC_TITLE];
@@ -57,9 +57,9 @@
 
 - (NSArray *) makeMedicationsArray;
 {
-    NSMutableArray *prescription = [[NSMutableArray alloc] init];
+    NSMutableArray *prescription = [NSMutableArray new];
     for (Product *item in medications) {
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *dict = [NSMutableDictionary new];
         
         [dict setObject:item.title       forKey:KEY_AMK_MED_PROD_NAME];
         [dict setObject:item.packageInfo forKey:KEY_AMK_MED_PACKAGE];
@@ -141,14 +141,14 @@
     
     NSDictionary *operatorDict = [receiptData objectForKey:KEY_AMK_OPERATOR] ? : [NSNull null];
     if (operatorDict) {
-        doctor = [[Operator alloc] init];
+        doctor = [Operator new];
         [doctor importFromDict:operatorDict];
         [doctor importSignatureFromDict:operatorDict];
     }
     
     NSDictionary *patientDict = [receiptData objectForKey:KEY_AMK_PATIENT] ? : [NSNull null];
     if (patientDict) {
-        patient = [[Patient alloc] init];
+        patient = [Patient new];
         [patient importFromDict:patientDict];
     }
     
@@ -156,7 +156,7 @@
     if (medications)
         [medications removeAllObjects];
     else
-        medications = [[NSMutableArray alloc] init];
+        medications = [NSMutableArray new];
 
     NSArray *medicationArray = [receiptData objectForKey:KEY_AMK_MEDICATIONS];
     if (medicationArray)

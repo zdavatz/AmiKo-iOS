@@ -113,28 +113,32 @@
     return self;
 }
 
-#pragma mark IBAction methods
+#pragma mark - IBAction methods
 
 - (IBAction) moveToPrevHighlight:(id)sender
 {
-    if (mTotalHighlights>1) {
-        mCurrentHightlight -= 1;
-        if (mCurrentHightlight<0)
-            mCurrentHightlight = mTotalHighlights-1;
-        [self.webView nextHighlight:mCurrentHightlight];
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
-    }
+    if (mTotalHighlights <= 1)
+        return;
+
+    mCurrentHightlight--;
+    if (mCurrentHightlight < 0)
+        mCurrentHightlight = mTotalHighlights-1;
+
+    [self.webView nextHighlight:mCurrentHightlight];
+    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
 }
 
 - (IBAction) moveToNextHighlight:(id)sender
 {
-    if (mTotalHighlights>1) {
-        mCurrentHightlight += 1;
-        if (mCurrentHightlight>=mTotalHighlights)
-            mCurrentHightlight = 0;
-        [self.webView nextHighlight:mCurrentHightlight];
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
-    }
+    if (mTotalHighlights <= 1)
+        return;
+
+    mCurrentHightlight++;
+    if (mCurrentHightlight >= mTotalHighlights)
+        mCurrentHightlight = 0;
+
+    [self.webView nextHighlight:mCurrentHightlight];
+    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
 }
 
 - (void) resetSearchField
@@ -168,14 +172,22 @@
 /**
  This is the observing class
  */
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void) observeValueForKeyPath:(NSString *)keyPath
+                       ofObject:(id)object
+                         change:(NSDictionary *)change
+                        context:(void *)context
 {
+#ifdef DEBUG
+    NSLog(@"%s line %d, keyPath: %@, change:%@", __FUNCTION__, __LINE__, keyPath, change);
+#endif
     // [self addObserver:self forKeyPath:@"javaScript" options:0 context:@"javaScriptChanged"];
+    // This class is added as an observer in '[MLViewController switchToAipsView]'
     if ([keyPath isEqualToString:@"javaScript"]) {
         htmlAnchor = [NSString stringWithString:[change objectForKey:@"new"]];
         [self.webView stopLoading];
         [self.webView stringByEvaluatingJavaScriptFromString:htmlAnchor];
-    } else {
+    }
+    else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
@@ -185,7 +197,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
 #ifdef DEBUG
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s, htmlStr length: %lu", __FUNCTION__, (unsigned long)[htmlStr length]);
 #endif
     
     [super viewWillAppear:animated];
@@ -470,23 +482,37 @@
     if (_jsBridge)
         return;
     
+#ifdef DEBUG
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+#endif
     [WebViewJavascriptBridge enableLogging];
     
     // @maxl: note the webviewdelegate parameter. if it's not passed, no way to get the webview delegates to work!
     // _jsBridge = [WebViewJavascriptBridge bridgeForWebView:self.webView handler:^(id msg, WVJBResponseCallback responseCallback) {
-    _jsBridge = [WebViewJavascriptBridge bridgeForWebView:self.webView webViewDelegate:self handler:^(id msg, WVJBResponseCallback responseCallback) {
+    _jsBridge = [WebViewJavascriptBridge bridgeForWebView: webView
+                                          webViewDelegate: self
+                                                  handler: ^(id msg, WVJBResponseCallback responseCallback) {
         if ([msg isEqualToString:@"notify_interaction"]) {
-            // NSLog(@"Notify interaction");
-            [self sendEmailTo:@"zdavatz@ywesee.com" withSubject:[NSString stringWithFormat:@"%@: Unbekannte Interaktionen", APP_NAME]];
-             return;
-        } else if ([msg isEqualToString:@"delete_all"]) {
-            // NSLog(@"Delete all");
-            [medBasket removeAllObjects];
-        } else {
-            // NSLog(@"Delete number %@", msg);
-            [medBasket removeObjectForKey:msg];
+#ifdef DEBUG
+            NSLog(@"%s line %d, Notify interaction", __FUNCTION__, __LINE__);
+#endif
+            [self sendEmailTo:@"zdavatz@ywesee.com"
+                  withSubject:[NSString stringWithFormat:@"%@: Unbekannte Interaktionen", APP_NAME]];
         }
-        [self updateInteractionBasketView];
+        else if ([msg isEqualToString:@"delete_all"]) {
+#ifdef DEBUG
+            NSLog(@"%s line %d, Delete all", __FUNCTION__, __LINE__);
+#endif
+            [self.medBasket removeAllObjects];
+            [self updateInteractionBasketView];
+        }
+        else {
+#ifdef DEBUG
+            NSLog(@"%s line %d, Delete number %@", __FUNCTION__, __LINE__, msg);
+#endif
+            [self.medBasket removeObjectForKey:msg];
+            [self updateInteractionBasketView];
+        }
     }];
 }
 
@@ -495,7 +521,7 @@
     // Check if device is configured to send email
     if ([MFMailComposeViewController canSendMail]) {
         // Init mail view controller
-        MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+        MFMailComposeViewController *mailer = [MFMailComposeViewController new];
         mailer.mailComposeDelegate = self;
         
         // Subject
@@ -528,20 +554,20 @@
 }
 
 /** 
- Updates medication basket html string
+ Updates medication basket HTML string
  */
 - (void) updateInteractionBasketView
 {
 #ifdef DEBUG
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
 #endif
-    // TODO --> OPTIMIZE!! Pre-load the following files!
+    // TODO: Optimize: pre-load the following files
     
     // Load style sheet from file
     NSString *interactionsCssPath = [[NSBundle mainBundle] pathForResource:@"interactions_css" ofType:@"css"];
     NSString *interactionsCss = [NSString stringWithContentsOfFile:interactionsCssPath encoding:NSUTF8StringEncoding error:nil];
     
-    // Load javascript from file
+    // Load JavaScript from file
     NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"deleterow" ofType:@"js"];
     NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath encoding:NSUTF8StringEncoding error:nil];
     
@@ -556,6 +582,10 @@
     
     self.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", interactionsCss, html];
     
+#ifdef DEBUG
+    NSLog(@"%s htmlStr:\n%@", __FUNCTION__, htmlStr);
+#endif
+
     [self updateWebView];
 }
 
@@ -565,7 +595,8 @@
 - (void) updateWebView
 {
 #ifdef DEBUG
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s htmlStr:\n\n%@", __FUNCTION__,
+          [htmlStr substringToIndex:MIN(500,[htmlStr length])]);
 #endif
     
     if ([self.htmlStr isEqualToString:@"Interactions"])
@@ -871,20 +902,32 @@
 }
 
 - (void) webViewDidStartLoad:(UIWebView *)webView
-{   
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
 }
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     // Check this out!
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         int fontSize = 80;
         NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", fontSize];
         [self.webView stringByEvaluatingJavaScriptFromString:jsString];
     }
-    // NSString *res =
-    [self.webView stringByEvaluatingJavaScriptFromString:htmlAnchor];
+
+    if ([htmlAnchor length] > 0) {
+#ifdef DEBUG
+        NSLog(@"%s, htmlAnchor: %@", __FUNCTION__, htmlAnchor);
+#endif
+        // NSString *res =
+        [self.webView stringByEvaluatingJavaScriptFromString:htmlAnchor];
+    }
+    
     // int height =
     [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] intValue];
     
@@ -895,7 +938,7 @@
     [self showFindPanel:NO];
 }
 
-#pragma mark MFMailComposeViewControllerDelegate methods
+#pragma mark - MFMailComposeViewControllerDelegate methods
 
 - (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {

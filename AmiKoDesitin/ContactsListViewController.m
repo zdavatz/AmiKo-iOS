@@ -44,7 +44,7 @@
     tableIdentifier = @"contactsListTableItem";
     textColor = [UIColor grayColor];
     
-    mFilteredArrayOfPatients = [[NSMutableArray alloc] init];
+    mFilteredArrayOfPatients = [NSMutableArray new];
     mSearchFiltered = FALSE;
     mPatientUUID = nil;
     
@@ -95,7 +95,7 @@
     }
     
     if ([CNContactStore class]) {
-        CNContactStore *addressBook = [[CNContactStore alloc] init];
+        CNContactStore *addressBook = [CNContactStore new];
         
         NSArray *keys = @[CNContactIdentifierKey,
                           CNContactFamilyNameKey,
@@ -114,7 +114,7 @@
                                                 if (error) {
                                                     NSLog(@"error fetching contacts %@", error);
                                                 } else {
-                                                    Patient *patient = [[Patient alloc] init];
+                                                    Patient *patient = [Patient new];
                                                     patient.familyName = contact.familyName;
                                                     patient.givenName = contact.givenName;
                                                     // Postal address

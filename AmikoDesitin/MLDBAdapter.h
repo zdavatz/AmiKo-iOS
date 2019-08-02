@@ -38,6 +38,7 @@
 - (NSInteger) getNumRecords;
 - (NSInteger) getNumProducts;
 - (MLMedication *) searchId: (long)rowId;
+- (MLMedication *) getMediWithRegnr:(NSString *)regnr;
 - (NSArray *) getRecord: (long)rowId;
 
 - (NSArray *) searchEan: (NSString *)ean;

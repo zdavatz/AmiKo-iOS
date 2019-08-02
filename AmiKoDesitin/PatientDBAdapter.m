@@ -234,7 +234,7 @@ static NSString *DB_SCHEMA = nil;
 
 - (Patient *) cursorToPatient:(NSArray *)cursor
 {
-    Patient *patient = [[Patient alloc] init];
+    Patient *patient = [Patient new];
     
 //    NSString *timeStamp =   (NSString *)[cursor objectAtIndex:0];
 //    NSLog(@"timeStamp %@", timeStamp);

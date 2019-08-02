@@ -24,7 +24,7 @@
                      size:(CGFloat)size
                     color:(UIColor*)color
 {
-    UILabel *label = [[UILabel alloc] init];
+    UILabel *label = [UILabel new];
     label.font = [IonIcons fontWithSize:size];
     label.text = icon_name;
     label.textColor = color;
@@ -79,7 +79,7 @@
                                          attributes:@{NSFontAttributeName: [IonIcons fontWithSize:iconSize],
                                                       NSForegroundColorAttributeName : iconColor}];
         // get the target bounding rect in order to center the icon within the UIImage:
-        NSStringDrawingContext *ctx = [[NSStringDrawingContext alloc] init];
+        NSStringDrawingContext *ctx = [NSStringDrawingContext new];
         CGRect boundingRect = [attString boundingRectWithSize:CGSizeMake(iconSize, iconSize) options:0 context:ctx];
         // draw the icon string into the image:
         [attString drawInRect:CGRectMake((imageSize.width/2.0f) - boundingRect.size.width/2.0f,

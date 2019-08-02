@@ -180,12 +180,12 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 #endif
     
     // Rear
-    mainViewController = [[MLViewController alloc] init];
+    mainViewController = [MLViewController new];
     UINavigationController *mainViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:mainViewController];
 
     // Front
-    MLSecondViewController *secondViewController = [[MLSecondViewController alloc] init];
+    MLSecondViewController *secondViewController = [MLSecondViewController new];
     UINavigationController *secondViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
@@ -205,7 +205,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                                 initWithRearViewController:mainViewNavigationController
                                                 frontViewController:secondViewNavigationController];
     
-    MLTitleViewController *titleViewController = [[MLTitleViewController alloc] init];    
+    MLTitleViewController *titleViewController = [MLTitleViewController new];
     mainRevealController.rightViewController = titleViewController;
     
     mainRevealController.delegate = self;
@@ -345,7 +345,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     vc.editedMedicines = false;
     
     // Switch to prescription view to show what we just imported
-    UITabBarItem *item = [[UITabBarItem alloc] init];
+    UITabBarItem *item = [UITabBarItem new];
     item.tag = 3;  // Simulate a tap on the tabbar 4th item
     [mainViewController switchTabBarItem:item];
     //[mainViewController setLaunchState:ePrescription];
@@ -380,7 +380,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
 
     // Load the prescription from the file in Inbox
-    Prescription *presInbox = [[Prescription alloc] init];
+    Prescription *presInbox = [Prescription new];
     [presInbox importFromURL:url];
     
     // Check if the patient subdirectory exists and possibly create it
@@ -405,7 +405,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
 
     // Check if the patient is already in the DB and possibly add it.
-    PatientDBAdapter *patientDb = [[PatientDBAdapter alloc] init];
+    PatientDBAdapter *patientDb = [PatientDBAdapter new];
     if (![patientDb openDatabase:@"patient_db"]) {
         NSLog(@"Could not open patient DB!");
         return NO;
@@ -423,7 +423,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
 
     BOOL prescriptionNeedsToBeImported = YES;
-    Prescription *presAmkDir = [[Prescription alloc] init];
+    Prescription *presAmkDir = [Prescription new];
     NSString *foundFileName;
     NSString *foundUniqueId;
     for (NSString *f in amkFilesArray) {

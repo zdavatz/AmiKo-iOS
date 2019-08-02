@@ -87,7 +87,7 @@ static NSString *FULL_TABLE = nil;
     
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [[self alloc] init];
+        sharedObject = [self new];
     });
     return sharedObject;
 }
@@ -145,7 +145,7 @@ static NSString *FULL_TABLE = nil;
     // Read drug interactions csv line after line
     NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     NSArray *rows = [content componentsSeparatedByString:@"\n"];
-    myDrugInteractionMap = [[NSMutableDictionary alloc] init];
+    myDrugInteractionMap = [NSMutableDictionary new];
     /*
      token[0]: ATC-Code1
      token[1]: ATC-Code2
@@ -279,6 +279,14 @@ static NSString *FULL_TABLE = nil;
     return [self cursorToFullMedInfo:[[self getRecord:rowId] objectAtIndex:0]];
 }
 
+- (MLMedication *) getMediWithRegnr:(NSString *)regnr
+{
+    NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%, %@%%' or %@ like '%@%%'", FULL_TABLE, DATABASE_TABLE, KEY_REGNRS, regnr, KEY_REGNRS, regnr];
+    NSArray *cursor = [[mySqliteDb performQuery:query] firstObject];
+    
+    return [self cursorToFullMedInfo:cursor];
+}
+
 - (NSArray *) searchWithQuery: (NSString *)query;
 {
     return [mySqliteDb performQuery:query];
@@ -379,7 +387,7 @@ static NSString *FULL_TABLE = nil;
 - (NSArray *) searchRegnrsFromList:(NSArray *)listOfRegnrs
 {
     const unsigned int N = 40;
-    NSMutableArray *listOfMedis = [[NSMutableArray alloc] init];
+    NSMutableArray *listOfMedis = [NSMutableArray new];
     
     NSUInteger C = [listOfRegnrs count];    // E.g. 100
     NSUInteger capacityA = (C / N) * N;     // E.g. 100/40 * 40 = 80
@@ -429,7 +437,7 @@ static NSString *FULL_TABLE = nil;
 
 - (MLMedication *) cursorToVeryShortMedInfo:(NSArray *)cursor
 {
-    MLMedication *medi = [[MLMedication alloc] init];
+    MLMedication *medi = [MLMedication new];
     
     [medi setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
     [medi setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
@@ -443,7 +451,7 @@ static NSString *FULL_TABLE = nil;
 
 - (MLMedication *) cursorToShortMedInfo: (NSArray *)cursor
 {
-    MLMedication *m = [[MLMedication alloc] init];
+    MLMedication *m = [MLMedication new];
         
     [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
     [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
@@ -463,7 +471,7 @@ static NSString *FULL_TABLE = nil;
 
 - (MLMedication *) cursorToFullMedInfo: (NSArray *)cursor
 {
-    MLMedication *m = [[MLMedication alloc] init];
+    MLMedication *m = [MLMedication new];
     
     [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
     [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
@@ -493,7 +501,7 @@ static NSString *FULL_TABLE = nil;
     NSMutableArray *medList = [NSMutableArray array];
 
     for (NSArray *cursor in results) {
-        MLMedication *m = [[MLMedication alloc] init];
+        MLMedication *m = [MLMedication new];
         
         [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
         [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];
@@ -520,7 +528,7 @@ static NSString *FULL_TABLE = nil;
     NSMutableArray *medList = [NSMutableArray array];
     
     for (NSArray *cursor in results) {
-        MLMedication *m = [[MLMedication alloc] init];
+        MLMedication *m = [MLMedication new];
         
         [m setMedId:[(NSString *)[cursor objectAtIndex:kMedId] longLongValue]];
         [m setTitle:(NSString *)[cursor objectAtIndex:kTitle]];

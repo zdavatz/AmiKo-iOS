@@ -176,10 +176,6 @@
 		D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22537194A3A400078FEFF /* 218-trash2.png */; };
 		D5A2253B194A3A400078FEFF /* 217-trash.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22538194A3A400078FEFF /* 217-trash.png */; };
 		D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22538194A3A400078FEFF /* 217-trash.png */; };
-		D5A2253E194A435B0078FEFF /* deleterow.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
-		D5A2253F194A435B0078FEFF /* deleterow.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
-		D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
-		D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253D194A435B0078FEFF /* deleterow.js */; };
 		D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
 		D5A31F4A18B51F3700F56BC5 /* MLCustomURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */; };
 		D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = D5A31F4E18B5207200F56BC5 /* ioapi.c */; };
@@ -294,8 +290,6 @@
 		FA256AB720D2D03200D41353 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = FA256AB520D2D03100D41353 /* camera.png */; };
 		FA3B621522E8511F00A80296 /* fulltext_style.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621422E8511F00A80296 /* fulltext_style.css */; };
 		FA3B621622E8511F00A80296 /* fulltext_style.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621422E8511F00A80296 /* fulltext_style.css */; };
-		FA3B621922E851CC00A80296 /* main_callbacks.js in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621822E851CC00A80296 /* main_callbacks.js */; };
-		FA3B621A22E851CC00A80296 /* main_callbacks.js in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621822E851CC00A80296 /* main_callbacks.js */; };
 		FA3B621C22E8527500A80296 /* color-scheme-dark.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621B22E8527500A80296 /* color-scheme-dark.css */; };
 		FA3B621D22E8527500A80296 /* color-scheme-dark.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621B22E8527500A80296 /* color-scheme-dark.css */; };
 		FA3B621F22E8528000A80296 /* color-scheme-light.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621E22E8527F00A80296 /* color-scheme-light.css */; };
@@ -349,6 +343,10 @@
 		FAD0664F22DF2A140078E28B /* FullTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664922DF29DC0078E28B /* FullTextEntry.m */; };
 		FAD0665222DF2A350078E28B /* FullTextDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */; };
 		FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */; };
+		FAF85BF322F44BF800730690 /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF222F44BF800730690 /* deleterow.js */; };
+		FAF85BF422F44BF800730690 /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF222F44BF800730690 /* deleterow.js */; };
+		FAF85BF622F44C1C00730690 /* main_callbacks.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF522F44C1C00730690 /* main_callbacks.js */; };
+		FAF85BF722F44C1C00730690 /* main_callbacks.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF522F44C1C00730690 /* main_callbacks.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -469,7 +467,6 @@
 		D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		D5A22537194A3A400078FEFF /* 218-trash2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "218-trash2.png"; sourceTree = "<group>"; };
 		D5A22538194A3A400078FEFF /* 217-trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "217-trash.png"; sourceTree = "<group>"; };
-		D5A2253D194A435B0078FEFF /* deleterow.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = deleterow.js; sourceTree = "<group>"; };
 		D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLCustomURLConnection.h; sourceTree = "<group>"; };
 		D5A31F4818B51F2A00F56BC5 /* MLCustomURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLCustomURLConnection.m; sourceTree = "<group>"; };
 		D5A31F4D18B5207200F56BC5 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
@@ -553,7 +550,6 @@
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		FA256AB520D2D03100D41353 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = AmiKoDesitin/camera.png; sourceTree = SOURCE_ROOT; };
 		FA3B621422E8511F00A80296 /* fulltext_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = fulltext_style.css; path = AmiKoDesitin/fulltext_style.css; sourceTree = SOURCE_ROOT; };
-		FA3B621822E851CC00A80296 /* main_callbacks.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = main_callbacks.js; path = AmiKoDesitin/main_callbacks.js; sourceTree = SOURCE_ROOT; };
 		FA3B621B22E8527500A80296 /* color-scheme-dark.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-dark.css"; path = "AmiKoDesitin/color-scheme-dark.css"; sourceTree = SOURCE_ROOT; };
 		FA3B621E22E8527F00A80296 /* color-scheme-light.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-light.css"; path = "AmiKoDesitin/color-scheme-light.css"; sourceTree = SOURCE_ROOT; };
 		FA3B622222E88E6500A80296 /* FullTextOverviewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextOverviewVC.h; path = AmiKoDesitin/FullTextOverviewVC.h; sourceTree = SOURCE_ROOT; };
@@ -605,6 +601,8 @@
 		FAD0664C22DF2A080078E28B /* FullTextSearch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextSearch.m; path = AmiKoDesitin/FullTextSearch.m; sourceTree = SOURCE_ROOT; };
 		FAD0665022DF2A350078E28B /* FullTextDBAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextDBAdapter.h; path = AmiKoDesitin/FullTextDBAdapter.h; sourceTree = SOURCE_ROOT; };
 		FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextDBAdapter.m; path = AmiKoDesitin/FullTextDBAdapter.m; sourceTree = SOURCE_ROOT; };
+		FAF85BF222F44BF800730690 /* deleterow.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = deleterow.js; path = AmiKoDesitin/JavaScript/deleterow.js; sourceTree = SOURCE_ROOT; };
+		FAF85BF522F44C1C00730690 /* main_callbacks.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = main_callbacks.js; path = AmiKoDesitin/JavaScript/main_callbacks.js; sourceTree = SOURCE_ROOT; };
 		FB4AE407B2573357E5DBB181 /* Pods-CoMedDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoMedDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoMedDesitin/Pods-CoMedDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -662,6 +660,7 @@
 		430285C22016124A003B2EF3 /* front */ = {
 			isa = PBXGroup;
 			children = (
+				FAF85BF822F44C7A00730690 /* search */,
 				D5A6F29817B16C3A00EAB24B /* MLSecondViewController.h */,
 				D5A6F29917B16C3A00EAB24B /* MLSecondViewController.m */,
 				D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */,
@@ -1009,8 +1008,6 @@
 				43D3A0DF201F2D1700EA77C6 /* json */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
-				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
-				D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */,
 				D5A6F28917B16C0200EAB24B /* MLDataStore.h */,
 				D5A6F28A17B16C0200EAB24B /* MLDataStore.m */,
 				D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */,
@@ -1057,7 +1054,8 @@
 		D5A6F26417B169F000EAB24B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				FA3B621722E8516800A80296 /* JavaScript */,
+				FAF85BF522F44C1C00730690 /* main_callbacks.js */,
+				FAF85BF222F44BF800730690 /* deleterow.js */,
 				FA3B621322E850DB00A80296 /* CSS */,
 				FA256AB520D2D03100D41353 /* camera.png */,
 				439F50F520122665000E82FC /* prescription-selected.png */,
@@ -1152,16 +1150,6 @@
 			name = CSS;
 			sourceTree = "<group>";
 		};
-		FA3B621722E8516800A80296 /* JavaScript */ = {
-			isa = PBXGroup;
-			children = (
-				FA3B621822E851CC00A80296 /* main_callbacks.js */,
-				D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */,
-				D5A2253D194A435B0078FEFF /* deleterow.js */,
-			);
-			name = JavaScript;
-			sourceTree = "<group>";
-		};
 		FA3B622122E88D9B00A80296 /* right */ = {
 			isa = PBXGroup;
 			children = (
@@ -1228,6 +1216,16 @@
 				FA98749A22E6F7AC008B778F /* FullTextViewController.xib */,
 			);
 			name = front;
+			sourceTree = "<group>";
+		};
+		FAF85BF822F44C7A00730690 /* search */ = {
+			isa = PBXGroup;
+			children = (
+				D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */,
+				D5A6F29517B16C2F00EAB24B /* MLSearchWebView.h */,
+				D5A6F29617B16C2F00EAB24B /* MLSearchWebView.m */,
+			);
+			name = search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1317,10 +1315,10 @@
 			files = (
 				D5A175661A9BC27400E69385 /* favorites@2x.png in Resources */,
 				D5A1755A1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
-				D5A22540194B8E3A0078FEFF /* deleterow.js in Resources */,
 				43A3851820333355001A5849 /* PatientDbListViewController.xib in Resources */,
 				D5A6F24517B1692F00EAB24B /* InfoPlist.strings in Resources */,
 				439F50F920122665000E82FC /* prescription-selected.png in Resources */,
+				FAF85BF622F44C1C00730690 /* main_callbacks.js in Resources */,
 				D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */,
 				439EEF46202CBF4900817588 /* ContactsListViewController.xib in Resources */,
 				439B6C6620206D210018F922 /* AmkListViewController.xib in Resources */,
@@ -1383,6 +1381,7 @@
 				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
 				FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */,
+				FAF85BF322F44BF800730690 /* deleterow.js in Resources */,
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				93109F8820751A5700CEFAA5 /* 1025-patient.png in Resources */,
@@ -1409,7 +1408,6 @@
 				FA3B622722E88E6600A80296 /* FullTextOverviewVC.xib in Resources */,
 				D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */,
 				439F50FC20122665000E82FC /* prescription@2x.png in Resources */,
-				FA3B621922E851CC00A80296 /* main_callbacks.js in Resources */,
 				D5A175541A9A741B00E69385 /* maindb@2x.png in Resources */,
 				D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */,
 				D5FFE1B718B1021B002D6159 /* LICENSE in Resources */,
@@ -1437,8 +1435,8 @@
 				D5A175671A9BC27400E69385 /* favorites@2x.png in Resources */,
 				930D94BC2077EC22007E4629 /* prescription@2x-selected.png in Resources */,
 				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
-				D5A22541194B8E4A0078FEFF /* deleterow.js in Resources */,
 				930D94BB2077EC1A007E4629 /* prescription@2x.png in Resources */,
+				FAF85BF722F44C1C00730690 /* main_callbacks.js in Resources */,
 				D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */,
 				D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
@@ -1501,6 +1499,7 @@
 				FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */,
 				FA98749E22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
+				FAF85BF422F44BF800730690 /* deleterow.js in Resources */,
 				D5A175651A9BC27400E69385 /* favorites.png in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
@@ -1527,7 +1526,6 @@
 				FA3B622822E88E6600A80296 /* FullTextOverviewVC.xib in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
 				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
-				FA3B621A22E851CC00A80296 /* main_callbacks.js in Resources */,
 				FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
@@ -1619,7 +1617,6 @@
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
 				43A3851720333355001A5849 /* PatientDbListViewController.m in Sources */,
 				FA3B622522E88E6600A80296 /* FullTextOverviewVC.m in Sources */,
-				D5A2253E194A435B0078FEFF /* deleterow.js in Sources */,
 				FAD0664D22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				430285BF20160FB1003B2EF3 /* PrescriptionViewController.m in Sources */,
 				439F26222028C8A700396C29 /* PatientViewController.m in Sources */,
@@ -1675,7 +1672,6 @@
 				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
 				930D94B02077E56D007E4629 /* AmkListViewController.m in Sources */,
 				FA3B622622E88E6600A80296 /* FullTextOverviewVC.m in Sources */,
-				D5A2253F194A435B0078FEFF /* deleterow.js in Sources */,
 				D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */,
 				930D94B12077E590007E4629 /* Prescription.m in Sources */,
 				930D94B62077E5DE007E4629 /* PatientViewController.m in Sources */,

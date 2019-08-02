@@ -29,7 +29,7 @@ static const float kFtLabelFontSize = 12.0;
     
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [[self alloc] init];
+        sharedObject = [self new];
     });
     
     return sharedObject;

@@ -56,7 +56,7 @@
             
             // Add progress bar
             mProgressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-            UIViewController *v = [[UIViewController alloc] init];
+            UIViewController *v = [UIViewController new];
             v.preferredContentSize = CGSizeMake(240, 20);
             [v.view addSubview:mProgressBar];
             [mProgressBar setFrame:CGRectMake(0, 0, 240, 20)];

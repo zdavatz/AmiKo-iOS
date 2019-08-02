@@ -87,7 +87,7 @@ static NSString *DATABASE_TABLE = @"frequency";
 
 - (FullTextEntry *) cursorToFullTextEntry:(NSArray *)cursor
 {
-    FullTextEntry *entry = [[FullTextEntry alloc] init];
+    FullTextEntry *entry = [FullTextEntry new];
     
     [entry setHash:(NSString *)[cursor objectAtIndex:kRowId]];
     [entry setKeyword:(NSString *)[cursor objectAtIndex:kKeyword]];
@@ -109,7 +109,7 @@ static NSString *DATABASE_TABLE = @"frequency";
         
         assert(cursor!=nil);
         
-        FullTextEntry *entry = [[FullTextEntry alloc] init];
+        FullTextEntry *entry = [FullTextEntry new];
         [entry setHash:(NSString *)[cursor objectAtIndex:kRowId]];
         [entry setKeyword:(NSString *)[cursor objectAtIndex:kKeyword]];
         NSString *regnrsAndChapters = (NSString *)[cursor objectAtIndex:kRegnrs];
@@ -127,9 +127,9 @@ static NSString *DATABASE_TABLE = @"frequency";
 
 - (NSMutableDictionary *) regChapterDict:(NSString *)regChapterStr
 {
-    NSMutableString *regnr = [[NSMutableString alloc] init];
-    NSMutableString *chapters = [[NSMutableString alloc] init];
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];   // regnr -> set of chapters
+    NSMutableString *regnr = [NSMutableString new];
+    NSMutableString *chapters = [NSMutableString new];
+    NSMutableDictionary *dict = [NSMutableDictionary new];   // regnr -> set of chapters
     // Format: 65000(13)|65001(14)|...
     NSArray *rac = [regChapterStr componentsSeparatedByString:@"|"];
     NSMutableSet *set = [NSMutableSet setWithArray:rac];
@@ -143,7 +143,7 @@ static NSString *DATABASE_TABLE = @"frequency";
                 NSArray *str2 = [[str1 objectAtIndex:1] componentsSeparatedByString:@")"];
                 chapters = [str2 objectAtIndex:0];
             }
-            NSMutableSet *chaptersSet = [[NSMutableSet alloc] init];
+            NSMutableSet *chaptersSet = [NSMutableSet new];
             if ([dict objectForKey:regnr]!=nil) {
                 chaptersSet = [dict objectForKey:regnr];
             }

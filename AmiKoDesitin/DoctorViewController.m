@@ -32,7 +32,7 @@
     
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [[self alloc] init];
+        sharedObject = [self new];
     });
     return sharedObject;
 }
@@ -107,7 +107,7 @@
 #ifdef DEBUG
     //NSLog(@"Default doctor %@", doctorDictionary);
 #endif
-    Operator *doctor = [[Operator alloc] init];
+    Operator *doctor = [Operator new];
     [doctor importFromDict:doctorDictionary];
     [self setAllFields:doctor];
 
@@ -203,7 +203,7 @@
 
 - (Operator *) getAllFields
 {
-    Operator *doctor = [[Operator alloc] init];
+    Operator *doctor = [Operator new];
     
     doctor.title = [mTitle text];
     doctor.givenName = [mGivenName text];
@@ -318,7 +318,7 @@
     }
     
     // Set as default for prescriptions
-    NSMutableDictionary *doctorDict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *doctorDict = [NSMutableDictionary new];
     [doctorDict setObject:mTitle.text         forKey:KEY_AMK_DOC_TITLE];
     [doctorDict setObject:mGivenName.text     forKey:KEY_AMK_DOC_NAME];
     [doctorDict setObject:mFamilyName.text    forKey:KEY_AMK_DOC_SURNAME];
@@ -350,7 +350,7 @@
         return;
     }
 
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    UIImagePickerController *picker = [UIImagePickerController new];
     picker.delegate = self;
 
     //picker.navigationBarHidden = NO;
@@ -376,7 +376,7 @@
         return;
     }
     
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    UIImagePickerController *picker = [UIImagePickerController new];
     picker.delegate = self;
 
     //picker.navigationBarHidden = NO;

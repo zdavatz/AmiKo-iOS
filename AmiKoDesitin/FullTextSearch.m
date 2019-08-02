@@ -29,7 +29,7 @@
 #endif
 
     int rows = 0;
-    NSMutableDictionary *chaptersCountDict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *chaptersCountDict = [NSMutableDictionary new];
     NSString *htmlStr = @"<ul>";
     
     // Assign list and dictionaries only if != nil
@@ -112,8 +112,8 @@
     
     htmlStr = [htmlStr stringByAppendingFormat:@"</ul>"];
     
-    NSMutableArray *listOfIds = [[NSMutableArray alloc] init];
-    NSMutableArray *listOfTitles = [[NSMutableArray alloc] init];
+    NSMutableArray *listOfIds = [NSMutableArray new];
+    NSMutableArray *listOfTitles = [NSMutableArray new];
     for (NSString *cStr in chaptersCountDict) {
         [listOfIds addObject:cStr];
         [listOfTitles addObject:[NSString stringWithFormat:@"%@ (%@)", cStr, chaptersCountDict[cStr]]];

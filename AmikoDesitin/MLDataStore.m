@@ -31,7 +31,7 @@
 
 + (MLDataStore *) initWithFavMedsSet: (NSMutableSet *)favMedsSet
 {
-    MLDataStore *favMeds = [[MLDataStore alloc] init];
+    MLDataStore *favMeds = [MLDataStore new];
     
     favMeds.favMedsSet = [NSSet setWithSet:favMedsSet];
     

@@ -60,12 +60,12 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 {
     self = [super init];
     if (self) {
-        mSectionTitles = [[NSMutableArray alloc] init];
+        mSectionTitles = [NSMutableArray new];
         for (NSString *title in sectionTitles) {
             [mSectionTitles addObject:title];
         }
 
-        mSectionIds = [[NSMutableArray alloc] init];
+        mSectionIds = [NSMutableArray new];
         for (NSString *identifier in sectionIds) {
             [mSectionIds addObject:identifier];
         }
@@ -86,11 +86,11 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 
 - (void) setSectionTitles:(NSArray *)titles andIds:(NSArray *)ids
 {
-    mSectionTitles = [[NSMutableArray alloc] init];
+    mSectionTitles = [NSMutableArray new];
     for (NSString *title in titles) {
         [mSectionTitles addObject:title];
     }
-    mSectionIds = [[NSMutableArray alloc] init];
+    mSectionIds = [NSMutableArray new];
     for (NSString *identifier in ids) {
         [mSectionIds addObject:identifier];
     }
@@ -209,7 +209,10 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 }
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
-{    
+{
+#ifdef DEBUG
+    NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+#endif
     // self.javaScript = [NSString stringWithFormat:@"window.location.hash='#%@'", mSectionIds[indexPath.row]];
     self.javaScript = [NSString stringWithFormat:@"var hashElement=document.getElementById('%@');if(hashElement) {hashElement.scrollIntoView();}", mSectionIds[indexPath.row]];
     
