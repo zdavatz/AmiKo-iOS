@@ -2174,30 +2174,37 @@ static BOOL mShowReport = false;
     if (!mSearchInteractions) {
         {
             // Load style sheet from file
-            NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
-            NSString *amikoCss;
-            if (amikoCssPath)
-                amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
-            else
-                amikoCss = [NSString stringWithString:mMed.styleStr];
+            NSString *amiko_Style;
+            {
+                NSString *amikoCssPath = [[NSBundle mainBundle] pathForResource:@"amiko_stylesheet" ofType:@"css"];
+                NSString *amikoCss;
+                if (amikoCssPath)
+                    amikoCss = [NSString stringWithContentsOfFile:amikoCssPath encoding:NSUTF8StringEncoding error:nil];
+                else
+                    amikoCss = [NSString stringWithString:mMed.styleStr];
+                
+                amiko_Style = [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", amikoCss];
+            }
             
             if (mCurrentSearchState == SEARCH_FULL_TEXT) {
 
-                NSString *colorCss = [MLUtility getColorCss];
-                NSString *colorHtml =
-                    [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", colorCss];
+                NSString *color_Style =
+                    [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", [MLUtility getColorCss]];
                 
                 // Load JavaScript from file
+                NSString *js_Script;
+                {
                 NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"main_callbacks" ofType:@"js"];
                 NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath
                                                                  encoding:NSUTF8StringEncoding
                                                                     error:nil];
-                NSString *jscriptHtml = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
+                js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
+                }
 
-                NSString *headHtml = [NSString stringWithFormat:@"<head>%@%@<style>%@</style></head>",
-                                      jscriptHtml,
-                                      colorHtml,
-                                      amikoCss];
+                NSString *headHtml = [NSString stringWithFormat:@"<head>%@\n%@\n%@\n</head>",
+                                      js_Script,
+                                      color_Style,
+                                      amiko_Style];
 #ifdef DEBUG
                 NSLog(@"%s line %d, mMed.contentStr:\n\n%@", __FUNCTION__, __LINE__,
                       [mMed.contentStr substringToIndex:MIN(500,[mMed.contentStr length])]);
@@ -2228,15 +2235,15 @@ static BOOL mShowReport = false;
                     secondViewController.htmlStr = [secondViewController.htmlStr stringByReplacingOccurrencesOfString:@"</body>"
                                                                  withString:extraHtmlCode];
                     
-#ifdef DEBUG
-                    NSUInteger length = [secondViewController.htmlStr length];
-                    
-                    NSLog(@"%s line %d, htmlStr head :\n\n%@", __FUNCTION__, __LINE__,
-                          [secondViewController.htmlStr substringToIndex:MIN(500,length)]);
-                    
-                    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
-                          [secondViewController.htmlStr substringFromIndex:length - MIN(200,length)]);
-#endif
+//#ifdef DEBUG
+//                    NSUInteger length = [secondViewController.htmlStr length];
+//
+//                    NSLog(@"%s line %d, htmlStr head :\n\n%@", __FUNCTION__, __LINE__,
+//                          [secondViewController.htmlStr substringToIndex:MIN(500,length)]);
+//
+//                    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
+//                          [secondViewController.htmlStr substringFromIndex:length - MIN(200,length)]);
+//#endif
                 }
                 
                 // Inject JS into webview
@@ -2246,7 +2253,10 @@ static BOOL mShowReport = false;
                 }
             }
             else {
-                secondViewController.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", amikoCss, mMed.contentStr];
+                secondViewController.htmlStr =
+                    [NSString stringWithFormat:@"<head>%@</head>%@",
+                     amiko_Style,
+                     mMed.contentStr];
             }
         }
 

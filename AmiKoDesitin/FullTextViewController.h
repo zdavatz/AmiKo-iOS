@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FullTextViewController : UIViewController <WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler>
+@interface FullTextViewController : UIViewController <WKUIDelegate, WKScriptMessageHandler>
 {
     UISearchBar *searchField;
     //WKWebView *webView;

@@ -568,13 +568,17 @@
     NSString *interactionsCss = [NSString stringWithContentsOfFile:interactionsCssPath encoding:NSUTF8StringEncoding error:nil];
     
     // Load JavaScript from file
+    NSString *js_Script;
+    {
     NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"deleterow" ofType:@"js"];
     NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath encoding:NSUTF8StringEncoding error:nil];
+    js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
+    }
     
     // Generate main interaction table
     NSString *html = [NSString stringWithFormat:@"<html><head><meta charset=\"utf-8\" />"];
-    html = [html stringByAppendingFormat:@"<script type=\"text/javascript\">%@</script><style type=\"text/css\">%@</style></head><body><div id=\"interactions\">%@<br><br>%@<br>%@</body></div></html>",
-            jscriptStr,
+    html = [html stringByAppendingFormat:@"%@<style type=\"text/css\">%@</style></head><body><div id=\"interactions\">%@<br><br>%@<br>%@</div></body></html>",
+            js_Script,
             interactionsCss,
             [self medBasketHtml],
             [self interactionsHtml],
@@ -582,9 +586,15 @@
     
     self.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", interactionsCss, html];
     
-#ifdef DEBUG
-    NSLog(@"%s htmlStr:\n%@", __FUNCTION__, htmlStr);
-#endif
+//#ifdef DEBUG
+//    NSUInteger length = [htmlStr length];
+//    
+//    NSLog(@"%s line %d, htmlStr head :\n\n%@", __FUNCTION__, __LINE__,
+//          [htmlStr substringToIndex:MIN(500,length)]);
+//    
+//    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
+//          [htmlStr substringFromIndex:length - MIN(200,length)]);
+//#endif
 
     [self updateWebView];
 }
