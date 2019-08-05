@@ -86,12 +86,6 @@ typedef NS_ENUM(NSInteger, SearchStates) {
     SEARCH_FULL_TEXT=10
 };
 
-//typedef NS_ENUM(NSInteger, WebviewModes) {
-//    kExpertInfoView=0,
-//    kFullTextSearchView=1,
-//    kInteractionsCartView=2
-//};
-
 static DatabaseTypes mUsedDatabase = DB_TYPE_NONE;
 static SearchStates mCurrentSearchState = SEARCH_TITLE;
 
@@ -102,6 +96,7 @@ static BOOL mShowReport = false;
 
 #pragma mark -
 
+////////////////////////////////////////////////////////////////////////////////
 @interface DataObject : NSObject
 
 @property NSString *title;
@@ -113,6 +108,7 @@ static BOOL mShowReport = false;
 
 #pragma mark -
 
+////////////////////////////////////////////////////////////////////////////////
 @implementation DataObject
 
 @synthesize title;
@@ -130,6 +126,7 @@ static BOOL mShowReport = false;
 
 #pragma mark -
 
+////////////////////////////////////////////////////////////////////////////////
 @implementation MLViewController
 {
     // Instance variable declarations go here
@@ -180,7 +177,7 @@ static BOOL mShowReport = false;
     
     BOOL runningActivityIndicator;
 
-    NSString *mAnchor;
+    NSDictionary *fullTextMessage;  // to pass around the anchor to be scrolled into view
     NSString *mFullTextContentStr;
     
     dispatch_queue_t mSearchQueue;
@@ -193,9 +190,7 @@ static BOOL mShowReport = false;
 @synthesize myTabBar;
 @synthesize pickerSheet, pickerView;
 
-/** Instance functions
- */
-#pragma mark Instance functions
+#pragma mark - Instance functions
 
 - (IBAction) searchAction:(id)sender
 {
@@ -2222,12 +2217,11 @@ static BOOL mShowReport = false;
                 NSString *keyword = [mFullTextEntry keyword];
                 if (keyword) {
 #ifdef DEBUG
-                    NSLog(@"%s line %d, keyword: %@, mAnchor: %@", __FUNCTION__, __LINE__, keyword, mAnchor);
+                    NSLog(@"%s line %d, keyword: %@", __FUNCTION__, __LINE__, keyword);
 #endif
 
                     NSString *jsCode =
-                    [NSString stringWithFormat:@"highlightText(document.body,'%@');moveToHighlight('%@')",
-                     keyword, mAnchor];
+                    [NSString stringWithFormat:@"highlightText(document.body,'%@')", keyword];
 
                     // Instead of appending like in the Windows version,
                     // insert before "</body>"
@@ -2244,12 +2238,7 @@ static BOOL mShowReport = false;
 //                    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
 //                          [secondViewController.htmlStr substringFromIndex:length - MIN(200,length)]);
 //#endif
-                }
-                
-                // Inject JS into webview
-                if (mAnchor) {
-                    NSString *jsCallback = [NSString stringWithFormat:@"moveToHighlight('%@')", mAnchor];
-                    [secondViewController.webView stringByEvaluatingJavaScriptFromString:jsCallback];
+                    secondViewController.anchor = fullTextMessage[@"Anchor"];
                 }
             }
             else {
@@ -2257,6 +2246,7 @@ static BOOL mShowReport = false;
                     [NSString stringWithFormat:@"<head>%@</head>%@",
                      amiko_Style,
                      mMed.contentStr];
+                secondViewController.anchor = @"";
             }
         }
 
@@ -2562,14 +2552,13 @@ static BOOL mShowReport = false;
 {
 #ifdef DEBUG
     NSLog(@"%s, message: %@", __FUNCTION__, message);
+//    NSString *ean = message[@"EanCode"];
+//    NSString *anchor = message[@"Anchor"];
 #endif
 
-    NSString *ean = message[@"EanCode"];
-    NSString *anchor = message[@"Anchor"];
-    mMed = [mDb getMediWithRegnr:ean];
-    //[self updateExpertInfoView:anchor]; // TODO: highlight
+    mMed = [mDb getMediWithRegnr:message[@"EanCode"]];
 
-    mAnchor = anchor;
+    fullTextMessage = message;
     mSearchInteractions = false;
     [self switchToAipsView:-1];
 }

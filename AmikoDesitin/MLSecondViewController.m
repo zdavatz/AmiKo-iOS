@@ -59,6 +59,7 @@
 @synthesize htmlStr;
 @synthesize medBasket;
 @synthesize titleViewController;
+@synthesize anchor;
 
 - (void) dealloc
 {
@@ -946,6 +947,11 @@
     
     // Hide find panel (webview is the superview of the panel)
     [self showFindPanel:NO];
+
+    if ([anchor length] > 0) {
+        NSString *jsCallback = [NSString stringWithFormat:@"moveToHighlight('%@')", anchor];
+        [self.webView stringByEvaluatingJavaScriptFromString:jsCallback];
+    }
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate methods

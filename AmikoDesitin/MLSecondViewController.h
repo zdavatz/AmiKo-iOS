@@ -48,6 +48,7 @@
 @property (nonatomic, weak) MLDBAdapter *dbAdapter;
 @property (nonatomic, strong) NSMutableDictionary *medBasket;   // important: strong
 @property (nonatomic, weak) MLTitleViewController *titleViewController;
+@property (nonatomic, weak) NSString *anchor;
 
 - (IBAction) moveToNextHighlight:(id)sender;
 - (IBAction) moveToPrevHighlight:(id)sender;
