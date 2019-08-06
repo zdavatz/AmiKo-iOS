@@ -38,10 +38,7 @@ static const float kFtLabelFontSize = 12.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
+    self.revealViewController.rightViewRevealWidth = 240.0;
 }
 
 - (void)viewDidAppear:(BOOL)animated
