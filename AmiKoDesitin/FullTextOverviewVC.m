@@ -38,7 +38,7 @@ static const float kFtLabelFontSize = 12.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.revealViewController.rightViewRevealWidth = 240.0;
+    self.revealViewController.rightViewRevealWidth = 200.0;
 }
 
 - (void)viewDidAppear:(BOOL)animated
