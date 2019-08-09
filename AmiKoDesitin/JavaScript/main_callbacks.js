@@ -3,6 +3,7 @@ function displayFachinfo(ean, anchor) {
     window.webkit.messageHandlers.buttonClicked.postMessage(messageToPost);
 }
 
+/*
 function moveToHighlight(anchor) {
     if (typeof anchor !== 'undefined') {
         try {
@@ -18,7 +19,9 @@ function moveToHighlight(anchor) {
         }
     }
 }
+*/
 
+/*
 function highlightText(node, text) {
     if (node instanceof Text) {
         var splitted = node.data.split(text);
@@ -55,4 +58,4 @@ function highlightText(node, text) {
     }
     return null;
 }
-
+*/

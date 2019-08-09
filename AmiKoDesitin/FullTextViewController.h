@@ -13,22 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FullTextViewController : UIViewController <WKUIDelegate, WKScriptMessageHandler>
 {
-    UISearchBar *searchField;
     //WKWebView *webView;
     NSString *htmlAnchor;
 }
 
-@property (nonatomic, retain) IBOutlet UISearchBar *searchField;
 @property (nonatomic, retain) IBOutlet WKWebView *webView;
 @property (nonatomic, copy) NSString *htmlStr;
 @property (strong, nonatomic) NSString *productURL;
 
 + (FullTextViewController *)sharedInstance;
-
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil
-                          bundle:(NSBundle *)nibBundleOrNil
-                           title:(NSString *)title
-                        andParam:(int)numRevealButtons;
 
 - (void) updateFullTextSearchView:(NSString *)contentStr;
 

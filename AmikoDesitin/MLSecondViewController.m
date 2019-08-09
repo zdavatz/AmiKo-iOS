@@ -35,11 +35,20 @@
 
 #import "WebViewJavascriptBridge.h"
 
-// Class extension
+typedef NS_ENUM(NSInteger, FindPanelVisibility) {
+    FIND_PANEL_INVISIBLE,
+    FIND_PANEL_VISIBLE,
+    FIND_PANEL_UNDEFINED
+};
+
+#pragma mark - Class extension
+////////////////////////////////////////////////////////////////////////////////
 @interface MLSecondViewController ()
 @property WebViewJavascriptBridge *jsBridge;
 @end
 
+#pragma mark -
+////////////////////////////////////////////////////////////////////////////////
 @implementation MLSecondViewController
 {
     int mNumRevealButtons;
@@ -47,7 +56,7 @@
     int mCurrentHightlight;
     float mFramePosA;
     float mFramePosB;
-    BOOL mIsFindPanelVisible;
+    FindPanelVisibility mIsFindPanelVisible;
     NSString *mTitle;
     NSString *mCurrentSearch;
 }
@@ -59,7 +68,8 @@
 @synthesize htmlStr;
 @synthesize medBasket;
 @synthesize titleViewController;
-@synthesize anchor;
+//@synthesize anchor;
+@synthesize keyword;
 
 - (void) dealloc
 {
@@ -95,7 +105,7 @@
     mNumRevealButtons = numRevealButtons;
     mTitle = title;
     
-    mIsFindPanelVisible = YES;
+    mIsFindPanelVisible = FIND_PANEL_UNDEFINED;
     
     return self;
 }
@@ -118,6 +128,10 @@
 
 - (IBAction) moveToPrevHighlight:(id)sender
 {
+#ifdef DEBUG
+    NSLog(@"%s line %d, mTotalHighlights: %d, mCurrentHightlight: %d", __FUNCTION__, __LINE__,
+          mTotalHighlights, mCurrentHightlight);
+#endif
     if (mTotalHighlights <= 1)
         return;
 
@@ -131,6 +145,10 @@
 
 - (IBAction) moveToNextHighlight:(id)sender
 {
+#ifdef DEBUG
+    NSLog(@"%s line %d, mTotalHighlights: %d, mCurrentHightlight: %d", __FUNCTION__, __LINE__,
+          mTotalHighlights, mCurrentHightlight);
+#endif
     if (mTotalHighlights <= 1)
         return;
 
@@ -144,6 +162,9 @@
 
 - (void) resetSearchField
 {
+#ifdef DEBUG
+    NSLog(@"%s line %d, mCurrentSearch: <%@>", __FUNCTION__, __LINE__, mCurrentSearch);
+#endif
     if (mCurrentSearch)
         [searchField setText:mCurrentSearch];
     else
@@ -233,6 +254,9 @@
             [searchBarView addSubview:searchField];
             
             // For iPhones add findCounter manually
+#ifdef DEBUG
+            NSLog(@"%s %d, mCurrentHightlight: %d/%d", __FUNCTION__, __LINE__, mCurrentHightlight, mTotalHighlights);
+#endif
             self.findCounter = [self findCounterAtPos:250.0 andSize:32.0];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
@@ -254,6 +278,9 @@
             [searchBarView addSubview:searchField];
             
             // For iPhones add findCounter manually
+#ifdef DEBUG
+            NSLog(@"%s %d, mCurrentHightlight: %d/%d", __FUNCTION__, __LINE__, mCurrentHightlight, mTotalHighlights);
+#endif
             self.findCounter = [self findCounterAtPos:200.0 andSize:44.0];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
             [searchBarView addSubview:self.findCounter];
@@ -285,7 +312,7 @@
 - (void) viewDidAppear:(BOOL)animated
 {
 #ifdef DEBUG
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
 //    for (id gr in self.view.gestureRecognizers)
 //        NSLog(@"gestureRecognizer: %@", [gr class]);
 #endif
@@ -301,12 +328,15 @@
     
     mFramePosA = self.findPanel.frame.origin.y;
     mFramePosB = self.findPanel.frame.origin.y - 200;
+    
+    if ([keyword length] > 0)
+        [self.searchField setText:keyword];
 }
 
 - (void) viewDidLoad
 {
 #ifdef DEBUG
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
 //    for (id gr in self.view.gestureRecognizers)
 //        NSLog(@"gestureRecognizer: %@", [gr class]);
 #endif
@@ -837,7 +867,7 @@
     return @"";
 }
 
-#pragma mark UISearchBarDelegate methods
+#pragma mark - UISearchBarDelegate methods
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
@@ -846,35 +876,51 @@
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+#ifdef DEBUG
+    NSLog(@"%s line %d, searchText: %@", __FUNCTION__, __LINE__, searchText);
+#endif
+
     mCurrentSearch = searchText;
     
     if ([searchText length] > 2) {
         mTotalHighlights = (int)[self.webView highlightAllOccurencesOfString:searchText];
+#ifdef DEBUG
+        NSLog(@"%s line %d, mTotalHighlights: %d, mCurrentHightlight: %d", __FUNCTION__, __LINE__, mTotalHighlights, mCurrentHightlight);
+#endif
         mCurrentHightlight = 0;
         if (mTotalHighlights>1) {
             [self.webView nextHighlight:mTotalHighlights-1];
-            [self showFindPanel:YES];
+            [self showFindPanel:FIND_PANEL_VISIBLE];
             [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
-        } else {
-            [self showFindPanel:NO];
         }
-    } else {
+        else {
+            [self showFindPanel:FIND_PANEL_INVISIBLE];
+        }
+    }
+    else {
         [self.webView removeAllHighlights];
         mTotalHighlights = 0;
-        [self showFindPanel:NO];
+        [self showFindPanel:FIND_PANEL_INVISIBLE];
     }
 }
 
-- (void) showFindPanel:(BOOL)visible
+- (void) showFindPanel:(FindPanelVisibility)visible
 {
-    if (visible == mIsFindPanelVisible)
+#ifdef DEBUG
+    NSLog(@"%s line %d, visible: %ld, was %ld", __FUNCTION__, __LINE__,
+          (long)visible, (long)mIsFindPanelVisible);
+#endif
+
+    if ((visible == mIsFindPanelVisible) ||
+        (visible == FIND_PANEL_UNDEFINED)) {
         return;
+    }
 
     mIsFindPanelVisible = visible;
     
     CGRect newFrame = self.findPanel.frame;
     
-    if (visible) {
+    if (visible == FIND_PANEL_VISIBLE) {
         // newFrame.origin.x = x - 200;
         newFrame.origin.y = mFramePosA;
     }
@@ -883,15 +929,22 @@
         newFrame.origin.y = mFramePosB;
     }
     
-    [UIView animateWithDuration:0.5f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.findPanel.frame = newFrame;
-    } completion:^(BOOL finished){
-        if (visible==NO) {
-            [self.findPanel setHidden:YES];
-        }
-    }];
-    
-    if (visible==YES) {
+    [UIView animateWithDuration:0.5f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.findPanel.frame = newFrame;
+                     }
+                     completion:^(BOOL finished){
+                         if (visible == FIND_PANEL_VISIBLE) {
+                             [self.findPanel setHidden:NO];
+                         }
+                         else {
+                             [self.findPanel setHidden:YES];
+                         }
+                     }];
+
+    if (visible == FIND_PANEL_VISIBLE) {
         [self.findPanel setHidden:NO];
         [self.findCounter setHidden:NO];
     }
@@ -944,19 +997,33 @@
     
     self.webView.scalesPageToFit = NO;  // YES
     self.webView.scrollView.zoomScale = 3.0;
-    
-    // Hide find panel (webview is the superview of the panel)
-    [self showFindPanel:NO];
 
-    if ([anchor length] > 0) {
-        NSString *jsCallback = [NSString stringWithFormat:@"moveToHighlight('%@')", anchor];
-        [self.webView stringByEvaluatingJavaScriptFromString:jsCallback];
+#ifdef DEBUG
+    NSLog(@"%s line %d, keyword:<%@>", __FUNCTION__, __LINE__, keyword);
+#endif
+
+    if ([keyword length] > 0) {
+        mTotalHighlights = (int)[self.webView highlightAllOccurencesOfString:keyword];
+
+        [self showFindPanel:FIND_PANEL_VISIBLE];
+        
+#ifdef DEBUG
+        NSLog(@"%s line %d, mTotalHighlights: %d", __FUNCTION__, __LINE__, mTotalHighlights);
+#endif
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+        // TBC: as a result highlightAllOccurencesOfString is called again ?
+    }
+    else {
+        // Hide find panel (webview is the superview of the panel)
+        [self showFindPanel:FIND_PANEL_INVISIBLE];
     }
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate methods
 
-- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+- (void) mailComposeController:(MFMailComposeViewController *)controller
+           didFinishWithResult:(MFMailComposeResult)result
+                         error:(NSError *)error
 {
     UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     [presentingController dismissViewControllerAnimated:YES completion:nil];
@@ -975,6 +1042,11 @@
         case MFMailComposeResultFailed:
             message = @"Error";
     }
+    
+#ifdef DEBUG
+    // Do something with the message
+    NSLog(@"%s, error: %@, message: %@", __FUNCTION__, error, message);
+#endif
 }
 
 #pragma mark helper functions

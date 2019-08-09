@@ -27,9 +27,17 @@
 
 - (NSInteger) highlightAllOccurencesOfString: (NSString*)str
 {
+#ifdef DEBUG
+    NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+#endif
     // Load JavaScript file
+    NSError *error;
     NSString *path = [[NSBundle mainBundle] pathForResource:@"MLSearchWebView" ofType:@"js"];
-    NSString *jsCode = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    NSString *jsCode = [NSString stringWithContentsOfFile:path
+                                                 encoding:NSUTF8StringEncoding
+                                                    error:&error];
+    if (error)
+        NSLog(@"%@", error.localizedDescription);
 
     // Inject it into webpage
     [self stringByEvaluatingJavaScriptFromString:jsCode];
@@ -54,6 +62,10 @@
 {
     if (index<0)
         index = 0;
+    
+#ifdef DEBUG
+    NSLog(@"%s line %d, index: %d", __FUNCTION__, __LINE__, index);
+#endif
     NSString *scrollPosition = [NSString stringWithFormat:@"MyArr[%d].scrollIntoView()", index];
     [self stringByEvaluatingJavaScriptFromString:scrollPosition];
 }

@@ -18,12 +18,10 @@
 @implementation FullTextViewController
 {
     int mNumRevealButtons;
-    BOOL mIsFindPanelVisible;
     NSString *mTitle;
     NSString *mCurrentSearch;
 }
 
-@synthesize searchField;
 //@synthesize webView;
 @synthesize htmlStr;
 
@@ -58,7 +56,7 @@
 - (void)viewDidLoad
 {
 #ifdef DEBUG
-    NSLog(@"%s %s", __FILE__, __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
 #endif
 
     [super viewDidLoad];
@@ -171,13 +169,6 @@
     // Pass the selected object to the new view controller.
 }
 */
-
-- (void) showFindPanel:(BOOL)visible
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-}
 
 #pragma mark - WKUIDelegate methods
 

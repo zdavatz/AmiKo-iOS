@@ -1878,12 +1878,16 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
  
     if (!indexPath) {
+#ifdef DEBUG
         NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+#endif
         return;
     }
     
     if (indexPath.section == kSectionPatient) {
+#ifdef DEBUG
         NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+#endif
         [self showCameraForHealthCardOCR];
         return;
     }

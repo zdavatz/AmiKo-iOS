@@ -118,24 +118,19 @@ static const float kFtLabelFontSize = 12.0;
         return;
     }
     
-#ifdef DEBUG
     NSString *selectedText = ftResults[indexPath.row];
+#ifdef DEBUG
     NSLog(@"%s, ftResults count: %lu, selectedText: %@", __FUNCTION__,
           (unsigned long)[ftResults count], selectedText);
 #endif
 
     NSDictionary *patientDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithInt: indexPath.row], KEY_FT_ROW,
-                                 selectedText,     KEY_FT_TEXT,
+                                 selectedText, KEY_FT_TEXT,
                                  nil];
 
-#if 0
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ftOverviewSelectedNotification"
-                                                        object:[NSNumber numberWithInt: indexPath.row]];
-#else
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ftOverviewSelectedNotification"
                                                         object:patientDict];
-#endif
 }
 
 @end

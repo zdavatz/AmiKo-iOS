@@ -1968,6 +1968,9 @@ static BOOL mShowReport = false;
 
 - (void) updateTableView
 {
+#ifdef DEBUG
+    NSLog(@"%s line %d, mCurrentSearchState: %ld", __FUNCTION__, __LINE__, (long)mCurrentSearchState);
+#endif
     if (!searchResults) {
         [self stopActivityIndicator];
         return;
@@ -2102,12 +2105,17 @@ static BOOL mShowReport = false;
             break;
             
         case SEARCH_FULL_TEXT:
+#ifdef DEBUG
+            NSLog(@"%s line %d, SEARCH_FULL_TEXT", __FUNCTION__, __LINE__);
+#endif
             for (FullTextEntry *e in searchResults) {
                 if (mUsedDatabase == DB_TYPE_FULL_TEXT)
                 {
                     if (![e.hash isEqual:[NSNull null]]) {
                         [favoriteKeyData addObject:e.hash];
-                        [self addKeyword:e.keyword andNumHits:e.numHits andHash:e.hash];
+                        [self addKeyword:e.keyword
+                              andNumHits:e.numHits
+                                 andHash:e.hash];
                     }
                 }
             }
@@ -2219,15 +2227,6 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
                     NSLog(@"%s line %d, keyword: %@", __FUNCTION__, __LINE__, keyword);
 #endif
-
-                    NSString *jsCode =
-                    [NSString stringWithFormat:@"highlightText(document.body,'%@')", keyword];
-
-                    // Instead of appending like in the Windows version,
-                    // insert before "</body>"
-                    NSString *extraHtmlCode = [NSString stringWithFormat:@"<script>%@</script>\n </body>", jsCode];
-                    secondViewController.htmlStr = [secondViewController.htmlStr stringByReplacingOccurrencesOfString:@"</body>"
-                                                                 withString:extraHtmlCode];
                     
 //#ifdef DEBUG
 //                    NSUInteger length = [secondViewController.htmlStr length];
@@ -2238,7 +2237,10 @@ static BOOL mShowReport = false;
 //                    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
 //                          [secondViewController.htmlStr substringFromIndex:length - MIN(200,length)]);
 //#endif
-                    secondViewController.anchor = fullTextMessage[@"Anchor"];
+                    //secondViewController.anchor = fullTextMessage[@"Anchor"];
+                    
+                    //[secondViewController.searchField setText:keyword]; // NG: it will be reset when view appears
+                    secondViewController.keyword = keyword;
                 }
             }
             else {
@@ -2246,7 +2248,7 @@ static BOOL mShowReport = false;
                     [NSString stringWithFormat:@"<head>%@</head>%@",
                      amiko_Style,
                      mMed.contentStr];
-                secondViewController.anchor = @"";
+                //secondViewController.anchor = @"";
             }
         }
 
