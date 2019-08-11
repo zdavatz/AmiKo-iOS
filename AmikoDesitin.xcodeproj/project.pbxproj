@@ -1288,10 +1288,9 @@
 			};
 			buildConfigurationList = D5A6F23217B1692F00EAB24B /* Build configuration list for PBXProject "AmikoDesitin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				de,
 				fr,
