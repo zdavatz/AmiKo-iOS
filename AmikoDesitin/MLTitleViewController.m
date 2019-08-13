@@ -211,7 +211,7 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
 #ifdef DEBUG
-    NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+    NSLog(@"%s Selected row %ld", __FUNCTION__, [indexPath row]);
 #endif
     // self.javaScript = [NSString stringWithFormat:@"window.location.hash='#%@'", mSectionIds[indexPath.row]];
     self.javaScript = [NSString stringWithFormat:@"var hashElement=document.getElementById('%@');if(hashElement) {hashElement.scrollIntoView();}", mSectionIds[indexPath.row]];

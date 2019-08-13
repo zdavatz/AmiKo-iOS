@@ -795,13 +795,18 @@ static BOOL mShowReport = false;
 
 - (void) setBarButtonItemsWith:(SearchStates)searchState
 {
+#ifdef DEBUG
+    NSLog(@"%s %d, searchStat: %ld", __FUNCTION__, __LINE__, (long)searchState);
+#endif
     for (UIBarButtonItem *b in [myToolBar items])
         [b setTintColor:[UIColor lightGrayColor]];   // Default color
 
+    NSUInteger indexOfObjectToBeHighlighted = searchState;
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        searchState /= 2;
+        indexOfObjectToBeHighlighted /= 2;
     
-    [[[myToolBar items] objectAtIndex:searchState] setTintColor:MAIN_TINT_COLOR];
+    [[[myToolBar items] objectAtIndex:indexOfObjectToBeHighlighted] setTintColor:MAIN_TINT_COLOR];
 
     [searchField setText:@""];
     switch (searchState)
@@ -2739,7 +2744,7 @@ static BOOL mShowReport = false;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 #ifdef DEBUG
-    NSLog(@"%@ Selected medicine or favourite at row %ld", NSStringFromSelector(_cmd), [indexPath row]);
+    NSLog(@"%s Selected medicine or favourite at row %ld", __FUNCTION__, [indexPath row]);
 #endif
     mCurrentIndexPath = indexPath;
     

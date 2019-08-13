@@ -149,8 +149,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     NSLog(@"%s line %d, mTotalHighlights: %d, mCurrentHightlight: %d", __FUNCTION__, __LINE__,
           mTotalHighlights, mCurrentHightlight);
 #endif
-    if (mTotalHighlights <= 1)
+    if (mTotalHighlights <= 1) {
+        // TODO: make sure findPanel is hidden
         return;
+    }
 
     mCurrentHightlight++;
     if (mCurrentHightlight >= mTotalHighlights)
