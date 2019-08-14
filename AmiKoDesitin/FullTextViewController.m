@@ -42,7 +42,7 @@
     if (self.htmlStr) {
         NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
 #ifdef DEBUG
-        NSLog(@"%s %s, mainBundleURL: %@", __FILE__, __FUNCTION__, mainBundleURL);
+        NSLog(@"%s, mainBundleURL: %@", __FUNCTION__, mainBundleURL);
 #endif
         // Loads HTML directly into webview
         [self.webView loadHTMLString:self.htmlStr
@@ -130,13 +130,14 @@
                                                         error:nil];
     NSString *js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
 #endif
-    
-    
+
+    NSString *scaling_Meta = @"<meta name=\"viewport\" content=\"initial-scale=1.0\" />";
     NSString *charset_Meta = @"<meta charset=\"utf-8\" />";
     NSString *colorScheme_Meta= @"<meta name=\"supported-color-schemes\" content=\"light dark\" />";
-    NSString *html_Head = [NSString stringWithFormat:@"<head>%@\n%@\n%@\n%@\n%@\n</head>",
+    NSString *html_Head = [NSString stringWithFormat:@"<head>%@\n%@\n%@\n%@\n%@\n%@\n</head>",
                       charset_Meta,
                       colorScheme_Meta,
+                      scaling_Meta,
                       js_Script,
                       color_Style,
                       fulltext_Style];

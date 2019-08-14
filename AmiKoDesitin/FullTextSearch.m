@@ -58,8 +58,8 @@
             contentStyle = [NSString stringWithFormat:@"<li style=\"background-color:transparent;\" id=\"{firstLetter}\">"];
 
         // TODO: use size from .css
-        NSString *span1 = [NSString stringWithFormat:@"<span style=\"font-size:1.6em\"><b>%@</b></span>", m.title];
-        NSString *span2 = [NSString stringWithFormat:@"<span style=\"font-size:1.4em\"> | %@</span>", m.auth];
+        NSString *span1 = [NSString stringWithFormat:@"<span style=\"font-size:0.8em\"><b>%@</b></span>", m.title];
+        NSString *span2 = [NSString stringWithFormat:@"<span style=\"font-size:0.7em\"> | %@</span>", m.auth];
         NSString *contentTitle = [NSString stringWithFormat:@"<a onclick=\"displayFachinfo('%@','{anchor}')\">%@</a> %@<br>", m.regnrs, span1, span2];
         
         NSString *contentChapters = @"";
@@ -95,7 +95,7 @@
                         chaptersCountDict[cStr] = [NSNumber numberWithInt:count+1];
                         if ([filter length]==0 || [filter isEqualToString:cStr]) {
                             // TODO: use size from .css
-                            contentChapters = [contentChapters stringByAppendingFormat:@"<span style=\"font-size:1.5em; color:#0088BB\"> <a onclick=\"displayFachinfo('%@','%@')\">%@</a></span><br>",
+                            contentChapters = [contentChapters stringByAppendingFormat:@"<span style=\"font-size:0.75em; color:#0088BB\"> <a onclick=\"displayFachinfo('%@','%@')\">%@</a></span><br>",
                                                m.regnrs, anchor, cStr];
                             filtered = false;
                         }
