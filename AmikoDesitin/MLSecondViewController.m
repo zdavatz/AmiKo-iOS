@@ -357,14 +357,17 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
     self.navigationController.navigationBar.translucent = NO;
     
-    UIBarButtonItem *revealButtonItem =
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
-                                     style:UIBarButtonItemStylePlain
-                                    target:revealController
-                                    action:@selector(revealToggle:)];
-    self.navigationItem.leftBarButtonItem = revealButtonItem;
+    {
+        UIBarButtonItem *revealButtonItem =
+        [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+                                         style:UIBarButtonItemStylePlain
+                                        target:revealController
+                                        action:@selector(revealToggle:)];
+        self.navigationItem.leftBarButtonItem = revealButtonItem;
+    }
     
-    if ( mNumRevealButtons==2 ) {
+    if ( mNumRevealButtons == 2 )
+    {
         UIBarButtonItem *rightRevealButtonItem =
         [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
                                          style:UIBarButtonItemStylePlain
@@ -965,13 +968,6 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     }
 
     return YES;
-}
-
-- (void) webViewDidStartLoad:(UIWebView *)webView
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
 }
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView

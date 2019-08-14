@@ -1124,7 +1124,7 @@ static BOOL mShowReport = false;
 - (void) viewDidAppear:(BOOL)animated
 {
 #ifdef DEBUG
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
 //    for (id gr in self.view.gestureRecognizers)
 //        NSLog(@"gestureRecognizer: %@", [gr class]);
 #endif
@@ -2177,7 +2177,7 @@ static BOOL mShowReport = false;
     [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                              bundle:nil
                                               title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
-                                           andParam:2];
+                                           andParam:2]; // numRevealButtons
     
     if (!mSearchInteractions) {
         {
@@ -2221,11 +2221,6 @@ static BOOL mShowReport = false;
                 secondViewController.htmlStr =
                 [mMed.contentStr stringByReplacingOccurrencesOfString:@"<head></head>"
                                                            withString:headHtml];
-//                secondViewController.htmlStr =
-//                    [NSString stringWithFormat:@"<head>%@<style>%@</style></head>%@",
-//                     jscriptHtml,
-//                     amikoCss,
-//                     mMed.contentStr];
 
                 NSString *keyword = [mFullTextEntry keyword];
                 if (keyword) {
@@ -2728,10 +2723,10 @@ static BOOL mShowReport = false;
             inProgress = true;
             // Update tableview
             dispatch_async(dispatch_get_main_queue(), ^{
-                [myTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:gesture.view.tag inSection:0]]
+                [self->myTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:gesture.view.tag inSection:0]]
                                    withRowAnimation:UITableViewRowAnimationMiddle];
                 inProgress = false;
-                if (mNumCurrSearchResults>500)
+                if (self->mNumCurrSearchResults > 500)
                     [scopeSelf stopActivityIndicator];
             });
         }

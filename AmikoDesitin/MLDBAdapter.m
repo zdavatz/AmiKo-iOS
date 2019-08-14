@@ -63,7 +63,7 @@ static NSString *FULL_TABLE = nil;
     NSMutableDictionary *myDrugInteractionMap;
 }
 
-#pragma mark Class functions
+#pragma mark - Class functions
 
 + (void) initialize
 {
@@ -92,7 +92,7 @@ static NSString *FULL_TABLE = nil;
     return sharedObject;
 }
 
-#pragma mark Instance functions
+#pragma mark - Instance functions
 
 - (void) listDirectoriesAtPath:(NSString*)dir
 {

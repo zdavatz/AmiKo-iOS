@@ -98,6 +98,8 @@
                                         action:@selector(rightRevealToggle:)];
         self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     }
+    
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
 
 - (void) updateFullTextSearchView:(NSString *)contentStr

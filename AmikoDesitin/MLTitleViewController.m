@@ -87,13 +87,13 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 - (void) setSectionTitles:(NSArray *)titles andIds:(NSArray *)ids
 {
     mSectionTitles = [NSMutableArray new];
-    for (NSString *title in titles) {
+    for (NSString *title in titles)
         [mSectionTitles addObject:title];
-    }
+
     mSectionIds = [NSMutableArray new];
-    for (NSString *identifier in ids) {
+    for (NSString *identifier in ids)
         [mSectionIds addObject:identifier];
-    }
+
     [myMenuView reloadData];
 }
 

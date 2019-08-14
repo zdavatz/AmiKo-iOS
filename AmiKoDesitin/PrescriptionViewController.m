@@ -90,7 +90,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return [super initWithPlaceholderItem:placeholderItem];
 }
 
-#pragma mark UIActivityItemSource
+#pragma mark - UIActivityItemSource
 
 // (required)
 - (id)activityViewController:(UIActivityViewController *)activityViewController
@@ -1406,7 +1406,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
      ];
 }
 
-#pragma mark UIPrintInteractionControllerDelegate
+#pragma mark - UIPrintInteractionControllerDelegate
 
 #ifdef DEBUG
 - (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)pic

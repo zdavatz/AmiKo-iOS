@@ -27,7 +27,7 @@
 
 @synthesize favMedsSet;
 
-#pragma mark Class methods
+#pragma mark - Class methods
 
 + (MLDataStore *) initWithFavMedsSet: (NSMutableSet *)favMedsSet
 {
@@ -38,7 +38,7 @@
     return favMeds;
 }
 
-#pragma mark Delegate methods
+#pragma mark - Delegate methods
 
 /** Returns a coder used as a dictionary
  */

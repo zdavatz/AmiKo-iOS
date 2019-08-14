@@ -313,7 +313,7 @@ static void * SessionRunningContext = &SessionRunningContext;
     [self.session commitConfiguration];
 }
 
-#pragma mark KVO and Notifications
+#pragma mark - KVO and Notifications
 
 - (void)addObservers
 {

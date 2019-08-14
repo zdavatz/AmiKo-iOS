@@ -43,9 +43,6 @@ static const float kFtLabelFontSize = 12.0;
 
 - (void)viewDidAppear:(BOOL)animated
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
     [myTableView reloadData];
 }
 
