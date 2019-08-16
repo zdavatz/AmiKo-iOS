@@ -51,6 +51,24 @@
     
     // Create objc - js bridge
     //[self createJSBridge];
+    
+#ifdef DEBUG
+    NSLog(@"%s %d, gestureRecognizers:%ld %@", __FUNCTION__, __LINE__,
+          [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
+#endif
+
+    // Make sure we have a reveal gesture recognizer (only for "front" controllers)
+    // The first time it's found, but if we come here after swiping the Fachinfo there
+    // are no recognizers and we need to add panGestureRecognizer again
+    bool found = false;
+    for (id gr in self.view.gestureRecognizers)
+        if ([gr isKindOfClass:[UIPanGestureRecognizer class]] ) {
+            found = true;
+            break;
+        }
+    
+    if (!found)
+        [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
 }
 
 - (void)viewDidLoad

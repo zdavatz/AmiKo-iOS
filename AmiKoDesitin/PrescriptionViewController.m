@@ -377,7 +377,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     bool found = false;
     for (id gr in self.view.gestureRecognizers) {
-        if ([gr isKindOfClass:[UIPanGestureRecognizer class]] ) { // SWRevealViewController
+        if ([gr isKindOfClass:[UIPanGestureRecognizer class]] ) {
             found = true;
             break;
         }
