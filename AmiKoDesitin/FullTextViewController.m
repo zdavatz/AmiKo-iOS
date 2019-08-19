@@ -140,16 +140,12 @@
         fulltext_Style = [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", fullTextCss];
     }
 
-#if 0
-    NSString *js_Script = @"";
-#else
     // Load JavaScript from file. Do we really need this ?
     NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"main_callbacks" ofType:@"js"];
     NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath
                                                      encoding:NSUTF8StringEncoding
                                                         error:nil];
     NSString *js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
-#endif
 
     NSString *scaling_Meta = @"<meta name=\"viewport\" content=\"initial-scale=1.0\" />";
     NSString *charset_Meta = @"<meta charset=\"utf-8\" />";
