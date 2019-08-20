@@ -154,7 +154,8 @@ static NSString *DATABASE_TABLE = @"frequency";
             }
             // Update dictionary
             dict[regnr] = chaptersSet;
-        } else {
+        }
+        else {
             // No chapters for this regnr -> do nothing
         }
     }

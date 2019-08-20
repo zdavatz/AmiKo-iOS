@@ -125,37 +125,47 @@
 
 #pragma mark - UIActionSheetDelegate
 
-- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+// TODO: Use UIAlertController with a preferredStyle of UIAlertControllerStyleActionSheet instead
+- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+#ifdef DEBUG
+    NSLog(@"%s %d, sheet: %@ sheet.tag: %ld, buttonIndex: %ld", __FUNCTION__, __LINE__,
+          sheet,
+          sheet.tag,
+          (long)buttonIndex);
+#endif
+    if (sheet.tag != 1)
+        return;
     
-    switch (sheet.tag) {
-        case 1: {
-            switch (buttonIndex) {
-                case 0:
-                    [self sendFeedback:NSLocalizedString(@"Feedback", "Button")];
-                    break;
-                case 1:
-                    [self shareApp:NSLocalizedString(@"Share", "Button")];
-                    break;
-                case 2:
-                    [self rateApp:NSLocalizedString(@"Rate", "Button")];
-                    break;
-                case 3:
-                    [self showReport:NSLocalizedString(@"Report", "Button")];
-                    break;
-                case 4:
-                    [self startUpdate:NSLocalizedString(@"Update", "Button")];
-                    break;
-                case 5:
-                    [self showPatients:nil];
-                    break;
-                case 6:
-                    [self showDoctor:nil];
-                    break;
-                default:
-                    break;
-            }
+    switch (buttonIndex) {
+        case 0:
+            [self sendFeedback:NSLocalizedString(@"Feedback", "Button")];
             break;
-        }
+
+        case 1:
+            [self shareApp:NSLocalizedString(@"Share", "Button")];
+            break;
+
+        case 2:
+            [self rateApp:NSLocalizedString(@"Rate", "Button")];
+            break;
+
+        case 3:
+            [self showReport:NSLocalizedString(@"Report", "Button")];
+            break;
+
+        case 4:
+            [self startUpdate:NSLocalizedString(@"Update", "Button")];
+            break;
+
+        case 5:
+            [self showPatients:nil];
+            break;
+
+        case 6:
+            [self showDoctor:nil];
+            break;
+
         default:
             break;
     }
@@ -215,7 +225,8 @@
         // It's important to use the presenting root view controller...
         UIViewController *presentingController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         [presentingController presentViewController:mailer animated:YES completion:nil];
-    } else {
+    }
+    else {
         MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Failure" message:@"Your device is not configured to send emails." button:@"OK"];
         [alert show];
     }

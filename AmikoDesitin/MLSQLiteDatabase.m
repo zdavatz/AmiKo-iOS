@@ -196,7 +196,8 @@
     // Open database from users filesystem
     if (sqlite3_prepare_v2(database, sql, -1, &compiledStatement, nil) != SQLITE_OK) {
         NSLog(@"%s Error when preparing query!", __FUNCTION__);
-    } else {
+    }
+    else {
         NSMutableArray *result = [NSMutableArray array];
         @autoreleasepool {
             // Loop through results and add them to feeds array
@@ -208,17 +209,22 @@
                     if (colType == SQLITE_TEXT) {
                         const char *col = (const char *)sqlite3_column_text(compiledStatement, i);
                         value = [[NSString alloc] initWithUTF8String:col];
-                    } else if (colType == SQLITE_INTEGER) {
+                    }
+                    else if (colType == SQLITE_INTEGER) {
                         int col = sqlite3_column_int(compiledStatement, i);
                         value = [NSNumber numberWithInt:col];
-                    } else if (colType == SQLITE_FLOAT) {
+                    }
+                    else if (colType == SQLITE_FLOAT) {
                         double col = sqlite3_column_double(compiledStatement, i);
                         value = [NSNumber numberWithDouble:col];
-                    } else if (colType == SQLITE_NULL) {
+                    }
+                    else if (colType == SQLITE_NULL) {
                         value = [NSNull null];
-                    } else {
+                    }
+                    else {
                         NSLog(@"%s Unknown data type.", __FUNCTION__);
                     }
+
                     // Add value to row
                     [row addObject:value];
                     value = nil;

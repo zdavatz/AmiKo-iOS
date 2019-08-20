@@ -146,11 +146,14 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     CGFloat screenScale = [[UIScreen mainScreen] scale];
     CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
 #ifdef DEBUG
+    
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_9_0  // Deprecated in iOS 9.0
     // Screen size minus the size of the status bar (if visible)
     // This is the size of the app window
     NSLog(@"points w = %f, points h = %f, scale = %f",
           [[UIScreen mainScreen] applicationFrame].size.width,
           [[UIScreen mainScreen] applicationFrame].size.height, screenScale);
+#endif
     
     // Screen size regardless of status bar.
     // This is the size of the device

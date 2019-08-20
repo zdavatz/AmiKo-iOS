@@ -26,16 +26,22 @@
 @implementation MLDataStore
 
 @synthesize favMedsSet;
+@synthesize favFTEntrySet;  // Full Text Entry
 
 #pragma mark - Class methods
 
 + (MLDataStore *) initWithFavMedsSet: (NSMutableSet *)favMedsSet
 {
     MLDataStore *favMeds = [MLDataStore new];
-    
     favMeds.favMedsSet = [NSSet setWithSet:favMedsSet];
-    
     return favMeds;
+}
+
++ (MLDataStore *) initWithFavFTEntrySet:(NSMutableSet *)favFTEntrySet
+{
+    MLDataStore *favFTEntry = [MLDataStore new];
+    favFTEntry.favFTEntrySet = [NSSet setWithSet:favFTEntrySet];
+    return favFTEntry;
 }
 
 #pragma mark - Delegate methods
@@ -45,7 +51,8 @@
 - (void) encodeWithCoder: (NSCoder *)encoder
 {
     // In a dictionary -> setValue:forKey:
-    [encoder encodeObject:favMedsSet forKey:@"kFavMedsSet"];
+    [encoder encodeObject:favMedsSet forKey:KEY_FAV_MED_SET];
+    [encoder encodeObject:favFTEntrySet forKey:KEY_FAV_FTE_SET];
 }
 
 /** Called when you try to unarchive class using NSKeyedUnarchiver
@@ -55,8 +62,10 @@
     self = [super init];
     if (self != nil) {
         // In a dictionary -> objectForKey:
-        favMedsSet = [decoder decodeObjectForKey:@"kFavMedsSet"];
+        favMedsSet = [decoder decodeObjectForKey:KEY_FAV_MED_SET];
+        favFTEntrySet = [decoder decodeObjectForKey:KEY_FAV_FTE_SET];
     }
+
     return self;
 }
 

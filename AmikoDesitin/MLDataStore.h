@@ -23,10 +23,15 @@
 
 #import <UIKit/UIKit.h>
 
+#define KEY_FAV_MED_SET             @"kFavMedsSet"
+#define KEY_FAV_FTE_SET             @"kFavFTEntrySet"
+
 @interface MLDataStore : NSObject <NSCoding>
 
 @property (nonatomic) NSSet *favMedsSet;
+@property (nonatomic) NSSet *favFTEntrySet;
 
 + (MLDataStore *) initWithFavMedsSet: (NSMutableSet *)favMedsSet;
++ (MLDataStore *) initWithFavFTEntrySet:(NSMutableSet *)favFTEntrySet;
 
 @end

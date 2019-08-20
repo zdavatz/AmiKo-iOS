@@ -414,7 +414,8 @@ static NSString *FULL_TABLE = nil;
                 [listOfMedis addObject:m];
             }
             subQuery = @"";
-        } else {
+        }
+        else {
             subQuery = [subQuery stringByAppendingString:@" or "];
         }
     }

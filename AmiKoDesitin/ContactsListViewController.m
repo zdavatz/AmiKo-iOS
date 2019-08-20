@@ -113,7 +113,8 @@
                                             usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop) {
                                                 if (error) {
                                                     NSLog(@"error fetching contacts %@", error);
-                                                } else {
+                                                }
+                                                else {
                                                     Patient *patient = [Patient new];
                                                     patient.familyName = contact.familyName;
                                                     patient.givenName = contact.givenName;
