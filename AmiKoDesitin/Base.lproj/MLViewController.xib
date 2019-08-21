@@ -59,7 +59,7 @@
                                 <action selector="onToolBarButtonPressed:" destination="-1" id="61"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="Full Text" id="pNM-GM-K4Y">
+                        <barButtonItem tag="6" title="Full Text" id="pNM-GM-K4Y">
                             <connections>
                                 <action selector="onToolBarButtonPressed:" destination="-1" id="3f9-kh-swy"/>
                             </connections>

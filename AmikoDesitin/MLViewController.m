@@ -346,6 +346,12 @@ static BOOL mShowReport = false;
             if (mUsedDatabase == DB_TYPE_AIPS)
                 mUsedDatabase = DB_TYPE_FULL_TEXT;
             break;
+            
+#ifdef DEBUG
+        default:
+            NSLog(@"%s %d, unexpected tag: %ld", __FUNCTION__, __LINE__, btn.tag);
+            break;
+#endif
     }
     
 #ifdef DEBUG
@@ -2717,7 +2723,7 @@ static BOOL mShowReport = false;
     // UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
 #ifdef DEBUG
-    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+    //NSLog(@"%s %d", __FUNCTION__, __LINE__);
 #endif
     static NSString *simpleTableIdentifier = @"MLSimpleCell";
     MLSimpleTableCell *cell = (MLSimpleTableCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
