@@ -2627,12 +2627,21 @@ static BOOL mShowReport = false;
     // Grab a handle to the reveal controller
     mainRevealController = self.revealViewController;
 
+    
+    // Right
+    {
+        FullTextOverviewVC *fullTextOverviewVC = [FullTextOverviewVC sharedInstance];
+        fullTextOverviewVC.ftResults = mFullTextSearch.listOfSectionTitles;
+        mainRevealController.rightViewController = fullTextOverviewVC;
+    }
+
     // Front
     {
         FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
         [fullTextVC updateFullTextSearchView: mFullTextContentStr];
+        [fullTextVC setRightPaneWidth];
 
-        if (otherViewNavigationController!=nil) {
+        if (otherViewNavigationController) {
             [otherViewNavigationController removeFromParentViewController];
             otherViewNavigationController = nil;
         }
@@ -2640,13 +2649,6 @@ static BOOL mShowReport = false;
 
         // Show FullTextViewController (WKWebView)
         [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-    }
-
-    // Right
-    {
-        FullTextOverviewVC *fullTextOverviewVC = [FullTextOverviewVC sharedInstance];
-        fullTextOverviewVC.ftResults = mFullTextSearch.listOfSectionTitles;
-        mainRevealController.rightViewController = fullTextOverviewVC;
     }
 
     mainRevealController.rightViewRevealOverdraw = 0;

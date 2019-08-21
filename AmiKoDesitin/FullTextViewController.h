@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (FullTextViewController *)sharedInstance;
 
 - (void) updateFullTextSearchView:(NSString *)contentStr;
+- (void) setRightPaneWidth;
 
 @end
 

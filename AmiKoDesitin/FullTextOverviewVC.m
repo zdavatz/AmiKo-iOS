@@ -8,12 +8,17 @@
 
 #import "FullTextOverviewVC.h"
 #import "SWRevealViewController.h"
+#import "MLConstants.h"
 
 static const float kFtLabelFontSize = 12.0;
+
+#pragma mark -
 
 @interface FullTextOverviewVC ()
 
 @end
+
+#pragma mark -
 
 @implementation FullTextOverviewVC
 {
@@ -35,11 +40,15 @@ static const float kFtLabelFontSize = 12.0;
     return sharedObject;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.revealViewController.rightViewRevealWidth = 200.0;
-}
+//- (void)viewDidLoad
+//{
+//    [super viewDidLoad];
+//
+//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+//        self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
+//    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+//        self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;
+//}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -77,11 +86,11 @@ static const float kFtLabelFontSize = 12.0;
         
         /** Use subview */
         UILabel *subLabel = nil;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             subLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,230,36)];
             [subLabel setFont:[UIFont systemFontOfSize:kFtLabelFontSize+2]];
         }
-        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             subLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,230,28)];
             [subLabel setFont:[UIFont systemFontOfSize:kFtLabelFontSize]];
         }

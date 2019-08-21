@@ -432,7 +432,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     return YES;
 }
 
-- (void) willRotateToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+// TODO: Implement 'viewWillTransitionToSize:withTransitionCoordinator:' instead
+- (void) willRotateToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation
+                                 duration: (NSTimeInterval)duration
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||

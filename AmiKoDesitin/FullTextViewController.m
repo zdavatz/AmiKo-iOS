@@ -10,6 +10,7 @@
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
 #import "MLViewController.h"
+#import "MLConstants.h"
 
 @interface FullTextViewController ()
 
@@ -119,6 +120,50 @@
     
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
+
+- (void)setRightPaneWidth
+{
+#ifdef DEBUG
+    //NSLog(@"%s line %d, orientation: %ld", __FUNCTION__, __LINE__, (long)[[UIDevice currentDevice] orientation]);
+#endif
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
+            self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
+        }
+        else if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
+            self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad + 100.0;
+        }
+    }
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;
+    }
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+//#ifdef DEBUG
+//    NSLog(@"%s line %d, coordinator: %@, orientation: %ld", __FUNCTION__, __LINE__,
+//          coordinator.description,
+//          (long)[[UIDevice currentDevice] orientation]);
+//#endif
+    
+    [self setRightPaneWidth];
+
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+                                    // willRotateToInterfaceOrientation
+                                }
+
+                                 completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+                                     // didRotateFromInterfaceOrientation
+                                 }];
+}
+
+#pragma mark -
 
 - (void) updateFullTextSearchView:(NSString *)contentStr
 {

@@ -442,10 +442,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    [coordinator animateAlongsideTransition:^(
-                                              id<UIViewControllerTransitionCoordinatorContext> context) {
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         // willRotateToInterfaceOrientation
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    }
+                                 completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         // didRotateFromInterfaceOrientation would go here.
         [self didRotate:nil];
     }];
