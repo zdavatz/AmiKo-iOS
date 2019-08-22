@@ -29,12 +29,13 @@
 
 + (int) checkVersion
 {
-    // Retrieve bundle root path, e.g. /var/mobile/Applications/<GUID>/<AppName>.app
+    // Retrieve bundle root path, e.g. /var/containers/Bundle/Application/<GUID>/<AppName>.app
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     // Handle to file manager, initialize
     NSFileManager *manager = [NSFileManager defaultManager];
     NSDictionary* attrs = [manager attributesOfItemAtPath:bundleRoot error:nil];
 #ifdef DEBUG
+    NSLog(@"=== Bundle path:\n\t%@", bundleRoot);
     NSLog(@"App creation date: %@", [attrs fileCreationDate]);
     NSLog(@"App modification date (unless bundle changed by code): %@", [attrs fileModificationDate]);
 #endif
@@ -42,6 +43,7 @@
     NSString *rootPath = [bundleRoot substringToIndex:[bundleRoot rangeOfString:@"/" options:NSBackwardsSearch].location];
     attrs = [manager attributesOfItemAtPath:rootPath error:nil];
 #ifdef DEBUG
+    NSLog(@"=== Bundle root:\n\t%@", rootPath);
     NSLog(@"App installation date (or first reinstalled after deletion): %@", [attrs fileCreationDate]);
 #endif
     

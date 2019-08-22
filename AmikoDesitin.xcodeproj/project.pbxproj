@@ -306,8 +306,6 @@
 		FA4827EF22DF861D005135BE /* amiko_frequency_de.db in Resources */ = {isa = PBXBuildFile; fileRef = FA4827EC22DF8613005135BE /* amiko_frequency_de.db */; };
 		FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
 		FA4FB4A120E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
-		FA528CF220D8F1590066CE89 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
-		FA528CF320D8F1590066CE89 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
 		FA5E5E4920F5F71B00CDB6C6 /* videoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5E5E4720F5F71B00CDB6C6 /* videoViewController.m */; };
 		FA5E5E4A20F5F71B00CDB6C6 /* videoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5E5E4720F5F71B00CDB6C6 /* videoViewController.m */; };
 		FA5E5E4B20F5F71B00CDB6C6 /* videoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5E5E4820F5F71B00CDB6C6 /* videoViewController.xib */; };
@@ -331,6 +329,8 @@
 		FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
 		FA7D750520E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
 		FA7D750620E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
+		FA8767B4230EDAEB00C9BD61 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
+		FA8767B5230EDAEC00C9BD61 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
 		FA98749B22E6F7AC008B778F /* FullTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA98749922E6F7AC008B778F /* FullTextViewController.m */; };
 		FA98749C22E6F7AC008B778F /* FullTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA98749922E6F7AC008B778F /* FullTextViewController.m */; };
 		FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA98749A22E6F7AC008B778F /* FullTextViewController.xib */; };
@@ -1377,6 +1377,7 @@
 				D533DAA617B434B600199C38 /* Default.png in Resources */,
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
+				FA8767B4230EDAEB00C9BD61 /* tessdata in Resources */,
 				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
 				FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				439F50FB20122665000E82FC /* prescription@2x-selected.png in Resources */,
@@ -1396,7 +1397,6 @@
 				D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */,
 				D533DAAC17B4351700199C38 /* Default@2x.png in Resources */,
 				D5A175521A9A741B00E69385 /* maindb.png in Resources */,
-				FA528CF220D8F1590066CE89 /* tessdata in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */,
@@ -1495,6 +1495,7 @@
 				D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
 				D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
+				FA8767B5230EDAEC00C9BD61 /* tessdata in Resources */,
 				FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */,
 				FA98749E22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
@@ -1514,7 +1515,6 @@
 				D5A1754F1A9A737F00E69385 /* interactions@2x.png in Resources */,
 				D5A175581A9A7A4D00E69385 /* maindb-selected.png in Resources */,
 				D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */,
-				FA528CF320D8F1590066CE89 /* tessdata in Resources */,
 				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
 				D5A175531A9A741B00E69385 /* maindb.png in Resources */,
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,

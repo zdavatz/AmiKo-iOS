@@ -176,12 +176,15 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 //          bundleIdentifier,
 //          [d objectForKey:@"CFBundleDisplayName"]);
 //    NSLog(@"documents dir:\n\t%@", [MLUtility documentsDirectory]);
-    NSLog(@"Defaults file:\n\t%@/Preferences/%@.plist",
+    NSLog(@"=== Defaults file:\n\t%@/Preferences/%@.plist",
           NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject,
           bundleIdentifier);
     NSLog(@"Tesseract version %@", [G8Tesseract version]);
 #endif
     
+    // Retrieve app related information
+    [MLUtility checkVersion];
+
     // Rear
     mainViewController = [MLViewController new];
     UINavigationController *mainViewNavigationController =

@@ -137,6 +137,16 @@ static BOOL mShowReport = false;
 #pragma mark -
 
 ////////////////////////////////////////////////////////////////////////////////
+@interface MLViewController ()
+
+- (void) loadFavorites;
+- (void) loadFavorites:(MLDataStore *)favorites;
+
+@end
+
+#pragma mark -
+
+////////////////////////////////////////////////////////////////////////////////
 @implementation MLViewController
 {
     // Instance variable declarations go here
@@ -406,8 +416,11 @@ static BOOL mShowReport = false;
     // Initialize constants
     [MLConstants start];
     
-    // Retreive app related information
-    [MLUtility checkVersion];
+    NSString *favoritesDir = @"~/Library/Preferences/data";
+    favoritesFile = [favoritesDir stringByExpandingTildeInPath];
+#ifdef DEBUG
+    NSLog(@"=== Favorites file:\n\t%@", favoritesFile);
+#endif
     
     medi = [NSMutableArray array];
     titleData = [NSMutableArray array];
@@ -455,6 +468,7 @@ static BOOL mShowReport = false;
                                                object:nil];
     mUsedDatabase = DB_TYPE_AIPS;
     mCurrentSearchState = SEARCH_TITLE;
+
     return self;
 }
 
@@ -916,9 +930,6 @@ static BOOL mShowReport = false;
 // See 'saveFavorites' in AmiKo-osx
 - (void) saveData
 {
-    NSString *path = @"~/Library/Preferences/data";
-    path = [path stringByExpandingTildeInPath];
-    
     NSMutableDictionary *rootObject = [NSMutableDictionary dictionary];
     
     if (favoriteMedsSet)
@@ -928,17 +939,63 @@ static BOOL mShowReport = false;
         [rootObject setValue:favoriteFTEntrySet forKey:KEY_FAV_FTE_SET];
     
     // Save contents of rootObject by key, value must conform to NSCoding protocol
-    [NSKeyedArchiver archiveRootObject:rootObject toFile:path];
+    [NSKeyedArchiver archiveRootObject:rootObject toFile:favoritesFile];
 }
 
 // See 'loadFavorites' in AmiKo-osx
-- (void) loadData:(MLDataStore *)favorites
+- (void) loadFavorites
 {
-    NSString *path = @"~/Library/Preferences/data";
-    path = [path stringByExpandingTildeInPath];
+    NSFileManager *fileManager = [NSFileManager new];
+    NSArray *urls = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
+    if ([urls count] > 0) {
+        NSURL *libraryFolder = urls[0];
+        // NSLog(@"%@ %@", libraryFolder, [libraryFolder absoluteString]);
+        NSError *error = nil;
+        NSArray *libraryFolderContent = [fileManager contentsOfDirectoryAtPath:[libraryFolder relativePath] error:&error];
+        
+        if (error)
+            NSLog(@"%s: %@", __FUNCTION__, error.localizedDescription);
+        else if ([libraryFolderContent count] == 0)
+            NSLog(@"Library folder is empty!");
+#ifdef DEBUG
+        else
+            NSLog(@"=== Library folder:\n\t%@\nContents:\n%@",
+                  libraryFolder.absoluteString,
+                  libraryFolderContent);
+#endif
+    }
+    else {
+        NSLog(@"Could not find the Library folder.");
+    }
     
+    MLDataStore *favorites = [MLDataStore new];
+    [self loadFavorites:favorites];
+    
+    favoriteMedsSet = [NSMutableSet new];
+    if (favorites.favMedsSet &&
+        [favorites.favMedsSet isKindOfClass:[NSSet class]] ) {
+        favoriteMedsSet = nil;
+        favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favorites.favMedsSet];
+    }
+    
+    favoriteFTEntrySet = [NSMutableSet new];
+    if (favorites.favFTEntrySet &&
+        [favorites.favFTEntrySet isKindOfClass:[NSSet class]] ) {
+        favoriteFTEntrySet = nil;
+        favoriteFTEntrySet = [[NSMutableSet alloc] initWithSet:favorites.favFTEntrySet];
+    }
+}
+
+// TODO: make it a member of class MLDataStore
+- (void) loadFavorites:(MLDataStore *)favorites
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:favoritesFile])
+        return;  // no favorites yet
+
     // Retrieves unarchived dictionary into rootObject
-    NSMutableDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    NSMutableDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:favoritesFile];
+    if (!rootObject)
+        return;  // no favorites yet
     
     if ([rootObject valueForKey:KEY_FAV_MED_SET]) {
         favorites.favMedsSet = [rootObject valueForKey:KEY_FAV_MED_SET];
@@ -1420,34 +1477,8 @@ static BOOL mShowReport = false;
 
     // Init medication basket
     mMedBasket = [NSMutableDictionary new];
-    
-    // Load favorites
-    NSFileManager *fileManager = [NSFileManager new];
-    NSArray *urls = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
-    if ([urls count] > 0) {
-        NSURL *libraryFolder = urls[0];
-        // NSLog(@"%@ %@", libraryFolder, [libraryFolder absoluteString]);
-        NSError *error = nil;
-        NSArray *libraryFolderContent = [fileManager contentsOfDirectoryAtPath:[libraryFolder relativePath] error:&error];
 
-        if (error)
-            NSLog(@"%s: %@", __FUNCTION__, error.localizedDescription);
-        else if ([libraryFolderContent count] == 0)
-            NSLog(@"Library folder is empty!");
-#ifdef DEBUG
-        else
-            NSLog(@"Contents of library folder = %@", libraryFolderContent);
-#endif
-    }
-    else {
-        NSLog(@"Could not find the Library folder.");
-    }
-
-    MLDataStore *favorites = [MLDataStore new];
-    [self loadData:favorites];
-    favoriteMedsSet = [[NSMutableSet alloc] initWithSet:favorites.favMedsSet];
-    favoriteFTEntrySet = [[NSMutableSet alloc] initWithSet:favorites.favFTEntrySet];
-    
+    [self loadFavorites];
     [self checkLastDBSync];
 }
 

@@ -31,7 +31,7 @@
 @property (nonatomic) NSSet *favMedsSet;
 @property (nonatomic) NSSet *favFTEntrySet;
 
-+ (MLDataStore *) initWithFavMedsSet: (NSMutableSet *)favMedsSet;
-+ (MLDataStore *) initWithFavFTEntrySet:(NSMutableSet *)favFTEntrySet;
+//- (instancetype) initWithFavMedsSet: (NSMutableSet *)favMedsSet;
+//- (instancetype) initWithFavFTEntrySet:(NSMutableSet *)favFTEntrySet;
 
 @end

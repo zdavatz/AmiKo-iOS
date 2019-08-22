@@ -28,23 +28,31 @@
 @synthesize favMedsSet;
 @synthesize favFTEntrySet;  // Full Text Entry
 
-#pragma mark - Class methods
-
-+ (MLDataStore *) initWithFavMedsSet: (NSMutableSet *)favMedsSet
+- (instancetype) init
 {
-    MLDataStore *favMeds = [MLDataStore new];
-    favMeds.favMedsSet = [NSSet setWithSet:favMedsSet];
-    return favMeds;
+    self = [super init];
+    if (self) {
+        favMedsSet = [NSSet new];
+        favFTEntrySet = [NSSet new];
+    }
+    return self;
 }
 
-+ (MLDataStore *) initWithFavFTEntrySet:(NSMutableSet *)favFTEntrySet
-{
-    MLDataStore *favFTEntry = [MLDataStore new];
-    favFTEntry.favFTEntrySet = [NSSet setWithSet:favFTEntrySet];
-    return favFTEntry;
-}
+//- (instancetype) initWithFavMedsSet: (NSMutableSet *)favMedsSet
+//{
+//    MLDataStore *favMeds = [MLDataStore new];
+//    favMeds.favMedsSet = [NSSet setWithSet:favMedsSet];
+//    return favMeds;
+//}
+//
+//- (instancetype) initWithFavFTEntrySet:(NSMutableSet *)favFTEntrySet
+//{
+//    MLDataStore *favFTEntry = [MLDataStore new];
+//    favFTEntry.favFTEntrySet = [NSSet setWithSet:favFTEntrySet];
+//    return favFTEntry;
+//}
 
-#pragma mark - Delegate methods
+#pragma mark - protocol NSCoding
 
 /** Returns a coder used as a dictionary
  */
@@ -60,10 +68,30 @@
 - (id) initWithCoder: (NSCoder *)decoder
 {
     self = [super init];
-    if (self != nil) {
+    if (self) {
         // In a dictionary -> objectForKey:
-        favMedsSet = [decoder decodeObjectForKey:KEY_FAV_MED_SET];
-        favFTEntrySet = [decoder decodeObjectForKey:KEY_FAV_FTE_SET];
+
+        id obj;
+
+        obj = [decoder decodeObjectForKey:KEY_FAV_MED_SET];
+        if (obj) {
+            //NSLog(@"%s %d", __FUNCTION__, __LINE__);
+            favMedsSet = [NSSet setWithObject:obj];
+        }
+//        else {
+//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
+//            favMedsSet = [NSSet new];
+//        }
+
+        obj = [decoder decodeObjectForKey:KEY_FAV_FTE_SET];
+        if (obj) {
+            //NSLog(@"%s %d", __FUNCTION__, __LINE__);
+            favFTEntrySet = [NSSet setWithObject:obj];
+        }
+//        else {
+//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
+//            favFTEntrySet = [NSSet new];
+//        }
     }
 
     return self;
