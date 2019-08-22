@@ -1,9 +1,15 @@
 #!/bin/bash
 
+# Alex Bettarini - 22 Aug 2019
+# Copyright © 2019 Ywesee GmbH. All rights reserved.
+
 #STEP_REMOVE_SUPPORT_FILES=true
 #STEP_DOWNLOAD_SUPPORT_FILES=true
+#STEP_DOWNLOAD_TESSDATA=true
 #STEP_PODFILE=true
-STEP_ARCHIVE=true
+#STEP_ARCHIVE=true
+#STEP_CREATE_IPA=true
+#STEP_UPLOAD_APP=true
 
 #-------------------------------------------------------------------------------
 TIMESTAMP1=$(date +%Y%m%d)
@@ -15,7 +21,7 @@ BUILD_PATH="$WD/../build"
 
 ARCHIVE_PATH="$BUILD_PATH/Archives/$TIMESTAMP1"
 
-PKG_PATH="$BUILD_PATH/pkg"
+PKG_PATH="$BUILD_PATH/ipa"
 
 security unlock-keychain
 
@@ -57,6 +63,16 @@ popd > /dev/null
 fi
 
 #-------------------------------------------------------------------------------
+if [ $STEP_DOWNLOAD_TESSDATA ] ; then
+    pushd ../AmiKoDesitin
+    FILENAME=tessdata.tar.gz
+    wget $PILLBOX_ODDB_ORG/$FILENAME
+    unzip $FILENAME
+    rm $FILENAME
+    popd > /dev/null
+fi
+
+#-------------------------------------------------------------------------------
 if [ $STEP_PODFILE ] ; then
     pod install
 fi
@@ -77,70 +93,32 @@ done
 popd > /dev/null
 fi
 
-exit 0
+#-------------------------------------------------------------------------------
+if [ $STEP_CREATE_IPA ] ; then
+#PRODUCT_BUNDLE_IDENTIFIER=org.oddb.generika
+#PROVISIONING_PROFILE_SPECIFIER="Zeno Davatz"
+pushd ../
+for f in $ARCHIVE_PATH/*.xcarchive ; do
+  echo "Export the .ipa from $f"
+  xcodebuild -exportArchive \
+   -verbose \
+   -archivePath "$f" \
+   -exportOptionsPlist $WD/store.plist \
+   -exportPath "$PKG_PATH"
+done
+popd > /dev/null
+fi
 
 #-------------------------------------------------------------------------------
+if [ $STEP_UPLOAD_APP ] ; then
+#source $ITC_FILE
+for f in $PKG_PATH/*.ipa ; do
+    echo "Validating $f"
+    xcrun altool --validate-app --type ios --file "$f" \
+        --username "$ITC_USER" --password "$ITC_PASSWORD"
 
-usage() {
-  echo """Target Usage:\n$0 [Debug|Staging|Release]
-  """ 1>&2;
-  exit 1;
-}
-
-if [ $# -eq 0 ]
-  then
-    usage
-    exit 1
+    echo "Uploading to iTC $f"
+    xcrun altool --upload-app --type ios --file "$f" \
+        --username "$ITC_USER" --password "$ITC_PASSWORD"
+done
 fi
-
-mkdir -p build/
-
-TARGET=$1
-
-echo "Target is $TARGET"
-
-xcodebuild archive \
-  -verbose \
-  -jobs 2 \
-  -workspace AmiKoDesitin.xcworkspace \
-    CONFIGURATION_BUILD_DIR=$(PWD)/build \
-    -scheme AmiKoDesitin \
-    -configuration $TARGET \
-    -derivedDataPath "$PWD/DerivedData" \
-    -archivePath $PWD/build/AmiKoDesitin.xcarchive \
-    || exit 1
-
-
-#named config variables - pass values in directly for override
-# xcodebuild archive \
-#   -verbose \
-#   -jobs 2 \
-#   -project AmiKoDesitin.xcodeproj \
-#     -scheme AmiKoDesitin \
-#     -configuration $TARGET \
-#     -derivedDataPath "$PWD/DerivedData" \
-#     -archivePath ./build/AmiKoDesitin.xcarchive \
-#     || exit 1
-     PRODUCT_BUNDLE_IDENTIFIER=org.oddb.generika \
-     PROVISIONING_PROFILE_SPECIFIER="Zeno Davatz" \
-#     || exit 1
-
-echo "Building IPA..."
-
-#clean the build directory for .ipa
-rm -rf ./build/*.app
-
-
-#choose export options
-if [ $TARGET = "Release" ]; then
-  options="store.plist"
-else
-  options="adhoc.plist"
-fi
-
-#now create the .IPA using export options specified in property list files
-xcodebuild -exportArchive \
- -verbose \
- -archivePath ./build/AmiKoDesitin.xcarchive \
- -exportPath ./build \
- -exportOptionsPlist ./exportOptions/"$options" \
