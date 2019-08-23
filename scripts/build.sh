@@ -65,7 +65,7 @@ fi
 #-------------------------------------------------------------------------------
 if [ $STEP_DOWNLOAD_TESSDATA ] ; then
     pushd ../AmiKoDesitin
-    FILENAME=tessdata.tar.gz
+    FILENAME=tessdata.zip
     wget $PILLBOX_ODDB_ORG/$FILENAME
     unzip $FILENAME
     rm $FILENAME
