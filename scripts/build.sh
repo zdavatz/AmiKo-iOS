@@ -3,13 +3,13 @@
 # Alex Bettarini - 22 Aug 2019
 # Copyright © 2019 Ywesee GmbH. All rights reserved.
 
-#STEP_REMOVE_SUPPORT_FILES=true
-#STEP_DOWNLOAD_SUPPORT_FILES=true
+STEP_REMOVE_SUPPORT_FILES=true
+STEP_DOWNLOAD_SUPPORT_FILES=true
 #STEP_DOWNLOAD_TESSDATA=true
-#STEP_PODFILE=true
-#STEP_ARCHIVE=true
-#STEP_CREATE_IPA=true
-#STEP_UPLOAD_APP=true
+STEP_PODFILE=true
+STEP_ARCHIVE=true
+STEP_CREATE_IPA=true
+STEP_UPLOAD_APP=true
 
 #-------------------------------------------------------------------------------
 TIMESTAMP1=$(date +%Y%m%d)
