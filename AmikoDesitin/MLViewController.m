@@ -2664,13 +2664,13 @@ static BOOL mShowReport = false;
         FullTextOverviewVC *fullTextOverviewVC = [FullTextOverviewVC sharedInstance];
         fullTextOverviewVC.ftResults = mFullTextSearch.listOfSectionTitles;
         mainRevealController.rightViewController = fullTextOverviewVC;
+        [fullTextOverviewVC setPaneWidth];
     }
 
     // Front
     {
         FullTextViewController *fullTextVC = [FullTextViewController sharedInstance];
         [fullTextVC updateFullTextSearchView: mFullTextContentStr];
-        [fullTextVC setRightPaneWidth];
 
         if (otherViewNavigationController) {
             [otherViewNavigationController removeFromParentViewController];

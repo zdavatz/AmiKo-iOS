@@ -40,15 +40,27 @@ static const float kFtLabelFontSize = 12.0;
     return sharedObject;
 }
 
-//- (void)viewDidLoad
-//{
-//    [super viewDidLoad];
-//
-//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
-//        self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
-//    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-//        self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;
-//}
+- (void)setPaneWidth
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
+            self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad + 10.0;
+        }
+        else if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
+            self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad + 100.0;
+        }
+    }
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone + 20.0;
+    }
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self setPaneWidth];
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
