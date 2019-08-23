@@ -23,7 +23,7 @@
             referenceY = self.zeroZero.y;
             referenceW = self.zeroZero.x - self.oneOne.x;
             referenceH = self.oneOne.y - self.zeroZero.y;
-            NSLog(@"line %d P.", __LINE__);
+            NSLog(@"%s line %d P.", __FUNCTION__, __LINE__);
             break;
             
         case UIInterfaceOrientationLandscapeRight:  // = UIDeviceOrientationLandscapeLeft
@@ -31,7 +31,7 @@
             referenceY = self.zeroZero.y;
             referenceW = fabs(self.oneOne.x - self.zeroZero.x);
             referenceH = fabs(self.oneOne.y - self.zeroZero.y);
-            NSLog(@"line %d LR.", __LINE__);
+            NSLog(@"%s line %d LR.", __FUNCTION__, __LINE__);
             break;
             
         case UIInterfaceOrientationLandscapeLeft: // = UIDeviceOrientationLandscapeRight
@@ -39,11 +39,11 @@
             referenceY = self.oneOne.y;
             referenceW = fabs(self.oneOne.x - self.zeroZero.x);
             referenceH = fabs(self.oneOne.y - self.zeroZero.y);
-            NSLog(@"line %d LL.", __LINE__);
+            NSLog(@"%s line %d LL.", __FUNCTION__, __LINE__);
             break;
             
         default:
-            NSLog(@"line %d", __LINE__);
+            NSLog(@"%s line %d", __FUNCTION__, __LINE__);
             break;
     }
     

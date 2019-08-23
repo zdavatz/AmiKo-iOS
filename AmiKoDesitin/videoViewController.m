@@ -106,7 +106,9 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    //NSLog(@"%s", __FUNCTION__);
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     [self stopVideoStream];
     [super viewDidDisappear:animated];
 }

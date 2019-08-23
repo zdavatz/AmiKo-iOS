@@ -64,8 +64,10 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     NSData *data = [photo fileDataRepresentation];
     UIImage *image = [UIImage imageWithData:data];
 
+#ifdef DEBUG
     //NSLog(@"line %d cardFrameFraction %@", __LINE__, NSStringFromCGRect(self.previewView.cardFrameFraction));
-    NSLog(@"line %d imageOrientation %ld", __LINE__, (long)image.imageOrientation);
+    NSLog(@"%s line %d, imageOrientation %ld", __FUNCTION__, __LINE__, (long)image.imageOrientation);
+#endif
 
     CGFloat x = self.cameraVC.previewView.cardFrameFraction.origin.x;
     CGFloat y = self.cameraVC.previewView.cardFrameFraction.origin.y;
@@ -120,6 +122,9 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         return;
     }
 
+//    for (NSValue *v in goodBoxes)
+//        NSLog(@"\trect: %@", NSStringFromCGRect(v.CGRectValue));
+
     @autoreleasepool {
 
     NSMutableArray *ocrStrings = [NSMutableArray new];
@@ -139,9 +144,14 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     // OCR with tesseract
 
     G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
+    //NSLog(@"%s line %d, engineMode: %lu", __FUNCTION__, __LINE__, (unsigned long)tesseract.engineMode);
     tesseract.delegate = self;
     tesseract.maximumRecognitionTime = 2.0;
-    //tesseract.engineMode = G8OCREngineModeTesseractCubeCombined; // G8OCREngineModeTesseractOnly
+
+    //tesseract.engineMode = G8OCREngineModeTesseractOnly; // fastest (default)
+    //tesseract.engineMode = G8OCREngineModeCubeOnly;// better accuracy, but slower
+    //tesseract.engineMode = G8OCREngineModeTesseractCubeCombined;// Run both and combine results - best accuracy
+
 #ifndef WITH_ARRAY_OF_BLACKLISTS
     tesseract.charBlacklist = @"_";
 #endif
@@ -282,7 +292,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     } // autoreleasepool
 }
 
-# pragma mark Text Detection
+# pragma mark - Text Detection
 // Returns an array with the word bounding boxes with x < 0.3 and y < 0.3
 - (NSArray *)detectTextBoundingBoxes:(CIImage*)image
                          orientation:(CGImagePropertyOrientation)orientation
@@ -298,6 +308,13 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
                                            orientation:orientation
                                                options:@{}];
     [handler performRequests:@[textRequest] error:nil];
+    
+//#ifdef DEBUG
+//    if (!textRequest.results)
+//        NSLog(@"%s line %d, textRequest.results: nil", __FUNCTION__, __LINE__);
+//    else
+//        NSLog(@"%s line %d, textRequest.results: %lu", __FUNCTION__, __LINE__, (unsigned long)[textRequest.results count]);
+//#endif
     
     for (VNTextObservation *observation in textRequest.results) {
         
@@ -335,7 +352,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         //NSLog(@"Keep first 5 %@", boxes);
     }
     
-    // Sort boxes by height
+    // Sort boxes by vertical size
     boxes = [boxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
         CGRect p1 = [obj1 CGRectValue];
         CGRect p2 = [obj2 CGRectValue];

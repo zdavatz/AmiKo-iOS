@@ -5,7 +5,7 @@ target 'AmiKoDesitin' do
   # use_frameworks!
 
   # Pods for AmiKoDesitin
-pod 'TesseractOCRiOS', '4.0.0'
+  pod 'TesseractOCRiOS', '4.0.0'
   # pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
   #pod 'WebViewJavascriptBridge', '4.1.4'
   #pod SWRevealViewController
@@ -14,12 +14,14 @@ end
 target 'CoMedDesitin' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
-pod 'TesseractOCRiOS', '4.0.0'
+
   # Pods for CoMedDesitin
+  pod 'TesseractOCRiOS', '4.0.0'
   # pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
   #pod 'WebViewJavascriptBridge', '4.1.4'
   #pod SWRevealViewController
 end
+
 post_install do |installer|
     installer.pods_project.targets.each do |target|
         if target.name == 'TesseractOCRiOS'
