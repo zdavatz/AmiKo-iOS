@@ -1,29 +1,26 @@
 platform :ios, '11.0'
 
-target 'AmiKoDesitin' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
+# Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+# use_frameworks!
 
-  # Pods for AmiKoDesitin
+def common_pods
   pod 'TesseractOCRiOS', '4.0.0'
-  # pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
-  #pod 'WebViewJavascriptBridge', '4.1.4'
+  #pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
+  pod 'WebViewJavascriptBridge', '4.1.4'
   #pod SWRevealViewController
 end
 
-target 'CoMedDesitin' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
+target 'AmiKoDesitin' do
+  common_pods
+end
 
-  # Pods for CoMedDesitin
-  pod 'TesseractOCRiOS', '4.0.0'
-  # pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
-  #pod 'WebViewJavascriptBridge', '4.1.4'
-  #pod SWRevealViewController
+target 'CoMedDesitin' do
+  common_pods
 end
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|
+        puts "=== Target: #{target.name}"
         if target.name == 'TesseractOCRiOS'
             target.build_configurations.each do |config|
                 config.build_settings['ENABLE_BITCODE'] = 'NO'

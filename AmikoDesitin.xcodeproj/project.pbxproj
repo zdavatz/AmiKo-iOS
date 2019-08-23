@@ -168,10 +168,6 @@
 		D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252719461D200078FEFF /* 938-connections-selected@2x.png */; };
 		D5A2252D19461D750078FEFF /* interactions_css.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252C19461D750078FEFF /* interactions_css.css */; };
 		D5A2252E19461D750078FEFF /* interactions_css.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A2252C19461D750078FEFF /* interactions_css.css */; };
-		D5A2253319461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */; };
-		D5A2253419461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */; };
-		D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */; };
-		D5A2253619461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */; };
 		D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22537194A3A400078FEFF /* 218-trash2.png */; };
 		D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22537194A3A400078FEFF /* 218-trash2.png */; };
 		D5A2253B194A3A400078FEFF /* 217-trash.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A22538194A3A400078FEFF /* 217-trash.png */; };
@@ -462,9 +458,6 @@
 		D5A2252619461D200078FEFF /* 938-connections-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "938-connections-selected.png"; sourceTree = "<group>"; };
 		D5A2252719461D200078FEFF /* 938-connections-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "938-connections-selected@2x.png"; sourceTree = "<group>"; };
 		D5A2252C19461D750078FEFF /* interactions_css.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = interactions_css.css; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.css; };
-		D5A2253019461D8D0078FEFF /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
-		D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
-		D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		D5A22537194A3A400078FEFF /* 218-trash2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "218-trash2.png"; sourceTree = "<group>"; };
 		D5A22538194A3A400078FEFF /* 217-trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "217-trash.png"; sourceTree = "<group>"; };
 		D5A31F4718B51F2A00F56BC5 /* MLCustomURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLCustomURLConnection.h; sourceTree = "<group>"; };
@@ -865,16 +858,6 @@
 			name = AppIcons;
 			sourceTree = "<group>";
 		};
-		D5A2252F19461D8D0078FEFF /* WebViewJavascriptBridge */ = {
-			isa = PBXGroup;
-			children = (
-				D5A2253019461D8D0078FEFF /* WebViewJavascriptBridge.h */,
-				D5A2253119461D8D0078FEFF /* WebViewJavascriptBridge.js.txt */,
-				D5A2253219461D8D0078FEFF /* WebViewJavascriptBridge.m */,
-			);
-			path = WebViewJavascriptBridge;
-			sourceTree = "<group>";
-		};
 		D5A31F4B18B5205E00F56BC5 /* SSZipArchive */ = {
 			isa = PBXGroup;
 			children = (
@@ -1029,7 +1012,6 @@
 		D5A6F26217B169CD00EAB24B /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				D5A2252F19461D8D0078FEFF /* WebViewJavascriptBridge */,
 				D5A31F4B18B5205E00F56BC5 /* SSZipArchive */,
 				D5FFE1AC18B1021B002D6159 /* ionicons */,
 			);
@@ -1239,6 +1221,7 @@
 				D5A6F23317B1692F00EAB24B /* Sources */,
 				D5A6F23417B1692F00EAB24B /* Frameworks */,
 				D5A6F23517B1692F00EAB24B /* Resources */,
+				618CAF2F143F3526F0B86CD0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1257,6 +1240,7 @@
 				D5F6BB4F17E8C87500DCBD16 /* Sources */,
 				D5F6BB5E17E8C87500DCBD16 /* Frameworks */,
 				D5F6BB6317E8C87500DCBD16 /* Resources */,
+				B9E6478E8C39D61CE5A9CA08 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1347,7 +1331,6 @@
 				D5A6F28517B16B6000EAB24B /* MLTitleViewController.xib in Resources */,
 				D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				D554575618B3E87D003299E0 /* 905-chat-2.png in Resources */,
-				D5A2253319461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */,
 				439F50FA20122665000E82FC /* prescription.png in Resources */,
 				D5A2252219461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
 				D5A2250B1945EA830078FEFF /* drug_interactions_csv_de.csv in Resources */,
@@ -1472,7 +1455,6 @@
 				FA5E5E4C20F5F71B00CDB6C6 /* videoViewController.xib in Resources */,
 				D5A225161945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				FA5FA7F0205A743200E0C042 /* MLViewController.xib in Resources */,
-				D5A2253419461D8D0078FEFF /* WebViewJavascriptBridge.js.txt in Resources */,
 				D5A2252319461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
 				FA5FA7F8205A745B00E0C042 /* MLViewController~iphone.xib in Resources */,
 				D5A2252E19461D750078FEFF /* interactions_css.css in Resources */,
@@ -1565,6 +1547,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		618CAF2F143F3526F0B86CD0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AmiKoDesitin/Pods-AmiKoDesitin-resources.sh",
+				"${PODS_ROOT}/WebViewJavascriptBridge/WebViewJavascriptBridge/WebViewJavascriptBridge.js.txt",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WebViewJavascriptBridge.js.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AmiKoDesitin/Pods-AmiKoDesitin-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8FC5BCB8D0C9C712D1287381 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1583,6 +1583,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B9E6478E8C39D61CE5A9CA08 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CoMedDesitin/Pods-CoMedDesitin-resources.sh",
+				"${PODS_ROOT}/WebViewJavascriptBridge/WebViewJavascriptBridge/WebViewJavascriptBridge.js.txt",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WebViewJavascriptBridge.js.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CoMedDesitin/Pods-CoMedDesitin-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1597,7 +1615,6 @@
 				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				FAD0664A22DF29DC0078E28B /* FullTextEntry.m in Sources */,
 				FAD0665222DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
-				D5A2253519461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
 				43D3A0E2201F3CFB00EA77C6 /* Product.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
@@ -1652,7 +1669,6 @@
 				930D94B42077E5D4007E4629 /* Patient.m in Sources */,
 				D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */,
 				FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
-				D5A2253619461D8D0078FEFF /* WebViewJavascriptBridge.m in Sources */,
 				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
 				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
