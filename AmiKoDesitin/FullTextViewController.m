@@ -11,6 +11,7 @@
 #import "MLUtility.h"
 #import "MLViewController.h"
 #import "MLConstants.h"
+#import "FullTextOverviewVC.h"
 
 @interface FullTextViewController ()
 
@@ -121,26 +122,6 @@
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
 
-- (void)setRightPaneWidth
-{
-#ifdef DEBUG
-    //NSLog(@"%s line %d, orientation: %ld", __FUNCTION__, __LINE__, (long)[[UIDevice currentDevice] orientation]);
-#endif
-
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
-            self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
-        }
-        else if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])) {
-            self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad + 100.0;
-        }
-    }
-    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-    {
-        self.revealViewController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;
-    }
-}
-
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
@@ -150,7 +131,12 @@
 //          (long)[[UIDevice currentDevice] orientation]);
 //#endif
     
-    [self setRightPaneWidth];
+    SWRevealViewController *revealController = [self revealViewController];
+    UIViewController *vc_right = revealController.rightViewController;
+    if ([vc_right isKindOfClass:[FullTextOverviewVC class]] ) {
+        FullTextOverviewVC *ftvc = (FullTextOverviewVC *)vc_right;
+        [ftvc setPaneWidth];
+    }
 
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
