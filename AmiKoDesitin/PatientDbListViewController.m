@@ -220,7 +220,7 @@
         [alertController addAction:actionEdit];
     }
     else if ((appDel.editMode == EDIT_MODE_PATIENTS) &&
-             (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone))
+             ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone))
     {
         UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                                style:UIAlertActionStyleCancel
@@ -232,7 +232,7 @@
 
     [alertController setModalPresentationStyle:UIModalPresentationPopover];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UITableViewCell *cell = [mTableView cellForRowAtIndexPath:indexPath];
         alertController.popoverPresentationController.sourceView = cell.contentView;
     }

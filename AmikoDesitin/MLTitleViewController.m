@@ -158,11 +158,11 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 
         /** Use subview */
         UILabel *subLabel = nil;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             subLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,230,36)];
             [subLabel setFont:[UIFont systemFontOfSize:14]];
         }
-        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             subLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,230,28)];
             [subLabel setFont:[UIFont systemFontOfSize:12]];
         }

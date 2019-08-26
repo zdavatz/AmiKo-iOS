@@ -43,7 +43,7 @@
     // - change x position
     // imageViewFrame.origin.x = contentViewBound.size.width - imageViewFrame.size.width;
     // - assign the new frame
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         self.imageView.frame = CGRectMake(12, 4, 28, 28);
     }
     else {

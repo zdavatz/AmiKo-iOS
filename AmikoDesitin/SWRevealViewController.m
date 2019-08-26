@@ -632,10 +632,12 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 
 - (void)revealToggleAnimated:(BOOL)animated
 {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         [self setFrontViewPosition:FrontViewPositionRightMost animated:animated];
         return;
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    }
+     
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [self setFrontViewPosition:FrontViewPositionRightMost animated:animated];
         return;
     }

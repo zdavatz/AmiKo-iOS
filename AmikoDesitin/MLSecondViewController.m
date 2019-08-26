@@ -228,7 +228,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         searchField.translucent = YES;
     } // iPad
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -379,13 +379,13 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     // PanGestureRecognizer goes here ... could be also placed in the other Views but this is the main view!
     // [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         searchField.barTintColor = [UIColor lightGrayColor];
         searchField.backgroundColor = [UIColor clearColor];
         searchField.translucent = YES;
     }
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         // Add search bar as title view to navigation bar
         searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -406,7 +406,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         UIGestureRecognizer *tapper = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                               action:@selector(handleSingleTap:)];
         tapper.cancelsTouchesInView = NO;
@@ -436,7 +436,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 - (void) willRotateToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation
                                  duration: (NSTimeInterval)duration
 {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
@@ -448,7 +448,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         searchField.translucent = YES;
     }
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -978,7 +978,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     NSLog(@"%s", __FUNCTION__);
 #endif
     // Check this out!
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         int fontSize = 80;
         NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", fontSize];
         [self.webView stringByEvaluatingJavaScriptFromString:jsString];

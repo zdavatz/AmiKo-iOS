@@ -148,7 +148,7 @@ static const float kAmkLabelFontSize = 12.0;
                                                          }];
     [alertController addAction:actionDelete];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         // iPad: Cancel buttons are removed from popovers automatically,
         // because tapping outside the popover represents "cancel", in a popover context
         UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
@@ -161,7 +161,7 @@ static const float kAmkLabelFontSize = 12.0;
 
     [alertController setModalPresentationStyle:UIModalPresentationPopover];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
         alertController.popoverPresentationController.sourceView = cell.contentView;
     }
@@ -190,11 +190,11 @@ static const float kAmkLabelFontSize = 12.0;
         
         /** Use subview */
         UILabel *subLabel = nil;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             subLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,230,36)];
             [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize+2]];
         }
-        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             subLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,230,28)];
             [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
         }

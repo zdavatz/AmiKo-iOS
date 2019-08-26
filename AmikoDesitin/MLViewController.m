@@ -230,7 +230,7 @@ static BOOL mShowReport = false;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     [searchField setText:@""];
 
-    if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ||
+    if (([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ||
         (orientation == UIInterfaceOrientationLandscapeLeft) ||
         (orientation == UIInterfaceOrientationLandscapeRight) )
     {
@@ -275,7 +275,7 @@ static BOOL mShowReport = false;
             [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
         }
     }
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
         if ([btn.title isEqualToString:NSLocalizedString(@"Prep", "Short toolbar")]) {
             [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -313,12 +313,14 @@ static BOOL mShowReport = false;
         }
     }
 
+#if 0 // @@@
     for (UIBarButtonItem *b in [myToolBar items]) {
         if (b==btn)
             [b setTintColor:MAIN_TINT_COLOR];
         else
-            [b setTintColor:[UIColor lightGrayColor]];   // Default color
+            [b setTintColor:[UIColor systemGrayColor]];   // Default color
     }
+#endif
 
     // Then update the app internal status
     // We shouldn't modify 'mUsedDatabase' here, it gets defined when the tab is switched,
@@ -859,11 +861,13 @@ static BOOL mShowReport = false;
     
     // Reset search state
 
+#if 0 // @@@
     for (UIBarButtonItem *b in [myToolBar items])
        [b setTintColor:[UIColor lightGrayColor]];   // Default color
 
     // Highlight first button in toolbar at the top of the screen
     [[[myToolBar items] objectAtIndex:SEARCH_TITLE] setTintColor:MAIN_TINT_COLOR];
+#endif
 
     [searchField setText:@""];
     [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -876,15 +880,20 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
     NSLog(@"%s %d, searchState: %ld", __FUNCTION__, __LINE__, (long)searchState);
 #endif
+    
+#if 1 // @@@
     for (UIBarButtonItem *b in [myToolBar items])
-        [b setTintColor:[UIColor lightGrayColor]];   // Default color
+        [b setTintColor:[UIColor labelColor]];   // Default color
+#endif
 
     NSUInteger indexOfObjectToBeHighlighted = searchState;
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         indexOfObjectToBeHighlighted /= 2;
     
+#if 1 // @@@
     [[[myToolBar items] objectAtIndex:indexOfObjectToBeHighlighted] setTintColor:MAIN_TINT_COLOR];
+#endif
 
     [searchField setText:@""];
     switch (searchState)
@@ -1113,7 +1122,7 @@ static BOOL mShowReport = false;
     NSLog(@"%s to orientation: %ld", __FUNCTION__, toInterfaceOrientation);
 #endif
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -1124,7 +1133,7 @@ static BOOL mShowReport = false;
         }
     } // iPad
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
         [self setToolbarItemsFontSize];
         
@@ -1187,7 +1196,7 @@ static BOOL mShowReport = false;
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -1204,7 +1213,7 @@ static BOOL mShowReport = false;
         [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
         [[[myToolBar items] objectAtIndex:5] setTitle:NSLocalizedString(@"Full Text", "Full toolbar")];
     }
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
         [self setToolbarItemsFontSize];
         
@@ -1266,7 +1275,7 @@ static BOOL mShowReport = false;
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -1277,7 +1286,7 @@ static BOOL mShowReport = false;
         }
     }
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -1330,9 +1339,11 @@ static BOOL mShowReport = false;
     self.title = APP_NAME;
     
     // Sets color and font and whatever else of the navigation bar
+#if 0 // @@@
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                           VERY_LIGHT_GRAY_COLOR, NSForegroundColorAttributeName,
                                                           nil]];
+#endif
     // Applies this color throughout the app
     // [[UISearchBar appearance] setBarTintColor:[UIColor lightGrayColor]];
     
@@ -1354,11 +1365,11 @@ static BOOL mShowReport = false;
     
     UIBarButtonItem *appIconItem = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         self.navigationItem.leftBarButtonItem = appIconItem;
 
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 #ifndef TWO_ITEMS_ON_LEFT_NAV_BAR
         // A single button on the left
         self.navigationItem.leftBarButtonItem = appIconItem;
@@ -1381,8 +1392,10 @@ static BOOL mShowReport = false;
     
     // Background color of navigation bar
     {
+#if 1 // @@@
         self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
         self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+#endif
         self.navigationController.navigationBar.translucent = NO;
         
         // Customize tabbar
@@ -1408,13 +1421,13 @@ static BOOL mShowReport = false;
     }
     
     // Add search bar as title view to navigation bar
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         searchField.barTintColor = [UIColor lightGrayColor];
         searchField.backgroundColor = [UIColor clearColor];
         searchField.translucent = YES;
     } // iPad
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
         searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -1493,7 +1506,7 @@ static BOOL mShowReport = false;
     // Remove keyboard
     [searchField resignFirstResponder];
     // Grab a handle to the reveal controller, as if you'd do with a navigation controller via self.navigationController.
-    if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         mainRevealController = self.revealViewController;
         [mainRevealController setFrontViewController:menuViewNavigationController];
         [mainRevealController setFrontViewPosition:FrontViewPositionRight animated:YES];
@@ -1851,7 +1864,7 @@ static BOOL mShowReport = false;
     static volatile bool inProgress = false;
     
     int minSearchChars = 0;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
         minSearchChars = 0;
 
     if (mCurrentSearchState == SEARCH_THERAPY)
@@ -2570,9 +2583,9 @@ static BOOL mShowReport = false;
 
     //
     mainRevealController.rightViewRevealOverdraw = 0;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;
 
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
@@ -2797,11 +2810,11 @@ static BOOL mShowReport = false;
 
     [cell.imageView addGestureRecognizer:tap];
   
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0];
     }
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:13.0];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
     }
@@ -2950,7 +2963,7 @@ static BOOL mShowReport = false;
     float frameWidth = self.myTableView.frame.size.width;
     
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - PADDING_IPAD, CGFLOAT_MAX)
                                           options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
                                        attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0]}
@@ -2961,7 +2974,7 @@ static BOOL mShowReport = false;
                                                 context:nil];
             retVal = textRect.size.height + subTextRect.size.height + PADDING_IPAD * 0.25;
         }
-        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
             textRect = [text boundingRectWithSize:CGSizeMake(frameWidth - 2.0*PADDING_IPHONE, CGFLOAT_MAX)
                                           options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
                                        attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0]}
@@ -3072,7 +3085,7 @@ static BOOL mShowReport = false;
                                                        metrics:nil
                                                        views:NSDictionaryOfVariableBindings(view)]];
                 
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                     UITableViewCell *cell = [myTableView cellForRowAtIndexPath:indexPath];
                     self.pickerSheet.popoverPresentationController.sourceView = cell.contentView;
                     self.pickerSheet.popoverPresentationController.sourceRect = cell.contentView.bounds;

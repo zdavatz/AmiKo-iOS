@@ -798,8 +798,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                     signatureView.contentMode = UIViewContentModeTopRight;
                     [cell.contentView addSubview:signatureView];
 #ifdef DEBUG_COLOR_BG
-                    [cell.contentView setBackgroundColor:[UIColor yellowColor]];
-                    label.backgroundColor = [UIColor orangeColor];
+                    [cell.contentView setBackgroundColor:[UIColor systemYellowColor]];
+                    label.backgroundColor = [UIColor systemOrangeColor];
 #endif
                 }
                 break;
@@ -1096,7 +1096,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                          }];
     [alertController addAction:actionCancel];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         //UIBarButtonItem *button = (UIBarButtonItem *)sender;
         alertController.popoverPresentationController.barButtonItem = sender;
         alertController.popoverPresentationController.sourceView = self.view;
@@ -1304,7 +1304,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
     };
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         CGRect r = [infoView rectForRowAtIndexPath:indexPath];
         [pic presentFromRect:r inView:infoView animated:YES completionHandler:completionHandler];
     }
@@ -1344,7 +1344,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     UIPrinterPickerController *picker = [UIPrinterPickerController printerPickerControllerWithInitiallySelectedPrinter:self.SavedPrinter];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         CGRect r = [infoView rectForRowAtIndexPath:indexPath];
         //NSLog(@"%s %d, rect: %@", __FUNCTION__, __LINE__, NSStringFromCGRect(r));
         [picker presentFromRect:r
@@ -1956,7 +1956,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [alertController addAction:actionDelete];
 #endif
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
         UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                                style:UIAlertActionStyleCancel
@@ -1968,7 +1968,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     [alertController setModalPresentationStyle:UIModalPresentationPopover];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UITableViewCell *cell = [infoView cellForRowAtIndexPath:indexPath];
         alertController.popoverPresentationController.sourceView = cell.contentView;
         alertController.popoverPresentationController.sourceRect = cell.contentView.bounds;
@@ -2131,7 +2131,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
     
     CGFloat margin;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         margin = 100.0;
     else
         margin = 50.0;
@@ -2434,7 +2434,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     [activityVC setValue:subjectLine forKey:@"subject"];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         activityVC.modalPresentationStyle = UIModalPresentationPopover;
 
     [self presentViewController:activityVC animated:YES completion:nil];

@@ -219,7 +219,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Make sure the orientation is correct
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
@@ -237,7 +237,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
         self.window.rootViewController = self.revealViewController;
     }
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
         mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
 
@@ -265,7 +265,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [UIFont systemFontOfSize:14], NSFontAttributeName,
-                                    [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+                                    //[UIColor whiteColor], NSForegroundColorAttributeName,
+                                    nil];
         [[UINavigationBar appearance] setTitleTextAttributes:attributes];
      
         // Remove shadow?
