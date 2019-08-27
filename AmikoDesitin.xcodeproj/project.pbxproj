@@ -302,6 +302,8 @@
 		FA5FA7F0205A743200E0C042 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7F2205A743200E0C042 /* MLViewController.xib */; };
 		FA5FA7F7205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
 		FA5FA7F8205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
+		FA606360231548F500E69A93 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA60635F231548F500E69A93 /* Colors.xcassets */; };
+		FA606361231548F500E69A93 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA60635F231548F500E69A93 /* Colors.xcassets */; };
 		FA66294B204D541B0000904A /* DoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* DoctorViewController.m */; };
 		FA6A005A20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A005920D39B90002D3A33 /* PatientViewController+smartCard.m */; };
 		FA6A005B20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6A005920D39B90002D3A33 /* PatientViewController+smartCard.m */; };
@@ -559,6 +561,7 @@
 		FA5FA7F9205A745B00E0C042 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/MLViewController~iphone.xib"; sourceTree = "<group>"; };
 		FA5FA7FC205A745D00E0C042 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "../AmiKoDesitin/de.lproj/MLViewController~iphone.strings"; sourceTree = "<group>"; };
 		FA5FA7FE205A745F00E0C042 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "../AmiKoDesitin/fr.lproj/MLViewController~iphone.strings"; sourceTree = "<group>"; };
+		FA60635F231548F500E69A93 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = AmiKoDesitin/Colors.xcassets; sourceTree = "<group>"; };
 		FA662948204D541B0000904A /* DoctorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DoctorViewController.h; path = AmiKoDesitin/DoctorViewController.h; sourceTree = SOURCE_ROOT; };
 		FA662949204D541B0000904A /* DoctorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DoctorViewController.m; path = AmiKoDesitin/DoctorViewController.m; sourceTree = SOURCE_ROOT; };
 		FA6A005820D39B90002D3A33 /* PatientViewController+smartCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientViewController+smartCard.h"; path = "AmiKoDesitin/PatientViewController+smartCard.h"; sourceTree = SOURCE_ROOT; };
@@ -873,6 +876,7 @@
 		D5A6F22E17B1692F00EAB24B = {
 			isa = PBXGroup;
 			children = (
+				FA60635F231548F500E69A93 /* Colors.xcassets */,
 				D551D53617F16DE2000EC52A /* Images.xcassets */,
 				D551D54117F22ACC000EC52A /* AppIcons */,
 				D5A6F24017B1692F00EAB24B /* AmikoDesitin */,
@@ -1313,6 +1317,7 @@
 				D5A6F2A617B16E4400EAB24B /* 28-star.png in Resources */,
 				D5A6F2A717B16E4400EAB24B /* 28-star@2x.png in Resources */,
 				D5A6F2A917B16EF700EAB24B /* app_icon_57x57.png in Resources */,
+				FA606360231548F500E69A93 /* Colors.xcassets in Resources */,
 				D5A6F2AB17B16F2300EAB24B /* app_icon_72x72.png in Resources */,
 				4387FC3D20189DB4000A5A0F /* PrescriptionViewController.xib in Resources */,
 				D5A6F2AD17B16F2900EAB24B /* app_icon_144x144.png in Resources */,
@@ -1427,6 +1432,7 @@
 				D5A2252E19461D750078FEFF /* interactions_css.css in Resources */,
 				D5F6BB7117E8C87500DCBD16 /* MLTitleViewController.xib in Resources */,
 				93109F8620751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */,
+				FA606361231548F500E69A93 /* Colors.xcassets in Resources */,
 				D5A2250D1945EA890078FEFF /* drug_interactions_csv_fr.csv in Resources */,
 				D5F6BB7217E8C87500DCBD16 /* MLTitleViewController~iphone.xib in Resources */,
 				D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */,

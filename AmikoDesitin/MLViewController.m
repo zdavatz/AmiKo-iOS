@@ -1402,8 +1402,11 @@ static BOOL mShowReport = false;
         self.navigationController.navigationBar.translucent = NO;
         
         // Customize tabbar
+
+#if 0   // Already done in IB ?
         [myTabBar setTintColor:MAIN_TINT_COLOR]; // color of bar item text labels
         [myTabBar setTranslucent:YES];
+#endif
         
         // Sets tabbar selected images
         UITabBarItem *tabBarItem0 = [myTabBar.items objectAtIndex:0];

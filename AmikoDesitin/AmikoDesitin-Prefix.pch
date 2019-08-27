@@ -4,8 +4,8 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_4_0
-#warning "This project uses features only available in iOS SDK 4.0 and later."
+#ifndef __IPHONE_13_0
+#warning "This project uses features only available in iOS SDK 13.0 and later."
 #endif
 
 #ifdef __OBJC__
@@ -13,13 +13,7 @@
     #import <Foundation/Foundation.h>
 #endif
 
-//#define IOS_NEWER_OR_EQUAL_TO_7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-
-//#define VERY_LIGHT_GRAY_COLOR ([UIColor colorWithWhite:0.9 alpha:1.0]) // /225 225 225
 #define VERY_LIGHT_GRAY_COLOR   [UIColor systemGray5Color]
-#define DESITIN_TINT_COLOR      [UIColor colorWithRed:242/255.0 green:198/255.0 blue:59/255.0 alpha:1.0]
-//#define YWESEE_TINT_COLOR     [UIColor orangeColor]
-#define MAIN_TINT_COLOR         DESITIN_TINT_COLOR
-//#define MAIN_TINT_COLOR         [UIColor systemOrangeColor]
+#define MAIN_TINT_COLOR         [UIColor colorNamed:@"mainTintColor"]
 
 #define SQLITE_LIMIT 512

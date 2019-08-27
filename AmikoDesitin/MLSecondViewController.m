@@ -30,6 +30,7 @@
 #import "MLSearchWebView.h"
 #import "MLMedication.h"
 //#import "MLMenuViewController.h"
+#import "MLViewController.h"
 
 #import "MLAlertView.h"
 
@@ -1090,6 +1091,13 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
           (long)previousTraitCollection.userInterfaceStyle,
           [UITraitCollection currentTraitCollection].userInterfaceStyle);
 #endif
+    
+    // Post message to switchToAips
+    UIViewController *nc_rear = self.revealViewController.rearViewController;
+    MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
+    NSArray *toolbarItems = [vc_rear.myToolBar items];
+    NSLog(@"%@", toolbarItems);
+    //[vc_rear switchToAipsViewFromFulltext: messageDictionary];
 }
 
 @end
