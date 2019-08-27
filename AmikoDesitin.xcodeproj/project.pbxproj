@@ -273,14 +273,6 @@
 		D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */ = {isa = PBXBuildFile; fileRef = D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */; };
 		D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
 		D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
-		D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE1AF18B1021B002D6159 /* IonIcons.m */; };
-		D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE1AF18B1021B002D6159 /* IonIcons.m */; };
-		D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B018B1021B002D6159 /* ionicons.ttf */; };
-		D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B018B1021B002D6159 /* ionicons.ttf */; };
-		D5FFE1B718B1021B002D6159 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B118B1021B002D6159 /* LICENSE */; };
-		D5FFE1B818B1021B002D6159 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B118B1021B002D6159 /* LICENSE */; };
-		D5FFE1B918B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
-		D5FFE1BA18B1021B002D6159 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE1B218B1021B002D6159 /* README.md */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
 		FA256AB620D2D03200D41353 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = FA256AB520D2D03100D41353 /* camera.png */; };
 		FA256AB720D2D03200D41353 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = FA256AB520D2D03100D41353 /* camera.png */; };
@@ -534,12 +526,6 @@
 		D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MLMenuViewController.xib; path = AmikoDesitin/MLMenuViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLMenuViewController.h; path = AmikoDesitin/MLMenuViewController.h; sourceTree = SOURCE_ROOT; };
 		D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLMenuViewController.m; path = AmikoDesitin/MLMenuViewController.m; sourceTree = SOURCE_ROOT; };
-		D5FFE1AD18B1021B002D6159 /* ionicons-codes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ionicons-codes.h"; sourceTree = "<group>"; };
-		D5FFE1AE18B1021B002D6159 /* IonIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IonIcons.h; sourceTree = "<group>"; };
-		D5FFE1AF18B1021B002D6159 /* IonIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IonIcons.m; sourceTree = "<group>"; };
-		D5FFE1B018B1021B002D6159 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ionicons.ttf; sourceTree = "<group>"; };
-		D5FFE1B118B1021B002D6159 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		D5FFE1B218B1021B002D6159 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		FA256AB520D2D03100D41353 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = AmiKoDesitin/camera.png; sourceTree = SOURCE_ROOT; };
 		FA3B621422E8511F00A80296 /* fulltext_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = fulltext_style.css; path = AmiKoDesitin/fulltext_style.css; sourceTree = SOURCE_ROOT; };
@@ -1013,7 +999,6 @@
 			isa = PBXGroup;
 			children = (
 				D5A31F4B18B5205E00F56BC5 /* SSZipArchive */,
-				D5FFE1AC18B1021B002D6159 /* ionicons */,
 			);
 			name = Libs;
 			sourceTree = "<group>";
@@ -1094,19 +1079,6 @@
 				D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		D5FFE1AC18B1021B002D6159 /* ionicons */ = {
-			isa = PBXGroup;
-			children = (
-				D5FFE1AD18B1021B002D6159 /* ionicons-codes.h */,
-				D5FFE1AE18B1021B002D6159 /* IonIcons.h */,
-				D5FFE1AF18B1021B002D6159 /* IonIcons.m */,
-				D5FFE1B018B1021B002D6159 /* ionicons.ttf */,
-				D5FFE1B118B1021B002D6159 /* LICENSE */,
-				D5FFE1B218B1021B002D6159 /* README.md */,
-			);
-			path = ionicons;
 			sourceTree = "<group>";
 		};
 		DC444D2052C026A9FE0C630C /* Pods */ = {
@@ -1368,7 +1340,6 @@
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				93109F8820751A5700CEFAA5 /* 1025-patient.png in Resources */,
-				D5FFE1B918B1021B002D6159 /* README.md in Resources */,
 				430285C820162C72003B2EF3 /* Localizable.strings in Resources */,
 				439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */,
 				FA4827EF22DF861D005135BE /* amiko_frequency_de.db in Resources */,
@@ -1382,7 +1353,6 @@
 				D5A175521A9A741B00E69385 /* maindb.png in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
-				D5FFE1B518B1021B002D6159 /* ionicons.ttf in Resources */,
 				D533DAAE17B435E300199C38 /* desitin_icon_72x72.png in Resources */,
 				D5A2251B19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */,
@@ -1392,7 +1362,6 @@
 				439F50FC20122665000E82FC /* prescription@2x.png in Resources */,
 				D5A175541A9A741B00E69385 /* maindb@2x.png in Resources */,
 				D565DA8917B7D8580002E2CF /* Default-Landscape~ipad.png in Resources */,
-				D5FFE1B718B1021B002D6159 /* LICENSE in Resources */,
 				D5A2252819461D200078FEFF /* 938-connections-selected.png in Resources */,
 				D5A1754C1A9A737F00E69385 /* interactions.png in Resources */,
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
@@ -1419,7 +1388,6 @@
 				D5A1755B1A9A7A5E00E69385 /* maindb-selected@2x.png in Resources */,
 				930D94BB2077EC1A007E4629 /* prescription@2x.png in Resources */,
 				FAF85BF722F44C1C00730690 /* main_callbacks.js in Resources */,
-				D5FFE1B618B1021B002D6159 /* ionicons.ttf in Resources */,
 				D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				93109F8920751A5700CEFAA5 /* 1025-patient.png in Resources */,
@@ -1440,7 +1408,6 @@
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				932F883E206BDA1600B5A77E /* ContactsListViewController.xib in Resources */,
 				D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */,
-				D5FFE1B818B1021B002D6159 /* LICENSE in Resources */,
 				93109F8C20751A6500CEFAA5 /* 1026-doctor-@2x.png in Resources */,
 				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
 				932F883C206BDA0400B5A77E /* PrescriptionViewController.xib in Resources */,
@@ -1511,7 +1478,6 @@
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D5A175551A9A741B00E69385 /* maindb@2x.png in Resources */,
-				D5FFE1BA18B1021B002D6159 /* README.md in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
 				D5A2252919461D200078FEFF /* 938-connections-selected.png in Resources */,
 				D5A1754D1A9A737F00E69385 /* interactions.png in Resources */,
@@ -1612,7 +1578,6 @@
 				439F25EC20286BF200396C29 /* Prescription.m in Sources */,
 				FA5E5E4920F5F71B00CDB6C6 /* videoViewController.m in Sources */,
 				43A385062032B930001A5849 /* MLMenuViewController.m in Sources */,
-				D5FFE1B318B1021B002D6159 /* IonIcons.m in Sources */,
 				FAD0664A22DF29DC0078E28B /* FullTextEntry.m in Sources */,
 				FAD0665222DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
@@ -1667,7 +1632,6 @@
 				930D94B72077E5E1007E4629 /* PatientDbListViewController.m in Sources */,
 				FA5E5E4A20F5F71B00CDB6C6 /* videoViewController.m in Sources */,
 				930D94B42077E5D4007E4629 /* Patient.m in Sources */,
-				D5FFE1B418B1021B002D6159 /* IonIcons.m in Sources */,
 				FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
 				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
