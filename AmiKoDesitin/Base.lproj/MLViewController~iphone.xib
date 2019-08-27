@@ -78,10 +78,13 @@
                         </constraint>
                     </constraints>
                     <items>
-                        <tabBarItem title="AIPS" image="maindb.png" id="467"/>
-                        <tabBarItem tag="1" title="Favorites" image="favorites.png" id="466"/>
-                        <tabBarItem tag="2" title="Interactions" image="interactions.png" id="JxN-5u-on8"/>
-                        <tabBarItem tag="3" title="Prescriptions" image="prescription.png" id="Yye-ET-TME" userLabel="Presc"/>
+                        <tabBarItem title="AIPS" image="doc.richtext" catalog="system" id="467"/>
+                        <tabBarItem tag="1" title="Favorites" image="star" catalog="system" id="466">
+                            <inset key="imageInsets" minX="0.0" minY="10" maxX="0.0" maxY="-10"/>
+                            <inset key="largeContentSizeImageInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
+                        </tabBarItem>
+                        <tabBarItem tag="2" title="Interactions" image="exclamationmark.triangle" catalog="system" id="JxN-5u-on8"/>
+                        <tabBarItem tag="3" title="Prescriptions" image="square.and.pencil" catalog="system" id="Yye-ET-TME" userLabel="Presc"/>
                     </items>
                     <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="selectedImageTintColor" name="mainTintColor"/>
@@ -162,12 +165,12 @@
         </view>
     </objects>
     <resources>
-        <image name="favorites.png" width="418.90908813476562" height="418.90908813476562"/>
-        <image name="interactions.png" width="17.130111694335938" height="17.130111694335938"/>
-        <image name="maindb.png" width="121.26316070556641" height="121.26316070556641"/>
-        <image name="prescription.png" width="51.200000762939453" height="51.200000762939453"/>
+        <image name="doc.richtext" catalog="system" width="56" height="64"/>
+        <image name="exclamationmark.triangle" catalog="system" width="64" height="56"/>
+        <image name="square.and.pencil" catalog="system" width="64" height="58"/>
+        <image name="star" catalog="system" width="64" height="58"/>
         <namedColor name="mainTintColor">
-            <color red="0.050980392156862744" green="0.22352941176470589" blue="0.7686274509803922" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.46274509803921571" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

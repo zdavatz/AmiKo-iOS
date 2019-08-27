@@ -249,18 +249,17 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     // Note: iOS7 - sets the global TINT color!!
     {
-        [application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-        // [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
-        // [application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];    // BLACK
+        //[application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
         
-        // Changes background color of navigation bar!
-        // [[UINavigationBar appearance] setBarTintColor:MAIN_TINT_COLOR];
+        // Changes background color of navigation bar
+        [[UINavigationBar appearance] setBarTintColor:[UIColor systemGray5Color]];
                 
         self.window.clipsToBounds =YES;
         // self.window.frame = CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height-20);
         
-        // Text and tabbar button colors
+        // Text and TabBar button colors (also images on navigationBar ?)
         [self.window setTintColor:MAIN_TINT_COLOR];
+        [self.window setTintColor:[UIColor labelColor]];
         
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [UIFont systemFontOfSize:14], NSFontAttributeName,
@@ -274,8 +273,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [[UINavigationBar appearance] setShadowImage:[UIImage new]];
         */
         
-        [[UIApplication sharedApplication] setStatusBarHidden:NO
-                                                withAnimation:UIStatusBarAnimationSlide];
+//        [[UIApplication sharedApplication] setStatusBarHidden:NO
+//                                                withAnimation:UIStatusBarAnimationSlide];
     }
     
     // Register the applications defaults

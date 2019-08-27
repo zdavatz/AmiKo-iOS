@@ -90,10 +90,10 @@
                     <rect key="frame" x="0.0" y="1062" width="834" height="50"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     <items>
-                        <tabBarItem title="AIPS" image="maindb.png" id="72"/>
-                        <tabBarItem tag="1" title="Favorites" image="favorites.png" id="71"/>
-                        <tabBarItem tag="2" title="Interactions" image="interactions.png" id="IFm-jM-mZk"/>
-                        <tabBarItem tag="3" title="Prescriptions" image="prescription.png" id="3ok-wB-fCZ" userLabel="Prescriptions"/>
+                        <tabBarItem title="AIPS" image="doc.richtext" catalog="system" id="72"/>
+                        <tabBarItem tag="1" title="Favorites" image="star" catalog="system" id="71"/>
+                        <tabBarItem tag="2" title="Interactions" image="exclamationmark.triangle" catalog="system" id="IFm-jM-mZk"/>
+                        <tabBarItem tag="3" title="Prescriptions" image="square.and.pencil" catalog="system" id="3ok-wB-fCZ" userLabel="Prescriptions"/>
                     </items>
                     <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="selectedImageTintColor" name="mainTintColor"/>
@@ -122,12 +122,12 @@
         </view>
     </objects>
     <resources>
-        <image name="favorites.png" width="418.90908813476562" height="418.90908813476562"/>
-        <image name="interactions.png" width="17.130111694335938" height="17.130111694335938"/>
-        <image name="maindb.png" width="121.26316070556641" height="121.26316070556641"/>
-        <image name="prescription.png" width="51.200000762939453" height="51.200000762939453"/>
+        <image name="doc.richtext" catalog="system" width="56" height="64"/>
+        <image name="exclamationmark.triangle" catalog="system" width="64" height="56"/>
+        <image name="square.and.pencil" catalog="system" width="64" height="58"/>
+        <image name="star" catalog="system" width="64" height="58"/>
         <namedColor name="mainTintColor">
-            <color red="0.050980392156862744" green="0.22352941176470589" blue="0.7686274509803922" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.46274509803921571" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

@@ -1341,14 +1341,8 @@ static BOOL mShowReport = false;
     
     self.title = APP_NAME;
     
-#if 0 // @@@ Already done in MLAppDelegate `application:didFinishLaunchingWithOptions:`
-    // Sets color and font and whatever else of the navigation bar
-    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                          VERY_LIGHT_GRAY_COLOR, NSForegroundColorAttributeName,
-                                                          nil]];
-    // Applies this color throughout the app
-    // [[UISearchBar appearance] setBarTintColor:[UIColor systemGray3Color]];
-#endif
+    // Setting color and font and whatever else of the navigation bar
+    // was already done in MLAppDelegate `application:didFinishLaunchingWithOptions:`
 
     // Add icon (top center)
     // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon_32x32.png"]];
@@ -1407,23 +1401,25 @@ static BOOL mShowReport = false;
         [myTabBar setTintColor:MAIN_TINT_COLOR]; // color of bar item text labels
         [myTabBar setTranslucent:YES];
 #endif
+
+//        UIImageSymbolConfiguration *configurationScale = [UIImageSymbolConfiguration configurationWithScale:UIImageSymbolScaleLarge];
+//
+//        UIImageSymbolConfiguration *configurationWeight = [UIImageSymbolConfiguration configurationWithWeight:UIImageSymbolWeightLight];
+//
+//        UIImageSymbolConfiguration *configurationSize = [UIImageSymbolConfiguration configurationWithPointSize:24.0];
         
-        // Sets tabbar selected images
-        UITabBarItem *tabBarItem0 = [myTabBar.items objectAtIndex:0];
-        UIImage* selectedImage = [[UIImage imageNamed:@"maindb-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        tabBarItem0.selectedImage = selectedImage;
-        
-        UITabBarItem *tabBarItem1 = [myTabBar.items objectAtIndex:1];
-        selectedImage = [[UIImage imageNamed:@"favorites-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        tabBarItem1.selectedImage = selectedImage;
-        
-        UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:2];
-        selectedImage = [[UIImage imageNamed:@"interactions-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        tabBarItem2.selectedImage = selectedImage;
-        
-        UITabBarItem *tabBarItem3 = [myTabBar.items objectAtIndex:3];
-        selectedImage = [[UIImage imageNamed:@"prescription-selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        tabBarItem3.selectedImage = selectedImage;
+        UIImageSymbolConfiguration *configuration =
+            [UIImageSymbolConfiguration configurationWithPointSize:24.0
+                                                            weight:UIImageSymbolWeightLight
+                                                             scale:UIImageSymbolScaleLarge];
+        for (UITabBarItem *item in myTabBar.items) {
+            //NSLog(@"Line %d, item: %@", __LINE__, item);
+            //item.image = [item.image imageByApplyingSymbolConfiguration:configurationScale];
+            //item.image = [item.image imageByApplyingSymbolConfiguration:configurationWeight];
+            //tabBarItem0.image = [tabBarItem0.image imageByApplyingSymbolConfiguration:configurationSize];
+            item.image = [item.image imageByApplyingSymbolConfiguration:configuration];
+            item.selectedImage = [item.selectedImage imageByApplyingSymbolConfiguration:configuration];
+        }
     }
     
     // Add search bar as title view to navigation bar
@@ -1452,6 +1448,7 @@ static BOOL mShowReport = false;
         searchField.barTintColor = [UIColor clearColor];
   #endif
 #endif
+
         searchField.translucent = NO;  // NO for opaque background, YES makes backgroundColor visible
         
 #ifdef TWO_ITEMS_ON_LEFT_NAV_BAR
