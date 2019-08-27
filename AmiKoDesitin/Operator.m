@@ -93,7 +93,7 @@
     
     UIGraphicsBeginImageContextWithOptions(desiredSize, NO, 0 );
 #ifdef DEBUG
-    UIColor *bgColor = [UIColor lightGrayColor];
+    UIColor *bgColor = [UIColor secondaryLabelColor];
     [bgColor setFill];
     CGRect bgRect = {CGPointZero, desiredSize};
     UIRectFill(bgRect);

@@ -46,7 +46,7 @@
 
     notificationName = @"PatientSelectedNotification";
     tableIdentifier = @"patientDbListTableItem";
-    textColor = [UIColor blackColor];
+    textColor = [UIColor labelColor];
     // TODO: (TBC) make sure the right view is back to the iOS Contacts list, for the sake of the swiping action
 }
 
@@ -79,6 +79,13 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
+#pragma mark -
 
 - (void) removeItem:(NSUInteger)rowIndex
 {

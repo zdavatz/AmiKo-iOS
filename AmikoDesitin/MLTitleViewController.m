@@ -125,10 +125,17 @@ static NSString *SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Status bar
+
 - (BOOL) prefersStatusBarHidden
 {
     return YES;
 }
+
+//- (UIStatusBarStyle)preferredStatusBarStyle
+//{
+//    return UIStatusBarStyleDefault;
+//}
 
 #pragma mark - Table view data source
 

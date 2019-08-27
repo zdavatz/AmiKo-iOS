@@ -175,12 +175,17 @@
 
 + (NSString *) getColorCss
 {
-    NSString *osMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
-    //NSLog(@"%s %d AppleInterfaceStyle:%@", __FUNCTION__, __LINE__, osMode);  // null, Dark
-    
+
     NSString *colorSchemeFilename = @"color-scheme-light";
+
+#ifdef DEBUG
+    NSLog(@"%@, %ld",
+          [UITraitCollection currentTraitCollection],
+          [UITraitCollection currentTraitCollection].userInterfaceStyle);
+#endif
+    UIUserInterfaceStyle osMode = [UITraitCollection currentTraitCollection].userInterfaceStyle;
     if (@available(iOS 13, *))
-        if ([osMode isEqualToString:@"Dark"])
+        if (osMode == UIUserInterfaceStyleDark)
             colorSchemeFilename = @"color-scheme-dark";
     
     NSString *colorCssPath = [[NSBundle mainBundle] pathForResource:colorSchemeFilename ofType:@"css"];

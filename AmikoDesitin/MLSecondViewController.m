@@ -239,7 +239,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         }
 
         self.edgesForExtendedLayout = UIRectEdgeNone;
-        searchField.barTintColor = [UIColor lightGrayColor];
+#if 0 // @@@
+        searchField.barTintColor = [UIColor systemGray3Color];
+#endif
         searchField.translucent = YES;
     } // iPad
 
@@ -294,7 +296,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         }
 
         self.edgesForExtendedLayout = UIRectEdgeNone;
+#if 0 // @@@
         searchField.barTintColor = [UIColor clearColor]; //[UIColor colorWithWhite:0.9 alpha:0.0];
+#endif
         searchField.backgroundImage = [UIImage new];
         searchField.translucent = YES;
     } // iPhone
@@ -353,8 +357,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
+#if 0 // @@@
     self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
     self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+#endif
     self.navigationController.navigationBar.translucent = NO;
     
     {
@@ -380,8 +386,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     // [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        searchField.barTintColor = [UIColor lightGrayColor];
+#if 0 // @@@
+        searchField.barTintColor = [UIColor systemGray3Color];
         searchField.backgroundColor = [UIColor clearColor];
+#endif
         searchField.translucent = YES;
     }
 
@@ -390,10 +398,14 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         searchField.barStyle = UIBarStyleDefault;
+#if 0 // @@@
         searchField.barTintColor = [UIColor clearColor];
+#endif
         searchField.backgroundImage = [UIImage new];
+#if 0 // @@@
         searchField.backgroundColor = [UIColor clearColor];
-        searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+        searchField.tintColor = [UIColor systemGray3Color];    // cursor color
+#endif
         searchField.translucent = YES;
         searchField.delegate = self;
         
@@ -413,6 +425,21 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         [self.view addGestureRecognizer:tapper];
     }
 }
+
+- (void) didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+ 
+    NSLog(@"%s", __FUNCTION__);
+    // Dispose of any resources that can be recreated.
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
+#pragma mark -
 
 /**
  Removes keyboard on iPhones
@@ -443,8 +470,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         else
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         
-        searchField.barTintColor = [UIColor lightGrayColor];
+#if 0 // @@@
+        searchField.barTintColor = [UIColor systemGray3Color];
         searchField.backgroundColor = [UIColor clearColor];
+#endif
         searchField.translucent = YES;
     }
 
@@ -501,10 +530,14 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         // Sets colors in toolbar and searchfield - modify with care!
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         searchField.barStyle = UIBarStyleDefault;
+#if 0 // @@@
         searchField.barTintColor = [UIColor clearColor];
+#endif
         searchField.backgroundImage = [UIImage new];
+#if 0 // @@@
         searchField.backgroundColor = [UIColor clearColor];
-        searchField.tintColor = [UIColor lightGrayColor];    // cursor color
+        searchField.tintColor = [UIColor systemGray3Color];    // cursor color
+#endif
         searchField.translucent = YES;
     }
 
@@ -643,8 +676,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 - (void) updateWebView
 {
 #ifdef DEBUG
-    NSLog(@"%s htmlStr:\n\n%@", __FUNCTION__,
-          [htmlStr substringToIndex:MIN(500,[htmlStr length])]);
+    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s htmlStr:\n\n%@", __FUNCTION__, [htmlStr substringToIndex:MIN(500,[htmlStr length])]);
 #endif
     
     if ([self.htmlStr isEqualToString:@"Interactions"])
@@ -1049,14 +1082,14 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #endif
 }
 
-#pragma mark helper functions
-
-- (void) didReceiveMemoryWarning
+// See `darkModeChanged` in AmiKo osx
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
-    [super didReceiveMemoryWarning];
- 
-    NSLog(@"%s", __FUNCTION__);
-    // Dispose of any resources that can be recreated.
+#ifdef DEBUG
+    NSLog(@"%s, previous style, %ld, current style:%ld", __FUNCTION__,
+          (long)previousTraitCollection.userInterfaceStyle,
+          [UITraitCollection currentTraitCollection].userInterfaceStyle);
+#endif
 }
 
 @end

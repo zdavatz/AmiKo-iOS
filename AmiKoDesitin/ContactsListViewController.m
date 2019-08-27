@@ -67,6 +67,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
+#pragma mark -
+
 - (Patient *) getContactAtRow:(NSInteger)row
 {
     if (mSearchFiltered)

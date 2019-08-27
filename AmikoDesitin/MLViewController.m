@@ -313,14 +313,7 @@ static BOOL mShowReport = false;
         }
     }
 
-#if 0 // @@@
-    for (UIBarButtonItem *b in [myToolBar items]) {
-        if (b==btn)
-            [b setTintColor:MAIN_TINT_COLOR];
-        else
-            [b setTintColor:[UIColor systemGrayColor]];   // Default color
-    }
-#endif
+    [self updateBarButtonColor:btn];
 
     // Then update the app internal status
     // We shouldn't modify 'mUsedDatabase' here, it gets defined when the tab is switched,
@@ -561,6 +554,11 @@ static BOOL mShowReport = false;
             [searchField setText:@"desitin"];
         }
     }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 - (void) doNotBackupDocumentsDir
@@ -853,6 +851,23 @@ static BOOL mShowReport = false;
    }
 }
 
+- (void) resetBarButtonsColor
+{
+    for (UIBarButtonItem *b in [myToolBar items])
+       [b setTintColor:[UIColor secondaryLabelColor]];
+}
+
+- (void) updateBarButtonColor: (UIBarButtonItem *)btn
+{
+    [self resetBarButtonsColor];
+
+    for (UIBarButtonItem *b in [myToolBar items])
+        if (b==btn) {
+            [b setTintColor:MAIN_TINT_COLOR];
+            break;
+        }
+}
+
 - (void) resetBarButtonItems
 {
 #ifdef DEBUG
@@ -861,13 +876,8 @@ static BOOL mShowReport = false;
     
     // Reset search state
 
-#if 0 // @@@
-    for (UIBarButtonItem *b in [myToolBar items])
-       [b setTintColor:[UIColor lightGrayColor]];   // Default color
-
-    // Highlight first button in toolbar at the top of the screen
-    [[[myToolBar items] objectAtIndex:SEARCH_TITLE] setTintColor:MAIN_TINT_COLOR];
-#endif
+    [self resetBarButtonsColor];
+    [[[myToolBar items] objectAtIndex:SEARCH_TITLE] setTintColor:MAIN_TINT_COLOR]; // Highlight first button
 
     [searchField setText:@""];
     [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -881,19 +891,12 @@ static BOOL mShowReport = false;
     NSLog(@"%s %d, searchState: %ld", __FUNCTION__, __LINE__, (long)searchState);
 #endif
     
-#if 1 // @@@
-    for (UIBarButtonItem *b in [myToolBar items])
-        [b setTintColor:[UIColor labelColor]];   // Default color
-#endif
-
     NSUInteger indexOfObjectToBeHighlighted = searchState;
-
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         indexOfObjectToBeHighlighted /= 2;
     
-#if 1 // @@@
+    [self resetBarButtonsColor];
     [[[myToolBar items] objectAtIndex:indexOfObjectToBeHighlighted] setTintColor:MAIN_TINT_COLOR];
-#endif
 
     [searchField setText:@""];
     switch (searchState)
@@ -1075,11 +1078,11 @@ static BOOL mShowReport = false;
 - (void) startActivityIndicator
 {
     if (runningActivityIndicator==NO) {
-        mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        mActivityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
         mActivityIndicator.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height/2.0f);
         mActivityIndicator.frame = CGRectIntegral(mActivityIndicator.frame);
         mActivityIndicator.color = [UIColor whiteColor];
-        mActivityIndicator.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.8];
+        mActivityIndicator.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.8];  // TODO:
         [mActivityIndicator layer].cornerRadius = 8.0f;
         CGRect f = mActivityIndicator.bounds;
         f.size.width += 10;
@@ -1338,15 +1341,15 @@ static BOOL mShowReport = false;
     
     self.title = APP_NAME;
     
+#if 0 // @@@ Already done in MLAppDelegate `application:didFinishLaunchingWithOptions:`
     // Sets color and font and whatever else of the navigation bar
-#if 0 // @@@
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                           VERY_LIGHT_GRAY_COLOR, NSForegroundColorAttributeName,
                                                           nil]];
-#endif
     // Applies this color throughout the app
-    // [[UISearchBar appearance] setBarTintColor:[UIColor lightGrayColor]];
-    
+    // [[UISearchBar appearance] setBarTintColor:[UIColor systemGray3Color]];
+#endif
+
     // Add icon (top center)
     // self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon_32x32.png"]];
 
@@ -1392,14 +1395,14 @@ static BOOL mShowReport = false;
     
     // Background color of navigation bar
     {
-#if 1 // @@@
+#if 0 // @@@
         self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
         self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
 #endif
         self.navigationController.navigationBar.translucent = NO;
         
         // Customize tabbar
-        [myTabBar setTintColor:MAIN_TINT_COLOR];
+        [myTabBar setTintColor:MAIN_TINT_COLOR]; // color of bar item text labels
         [myTabBar setTranslucent:YES];
         
         // Sets tabbar selected images
@@ -1422,8 +1425,10 @@ static BOOL mShowReport = false;
     
     // Add search bar as title view to navigation bar
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        searchField.barTintColor = [UIColor lightGrayColor];
+#if 1 // @@@
         searchField.backgroundColor = [UIColor clearColor];
+        searchField.barTintColor = [UIColor systemGray3Color];
+#endif
         searchField.translucent = YES;
     } // iPad
 
@@ -1434,11 +1439,17 @@ static BOOL mShowReport = false;
         searchField.delegate = self;
 
         searchField.barStyle = UIBarStyleDefault;
+        //searchField.backgroundImage = [UIImage new];    // Necessary for completely transparent search bar...
+
+#if 1 // @@@
+        searchField.tintColor = [UIColor systemGray3Color]; // blinking cursor color. It no longer affects the bar's background
+  #ifdef DEBUG
+        searchField.barTintColor = [UIColor systemGreenColor];  // the bar's background, but it seems to have no effect
+  #else
         searchField.barTintColor = [UIColor clearColor];
-        searchField.backgroundImage = [UIImage new];    // Necessary fo completely transparent search bar...
-        searchField.backgroundColor = [UIColor clearColor];
-        searchField.tintColor = [UIColor lightGrayColor];    // cursor color
-        searchField.translucent = NO;
+  #endif
+#endif
+        searchField.translucent = NO;  // NO for opaque background, YES makes backgroundColor visible
         
 #ifdef TWO_ITEMS_ON_LEFT_NAV_BAR
         // Left
@@ -1494,6 +1505,8 @@ static BOOL mShowReport = false;
     [self loadFavorites];
     [self checkLastDBSync];
 }
+
+#pragma mark -
 
 // issue #57 - Removes keyboard on iPhones
 - (void) handleSingleTap:(UITapGestureRecognizer *)sender
@@ -2332,6 +2345,9 @@ static BOOL mShowReport = false;
     
     if (!mSearchInteractions) {
         {
+            NSString *color_Style =
+                [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", [MLUtility getColorCss]];
+
             // Load style sheet from file
             NSString *amiko_Style;
             {
@@ -2344,62 +2360,87 @@ static BOOL mShowReport = false;
                 
                 amiko_Style = [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", amikoCss];
             }
-            
-            if (mCurrentSearchState == SEARCH_FULL_TEXT) {
 
-                NSString *color_Style =
-                    [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", [MLUtility getColorCss]];
-                
-                // Load JavaScript from file
-                NSString *js_Script;
-                {
+            // It doesn't get here for SEARCH_FULL_TEXT !
+
+            // Load JavaScript from file
+            NSString *js_Script;
+            {
                 NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"main_callbacks" ofType:@"js"];
                 NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath
                                                                  encoding:NSUTF8StringEncoding
                                                                     error:nil];
                 js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
-                }
+            }
 
-                NSString *headHtml = [NSString stringWithFormat:@"<head>%@\n%@\n%@\n</head>",
+            NSString *headHtml;
+            {
+                NSString *scaling_Meta = @"<meta name=\"viewport\" content=\"initial-scale=1.0\" />";
+                NSString *charset_Meta = @"<meta charset=\"utf-8\" />";
+                NSString *colorScheme_Meta= @"<meta name=\"supported-color-schemes\" content=\"light dark\" />";
+                headHtml = [NSString stringWithFormat:@"<head>%@\n%@\n%@\n%@\n%@\n%@\n</head>",
+                                      charset_Meta,
+                                      colorScheme_Meta,
+                                      scaling_Meta,
                                       js_Script,
                                       color_Style,
                                       amiko_Style];
-#ifdef DEBUG
-                NSLog(@"%s line %d, mMed.contentStr:\n\n%@", __FUNCTION__, __LINE__,
-                      [mMed.contentStr substringToIndex:MIN(500,[mMed.contentStr length])]);
-#endif
-
-                secondViewController.htmlStr =
-                [mMed.contentStr stringByReplacingOccurrencesOfString:@"<head></head>"
-                                                           withString:headHtml];
-
-                NSString *keyword = [mFullTextEntry keyword];
-                if (keyword) {
-#ifdef DEBUG
-                    NSLog(@"%s line %d, keyword: %@", __FUNCTION__, __LINE__, keyword);
-#endif
-                    
-//#ifdef DEBUG
-//                    NSUInteger length = [secondViewController.htmlStr length];
-//
-//                    NSLog(@"%s line %d, htmlStr head :\n\n%@", __FUNCTION__, __LINE__,
-//                          [secondViewController.htmlStr substringToIndex:MIN(500,length)]);
-//
-//                    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
-//                          [secondViewController.htmlStr substringFromIndex:length - MIN(200,length)]);
-//#endif
-                    //secondViewController.anchor = fullTextMessage[@"Anchor"];
-                    
-                    //[secondViewController.searchField setText:keyword]; // NG: it will be reset when view appears
-                    secondViewController.keyword = keyword;
-                }
             }
-            else {
-                secondViewController.htmlStr =
-                    [NSString stringWithFormat:@"<head>%@</head>%@",
-                     amiko_Style,
-                     mMed.contentStr];
-                //secondViewController.anchor = @"";
+
+            #ifdef DEBUG
+                            
+            NSLog(@"%s line %d, mMed.contentStr:\n\n%@", __FUNCTION__, __LINE__,
+                  [mMed.contentStr substringToIndex:MIN(500,[mMed.contentStr length])]);
+            #endif
+
+            NSString *htmlStr = mMed.contentStr;
+            if ([htmlStr length] == 0)
+                htmlStr = @"<html><head></head><body></body></html>";
+
+            htmlStr = [htmlStr stringByReplacingOccurrencesOfString:@"<head></head>"
+                                                         withString:headHtml];
+            
+            htmlStr = [htmlStr stringByReplacingOccurrencesOfString:@"<html>"
+                                                         withString:@"<!DOCTYPE html><html>"];
+            
+            // Some tables have the color set in the HTML string (not set with CSS)
+            secondViewController.htmlStr = [htmlStr stringByReplacingOccurrencesOfString:@"background-color: #EEEEEE"
+                                                                              withString:@"background-color: var(--background-color-gray)"];
+#if 0 //def DEBUG
+            // Create an HTML file of the Fachinfo, so it can be tested with Safari and inspected with an editor
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
+            NSError *error;
+            NSString *pathFI = [documentsDirectory stringByAppendingPathComponent:@"myfile.html"];
+            BOOL succeed = [secondViewController.htmlStr writeToFile:pathFI
+                                                          atomically:YES
+                                                            encoding:NSUTF8StringEncoding
+                                                               error:&error];
+            if (succeed)
+                NSLog(@"Created Fachinfo: %@", pathFI);
+            else
+                NSLog(@"%@", error.localizedDescription);
+#endif
+
+            NSString *keyword = [mFullTextEntry keyword];
+            if (keyword) {
+#ifdef DEBUG
+                NSLog(@"%s line %d, keyword: %@", __FUNCTION__, __LINE__, keyword);
+#endif
+                
+//#ifdef DEBUG
+//                NSUInteger length = [secondViewController.htmlStr length];
+//
+//                NSLog(@"%s line %d, htmlStr head :\n\n%@", __FUNCTION__, __LINE__,
+//                      [secondViewController.htmlStr substringToIndex:MIN(500,length)]);
+//
+//                NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
+//                      [secondViewController.htmlStr substringFromIndex:length - MIN(200,length)]);
+//#endif
+                //secondViewController.anchor = fullTextMessage[@"Anchor"];
+                
+                //[secondViewController.searchField setText:keyword]; // NG: it will be reset when view appears
+                secondViewController.keyword = keyword;
             }
         }
 
@@ -2843,7 +2884,7 @@ static BOOL mShowReport = false;
         }
     }
     else {
-        cell.detailTextLabel.textColor = [UIColor redColor];    // Original
+        cell.detailTextLabel.textColor = [UIColor systemRedColor];    // Original
     }
     
     return cell;
@@ -3144,7 +3185,7 @@ static BOOL mShowReport = false;
         CGRect frame = CGRectMake(0.0, 0.0, 270, 32.0);
         pickerLabel = [[UILabel alloc] initWithFrame:frame];
         pickerLabel.textAlignment = NSTextAlignmentLeft;
-        pickerLabel.backgroundColor = [UIColor clearColor];
+        pickerLabel.backgroundColor = [UIColor clearColor]; // TODO:
         pickerLabel.font = [UIFont systemFontOfSize:14.0];
     }
     

@@ -99,7 +99,7 @@
     NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
     if (!doctorDictionary) {
         NSLog(@"Default doctor signature not defined");
-        [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
+        [self.signatureView.layer setBorderColor: [[UIColor labelColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
         return;
     }
@@ -117,7 +117,7 @@
     else {
         NSLog(@"Default doctor signature not yet defined");
         // Make the picture area stand out with a border
-        [self.signatureView.layer setBorderColor: [[UIColor blackColor] CGColor]];
+        [self.signatureView.layer setBorderColor: [[UIColor labelColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
     }
 }
@@ -127,6 +127,18 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
+#pragma mark -
+
+- (UIColor *)getInvalidFieldColor
+{
+    return [[UIColor systemRedColor] colorWithAlphaComponent:0.3];
+}
+
 - (BOOL) stringIsNilOrEmpty:(NSString*)str
 {
     return !(str && str.length);
@@ -134,21 +146,19 @@
 
 - (void) resetFieldsColors
 {
-    mGivenName.backgroundColor = nil;
-    mFamilyName.backgroundColor = nil;
-    mPostalAddress.backgroundColor = nil;
-    mCity.backgroundColor = nil;
-    mZipCode.backgroundColor = nil;
-    mPhone.backgroundColor = nil;
-    mEmail.backgroundColor = nil;
+    mGivenName.backgroundColor =
+    mFamilyName.backgroundColor =
+    mPostalAddress.backgroundColor =
+    mCity.backgroundColor =
+    mZipCode.backgroundColor =
+    mPhone.backgroundColor =
+    mEmail.backgroundColor = [UIColor secondarySystemBackgroundColor];
 }
 
 - (void) checkFields
 {
-    UIColor *lightRed = [UIColor colorWithRed:1.0
-                                        green:0.0
-                                         blue:0.0
-                                        alpha:0.3];
+    UIColor *lightRed = [self getInvalidFieldColor];
+
     [self resetFieldsColors];
     
     if ([self stringIsNilOrEmpty:[mGivenName text]])
@@ -221,10 +231,7 @@
 - (BOOL) validateFields:(Operator *)doctor
 {
     BOOL valid = TRUE;
-    UIColor *lightRed = [UIColor colorWithRed:1.0
-                                        green:0.0
-                                         blue:0.0
-                                        alpha:0.3];
+    UIColor *lightRed = [self getInvalidFieldColor];
     
     [self resetFieldsColors];
     
@@ -287,18 +294,15 @@
 #ifdef DEBUG
     //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
 #endif
-    UIColor *lightRed = [UIColor colorWithRed:1.0
-                                        green:0.0
-                                         blue:0.0
-                                        alpha:0.3];
+
     BOOL valid = TRUE;
     if ([textField.text isEqualToString:@""])
         valid = FALSE;
     
     if (valid)
-        textField.backgroundColor = nil;
+        textField.backgroundColor = [UIColor secondarySystemBackgroundColor];
     else
-        textField.backgroundColor = lightRed;
+        textField.backgroundColor = [self getInvalidFieldColor];
     
     return valid;
 }
@@ -471,7 +475,7 @@
 #endif
 
     // Show it
-    self.signatureView.backgroundColor = nil;
+    self.signatureView.backgroundColor = [UIColor secondarySystemBackgroundColor];
     self.signatureView.image = thumbnailImage;
     
     [picker dismissViewControllerAnimated:YES completion:nil];

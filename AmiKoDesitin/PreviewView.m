@@ -100,16 +100,16 @@
           thickness:(CGFloat)thickness
 {
     CALayer *layer = [CALayer layer];
-    layer.backgroundColor = [UIColor clearColor].CGColor;
+    layer.backgroundColor = [UIColor clearColor].CGColor; // TODO:
 #if 0
     layer.shadowOffset = CGSizeMake(0, 3);
     layer.shadowRadius = 5.0;
-    layer.shadowColor = [UIColor blackColor].CGColor;
+    layer.shadowColor = [UIColor labelColor].CGColor;
     layer.shadowOpacity = 0.8;
 #endif
     layer.frame = rect;
     
-    layer.borderColor = [UIColor greenColor].CGColor;
+    layer.borderColor = [UIColor systemGreenColor].CGColor;
     layer.borderWidth = thickness;
     layer.cornerRadius = 10.0;
     

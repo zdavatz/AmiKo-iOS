@@ -118,6 +118,11 @@ static void * SessionRunningContext = &SessionRunningContext;
     // Dispose of any resources that can be recreated.
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
 #pragma mark - Rotation
 
 - (BOOL)shouldAutorotate

@@ -97,8 +97,10 @@
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
+#if 0 // @@@
     self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
     self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
+#endif
     self.navigationController.navigationBar.translucent = NO;
 
     {
@@ -147,6 +149,11 @@
                                  completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
                                      // didRotateFromInterfaceOrientation
                                  }];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 #pragma mark -
@@ -254,6 +261,16 @@
         MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
         [vc_rear switchToAipsViewFromFulltext: messageDictionary];
     }
+}
+
+// See `darkModeChanged` in AmiKo osx
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+#ifdef DEBUG
+    NSLog(@"%s, previous style, %ld, current style:%ld", __FUNCTION__,
+          (long)previousTraitCollection.userInterfaceStyle,
+          [UITraitCollection currentTraitCollection].userInterfaceStyle);
+#endif
 }
 
 @end

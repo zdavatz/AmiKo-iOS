@@ -166,7 +166,7 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
 
         CALayer *frontViewLayer = _frontView.layer;
         frontViewLayer.masksToBounds = NO;
-        frontViewLayer.shadowColor = [UIColor blackColor].CGColor;
+        frontViewLayer.shadowColor = [UIColor labelColor].CGColor;
         //frontViewLayer.shadowOpacity = 1.0f;
         frontViewLayer.shadowOpacity = _c.frontViewShadowOpacity;
         frontViewLayer.shadowOffset = _c.frontViewShadowOffset;
@@ -533,7 +533,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
     }
     
     // Apple also tells us to do this:
-    _contentView.backgroundColor = [UIColor blackColor];
+    _contentView.backgroundColor = [UIColor labelColor];
     
     // we set the current frontViewPosition to none before seting the
     // desired initial position, this will force proper controller reload

@@ -130,7 +130,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     completionHandler(handledShortcutItem);
 }
 
-
 /** Override method: app entry point
  */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -250,7 +249,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     
     // Note: iOS7 - sets the global TINT color!!
     {
-        [application setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];  // WHITE
+        [application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
         // [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
         // [application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];    // BLACK
         
@@ -265,7 +264,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [UIFont systemFontOfSize:14], NSFontAttributeName,
-                                    //[UIColor whiteColor], NSForegroundColorAttributeName,
+                                    [UIColor labelColor], NSForegroundColorAttributeName,
                                     nil];
         [[UINavigationBar appearance] setTitleTextAttributes:attributes];
      
@@ -275,7 +274,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [[UINavigationBar appearance] setShadowImage:[UIImage new]];
         */
         
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                withAnimation:UIStatusBarAnimationSlide];
     }
     
     // Register the applications defaults

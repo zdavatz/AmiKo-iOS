@@ -69,6 +69,11 @@
     return self;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
 - (void) setMessage:(NSString *)msg
 {
     [mAlertController setMessage:msg];

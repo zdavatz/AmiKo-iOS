@@ -199,6 +199,13 @@ enum {
     // Dispose of any resources that can be recreated.
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
+#pragma mark -
+
 - (BOOL) stringIsNilOrEmpty:(NSString*)str
 {
     return !(str && str.length);
@@ -206,23 +213,25 @@ enum {
 
 - (void) resetFieldsColors
 {
-    mFamilyName.backgroundColor = nil;
-    mGivenName.backgroundColor = nil;
-    mBirthDate.backgroundColor = nil;
-    mPostalAddress.backgroundColor = nil;
-    mCity.backgroundColor = nil;
-    mZipCode.backgroundColor = nil;
-    mSex.backgroundColor = nil;
-    mEmail.backgroundColor = nil;
+    mFamilyName.backgroundColor =
+    mGivenName.backgroundColor =
+    mBirthDate.backgroundColor =
+    mPostalAddress.backgroundColor =
+    mCity.backgroundColor =
+    mZipCode.backgroundColor =
+    mSex.backgroundColor =
+    mEmail.backgroundColor = [UIColor secondarySystemBackgroundColor];
+}
+
+- (UIColor *)getInvalidFieldColor
+{
+    return [[UIColor systemRedColor] colorWithAlphaComponent:0.3];
 }
 
 - (void) checkFields
 {
-    UIColor *lightRed = [UIColor colorWithRed:1.0
-                                        green:0.0
-                                         blue:0.0
-                                        alpha:0.3];
     [self resetFieldsColors];
+    UIColor *lightRed = [self getInvalidFieldColor];
     
     if ([self stringIsNilOrEmpty:[mFamilyName text]])
         mFamilyName.backgroundColor = lightRed;
@@ -357,12 +366,8 @@ enum {
 - (BOOL) validateFields:(Patient *)patient
 {
     BOOL valid = TRUE;
-    UIColor *lightRed = [UIColor colorWithRed:1.0
-                                        green:0.0
-                                         blue:0.0
-                                        alpha:0.3];
-    
     [self resetFieldsColors];
+    UIColor *lightRed = [self getInvalidFieldColor];
     
     if ([self stringIsNilOrEmpty:patient.familyName]) {
         mFamilyName.backgroundColor = lightRed;
@@ -454,11 +459,6 @@ enum {
     {
         return TRUE;  // Allow non mandatory fields to be empty
     }
-        
-    UIColor *lightRed = [UIColor colorWithRed:1.0
-                                        green:0.0
-                                         blue:0.0
-                                        alpha:0.3];
 
     BOOL valid = TRUE;
     if ([textField.text isEqualToString:@""])
@@ -478,9 +478,9 @@ enum {
 //    }
 
     if (valid)
-        textField.backgroundColor = nil;
+        textField.backgroundColor = [UIColor secondarySystemBackgroundColor];
     else
-        textField.backgroundColor = lightRed;
+        textField.backgroundColor = [self getInvalidFieldColor];
     
     return valid;
 }

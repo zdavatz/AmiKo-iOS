@@ -7,7 +7,7 @@ def common_pods
   pod 'TesseractOCRiOS', '4.0.0'
   #pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
   pod 'WebViewJavascriptBridge', '4.1.4'
-  #pod SWRevealViewController
+  #pod 'SWRevealViewController'
 end
 
 target 'AmiKoDesitin' do

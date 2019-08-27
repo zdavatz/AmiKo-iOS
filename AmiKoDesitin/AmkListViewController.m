@@ -41,6 +41,13 @@ static const float kAmkLabelFontSize = 12.0;
     // Dispose of any resources that can be recreated.
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
+#pragma mark -
+
 - (void) refreshList
 {
     NSString *amkDir = [MLUtility amkDirectory];

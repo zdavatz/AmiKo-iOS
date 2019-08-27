@@ -422,6 +422,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // Dispose of any resources that can be recreated.
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
 #pragma mark - Rotation
 
 - (BOOL)shouldAutorotate {
@@ -635,7 +640,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             format = NSLocalizedString(@"Medicines", nil);
 
         label.text = [NSString stringWithFormat:@"%@ (%lu)", format, count];
-        [view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        [view setBackgroundColor:[UIColor systemGroupedBackgroundColor]];
     }
 
     [view addSubview:label];
@@ -711,7 +716,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //    NSLog(@"Line %d, contentSize: %@", __LINE__, NSStringFromCGSize(tableView.contentSize));
 #endif
 #ifdef DEBUG_COLOR_BG
-    self.view.backgroundColor = [UIColor blueColor];
+    self.view.backgroundColor = [UIColor systemBlueColor];
 #endif
 
     static NSString *tableIdentifier = @"PrescriptionTableItem";
@@ -735,7 +740,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (indexPath.section == kSectionMeta) {
         label.font = [UIFont systemFontOfSize:13.8];
         label.textAlignment = NSTextAlignmentLeft;
-        label.textColor = [UIColor blackColor];
+        label.textColor = [UIColor labelColor];
         label.backgroundColor = [UIColor clearColor];
         label.text = prescription.placeDate;
     }
@@ -755,11 +760,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
         label.font = [UIFont systemFontOfSize:13.0];
         label.textAlignment = NSTextAlignmentLeft;
-        label.textColor = [UIColor blackColor];
+        label.textColor = [UIColor labelColor];
         label.backgroundColor = [UIColor clearColor];
         label.text = @"";  // Initialize for appending
 #ifdef DEBUG_COLOR_BG
-        cell.backgroundColor = [UIColor greenColor];
+        cell.backgroundColor = [UIColor systemGreenColor];
 #else
         cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
 #endif
@@ -829,7 +834,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
         label.font = [UIFont systemFontOfSize:13.0];
         label.textAlignment = NSTextAlignmentLeft;
-        label.textColor = [UIColor blackColor];
+        label.textColor = [UIColor labelColor];
         label.backgroundColor = [UIColor clearColor];
         switch (indexPath.row) {
             case 0:
@@ -874,10 +879,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     else {
         Product * med = prescription.medications[indexPath.row];
         UILabel *packLabel = [self makeLabel:med.packageInfo
-                                   textColor:[UIColor blackColor]];
+                                   textColor:[UIColor labelColor]];
 
         UILabel *eanLabel = [self makeLabel:med.eanCode
-                                  textColor:[UIColor darkGrayColor]];
+                                  textColor:[UIColor darkGrayColor]]; // TODO:
 
 #ifdef DEBUG
         //NSLog(@"cellForRowAtIndexPath Line %d comment before:<%@>", __LINE__, med.comment);
@@ -899,7 +904,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                  blue:0.6
                                                 alpha:1.0];
             commentTextField.backgroundColor = lightRed;
-            commentTextField.tintColor = [UIColor blackColor];
+            commentTextField.tintColor = [UIColor labelColor];
             [commentTextField sizeToFit];
             commentTextField.delegate = self;
 #ifdef DEBUG
@@ -920,7 +925,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         
 
 #ifdef DEBUG_COLOR_BG
-        [cell.contentView setBackgroundColor:[UIColor yellowColor]];
+        [cell.contentView setBackgroundColor:[UIColor systemYellowColor]];
 #endif
         [cell.contentView addSubview:packLabel];
         [cell.contentView insertSubview:eanLabel belowSubview:packLabel];
@@ -2199,7 +2204,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     NSDictionary * attrDoc = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
 #ifdef DEBUG
-                               NSBackgroundColorAttributeName:[UIColor greenColor],
+                               NSBackgroundColorAttributeName:[UIColor systemGreenColor],
 #endif
                                NSParagraphStyleAttributeName: paragraphStyleRight};
     CGSize sizeDoc = [strDoctor sizeWithAttributes:attrDoc]; // FIXME: single line
@@ -2232,7 +2237,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // Show a border to verify the alignment
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 1);
-    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor labelColor].CGColor);
     CGContextStrokeRect(context, signatureRect);
 #endif
     
@@ -2286,15 +2291,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         paragraphStyleComment.alignment = NSTextAlignmentLeft;
         
         NSDictionary *attrEan = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-                                  NSForegroundColorAttributeName:[UIColor grayColor],
+                                  NSForegroundColorAttributeName:[UIColor systemGrayColor],
                                   NSParagraphStyleAttributeName: paragraphStyleLeft};
 
         NSDictionary *attrMedPackage = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-                                         NSForegroundColorAttributeName:[UIColor blueColor],
+                                         NSForegroundColorAttributeName:[UIColor systemBlueColor],
                                          NSParagraphStyleAttributeName: paragraphStyleLeft};
         
         NSDictionary *attrMedComment = @{NSFontAttributeName: [UIFont systemFontOfSize:fontSize],
-                                         NSForegroundColorAttributeName:[UIColor grayColor],
+                                         NSForegroundColorAttributeName:[UIColor systemGrayColor],
                                          NSParagraphStyleAttributeName: paragraphStyleComment};
 
         for (NSInteger i=0; i<nMed; i++) {

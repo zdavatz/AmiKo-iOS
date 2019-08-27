@@ -63,6 +63,11 @@
     return YES;
 }
 
+//- (UIStatusBarStyle)preferredStatusBarStyle
+//{
+//    return UIStatusBarStyleDefault;
+//}
+
 // TODO: Implement "viewWillTransitionToSize:withTransitionCoordinator:" instead
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                  duration:(NSTimeInterval)duration

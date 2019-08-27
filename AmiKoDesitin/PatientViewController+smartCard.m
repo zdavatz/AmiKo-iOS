@@ -163,7 +163,7 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
     UIGraphicsPushContext(cg_context);
     
     CGContextSetLineWidth(cg_context, 10.0f);
-    CGContextSetStrokeColorWithColor(cg_context, [UIColor blueColor].CGColor);
+    CGContextSetStrokeColorWithColor(cg_context, [UIColor systemBlueColor].CGColor);
     
     CGSize cg_size = ui_img3.size;
 
