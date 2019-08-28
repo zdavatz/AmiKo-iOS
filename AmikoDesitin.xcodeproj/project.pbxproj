@@ -42,14 +42,6 @@
 		930D94B82077E610007E4629 /* BaseListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851220333147001A5849 /* BaseListViewController.m */; };
 		930D94B92077E62C007E4629 /* PrescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 430285BD20160FB1003B2EF3 /* PrescriptionViewController.m */; };
 		930D94BA2077E641007E4629 /* Operator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4333432C201B64A2006BFC23 /* Operator.m */; };
-		93109F8520751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */; };
-		93109F8620751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */; };
-		93109F8820751A5700CEFAA5 /* 1025-patient.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8720751A5600CEFAA5 /* 1025-patient.png */; };
-		93109F8920751A5700CEFAA5 /* 1025-patient.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8720751A5600CEFAA5 /* 1025-patient.png */; };
-		93109F8B20751A6500CEFAA5 /* 1026-doctor-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8A20751A6500CEFAA5 /* 1026-doctor-@2x.png */; };
-		93109F8C20751A6500CEFAA5 /* 1026-doctor-@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8A20751A6500CEFAA5 /* 1026-doctor-@2x.png */; };
-		93109F8E20751A7100CEFAA5 /* 1026-doctor.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8D20751A7000CEFAA5 /* 1026-doctor.png */; };
-		93109F8F20751A7100CEFAA5 /* 1026-doctor.png in Resources */ = {isa = PBXBuildFile; fileRef = 93109F8D20751A7000CEFAA5 /* 1026-doctor.png */; };
 		932F883B206BD9EC00B5A77E /* DoctorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511B7204ECAFD00899A77 /* DoctorViewController.xib */; };
 		932F883C206BDA0400B5A77E /* PrescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4387FC3F20189DB4000A5A0F /* PrescriptionViewController.xib */; };
 		932F883D206BDA1000B5A77E /* PatientDbListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43A3851620333355001A5849 /* PatientDbListViewController.xib */; };
@@ -84,26 +76,10 @@
 		D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53917F22A58000EC52A /* desitin_icon_152x152.png */; };
 		D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53A17F22A58000EC52A /* desitin_icon_120x120.png */; };
 		D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53A17F22A58000EC52A /* desitin_icon_120x120.png */; };
-		D554573E18B3E82C003299E0 /* 1024-share.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573C18B3E82C003299E0 /* 1024-share.png */; };
-		D554573F18B3E82C003299E0 /* 1024-share.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573C18B3E82C003299E0 /* 1024-share.png */; };
-		D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573D18B3E82C003299E0 /* 1024-share@2x.png */; };
-		D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554573D18B3E82C003299E0 /* 1024-share@2x.png */; };
-		D554574418B3E847003299E0 /* 1100-list-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574218B3E847003299E0 /* 1100-list-2.png */; };
-		D554574518B3E847003299E0 /* 1100-list-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574218B3E847003299E0 /* 1100-list-2.png */; };
-		D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574318B3E847003299E0 /* 1100-list-2@2x.png */; };
-		D554574718B3E847003299E0 /* 1100-list-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574318B3E847003299E0 /* 1100-list-2@2x.png */; };
 		D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574818B3E85D003299E0 /* 939-download-rectangle.png */; };
 		D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574818B3E85D003299E0 /* 939-download-rectangle.png */; };
 		D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */; };
 		D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */; };
-		D554575018B3E86B003299E0 /* 970-medal.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574E18B3E86B003299E0 /* 970-medal.png */; };
-		D554575118B3E86B003299E0 /* 970-medal.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574E18B3E86B003299E0 /* 970-medal.png */; };
-		D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574F18B3E86B003299E0 /* 970-medal@2x.png */; };
-		D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554574F18B3E86B003299E0 /* 970-medal@2x.png */; };
-		D554575618B3E87D003299E0 /* 905-chat-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575418B3E87D003299E0 /* 905-chat-2.png */; };
-		D554575718B3E87D003299E0 /* 905-chat-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575418B3E87D003299E0 /* 905-chat-2.png */; };
-		D554575818B3E87D003299E0 /* 905-chat-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575518B3E87D003299E0 /* 905-chat-2@2x.png */; };
-		D554575918B3E87D003299E0 /* 905-chat-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D554575518B3E87D003299E0 /* 905-chat-2@2x.png */; };
 		D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D565DA8217B7B48D0002E2CF /* MLConstants.m */; };
 		D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */; };
 		D565DA8717B7D8370002E2CF /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = D565DA8617B7D8370002E2CF /* Default-Portrait~ipad.png */; };
@@ -342,10 +318,6 @@
 		43D3A0E0201F3CFB00EA77C6 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = AmiKoDesitin/Product.h; sourceTree = SOURCE_ROOT; };
 		43D3A0E1201F3CFB00EA77C6 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = AmiKoDesitin/Product.m; sourceTree = SOURCE_ROOT; };
 		5B1BEAABB72AF37F805635CC /* Pods-AmiKoDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmiKoDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AmiKoDesitin/Pods-AmiKoDesitin.debug.xcconfig"; sourceTree = "<group>"; };
-		93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "1025-patient-@2x.png"; path = "AmiKoDesitin/1025-patient-@2x.png"; sourceTree = SOURCE_ROOT; };
-		93109F8720751A5600CEFAA5 /* 1025-patient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "1025-patient.png"; path = "AmiKoDesitin/1025-patient.png"; sourceTree = SOURCE_ROOT; };
-		93109F8A20751A6500CEFAA5 /* 1026-doctor-@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "1026-doctor-@2x.png"; path = "AmiKoDesitin/1026-doctor-@2x.png"; sourceTree = SOURCE_ROOT; };
-		93109F8D20751A7000CEFAA5 /* 1026-doctor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "1026-doctor.png"; path = "AmiKoDesitin/1026-doctor.png"; sourceTree = SOURCE_ROOT; };
 		C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoMedDesitin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
@@ -371,16 +343,8 @@
 		D551D53817F22A58000EC52A /* desitin_icon_76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_76x76.png; sourceTree = "<group>"; };
 		D551D53917F22A58000EC52A /* desitin_icon_152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_152x152.png; sourceTree = "<group>"; };
 		D551D53A17F22A58000EC52A /* desitin_icon_120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_120x120.png; sourceTree = "<group>"; };
-		D554573C18B3E82C003299E0 /* 1024-share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1024-share.png"; sourceTree = "<group>"; };
-		D554573D18B3E82C003299E0 /* 1024-share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1024-share@2x.png"; sourceTree = "<group>"; };
-		D554574218B3E847003299E0 /* 1100-list-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1100-list-2.png"; sourceTree = "<group>"; };
-		D554574318B3E847003299E0 /* 1100-list-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1100-list-2@2x.png"; sourceTree = "<group>"; };
 		D554574818B3E85D003299E0 /* 939-download-rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "939-download-rectangle.png"; sourceTree = "<group>"; };
 		D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "939-download-rectangle@2x.png"; sourceTree = "<group>"; };
-		D554574E18B3E86B003299E0 /* 970-medal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "970-medal.png"; sourceTree = "<group>"; };
-		D554574F18B3E86B003299E0 /* 970-medal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "970-medal@2x.png"; sourceTree = "<group>"; };
-		D554575418B3E87D003299E0 /* 905-chat-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "905-chat-2.png"; sourceTree = "<group>"; };
-		D554575518B3E87D003299E0 /* 905-chat-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "905-chat-2@2x.png"; sourceTree = "<group>"; };
 		D565DA8117B7B48D0002E2CF /* MLConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = ../AmiKoDesitin/MLConstants.h; sourceTree = "<group>"; };
 		D565DA8217B7B48D0002E2CF /* MLConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLConstants.m; path = ../AmiKoDesitin/MLConstants.m; sourceTree = "<group>"; };
 		D565DA8417B7D81B0002E2CF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -989,20 +953,8 @@
 				D5A2251D19461C420078FEFF /* 907-plus-rounded-square@2x.png */,
 				D5A2252019461CF60078FEFF /* 907-plus-rounded-square-selected.png */,
 				D5A2252119461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png */,
-				D554575418B3E87D003299E0 /* 905-chat-2.png */,
-				D554575518B3E87D003299E0 /* 905-chat-2@2x.png */,
-				D554574E18B3E86B003299E0 /* 970-medal.png */,
-				D554574F18B3E86B003299E0 /* 970-medal@2x.png */,
 				D554574818B3E85D003299E0 /* 939-download-rectangle.png */,
 				D554574918B3E85D003299E0 /* 939-download-rectangle@2x.png */,
-				D554574218B3E847003299E0 /* 1100-list-2.png */,
-				D554574318B3E847003299E0 /* 1100-list-2@2x.png */,
-				D554573C18B3E82C003299E0 /* 1024-share.png */,
-				D554573D18B3E82C003299E0 /* 1024-share@2x.png */,
-				93109F8420751A4400CEFAA5 /* 1025-patient-@2x.png */,
-				93109F8720751A5600CEFAA5 /* 1025-patient.png */,
-				93109F8A20751A6500CEFAA5 /* 1026-doctor-@2x.png */,
-				93109F8D20751A7000CEFAA5 /* 1026-doctor.png */,
 				D5F6BB2117E7866C00DCBD16 /* amiko_report_fr.html */,
 				D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */,
 				D533DAA217B2D2AE00199C38 /* desitin_icon_32x32.png */,
@@ -1222,21 +1174,17 @@
 				FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */,
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
-				D554574018B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */,
 				D5A6F28417B16B6000EAB24B /* MLSecondViewController~iphone.xib in Resources */,
-				93109F8520751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */,
 				FA5FA7EF205A743200E0C042 /* MLViewController.xib in Resources */,
 				FA5FA7F7205A745B00E0C042 /* MLViewController~iphone.xib in Resources */,
 				D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
 				D5A6F28517B16B6000EAB24B /* MLTitleViewController.xib in Resources */,
 				D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
-				D554575618B3E87D003299E0 /* 905-chat-2.png in Resources */,
 				D5A2252219461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
 				D5A2250B1945EA830078FEFF /* drug_interactions_csv_de.csv in Resources */,
 				FA5E5E4B20F5F71B00CDB6C6 /* videoViewController.xib in Resources */,
 				D5A2252D19461D750078FEFF /* interactions_css.css in Resources */,
-				D554575018B3E86B003299E0 /* 970-medal.png in Resources */,
 				D5A6F28617B16B6000EAB24B /* MLTitleViewController~iphone.xib in Resources */,
 				D5A6F2A617B16E4400EAB24B /* 28-star.png in Resources */,
 				D5A6F2A717B16E4400EAB24B /* 28-star@2x.png in Resources */,
@@ -1247,11 +1195,8 @@
 				D5A6F2AD17B16F2900EAB24B /* app_icon_144x144.png in Resources */,
 				D5A6F2AF17B16F3600EAB24B /* app_icon_114x114.png in Resources */,
 				D551D53D17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
-				D554574418B3E847003299E0 /* 1100-list-2.png in Resources */,
-				D554575818B3E87D003299E0 /* 905-chat-2@2x.png in Resources */,
 				D5A6F2B117B16FFD00EAB24B /* app_icon_32x32.png in Resources */,
 				D533DA9D17B2D05F00199C38 /* desitin_icon_57x57.png in Resources */,
-				93109F8B20751A6500CEFAA5 /* 1026-doctor-@2x.png in Resources */,
 				FA3B621C22E8527500A80296 /* color-scheme-dark.css in Resources */,
 				D5A2252A19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
 				D5A2253B194A3A400078FEFF /* 217-trash.png in Resources */,
@@ -1266,11 +1211,9 @@
 				FAF85BF322F44BF800730690 /* deleterow.js in Resources */,
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
-				93109F8820751A5700CEFAA5 /* 1025-patient.png in Resources */,
 				430285C820162C72003B2EF3 /* Localizable.strings in Resources */,
 				439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */,
 				FA4827EF22DF861D005135BE /* amiko_frequency_de.db in Resources */,
-				D554574618B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D533DAAA17B434FF00199C38 /* Default-Portrait@2x~ipad.png in Resources */,
 				D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */,
 				D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */,
@@ -1288,12 +1231,9 @@
 				D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */,
 				D5F6BB2217E7866C00DCBD16 /* amiko_report_fr.html in Resources */,
 				430285CD20162DA1003B2EF3 /* Localizable.strings in Resources */,
-				D554575218B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				430285D120162DEB003B2EF3 /* Localizable.strings in Resources */,
-				D554573E18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5A2252419461CF60078FEFF /* 907-plus-rounded-square-selected@2x.png in Resources */,
 				FA4511B8204ECBCB00899A77 /* PatientViewController.xib in Resources */,
-				93109F8E20751A7100CEFAA5 /* 1026-doctor.png in Resources */,
 				FA3B621F22E8528000A80296 /* color-scheme-light.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1306,7 +1246,6 @@
 				FAF85BF722F44C1C00730690 /* main_callbacks.js in Resources */,
 				D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
-				93109F8920751A5700CEFAA5 /* 1025-patient.png in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				932F8840206BDA4700B5A77E /* AmkListViewController.xib in Resources */,
 				FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */,
@@ -1320,16 +1259,13 @@
 				932F883B206BD9EC00B5A77E /* DoctorViewController.xib in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				932F883E206BDA1600B5A77E /* ContactsListViewController.xib in Resources */,
-				93109F8C20751A6500CEFAA5 /* 1026-doctor-@2x.png in Resources */,
 				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
 				932F883C206BDA0400B5A77E /* PrescriptionViewController.xib in Resources */,
 				D5F6BB6B17E8C87500DCBD16 /* 10-medical.png in Resources */,
 				D551D53C17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
 				D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */,
 				D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */,
-				D554575118B3E86B003299E0 /* 970-medal.png in Resources */,
 				D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */,
-				D554574518B3E847003299E0 /* 1100-list-2.png in Resources */,
 				D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */,
 				FA5E5E4C20F5F71B00CDB6C6 /* videoViewController.xib in Resources */,
 				D5A225161945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
@@ -1338,14 +1274,12 @@
 				FA5FA7F8205A745B00E0C042 /* MLViewController~iphone.xib in Resources */,
 				D5A2252E19461D750078FEFF /* interactions_css.css in Resources */,
 				D5F6BB7117E8C87500DCBD16 /* MLTitleViewController.xib in Resources */,
-				93109F8620751A4500CEFAA5 /* 1025-patient-@2x.png in Resources */,
 				FA606361231548F500E69A93 /* Colors.xcassets in Resources */,
 				D5A2250D1945EA890078FEFF /* drug_interactions_csv_fr.csv in Resources */,
 				D5F6BB7217E8C87500DCBD16 /* MLTitleViewController~iphone.xib in Resources */,
 				D5F6BB7317E8C87500DCBD16 /* 28-star.png in Resources */,
 				D5F6BB7417E8C87500DCBD16 /* 28-star@2x.png in Resources */,
 				D5F6BB7517E8C87500DCBD16 /* app_icon_57x57.png in Resources */,
-				D554573F18B3E82C003299E0 /* 1024-share.png in Resources */,
 				D5F6BB7617E8C87500DCBD16 /* app_icon_72x72.png in Resources */,
 				D5F6BB7717E8C87500DCBD16 /* app_icon_144x144.png in Resources */,
 				FA3B621D22E8527500A80296 /* color-scheme-dark.css in Resources */,
@@ -1353,7 +1287,6 @@
 				D5B75BEF17FF57D7008ECDBB /* Images.xcassets in Resources */,
 				932F883D206BDA1000B5A77E /* PatientDbListViewController.xib in Resources */,
 				D5F6BB7917E8C87500DCBD16 /* app_icon_32x32.png in Resources */,
-				D554575918B3E87D003299E0 /* 905-chat-2@2x.png in Resources */,
 				D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
 				D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
@@ -1367,7 +1300,6 @@
 				D5A2251F19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D5990A741BDF44C80040C4C2 /* desitin_quick@2x.png in Resources */,
 				D5990A731BDF44C50040C4C2 /* desitin_quick.png in Resources */,
-				D554575318B3E86B003299E0 /* 970-medal@2x.png in Resources */,
 				D554574B18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
 				FA4827EE22DF8618005135BE /* amiko_frequency_fr.db in Resources */,
@@ -1375,18 +1307,14 @@
 				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
 				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
-				93109F8F20751A7100CEFAA5 /* 1026-doctor.png in Resources */,
-				D554574718B3E847003299E0 /* 1100-list-2@2x.png in Resources */,
 				D5A2251C19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				FA3B622822E88E6600A80296 /* FullTextOverviewVC.xib in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
-				D554574118B3E82C003299E0 /* 1024-share@2x.png in Resources */,
 				FA7B54E8207BC1F0003D300A /* Localizable.strings in Resources */,
 				D52A0D6817ECC1D1003BF272 /* ComedDesitin@2x.png in Resources */,
 				D5F6BB7C17E8C87500DCBD16 /* desitin_icon_32x32.png in Resources */,
 				D52A0D6A17ECC1D6003BF272 /* ComedDesitin-568h@2x.png in Resources */,
 				D5A2252919461D200078FEFF /* 938-connections-selected.png in Resources */,
-				D554575718B3E87D003299E0 /* 905-chat-2.png in Resources */,
 				D52A0D6C17ECC238003BF272 /* ComedDesitin-Portrait~ipad.png in Resources */,
 				D52A0D6E17ECC23D003BF272 /* ComedDesitin-Portrait@2x~ipad.png in Resources */,
 				D52A0D7017ECC243003BF272 /* ComedDesitin-Landscape~ipad.png in Resources */,
