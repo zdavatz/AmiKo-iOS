@@ -620,7 +620,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     CGRect labelFrame = CGRectMake(leftMargin+kMedCellHorMargin, 2, 200, kSectionHeaderHeight-2);
     UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
     label.font = [UIFont systemFontOfSize:13 weight:UIFontWeightLight];
-    label.textColor = [UIColor darkGrayColor];
+    label.textColor = [UIColor labelColor];
     frame.size.height = kSectionHeaderHeight-2;
     
     if (section == kSectionMeta) {
@@ -882,7 +882,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    textColor:[UIColor labelColor]];
 
         UILabel *eanLabel = [self makeLabel:med.eanCode
-                                  textColor:[UIColor darkGrayColor]]; // TODO:
+                                  textColor:[UIColor secondaryLabelColor]];
 
 #ifdef DEBUG
         //NSLog(@"cellForRowAtIndexPath Line %d comment before:<%@>", __LINE__, med.comment);
@@ -913,7 +913,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         }
         else {
             commentLabel = [self makeLabel:med.comment
-                                 textColor:[UIColor darkGrayColor]];
+                                 textColor:[UIColor labelColor]];
         }
 
         // layout
@@ -1991,7 +1991,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [textView setReturnKeyType:UIReturnKeyDone];
 #else
     UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    toolBar.barStyle = UIBarStyleBlackOpaque;
+    toolBar.barStyle = UIBarStyleBlack;
     toolBar.tintColor = MAIN_TINT_COLOR;
     
     UIBarButtonItem *flex =
