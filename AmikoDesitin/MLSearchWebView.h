@@ -22,9 +22,10 @@
  ------------------------------------------------------------------------ */
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 // Defines a category!
-@interface UIWebView (MLSearchWebView)
+@interface WKWebView (MLSearchWebView)
 
 - (NSInteger) highlightAllOccurencesOfString:(NSString*)str;
 - (void) moveToStart;

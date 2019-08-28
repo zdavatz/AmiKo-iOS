@@ -2500,7 +2500,7 @@ static BOOL mShowReport = false;
     }
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:secondViewController];
     
-    // Show SecondViewController (UIWebView)
+    // Show SecondViewController (WKWebView)
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     

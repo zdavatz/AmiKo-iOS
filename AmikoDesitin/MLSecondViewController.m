@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     htmlStr = nil;
     medBasket = nil;
     
-    self.webView.delegate = nil;
+    self.webView.UIDelegate = nil;
     self.webView = nil;
     [self.webView removeFromSuperview];
     
@@ -210,7 +210,11 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     if ([keyPath isEqualToString:@"javaScript"]) {
         htmlAnchor = [NSString stringWithString:[change objectForKey:@"new"]];
         [self.webView stopLoading];
-        [self.webView stringByEvaluatingJavaScriptFromString:htmlAnchor];
+        [self.webView evaluateJavaScript:htmlAnchor
+                       completionHandler:^(NSString* result, NSError *error) {
+            if (error)
+                NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+        }];
     }
     else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -352,6 +356,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     
     // Do any additional setup after loading the view from its nib.
     self.title = mTitle;
+    self.webView.UIDelegate = self;
 
     // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
@@ -993,19 +998,23 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     }
 }
 
-#pragma mark - UIWebViewDelegate methods
+#pragma mark - WKNavigationDelegate methods
 
-- (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+- (void) webView:(WKWebView *)webView
+decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
+ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
-        [[UIApplication sharedApplication] openURL:[request URL]];
-        return NO;
-    }
+#ifdef DEBUG
+    NSLog(@"%s navigationType: %ld", __FUNCTION__, (long)navigationAction.navigationType);
+#endif
 
-    return YES;
+    //if (navigationAction.navigationType == WKNavigationTypeLinkActivated)
+        decisionHandler(WKNavigationActionPolicyAllow);
+    //else
+    //    decisionHandler(WKNavigationActionPolicyCancel);
 }
 
-- (void) webViewDidFinishLoad:(UIWebView *)webView
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
@@ -1014,7 +1023,11 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         int fontSize = 80;
         NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", fontSize];
-        [self.webView stringByEvaluatingJavaScriptFromString:jsString];
+        [self.webView evaluateJavaScript:jsString
+                       completionHandler:^(NSString* result, NSError *error) {
+            if (error)
+                NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+        }];
     }
 
     if ([htmlAnchor length] > 0) {
@@ -1022,13 +1035,23 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         NSLog(@"%s, htmlAnchor: %@", __FUNCTION__, htmlAnchor);
 #endif
         // NSString *res =
-        [self.webView stringByEvaluatingJavaScriptFromString:htmlAnchor];
+        [self.webView evaluateJavaScript:htmlAnchor
+                       completionHandler:^(NSString* result, NSError *error) {
+            if (error)
+                NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+        }];
     }
     
-    // int height =
-    [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] intValue];
-    
-    self.webView.scalesPageToFit = NO;  // YES
+    __block int height;
+    [self.webView evaluateJavaScript:@"document.body.offsetHeight;"
+                   completionHandler:^(NSString* result, NSError *error) {
+        if (error)
+            NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+        else
+            height = [result intValue];
+    }];
+
+    //self.webView.scalesPageToFit = NO;  // YES
     self.webView.scrollView.zoomScale = 3.0;
 
 #ifdef DEBUG
@@ -1050,6 +1073,16 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         // Hide find panel (webview is the superview of the panel)
         [self showFindPanel:FIND_PANEL_INVISIBLE];
     }
+}
+
+#pragma mark - WKUIDelegate methods
+
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable))completionHandler
+{
+#ifdef DEBUG
+    NSLog(@"%s, defaultText: %@", __FUNCTION__, defaultText);
+#endif
+    completionHandler(defaultText);
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate methods

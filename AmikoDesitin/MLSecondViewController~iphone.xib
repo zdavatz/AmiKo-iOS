@@ -11,7 +11,7 @@
             <connections>
                 <outlet property="findPanel" destination="Kha-Ea-cqs" id="ni4-Rw-dky"/>
                 <outlet property="view" destination="1" id="14"/>
-                <outlet property="webView" destination="3" id="13"/>
+                <outlet property="webView" destination="4Ac-xM-pgb" id="NhV-gw-xA0"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -19,14 +19,14 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3">
+                <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ac-xM-pgb">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="847"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <dataDetectorType key="dataDetectorTypes"/>
-                    <connections>
-                        <outlet property="delegate" destination="-1" id="12"/>
-                    </connections>
-                </webView>
+                    <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kha-Ea-cqs">
                     <rect key="frame" x="211" y="16" width="120" height="30"/>
                     <subviews>
@@ -62,20 +62,12 @@
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="3" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="9">
-                    <variation key="heightClass=compact-widthClass=compact" constant="-44"/>
-                    <variation key="heightClass=compact-widthClass=regular" constant="-44"/>
-                </constraint>
-                <constraint firstItem="3" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="10">
-                    <variation key="heightClass=compact-widthClass=compact" constant="44"/>
-                    <variation key="heightClass=compact-widthClass=regular" constant="44"/>
-                </constraint>
-                <constraint firstItem="3" firstAttribute="top" secondItem="1" secondAttribute="top" id="11"/>
+                <constraint firstItem="4Ac-xM-pgb" firstAttribute="top" secondItem="1" secondAttribute="top" id="497-C2-ids"/>
                 <constraint firstAttribute="trailing" secondItem="Kha-Ea-cqs" secondAttribute="trailing" constant="44" id="4ux-we-04Y"/>
-                <constraint firstAttribute="bottom" secondItem="3" secondAttribute="bottom" id="sHX-zk-xC6">
-                    <variation key="heightClass=regular-widthClass=compact" constant="-35"/>
-                </constraint>
+                <constraint firstAttribute="bottom" secondItem="4Ac-xM-pgb" secondAttribute="bottom" constant="-35" id="JBC-br-yhP"/>
+                <constraint firstItem="4Ac-xM-pgb" firstAttribute="trailing" secondItem="b8J-d7-q7d" secondAttribute="trailing" id="q6F-bS-n9X"/>
                 <constraint firstItem="Kha-Ea-cqs" firstAttribute="top" secondItem="1" secondAttribute="top" constant="16" id="t0q-Vm-vE6"/>
+                <constraint firstItem="4Ac-xM-pgb" firstAttribute="leading" secondItem="b8J-d7-q7d" secondAttribute="leading" id="thX-qH-9MR"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="b8J-d7-q7d"/>
             <point key="canvasLocation" x="34.5" y="54"/>

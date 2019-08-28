@@ -23,7 +23,7 @@
 
 #import "MLSearchWebView.h"
 
-@implementation UIWebView (MLSearchWebView)
+@implementation WKWebView (MLSearchWebView)
 
 - (NSInteger) highlightAllOccurencesOfString: (NSString*)str
 {
@@ -40,14 +40,29 @@
         NSLog(@"%@", error.localizedDescription);
 
     // Inject it into webpage
-    [self stringByEvaluatingJavaScriptFromString:jsCode];
+    [self evaluateJavaScript:jsCode
+           completionHandler:^(NSString* result, NSError *error) {
+        if (error)
+            NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+    }];
     
     // Call Javascript function
     NSString *startSearch = [NSString stringWithFormat:@"MyApp_HighlightAllOccurencesOfString('%@')", str];
-    [self stringByEvaluatingJavaScriptFromString:startSearch];
+    [self evaluateJavaScript:startSearch
+           completionHandler:^(NSString* result, NSError *error) {
+        if (error)
+            NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+    }];
     
     // Access variable defined in Javascript code
-    NSString *result = [self stringByEvaluatingJavaScriptFromString:@"MyApp_SearchResultCount"];
+    __block NSString *result;
+    [self evaluateJavaScript:@"MyApp_SearchResultCount"
+                              completionHandler:^(NSString* myResult, NSError *error) {
+        if (error)
+            NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+        else
+            result = myResult;
+    }];
        
     // Return
     return [result integerValue];
@@ -67,12 +82,20 @@
     NSLog(@"%s line %d, index: %d", __FUNCTION__, __LINE__, index);
 #endif
     NSString *scrollPosition = [NSString stringWithFormat:@"MyArr[%d].scrollIntoView()", index];
-    [self stringByEvaluatingJavaScriptFromString:scrollPosition];
+    [self evaluateJavaScript:scrollPosition
+           completionHandler:^(NSString* result, NSError *error) {
+        if (error)
+            NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+    }];
 }
 
 - (void) removeAllHighlights
 {
-    [self stringByEvaluatingJavaScriptFromString:@"MyApp_RemoveAllHighlights()"];
+    [self evaluateJavaScript:@"MyApp_RemoveAllHighlights()"
+           completionHandler:^(NSString* result, NSError *error) {
+        if (error)
+            NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+    }];
 }
 
 @end

@@ -22,6 +22,7 @@
  ------------------------------------------------------------------------ */
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -29,10 +30,10 @@
 #import "MLDBAdapter.h"
 #import "MLTitleViewController.h"
 
-@interface MLSecondViewController : UIViewController <UISearchBarDelegate, UIWebViewDelegate, MFMailComposeViewControllerDelegate>
+@interface MLSecondViewController : UIViewController <UISearchBarDelegate, WKUIDelegate, WKNavigationDelegate, MFMailComposeViewControllerDelegate>
 {
     UISearchBar *searchField;
-    UIWebView *webView;
+    WKWebView *webView;
     UILabel *findCounter;
     UIView *findPanel;
     NSString *htmlStr;
@@ -41,7 +42,7 @@
 
 // Note: "strong" is a replacement for retain, it comes with ARC
 @property (nonatomic, retain) IBOutlet UISearchBar *searchField;
-@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, retain) IBOutlet WKWebView *webView;
 @property (nonatomic, retain) IBOutlet UILabel *findCounter;
 @property (nonatomic, retain) IBOutlet UIView *findPanel;
 @property (nonatomic, copy) NSString *htmlStr;
