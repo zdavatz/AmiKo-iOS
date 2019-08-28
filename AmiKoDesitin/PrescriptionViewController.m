@@ -272,7 +272,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+    [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:NAVIGATION_ICON_LEFT]
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
@@ -325,7 +325,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
 
     UIBarButtonItem *rightRevealButtonItem =
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+    [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:NAVIGATION_ICON_RIGHT]
                                      style:UIBarButtonItemStylePlain
                                     target:aTarget
                                     action:aSelector];

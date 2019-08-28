@@ -66,7 +66,7 @@ enum {
 
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+    [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:NAVIGATION_ICON_LEFT]
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
@@ -101,9 +101,8 @@ enum {
     
     CGRect frame = CGRectMake(0, 0, 28, 21);
     UIButton* cameraButton = [[UIButton alloc] initWithFrame:frame];
-    [cameraButton setBackgroundImage:[UIImage imageNamed:@"camera.png"]
+    [cameraButton setBackgroundImage:[UIImage systemImageNamed:@"camera.viewfinder"]
                             forState:UIControlStateNormal];
-
     //[cameraButton setTitleColor:MAIN_TINT_COLOR forState:UIControlStateNormal];
     [cameraButton addTarget:self action:@selector(handleCameraButton:) forControlEvents:UIControlEventTouchDown];
 //    cameraButton.backgroundColor = [UIColor grayColor];
@@ -120,7 +119,7 @@ enum {
     SEL aSelector = @selector(rightRevealToggle:);
 #endif
     UIBarButtonItem *rightRevealButtonItem =
-    [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reveal-icon.png"]
+    [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:NAVIGATION_ICON_RIGHT]
                                      style:UIBarButtonItemStylePlain
                                     target:aTarget
                                     action:aSelector];

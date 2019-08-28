@@ -168,11 +168,9 @@
 		D5A6F26717B16A2300EAB24B /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F26617B16A2300EAB24B /* libsqlite3.0.dylib */; };
 		D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */; };
 		D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */; };
-		D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26C17B16A7700EAB24B /* reveal-icon.png */; };
 		D5A6F27017B16A7700EAB24B /* amiko_stylesheet.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */; };
 		D5A6F27617B16AA400EAB24B /* 28-star-gy.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27117B16AA400EAB24B /* 28-star-gy.png */; };
 		D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27217B16AA400EAB24B /* 28-star-ye.png */; };
-		D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */; };
 		D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27417B16AA400EAB24B /* 10-medical.png */; };
 		D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */; };
 		D5A6F28317B16B6000EAB24B /* MLSecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */; };
@@ -217,11 +215,9 @@
 		D5F6BB6117E8C87500DCBD16 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23C17B1692F00EAB24B /* Foundation.framework */; };
 		D5F6BB6217E8C87500DCBD16 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F23E17B1692F00EAB24B /* CoreGraphics.framework */; };
 		D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F24317B1692F00EAB24B /* InfoPlist.strings */; };
-		D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26C17B16A7700EAB24B /* reveal-icon.png */; };
 		D5F6BB6617E8C87500DCBD16 /* amiko_stylesheet.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */; };
 		D5F6BB6717E8C87500DCBD16 /* 28-star-gy.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27117B16AA400EAB24B /* 28-star-gy.png */; };
 		D5F6BB6817E8C87500DCBD16 /* 28-star-ye.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27217B16AA400EAB24B /* 28-star-ye.png */; };
-		D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */; };
 		D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */; };
 		D5F6BB6B17E8C87500DCBD16 /* 10-medical.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27417B16AA400EAB24B /* 10-medical.png */; };
 		D5F6BB6C17E8C87500DCBD16 /* 10-medical@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */; };
@@ -246,8 +242,6 @@
 		D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
 		D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
-		FA256AB620D2D03200D41353 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = FA256AB520D2D03100D41353 /* camera.png */; };
-		FA256AB720D2D03200D41353 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = FA256AB520D2D03100D41353 /* camera.png */; };
 		FA3B621522E8511F00A80296 /* fulltext_style.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621422E8511F00A80296 /* fulltext_style.css */; };
 		FA3B621622E8511F00A80296 /* fulltext_style.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621422E8511F00A80296 /* fulltext_style.css */; };
 		FA3B621C22E8527500A80296 /* color-scheme-dark.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621B22E8527500A80296 /* color-scheme-dark.css */; };
@@ -442,11 +436,9 @@
 		D5A6F26817B16A5900EAB24B /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MLSearchWebView.js; sourceTree = "<group>"; };
-		D5A6F26C17B16A7700EAB24B /* reveal-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon.png"; sourceTree = "<group>"; };
 		D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = amiko_stylesheet.css; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.css; };
 		D5A6F27117B16AA400EAB24B /* 28-star-gy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star-gy.png"; sourceTree = "<group>"; };
 		D5A6F27217B16AA400EAB24B /* 28-star-ye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star-ye.png"; sourceTree = "<group>"; };
-		D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reveal-icon@2x.png"; sourceTree = "<group>"; };
 		D5A6F27417B16AA400EAB24B /* 10-medical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "10-medical.png"; sourceTree = "<group>"; };
 		D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "10-medical@2x.png"; sourceTree = "<group>"; };
 		D5A6F27F17B16B6000EAB24B /* MLSecondViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLSecondViewController.xib; sourceTree = "<group>"; };
@@ -487,7 +479,6 @@
 		D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLMenuViewController.h; path = AmikoDesitin/MLMenuViewController.h; sourceTree = SOURCE_ROOT; };
 		D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLMenuViewController.m; path = AmikoDesitin/MLMenuViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		FA256AB520D2D03100D41353 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = AmiKoDesitin/camera.png; sourceTree = SOURCE_ROOT; };
 		FA3B621422E8511F00A80296 /* fulltext_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = fulltext_style.css; path = AmiKoDesitin/fulltext_style.css; sourceTree = SOURCE_ROOT; };
 		FA3B621B22E8527500A80296 /* color-scheme-dark.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-dark.css"; path = "AmiKoDesitin/color-scheme-dark.css"; sourceTree = SOURCE_ROOT; };
 		FA3B621E22E8527F00A80296 /* color-scheme-light.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-light.css"; path = "AmiKoDesitin/color-scheme-light.css"; sourceTree = SOURCE_ROOT; };
@@ -986,7 +977,6 @@
 				FAF85BF522F44C1C00730690 /* main_callbacks.js */,
 				FAF85BF222F44BF800730690 /* deleterow.js */,
 				FA3B621322E850DB00A80296 /* CSS */,
-				FA256AB520D2D03100D41353 /* camera.png */,
 				D5990A6C1BDEC2A10040C4C2 /* desitin_quick.png */,
 				D5990A6D1BDEC2A10040C4C2 /* desitin_quick@2x.png */,
 				D5A22537194A3A400078FEFF /* 218-trash2.png */,
@@ -1023,8 +1013,6 @@
 				D5A6F27217B16AA400EAB24B /* 28-star-ye.png */,
 				D5A6F27417B16AA400EAB24B /* 10-medical.png */,
 				D5A6F27517B16AA400EAB24B /* 10-medical@2x.png */,
-				D5A6F26C17B16A7700EAB24B /* reveal-icon.png */,
-				D5A6F27317B16AA400EAB24B /* reveal-icon@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1219,14 +1207,11 @@
 				43A3851820333355001A5849 /* PatientDbListViewController.xib in Resources */,
 				D5A6F24517B1692F00EAB24B /* InfoPlist.strings in Resources */,
 				FAF85BF622F44C1C00730690 /* main_callbacks.js in Resources */,
-				D5A6F26F17B16A7700EAB24B /* reveal-icon.png in Resources */,
 				439EEF46202CBF4900817588 /* ContactsListViewController.xib in Resources */,
 				439B6C6620206D210018F922 /* AmkListViewController.xib in Resources */,
 				D5A6F27017B16A7700EAB24B /* amiko_stylesheet.css in Resources */,
 				D5A6F27617B16AA400EAB24B /* 28-star-gy.png in Resources */,
 				D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */,
-				FA256AB620D2D03200D41353 /* camera.png in Resources */,
-				D5A6F27817B16AA400EAB24B /* reveal-icon@2x.png in Resources */,
 				FA3B621522E8511F00A80296 /* fulltext_style.css in Resources */,
 				FA4511B5204ECAFD00899A77 /* DoctorViewController.xib in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
@@ -1323,9 +1308,7 @@
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				93109F8920751A5700CEFAA5 /* 1025-patient.png in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
-				D5F6BB6517E8C87500DCBD16 /* reveal-icon.png in Resources */,
 				932F8840206BDA4700B5A77E /* AmkListViewController.xib in Resources */,
-				FA256AB720D2D03200D41353 /* camera.png in Resources */,
 				FA7B54E7207BC1ED003D300A /* Localizable.strings in Resources */,
 				FA3B621622E8511F00A80296 /* fulltext_style.css in Resources */,
 				932F883F206BDA1D00B5A77E /* PatientViewController.xib in Resources */,
@@ -1337,7 +1320,6 @@
 				932F883B206BD9EC00B5A77E /* DoctorViewController.xib in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				932F883E206BDA1600B5A77E /* ContactsListViewController.xib in Resources */,
-				D5F6BB6917E8C87500DCBD16 /* reveal-icon@2x.png in Resources */,
 				93109F8C20751A6500CEFAA5 /* 1026-doctor-@2x.png in Resources */,
 				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
 				932F883C206BDA0400B5A77E /* PrescriptionViewController.xib in Resources */,
