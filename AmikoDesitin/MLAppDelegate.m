@@ -77,46 +77,33 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 {
     bool handled = NO;
 
+    NSString *bundleId = [NSBundle mainBundle].bundleIdentifier;
+
+    NSString *typeAips = [NSString stringWithFormat:@"%@.Aips", bundleId];
+    NSString *typeFavorites = [NSString stringWithFormat:@"%@.Favorites", bundleId];
+    NSString *typeInteractions = [NSString stringWithFormat:@"%@.Interactions", bundleId];
+    NSString *typeDesitin = [NSString stringWithFormat:@"%@.Desitin", bundleId];
+
     // Check which quick action to run
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.aips"] ||
-        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.aips"]) {
-#ifdef DEBUG
-        NSLog(@"shortcut tapped: aips");
-#endif
+    if ([shortcutItem.type isEqualToString:typeAips]) {
         launchState = eAips;
         handled = YES;
     }
-
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.favorites"] ||
-        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.favorites"]) {
-#ifdef DEBUG
-        NSLog(@"shortcut tapped: favorites");
-#endif
+    else if ([shortcutItem.type isEqualToString:typeFavorites]) {
         launchState = eFavorites;
         handled = YES;
     }
-
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.interactions"] ||
-        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.interactions"]) {
-#ifdef DEBUG
-        NSLog(@"shortcut tapped: interactions");
-#endif
+    else if ([shortcutItem.type isEqualToString:typeInteractions]) {
         launchState = eInteractions;
         handled = YES;
     }
-
-    if ([shortcutItem.type isEqualToString:@"com.ywesee.amiko.ios.desitin"] ||
-        [shortcutItem.type isEqualToString:@"com.ywesee.comed.ios.desitin"]) {
-#ifdef DEBUG
-        NSLog(@"shortcut tapped: desitin");
-#endif
+    else if ([shortcutItem.type isEqualToString:typeDesitin]) {
         launchState = eDesitin;
         handled = YES;
     }
     
-    if (mainViewController!=nil && handled==YES) {
+    if (mainViewController && handled)
         [mainViewController setLaunchState:launchState];
-    }
     
     return handled;
 }
@@ -125,6 +112,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
  */
 - (void) application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     bool handledShortcutItem = [self handleShortcutItem:shortcutItem];
     // completionHandler expects a bool indicating whether we are able to handle the item
     completionHandler(handledShortcutItem);
@@ -193,16 +183,17 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     MLSecondViewController *secondViewController = [MLSecondViewController new];
     UINavigationController *secondViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:secondViewController];
+    
+    // Setup Quick Action menu
+    [self configDynamicShortcutItems];
 
     // Check if app was launched by quick action
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
-        UIApplicationShortcutItem *shortcutItem = [launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
-        if (shortcutItem != nil) {
-            [self handleShortcutItem:shortcutItem];
-            // Method returns false if application was launched from shortcut
-            // and prevents performActionForShortcutItem to be called...
-            launchedFromShortcut = YES;
-        }
+    UIApplicationShortcutItem *shortcutItem = [launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
+    if (shortcutItem) {
+        [self handleShortcutItem:shortcutItem];
+        // Method returns false if application was launched from shortcut
+        // and prevents performActionForShortcutItem to be called...
+        launchedFromShortcut = YES;
     }
     
     // Init swipe (reveal) view controller
@@ -333,6 +324,60 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 - (void) applicationWillTerminate: (UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark -
+
+/**
+ *  @brief config dynamic shortcutItems
+ *  @discussion after first launch, users can see dynamic shortcutItems
+ */
+- (void)configDynamicShortcutItems
+{
+    NSString *bundleId = [NSBundle mainBundle].bundleIdentifier;
+
+    NSString *typeAips = [NSString stringWithFormat:@"%@.Aips", bundleId];
+    NSString *typeFavorites = [NSString stringWithFormat:@"%@.Favorites", bundleId];
+    NSString *typeInteractions = [NSString stringWithFormat:@"%@.Interactions", bundleId];
+    NSString *typeDesitin = [NSString stringWithFormat:@"%@.Desitin", bundleId];
+
+    UIApplicationShortcutIcon *scAipsIcon = [UIApplicationShortcutIcon iconWithSystemImageName:@"doc.richtext"]; // SF Symbol
+    UIApplicationShortcutIcon *scFavoritesIcon = [UIApplicationShortcutIcon iconWithSystemImageName:@"star"]; // SF Symbol
+    UIApplicationShortcutIcon *scInteractionsIcon = [UIApplicationShortcutIcon iconWithSystemImageName:@"exclamationmark.triangle"]; // SF Symbol
+    UIApplicationShortcutIcon *scDesitinIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:@"desitin_quick"]; // custom image in app bundles
+
+    UIApplicationShortcutItem *shortcutAips =
+        [[UIApplicationShortcutItem alloc] initWithType:typeAips
+                                         localizedTitle:@"AIPS"
+                                      localizedSubtitle:nil
+                                                   icon:scAipsIcon
+                                               userInfo:nil];
+
+    UIApplicationShortcutItem *shortcutFavorites =
+        [[UIApplicationShortcutItem alloc] initWithType:typeFavorites
+                                         localizedTitle:NSLocalizedString(@"Favorites", nil)
+                                      localizedSubtitle:nil
+                                                   icon:scFavoritesIcon
+                                               userInfo:nil];
+
+    UIApplicationShortcutItem *shortcutInteractions =
+        [[UIApplicationShortcutItem alloc] initWithType:typeInteractions
+                                         localizedTitle:NSLocalizedString(@"Interactions", nil)
+                                      localizedSubtitle:nil
+                                                   icon:scInteractionsIcon
+                                               userInfo:nil];
+
+    UIApplicationShortcutItem *shortcutDesitin =
+        [[UIApplicationShortcutItem alloc] initWithType:typeDesitin
+                                         localizedTitle:NSLocalizedString(@"Desitin Products", nil)
+                                      localizedSubtitle:nil
+                                                   icon:scDesitinIcon
+                                               userInfo:nil];
+    // Add the array to our app
+    [UIApplication sharedApplication].shortcutItems = @[shortcutDesitin,
+                                                        shortcutInteractions,
+                                                        shortcutFavorites,
+                                                        shortcutAips];
 }
 
 - (void) showPrescriptionId:(NSString *)uniqueId :(NSString *)fileName

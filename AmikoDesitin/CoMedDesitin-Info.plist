@@ -74,41 +74,6 @@
 	<array>
 		<string>ionicons.ttf</string>
 	</array>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>desitin_quick</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Produits Desitin</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.ywesee.comed.ios.desitin</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>interactions</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Interactions</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.ywesee.comed.ios.interactions</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>favorites</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Favorites</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.ywesee.comed.ios.favorites</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconFile</key>
-			<string>maindb</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>AIPS</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.ywesee.comed.ios.aips</string>
-		</dict>
-	</array>
 	<key>UIFileSharingEnabled</key>
 	<false/>
 	<key>UILaunchStoryboardName</key>

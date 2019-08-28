@@ -35,6 +35,9 @@
 "Delete package" = "Effacer l’emballage prescrit/annot.";
 
 /* No comment provided by engineer. */
+"Desitin Products" = "Produits Desitin";
+
+/* No comment provided by engineer. */
 "Doctor" = "Médecin";
 
 /* Button */
@@ -48,6 +51,9 @@
 
 /* No comment provided by engineer. */
 "Edit comment" = "Traiter votre annotation";
+
+/* No comment provided by engineer. */
+"Favorites" = "Favoris";
 
 /* Button */
 "Feedback" = "Feedback";
@@ -72,6 +78,9 @@
 
 /* No comment provided by engineer. */
 "Imported %@" = "Importé %@";
+
+/* No comment provided by engineer. */
+"Interactions" = "Interactions";
 
 /* No comment provided by engineer. */
 "Known interactions" = "Interactions Connues";

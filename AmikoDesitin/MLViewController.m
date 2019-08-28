@@ -1401,22 +1401,12 @@ static BOOL mShowReport = false;
         [myTabBar setTintColor:MAIN_TINT_COLOR]; // color of bar item text labels
         [myTabBar setTranslucent:YES];
 #endif
-
-//        UIImageSymbolConfiguration *configurationScale = [UIImageSymbolConfiguration configurationWithScale:UIImageSymbolScaleLarge];
-//
-//        UIImageSymbolConfiguration *configurationWeight = [UIImageSymbolConfiguration configurationWithWeight:UIImageSymbolWeightLight];
-//
-//        UIImageSymbolConfiguration *configurationSize = [UIImageSymbolConfiguration configurationWithPointSize:24.0];
         
         UIImageSymbolConfiguration *configuration =
             [UIImageSymbolConfiguration configurationWithPointSize:24.0
                                                             weight:UIImageSymbolWeightLight
                                                              scale:UIImageSymbolScaleLarge];
         for (UITabBarItem *item in myTabBar.items) {
-            //NSLog(@"Line %d, item: %@", __LINE__, item);
-            //item.image = [item.image imageByApplyingSymbolConfiguration:configurationScale];
-            //item.image = [item.image imageByApplyingSymbolConfiguration:configurationWeight];
-            //tabBarItem0.image = [tabBarItem0.image imageByApplyingSymbolConfiguration:configurationSize];
             item.image = [item.image imageByApplyingSymbolConfiguration:configuration];
             item.selectedImage = [item.selectedImage imageByApplyingSymbolConfiguration:configuration];
         }

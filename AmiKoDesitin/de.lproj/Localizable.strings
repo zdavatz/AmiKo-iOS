@@ -35,6 +35,9 @@
 "Delete package" = "Packung/Bemerkung löschen";
 
 /* No comment provided by engineer. */
+"Desitin Products" = "Desitin Produkte";
+
+/* No comment provided by engineer. */
 "Doctor" = "Arzt";
 
 /* Button */
@@ -48,6 +51,9 @@
 
 /* No comment provided by engineer. */
 "Edit comment" = "Bemerkung bearbeiten";
+
+/* No comment provided by engineer. */
+"Favorites" = "Favoriten";
 
 /* Button */
 "Feedback" = "Feedback";
@@ -72,6 +78,9 @@
 
 /* No comment provided by engineer. */
 "Imported %@" = "Imported %@";
+
+/* No comment provided by engineer. */
+"Interactions" = "Interaktionen";
 
 /* No comment provided by engineer. */
 "Known interactions" = "Bekannte Interaktionen";
