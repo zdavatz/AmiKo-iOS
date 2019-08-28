@@ -558,12 +558,11 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 #endif
     [WebViewJavascriptBridge enableLogging];
-    
-    // @maxl: note the webviewdelegate parameter. if it's not passed, no way to get the webview delegates to work!
-    // _jsBridge = [WebViewJavascriptBridge bridgeForWebView:self.webView handler:^(id msg, WVJBResponseCallback responseCallback) {
-    _jsBridge = [WebViewJavascriptBridge bridgeForWebView: webView
-                                          webViewDelegate: self
-                                                  handler: ^(id msg, WVJBResponseCallback responseCallback) {
+
+    _jsBridge = [WebViewJavascriptBridge bridgeForWebView: webView];
+    [_jsBridge setWebViewDelegate:self];
+    [_jsBridge registerHandler:@"JSToObjC_"
+                       handler:^(id msg, WVJBResponseCallback responseCallback) {
         if ([msg isEqualToString:@"notify_interaction"]) {
 #ifdef DEBUG
             NSLog(@"%s line %d, Notify interaction", __FUNCTION__, __LINE__);

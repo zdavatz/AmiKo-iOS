@@ -3,8 +3,13 @@ function deleteRow(msg,tableID,currentRow) {
     // var myfunc = window.RemoveMeds;
     try {
         if (msg=="Notify_interaction") {
-            WebViewJavascriptBridge.send("notify_interaction");
-        } else if (msg=="Delete_all") {
+            WebViewJavascriptBridge.callHandler("JSToObjC_",
+                                                "notify_interaction",
+                                                function responseCallback(responseData) {
+                                                    console.log("JS received response:", responseData);
+                                                });
+        }
+        else if (msg=="Delete_all") {
             //
             // window.alert("delete all rows");
             //
@@ -15,8 +20,13 @@ function deleteRow(msg,tableID,currentRow) {
                 table.deleteRow(i-1);
             }
             // Notify objc
-            WebViewJavascriptBridge.send("delete_all");
-		} else {
+            WebViewJavascriptBridge.callHandler("JSToObjC_",
+                                                "delete_all",
+                                                function responseCallback(responseData) {
+                                                    console.log("JS received response:", responseData);
+                                                });
+		}
+        else {
             //
             // window.alert("delete single row");
             //
@@ -26,7 +36,12 @@ function deleteRow(msg,tableID,currentRow) {
 				var row = table.rows[i];
 				if (row==currentRow.parentNode.parentNode) {
                     // Notify objc
-                    WebViewJavascriptBridge.send(row.cells[1].innerText);
+                    WebViewJavascriptBridge.callHandler("JSToObjC_",
+                                                        row.cells[1].innerText,
+                                                        function responseCallback(responseData) {
+                                                            console.log("JS received response:", responseData);
+                                                        });
+
 					// Delete row
 					table.deleteRow(i);		
 					// Update counters
