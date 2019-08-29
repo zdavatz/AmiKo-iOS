@@ -173,7 +173,7 @@
 
 #pragma mark - UISearchBarDelegate
 
-// See onSearchDatabase in AmiKo
+// See onSearchDatabase in AmiKo-macOS
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
 #ifdef DEBUG

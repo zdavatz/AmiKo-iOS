@@ -4,6 +4,9 @@
 /* Full toolbar */
 "ATC Code" = "Principe/ATC";
 
+/* Interactions */
+"Avoid combination" = "Eviter la combinaison";
+
 /* No comment provided by engineer. */
 "born" = "Anniv.";
 
@@ -13,17 +16,29 @@
 /* No comment provided by engineer. */
 "Chapter" = "Chapter";
 
+/* Interactions */
+"Color Legend" = "Légende des couleurs";
+
 /* No comment provided by engineer. */
 "Confirm delete %@" = "Confirm delete %@";
 
 /* No comment provided by engineer. */
 "Contact was saved in the AmiKo address book" = "Contact enregistré dans le carnet d'adresses CoMed.";
 
+/* Interactions */
+"Contraindicated" = "Contre-indiquée";
+
+/* No comment provided by engineer. */
+"Currently, there are no interactions between these drugs in the EPha.ch database. For more information, please refer to the technical information." = "Il n’y a aucune information dans la banque de données EPha.ch à propos d’une interaction entre les médicaments sélectionnés. Veuillez consulter les informations professionelles.";
+
 /* No comment provided by engineer. */
 "Database Update" = "Mise à jour de la banque des données";
 
 /* No comment provided by engineer. */
 "%@ Database Updated!" = "Banque des donnees %@ mises à jour!";
+
+/* Interactions */
+"Data source: Public domain data from EPha.ch" = "Source des données : données du domaine publique de EPha.ch";
 
 /* No comment provided by engineer. */
 "Delete" = "Supprimer patient/compris ordonnances";
@@ -57,6 +72,9 @@
 
 /* Button */
 "Feedback" = "Feedback";
+
+/* Interactions */
+"Footnotes" = "Footnotes";
 
 /* Short toolbar */
 "FTS" = "RPT";
@@ -94,6 +112,9 @@
 /* No comment provided by engineer. */
 "Medicines" = "Préparation";
 
+/* Interactions */
+"No measures necessary" = "Aucune mesure nécessaire";
+
 /* No comment provided by engineer. */
 "No package found with this barcode. Please contact zdavatz@ywesee.com" = "Aucun paquet avec ce code-barres n'a été trouvé. Veuillez contacter zdavatz@ywesee.com";
 
@@ -121,6 +142,9 @@
 /* No comment provided by engineer. */
 "Please add doctor's address" = "Rajoutez l’adresse du médecin svp.";
 
+/* Interactions */
+"Precautionary measures recommended" = "Mesures de précaution sont recommandées";
+
 /* Short toolbar */
 "Prep" = "Pré";
 
@@ -145,8 +169,14 @@
 /* Full toolbar */
 "Reg. No" = "No d'Autor";
 
+/* Interactions */
+"Regular monitoring" = "Doit être régulièrement surveillée";
+
 /* Button */
 "Report" = "Report";
+
+/* No comment provided by engineer. */
+"Report an interaction" = "Signaler une interaction";
 
 /* No comment provided by engineer. */
 "Save" = "Sauver";
@@ -174,6 +204,9 @@
 
 /* Button */
 "Share" = "Share";
+
+/* Interactions */
+"Supported by: IBSA Institut Biochimique SA" = "Soutenu par : IBSA Institut Biochimique SA";
 
 /* No comment provided by engineer. */
 "The database contains:\n- %ld Products\n- %ld Specialist information\n- %ld Keywords\n- %d Interactions" = "La banque des données contien:\n- %ld produits\n- %ld notices infopro\n- %ld mot-clés\n- %d interactions";

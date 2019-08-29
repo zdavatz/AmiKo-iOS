@@ -217,7 +217,7 @@ static BOOL mShowReport = false;
     // Do something
 }
 
-// See 'onButtonPressed' in AmiKo osx
+// See 'onButtonPressed' in AmiKo-macOS
 - (IBAction) onToolBarButtonPressed:(id)sender
 {
 #ifdef DEBUG
@@ -366,7 +366,7 @@ static BOOL mShowReport = false;
           mCurrentSearchState);
 #endif
 
-    // See 'updateSearchResults' in AmiKo osx
+    // See 'updateSearchResults' in AmiKo-macOS
     if (prevState == SEARCH_FULL_TEXT || mCurrentSearchState == SEARCH_FULL_TEXT) {
         switch (mUsedDatabase) {
             case DB_TYPE_AIPS:
@@ -939,7 +939,7 @@ static BOOL mShowReport = false;
     mCurrentSearchState = searchState;
 }
 
-// See 'saveFavorites' in AmiKo-osx
+// See 'saveFavorites' in AmiKo-macOS
 - (void) saveData
 {
     NSMutableDictionary *rootObject = [NSMutableDictionary dictionary];
@@ -954,7 +954,7 @@ static BOOL mShowReport = false;
     [NSKeyedArchiver archiveRootObject:rootObject toFile:favoritesFile];
 }
 
-// See 'loadFavorites' in AmiKo-osx
+// See 'loadFavorites' in AmiKo-macOS
 - (void) loadFavorites
 {
     NSFileManager *fileManager = [NSFileManager new];
@@ -1619,7 +1619,7 @@ static BOOL mShowReport = false;
 //    }
 //}
 
-// See 'searchAnyDatabasesWith' in AmiKo osx
+// See 'searchAnyDatabasesWith' in AmiKo-macOS
 - (NSArray *) searchDatabaseWith:(NSString *)searchQuery
 {
 #ifdef DEBUG
@@ -1706,7 +1706,7 @@ static BOOL mShowReport = false;
 }
 
 // TabBar at the bottom of the screen
-// See 'switchTabs' in AmiKo osx
+// See 'switchTabs' in AmiKo-macOS
 - (void) switchTabBarItem: (UITabBarItem *)item
 {
     static bool inProgress = false;
@@ -2377,11 +2377,10 @@ static BOOL mShowReport = false;
                                       amiko_Style];
             }
 
-            #ifdef DEBUG
-                            
+#ifdef DEBUG
             NSLog(@"%s line %d, mMed.contentStr:\n\n%@", __FUNCTION__, __LINE__,
                   [mMed.contentStr substringToIndex:MIN(500,[mMed.contentStr length])]);
-            #endif
+#endif
 
             NSString *htmlStr = mMed.contentStr;
             if ([htmlStr length] == 0)
@@ -2401,13 +2400,13 @@ static BOOL mShowReport = false;
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
             NSError *error;
-            NSString *pathFI = [documentsDirectory stringByAppendingPathComponent:@"myfile.html"];
-            BOOL succeed = [secondViewController.htmlStr writeToFile:pathFI
+            NSString *path = [documentsDirectory stringByAppendingPathComponent:@"fachinfo.html"];
+            BOOL succeed = [secondViewController.htmlStr writeToFile:path
                                                           atomically:YES
                                                             encoding:NSUTF8StringEncoding
                                                                error:&error];
             if (succeed)
-                NSLog(@"Created Fachinfo: %@", pathFI);
+                NSLog(@"Created file: %@", path);
             else
                 NSLog(@"%@", error.localizedDescription);
 #endif
@@ -2882,7 +2881,7 @@ static BOOL mShowReport = false;
 
 #pragma mark -
 
-// See 'tappedOnStar' in AmiKo osx
+// See 'tappedOnStar' in AmiKo-macOS
 - (void) myTapMethod:(id)sender
 {
 #ifdef DEBUG
@@ -3068,7 +3067,7 @@ static BOOL mShowReport = false;
     NSLog(@"long press began on table view at row %ld", indexPath.row);
 
     switch (mCurrentSearchState) {
-        case SEARCH_TITLE:    // Can only add medicine from Prep like in AmiKo OSX
+        case SEARCH_TITLE:    // Can only add medicine from Prep like in AmiKo-macOS
         {
             NSString *subTitle = [medi[indexPath.row] subTitle];
             _pickerData = [subTitle componentsSeparatedByString:@"\n"];

@@ -35,6 +35,7 @@
 #import "MLAlertView.h"
 
 #import "WebViewJavascriptBridge.h"
+#import "MLUtility.h"
 
 typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     FIND_PANEL_INVISIBLE,
@@ -629,9 +630,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     }
 }
 
-/** 
- Updates medication basket HTML string
- */
+// Updates medication basket HTML string
+// See 'fullInteractionsHtml' in AmiKo-macOS
 - (void) updateInteractionBasketView
 {
 #ifdef DEBUG
@@ -639,38 +639,60 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #endif
     // TODO: Optimize: pre-load the following files
     
-    // Load style sheet from file
-    NSString *interactionsCssPath = [[NSBundle mainBundle] pathForResource:@"interactions_css" ofType:@"css"];
-    NSString *interactionsCss = [NSString stringWithContentsOfFile:interactionsCssPath encoding:NSUTF8StringEncoding error:nil];
+    NSString *color_Style =
+        [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", [MLUtility getColorCss]];
+
+    NSString *interactions_Style;
+    {
+        // Load style sheet from file
+        NSString *interactionsCssPath = [[NSBundle mainBundle] pathForResource:@"interactions_css" ofType:@"css"];
+        NSString *interactionsCss = [NSString stringWithContentsOfFile:interactionsCssPath encoding:NSUTF8StringEncoding error:nil];
+        interactions_Style = [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", interactionsCss];
+    }
     
     // Load JavaScript from file
     NSString *js_Script;
     {
-    NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"deleterow" ofType:@"js"];
-    NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath encoding:NSUTF8StringEncoding error:nil];
-    js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
+        NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"deleterow" ofType:@"js"];
+        NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath encoding:NSUTF8StringEncoding error:nil];
+        js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
     }
     
+    NSString *charset_Meta = @"<meta charset=\"utf-8\" />";
+    NSString *colorScheme_Meta= @"<meta name=\"supported-color-schemes\" content=\"light dark\" />";
+    NSString *scaling_Meta = @"<meta name=\"viewport\" content=\"initial-scale=1.0\" />";
+
     // Generate main interaction table
-    NSString *html = [NSString stringWithFormat:@"<html><head><meta charset=\"utf-8\" />"];
-    html = [html stringByAppendingFormat:@"%@<style type=\"text/css\">%@</style></head><body><div id=\"interactions\">%@<br><br>%@<br>%@</div></body></html>",
+    NSString *html_Head = [NSString stringWithFormat:@"<head>%@\n%@\n%@\n%@\n%@\n%@</head>",
+            charset_Meta,
+            colorScheme_Meta,
+            scaling_Meta,
             js_Script,
-            interactionsCss,
+            color_Style,
+            interactions_Style];
+    
+    NSString *html_Body = [NSString stringWithFormat:@"<body><div id=\"interactions\">%@<br><br>%@<br>%@</div></body>",
             [self medBasketHtml],
             [self interactionsHtml],
             [self footNoteHtml]];
     
-    self.htmlStr = [NSString stringWithFormat:@"<head><style>%@</style></head>%@", interactionsCss, html];
+    self.htmlStr = [NSString stringWithFormat:@"<!DOCTYPE html><html>\n%@\n%@\n</html>", html_Head, html_Body];
     
-//#ifdef DEBUG
-//    NSUInteger length = [htmlStr length];
-//    
-//    NSLog(@"%s line %d, htmlStr head :\n\n%@", __FUNCTION__, __LINE__,
-//          [htmlStr substringToIndex:MIN(500,length)]);
-//    
-//    NSLog(@"%s line %d, htmlStr tail :\n\n%@", __FUNCTION__, __LINE__,
-//          [htmlStr substringFromIndex:length - MIN(200,length)]);
-//#endif
+#if 0 //def DEBUG
+    // Create an HTML file of the Fachinfo, so it can be tested with Safari and inspected with an editor
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
+    NSError *error;
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"interactions.html"];
+    BOOL succeed = [self.htmlStr writeToFile:path
+                                  atomically:YES
+                                    encoding:NSUTF8StringEncoding
+                                       error:&error];
+    if (succeed)
+        NSLog(@"Created file: %@", path);
+    else
+        NSLog(@"%@", error.localizedDescription);
+#endif
 
     [self updateWebView];
 }
@@ -701,7 +723,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #pragma mark - medication basket methods
 
 /** 
- Creates interaction basket html string
+ Creates interaction basket HTML string
  */
 - (NSString *) medBasketHtml
 {
@@ -770,7 +792,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 }
 
 /**
- Creates html displaying interactions between drugs
+ Creates HTML displaying interactions between drugs
  */
 - (NSString *) interactionsHtml
 {  
@@ -782,7 +804,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         sectionTitles = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"Drugs Basket", nil), nil];
     
     // Check if there are meds in the "Medikamentenkorb"
-    if ([medBasket count]>1) {
+    if ([medBasket count] > 1) {
         [interactionStr appendString:[NSString stringWithFormat:
                                       @"<fieldset><legend>%@</legend></fieldset>",
                                       NSLocalizedString(@"Known interactions", nil)]];
@@ -832,31 +854,29 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                 }
             }
         }
-        if ([sectionTitles count]<2) {
-            // TODO: proper localization, not based on the database language
-            if ([[MLConstants databaseLanguage] isEqualToString:@"de"])
-                [interactionStr appendString:@"<p class=\"paragraph0\">Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten in der EPha.ch-Datenbank vorhanden. Weitere Informationen finden Sie in der Fachinformation.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Interaktion melden\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
-            else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"])
-                [interactionStr appendString:@"<p class=\"paragraph0\">Il n’y a aucune information dans la banque de données EPha.ch à propos d’une interaction entre les médicaments sélectionnés. Veuillez consulter les informations professionelles.</p><div id=\"Delete_all\"><input type=\"button\" value=\"Signaler une interaction\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" /></div><br>"];
+
+        if ([sectionTitles count] < 2) {
+            NSString *note = NSLocalizedString(@"Currently, there are no interactions between these drugs in the EPha.ch database. For more information, please refer to the technical information.", nil);
+
+            NSString *button = [NSString stringWithFormat:@"<input type=\"button\" value=\"%@\" onclick=\"deleteRow('Notify_interaction','InterTable',this)\" />", NSLocalizedString(@"Report an interaction", nil)];
+
+            NSString *noInteractions_Par_Div = [NSString stringWithFormat:@"<p class=\"paragraph0\">%@</p><div id=\"Delete_all\">%@</div><br>", note, button];
+
+            [interactionStr appendString:noInteractions_Par_Div];
         }
-        else if ([sectionTitles count]>2) {
+        else if ([sectionTitles count] > 2) {
             [interactionStr appendString:@"<br>"];
         }
     }
     
-    if ([medBasket count]>0) {
-        // TODO: proper localization, not based on the database language
-        [sectionIds addObject:@"Farblegende"];
-        if ([[MLConstants databaseLanguage] isEqualToString:@"de"])
-            [sectionTitles addObject:@"Farblegende"];
-        else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"])
-            [sectionTitles addObject:@"Légende des couleurs"];
+    if ([medBasket count] > 0) {
+        [sectionIds addObject:@"Farblegende"]; // TODO: Can we localize this ?
+        [sectionTitles addObject:NSLocalizedString(@"Color Legend", "Interactions")];
     }
     
-    if (titleViewController!=nil) {
+    if (titleViewController)
         [titleViewController setSectionTitles:[NSArray arrayWithArray:sectionTitles]
                                        andIds:[NSArray arrayWithArray:sectionIds]];
-    }
     
     return interactionStr;
 }
@@ -873,43 +893,25 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
      X: Kontraindiziert (hellrot)
      0: Keine Angaben (grau)
      */
-    if ([medBasket count]>0) {
-        // TODO: proper localization, not based on the database language
-        if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
-            NSString *legend = {
-                @"<fieldset><legend>Fussnoten</legend></fieldset>"
-                @"<p class=\"footnote\">1. Farblegende: </p>"
-                @"<table id=\"Farblegende\" style=\"background-color:#ffffff;\" cellpadding=\"3px\" width=\"100%25\">"
-                @"  <tr bgcolor=\"#caff70\"><td align=\"center\">A</td><td>Keine Massnahmen notwendig</td></tr>"
-                @"  <tr bgcolor=\"#ffec8b\"><td align=\"center\">B</td><td>Vorsichtsmassnahmen empfohlen</td></tr>"
-                @"  <tr bgcolor=\"#ffb90f\"><td align=\"center\">C</td><td>Regelmässige Überwachung</td></tr>"
-                @"  <tr bgcolor=\"#ff82ab\"><td align=\"center\">D</td><td>Kombination vermeiden</td></tr>"
-                @"  <tr bgcolor=\"#ff6a6a\"><td align=\"center\">X</td><td>Kontraindiziert</td></tr>"
-                @"</table>"
-                @"<p class=\"footnote\">2. Datenquelle: Public Domain Daten von EPha.ch.</p>"
-                @"<p class=\"footnote\">3. Unterstützt durch:  IBSA Institut Biochimique SA.</p>"
-            };
-            return legend;
-        }
-        else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
-            NSString *legend = {
-                @"<fieldset><legend>Notes</legend></fieldset>"
-                @"<p class=\"footnote\">1. Légende des couleurs: </p>"
-                @"<table id=\"Farblegende\" style=\"background-color:#ffffff;\" cellpadding=\"3px\" width=\"100%25\">"
-                @"  <tr bgcolor=\"#caff70\"><td align=\"center\">A</td><td>Aucune mesure nécessaire</td></tr>"
-                @"  <tr bgcolor=\"#ffec8b\"><td align=\"center\">B</td><td>Mesures de précaution sont recommandées</td></tr>"
-                @"  <tr bgcolor=\"#ffb90f\"><td align=\"center\">C</td><td>Doit être régulièrement surveillée</td></tr>"
-                @"  <tr bgcolor=\"#ff82ab\"><td align=\"center\">D</td><td>Eviter la combinaison</td></tr>"
-                @"  <tr bgcolor=\"#ff6a6a\"><td align=\"center\">X</td><td>Contre-indiquée</td></tr>"
-                @"</table>"
-                @"<p class=\"footnote\">2. Source des données : données du domaine publique de EPha.ch.</p>"
-                @"<p class=\"footnote\">3. Soutenu par : IBSA Institut Biochimique SA.</p>"
-            };
-            return legend;
-        }
-    }
-    
-    return @"";
+    if ([medBasket count] == 0)
+            return @"";
+
+    NSString *fieldset = [NSString stringWithFormat:@"<fieldset><legend>%@</legend></fieldset>", NSLocalizedString(@"Footnotes", "Interactions")];
+    NSString *footnote1_par = [NSString stringWithFormat:@"<p class=\"footnote\">1. %@:</p>", NSLocalizedString(@"Color Legend", "Interactions")];
+    NSString *footnote2_par = [NSString stringWithFormat:@"<p class=\"footnote\">2. %@.</p>", NSLocalizedString(@"Data source: Public domain data from EPha.ch", "Interactions")];
+    NSString *footnote3_par = [NSString stringWithFormat:@"<p class=\"footnote\">3. %@.</p>", NSLocalizedString(@"Supported by: IBSA Institut Biochimique SA", "Interactions")];
+
+    NSString *colorA_tr = [NSString stringWithFormat:@"<tr bgcolor=\"#caff70\"><td align=\"center\">A</td><td>%@</td></tr>", NSLocalizedString(@"No measures necessary", "Interactions")];
+    NSString *colorB_tr = [NSString stringWithFormat:@"<tr bgcolor=\"#ffec8b\"><td align=\"center\">B</td><td>%@</td></tr>", NSLocalizedString(@"Precautionary measures recommended", "Interactions")];
+    NSString *colorC_tr = [NSString stringWithFormat:@"<tr bgcolor=\"#ffb90f\"><td align=\"center\">C</td><td>%@</td></tr>", NSLocalizedString(@"Regular monitoring", "Interactions")];
+    NSString *colorD_tr = [NSString stringWithFormat:@"<tr bgcolor=\"#ff82ab\"><td align=\"center\">D</td><td>%@</td></tr>", NSLocalizedString(@"Avoid combination", "Interactions")];
+    NSString *colorX_tr = [NSString stringWithFormat:@"<tr bgcolor=\"#ff6a6a\"><td align=\"center\">X</td><td>%@</td></tr>", NSLocalizedString(@"Contraindicated", "Interactions")];
+    NSString *table = [NSString stringWithFormat:@"<table id=\"Farblegende\" style=\"background-color:transparent;\" cellpadding=\"3px\" width=\"100%%25\">\n %@\n %@\n %@\n %@\n %@\n</table>", colorA_tr, colorB_tr, colorC_tr, colorD_tr, colorX_tr];
+
+    NSString *legend = [NSString stringWithFormat:@"%@\n %@\n %@\n %@\n %@\n",
+                         fieldset, footnote1_par, table, footnote2_par, footnote3_par];
+
+    return legend;
 }
 
 #pragma mark - UISearchBarDelegate methods
@@ -1115,7 +1117,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 #endif
 }
 
-// See `darkModeChanged` in AmiKo osx
+// See `darkModeChanged` in AmiKo-macOS
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
 #ifdef DEBUG

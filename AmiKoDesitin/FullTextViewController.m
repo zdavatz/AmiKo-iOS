@@ -185,9 +185,9 @@
                                                         error:nil];
     NSString *js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
 
-    NSString *scaling_Meta = @"<meta name=\"viewport\" content=\"initial-scale=1.0\" />";
     NSString *charset_Meta = @"<meta charset=\"utf-8\" />";
     NSString *colorScheme_Meta= @"<meta name=\"supported-color-schemes\" content=\"light dark\" />";
+    NSString *scaling_Meta = @"<meta name=\"viewport\" content=\"initial-scale=1.0\" />";
     NSString *html_Head = [NSString stringWithFormat:@"<head>%@\n%@\n%@\n%@\n%@\n%@\n</head>",
                       charset_Meta,
                       colorScheme_Meta,
@@ -263,7 +263,7 @@
     }
 }
 
-// See `darkModeChanged` in AmiKo osx
+// See `darkModeChanged` in AmiKo-macOS
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
 #ifdef DEBUG
