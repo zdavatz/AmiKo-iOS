@@ -314,10 +314,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [self resetSearchField];
     
     // Update webview which is either "Fachinfo" or "medication basket"
-    if (self.htmlStr)
-        [self updateWebView];
-    
-    // Create objc - js bridge
+    [self updateWebView];
+
     [self createJSBridge];
 }
 
@@ -707,7 +705,17 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     //NSLog(@"%s htmlStr:\n\n%@", __FUNCTION__, [htmlStr substringToIndex:MIN(500,[htmlStr length])]);
 #endif
     
-    if ([self.htmlStr isEqualToString:@"Interactions"])
+    if ([htmlStr length] == 0) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            // The iPad always shows part of this page on the right of the screen.
+            // Without this workaround the initial empty page will stay white even in dark mode.
+            // Ideally the WKWebkit should do this by itself. To be checked in future SDK releases.
+            self.htmlStr = @"<html><head><meta name=\"supported-color-schemes\" content=\"light dark\" /></head><body></body></html>";
+        }
+        else
+            return; // iPhone
+    }
+    else if ([htmlStr isEqualToString:@"Interactions"])
         [self updateInteractionBasketView];
 
     NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
