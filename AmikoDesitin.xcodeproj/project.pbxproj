@@ -68,8 +68,6 @@
 		D533DAAE17B435E300199C38 /* desitin_icon_72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAD17B435E300199C38 /* desitin_icon_72x72.png */; };
 		D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */; };
 		D53E027017C7C09B00CC29E3 /* amiko_report_de.html in Resources */ = {isa = PBXBuildFile; fileRef = D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */; };
-		D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */ = {isa = PBXBuildFile; fileRef = D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */; };
-		D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */ = {isa = PBXBuildFile; fileRef = D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */; };
 		D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53817F22A58000EC52A /* desitin_icon_76x76.png */; };
 		D551D53C17F22A58000EC52A /* desitin_icon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53817F22A58000EC52A /* desitin_icon_76x76.png */; };
 		D551D53D17F22A58000EC52A /* desitin_icon_152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = D551D53917F22A58000EC52A /* desitin_icon_152x152.png */; };
@@ -337,7 +335,6 @@
 		D533DAAD17B435E300199C38 /* desitin_icon_72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_72x72.png; sourceTree = "<group>"; };
 		D533DAAF17B4362600199C38 /* desitin_icon_144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_144x144.png; sourceTree = "<group>"; };
 		D53E026F17C7C09B00CC29E3 /* amiko_report_de.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = amiko_report_de.html; sourceTree = "<group>"; };
-		D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_launch_default.png; sourceTree = "<group>"; };
 		D53F93801D9D150000086E91 /* desitin_icon_32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = desitin_icon_32x32.png; path = AmikoDesitin/desitin_icon_32x32.png; sourceTree = "<group>"; };
 		D551D53617F16DE2000EC52A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AmiKoDesitin/Images.xcassets; sourceTree = "<group>"; };
 		D551D53817F22A58000EC52A /* desitin_icon_76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = desitin_icon_76x76.png; sourceTree = "<group>"; };
@@ -862,7 +859,6 @@
 		D5A6F26017B169B000EAB24B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				D53F3D5D1BDD618400BB63ED /* desitin_launch_default.png */,
 				D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */,
 				D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */,
 				D52A0D6917ECC1D6003BF272 /* ComedDesitin-568h@2x.png */,
@@ -1166,7 +1162,6 @@
 				FA4511B5204ECAFD00899A77 /* DoctorViewController.xib in Resources */,
 				D533DAA417B4229D00199C38 /* MLSearchWebView.js in Resources */,
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
-				D53F3D5E1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5A225181945FC880078FEFF /* 938-connections.png in Resources */,
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
 				FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */,
@@ -1242,7 +1237,6 @@
 			files = (
 				D5990A721BDF42F40040C4C2 /* MLLaunchScreen.storyboard in Resources */,
 				FAF85BF722F44C1C00730690 /* main_callbacks.js in Resources */,
-				D53F3D5F1BDD618400BB63ED /* desitin_launch_default.png in Resources */,
 				D5F6BB6417E8C87500DCBD16 /* InfoPlist.strings in Resources */,
 				D551D54017F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				932F8840206BDA4700B5A77E /* AmkListViewController.xib in Resources */,
