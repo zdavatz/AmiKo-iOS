@@ -60,7 +60,7 @@
                             </connections>
                         </barButtonItem>
                     </items>
-                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </toolbar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="41">
                     <rect key="frame" x="0.0" y="32" width="667" height="293"/>
@@ -86,7 +86,7 @@
                         <tabBarItem tag="2" title="Interactions" image="exclamationmark.triangle" catalog="system" id="JxN-5u-on8"/>
                         <tabBarItem tag="3" title="Prescriptions" image="square.and.pencil" catalog="system" id="Yye-ET-TME" userLabel="Presc"/>
                     </items>
-                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="selectedImageTintColor" name="mainTintColor"/>
                     <variation key="heightClass=regular">
                         <mask key="constraints">

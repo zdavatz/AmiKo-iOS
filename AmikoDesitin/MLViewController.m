@@ -99,8 +99,6 @@ static DatabaseTypes mUsedDatabase = DB_TYPE_NONE;
 static SearchStates mCurrentSearchState = SEARCH_TITLE;
 static NSString *mCurrentSearchKey = @"";
 
-static CGFloat searchFieldWidth = 320.0f;
-
 static BOOL mSearchInteractions = false;
 static BOOL mShowReport = false;
 
@@ -1338,9 +1336,12 @@ static BOOL mShowReport = false;
     [super viewDidLoad];
     
     // Do any additional setup after loading the view, typically from a nib.
-    
-    self.title = APP_NAME;
-    
+
+    // For the iPhone the title is shown on its own bar
+    // For iPhone it's hidden by the search bar, and if truncated it shows ugly ellipsis "..."
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        self.title = APP_NAME;
+
     // Setting color and font and whatever else of the navigation bar
     // was already done in MLAppDelegate `application:didFinishLaunchingWithOptions:`
 
@@ -1354,19 +1355,15 @@ static BOOL mShowReport = false;
     [logoButton addTarget:self
                    action:@selector(myShowMenuMethod:)
          forControlEvents:UIControlEventTouchUpInside];
-
-    if (@available(iOS 9, *)) {
-        [logoButton.widthAnchor constraintEqualToConstant:32.0f].active = YES;
-        [logoButton.heightAnchor constraintEqualToConstant:32.0f].active = YES;
-    }
+    [logoButton.widthAnchor constraintEqualToConstant:32.0f].active = YES;
+    [logoButton.heightAnchor constraintEqualToConstant:32.0f].active = YES;
     
     UIBarButtonItem *appIconItem = [[UIBarButtonItem alloc] initWithCustomView:logoButton];
     
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         self.navigationItem.leftBarButtonItem = appIconItem;
-
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+    }
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 #ifndef TWO_ITEMS_ON_LEFT_NAV_BAR
         // A single button on the left
         self.navigationItem.leftBarButtonItem = appIconItem;
@@ -1423,6 +1420,8 @@ static BOOL mShowReport = false;
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
+        CGFloat searchFieldWidth = [[UIScreen mainScreen] bounds].size.width - logoButton.frame.size.width - 40.0f;
+
         searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 44.0f)];
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         searchField.delegate = self;
