@@ -96,20 +96,26 @@ enum {
                 revealButtonItem, spacer, cancelItem, nil];
 #endif
     
-#if 1
     // Middle button
-    
-    CGRect frame = CGRectMake(0, 0, 28, 21);
-    UIButton* cameraButton = [[UIButton alloc] initWithFrame:frame];
-    [cameraButton setBackgroundImage:[UIImage systemImageNamed:@"camera.viewfinder"]
-                            forState:UIControlStateNormal];
-    //[cameraButton setTitleColor:MAIN_TINT_COLOR forState:UIControlStateNormal];
-    [cameraButton addTarget:self action:@selector(handleCameraButton:) forControlEvents:UIControlEventTouchDown];
-//    cameraButton.backgroundColor = [UIColor grayColor];
-    self.navigationItem.titleView = cameraButton;
-#endif
-    
+    {
+        UIButton* cameraButton = [UIButton new];
+        UIImageSymbolConfiguration *configuration =
+        [UIImageSymbolConfiguration configurationWithPointSize:24.0
+                                                        weight:UIImageSymbolWeightLight
+                                                         scale:UIImageSymbolScaleLarge];
+        UIImage *image = [UIImage systemImageNamed:@"camera.viewfinder"
+                                 withConfiguration:configuration];
+        [cameraButton setBackgroundImage:image
+                                forState:UIControlStateNormal];
+        [cameraButton addTarget:self
+                          action:@selector(handleCameraButton:)
+                forControlEvents:UIControlEventTouchDown];
+
+        self.navigationItem.titleView = cameraButton;
+    }
+
     // Right button(s)
+    {
 #if 1
     // First ensure the "right" is a ContactsListViewController
     id aTarget = self;
@@ -140,6 +146,7 @@ enum {
     self.navigationItem.rightBarButtonItems =
     [NSArray arrayWithObjects:rightRevealButtonItem, spacer, saveItem, nil];
 #endif
+    }
     
 #ifdef DEBUG
     //self.navigationItem.prompt = @"Patient Edit";
