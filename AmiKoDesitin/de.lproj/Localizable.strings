@@ -89,7 +89,7 @@
 "%@ has already been imported" = "%@ wurde bereits importiert.";
 
 /* No comment provided by engineer. */
-"Hit" = "Treffer";
+"Hits" = "Treffer";
 
 /* No comment provided by engineer. */
 "If no interactions are displayed, no interactions known" = "Werden keine Interaktionen angezeigt, sind z.Z. keine Interaktionen bekannt";

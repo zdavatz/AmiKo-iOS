@@ -1577,7 +1577,7 @@ static BOOL mShowReport = false;
     secondViewController = [[MLSecondViewController alloc] initWithNibName:@"MLSecondViewController"
                                                                     bundle:nil
                                                                      title:@"About"
-                                                                  andParam:1];
+                                                                  andParam:1]; // numRevealButtons
     
     {
         UIFont *font = [UIFont fontWithName:@"Arial" size:14];
@@ -1758,7 +1758,7 @@ static BOOL mShowReport = false;
                             [self.searchField resignFirstResponder];
                             [self.myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms",
                                                        (unsigned long)[self->searchResults count],
-                                                       NSLocalizedString(@"Hit",nil),
+                                                       NSLocalizedString(@"Hits",nil),
                                                        self->timeForSearch_ms]];
                             inProgress = false;
                         });
@@ -1797,7 +1797,7 @@ static BOOL mShowReport = false;
                         [scopeSelf updateTableView];
                         [self.myTableView reloadData];
                         // [searchField resignFirstResponder];
-                        [self.myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[self->searchResults count], NSLocalizedString(@"Hit",nil), self->timeForSearch_ms]];
+                        [self.myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms", (unsigned long)[self->searchResults count], NSLocalizedString(@"Hits",nil), self->timeForSearch_ms]];
                         inProgress = false;
                     });
                     //}
@@ -1919,7 +1919,7 @@ static BOOL mShowReport = false;
                 [self->myTableView reloadData];
                 [self->myTextField setText:[NSString stringWithFormat:@"%ld %@ in %dms",
                                             (unsigned long)[self->searchResults count],
-                                            NSLocalizedString(@"Hit", nil),
+                                            NSLocalizedString(@"Hits", nil),
                                             self->timeForSearch_ms]];
                 @synchronized(self) {
                     inProgress = false;
@@ -2122,7 +2122,7 @@ static BOOL mShowReport = false;
     else
         m.title = NSLocalizedString(@"Not specified", nil);
     
-    m.subTitle = [NSString stringWithFormat:@"%ld Treffer", numHits];  // TODO: localize
+    m.subTitle = [NSString stringWithFormat:@"%ld %@", numHits, NSLocalizedString(@"Hits", nil)];
     m.hashId = hash;
     
     [medi addObject:m];

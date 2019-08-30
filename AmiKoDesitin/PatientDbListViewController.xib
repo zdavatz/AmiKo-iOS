@@ -38,6 +38,7 @@
                     </connections>
                 </searchBar>
             </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="2Il-9N-CM5" firstAttribute="trailing" secondItem="CoF-Jb-cs2" secondAttribute="trailing" id="JAt-QO-rMN"/>
