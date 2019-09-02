@@ -54,8 +54,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 @implementation MLSecondViewController
 {
     int mNumRevealButtons;
-    int mTotalHighlights;
-    int mCurrentHightlight;
+    int mTotalHighlightCount;
+    int mCurrentHightlightIndex;
     float mFramePosA;
     float mFramePosB;
     FindPanelVisibility mIsFindPanelVisible;
@@ -130,38 +130,39 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 
 - (IBAction) moveToPrevHighlight:(id)sender
 {
-#ifdef DEBUG
-    NSLog(@"%s line %d, mTotalHighlights: %d, mCurrentHightlight: %d", __FUNCTION__, __LINE__,
-          mTotalHighlights, mCurrentHightlight);
-#endif
-    if (mTotalHighlights <= 1)
+    if (mTotalHighlightCount <= 1)
         return;
 
-    mCurrentHightlight--;
-    if (mCurrentHightlight < 0)
-        mCurrentHightlight = mTotalHighlights-1;
+    mCurrentHightlightIndex--;
+    if (mCurrentHightlightIndex < 0)
+        mCurrentHightlightIndex = mTotalHighlightCount-1;
 
-    [self.webView nextHighlight:mCurrentHightlight];
-    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+#ifdef DEBUG
+    NSLog(@"%s line %d, highlight index: %d of %d", __FUNCTION__, __LINE__,
+          mCurrentHightlightIndex, mTotalHighlightCount);
+#endif
+
+    [self.webView nextHighlight:(mTotalHighlightCount-mCurrentHightlightIndex-1)];
+    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
 }
 
 - (IBAction) moveToNextHighlight:(id)sender
 {
-#ifdef DEBUG
-    NSLog(@"%s line %d, mTotalHighlights: %d, mCurrentHightlight: %d", __FUNCTION__, __LINE__,
-          mTotalHighlights, mCurrentHightlight);
-#endif
-    if (mTotalHighlights <= 1) {
+    if (mTotalHighlightCount <= 1) {
         // TODO: make sure findPanel is hidden
         return;
     }
 
-    mCurrentHightlight++;
-    if (mCurrentHightlight >= mTotalHighlights)
-        mCurrentHightlight = 0;
+    mCurrentHightlightIndex++;
+    if (mCurrentHightlightIndex >= mTotalHighlightCount)
+        mCurrentHightlightIndex = 0;
 
-    [self.webView nextHighlight:mCurrentHightlight];
-    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+#ifdef DEBUG
+    NSLog(@"%s line %d, highlight: %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
+#endif
+
+    [self.webView nextHighlight:(mTotalHighlightCount-mCurrentHightlightIndex-1)];
+    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
 }
 
 - (void) resetSearchField
@@ -267,10 +268,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
             
             // For iPhones add findCounter manually
 #ifdef DEBUG
-            NSLog(@"%s %d, mCurrentHightlight: %d/%d", __FUNCTION__, __LINE__, mCurrentHightlight, mTotalHighlights);
+            NSLog(@"%s %d, hightlight index %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
 #endif
             self.findCounter = [self findCounterAtPos:250.0 andSize:32.0];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
             [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
@@ -291,10 +292,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
             
             // For iPhones add findCounter manually
 #ifdef DEBUG
-            NSLog(@"%s %d, mCurrentHightlight: %d/%d", __FUNCTION__, __LINE__, mCurrentHightlight, mTotalHighlights);
+            NSLog(@"%s %d, hightlight index %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
 #endif
             self.findCounter = [self findCounterAtPos:200.0 andSize:44.0];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
             [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
@@ -498,8 +499,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
             
             // For iPhones add findCounter manually
             self.findCounter = [self findCounterAtPos:250.0 andSize:32.0];
-            if (mTotalHighlights>0)
-                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+            if (mTotalHighlightCount>0)
+                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
             [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
@@ -521,8 +522,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
             
             // For iPhones add findCounter manually
             self.findCounter = [self findCounterAtPos:200.0 andSize:44.0];
-            if (mTotalHighlights>0)
-                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+            if (mTotalHighlightCount>0)
+                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
              [searchBarView addSubview:self.findCounter];
             
             self.navigationItem.titleView = searchBarView;
@@ -940,15 +941,15 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     mCurrentSearch = searchText;
     
     if ([searchText length] > 2) {
-        mTotalHighlights = (int)[self.webView highlightAllOccurencesOfString:searchText];
+        mTotalHighlightCount = (int)[self.webView highlightAllOccurencesOfString:searchText];
 #ifdef DEBUG
-        NSLog(@"%s line %d, mTotalHighlights: %d, mCurrentHightlight: %d", __FUNCTION__, __LINE__, mTotalHighlights, mCurrentHightlight);
+        NSLog(@"%s line %d, highlight index: %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
 #endif
-        mCurrentHightlight = 0;
-        if (mTotalHighlights>1) {
-            [self.webView nextHighlight:mTotalHighlights-1];
+        mCurrentHightlightIndex = 0;
+        if (mTotalHighlightCount>1) {
+            [self.webView nextHighlight:mTotalHighlightCount-1];
             [self showFindPanel:FIND_PANEL_VISIBLE];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
         }
         else {
             [self showFindPanel:FIND_PANEL_INVISIBLE];
@@ -956,7 +957,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     }
     else {
         [self.webView removeAllHighlights];
-        mTotalHighlights = 0;
+        mTotalHighlightCount = 0;
         [self showFindPanel:FIND_PANEL_INVISIBLE];
     }
 }
@@ -1071,14 +1072,14 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 #endif
 
     if ([keyword length] > 0) {
-        mTotalHighlights = (int)[self.webView highlightAllOccurencesOfString:keyword];
+        mTotalHighlightCount = (int)[self.webView highlightAllOccurencesOfString:keyword];
 
         [self showFindPanel:FIND_PANEL_VISIBLE];
         
 #ifdef DEBUG
-        NSLog(@"%s line %d, mTotalHighlights: %d", __FUNCTION__, __LINE__, mTotalHighlights);
+        NSLog(@"%s line %d, highlight count: %d", __FUNCTION__, __LINE__, mTotalHighlightCount);
 #endif
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlight+1, mTotalHighlights]];
+        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
         // TBC: as a result highlightAllOccurencesOfString is called again ?
     }
     else {
