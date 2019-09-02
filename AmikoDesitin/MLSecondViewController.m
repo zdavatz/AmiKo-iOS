@@ -169,10 +169,12 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #ifdef DEBUG
     NSLog(@"%s line %d, mCurrentSearch: <%@>", __FUNCTION__, __LINE__, mCurrentSearch);
 #endif
-    if (mCurrentSearch)
+    if ([mCurrentSearch length] > 0)
         [searchField setText:mCurrentSearch];
-    else
+    else {
         [searchField setText:@""];
+        // Note: 'keyword' must be preserved, don't clear it here
+    }
     
     if ([self.htmlStr isEqualToString:@"Interactions"])
         [searchField setPlaceholder:[NSString stringWithFormat:NSLocalizedString(@"Search in interactions", nil)]];

@@ -44,7 +44,7 @@
     if (self.htmlStr) {
         NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
 #ifdef DEBUG
-        NSLog(@"%s, mainBundleURL: %@", __FUNCTION__, mainBundleURL);
+        //NSLog(@"%s, mainBundleURL: %@", __FUNCTION__, mainBundleURL);
 #endif
         // Loads HTML directly into webview
         [self.webView loadHTMLString:self.htmlStr
@@ -55,8 +55,7 @@
     //[self createJSBridge];
     
 #ifdef DEBUG
-    NSLog(@"%s %d, gestureRecognizers:%ld %@", __FUNCTION__, __LINE__,
-          [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
+    //NSLog(@"%s %d, gestureRecognizers:%ld %@", __FUNCTION__, __LINE__, [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
 #endif
 
     // Make sure we have a reveal gesture recognizer (only for "front" controllers)

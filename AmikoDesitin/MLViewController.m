@@ -99,8 +99,8 @@ static DatabaseTypes mUsedDatabase = DB_TYPE_NONE;
 static SearchStates mCurrentSearchState = SEARCH_TITLE;
 static NSString *mCurrentSearchKey = @"";
 
-static BOOL mSearchInteractions = false;
-static BOOL mShowReport = false;
+static BOOL flagSearchInteractions = false;
+static BOOL flagShowReport = false;
 
 #pragma mark -
 
@@ -363,11 +363,19 @@ static BOOL mShowReport = false;
           prevState,
           mCurrentSearchState);
 #endif
+    
+    if (prevState == mCurrentSearchState) {
+#ifdef DEBUG
+        NSLog(@"%s %d, state: %ld already selected", __FUNCTION__, __LINE__, mCurrentSearchState);
+#endif
+        return;
+    }
 
     // See 'updateSearchResults' in AmiKo-macOS
     if (prevState == SEARCH_FULL_TEXT || mCurrentSearchState == SEARCH_FULL_TEXT) {
         switch (mUsedDatabase) {
             case DB_TYPE_AIPS:
+                mFullTextEntry.keyword = @"";
                 searchResults = [self searchDatabaseWith:mCurrentSearchKey];
                 break;
 
@@ -489,7 +497,7 @@ static BOOL mShowReport = false;
             goBackToMainView = true;
             mUsedDatabase = DB_TYPE_AIPS;
             mCurrentSearchState = SEARCH_TITLE;
-            mSearchInteractions = false;
+            flagSearchInteractions = false;
             mCurrentIndexPath = nil;
             [self resetBarButtonItems];
             [self clearDataInTableView];
@@ -501,7 +509,7 @@ static BOOL mShowReport = false;
             goBackToMainView = true;
             mUsedDatabase = DB_TYPE_FAVORITES;
             mCurrentSearchState = SEARCH_TITLE;
-            mSearchInteractions = false;
+            flagSearchInteractions = false;
             // The following programmatical call takes care of everything...
             [self switchTabBarItem:[myTabBar.items objectAtIndex:1]];
             //
@@ -512,7 +520,7 @@ static BOOL mShowReport = false;
             goBackToMainView = true;
             mUsedDatabase = DB_TYPE_AIPS;
             mCurrentSearchState = SEARCH_TITLE;
-            mSearchInteractions = true;
+            flagSearchInteractions = true;
             [self resetBarButtonItems];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
@@ -522,7 +530,7 @@ static BOOL mShowReport = false;
             goBackToMainView = true;
             mUsedDatabase = DB_TYPE_AIPS;
             mCurrentSearchState = SEARCH_AUTHOR;
-            mSearchInteractions = false;
+            flagSearchInteractions = false;
             [self executeSearch:@"desitin"];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
@@ -531,7 +539,7 @@ static BOOL mShowReport = false;
             
         case ePrescription:
             goBackToMainView = true;
-            mSearchInteractions = false;
+            flagSearchInteractions = false;
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:3]];
             break;
             
@@ -1249,7 +1257,7 @@ static BOOL mShowReport = false;
         }
     }
     
-    if (!mSearchInteractions) {
+    if (!flagSearchInteractions) {
         if (mUsedDatabase == DB_TYPE_AIPS)
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
         else if (mUsedDatabase == DB_TYPE_FAVORITES)
@@ -1564,9 +1572,9 @@ static BOOL mShowReport = false;
     mainRevealController = self.revealViewController;
     mainRevealController.rightViewController = nil;
 
-    if (!mShowReport) {
+    if (!flagShowReport) {
         [self invalidateObserver];
-        mShowReport = true;
+        flagShowReport = true;
     }
     if (secondViewController!=nil) {
         // [secondViewController removeFromParentViewController];
@@ -1720,9 +1728,9 @@ static BOOL mShowReport = false;
 #ifdef DEBUG
             NSLog(@"TabBar - Aips Database");
 #endif
-            if (mUsedDatabase==DB_TYPE_FAVORITES || mSearchInteractions==true) {
+            if (mUsedDatabase==DB_TYPE_FAVORITES || flagSearchInteractions) {
                 mUsedDatabase = DB_TYPE_AIPS;
-                mSearchInteractions = false;
+                flagSearchInteractions = false;
                 mCurrentIndexPath = nil;
                 [self stopActivityIndicator];
                 [self clearDataInTableView];
@@ -1774,7 +1782,7 @@ static BOOL mShowReport = false;
             NSLog(@"TabBar - Favorite Database");
 #endif
             mUsedDatabase = DB_TYPE_FAVORITES;
-            mSearchInteractions = false;
+            flagSearchInteractions = false;
             mCurrentIndexPath = nil;
             // Reset searchfield
             //mUsedDatabase = DB_TYPE_AIPS;
@@ -1810,7 +1818,7 @@ static BOOL mShowReport = false;
             NSLog(@"TabBar - Interactions");
 #endif
             mUsedDatabase = DB_TYPE_AIPS;
-            mSearchInteractions = true;
+            flagSearchInteractions = true;
             [self stopActivityIndicator];
             [self setBarButtonItemsWith:SEARCH_TITLE];
             // Switch view
@@ -1823,7 +1831,7 @@ static BOOL mShowReport = false;
 #endif
             mUsedDatabase = DB_TYPE_AIPS; // tabbar in rear view selects AIPS
             //mUsedDatabase = DB_TYPE_PRESCRIPTION;
-            mSearchInteractions = false;
+            flagSearchInteractions = false;
             {
                 MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
                 appDel.editMode = EDIT_MODE_PRESCRIPTION;
@@ -2319,7 +2327,7 @@ static BOOL mShowReport = false;
 - (void) switchToAipsView :(long int)mId
 {
 #ifdef DEBUG
-    NSLog(@"%s, mId: %ld", __FUNCTION__, mId);
+    NSLog(@"%s, mId: %ld, flagSearchInteractions: %d", __FUNCTION__, mId, flagSearchInteractions);
 #endif
     if (secondViewController != nil) {
         // [secondViewController removeFromParentViewController];
@@ -2332,7 +2340,7 @@ static BOOL mShowReport = false;
                                               title:NSLocalizedString(@"Prescription Info", nil)//FACHINFO_STRING
                                            andParam:2]; // numRevealButtons
     
-    if (!mSearchInteractions) {
+    if (!flagSearchInteractions) {
         {
             NSString *color_Style =
                 [NSString stringWithFormat:@"<style type=\"text/css\">%@</style>", [MLUtility getColorCss]];
@@ -2454,6 +2462,7 @@ static BOOL mShowReport = false;
         }
     }
     else {
+        // Not Interactions
         if (mId > -1) {
             [self pushToMedBasket];
             
@@ -2511,12 +2520,12 @@ static BOOL mShowReport = false;
 {
     mainRevealController = self.revealViewController;
 
-    mShowReport = false;
+    flagShowReport = false;
     
     [mMedBasket removeAllObjects];
     mMedBasket = medBasket; // Save the basket so we can keep adding medicines to the interactions later on
 
-    mSearchInteractions = true;
+    flagSearchInteractions = true;
     
     // Right
 #if 1
@@ -2743,7 +2752,7 @@ static BOOL mShowReport = false;
     mMed = [mDb getMediWithRegnr:message[@"EanCode"]];
 
     fullTextMessage = message;
-    mSearchInteractions = false;
+    flagSearchInteractions = false;
     [self switchToAipsView:-1];
 }
 
@@ -2955,6 +2964,15 @@ static BOOL mShowReport = false;
 #endif
     mCurrentIndexPath = indexPath;
     
+#ifdef DEBUG
+    UIViewController *nc_front = self.revealViewController.frontViewController;
+    UIViewController *vc_front = [nc_front.childViewControllers firstObject];
+    if ([vc_front isKindOfClass:[MLSecondViewController class]]) {
+        MLSecondViewController *svc = (MLSecondViewController *)vc_front;
+        NSLog(@"%s %d, Verify keyword <%@>", __FUNCTION__, __LINE__, svc.keyword);
+    }
+#endif
+    
     if (mCurrentSearchState != SEARCH_FULL_TEXT) {
         /* Search in Aips DB or Interactions DB
          */
@@ -2965,11 +2983,11 @@ static BOOL mShowReport = false;
             mMed = [mDb searchId:mId];
         }
         
-        if (!mShowReport) {
+        if (!flagShowReport) {
             [self invalidateObserver];
         }
         
-        mShowReport = false;
+        flagShowReport = false;
         [self switchToAipsView:mId];
     }
     else {

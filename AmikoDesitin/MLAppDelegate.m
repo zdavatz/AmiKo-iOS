@@ -169,6 +169,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
           NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject,
           bundleIdentifier);
     NSLog(@"Tesseract version %@", [G8Tesseract version]);
+    //NSLog(@"current device model %@", [UIDevice currentDevice].model );
 #endif
     
     // Retrieve app related information

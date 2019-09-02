@@ -47,24 +47,41 @@
     }];
     
     // Call Javascript function
+    dispatch_semaphore_t sema1 = dispatch_semaphore_create(0);
     NSString *startSearch = [NSString stringWithFormat:@"MyApp_HighlightAllOccurencesOfString('%@')", str];
     [self evaluateJavaScript:startSearch
            completionHandler:^(NSString* result, NSError *error) {
         if (error)
             NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
+        
+        // This is NOT the main thread
+        dispatch_semaphore_signal(sema1);
     }];
     
+    // This is the main thread: cannot use DISPATCH_TIME_FOREVER
+    while (dispatch_semaphore_wait(sema1, DISPATCH_TIME_NOW)) {  //  zero on success, or non-zero if the timeout occurred
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]]; }
+    
     // Access variable defined in Javascript code
-    __block NSString *result;
+    __block NSString *result = @"0";
+    dispatch_semaphore_t sema2 = dispatch_semaphore_create(0);
     [self evaluateJavaScript:@"MyApp_SearchResultCount"
-                              completionHandler:^(NSString* myResult, NSError *error) {
+           completionHandler:^(NSString* myResult, NSError *error) {
         if (error)
             NSLog(@"%s line %d, %@", __FUNCTION__, __LINE__, error.localizedDescription);
         else
             result = myResult;
+
+        // This is NOT the main thread
+        dispatch_semaphore_signal(sema2);
     }];
-       
-    // Return
+
+    // This is the main thread: cannot use DISPATCH_TIME_FOREVER
+    while (dispatch_semaphore_wait(sema2, DISPATCH_TIME_NOW)) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]]; }
+
     return [result integerValue];
 }
 
