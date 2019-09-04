@@ -63,10 +63,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     NSString *mCurrentSearch;
 }
 
-@synthesize searchField;
 @synthesize webView;
-@synthesize findCounter;
-@synthesize findPanel;
+@synthesize searchBarView, searchField;
+@synthesize findPanel, findCounter;
 @synthesize htmlStr;
 @synthesize medBasket;
 @synthesize titleViewController;
@@ -79,8 +78,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     NSLog(@"%s", __FUNCTION__);
 #endif
 
-    htmlAnchor = nil;    
-    searchField = nil;
+    htmlAnchor = nil;
     htmlStr = nil;
     medBasket = nil;
     
@@ -143,7 +141,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #endif
 
     [self.webView nextHighlight:(mTotalHighlightCount-mCurrentHightlightIndex-1)];
-    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
+    [self updateFindCounterLabel];
 }
 
 - (IBAction) moveToNextHighlight:(id)sender
@@ -162,7 +160,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #endif
 
     [self.webView nextHighlight:(mTotalHighlightCount-mCurrentHightlightIndex-1)];
-    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
+    [self updateFindCounterLabel];
 }
 
 - (void) resetSearchField
@@ -186,16 +184,19 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         [searchField setPlaceholder:NSLocalizedString(@"Search in report", nil)];
 }
 
-/** 
- Creates find counter label which is located in the searchfield
- */
-- (UILabel *) findCounterAtPos:(float)x andSize:(float)size
+- (void) updateFindCounterLabel
 {
-    UILabel *findCnt = [[UILabel alloc] initWithFrame:CGRectMake(x, 0.0, 60.0, size)];
-    findCnt.font = [UIFont systemFontOfSize:14];
-    findCnt.textColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0];
-  
-    return findCnt;
+    if (mTotalHighlightCount <= 0) {
+        [self.findCounter setText:@""];
+        return;
+    }
+
+#ifdef DEBUG
+    //NSLog(@"%s %d, highlight index %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
+#endif
+
+    [self.findCounter setText:[NSString stringWithFormat:@"%d/%d",
+                               mCurrentHightlightIndex+1, mTotalHighlightCount]];
 }
 
 /**
@@ -248,68 +249,25 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         }
 
         self.edgesForExtendedLayout = UIRectEdgeNone;
-#if 0 // @@@
-        searchField.barTintColor = [UIColor systemGray3Color];
-#endif
-        searchField.translucent = YES;
-    } // iPad
+    }
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
-            // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
-            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
-            searchBarView.autoresizingMask = 0;
-            self.searchField.delegate = self;
-            [searchBarView addSubview:searchField];
-            
-            // For iPhones add findCounter manually
-#ifdef DEBUG
-            NSLog(@"%s %d, hightlight index %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
-#endif
-            self.findCounter = [self findCounterAtPos:250.0 andSize:32.0];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
-            [searchBarView addSubview:self.findCounter];
-            
-            self.navigationItem.titleView = searchBarView;
-            //
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
 
             [[UIApplication sharedApplication] setStatusBarHidden:YES
                                                     withAnimation:UIStatusBarAnimationSlide];
         }
         else {
-            // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-            searchBarView.autoresizingMask = 0;
-            self.searchField.delegate = self;
-            [searchBarView addSubview:searchField];
-            
-            // For iPhones add findCounter manually
-#ifdef DEBUG
-            NSLog(@"%s %d, hightlight index %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
-#endif
-            self.findCounter = [self findCounterAtPos:200.0 andSize:44.0];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
-            [searchBarView addSubview:self.findCounter];
-            
-            self.navigationItem.titleView = searchBarView;
-            //
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
         }
 
+        [self updateFindCounterLabel];
+        self.navigationItem.titleView = searchBarView;
         self.edgesForExtendedLayout = UIRectEdgeNone;
-#if 0 // @@@
-        searchField.barTintColor = [UIColor clearColor]; //[UIColor colorWithWhite:0.9 alpha:0.0];
-#endif
-        searchField.backgroundImage = [UIImage new];
-        searchField.translucent = YES;
     } // iPhone
     
     mCurrentSearch = @"";
@@ -337,7 +295,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     self.findPanel.layer.cornerRadius = 6.0f;
     
     [self.findPanel setHidden:YES];
-    [self.findCounter setHidden:YES];
+    //[self.findCounter setHidden:YES];
     
     mFramePosA = self.findPanel.frame.origin.y;
     mFramePosB = self.findPanel.frame.origin.y - 200;
@@ -394,34 +352,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     // [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-#if 0 // @@@
-        searchField.barTintColor = [UIColor systemGray3Color];
-        searchField.backgroundColor = [UIColor clearColor];
-#endif
         searchField.translucent = YES;
     }
-
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        // Add search bar as title view to navigation bar
-        searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-        searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        searchField.barStyle = UIBarStyleDefault;
-#if 0 // @@@
-        searchField.barTintColor = [UIColor clearColor];
-#endif
-        searchField.backgroundImage = [UIImage new];
-#if 0 // @@@
-        searchField.backgroundColor = [UIColor clearColor];
-        searchField.tintColor = [UIColor systemGray3Color];    // cursor color
-#endif
-        searchField.translucent = YES;
-        searchField.delegate = self;
-        
-        UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-        // searchBarView.autoresizingMask = 0;
-        [searchBarView addSubview:searchField];
-        
-        self.navigationItem.titleView = searchBarView;
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        //self.navigationItem.titleView = searchBarView;
     }
     
     [self.view addGestureRecognizer:revealController.panGestureRecognizer];
@@ -471,6 +405,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 - (void) willRotateToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation
                                  duration: (NSTimeInterval)duration
 {
+#ifdef DEBUG
+    //NSLog(@"%s %d, next orientation: %ld", __FUNCTION__, __LINE__, (long)toInterfaceOrientation);
+#endif
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -478,33 +415,15 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         else
             self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
         
-#if 0 // @@@
-        searchField.barTintColor = [UIColor systemGray3Color];
-        searchField.backgroundColor = [UIColor clearColor];
-#endif
         searchField.translucent = YES;
     }
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        //[self updateFindCounterLabel];  // the count didn't change just by changing orientation
+
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
         {
-            // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
-            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 32.0)];
-            searchBarView.autoresizingMask = 0;
-            self.searchField.delegate = self;
-            [searchBarView addSubview:self.searchField];
-            
-            // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:250.0 andSize:32.0];
-            if (mTotalHighlightCount>0)
-                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
-            [searchBarView addSubview:self.findCounter];
-            
-            self.navigationItem.titleView = searchBarView;
-            //            
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
 
@@ -512,41 +431,12 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                                                     withAnimation:UIStatusBarAnimationSlide];
         }
         else {
-            // Add search bar as title view to navigation bar
-            self.searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-            self.searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 44.0)];
-            searchBarView.autoresizingMask = 0;
-            self.searchField.delegate = self;
-            [searchBarView addSubview:self.searchField];
-            
-            // For iPhones add findCounter manually
-            self.findCounter = [self findCounterAtPos:200.0 andSize:44.0];
-            if (mTotalHighlightCount>0)
-                [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
-             [searchBarView addSubview:self.findCounter];
-            
-            self.navigationItem.titleView = searchBarView;
-            //
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
 
             // Shows status bar
             [[UIApplication sharedApplication] setStatusBarHidden:NO
                                                     withAnimation:UIStatusBarAnimationSlide];
         }
-
-        // Sets colors in toolbar and searchfield - modify with care!
-        searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        searchField.barStyle = UIBarStyleDefault;
-#if 0 // @@@
-        searchField.barTintColor = [UIColor clearColor];
-#endif
-        searchField.backgroundImage = [UIImage new];
-#if 0 // @@@
-        searchField.backgroundColor = [UIColor clearColor];
-        searchField.tintColor = [UIColor systemGray3Color];    // cursor color
-#endif
-        searchField.translucent = YES;
     }
 
     [self resetSearchField];
@@ -946,10 +836,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         NSLog(@"%s line %d, highlight index: %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
 #endif
         mCurrentHightlightIndex = 0;
-        if (mTotalHighlightCount>1) {
+        if (mTotalHighlightCount > 1) {
             [self.webView nextHighlight:mTotalHighlightCount-1];
             [self showFindPanel:FIND_PANEL_VISIBLE];
-            [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
+            [self updateFindCounterLabel];
         }
         else {
             [self showFindPanel:FIND_PANEL_INVISIBLE];
@@ -1004,10 +894,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 
     if (visible == FIND_PANEL_VISIBLE) {
         [self.findPanel setHidden:NO];
-        [self.findCounter setHidden:NO];
+        //[self.findCounter setHidden:NO]; 
     }
     else {
-        [self.findCounter setHidden:YES];
+        //[self.findCounter setHidden:YES];
     }
 }
 
@@ -1079,7 +969,7 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 #ifdef DEBUG
         NSLog(@"%s line %d, highlight count: %d", __FUNCTION__, __LINE__, mTotalHighlightCount);
 #endif
-        [self.findCounter setText:[NSString stringWithFormat:@"%d/%d", mCurrentHightlightIndex+1, mTotalHighlightCount]];
+        [self updateFindCounterLabel];
         // TBC: as a result highlightAllOccurencesOfString is called again ?
     }
     else {

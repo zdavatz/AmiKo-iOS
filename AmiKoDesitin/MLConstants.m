@@ -81,7 +81,7 @@ const int RearViewRevealWidth_Landscape_iPhone = 420;           // 420 + 60 = 48
 const int RearViewRevealWidth_Landscape_iPhone_Retina = 508;    // 508 + 60 = 568 x 2 = 1136
 const int RearViewRevealOverdraw_Landscape_iPhone_Retina = 60;
 
-/** Width and heigh in points (units)
+/** Width and height in points (units)
  */
 static int WidthInPoints;
 static int HeightInPoints;

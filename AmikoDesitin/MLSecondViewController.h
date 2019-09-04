@@ -32,19 +32,19 @@
 
 @interface MLSecondViewController : UIViewController <UISearchBarDelegate, WKUIDelegate, WKNavigationDelegate, MFMailComposeViewControllerDelegate>
 {
-    UISearchBar *searchField;
     WKWebView *webView;
-    UILabel *findCounter;
-    UIView *findPanel;
     NSString *htmlStr;
     NSString *htmlAnchor;
 }
 
 // Note: "strong" is a replacement for retain, it comes with ARC
+@property (nonatomic, retain) IBOutlet UIView *searchBarView;
 @property (nonatomic, retain) IBOutlet UISearchBar *searchField;
-@property (nonatomic, retain) IBOutlet WKWebView *webView;
-@property (nonatomic, retain) IBOutlet UILabel *findCounter;
+
 @property (nonatomic, retain) IBOutlet UIView *findPanel;
+@property (nonatomic, retain) IBOutlet UILabel *findCounter;
+
+@property (nonatomic, retain) IBOutlet WKWebView *webView;
 @property (nonatomic, copy) NSString *htmlStr;
 @property (nonatomic, weak) MLDBAdapter *dbAdapter;
 @property (nonatomic, strong) NSMutableDictionary *medBasket;   // important: strong
