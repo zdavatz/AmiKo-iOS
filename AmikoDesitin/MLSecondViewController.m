@@ -56,9 +56,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     int mNumRevealButtons;
     int mTotalHighlightCount;
     int mCurrentHightlightIndex;
-    float mFramePosA;
-    float mFramePosB;
-    FindPanelVisibility mIsFindPanelVisible;
+    float frameY_Visible;
+    float frameY_Invisible;
+    FindPanelVisibility wasVisible;
     NSString *mTitle;
     NSString *mCurrentSearch;
 }
@@ -105,15 +105,19 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     mNumRevealButtons = numRevealButtons;
     mTitle = title;
     
-    mIsFindPanelVisible = FIND_PANEL_UNDEFINED;
+    wasVisible = FIND_PANEL_UNDEFINED;
     
     return self;
 }
 
+// It doesn't seem to get called
 - (instancetype) initWithNibName: (NSString *)nibNameOrNil
                           bundle: (NSBundle *)nibBundleOrNil
                       withString: (NSString *)html
 {
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
     self = [super init];
 
     mCurrentSearch = @"";
@@ -270,6 +274,12 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     } // iPhone
     
+    frameY_Visible = findPanel.frame.origin.y;
+    frameY_Invisible = findPanel.frame.origin.y - 200;
+    self.findPanel.layer.cornerRadius = 6.0f;
+    wasVisible = FIND_PANEL_UNDEFINED;
+    [self showFindPanel:FIND_PANEL_INVISIBLE]; // position it off screen
+
     mCurrentSearch = @"";
     // Reset search field place holder
     [self resetSearchField];
@@ -291,14 +301,6 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [super viewDidAppear:animated];
     
     [self.webView reload];
-    
-    self.findPanel.layer.cornerRadius = 6.0f;
-    
-    [self.findPanel setHidden:YES];
-    //[self.findCounter setHidden:YES];
-    
-    mFramePosA = self.findPanel.frame.origin.y;
-    mFramePosB = self.findPanel.frame.origin.y - 200;
     
     if ([keyword length] > 0)
         [self.searchField setText:keyword];
@@ -852,31 +854,46 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     }
 }
 
+// Maybe the IB constraints on 'findPanel' force it to be at the visible Y
+// initially, even though it was moved off screen.
+// As a result the very first animation starts and ends at the same point.
 - (void) showFindPanel:(FindPanelVisibility)visible
 {
 #ifdef DEBUG
-    NSLog(@"%s line %d, visible: %ld, was %ld", __FUNCTION__, __LINE__,
-          (long)visible, (long)mIsFindPanelVisible);
+    NSLog(@"%s line %d, visible: %ld, was %ld, frame: %@", __FUNCTION__, __LINE__,
+          (long)visible, (long)wasVisible, NSStringFromCGRect(self.findPanel.frame));
 #endif
 
-    if ((visible == mIsFindPanelVisible) ||
-        (visible == FIND_PANEL_UNDEFINED)) {
+    if ((visible == wasVisible) ||
+        (visible == FIND_PANEL_UNDEFINED))
+    {
+        // Nothing to do
         return;
     }
+    
+    if (wasVisible == FIND_PANEL_UNDEFINED) {
+        // Don't show animations to show or hide from undefined state
+        [self.findPanel setHidden:YES];
+    }
+    else if (visible == FIND_PANEL_VISIBLE) {
+        // Make the panel visible before the un-hiding animation starts,
+        // otherwise we don't see the animation
+        [self.findPanel setHidden:NO];
+    }
 
-    mIsFindPanelVisible = visible;
+    wasVisible = visible;
     
     CGRect newFrame = self.findPanel.frame;
     
     if (visible == FIND_PANEL_VISIBLE) {
         // newFrame.origin.x = x - 200;
-        newFrame.origin.y = mFramePosA;
+        newFrame.origin.y = frameY_Visible;
     }
     else {
         // newFrame.origin.x = x + 200;
-        newFrame.origin.y = mFramePosB;
+        newFrame.origin.y = frameY_Invisible;
     }
-    
+
     [UIView animateWithDuration:0.5f
                           delay:0.0f
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -884,21 +901,11 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                          self.findPanel.frame = newFrame;
                      }
                      completion:^(BOOL finished){
-                         if (visible == FIND_PANEL_VISIBLE) {
-                             [self.findPanel setHidden:NO];
-                         }
-                         else {
-                             [self.findPanel setHidden:YES];
-                         }
+                        // Hide it when the animation is over
+                        if (visible == FIND_PANEL_INVISIBLE)
+                            [self.findPanel setHidden:YES];
                      }];
 
-    if (visible == FIND_PANEL_VISIBLE) {
-        [self.findPanel setHidden:NO];
-        //[self.findCounter setHidden:NO]; 
-    }
-    else {
-        //[self.findCounter setHidden:YES];
-    }
 }
 
 #pragma mark - WKNavigationDelegate methods
