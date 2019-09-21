@@ -30,6 +30,8 @@
 #import "MLDBAdapter.h"
 #import "MLTitleViewController.h"
 
+//#define WITH_ANIMATION
+
 @interface MLSecondViewController : UIViewController <UISearchBarDelegate, WKUIDelegate, WKNavigationDelegate, MFMailComposeViewControllerDelegate>
 {
     WKWebView *webView;
