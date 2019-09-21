@@ -44,13 +44,13 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 };
 
 #pragma mark - Class extension
-////////////////////////////////////////////////////////////////////////////////
+
 @interface MLSecondViewController ()
 @property WebViewJavascriptBridge *jsBridge;
 @end
 
 #pragma mark -
-////////////////////////////////////////////////////////////////////////////////
+
 @implementation MLSecondViewController
 {
     int mNumRevealButtons;
@@ -59,8 +59,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #ifdef WITH_ANIMATION
     float frameY_Visible;
     float frameY_Invisible;
-#endif
     FindPanelVisibility wasVisible;
+#endif
     NSString *mTitle;
     NSString *mCurrentSearch;
 }
@@ -107,7 +107,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     mNumRevealButtons = numRevealButtons;
     mTitle = title;
     
+#ifdef WITH_ANIMATION
     wasVisible = FIND_PANEL_UNDEFINED;
+#endif
     
     return self;
 }
@@ -279,9 +281,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 #ifdef WITH_ANIMATION
     frameY_Visible = findPanel.frame.origin.y;
     frameY_Invisible = findPanel.frame.origin.y - 200;
+    wasVisible = FIND_PANEL_UNDEFINED;
 #endif
     self.findPanel.layer.cornerRadius = 6.0f;
-    wasVisible = FIND_PANEL_UNDEFINED;
     [self showFindPanel:FIND_PANEL_INVISIBLE]; // position it off screen
 
     mCurrentSearch = @"";
@@ -864,63 +866,48 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 - (void) showFindPanel:(FindPanelVisibility)visible
 {
 #ifdef DEBUG
-    NSLog(@"%s line %d, visible: %ld, was %ld, frame: %@, highlight count: %d", __FUNCTION__, __LINE__,
-          (long)visible,
-          (long)wasVisible,
-          NSStringFromCGRect(self.findPanel.frame),
-          mTotalHighlightCount);
+    NSLog(@"%s line %d, visible: %ld, frame: %@, highlight count: %d", __FUNCTION__, __LINE__,
+          (long)visible, NSStringFromCGRect(self.findPanel.frame), mTotalHighlightCount);
 #endif
 
-    if ((visible == wasVisible) ||
-        (visible == FIND_PANEL_UNDEFINED))
-    {
-        // Nothing to do
-#ifdef DEBUG
-        NSLog(@"%s line %d Nothing to do", __FUNCTION__, __LINE__);
-#endif
-        return;
-    }
-    
+    if (visible == FIND_PANEL_UNDEFINED)
+        return; // Nothing to do
+
+#ifdef WITH_ANIMATION
+    //NSLog(@"wasVisible %ld", (long)wasVisible);
+    if (visible == wasVisible)
+        return; // Nothing to do
+
     if (wasVisible == FIND_PANEL_UNDEFINED) {
         // Don't show animations to show or hide from undefined state
+        //NSLog(@"%s line %d, hide to/from undefined", __FUNCTION__, __LINE__);
         [self.findPanel setHidden:YES];
-#ifdef DEBUG
-        NSLog(@"%s line %d, hide to/from undefined", __FUNCTION__, __LINE__);
-#endif
     }
-    else if (visible == FIND_PANEL_VISIBLE) {
+    else
+#endif
+    if (visible == FIND_PANEL_VISIBLE) {
         // Make the panel visible before the un-hiding animation starts,
         // otherwise we don't see the animation
         [self.findPanel setHidden:NO];
-#ifdef DEBUG
-        NSLog(@"%s line %d, show before the un-hiding animation", __FUNCTION__, __LINE__);
-#endif
     }
+#ifndef WITH_ANIMATION
+    else if (visible == FIND_PANEL_INVISIBLE)
+        [self.findPanel setHidden:YES];
+#endif
 
-    wasVisible = visible;
-    
-    CGRect newFrame = self.findPanel.frame;
-    
 #ifdef WITH_ANIMATION
+    wasVisible = visible;
+    CGRect newFrame = self.findPanel.frame;
     if (visible == FIND_PANEL_VISIBLE) {
         // newFrame.origin.x = x - 200;
         newFrame.origin.y = frameY_Visible;
-  #ifdef DEBUG
-        NSLog(@"%s line %d, newFrame.origin.y %f", __FUNCTION__, __LINE__, newFrame.origin.y);
-  #endif
     }
     else {
         // newFrame.origin.x = x + 200;
         newFrame.origin.y = frameY_Invisible;
-  #ifdef DEBUG
-        NSLog(@"%s line %d, newFrame.origin.y %f", __FUNCTION__, __LINE__, newFrame.origin.y);
-  #endif
     }
 
     __block FindPanelVisibility visibleB = visible;
-  #ifdef DEBUG
-    NSLog(@"%s line %d, animation start, visibleB: %ld", __FUNCTION__, __LINE__, (long)visibleB);
-  #endif
     [UIView animateWithDuration:0.5f
                           delay:0.0f
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -928,28 +915,12 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                          self.findPanel.frame = newFrame;
                      }
                      completion:^(BOOL finished){
-#ifdef DEBUG
-        // finished indicates whether or not the animations actually finished before the completion handler was called.
-        NSLog(@"%s line %d, animation finished: %d, visibleB: %ld", __FUNCTION__, __LINE__,
-              finished, (long)visibleB);
-#endif
+                        // 'finished' indicates whether or not the animations actually finished before the completion handler was called.
                         // Hide it when the animation is over
-                        if (visibleB == FIND_PANEL_INVISIBLE) {
-                            [self.findPanel setHidden:YES];  //
-#ifdef DEBUG
-                            NSLog(@"%s line %d, hide panel", __FUNCTION__, __LINE__);
-#endif
-                        }
+                        if (visibleB == FIND_PANEL_INVISIBLE)
+                            [self.findPanel setHidden:YES];
                      }];
-#else // WITH_ANIMATION
-
-    if (visible == FIND_PANEL_INVISIBLE) {
-        [self.findPanel setHidden:YES];  //
-#ifdef DEBUG
-        NSLog(@"%s line %d, hide panel", __FUNCTION__, __LINE__);
 #endif
-    }
-#endif // WITH_ANIMATION
 }
 
 #pragma mark - WKNavigationDelegate methods
