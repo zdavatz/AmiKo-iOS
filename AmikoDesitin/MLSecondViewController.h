@@ -30,6 +30,7 @@
 #import "MLDBAdapter.h"
 #import "MLTitleViewController.h"
 
+// https://github.com/zdavatz/AmiKo-iOS/issues/105#issuecomment-533616470
 //#define WITH_ANIMATION
 
 @interface MLSecondViewController : UIViewController <UISearchBarDelegate, WKUIDelegate, WKNavigationDelegate, MFMailComposeViewControllerDelegate>
