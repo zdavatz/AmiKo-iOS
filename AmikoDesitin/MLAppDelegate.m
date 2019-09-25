@@ -31,7 +31,6 @@
 #import "MLTitleViewController.h"
 #import "MLMenuViewController.h"
 #import "MLUtility.h"
-#import "MLAlertView.h"
 #import "PatientDbListViewController.h"
 #import "PatientDBAdapter.h"
 
@@ -89,7 +88,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                                                    message:aMessage
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK",@"confirm")
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"Alert OK button")
                                               style:UIAlertActionStyleCancel
                                             handler:^(UIAlertAction * _Nonnull action) {
         // continue your work
@@ -170,11 +169,11 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:screenBound];
     
+#ifdef DEBUG
     // Print out some useful info
     CGFloat screenScale = [[UIScreen mainScreen] scale];
     CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
 
-#ifdef DEBUG
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_9_0  // Deprecated in iOS 9.0
     // Screen size minus the size of the status bar (if visible)
     // This is the size of the app window
@@ -526,10 +525,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                     code:99
                                 userInfo:@{NSLocalizedDescriptionKey:message}];
 
-        MLAlertView *alert1 = [[MLAlertView alloc] initWithTitle:@"Import Error"
-                                                        message:error.localizedDescription
-                                                         button:@"OK"];
-        [alert1 show];
+        [self showPopupWithTitle:@"Import Error"
+                         message:error.localizedDescription];
         
         // Clean up: discard amk file from Inbox
 #ifdef DEBUG
@@ -553,13 +550,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [[NSFileManager defaultManager] moveItemAtPath:source
                                             toPath:destination
                                              error:&error];
-    if (!error) {
-        NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
-        MLAlertView *alert2 = [[MLAlertView alloc] initWithTitle:@"Success!"
-                                                         message:alertMessage
-                                                          button:@"OK"];
-        [alert2 show];
-    }
+    if (!error)
+        [self showPopupWithTitle:@"Success!"
+                         message:[NSString stringWithFormat:@"Imported %@", fileName]];
     
     [self showPrescriptionId:presInbox.patient.uniqueId :fileName];
     return YES;

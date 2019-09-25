@@ -118,6 +118,9 @@
 /* No comment provided by engineer. */
 "No package found with this barcode. Please contact zdavatz@ywesee.com" = "No package found with this barcode. Please contact zdavatz@ywesee.com";
 
+/* Alert OK button */
+"OK" = "OK";
+
 /* No comment provided by engineer. */
 "Open with" = "Open with:";
 
@@ -219,6 +222,9 @@
 
 /* Full toolbar */
 "Therapy" = "Therapy";
+
+/* Alert message when something goes wrong during capture session configuration */
+"Unable to capture media" = "Unable to capture media";
 
 /* Button */
 "Update" = "Update";
