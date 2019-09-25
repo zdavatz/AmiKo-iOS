@@ -92,6 +92,36 @@ static NSString *FULL_TABLE = nil;
     return sharedObject;
 }
 
++ (void) removeFileInDocDir:(NSString*)name extension:(NSString*)ext
+{
+    NSString *dbName = [NSString stringWithFormat:@"%@%@", name, [MLConstants databaseLanguage]];
+
+    // Get documents directory
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDir = [paths lastObject];
+    NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:ext];
+    
+    //NSLog(@"%s %d, trying to delete %@", __FUNCTION__, __LINE__, filePath);
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:filePath]) {
+        //NSLog(@"%s %d, file doesn't exist", __FUNCTION__, __LINE__); // DB has never been updated so far.
+        return;
+    }
+
+    // File exists
+
+    if (![[NSFileManager defaultManager] isDeletableFileAtPath:filePath]) {
+        NSLog(@"ERROR: file not deletable");
+        return;
+    }
+
+    NSError *error;
+    BOOL success = [fileManager removeItemAtPath:filePath error:&error];
+    if (!success)
+        NSLog(@"Error removing file at path: %@", error.localizedDescription);
+}
+
 #pragma mark - Instance functions
 
 - (void) listDirectoriesAtPath:(NSString*)dir
@@ -117,7 +147,9 @@ static NSString *FULL_TABLE = nil;
     if (filePath!=nil) {
         NSFileManager *fileManager = [NSFileManager defaultManager];
         if ([fileManager fileExistsAtPath:filePath]) {
-            NSLog(@"Drug interactions csv found documents folder - %@", filePath);
+#ifdef DEBUG
+            NSLog(@"Using Drug interactions csv in documents folder - %@", filePath);
+#endif
             return [self readDrugInteractionMap:filePath];
         }
     }
@@ -125,7 +157,9 @@ static NSString *FULL_TABLE = nil;
     // ** B. If no database is available, check if db is in app bundle
     filePath = [[NSBundle mainBundle] pathForResource:name ofType:@"csv"];
     if (filePath!=nil ) {
-        NSLog(@"Drug interactions csv found in app bundle - %@", filePath);
+#ifdef DEBUG
+        NSLog(@"Using Drug interactions csv in app bundle - %@", filePath);
+#endif
         // Read drug interactions csv line after line
         return [self readDrugInteractionMap:filePath];
     }
@@ -202,8 +236,6 @@ static NSString *FULL_TABLE = nil;
 // Drugs database
 - (BOOL) openDatabase: (NSString *)dbName
 {
-    NSLog(@"%s %@", __FUNCTION__, dbName);
-
     // Check first users documents folder
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -212,24 +244,24 @@ static NSString *FULL_TABLE = nil;
     NSString *documentsDir = [paths lastObject];
     NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:@"db"];
     
-#ifdef DEBUG
-    NSLog(@"%s %d  filePath: %@", __FUNCTION__, __LINE__, filePath);
-#endif
-    
     // Check if database exists
-    if (filePath!=nil) {
+    if (filePath) {
         if ([fileManager fileExistsAtPath:filePath]) {
             mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
-            NSLog(@"Database found in documents folder - %@", filePath);
+#ifdef DEBUG
+            NSLog(@"Using DB in documents folder - %@", filePath);
+#endif
             return TRUE;
         }
     }
     
     // B. If no database is available, check if db is in app bundle
     filePath = [[NSBundle mainBundle] pathForResource:dbName ofType:@"db"];
-    if (filePath!=nil ) {
+    if (filePath) {
         mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
-        NSLog(@"Database found in app bundle - %@", filePath);
+#ifdef DEBUG
+        NSLog(@"Using DB in app bundle - %@", filePath);
+#endif
         return TRUE;
     }
     

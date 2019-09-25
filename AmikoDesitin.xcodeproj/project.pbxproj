@@ -1684,7 +1684,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					AMIKO_DESITIN,
 					"$(inherited)",
-					"DEBUG_ISSUE_86=1",
+					"DEBUG_ISSUE_107=1",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";

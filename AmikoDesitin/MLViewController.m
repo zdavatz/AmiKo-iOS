@@ -794,16 +794,20 @@ static BOOL flagShowReport = false;
 
 - (void) openSQLiteDatabase
 {
+#ifdef DEBUG_ISSUE_107
+    NSLog(@"%s", __FUNCTION__);
+#endif
     mDb = [MLDBAdapter sharedInstance];
 
     if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
         if (![mDb openDatabase:@"amiko_db_full_idx_de"]) {
-            NSLog(@"No German database!");
+            NSLog(@"ERROR: No German database!");
             mDb = nil;
         }
-    } else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
+    }
+    else if ([[MLConstants databaseLanguage] isEqualToString:@"fr"]) {
         if (![mDb openDatabase:@"amiko_db_full_idx_fr"]) {
-            NSLog(@"No French database!");
+            NSLog(@"ERROR: No French database!");
             mDb = nil;
         }
     }
@@ -811,6 +815,9 @@ static BOOL flagShowReport = false;
 
 - (void) openFullTextDatabase
 {
+#ifdef DEBUG_ISSUE_107
+    NSLog(@"%s", __FUNCTION__);
+#endif
     mFullTextDb = [FullTextDBAdapter new];
     if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
         if (![mFullTextDb openDatabase:@"amiko_frequency_de"]) {
@@ -1352,7 +1359,7 @@ static BOOL flagShowReport = false;
 
 - (void) viewDidLoad
 {
-#ifdef DEBUG
+#ifdef DEBUG_ISSUE_107
     NSLog(@"%s", __FUNCTION__);
 #endif
     

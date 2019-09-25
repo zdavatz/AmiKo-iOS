@@ -27,6 +27,7 @@
 @interface MLDBAdapter : NSObject
 
 + (MLDBAdapter *)sharedInstance;
++ (void) removeFileInDocDir:(NSString*)name extension:(NSString*)ext;
 
 - (BOOL) openInteractionsCsvFile: (NSString *)name;
 - (void) closeInteractionsCsvFile;

@@ -162,7 +162,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
  */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef DEBUG
+#ifdef DEBUG_ISSUE_107
     NSLog(@"%s, %@", __FUNCTION__, launchOptions);
 #endif
     // Init main window
@@ -300,16 +300,23 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [appDefaults setValue:[NSDate date] forKey:keyDBLastUpdate];
     [defaults registerDefaults:appDefaults];
 
-    BOOL versionChanged = [MLUtility checkAppVersion]; // read/write defaults
-    if (versionChanged) {
+    BOOL appVersionChanged = [MLUtility checkAppVersion]; // read/write defaults
+    if (appVersionChanged) {
+        // Delete DB files in Documents folder so that the ones in the Bundle will be used
+        [MLDBAdapter removeFileInDocDir:@"amiko_db_full_idx_" extension:@"db"];
+        [MLDBAdapter removeFileInDocDir:@"drug_interactions_csv_" extension:@"csv"];
+        [MLDBAdapter removeFileInDocDir:@"amiko_frequency_" extension:@"db"];
+        [MLDBAdapter removeFileInDocDir:@"amiko_report_" extension:@"html"];
+
         [MLUtility updateDBCheckedTimestamp];
-#ifdef DEBUG_ISSUE_106
-        [self showPopupWithTitle:@"version changed" message:@"version changed"];
     }
-    else {
+    
+#ifdef DEBUG_ISSUE_106
+    if (appVersionChanged)
+        [self showPopupWithTitle:@"version changed" message:@"version changed"];
+    else
         [self showPopupWithTitle:@"same version" message:@"same version"];
 #endif
-    }
 
     [defaults removeObjectForKey:@"lastUsedPrescription"];
     [defaults synchronize];
@@ -438,8 +445,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 {
     NSError *error;
 
-#ifdef DEBUG
-    //NSLog(@"%s url:%@", __FUNCTION__, url);
+#ifdef DEBUG_ISSUE_107
+    NSLog(@"%s url:%@", __FUNCTION__, url);
 #endif
     if (!url ||
         ![url isFileURL])
