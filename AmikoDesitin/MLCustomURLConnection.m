@@ -136,10 +136,8 @@
         return;
     }
 
-    if (mModal) {
-        // Remove progress view
+    if (mModal)
         [myProgressView remove];
-     }
     
      [self unzipDatabase];
 }
@@ -168,7 +166,7 @@
         filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
     }
     else if ([mFileName isEqualToString:@"amiko_db_full_idx_fr.zip"] ||
-        [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"]) {
+             [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"]) {
         filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
     }
 
@@ -192,7 +190,7 @@
     
     if (filePath == nil) {
 #ifdef DEBUG
-        NSLog(@"%s %d, filePath was nil", __FUNCTION__, __LINE__);
+        NSLog(@"%s %d, filePath not in bundle", __FUNCTION__, __LINE__);
 #endif
         return;
     }

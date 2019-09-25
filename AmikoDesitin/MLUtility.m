@@ -22,32 +22,99 @@
  ------------------------------------------------------------------------ */
 
 #import "MLUtility.h"
-
 #import "MLConstants.h"
+
+// Issue #106
+#define BUNDLE_VERSION_KEY      @"savedBundleVersion"
 
 @implementation MLUtility
 
-+ (int) checkVersion
+// return value, indicates that the the app runs for the first time
++ (BOOL) checkAppVersion
 {
+    BOOL newBundle = false;
+
+    NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
+    NSString *bundleVersion = [d objectForKey:@"CFBundleShortVersionString"];
+
+#ifdef DEBUG
+    NSLog(@"%@, %@, %@, %@",
+          [d objectForKey:@"CFBundleName"],
+          [d objectForKey:@"CFBundleExecutable"],
+          [d objectForKey:@"CFBundleShortVersionString"],
+          [d objectForKey:@"CFBundleVersion"]);
+#endif
+    NSString *bundleIdentifier = [d objectForKey:@"CFBundleIdentifier"];
+//    NSLog(@"bundle identifier <%@>, display name <%@>",
+//          bundleIdentifier,
+//          [d objectForKey:@"CFBundleDisplayName"]);
+//    NSLog(@"documents dir:\n\t%@", [MLUtility documentsDirectory]);
+    NSLog(@"=== Defaults file:\n\t%@/Preferences/%@.plist",
+          NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject,
+          bundleIdentifier);
+
+#ifdef DEBUG
     // Retrieve bundle root path, e.g. /var/containers/Bundle/Application/<GUID>/<AppName>.app
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     // Handle to file manager, initialize
     NSFileManager *manager = [NSFileManager defaultManager];
-    NSDictionary* attrs = [manager attributesOfItemAtPath:bundleRoot error:nil];
-#ifdef DEBUG
+
+    NSDictionary *attrs = [manager attributesOfItemAtPath:bundleRoot error:nil];
     NSLog(@"=== Bundle path:\n\t%@", bundleRoot);
     NSLog(@"App creation date: %@", [attrs fileCreationDate]);
     NSLog(@"App modification date (unless bundle changed by code): %@", [attrs fileModificationDate]);
+    
+    NSError *error = nil;
+    NSArray *docFolderContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[MLUtility documentsDirectory] error:&error];
+    if (error)
+        NSLog(@"%s: %@", __FUNCTION__, error.localizedDescription);
+    else if ([docFolderContent count] == 0)
+        NSLog(@"Documents folder is empty!");
+    else
+        NSLog(@"=== Documents folder:\n\t%@\nContents:\n%@", [MLUtility documentsDirectory], docFolderContent);
 #endif
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *savedBundleVersion = [defaults stringForKey:BUNDLE_VERSION_KEY];
+    //NSLog(@"BundleVersion: %@, saved: %@", bundleVersion, savedBundleVersion);
+    if (savedBundleVersion.length == 0) {
+#ifdef DEBUG
+        NSLog(@"=== Fresh installation");
+#endif
+        newBundle = true;
+    }
+    else if (![savedBundleVersion isEqualToString:bundleVersion]) {
+#ifdef DEBUG
+        NSLog(@"=== App has been updated");
+#endif
+        newBundle = true;
+    }
+    else {
+#ifdef DEBUG
+        NSLog(@"=== App runs again");
+#endif
+        newBundle = false;
+#ifdef DEBUG_SIMULATE_NEW_VERSION
+        [defaults removeObjectForKey:BUNDLE_VERSION_KEY];
+#endif
+    }
+    
+    if (newBundle) {
+        NSLog(@"=== Store bundle version into defaults");
+        [defaults setObject:bundleVersion forKey:BUNDLE_VERSION_KEY];
+        [defaults synchronize];  // This seems to cause problems here
+        //NSLog(@"%s %d standardUserDefaults: %@", __FUNCTION__, __LINE__, [defaults dictionaryRepresentation]);
+    }
+
+#ifdef DEBUG
     // e.g /var/mobile/Applications/<GUID>
     NSString *rootPath = [bundleRoot substringToIndex:[bundleRoot rangeOfString:@"/" options:NSBackwardsSearch].location];
     attrs = [manager attributesOfItemAtPath:rootPath error:nil];
-#ifdef DEBUG
     NSLog(@"=== Bundle root:\n\t%@", rootPath);
     NSLog(@"App installation date (or first reinstalled after deletion): %@", [attrs fileCreationDate]);
 #endif
-    
-    return 0;
+
+    return newBundle;
 }
 
 + (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date
@@ -57,14 +124,41 @@
     return timeInterval;
 }
 
++ (void) updateDBCheckedTimestamp
+{
+#ifdef DEBUG
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *keyDBLastUpdate = [MLConstants databaseUpdateKey];
+    [defaults setValue:[NSDate date] forKey:keyDBLastUpdate];
+    [defaults synchronize];
+}
+
 + (double) timeIntervalSinceLastDBSync
 {
     double timeInterval = 0.0;
     
-    NSDate* lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:[MLConstants databaseUpdateKey]];
+    NSDate *lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:[MLConstants databaseUpdateKey]];
     if (lastUpdated)
         timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
-    
+
+#ifdef DEBUG_ISSUE_106
+    if (lastUpdated) {
+        NSLog(@"DB last updated : %@, %.1f s ago", lastUpdated, timeInterval);
+
+        NSString *title = [NSString stringWithFormat:@"Last DB update %.0fs ago", timeInterval];
+        NSString *message = [NSDateFormatter localizedStringFromDate:lastUpdated
+                                                 dateStyle:NSDateFormatterShortStyle
+                                                 timeStyle:NSDateFormatterFullStyle];
+        NSLog(@"%@ %@", title, message);
+    }
+    else {
+        NSLog(@"timestamp not found");
+        //NSLog(@"%s %d timestamp not found in standardUserDefaults: %@", __FUNCTION__, __LINE__, [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
+    }
+#endif
+
     return timeInterval;
 }
 

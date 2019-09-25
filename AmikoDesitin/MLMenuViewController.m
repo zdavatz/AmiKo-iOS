@@ -189,7 +189,7 @@
                         NSLocalizedString(@"Rate",     "Button"),
                         NSLocalizedString(@"Report",   "Button"),
                         NSLocalizedString(@"Update",   "Button"),
-                        NSLocalizedString(@"Patients",   "Button"),
+                        NSLocalizedString(@"Patients", "Button"),
                         NSLocalizedString(@"Doctor Signature",   "Button"),
                         nil];
     mMenuActionSheet.tag = 1;
@@ -232,7 +232,10 @@
         [presentingController presentViewController:mailer animated:YES completion:nil];
     }
     else {
-        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Failure" message:@"Your device is not configured to send emails." button:@"OK"];
+        MLAlertView *alert =
+            [[MLAlertView alloc] initWithTitle:@"Failure"
+                                       message:@"Your device is not configured to send emails."
+                                        button:@"OK"];
         [alert show];
     }
 }

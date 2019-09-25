@@ -25,9 +25,10 @@
 
 @interface MLUtility : NSObject
 
-+ (int) checkVersion;
++ (BOOL) checkAppVersion;
 + (NSNumber*) timeIntervalInSecondsSince1970:(NSDate *)date;
 + (double) timeIntervalSinceLastDBSync;
++ (void) updateDBCheckedTimestamp;
 
 + (NSString *) currentTime;
 + (NSString *) prettyTime;
@@ -42,3 +43,4 @@
 
 + (NSString *) getColorCss;
 @end
+

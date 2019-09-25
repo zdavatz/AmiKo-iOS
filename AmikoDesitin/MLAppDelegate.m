@@ -37,9 +37,13 @@
 
 #import <TesseractOCR/TesseractOCR.h>
 
+#pragma mark -
+
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
 // Do stuff
 @end
+
+#pragma mark -
 
 @implementation MLAppDelegate
 
@@ -69,6 +73,41 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
     
     return result;
+}
+
+#pragma mark -
+
+// Show a UIAlertController without having a UIViewController
+- (void) showPopupWithTitle:(NSString *) aTitle
+                    message:(NSString *) aMessage
+{
+    // https://stackoverflow.com/questions/36155769/how-to-show-uialertcontroller-from-appdelegate
+    __block UIWindow* topWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    topWindow.rootViewController = [UIViewController new];
+    topWindow.windowLevel = UIWindowLevelAlert + 1;
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:aTitle
+                                                                   message:aMessage
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK",@"confirm")
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        // continue your work
+
+        // important to hide the window after work completed.
+        // this also keeps a reference to the window until the action is invoked.
+
+#if 0
+        // if you want to hide the top window then use this
+        topWindow.hidden = YES;
+#else
+        // if you want to remove the top window then use this
+        topWindow = nil;
+#endif
+    }]];
+
+    [topWindow makeKeyAndVisible];
+    [topWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 /** Handles Quick Action shortcuts
@@ -125,7 +164,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s, %@", __FUNCTION__, launchOptions);
 #endif
     // Init main window
     CGRect screenBound = [[UIScreen mainScreen] bounds];
@@ -134,8 +173,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Print out some useful info
     CGFloat screenScale = [[UIScreen mainScreen] scale];
     CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
+
 #ifdef DEBUG
-    
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_9_0  // Deprecated in iOS 9.0
     // Screen size minus the size of the status bar (if visible)
     // This is the size of the app window
@@ -154,26 +193,10 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
           [[UIScreen mainScreen] nativeBounds].size.width,
           [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
-    NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
-    NSLog(@"%@, %@, %@, %@",
-          [d objectForKey:@"CFBundleName"],
-          [d objectForKey:@"CFBundleExecutable"],
-          [d objectForKey:@"CFBundleShortVersionString"],
-          [d objectForKey:@"CFBundleVersion"]);
-    NSString *bundleIdentifier = [d objectForKey:@"CFBundleIdentifier"];
-//    NSLog(@"bundle identifier <%@>, display name <%@>",
-//          bundleIdentifier,
-//          [d objectForKey:@"CFBundleDisplayName"]);
-//    NSLog(@"documents dir:\n\t%@", [MLUtility documentsDirectory]);
-    NSLog(@"=== Defaults file:\n\t%@/Preferences/%@.plist",
-          NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject,
-          bundleIdentifier);
+
     NSLog(@"Tesseract version %@", [G8Tesseract version]);
     //NSLog(@"current device model %@", [UIDevice currentDevice].model );
 #endif
-    
-    // Retrieve app related information
-    [MLUtility checkVersion];
 
     // Rear
     mainViewController = [MLViewController new];
@@ -235,7 +258,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         self.revealViewController = mainRevealController;
         [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
 
-        self.window.rootViewController = self.revealViewController; 
+        self.window.rootViewController = self.revealViewController;
     }
     mainRevealController.bounceBackOnOverdraw = YES;
     
@@ -269,19 +292,24 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 //                                                withAnimation:UIStatusBarAnimationSlide];
     }
     
-    // Register the applications defaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    // Register the values that should be returned if an object is not found in the defaults
+    // Note: it doesn't affect the "defaults"
     NSMutableDictionary *appDefaults = [NSMutableDictionary dictionary];
     NSString *keyDBLastUpdate = [MLConstants databaseUpdateKey];
-
     [appDefaults setValue:[NSDate date] forKey:keyDBLastUpdate];
     [defaults registerDefaults:appDefaults];
 
-    // Initialize user defaults first time app is run
-    NSDate* lastUpdated = [defaults objectForKey:keyDBLastUpdate];
-    if (!lastUpdated) {
-        [lastUpdated setValue:[NSDate date] forKey:keyDBLastUpdate];
-        NSLog(@"Initializing defaults...");
+    BOOL versionChanged = [MLUtility checkAppVersion]; // read/write defaults
+    if (versionChanged) {
+        [MLUtility updateDBCheckedTimestamp];
+#ifdef DEBUG_ISSUE_106
+        [self showPopupWithTitle:@"version changed" message:@"version changed"];
+    }
+    else {
+        [self showPopupWithTitle:@"same version" message:@"same version"];
+#endif
     }
 
     [defaults removeObjectForKey:@"lastUsedPrescription"];
@@ -527,10 +555,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                              error:&error];
     if (!error) {
         NSString *alertMessage = [NSString stringWithFormat:@"Imported %@", fileName];
-        MLAlertView *alert2;
-        alert2 = [[MLAlertView alloc] initWithTitle:@"Success!"
-                                           message:alertMessage
-                                            button:@"OK"];
+        MLAlertView *alert2 = [[MLAlertView alloc] initWithTitle:@"Success!"
+                                                         message:alertMessage
+                                                          button:@"OK"];
         [alert2 show];
     }
     

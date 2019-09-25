@@ -1,5 +1,5 @@
 /*
- 
+
  Copyright (c) 2015 Max Lungarella <cybrmx@gmail.com>
  
  Created on 21/02/2015.
@@ -23,7 +23,9 @@
 
 @interface MLAlertView : NSObject
 
-- (instancetype) initWithTitle: (NSString *)alertTitle message: (NSString *)message button: (NSString *)buttonTitle;
+- (instancetype) initWithTitle: (NSString *)alertTitle
+                       message: (NSString *)message
+                        button: (NSString *)buttonTitle;
 - (void) show;
 
 @end

@@ -452,7 +452,7 @@ static BOOL flagShowReport = false;
                                                  name:@"MLStatusCode404"
                                                object:nil];
 
-    // Regisger observer to check if we are back from the background
+    // Register observer to check if we are back from the background
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(dbSyncNotification:)
                                                  name:UIApplicationWillEnterForegroundNotification
@@ -642,7 +642,7 @@ static BOOL flagShowReport = false;
             break;
     }
     
-    [self.revealViewController rightRevealToggle:self];    
+    [self.revealViewController rightRevealToggle:self];
 }
 
 - (void) finishedDownloading:(NSNotification *)notification
@@ -700,16 +700,11 @@ static BOOL flagShowReport = false;
                                                              button:@"OK"];
             [alert show];
 
-            // Store update date, this variable is set very first time app is set up
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            NSString *key = [MLConstants databaseUpdateKey];
-            [defaults setValue:[NSDate date] forKey:key];
-
-            // Make sure it's saved to file immediately
-            [defaults synchronize];
+            [MLUtility updateDBCheckedTimestamp];
         }
     } else if ([[notification name] isEqualToString:@"MLStatusCode404"]) {
         NSLog(@"Status Code 404");
+        // TODO: localize
         MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Datenbank kann nicht aktualisiert werden!"
                                                         message:@"Server unreachable..."
                                                          button:@"OK"];
@@ -717,11 +712,15 @@ static BOOL flagShowReport = false;
     }
 }
 
+// Called when we "resume" the application,
+// for example after we hit the home button and the app was running in the background
 - (void) dbSyncNotification:(NSNotification *)notification
 {
-    if ([[notification name] isEqualToString:UIApplicationWillEnterForegroundNotification]) {
+#ifdef DEBUG
+    NSLog(@"%s %@", __FUNCTION__, notification);
+#endif
+    if ([[notification name] isEqualToString:UIApplicationWillEnterForegroundNotification])
         [self checkLastDBSync];
-    }
 }
 
 - (void)ftOverviewDidChangeSelection:(NSNotification *)aNotification
@@ -756,9 +755,30 @@ static BOOL flagShowReport = false;
 
 - (void) checkLastDBSync
 {
-    // Nag user all 30 days! = 60 x 60 x 24 x 30 seconds
-    if ([MLUtility timeIntervalSinceLastDBSync] <= 60*60*24*30)
+    // Nag user every 30 days
+    double days30 = 60*60*24*30;  // 60 seconds x 60 minutes x 24 hours x 30 days
+    double lastSync = [MLUtility timeIntervalSinceLastDBSync];
+#if 0 //def DEBUG
+    if (lastSync > 0.0f)
+    {
+        NSString *title = [NSString stringWithFormat:@"Last DB update %.0fs ago", lastSync];
+        NSString *message = [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeInterval:-lastSync sinceDate:[NSDate date]]
+                                                           dateStyle:NSDateFormatterShortStyle
+                                                           timeStyle:NSDateFormatterFullStyle];
+        // TODO: fix problem with iPhone 8s simulator
+        MLAlertView *alert1 = [[MLAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                         button:@"OK"];
+        [alert1 show];
+    }
+#endif
+
+    if (lastSync <= days30) {
+#ifdef DEBUG
+        NSLog(@"%s Less than 30 days", __FUNCTION__);
+#endif
         return;
+    }
 
     // Show alert with OK button
     NSString *title = NSLocalizedString(@"Database Update", nil);
@@ -769,12 +789,7 @@ static BOOL flagShowReport = false;
                                                      button:@"OK"];
     [alert show];
 
-    // Store current date, and bother user again in a month
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:[NSDate date] forKey:[MLConstants databaseUpdateKey]];
-
-    // Make sure it's saved to file immediately
-    [defaults synchronize];
+    [MLUtility updateDBCheckedTimestamp];
 }
 
 - (void) openSQLiteDatabase
@@ -1744,7 +1759,7 @@ static BOOL flagShowReport = false;
             else {
                 // Empty search field
                 [searchField setText:@""];
-                // 
+                //
                 MLViewController* __weak weakSelf = self;
                 //
                 dispatch_queue_t search_queue = dispatch_queue_create("com.ywesee.searchdb", nil);
@@ -2801,7 +2816,7 @@ static BOOL flagShowReport = false;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{ 
+{
     // What to display in row n?
     // static NSString *simpleTableIdentifier = @"SimpleTableItem";
     // UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
@@ -2819,7 +2834,7 @@ static BOOL flagShowReport = false;
     }
     
     
-    // Check if cell.textLabel.text is in starred NSSet    
+    // Check if cell.textLabel.text is in starred NSSet
     NSString *regnrStr = favoriteKeyData[indexPath.row];//[favoriteKeyData objectAtIndex:indexPath.row];
     
     BOOL starOn = NO;
@@ -3247,3 +3262,4 @@ void report_memory(void)
     }
 }
 @end
+
