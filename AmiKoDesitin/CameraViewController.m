@@ -7,10 +7,10 @@
 //
 
 #import "CameraViewController.h"
-#import "PatientViewController+smartCard.h" // use this class as photo delegate
+#import "PatientViewController+smartCard.h" // use this class as photo/video delegate
 #import "avcamtypes.h"
 
-static void * SessionRunningContext = &SessionRunningContext;
+//static void * SessionRunningContext = &SessionRunningContext;
 
 #pragma mark -
 
@@ -23,7 +23,6 @@ static void * SessionRunningContext = &SessionRunningContext;
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput; // .device
 @property (nonatomic) AVCamLivePhotoMode livePhotoMode;
 @property (nonatomic) AVCamDepthDataDeliveryMode depthDataDeliveryMode;
-@property (nonatomic) AVCapturePhotoOutput *photoOutput;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
 @end
@@ -39,7 +38,6 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)viewDidLoad
 {
-    //NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
     
     self.session = [AVCaptureSession new];
@@ -57,7 +55,8 @@ static void * SessionRunningContext = &SessionRunningContext;
         case AVAuthorizationStatusNotDetermined:
         {
             dispatch_suspend( self.sessionQueue );
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^( BOOL granted ) {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo
+                                     completionHandler:^( BOOL granted ) {
                 if ( ! granted ) {
                     self.setupResult = AVCamSetupResultCameraNotAuthorized;
                 }
@@ -82,14 +81,13 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
     [self startCameraStream];
+    [self setVidOrientation:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    //NSLog(@"%s", __FUNCTION__);
     [self stopCameraStream];
     [super viewDidDisappear:animated];
 }
@@ -103,22 +101,16 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (BOOL)shouldAutorotate
 {
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
     return YES;
 }
 
-- (void)didRotate:(NSNotification *)notification
+- (void)didRotate:(CGSize)size
 {
-    //NSLog(@"%s %@", __FUNCTION__, notification);
+    //NSLog(@"%s, size %@, %@", __FUNCTION__, NSStringFromCGSize(size), (size.height > size.width) ? @"Por" : @"Land");
     [self.view layoutIfNeeded];
     
-    // Update the camera rotation
-    UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    AVCaptureVideoOrientation initialVideoOrientation = AVCaptureVideoOrientationPortrait;
-    if ( statusBarOrientation != UIInterfaceOrientationUnknown ) {
-        initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
-        self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
-    }
+    [self setVidOrientation:nil];    // Update the camera rotation
     
     [self.previewView setNeedsDisplay]; // Will call drawRect
 }
@@ -126,7 +118,7 @@ static void * SessionRunningContext = &SessionRunningContext;
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
-    //NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     [coordinator animateAlongsideTransition:
@@ -135,8 +127,8 @@ static void * SessionRunningContext = &SessionRunningContext;
      }
                                  completion:
      ^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        // didRotateFromInterfaceOrientation would go here.
-        [self didRotate:nil];
+        // didRotateFromInterfaceOrientation
+        [self didRotate:size];
      }];
 }
 
@@ -144,6 +136,7 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void) startCameraStream
 {
+    //NSLog(@"%s", __FUNCTION__);
     dispatch_async( self.sessionQueue, ^{
         switch ( self.setupResult )
         {
@@ -205,7 +198,9 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)stopCameraStream
 {
-    //NSLog(@"%s", __FUNCTION__);
+    AVCaptureConnection *conn = self.previewView.videoPreviewLayer.connection;
+    conn.enabled = NO;
+
     dispatch_async( self.sessionQueue, ^{
         if ( self.setupResult == AVCamSetupResultSuccess ) {
             [self.session stopRunning];
@@ -214,12 +209,59 @@ static void * SessionRunningContext = &SessionRunningContext;
     } );
 }
 
+- (void)setVidOrientation:(AVCaptureConnection *)connection
+{
+    dispatch_async( dispatch_get_main_queue(), ^{
+        /*
+         Why are we dispatching this to the main queue?
+         Because AVCaptureVideoPreviewLayer is the backing layer for AVCamPreviewView and UIView
+         can only be manipulated on the main thread.
+         Note: As an exception to the above rule, it is not necessary to serialize video orientation changes
+         on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
+         
+         Use the status bar orientation as the initial video orientation. Subsequent orientation changes are
+         handled by -[AVCamCameraViewController viewWillTransitionToSize:withTransitionCoordinator:].
+         */
+        //AVCaptureConnection *connection = self.previewView.videoPreviewLayer.connection;
+
+        AVCaptureConnection *conn;
+//        if (connection)
+//            conn = connection;
+//        else
+            conn = self.previewView.videoPreviewLayer.connection;
+
+        if ([conn isVideoOrientationSupported])
+        {
+            UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
+            if (statusBarOrientation == UIInterfaceOrientationPortrait)  // 1 ok
+            {
+                [conn setVideoOrientation: AVCaptureVideoOrientationPortrait];
+            }
+            else if (statusBarOrientation == UIInterfaceOrientationLandscapeRight)  // 3 ok
+            {
+                [conn setVideoOrientation: AVCaptureVideoOrientationLandscapeRight];
+            }
+            else if (statusBarOrientation == UIInterfaceOrientationLandscapeLeft)  // 4
+            {
+                [conn setVideoOrientation: AVCaptureVideoOrientationLandscapeLeft]; //upside down
+                //[connection setVideoOrientation: AVCaptureVideoOrientationLandscapeRight];
+            }
+            else
+            {
+                [conn setVideoOrientation: AVCaptureVideoOrientationPortrait];
+            }
+        }
+        
+        self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill; // Preserve aspect ratio; fill layer bounds.
+    } );
+}
+
 - (void)configureSession
 {
     //NSLog(@"%s setupResult %ld", __FUNCTION__, (long)self.setupResult);
     
     if ( self.setupResult != AVCamSetupResultSuccess ) {
-        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+        NSLog(@"%s line %d, cannot configure session", __FUNCTION__, __LINE__);
         return;
     }
     
@@ -228,21 +270,41 @@ static void * SessionRunningContext = &SessionRunningContext;
     [self.session beginConfiguration];
     self.session.sessionPreset = AVCaptureSessionPresetPhoto;
     
-    ////////////////////////////////////////////////////////////////////////////
+    ///
     AVCaptureDevice *videoDevice =
-    [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
-                                       mediaType:AVMediaTypeVideo
-                                        position:AVCaptureDevicePositionBack];
+        [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
+                                           mediaType:AVMediaTypeVideo
+                                            position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
+        // TODO: Possibly try another camera
         //NSLog(@"No videoDevice\n%s:%d", __FILE__, __LINE__);
         [self.session commitConfiguration]; // To prevent crash with the simulator
         return;
     }
+
+    // Lower the frame rate
+    if ( [videoDevice lockForConfiguration:&error] ) {
+        @try {
+            // See AVCaptureDeviceFormat videoSupportedFrameRateRanges property
+            [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(1, 8)];  // 1/8 second
+            [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(1, 4)];  // 1/4 second
+        }
+        @catch(NSException *exception)
+        {
+            NSLog(@"%s %d, Exception: %@", __FILE__, __LINE__, exception);
+        }
+        @finally {
+            [videoDevice unlockForConfiguration];
+        }
+    }
+    else {
+        NSLog( @"Could not lock video device for configuration: %@", error.localizedDescription );
+    }
     
-    ////////////////////////////////////////////////////////////////////////////
+    ///
     AVCaptureDeviceInput *cameraDeviceInput =
-    [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
-                                          error:&error];
+        [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
+                                              error:&error];
     if ( ! cameraDeviceInput ) {
         NSLog( @"Could not create camera device input: %@", error );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
@@ -250,77 +312,50 @@ static void * SessionRunningContext = &SessionRunningContext;
         return;
     }
     
-    if ( [self.session canAddInput:cameraDeviceInput] )
+    if (! [self.session canAddInput:cameraDeviceInput] )
     {
-        [self.session addInput:cameraDeviceInput];
-        self.videoDeviceInput = cameraDeviceInput;
-        
-        dispatch_async( dispatch_get_main_queue(), ^{
-            /*
-             Why are we dispatching this to the main queue?
-             Because AVCaptureVideoPreviewLayer is the backing layer for AVCamPreviewView and UIView
-             can only be manipulated on the main thread.
-             Note: As an exception to the above rule, it is not necessary to serialize video orientation changes
-             on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
-             
-             Use the status bar orientation as the initial video orientation. Subsequent orientation changes are
-             handled by -[AVCamCameraViewController viewWillTransitionToSize:withTransitionCoordinator:].
-             */
-            UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
-            AVCaptureVideoOrientation initialVideoOrientation = AVCaptureVideoOrientationPortrait;
-            if ( statusBarOrientation != UIInterfaceOrientationUnknown ) {
-                initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
-            }
-            
-            self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
-            self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        } );
-    }
-    else {
         NSLog( @"Could not add camera device input to the session" );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
     }
+
+    [self.session addInput:cameraDeviceInput];
+    self.videoDeviceInput = cameraDeviceInput;
+    [self setVidOrientation: nil];
     
-    ////////////////////////////////////////////////////////////////////////////
-    // Add photo output.
-    AVCapturePhotoOutput *photoOutput = [AVCapturePhotoOutput new];
-    if ( [self.session canAddOutput:photoOutput] )
+    ///
+    AVCaptureVideoDataOutput *videoDataOutput = [AVCaptureVideoDataOutput new];
+    if (![self.session canAddOutput:videoDataOutput])
     {
-        [self.session addOutput:photoOutput];
-        self.photoOutput = photoOutput;
-        
-        self.photoOutput.highResolutionCaptureEnabled = YES;
-        self.photoOutput.livePhotoCaptureEnabled = self.photoOutput.livePhotoCaptureSupported;
-        self.photoOutput.depthDataDeliveryEnabled = self.photoOutput.depthDataDeliverySupported;
-        
-        self.livePhotoMode = self.photoOutput.livePhotoCaptureSupported ? AVCamLivePhotoModeOn : AVCamLivePhotoModeOff;
-        self.depthDataDeliveryMode = self.photoOutput.depthDataDeliverySupported ? AVCamDepthDataDeliveryModeOn : AVCamDepthDataDeliveryModeOff;
-        
-        //self.inProgressPhotoCaptureDelegates = [NSMutableDictionary dictionary];
-    }
-    else {
-        NSLog( @"Could not add photo output to the session" );
+        NSLog(@"Could not add video output to the session");
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
     }
-    
+
+    videoDataOutput.videoSettings = nil;
+    videoDataOutput.alwaysDiscardsLateVideoFrames = YES;
+    [videoDataOutput setSampleBufferDelegate:self.delegate
+                                       queue:self.sessionQueue];
+
+    [self.session addOutput:videoDataOutput];
     self.backgroundRecordingID = UIBackgroundTaskInvalid;
     
-    ////////////////////////////////////////////////////////////////////////////
+    ///
     [self.session commitConfiguration];
+    
+    //[self setVideoOrientation:self.previewView.videoPreviewLayer.connection];
 }
 
 #pragma mark - KVO and Notifications
 
 - (void)addObservers
 {
-    [self.session addObserver:self
-                   forKeyPath:@"running"
-                      options:NSKeyValueObservingOptionNew
-                      context:SessionRunningContext];
+//    [self.session addObserver:self
+//                   forKeyPath:@"running"
+//                      options:NSKeyValueObservingOptionNew
+//                      context:SessionRunningContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(subjectAreaDidChange:)
@@ -352,12 +387,14 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)removeObservers
 {
+#ifdef DEBUG_ISSUE_102_VERBOSE
+    NSLog(@"%s", __FUNCTION__);
+#endif
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [self.session
-     removeObserver:self
-     forKeyPath:@"running"
-     context:SessionRunningContext];
+//    [self.session removeObserver:self
+//                      forKeyPath:@"running"
+//                         context:SessionRunningContext];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -365,7 +402,8 @@ static void * SessionRunningContext = &SessionRunningContext;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    if ( context == SessionRunningContext ) {
+//    if ( context == SessionRunningContext )
+//   {
 //        BOOL isSessionRunning = [change[NSKeyValueChangeNewKey] boolValue];
 //        BOOL livePhotoCaptureSupported = self.photoOutput.livePhotoCaptureSupported;
 //        BOOL livePhotoCaptureEnabled = self.photoOutput.livePhotoCaptureEnabled;
@@ -375,8 +413,9 @@ static void * SessionRunningContext = &SessionRunningContext;
 //        dispatch_async( dispatch_get_main_queue(), ^{
 //
 //        } );
-    }
-    else {
+//    }
+//    else
+    {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
@@ -416,6 +455,7 @@ monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
 - (void)subjectAreaDidChange:(NSNotification *)notification
 {
     CGPoint devicePoint = CGPointMake( 0.5, 0.5 );
+
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus
          exposeWithMode:AVCaptureExposureModeContinuousAutoExposure
           atDevicePoint:devicePoint
@@ -437,11 +477,6 @@ monitorSubjectAreaChange:NO];
             if ( self.isSessionRunning ) {
                 [self.session startRunning];
                 self.sessionRunning = self.session.isRunning;
-#if 0
-                AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
-                [self.photoOutput capturePhotoWithSettings:photoSettings
-                                                  delegate:self];
-#endif
             }
         } );
     }
@@ -472,7 +507,10 @@ monitorSubjectAreaChange:NO];
 
 - (IBAction)cancelCamera:(id)sender
 {
+#ifdef DEBUG_ISSUE_102_VERBOSE
     NSLog(@"%s", __FUNCTION__);
+#endif
+    //[self stopCameraStream]; // will be called in viewDidDisappear
     [self dismissViewControllerAnimated:NO completion:NULL];
 }
 
@@ -480,27 +518,17 @@ monitorSubjectAreaChange:NO];
 
 - (IBAction) handleTap:(UITapGestureRecognizer *)gesture
 {
-    //NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s is running: %d", __FUNCTION__, self.session.isRunning);
 
+#ifdef TAP_TO_END_CARD_OCR
     if (self.session.isRunning) {
-        // Acquire image
-        AVCaptureVideoOrientation videoPreviewLayerVideoOrientation = self.previewView.videoPreviewLayer.connection.videoOrientation;
-        
-        // Update the photo output's connection to match the video orientation of the video preview layer.
-        AVCaptureConnection *photoOutputConnection = [self.photoOutput connectionWithMediaType:AVMediaTypeVideo];
-        photoOutputConnection.videoOrientation = videoPreviewLayerVideoOrientation; // very important !
-        
-        AVCapturePhotoSettings *photoSettings = [AVCapturePhotoSettings photoSettings];
-        if ( self.videoDeviceInput.device.isFlashAvailable )
-            photoSettings.flashMode = AVCaptureFlashModeAuto;
-
-        photoSettings.highResolutionPhotoEnabled = YES;
-
-        [self.photoOutput capturePhotoWithSettings:photoSettings
-                                          delegate:self.delegate];
+        [self stopCameraStream];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"lastVideoFrameNotification"
+                                                            object:nil];
     }
+#endif
     
-     [self dismissViewControllerAnimated:NO completion:NULL];
+    [self dismissViewControllerAnimated:NO completion:NULL];
 }
 
 @end

@@ -7,13 +7,26 @@
 //
 
 #import "PatientViewController.h"
-#import <TesseractOCR/TesseractOCR.h>
+
+#define NUMBER_OF_BOXES_FOR_OCR   3
 
 #import "CameraViewController.h"
 
+struct scannedResults {
+    NSString *familyName;
+    NSString *givenName;
+    NSString *cardNumberString;
+    NSString *dateString;
+    NSString *sexString;
+};
+
 #pragma mark - class extension
 
-@interface PatientViewController () <AVCapturePhotoCaptureDelegate, G8TesseractDelegate>
+@interface PatientViewController () <AVCaptureVideoDataOutputSampleBufferDelegate>
+{
+    BOOL videoCaptureFinished;
+    struct scannedResults savedOcr;
+}
 
 @property (nonatomic) CameraViewController *cameraVC;
 
@@ -23,6 +36,8 @@
 
 @interface PatientViewController (smartCard)
 
-- (void) startCameraLivePreview;
+- (void)startCameraLivePreview;
+- (void)lastVideoFrame:(NSNotification *)notification;
+- (BOOL)validateOcrResults:(NSArray *)ocrResults;
 
 @end

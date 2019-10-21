@@ -259,8 +259,6 @@
 		FA7B54E9207BC719003D300A /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435D2E31202DA1B6001A829C /* Contacts.framework */; };
 		FA7D750520E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
 		FA7D750620E3EEFB005E49FE /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7D750220E3EEFB005E49FE /* CameraViewController.m */; };
-		FA8767B4230EDAEB00C9BD61 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
-		FA8767B5230EDAEC00C9BD61 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = FA528CF120D8F1590066CE89 /* tessdata */; };
 		FA98749B22E6F7AC008B778F /* FullTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA98749922E6F7AC008B778F /* FullTextViewController.m */; };
 		FA98749C22E6F7AC008B778F /* FullTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA98749922E6F7AC008B778F /* FullTextViewController.m */; };
 		FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA98749A22E6F7AC008B778F /* FullTextViewController.xib */; };
@@ -1198,7 +1196,6 @@
 				D533DAA617B434B600199C38 /* Default.png in Resources */,
 				D533DAA817B434EA00199C38 /* Default-Landscape@2x~ipad.png in Resources */,
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
-				FA8767B4230EDAEB00C9BD61 /* tessdata in Resources */,
 				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
 				FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				FAF85BF322F44BF800730690 /* deleterow.js in Resources */,
@@ -1282,7 +1279,6 @@
 				D5A2252B19461D200078FEFF /* 938-connections-selected@2x.png in Resources */,
 				D5A2253C194A3A400078FEFF /* 217-trash.png in Resources */,
 				D5F6BB7A17E8C87500DCBD16 /* desitin_icon_57x57.png in Resources */,
-				FA8767B5230EDAEC00C9BD61 /* tessdata in Resources */,
 				FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */,
 				FA98749E22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
@@ -1684,7 +1680,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					AMIKO_DESITIN,
 					"$(inherited)",
-					"DEBUG_ISSUE_107=1",
+					"DEBUG_ISSUE_102=1",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";

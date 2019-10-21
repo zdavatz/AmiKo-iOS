@@ -14,15 +14,18 @@
 #import "SWRevealViewController.h"
 #import "MLAppDelegate.h"
 
-#define NUMBER_OF_BOXES_FOR_TESSERACT   3
-//#define WITH_ARRAY_OF_BLACKLISTS
+//#define DEBUG_ISSUE_102_SHOW_ALL_BOXES
+#define DISCARD_BAD_BOXES
 
 @implementation PatientViewController (smartCard)
 
 - (void) startCameraLivePreview
 {
+#ifdef DEBUG_ISSUE_102_VERBOSE
     NSLog(@"%s", __FUNCTION__);
-    
+#endif
+    videoCaptureFinished = NO;
+
 //    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
 //    UINavigationController *nc = self.navigationController;  // nil
 //    NSLog(@"%s self %p, class %@", __FUNCTION__, self, [self class]);
@@ -32,8 +35,6 @@
     // Make sure front is PatientViewController
     UIViewController *nc_front = self.revealViewController.frontViewController; // UINavigationController
     UIViewController *vc_front = [nc_front.childViewControllers firstObject];   // PatientViewController
-    //NSLog(@"nc_front %@", [nc_front class]);
-    //NSLog(@"vc_front %@", [vc_front class]);
     
     if (!self.cameraVC)
         self.cameraVC = nil; // So that it will be reinitialized with the current orientation
@@ -47,209 +48,668 @@
                          completion:NULL];
 }
 
-#pragma mark - AVCapturePhotoCaptureDelegate
+#pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
 
-- (void)captureOutput:(AVCapturePhotoOutput *)captureOutput
-didFinishProcessingPhoto:(AVCapturePhoto *)photo
-                error:(nullable NSError *)error
+- (void)captureOutput:(AVCaptureOutput *)output
+didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+       fromConnection:(AVCaptureConnection *)connection
 {
-    if ( error ) {
-        NSLog( @"Error capturing photo: %@", error );
-        return;
-    }
-    
-    [self.cameraVC.previewView updatePoiCornerPosition];
-    [self.cameraVC.previewView updateCardFrameFraction];  // from outerCardOutline
-    
-    NSData *data = [photo fileDataRepresentation];
-    UIImage *image = [UIImage imageWithData:data];
-
-#ifdef DEBUG
-    //NSLog(@"line %d cardFrameFraction %@", __LINE__, NSStringFromCGRect(self.previewView.cardFrameFraction));
-    NSLog(@"%s line %d, imageOrientation %ld", __FUNCTION__, __LINE__, (long)image.imageOrientation);
+#ifdef DEBUG_ISSUE_102_VERBOSE
+    static int frameNumber = 0;
+    AVCaptureVideoOrientation entryVideoOrientation = connection.videoOrientation;
+    NSLog(@"captureOutput line %d, frame# %d, ori: %ld, thread:%@, main:%d, finished:%d, skipped:%u", __LINE__,
+          frameNumber++,
+          (long)entryVideoOrientation,
+          [NSThread currentThread],
+          [[NSThread currentThread] isMainThread],
+          videoCaptureFinished,
+          stats.skippedFramesAfterFinished);
 #endif
 
+    if (videoCaptureFinished)
+        return;
+
+//    __block UIInterfaceOrientation statusBarOrientation2;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        statusBarOrientation2 = [UIApplication sharedApplication].statusBarOrientation;
+//    });
+
+//    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+
+    // TODO: maybe we don't need to set this here everytime
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
+        if ([connection isVideoOrientationSupported]) {
+            if (statusBarOrientation == UIInterfaceOrientationPortrait)  // 1 ok
+            {
+                [connection setVideoOrientation: AVCaptureVideoOrientationPortrait];
+                #ifdef DEBUG_ISSUE_102_VERBOSE
+                NSLog(@"%s %d, setVideoOrientation: %ld", __FUNCTION__, __LINE__, (long)statusBarOrientation);
+                NSLog(@"%s %d, connection.videoOrientation: %ld", __FUNCTION__, __LINE__, connection.videoOrientation);
+                #endif
+            }
+            else if (statusBarOrientation == UIInterfaceOrientationLandscapeRight)  // 3 ok
+            {
+                [connection setVideoOrientation: AVCaptureVideoOrientationLandscapeRight];
+                #ifdef DEBUG_ISSUE_102_VERBOSE
+                NSLog(@"%s %d, setVideoOrientation: %ld", __FUNCTION__, __LINE__, (long)statusBarOrientation);
+                NSLog(@"%s %d, connection.videoOrientation: %ld", __FUNCTION__, __LINE__, connection.videoOrientation);
+                #endif
+            }
+            else if (statusBarOrientation == UIInterfaceOrientationLandscapeLeft)  // 4
+            {
+                [connection setVideoOrientation: AVCaptureVideoOrientationLandscapeLeft]; //upside down
+                //[connection setVideoOrientation: AVCaptureVideoOrientationLandscapeRight];
+                #ifdef DEBUG_ISSUE_102_VERBOSE
+                NSLog(@"%s %d, setVideoOrientation: %ld", __FUNCTION__, __LINE__,
+                      (long)statusBarOrientation);
+                NSLog(@"%s %d, connection.videoOrientation: %ld", __FUNCTION__, __LINE__, connection.videoOrientation);
+                #endif
+            }
+            else
+            {
+                [connection setVideoOrientation: AVCaptureVideoOrientationPortrait];
+                #ifdef DEBUG_ISSUE_102_VERBOSE
+                NSLog(@"%s %d, setVideoOrientation: %ld, P:%ld, L:%ld", __FUNCTION__, __LINE__,
+                      (long)statusBarOrientation,
+                      (long)UIInterfaceOrientationPortrait,
+                      (long)UIInterfaceOrientationLandscapeLeft);
+                NSLog(@"%s %d, connection.videoOrientation: %ld", __FUNCTION__, __LINE__, connection.videoOrientation);
+                #endif
+            }
+            //[connection setVideoOrientation: (AVCaptureVideoOrientation)statusBarOrientation];  // NG
+        }
+    });
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.cameraVC.previewView updatePoiCornerPosition];
+        [self.cameraVC.previewView updateCardFrameFraction];
+    });
+
+    UIImage *image;
+    {
+        CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)CMSampleBufferGetImageBuffer(sampleBuffer);
+        CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+        //NSLog(@"%s %d, ciImage.properties %@", __FUNCTION__, __LINE__, ciImage.properties); // null
+        CIContext *context = [CIContext contextWithOptions:nil];
+        CGRect r = CGRectMake(0, 0,
+                              CVPixelBufferGetWidth(pixelBuffer),
+                              CVPixelBufferGetHeight(pixelBuffer));
+        CGImageRef myImage = [context createCGImage:ciImage
+                                           fromRect:r];
+
+        image = [UIImage imageWithCGImage:myImage];
+        CGImageRelease(myImage);
+        if (!image) {
+            NSLog(@"%s %d, image is nil", __FUNCTION__, __LINE__);
+            return;
+        }
+    }
+
+    //NSLog(@"%s %d, image ori %ld", __FUNCTION__, __LINE__, (long)image.imageOrientation); // RO
+    
+#ifdef CROP_IMAGE_TO_CARD_ROI
+    // Crop the image to the ROI in the health card outline
+    CGFloat x = self.cameraVC.previewView.roiFrameFraction.origin.x;
+    CGFloat y = self.cameraVC.previewView.roiFrameFraction.origin.y;
+    CGFloat w = self.cameraVC.previewView.roiFrameFraction.size.width;
+    CGFloat h = self.cameraVC.previewView.roiFrameFraction.size.height;
+
+    CGRect cg_rectCropCard = CGRectMake(x * image.size.width,
+                                        y * image.size.height,
+                                        w * image.size.width,
+                                        h * image.size.height);
+#else
+    // Crop the image to the health card outline
     CGFloat x = self.cameraVC.previewView.cardFrameFraction.origin.x;
     CGFloat y = self.cameraVC.previewView.cardFrameFraction.origin.y;
     CGFloat w = self.cameraVC.previewView.cardFrameFraction.size.width;
     CGFloat h = self.cameraVC.previewView.cardFrameFraction.size.height;
 
-    // Crop the image to the health card outline
     CGRect cg_rectCropCard = CGRectMake(x * image.size.width,
                                         y * image.size.height,
                                         w * image.size.width,
                                         h * image.size.height);
-    
-    //NSLog(@"line %d cropCard %@", __LINE__, NSStringFromCGRect(cg_rectCropCard));
-//    NSLog(@"line %d im size %@, ar %.3f", __LINE__,
-//          NSStringFromCGSize(image.size),
-//          image.size.width/image.size.height);
+#endif
 
-    UIImage *imageCard = [image cropRectangle:cg_rectCropCard inFrame:image.size];
-//    NSLog(@"line %d card size WH: %@, ar %.3f", __LINE__,
-//          NSStringFromCGSize(imageCard.size),
-//          imageCard.size.width/imageCard.size.height);
-
-    [self resetAllFields];
+    UIImage *imageCropped = [image cropRectangle:cg_rectCropCard inFrame:image.size];
+    if (!imageCropped) {
+        #ifdef DEBUG_ISSUE_102_VERBOSE
+        NSLog(@"%s %d, imageCard is nil", __FUNCTION__, __LINE__);
+        NSLog(@"%s %d, cg_rectCropCard %@", __FUNCTION__, __LINE__, NSStringFromCGRect(cg_rectCropCard));
+        #endif
+        return;
+    }
     
     // Vision, text detection
-    CIImage* ciimage = [[CIImage alloc] initWithCGImage:imageCard.CGImage];
-    //NSLog(@"line %d card size WH: %@", __LINE__, NSStringFromCGSize(imageCard.size));
+    CIImage* ciimage = [[CIImage alloc] initWithCGImage:imageCropped.CGImage];
+    if (!ciimage) {
+        #ifdef DEBUG_ISSUE_102_VERBOSE
+        NSLog(@"%s %d, ciimage is nil", __FUNCTION__, __LINE__);
+        #endif
+        return;
+    }
 
+    // Try ignoring the video orientation (always 0) and use the screen orientation
+    __block UIInterfaceOrientation interfaceOrient;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        interfaceOrient = [UIApplication sharedApplication].statusBarOrientation;
+    });
     CGImagePropertyOrientation orient;
-    
-    if (imageCard.imageOrientation == UIImageOrientationRight) {
+    if (interfaceOrient == UIInterfaceOrientationLandscapeRight) {
+        //NSLog(@"%s %d, UIInterfaceOrientation LandscapeRight", __FUNCTION__, __LINE__);
         orient = kCGImagePropertyOrientationRight; // for portrait
     }
-    else if (imageCard.imageOrientation == UIImageOrientationUp) {
-        orient = kCGImagePropertyOrientationUp; // for landscape L
+    else if (interfaceOrient == UIInterfaceOrientationPortrait) {
+        //NSLog(@"%s %d, UIInterfaceOrientation Portrait", __FUNCTION__, __LINE__);
+        orient = kCGImagePropertyOrientationUp; // for landscape L  // always this one ?
     }
-    else { //if (imageCard.imageOrientation == UIImageOrientationDown) {
-        orient = kCGImagePropertyOrientationDown; // for landscape R
+    else if (interfaceOrient == UIInterfaceOrientationLandscapeLeft) {
+        //NSLog(@"%s %d, UIInterfaceOrientation LandscapeLeft", __FUNCTION__, __LINE__);
+        orient = kCGImagePropertyOrientationLeft; // for landscape R
+    }
+    else {
+        //NSLog(@"%s %d, UIInterfaceOrientation other", __FUNCTION__, __LINE__);
+        orient = kCGImagePropertyOrientationUp;
     }
 
-    NSArray *boxes = [self detectTextBoundingBoxes:ciimage orientation:orient];
-    NSArray *goodBoxes = [self analyzeVisionBoxes:boxes];
+    NSUInteger vnCount;
+    NSArray *boxedWords = [self visionDetectTextBoundingBoxes:ciimage orientation:orient boxesCount:&vnCount];
+#ifdef DEBUG_ISSUE_102_VERBOSE
+    if ([boxedWords count] > 0) {
+        NSLog(@"==== Line %d, === Accepted boxes: %ld of %lu", __LINE__, [boxedWords count], (unsigned long)vnCount);
+        for (NSDictionary *d in boxedWords) {
+            NSLog(@"\t dict: %@", d);
 
+//            NSValue *v = d[@"box"];
+//            NSString *s = d[@"text"];
+//            NSLog(@"\t\t rect: %@ <%@>", NSStringFromCGRect(v.CGRectValue), s);
+        }
+    }
+#endif
+
+    if ([boxedWords count] == 0) {
+        //NSLog(@"%s Line %d, no boxes detected", __FUNCTION__, __LINE__);
+        return;
+    }
+
+#ifdef DEBUG_ISSUE_102_SHOW_ALL_BOXES
+    NSArray *goodBoxedWords = boxedWords;
+#else
+    NSArray *goodBoxedWords = [self analyzeVisionBoxedWords:boxedWords];
+#endif
+    
     // We expect to have
     //  goodBoxes[0] FamilyName, GivenName
     //  goodBoxes[1] CardNumber (unused)
     //  goodBoxes[2] Birthday Sex
 
-    if ([goodBoxes count] != NUMBER_OF_BOXES_FOR_TESSERACT) {
-        NSLog(@"Detected %ld boxes instead of %d", [goodBoxes count], NUMBER_OF_BOXES_FOR_TESSERACT);
-        [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
+//#ifdef DEBUG_ISSUE_102
+//    // Check for multiline blocks (if any, only the first line should be kept)
+//    for (NSDictionary *d in goodBoxedWords) {
+//        NSString *s = d[@"text"];
+//        NSArray *a = [s componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+//        if ([a count] > 1)
+//            NSLog(@"multiline: %@", a);
+//    }
+//#endif
+    
+#ifndef DEBUG_ISSUE_102_SHOW_ALL_BOXES
+  #ifdef DEBUG_ISSUE_102
+    if ([goodBoxedWords count] != NUMBER_OF_BOXES_FOR_OCR ) {
+        NSLog(@"Line %d, VN box: %ld, accepted: %ld, sorted %ld good boxes instead of %d", __LINE__,
+              vnCount,
+              [boxedWords count],
+              [goodBoxedWords count],
+              NUMBER_OF_BOXES_FOR_OCR);
+
+        //[self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
         return;
     }
-
-//    for (NSValue *v in goodBoxes)
-//        NSLog(@"\trect: %@", NSStringFromCGRect(v.CGRectValue));
-
-    @autoreleasepool {
-
-    NSMutableArray *ocrStrings = [NSMutableArray new];
-#ifdef WITH_ARRAY_OF_BLACKLISTS
-    NSArray *blacklist = [NSArray arrayWithObjects:
-                          @"_}\".[]':",
-                          @"", //   [NSNull null] will crash
-                          @"",
-                          nil];
-    NSArray *whitelist = [NSArray arrayWithObjects:
-                          @"",
-                          @"0123456789",
-                          @"0123456789. MF",
-                          nil];
+  #endif
+    
+  #ifdef DEBUG_ISSUE_102_VERBOSE
+    NSLog(@"==== Line %d, === Sorted boxes: %ld", __LINE__, [goodBoxedWords count]);
+    for (NSDictionary *d  in goodBoxedWords)
+        NSLog(@"\t dict: %@", d);
+  #endif
 #endif
 
-    // OCR with tesseract
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.cameraVC.previewView updateOCRBoxedWords:goodBoxedWords];
+        [self.cameraVC.previewView setNeedsDisplay];
+    });
+    
+    // By now we know that we have the correct number of text boxes in the right place and with the right size
+    // Let's verify that the text is formatted as expected
 
-    G8Tesseract *tesseract = [[G8Tesseract alloc] initWithLanguage:@"eng+fra"];
-    //NSLog(@"%s line %d, engineMode: %lu", __FUNCTION__, __LINE__, (unsigned long)tesseract.engineMode);
-    tesseract.delegate = self;
-    tesseract.maximumRecognitionTime = 2.0;
+    if ([self validateOcrResults:goodBoxedWords]) {
 
-    //tesseract.engineMode = G8OCREngineModeTesseractOnly; // fastest (default)
-    //tesseract.engineMode = G8OCREngineModeCubeOnly;// better accuracy, but slower
-    //tesseract.engineMode = G8OCREngineModeTesseractCubeCombined;// Run both and combine results - best accuracy
+#ifndef TAP_TO_END_CARD_OCR
+        //NSLog(@"Line %d, OCR validated", __LINE__);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.cameraVC stopCameraStream];
+            [self.cameraVC cancelCamera:nil];
+        });
 
-#ifndef WITH_ARRAY_OF_BLACKLISTS
-    tesseract.charBlacklist = @"_";
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"lastVideoFrameNotification"
+                                                                object:nil];
+#endif
+    }
+#ifdef DEBUG_ISSUE_102
+    else {
+        NSLog(@"Line %d, OCR failed validation", __LINE__);
+    }
+#endif
+}
+
+# pragma mark - Text Detection
+// Returns an array with the word bounding boxes with x < 0.3 and y < 0.3
+- (NSArray *)visionDetectTextBoundingBoxes:(CIImage*)image
+                               orientation:(CGImagePropertyOrientation)orientation
+                                boxesCount:(NSUInteger *)vnCount
+{
+#ifdef DEBUG_ISSUE_102_VERBOSE
+    NSLog(@"Line %s, orientation %d", __LINE__, orientation);
+#endif
+    
+    VNRecognizeTextRequest *textRequest = [VNRecognizeTextRequest new];
+    textRequest.recognitionLevel = VNRequestTextRecognitionLevelAccurate;
+    //textRequest.recognitionLevel = VNRequestTextRecognitionLevelFast;
+    textRequest.revision = VNRecognizeTextRequestRevision1;
+    textRequest.usesLanguageCorrection = FALSE;
+    textRequest.minimumTextHeight = minTextHeight_mm / cardHeight_mm;
+    
+    // Performs requests on a single image.
+    VNImageRequestHandler *handler =
+        [[VNImageRequestHandler alloc] initWithCIImage:image
+                                           orientation:orientation
+                                               options:@{}];
+    [handler performRequests:@[textRequest] error:nil];
+    
+    *vnCount = [textRequest.results count];
+
+    if (!textRequest.results || ([textRequest.results count] == 0)) {
+        //NSLog(@"%s line %d, NO textRequest results", __FUNCTION__, __LINE__);
+        return @[];
+    }
+
+#ifdef DEBUG_ISSUE_102_VERBOSE
+    NSLog(@"==== Line %d, === Detected VN textRequest.results: %lu", __LINE__, (unsigned long)[textRequest.results count]);
 #endif
 
-    UIImage *ui_img3 = imageCard;
-    
-    UIGraphicsBeginImageContextWithOptions(ui_img3.size, NO, ui_img3.scale);
-    CGContextRef cg_context = UIGraphicsGetCurrentContext();
-    UIGraphicsPushContext(cg_context);
-    
-    CGContextSetLineWidth(cg_context, 10.0f);
-    CGContextSetStrokeColorWithColor(cg_context, [UIColor systemBlueColor].CGColor);
-    
-    CGSize cg_size = ui_img3.size;
+    NSMutableArray *boxedWords = [NSMutableArray new];
 
-        int i = 0;
-        for (id box in goodBoxes) { // We know we have these many: NUMBER_OF_BOXES_FOR_TESSERACT
-        @autoreleasepool {
+    unsigned int boxNumber = 0;
+    for (VNRecognizedTextObservation *obs in textRequest.results)
+    {
+        boxNumber++;
+        CGRect box = obs.boundingBox;
 
-            const CGFloat margin = 1.0f;
-            CGRect cg_r = [box CGRectValue];
-            CGRect cg_imageRect = CGRectMake(cg_r.origin.x * cg_size.width - margin, // XYWH
-                                             cg_r.origin.y * cg_size.height - margin,
-                                             cg_r.size.width * cg_size.width + 2*margin,
-                                             cg_r.size.height * cg_size.height + 2*margin);
-            CGContextStrokeRect(cg_context, cg_imageRect);
-            
-            CGRect cg_imageRect2 = CGRectMake(cg_imageRect.origin.x,
-                                              ui_img3.size.height - (cg_imageRect.origin.y+cg_imageRect.size.height),
-                                              cg_imageRect.size.width,
-                                              cg_imageRect.size.height);
-            UIImage *tesseractSubImage = [ui_img3 cropRectangle:cg_imageRect2 inFrame:ui_img3.size];
-            tesseract.image = tesseractSubImage;
+#ifdef DISCARD_BAD_BOXES
 
-#ifdef WITH_ARRAY_OF_BLACKLISTS
-            tesseract.charWhitelist = whitelist[i];
-            tesseract.charBlacklist = blacklist[i];
+#ifndef CROP_IMAGE_TO_CARD_ROI
+        // Discards text in the top area of the card (0 is the top, 1 is the bottom)
+  #ifdef VN_BOXES_NEED_XY_SWAP
+        if ((box.origin.x) < (cardIgnoreTop_mm/cardHeight_mm))
+  #else
+        if ((box.origin.y) < (cardIgnoreTop_mm/cardHeight_mm))
+  #endif
+        {
+            #ifdef DEBUG_ISSUE_102_VERBOSE
+            NSLog(@"\t --%u-- Skip top because x: %.2f < %.2f", boxNumber, box.origin.x, cardIgnoreTop_mm / cardHeight_mm);
+            #endif
+            continue;
+        }
 #endif
 
-            [tesseract recognize];    // Start the recognition
+#if 1
+        // Discard text in the right area of the card
+        // Keep only boxes with corner within 14mm strip on the left
+  #ifdef CROP_IMAGE_TO_CARD_ROI
+        CGFloat thresholdX = cardKeepLeft_mm / (cardROI_W*cardWidth_mm);
+  #else
+        CGFloat thresholdX = cardKeepLeft_mm / cardWidth_mm;
+  #endif
 
-            // Add to result array, trimming off the trailing "\n\n"
-            [ocrStrings addObject:[[tesseract recognizedText] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]];
-            
-            i++;
-        }   // autoreleasepool
-    } // for
-    
-#ifdef DEBUG
-    NSLog(@"OCR result <%@>", ocrStrings);
+  #ifdef VN_BOXES_NEED_XY_SWAP
+        if (box.origin.y > thresholdX)
+  #else
+        if (box.origin.x > thresholdX)
+  #endif
+        {
+            #ifdef DEBUG_ISSUE_102_VERBOSE
+            NSLog(@"\t --%u-- Skip right because y: %.2f > %.2f", boxNumber, box.origin.y, thresholdX);
+            #endif
+            continue;
+        }
 #endif
 
-    // Fixup OCR results
+#if 1
+        // Discard text smaller than expected
+        if (box.size.width < rejectBoxWidthFraction) {
+            #ifdef DEBUG_ISSUE_102_VERBOSE
+            NSLog(@"\t --%u-- Skip too small because width: %.2f < %.2f", boxNumber, box.size.width, rejectBoxWidthFraction);
+            #endif
+            continue;
+        }
+#endif
 
-    // In some cases instead of the comma it detects a period
-    NSString *nameString = [ocrStrings[0] stringByReplacingOccurrencesOfString:@"." withString:@","];
+#if 0
+        // Discard text bigger than expected
+        // Careful: the box might be big but the "text box" smaller
+        if (box.size.width > (rejectBoxWidth_mm / cardWidth_mm)) {
+            #ifdef DEBUG_ISSUE_102_VERBOSE
+            NSLog(@"\t --%u-- Skip too big", boxNumber);
+            #endif
+            stats.skippedBoxTall++;
+            continue;
+        }
+#endif
+#endif // DISCARD_BAD_BOXES
 
-    NSArray *nameArray = [nameString componentsSeparatedByString:@","]; // sometimes we get ",_" instead of ", "
-    NSArray *dateArray = [ocrStrings[2] componentsSeparatedByString:@" "];
+        //NSLog(@"line %d, class %@", __LINE__, [obs class] ); // VNRecognizedTextObservation
+        //NSLog(@"line %d, %@", __LINE__, obs );
+#if 0 // show all candidates
+        NSArray<VNRecognizedText*> *topCandidates = [obs topCandidates:3]; // (NSUInteger)maxCandidateCount;
+        for (VNRecognizedText *t in topCandidates)
+            NSLog(@"\t <%@>", t.string);
+#endif
 
-    if ([nameArray count] < 2 || [dateArray count] < 2) {
-        [self resetAllFields];
-        [self friendlyNote:NSLocalizedString(@"Please retry OCR", nil)];
-        return;
+        NSArray<VNRecognizedText*> *topCandidates = [obs topCandidates:1];
+        NSString *s;
+        VNConfidence c = 0;
+        CGRect boundBox = CGRectZero;  // text bounding box
+        if (topCandidates.count == 0) {
+            continue;
+        }
+
+        // Use only first candidate
+
+        s = topCandidates[0].string;
+        c = topCandidates[0].confidence;
+        id bbox = [topCandidates[0] boundingBoxForRange:NSMakeRange(0, s.length) error:nil];
+        boundBox = [bbox boundingBox];  // observed that it's >= obs.boundingBox
+        //VNRecognizedText *t = topCandidates[0];
+
+#ifdef DISCARD_BAD_BOXES
+#if 1
+        VNConfidence confidenceThreshold = 0.4f;
+        if (c < confidenceThreshold) {
+            #ifdef DEBUG_ISSUE_102_VERBOSE
+            NSLog(@"\t --%u-- Skip <%@> confidence %.2f less than %.2f", boxNumber, s, c, confidenceThreshold);
+            #endif
+            continue;
+        }
+#endif
+#if 1
+        // Discard boxes whose text contains unwanted characters
+        NSCharacterSet *unwantedCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/^•&~!=:(%#_"];
+        NSUInteger loc = [s rangeOfCharacterFromSet:unwantedCharacters].location;
+        if (loc != NSNotFound) {
+            #ifdef DEBUG_ISSUE_102_VERBOSE
+            NSLog(@"\t --%u-- Skip <%@> because of '%@'", boxNumber, s, [s substringWithRange:NSMakeRange(loc, 1)]);
+            #endif
+            continue;
+        }
+#endif
+#if 1
+        // Discard boxes that contain unwanted text
+        NSArray *unwantedText = @[@"Name", @"Vorname", @"Cognome",
+                                  @"Karten",
+                                  @"Geburtsdatum", @"Date de",
+                                  @"Data di", @"Data da"];
+        BOOL foundUnwantedText = NO;
+        for (id text in unwantedText)
+        {
+            if ([s rangeOfString:text].location != NSNotFound) {
+                #ifdef DEBUG_ISSUE_102_VERBOSE
+                NSLog(@"\t --%u-- Skip <%@> because of <%@>", boxNumber, s, text);
+                #endif
+                foundUnwantedText = YES;
+                break;
+            }
+        }
+
+        if (foundUnwantedText)
+            continue;
+
+        #ifdef DEBUG_ISSUE_102_VERBOSE
+        NSLog(@"\t ++%d++ Keep <%@>\n\t\t%@", boxNumber, s, NSStringFromCGRect(box));
+        //NSLog(@"\t ++%d++ Keep <%@>", boxNumber, s);
+        #endif
+
+#endif
+#endif // DISCARD_BAD_BOXES
+        
+        NSDictionary *dict = @{@"box" : [NSValue valueWithCGRect: box],
+                               @"conf": [NSNumber numberWithFloat: c],
+                               @"bbx": [NSValue valueWithCGRect: boundBox],
+                               @"text": s};
+        [boxedWords addObject:dict];
+    }
+    
+    return [boxedWords copy];
+}
+
+- (NSArray *)analyzeVisionBoxedWords:(NSArray *)allBoxes
+{
+    //NSLog(@"%s %@, class: %@", __FUNCTION__, allBoxes, [allBoxes[0] class]); // NSConcreteValue
+
+    NSUInteger n = [allBoxes count];
+    if (n < NUMBER_OF_BOXES_FOR_OCR) {
+#ifdef DEBUG_ISSUE_102_VERBOSE
+        NSLog(@"%s Nothing to do with only %lu boxes", __FUNCTION__, (unsigned long)n);
+#endif
+        return allBoxes;
+    }
+    
+    // Note: if we have n == NUMBER_OF_BOXES_FOR_OCR we still need to sort them by Y
+
+    NSArray *boxedWords = allBoxes;
+
+    if (n > NUMBER_OF_BOXES_FOR_OCR)
+    {
+        // Keep only the first 5
+        if (n > 5) {
+            boxedWords = [allBoxes subarrayWithRange:NSMakeRange(0, 5)];
+            //NSLog(@"Keep first 5 %@", boxes);
+        }
+        
+#ifdef DEBUG_ISSUE_102_VERBOSE
+        NSLog(@"%s %d, %d boxes to be sorted %@", __FUNCTION__, __LINE__, n, boxedWords);
+#endif
+
+        // Sort boxes by height
+        boxedWords = [boxedWords sortedArrayUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+            CGRect p1 = [obj1[@"box"] CGRectValue];
+            CGRect p2 = [obj2[@"box"] CGRectValue];
+#ifdef VN_BOXES_NEED_XY_SWAP
+            //  sort them by width for Vision boxes
+            if (p1.size.width == p2.size.width)
+                return NSOrderedSame;
+
+            return p1.size.width < p2.size.width;
+#else
+            if (p1.size.height == p2.size.height)
+                return NSOrderedSame;
+
+            return p1.size.height < p2.size.height;
+#endif
+        }];
+        //NSLog(@"sorted by height %@", boxedWords);
+        
+        // Keep only the first NUMBER_OF_BOXES_FOR_OCR
+        boxedWords = [boxedWords subarrayWithRange:NSMakeRange(0, NUMBER_OF_BOXES_FOR_OCR)];
+        //NSLog(@"Keep first %d %@", NUMBER_OF_BOXES_FOR_OCR, boxedWords);
+    }
+
+    // Sort them back by Y
+    boxedWords = [boxedWords sortedArrayUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+        CGRect p1 = [obj1[@"box"] CGRectValue];
+        CGRect p2 = [obj2[@"box"] CGRectValue];
+#ifdef VN_BOXES_NEED_XY_SWAP
+        if (p1.origin.x == p2.origin.x)
+            return NSOrderedSame;
+
+        return p1.origin.x >= p2.origin.x;
+#else
+        if (p1.origin.y == p2.origin.y)
+            return NSOrderedSame;
+
+        return p1.origin.y < p2.origin.y;
+#endif
+    }];
+
+    //NSLog(@"Sort by Y %@", boxedWords);
+    return boxedWords;
+}
+
+- (BOOL)validateOcrResults:(NSArray *)ocrResults
+{
+    if (videoCaptureFinished) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"%s %d, no validation after videoCaptureFinished", __FUNCTION__, __LINE__);
+        #endif
+        return NO;
+    }
+    
+    if ([ocrResults count] < NUMBER_OF_BOXES_FOR_OCR) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"%s %d, wrong number of OCR results", __FUNCTION__, __LINE__);
+        #endif
+        return NO;
+    }
+
+    // Validate first line /////////////////////////////////////////////////////
+    NSDictionary *d = ocrResults[0];
+    NSString *s = d[@"text"];
+    
+    NSArray *line1Array = [s componentsSeparatedByString:@","];
+    if ([line1Array count] < 2) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"Line %d, not enough elements in first line: <%@>", __LINE__, line1Array);
+        #endif
+        return NO;
+    }
+
+    NSString *familyName = line1Array[0];
+    NSString *givenName = line1Array[1];
+    
+    if ([givenName length] == 0) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"Line %d, given name is empty", __LINE__);
+        #endif
+        return NO;
     }
 
     // Trim leading space from given name
-    NSString *givenName = nameArray[1];
     if ([givenName length] > 0) {
         if ([[NSCharacterSet whitespaceCharacterSet] characterIsMember:[givenName characterAtIndex:0]])
             givenName = [givenName substringFromIndex:1];
         
-        // Trim trailing '-' from given name
-        if ([givenName hasSuffix:@"-"])
-            givenName = [givenName substringToIndex:[givenName length]-1];
+//        // Trim trailing '-' from given name
+//        if ([givenName hasSuffix:@"-"])
+//            givenName = [givenName substringToIndex:[givenName length]-1];
     }
 
-#ifdef DEBUG
-    NSLog(@"Family name <%@>", nameArray[0]);
-    NSLog(@"First name <%@>", givenName);
-    NSLog(@"Birthday <%@>", dateArray[0]);
-    NSLog(@"Sex <%@>", dateArray[1]);
+    // Validate second line ////////////////////////////////////////////////////
+    // Still unused but it helps to validate it
+    d = ocrResults[1];
+    NSString *cardNumberString = d[@"text"];
+    if ([cardNumberString length] != 20) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"Line %d, card number wrong size: <%lu>", __LINE__, (unsigned long)[cardNumberString length]);
+        #endif
+        return NO;
+    }
+    
+    // Check that it contains only numerical digits
+    NSCharacterSet *_NumericOnly = [NSCharacterSet decimalDigitCharacterSet];
+    NSCharacterSet *myStringSet = [NSCharacterSet characterSetWithCharactersInString:cardNumberString];
+    if (![_NumericOnly isSupersetOfSet: myStringSet]) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"Line %d, card number not only digits: <%@>", __LINE__, cardNumberString);
+        #endif
+        return NO;
+    }
+
+    // Validate third line /////////////////////////////////////////////////////
+    d = ocrResults[2];
+    s = d[@"text"];
+    NSArray *line2Array = [s componentsSeparatedByString:@" "];
+    if ([line2Array count] < 2) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"Line %d, possibly missing sex field in third line: <%@>", __LINE__, line2Array);
+        #endif
+        return NO;
+    }
+    
+    NSString *dateString = line2Array[0];
+    // Validate that it contains 3 fields separated by '.'
+    NSArray *dateFieldsArray = [dateString componentsSeparatedByString:@"."];
+    if ([dateFieldsArray count] < 3) {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"Line %d, bad date: <%@>", __LINE__, dateString);
+        #endif
+        return NO;
+    }
+    
+    NSString *sexString = line2Array[1];
+
+    if (![sexString isEqualToString:@"M"] &&
+        ![sexString isEqualToString:@"F"])
+    {
+        #ifdef DEBUG_ISSUE_102
+        NSLog(@"%s %d, wrong sex %@", __FUNCTION__, __LINE__, sexString);
+        #endif
+        return NO;
+    }
+
+    savedOcr.familyName = familyName;
+    savedOcr.givenName = givenName;
+    savedOcr.cardNumberString = cardNumberString;
+    savedOcr.dateString = dateString;
+    savedOcr.sexString = sexString;
+
+#ifdef DEBUG_ISSUE_102_VERBOSE
+    NSLog(@"Validated OCR results\n\t Family name <%@>\n\t First name <%@>\n\t Card# <%@>\n\t Birthday <%@>\n\t Sex <%@>",
+          familyName,
+          givenName,
+          cardNumberString,
+          dateString,
+          sexString);
 #endif
+    
+    return YES;
+}
+
+#pragma mark - Notifications
+- (void)lastVideoFrame:(NSNotification *)notification
+{
+    videoCaptureFinished = YES;
     
     // Create a Patient and fill up the edit fields
 
     Patient *incompletePatient = [Patient new];
-    incompletePatient.familyName = nameArray[0];
-    incompletePatient.givenName = givenName;
-    incompletePatient.birthDate = dateArray[0];
+    incompletePatient.familyName = savedOcr.familyName;
+    incompletePatient.givenName = savedOcr.givenName;
+    incompletePatient.birthDate = savedOcr.dateString;
     incompletePatient.uniqueId = [incompletePatient generateUniqueID];
     
-    if ([dateArray[1] isEqualToString:@"M"])
+    if ([savedOcr.sexString isEqualToString:@"M"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_M;
-    else if ([dateArray[1] isEqualToString:@"F"])
+    else if ([savedOcr.sexString isEqualToString:@"F"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_F;
 
+#ifdef TAP_TO_END_CARD_OCR
     [self resetAllFields];
+#else
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self resetAllFields];
+    });
+#endif
 
     // Check it the patient is already in the database
     //NSLog(@"uniqueId %@", incompletePatient.uniqueId);
@@ -260,10 +720,6 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:existingPatient.uniqueId forKey:@"currentPatient"];
         [defaults synchronize];
-        
-#ifdef DEBUG_ISSUE_86
-        NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, existingPatient.uniqueId);
-#endif
 
         MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
         appDel.editMode = EDIT_MODE_PRESCRIPTION;
@@ -272,113 +728,15 @@ didFinishProcessingPhoto:(AVCapturePhoto *)photo
         MLViewController *vc = [nc.childViewControllers firstObject];
         [vc switchToPrescriptionView];
     }
-    else
+    else {
+#ifdef TAP_TO_END_CARD_OCR
         [self setAllFields:incompletePatient];
 
-        
-    // Clean up
-
-    tesseract = nil;
-    // Try to call 'clearCache' after all the tesseract instances are completely deallocated
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^{
-        [G8Tesseract clearCache];
-    });
-
-    [ocrStrings removeAllObjects];
-    ocrStrings = nil;
-        
-    } // autoreleasepool
-}
-
-# pragma mark - Text Detection
-// Returns an array with the word bounding boxes with x < 0.3 and y < 0.3
-- (NSArray *)detectTextBoundingBoxes:(CIImage*)image
-                         orientation:(CGImagePropertyOrientation)orientation
-{
-    NSMutableArray *words = [NSMutableArray new];
-
-    VNDetectTextRectanglesRequest *textRequest = [VNDetectTextRectanglesRequest new];
-    textRequest.reportCharacterBoxes = NO;
-    
-    // Performs requests on a single image.
-    VNImageRequestHandler *handler =
-        [[VNImageRequestHandler alloc] initWithCIImage:image
-                                           orientation:orientation
-                                               options:@{}];
-    [handler performRequests:@[textRequest] error:nil];
-    
-//#ifdef DEBUG
-//    if (!textRequest.results)
-//        NSLog(@"%s line %d, textRequest.results: nil", __FUNCTION__, __LINE__);
-//    else
-//        NSLog(@"%s line %d, textRequest.results: %lu", __FUNCTION__, __LINE__, (unsigned long)[textRequest.results count]);
-//#endif
-    
-    for (VNTextObservation *observation in textRequest.results) {
-        
-        CGRect boundingBoxWord = observation.boundingBox;
-
-        // Discards text in the top area of the card
-        if (boundingBoxWord.origin.y > 0.352f)   // 0 is bottom of the card, 1 top
-            continue;
-        
-        // Discard text in the right area of the card
-        if (boundingBoxWord.origin.x > 0.3)
-            continue;
-
-        [words addObject:[NSValue valueWithCGRect: boundingBoxWord]];
+#else
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setAllFields:incompletePatient];
+        });
+#endif
     }
-    
-    return words;
 }
-
-- (NSArray *)analyzeVisionBoxes:(NSArray *)allBoxes
-{
-    //NSLog(@"%s %@, class: %@", __FUNCTION__, allBoxes, [allBoxes[0] class]); // NSConcreteValue
-
-    NSUInteger n = [allBoxes count];
-    if (n <= NUMBER_OF_BOXES_FOR_TESSERACT) {
-        NSLog(@"%s Nothing to do with only %lu boxes", __FUNCTION__, (unsigned long)n);
-        return allBoxes;
-    }
-
-    NSArray *boxes = allBoxes;
-
-    // Keep only the first 5 (sorted by Y)
-    if (n > 5) {
-        boxes = [allBoxes subarrayWithRange:NSMakeRange(0, 5)];
-        //NSLog(@"Keep first 5 %@", boxes);
-    }
-    
-    // Sort boxes by vertical size
-    boxes = [boxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
-        CGRect p1 = [obj1 CGRectValue];
-        CGRect p2 = [obj2 CGRectValue];
-        if (p1.size.height == p2.size.height)
-            return NSOrderedSame;
-        
-        return p1.size.height < p2.size.height;
-    }];
-    //NSLog(@"sorted by height %@", boxes);
-    
-    // Keep only the first NUMBER_OF_BOXES_FOR_TESSERACT
-    boxes = [boxes subarrayWithRange:NSMakeRange(0, NUMBER_OF_BOXES_FOR_TESSERACT)];
-    //NSLog(@"Keep first %d %@", NUMBER_OF_BOXES_FOR_TESSERACT, boxes);
-
-    // Sort them back by Y
-    boxes = [boxes sortedArrayUsingComparator:^NSComparisonResult(NSValue *obj1, NSValue *obj2) {
-        CGRect p1 = [obj1 CGRectValue];
-        CGRect p2 = [obj2 CGRectValue];
-        if (p1.origin.y == p2.origin.y)
-            return NSOrderedSame;
-        
-        return p1.origin.y < p2.origin.y;
-    }];
-    //NSLog(@"Sort by Y %@", boxes);
-
-    return boxes;
-}
-
 @end

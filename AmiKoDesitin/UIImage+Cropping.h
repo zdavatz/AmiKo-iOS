@@ -32,5 +32,4 @@
 -(UIImage*)cropRectangle:(CGRect)cropArea inFrame:(CGSize)frameSizel;
 -(CGRect)transposeCropRect:(CGRect)cropRect fromBound:(CGRect)fromRect toBound:(CGRect)toRect;
 
-
 @end

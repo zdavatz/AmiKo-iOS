@@ -34,8 +34,6 @@
 #import "PatientDbListViewController.h"
 #import "PatientDBAdapter.h"
 
-#import <TesseractOCR/TesseractOCR.h>
-
 #pragma mark -
 
 @interface MLAppDelegate()<SWRevealViewControllerDelegate>
@@ -193,7 +191,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
           [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
     NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
 
-    NSLog(@"Tesseract version %@", [G8Tesseract version]);
     //NSLog(@"current device model %@", [UIDevice currentDevice].model );
 #endif
 

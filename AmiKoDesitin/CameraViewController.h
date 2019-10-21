@@ -13,7 +13,7 @@
 @interface CameraViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet PreviewView *previewView;
-@property (nonatomic, weak) id<AVCapturePhotoCaptureDelegate> delegate;
+@property (nonatomic, weak) id<AVCaptureVideoDataOutputSampleBufferDelegate> delegate;
 
 - (void) addObservers;
 - (void) startCameraStream;
@@ -22,4 +22,5 @@
 - (IBAction) cancelCamera:(id)sender;
 - (IBAction) handleTap:(UITapGestureRecognizer *)gesture;
 
+- (void)setVidOrientation:(AVCaptureConnection *)connection;
 @end

@@ -70,6 +70,8 @@
 	<string>Bestehende Kunden für Rezepterstellung ins $(PRODUCT_NAME) Adressbuch importieren.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>debug cropped card</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ionicons.ttf</string>

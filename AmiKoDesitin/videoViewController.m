@@ -12,7 +12,6 @@
 static void * SessionRunningContext = &SessionRunningContext;
 
 #pragma mark -
-////////////////////////////////////////////////////////////////////////////////
 
 @implementation VideoPreviewView
 
@@ -39,7 +38,6 @@ static void * SessionRunningContext = &SessionRunningContext;
 @end
 
 #pragma mark -
-////////////////////////////////////////////////////////////////////////////////
 
 @interface videoViewController ()
 
@@ -174,7 +172,7 @@ static void * SessionRunningContext = &SessionRunningContext;
 - (void)configureSession
 {
     if ( self.setupResult != AVCamSetupResultSuccess ) {
-        NSLog(@"%s line %d", __FUNCTION__, __LINE__);
+        NSLog(@"%s line %d, cannot configure session", __FUNCTION__, __LINE__);
         return;
     }
     
@@ -183,11 +181,11 @@ static void * SessionRunningContext = &SessionRunningContext;
     [self.session beginConfiguration];
     self.session.sessionPreset = AVCaptureSessionPresetPhoto;
     
-    ////////////////////////////////////////////////////////////////////////////
+    ///
     AVCaptureDevice *videoDevice =
-    [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
-                                       mediaType:AVMediaTypeVideo
-                                        position:AVCaptureDevicePositionBack];
+        [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera
+                                           mediaType:AVMediaTypeVideo
+                                            position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
         NSLog(@"No videoDevice\n%s:%d", __FILE__, __LINE__);
         [self.session commitConfiguration];
@@ -196,77 +194,72 @@ static void * SessionRunningContext = &SessionRunningContext;
 
     // Lower the frame rate
     if ( [videoDevice lockForConfiguration:&error] ) {
-        [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(1, 8)];
-        [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(1, 4)];
+        [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(1, 8)];  // 1/8 second
+        [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(1, 4)];  // 1/4 second
         [videoDevice unlockForConfiguration];
     }
     else {
-        NSLog( @"Could not lock video device for configuration: %@", error );
+        NSLog( @"Could not lock video device for configuration: %@", error.localizedDescription );
     }
 
-    ////////////////////////////////////////////////////////////////////////////
+    ///
     AVCaptureDeviceInput *videoDeviceInput =
-    [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
-                                          error:&error];
-    if ( ! videoDeviceInput ) {
-        NSLog( @"Could not create video device input: %@", error );
+        [AVCaptureDeviceInput deviceInputWithDevice:videoDevice
+                                              error:&error];
+    if ( !videoDeviceInput ) {
+        NSLog( @"Could not create video device input: %@", error.localizedDescription );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
     }
     
-    if ([self.session canAddInput:videoDeviceInput])
+    if (![self.session canAddInput:videoDeviceInput])
     {
-        [self.session addInput:videoDeviceInput];
-        self.videoDeviceInput = videoDeviceInput;
-        
-        dispatch_async( dispatch_get_main_queue(), ^{
-            UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
-            AVCaptureVideoOrientation initialVideoOrientation = AVCaptureVideoOrientationPortrait;
-            if ( statusBarOrientation != UIInterfaceOrientationUnknown ) {
-                initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
-            }
-            self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
-#if 1
-            // The image is stretched, but at least we get the toolbar.
-            // Luckily, barcode recognition still works with a distorted image.
-            self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResize;
-#else
-            // Fill the screen
-            // In landscape orientation the toolbar is no longer visible.
-            // (Strange thing is that it works for the card OCR preview)
-            self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-#endif
-        });
-    }
-    else {
         NSLog( @"Could not add video device input to the session" );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
     }
+
+    [self.session addInput:videoDeviceInput];
+    self.videoDeviceInput = videoDeviceInput;
     
-    ////////////////////////////////////////////////////////////////////////////
+    dispatch_async( dispatch_get_main_queue(), ^{
+        UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
+        AVCaptureVideoOrientation initialVideoOrientation = AVCaptureVideoOrientationPortrait;
+        if ( statusBarOrientation != UIInterfaceOrientationUnknown ) {
+            initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
+        }
+        self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
+#if 1
+        // The image is stretched, but at least we get the toolbar.
+        // Luckily, barcode recognition still works with a distorted image.
+        self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResize;
+#else
+        // Fill the screen
+        // In landscape orientation the toolbar is no longer visible.
+        // (Strange thing is that it works for the card OCR preview)
+        self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+#endif
+    });
+    
+    ///
     self.videoDataOutput = [AVCaptureVideoDataOutput new];
-    
-    if ( [self.session canAddOutput:self.videoDataOutput] )
+    if (![self.session canAddOutput:self.videoDataOutput])
     {
-        [self.session addOutput:self.videoDataOutput];
-
-        _videoDataOutput.videoSettings = nil;
-        _videoDataOutput.alwaysDiscardsLateVideoFrames = NO;
-
-        [_videoDataOutput setSampleBufferDelegate:self.delegate
-                                            queue:self.sessionQueue];
-    }
-    else {
         NSLog( @"Could not add video output to the session" );
         self.setupResult = AVCamSetupResultSessionConfigurationFailed;
         [self.session commitConfiguration];
         return;
     }
+
+    [self.session addOutput:self.videoDataOutput];
+    _videoDataOutput.videoSettings = nil;
+    _videoDataOutput.alwaysDiscardsLateVideoFrames = NO;
+    [_videoDataOutput setSampleBufferDelegate:self.delegate
+                                        queue:self.sessionQueue];
   
-    ////////////////////////////////////////////////////////////////////////////
+    ///
     [self.session commitConfiguration];
 }
 
