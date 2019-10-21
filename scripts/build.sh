@@ -5,7 +5,6 @@
 
 STEP_REMOVE_SUPPORT_FILES=true
 STEP_DOWNLOAD_SUPPORT_FILES=true
-#STEP_DOWNLOAD_TESSDATA=true
 STEP_PODFILE=true
 STEP_ARCHIVE=true
 STEP_CREATE_IPA=true
@@ -60,16 +59,6 @@ for LANG in de fr ; do
     rm $FILENAME
 done
 popd > /dev/null
-fi
-
-#-------------------------------------------------------------------------------
-if [ $STEP_DOWNLOAD_TESSDATA ] ; then
-    pushd ../AmiKoDesitin
-    FILENAME=tessdata.zip
-    wget $PILLBOX_ODDB_ORG/$FILENAME
-    unzip $FILENAME
-    rm $FILENAME
-    popd > /dev/null
 fi
 
 #-------------------------------------------------------------------------------
