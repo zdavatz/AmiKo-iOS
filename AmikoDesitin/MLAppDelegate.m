@@ -227,9 +227,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     mainRevealController.delegate = self;
 
     // Make sure the orientation is correct
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         if (orientation == UIInterfaceOrientationLandscapeLeft ||
             orientation == UIInterfaceOrientationLandscapeRight)
         {
