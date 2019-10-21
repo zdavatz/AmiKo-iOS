@@ -57,13 +57,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 #ifdef DEBUG_ISSUE_102_VERBOSE
     static int frameNumber = 0;
     AVCaptureVideoOrientation entryVideoOrientation = connection.videoOrientation;
-    NSLog(@"captureOutput line %d, frame# %d, ori: %ld, thread:%@, main:%d, finished:%d, skipped:%u", __LINE__,
+    NSLog(@"captureOutput line %d, frame# %d, ori: %ld, thread:%@, main:%d, finished:%d", __LINE__,
           frameNumber++,
           (long)entryVideoOrientation,
           [NSThread currentThread],
           [[NSThread currentThread] isMainThread],
-          videoCaptureFinished,
-          stats.skippedFramesAfterFinished);
+          videoCaptureFinished);
 #endif
 
     if (videoCaptureFinished)
@@ -258,7 +257,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 #ifndef DEBUG_ISSUE_102_SHOW_ALL_BOXES
   #ifdef DEBUG_ISSUE_102
     if ([goodBoxedWords count] != NUMBER_OF_BOXES_FOR_OCR ) {
-        NSLog(@"Line %d, VN box: %ld, accepted: %ld, sorted %ld good boxes instead of %d", __LINE__,
+        NSLog(@"Line %d, VN box: %ld, accepted: %ld, sorted %ld (expected %d)", __LINE__,
               vnCount,
               [boxedWords count],
               [goodBoxedWords count],
@@ -311,7 +310,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                                 boxesCount:(NSUInteger *)vnCount
 {
 #ifdef DEBUG_ISSUE_102_VERBOSE
-    NSLog(@"Line %s, orientation %d", __LINE__, orientation);
+    NSLog(@"Line %d, orientation %d", __LINE__, orientation);
 #endif
     
     VNRecognizeTextRequest *textRequest = [VNRecognizeTextRequest new];
@@ -403,7 +402,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             #ifdef DEBUG_ISSUE_102_VERBOSE
             NSLog(@"\t --%u-- Skip too big", boxNumber);
             #endif
-            stats.skippedBoxTall++;
             continue;
         }
 #endif

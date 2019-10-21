@@ -7,7 +7,7 @@
 //
 
 #import "CameraViewController.h"
-#import "PatientViewController+smartCard.h" // use this class as photo/video delegate
+#import "PatientViewController+smartCard.h" // use this class as video delegate
 #import "avcamtypes.h"
 
 //static void * SessionRunningContext = &SessionRunningContext;

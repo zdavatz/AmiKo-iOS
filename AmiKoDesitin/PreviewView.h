@@ -28,7 +28,7 @@
 // Following 4 defines in the range 0..1
 #define cardROI_X               0.0f
 #define cardROI_Y               (cardIgnoreTop_mm / cardHeight_mm)
-#define cardROI_W               ((cardWidth_mm / 2.0f)/cardWidth_mm)
+#define cardROI_W               (60.0/cardWidth_mm)
 #define cardROI_H               ((cardHeight_mm - cardIgnoreTop_mm)/cardHeight_mm)
 
 #ifdef CROP_IMAGE_TO_CARD_ROI
