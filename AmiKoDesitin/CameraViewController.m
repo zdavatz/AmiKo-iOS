@@ -526,9 +526,9 @@ monitorSubjectAreaChange:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"lastVideoFrameNotification"
                                                             object:nil];
     }
-#endif
     
     [self dismissViewControllerAnimated:NO completion:NULL];
+#endif
 }
 
 @end
