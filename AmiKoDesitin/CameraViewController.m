@@ -268,7 +268,7 @@
     NSError *error = nil;
     
     [self.session beginConfiguration];
-    self.session.sessionPreset = AVCaptureSessionPresetPhoto;
+    self.session.sessionPreset = AVCaptureSessionPresetHigh;
     
     ///
     AVCaptureDevice *videoDevice =
