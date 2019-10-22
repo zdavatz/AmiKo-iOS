@@ -68,11 +68,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (videoCaptureFinished)
         return;
 
-//    __block UIInterfaceOrientation statusBarOrientation2;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        statusBarOrientation2 = [UIApplication sharedApplication].statusBarOrientation;
-//    });
-
 //    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
 
     // TODO: maybe we don't need to set this here everytime
@@ -117,7 +112,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 NSLog(@"%s %d, connection.videoOrientation: %ld", __FUNCTION__, __LINE__, connection.videoOrientation);
                 #endif
             }
-            //[connection setVideoOrientation: (AVCaptureVideoOrientation)statusBarOrientation];  // NG
         }
     });
 
