@@ -59,6 +59,9 @@
 #import "FullTextSearch.h"
 #import "FullTextEntry.h"
 
+#import "MLCustomURLConnection.h"
+#import "UpdateManager.h"
+
 // Requirement to show at least up to the first comma, no line wrapping
 #define CUSTOM_FONT_SIZE_PICKER
 
@@ -443,14 +446,14 @@ static BOOL flagShowReport = false;
     // Register observer to notify successful download of new database
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(finishedDownloading:)
-                                                 name:@"MLDidFinishLoading"
+                                                 name:NOTIFY_DB_UPDATE_DOWNLOAD_SUCCESS
                                                object:nil];
     
-    // Register observer to notify absence of file on pillbox server
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(finishedDownloading:)
-                                                 name:@"MLStatusCode404"
-                                               object:nil];
+//    // Register observer to notify absence of file on pillbox server
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(finishedDownloading:)
+//                                                 name:NOTIFY_DB_UPDATE_DOWNLOAD_FAILURE
+//                                               object:nil];
 
     // Register observer to check if we are back from the background
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -648,17 +651,39 @@ static BOOL flagShowReport = false;
 - (void) finishedDownloading:(NSNotification *)notification
 {
     static int fileCnt = 0;
-    
-    if ([[notification name] isEqualToString:@"MLDidFinishLoading"]) {
-        fileCnt++;
-        NSLog(@"Finished downloading file %d", fileCnt);
 
-        if (mDb != nil &&
-            mFullTextDb != nil &&
-            fileCnt==3)
+    fileCnt++;
+#ifdef DEBUG_ISSUE_108
+    MLCustomURLConnection *conn = notification.object;
+    NSLog(@"%s === %@ file %d %@", __FUNCTION__, notification.name, fileCnt, [conn mFileName]);
+#endif
+
+    UpdateManager *um = [UpdateManager sharedInstance];
+
+//    if (![um updateSucceeded]) {
+//        [um terminateProgressBar];
+//        return;
+//    }
+
+    if (fileCnt < [um numConnections]) {
+        //NSLog(@"%s %d < %lu", __FUNCTION__, __LINE__, (unsigned long)[um numConnections]);
+        return; // Wait until all files are done
+    }
+    
+    if (![um updateSucceeded]) {
+        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:NSLocalizedString(@"Database cannot be updated!", nil)
+                                                        message:NSLocalizedString(@"Server unreachable...", nil)
+                                                         button:@"OK"];
+        [alert show];
+        return;
+    }
+
+    if ([[notification name] isEqualToString:NOTIFY_DB_UPDATE_DOWNLOAD_SUCCESS])
+    {
+        if (mDb && mFullTextDb)
         {
-            // Reset file counter
-            fileCnt=0;
+            //[um updateProgressMessage:@"Reinitializing DB..."];  // Too fast to be noticed
+
             // Make sure downloaded files cannot be backed up
             [self doNotBackupDocumentsDir];
 
@@ -682,7 +707,9 @@ static BOOL flagShowReport = false;
             [self resetDataInTableView];
             mCurrentSearchState = _mySearchState;
             mCurrentSearchKey = _mySearchKey;
-            
+
+            [um terminateProgressBar];
+
             // Display friendly message
             long numProducts = [mDb getNumProducts];
             long numSearchRes = [searchResults count]; // numFachinfos
@@ -691,7 +718,7 @@ static BOOL flagShowReport = false;
 
             NSDictionary *d = [[NSBundle mainBundle] infoDictionary];
             NSString *bundleName = [d objectForKey:@"CFBundleName"];
-            NSString *title = [NSString stringWithFormat:NSLocalizedString(@"%@ Database Updated!",nil), bundleName];
+            NSString *title = [NSString stringWithFormat:NSLocalizedString(@"%@ Database Updated!", nil), bundleName];
             
             NSString *message = [NSString stringWithFormat:NSLocalizedString(@"The database contains:\n- %ld Products\n- %ld Specialist information\n- %ld Keywords\n- %d Interactions", nil), numProducts, numSearchRes, numSearchTerms, numInteractions];
 
@@ -701,15 +728,17 @@ static BOOL flagShowReport = false;
             [alert show];
 
             [MLUtility updateDBCheckedTimestamp];
+            fileCnt = 0;    // Reset file counter
         }
-    } else if ([[notification name] isEqualToString:@"MLStatusCode404"]) {
-        NSLog(@"Status Code 404");
-        // TODO: localize
-        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Datenbank kann nicht aktualisiert werden!"
-                                                        message:@"Server unreachable..."
-                                                         button:@"OK"];
-        [alert show];
     }
+//    else if ([[notification name] isEqualToString:NOTIFY_DB_UPDATE_DOWNLOAD_FAILURE])
+//    {
+//        NSLog(@"%s Status Code 404", __FUNCTION__);
+//        MLAlertView *alert = [[MLAlertView alloc] initWithTitle:NSLocalizedString(@"Database cannot be updated!", nil)
+//                                                        message:NSLocalizedString(@"Server unreachable...", nil)
+//                                                         button:@"OK"];
+//        [alert show];
+//    }
 }
 
 // Called when we "resume" the application,

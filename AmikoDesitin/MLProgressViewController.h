@@ -21,13 +21,9 @@
  
  ------------------------------------------------------------------------ */
 
-
 #import <UIKit/UIKit.h>
 
 @interface MLProgressViewController : UIViewController
-{
-    BOOL mDownloadInProgress;
-}
 
 @property (nonatomic, assign) BOOL mDownloadInProgress;
 

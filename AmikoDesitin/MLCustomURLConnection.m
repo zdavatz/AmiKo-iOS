@@ -21,40 +21,25 @@
  
  ------------------------------------------------------------------------ */
 
-
 #import "MLCustomURLConnection.h"
 #import "MLProgressViewController.h"
 #import "MLConstants.h"
+#import "UpdateManager.h"
 
 @implementation MLCustomURLConnection
 {
-    MLProgressViewController *myProgressView;
     NSURLConnection *myConnection;
     NSFileHandle *mFile;        // writes directly to disk
     // NSMutableData *mData;    // caches in memory
     NSUInteger bytesReceived;
-    long mTotExpectedBytes;
-    long mTotDownloadedBytes;
     long mStatusCode;
-    bool mModal;
-    NSString *mFileName;
 }
 
-- (void) downloadFileWithName:(NSString *)fileName andModal:(bool)modal
+#pragma mark -
+
+- (void) downloadFileWithName:(NSString *)fileName
 {
-#ifdef DEBUG
-    NSLog(@"Downloading file %@", fileName);
-#endif
-
-    mModal = modal;
-    mFileName = fileName;
-    
-    if (modal) {
-        if (!myProgressView)
-            myProgressView = [MLProgressViewController new];
-
-        [myProgressView start];
-    }
+    self.mFileName = fileName;
 
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async( queue, ^(void){
@@ -63,11 +48,11 @@
                                                  cachePolicy:NSURLRequestUseProtocolCachePolicy
                                              timeoutInterval:30.0];
         
-        myConnection = [[NSURLConnection alloc] initWithRequest:request
+        self->myConnection = [[NSURLConnection alloc] initWithRequest:request
                                                        delegate:self
                                                startImmediately:NO];
-        [myConnection setDelegateQueue:[NSOperationQueue mainQueue]];
-        [myConnection start];
+        [self->myConnection setDelegateQueue:[NSOperationQueue mainQueue]];
+        [self->myConnection start];
     });
     
     // Get handle to file where the downloaded file is saved
@@ -75,6 +60,9 @@
     NSString *filePath = [documentsDirectory stringByAppendingPathComponent:fileName];
     [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
     mFile = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
+#ifdef DEBUG_ISSUE_108
+    NSLog(@"%s %d, start download to <%@>", __FUNCTION__, __LINE__, filePath);
+#endif
 }
 
 #pragma mark - NSURLConnectionDataDelegate
@@ -82,8 +70,8 @@
 // delegate calls just so let us know when it's working or when it isn't
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-#ifdef DEBIG
-    NSLog(@"Download failed with an error: %@, %@", error, [error description]);
+#ifdef DEBUG
+    NSLog(@"%s error: %@, %@", __FUNCTION__, error, [error description]);
 #endif
     // Release stuff
     myConnection = nil;
@@ -91,122 +79,131 @@
         [mFile closeFile];
 }
 
+// Here we are notified of the number of bytes to be downloaded for one file
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+    UpdateManager *um = [UpdateManager sharedInstance];
+
     // Get status code
     mStatusCode = [((NSHTTPURLResponse *)response) statusCode];
-    
-    mTotExpectedBytes = [response expectedContentLength];
+    if (mStatusCode == 404) {
 #ifdef DEBUG
-    NSLog(@"Expected content length = %ld bytes", mTotExpectedBytes);
+        NSLog(@"%s %d, %@ ERROR: status code: %ld", __FUNCTION__, __LINE__, self.mFileName, mStatusCode);
 #endif
-    mTotDownloadedBytes = 0;
+        um.totalDownloadSuccess = false;
+        [myConnection cancel];
+        return;
+    }
+    
+    um.totalExpectedBytes += [response expectedContentLength];
 }
 
 - (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    if (mModal && ![myProgressView mDownloadInProgress]) {
+    UpdateManager *um = [UpdateManager sharedInstance];
+
+#if 0
+    if (![um.myProgressView mDownloadInProgress])
+    {
         NSLog(@"Download canceled");
         [myConnection cancel];
         myConnection = nil;
         if (mFile)
             [mFile closeFile];
+
         return;
     }
+#endif
     
-    if (mFile) {
+    if (mFile)
         [mFile writeData:data];
-    }
-    mTotDownloadedBytes += [data length];
 
-    if (mModal)
-        [myProgressView updateWith:mTotDownloadedBytes andWith:mTotExpectedBytes];
+    um.totalDownloadedBytes += [data length];
+    [um updateProgress];
 }
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection
 {
+#ifdef DEBUG_ISSUE_108
+    NSLog(@"%s %d\n\n mFileName: %@", __FUNCTION__, __LINE__, self.mFileName);
+#endif
+
     // Release stuff
     myConnection = nil;
     if (mFile)
         [mFile closeFile];
 
-    if (mStatusCode == 404) {
-        // Notify status code 404 (file not found)
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MLStatusCode404" object:self];
+    if (mStatusCode == 404) {   // Notify status code 404 (file not found)
+        [[UpdateManager sharedInstance] setTotalDownloadSuccess:false];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DB_UPDATE_DOWNLOAD_FAILURE object:self];
+#ifdef DEBUG
+        NSLog(@"%s %d ERROR mFileName: %@", __FUNCTION__, __LINE__, self.mFileName);
+#endif
+        [connection cancel];
         return;
     }
 
-    if (mModal)
-        [myProgressView remove];
-    
-     [self unzipDatabase];
+    if ([[self.mFileName pathExtension] isEqualToString:@"zip"])
+        [self unzipDatabase];
+    else
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DB_UPDATE_DOWNLOAD_SUCCESS object:self];
 }
 
 - (void) unzipDatabase
 {
-    if (![[mFileName pathExtension] isEqualToString:@"zip"])
-        return;
-    
-#ifdef DEBUG
-    NSLog(@"%s %d, mFileName: %@", __FUNCTION__, __LINE__, mFileName);
-#endif
+//    // Why are we checking if these files are already in the bundle ?
+//
+//    NSString *filePath;
+//    if ([mFileName isEqualToString:@"amiko_db_full_idx_de.zip"] ||
+//        [mFileName isEqualToString:@"amiko_db_full_idx_zr_de.zip"]) {
+//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
+//    }
+//    else if ([mFileName isEqualToString:@"amiko_db_full_idx_fr.zip"] ||
+//             [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"]) {
+//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
+//    }
+//
+//    if ([mFileName isEqualToString:@"drug_interactions_csv_de.zip"]) {
+//        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_de" ofType:@"csv"];
+//    }
+//    else if ([mFileName isEqualToString:@"drug_interactions_csv_fr.zip"]) {
+//        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_fr" ofType:@"csv"];
+//    }
+//
+//    if ([mFileName isEqualToString:@"amiko_frequency_de.db.zip"]) {
+//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_de" ofType:@"db"];
+//    }
+//    else if ([mFileName isEqualToString:@"amiko_frequency_fr.db.zip"]) {
+//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_fr" ofType:@"db"];
+//    }
+//
+//    //NSLog(@"%s %d, bundle filePath: %@", __FUNCTION__, __LINE__, filePath);
+//
+//    if (filePath.length == 0) {
+//        //NSLog(@"%s %d, filePath not in bundle", __FUNCTION__, __LINE__);
+//        return;
+//    }
 
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:mFileName];
-
-#ifdef DEBUG
-    NSLog(@"%s %d, zipFilePath: %@", __FUNCTION__, __LINE__, zipFilePath);
-#endif
-
-    // Why are we checking if these files are already in the bundle ?
-
-    NSString *filePath;
-    if ([mFileName isEqualToString:@"amiko_db_full_idx_de.zip"] ||
-        [mFileName isEqualToString:@"amiko_db_full_idx_zr_de.zip"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
-    }
-    else if ([mFileName isEqualToString:@"amiko_db_full_idx_fr.zip"] ||
-             [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
-    }
-
-    if ([mFileName isEqualToString:@"drug_interactions_csv_de.zip"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_de" ofType:@"csv"];
-    }
-    else if ([mFileName isEqualToString:@"drug_interactions_csv_fr.zip"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_fr" ofType:@"csv"];
-    }
-    
-    if ([mFileName isEqualToString:@"amiko_frequency_de.db.zip"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_de" ofType:@"db"];
-    }
-    else if ([mFileName isEqualToString:@"amiko_frequency_fr.db.zip"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_fr" ofType:@"db"];
-    }
-    
-#ifdef DEBUG
-    NSLog(@"%s %d, filePath: %@", __FUNCTION__, __LINE__, filePath);
-#endif
-    
-    if (filePath == nil) {
-#ifdef DEBUG
-        NSLog(@"%s %d, filePath not in bundle", __FUNCTION__, __LINE__);
-#endif
-        return;
-    }
-
-    // NSLog(@"Filepath = %@", filePath);
+    NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:self.mFileName];
     NSString *output = [documentsDirectory stringByAppendingPathComponent:@"."];
-    // NSLog(@"Output = %@", output);
+
+#ifdef DEBUG_ISSUE_108
+    NSLog(@"%s %d\n\t mFileName: %@\n\t zipFilePath: %@\n\t output: %@", __FUNCTION__, __LINE__, self.mFileName, zipFilePath, output);
+#endif
+
     BOOL unzipped = [SSZipArchive unzipFileAtPath:zipFilePath toDestination:output delegate:self];
     // Unzip data success, post notification
     if (unzipped)
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MLDidFinishLoading" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DB_UPDATE_DOWNLOAD_SUCCESS object:self];
 }
 
 #pragma mark - SSZipArchiveDelegate
 
-- (void) zipArchiveWillUnzipFileAtIndex:(NSInteger)fileIndex totalFiles:(NSInteger)totalFiles archivePath:(NSString *)archivePath fileInfo:(unz_file_info)fileInfo
+- (void) zipArchiveWillUnzipFileAtIndex:(NSInteger)fileIndex
+                             totalFiles:(NSInteger)totalFiles
+                            archivePath:(NSString *)archivePath
+                               fileInfo:(unz_file_info)fileInfo
 {
     NSLog(@"Unzipping: %ld of %ld", (long)fileIndex+1, (long)totalFiles);
 }

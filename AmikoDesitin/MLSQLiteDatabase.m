@@ -110,7 +110,9 @@
         sqlite3 *dbConnection;
         // Open database from users filesystem
         NSFileManager *fileMgr = [NSFileManager new];
-        NSLog(@"%@", path);
+#ifdef DEBUG
+        NSLog(@"%s %@", __FUNCTION__, path);
+#endif
         NSArray *content = [fileMgr contentsOfDirectoryAtPath:path error:nil];
         for (NSString *p in content) {
             NSLog(@"%@\n", p);

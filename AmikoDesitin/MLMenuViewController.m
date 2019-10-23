@@ -21,7 +21,6 @@
  
  ------------------------------------------------------------------------ */
 
-
 #import "MLMenuViewController.h"
 
 #import "MLConstants.h"
@@ -31,6 +30,7 @@
 #import "PatientViewController.h"
 
 #import "MLAppDelegate.h"
+#import "UpdateManager.h"
 
 @interface MLMenuViewController ()
 
@@ -320,29 +320,15 @@
 
 - (IBAction) startUpdate:(id)sender
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
-    MLCustomURLConnection *reportConn = [MLCustomURLConnection new];
-    MLCustomURLConnection *dbConn = [MLCustomURLConnection new];
-    MLCustomURLConnection *interConn = [MLCustomURLConnection new];
-    MLCustomURLConnection *fulltextConn = [MLCustomURLConnection new];
+    UpdateManager *um = [UpdateManager sharedInstance];
+    [um resetProgressBar];
 
-    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
-        [APP_NAME isEqualToString:@"AmiKoDesitin"]) {
-        [reportConn downloadFileWithName:@"amiko_report_de.html" andModal:NO];
-        [interConn downloadFileWithName:@"drug_interactions_csv_de.zip" andModal:NO];
-        [fulltextConn downloadFileWithName:@"amiko_frequency_de.db.zip" andModal:NO];
-        [dbConn downloadFileWithName:@"amiko_db_full_idx_de.zip" andModal:YES];
-    }
-    else if ([APP_NAME isEqualToString:@"iCoMed"] ||
-             [APP_NAME isEqualToString:@"CoMedDesitin"]) {
-        [reportConn downloadFileWithName:@"amiko_report_fr.html" andModal:NO];
-        [interConn downloadFileWithName:@"drug_interactions_csv_fr.zip" andModal:NO];
-        [fulltextConn downloadFileWithName:@"amiko_frequency_fr.db.zip" andModal:NO];
-        [dbConn downloadFileWithName:@"amiko_db_full_idx_fr.zip" andModal:YES];
-    }
+    [um addLanguageFile:@"amiko_report" extension:@"html"];
+    [um addLanguageFile:@"drug_interactions_csv" extension:@"zip"];
+    [um addLanguageFile:@"amiko_frequency" extension:@"db.zip"];
+    [um addLanguageFile:@"amiko_db_full_idx" extension:@"zip"];
+
+    [um startProgressBar];
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate

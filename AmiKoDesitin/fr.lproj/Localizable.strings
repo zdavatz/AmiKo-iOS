@@ -32,6 +32,9 @@
 "Currently, there are no interactions between these drugs in the EPha.ch database. For more information, please refer to the technical information." = "Il n’y a aucune information dans la banque de données EPha.ch à propos d’une interaction entre les médicaments sélectionnés. Veuillez consulter les informations professionelles.";
 
 /* No comment provided by engineer. */
+"Database cannot be updated!" = "La base de données ne peut pas être mise à jour!";
+
+/* No comment provided by engineer. */
 "Database Update" = "Mise à jour de la banque des données";
 
 /* No comment provided by engineer. */
@@ -175,6 +178,9 @@
 /* Interactions */
 "Regular monitoring" = "Doit être régulièrement surveillée";
 
+/* No comment provided by engineer. */
+"Reinitializing DB..." = "Reinitialisation de la DB...";
+
 /* Button */
 "Report" = "Report";
 
@@ -204,6 +210,9 @@
 
 /* No comment provided by engineer. */
 "Select package" = "Select package";
+
+/* No comment provided by engineer. */
+"Server unreachable..." = "Serveur inaccessible...";
 
 /* Button */
 "Share" = "Share";

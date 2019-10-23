@@ -21,13 +21,14 @@
  
  ------------------------------------------------------------------------ */
 
-
 #import <Foundation/Foundation.h>
 
 #import "SSZipArchive.h"
 
 @interface MLCustomURLConnection : NSURLConnection <NSURLConnectionDataDelegate, SSZipArchiveDelegate>
 
-- (void) downloadFileWithName:(NSString *)file andModal:(bool)modal;
+@property (nonatomic, copy) NSString *mFileName;
+
+- (void) downloadFileWithName:(NSString *)file;
 
 @end

@@ -216,6 +216,8 @@
 		D5FFE17418A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
 		D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FFE17318A96B0D002D6159 /* MLMenuViewController.xib */; };
 		D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */; };
+		FA20BD252360874E0092CBBE /* UpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA20BD242360874E0092CBBE /* UpdateManager.m */; };
+		FA20BD262360874E0092CBBE /* UpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FA20BD242360874E0092CBBE /* UpdateManager.m */; };
 		FA3B621522E8511F00A80296 /* fulltext_style.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621422E8511F00A80296 /* fulltext_style.css */; };
 		FA3B621622E8511F00A80296 /* fulltext_style.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621422E8511F00A80296 /* fulltext_style.css */; };
 		FA3B621C22E8527500A80296 /* color-scheme-dark.css in Resources */ = {isa = PBXBuildFile; fileRef = FA3B621B22E8527500A80296 /* color-scheme-dark.css */; };
@@ -438,6 +440,8 @@
 		D5FFE17618A96BA0002D6159 /* MLMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLMenuViewController.h; path = AmikoDesitin/MLMenuViewController.h; sourceTree = SOURCE_ROOT; };
 		D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLMenuViewController.m; path = AmikoDesitin/MLMenuViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FFE1BB18B1061B002D6159 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FA20BD242360874E0092CBBE /* UpdateManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UpdateManager.m; path = AmiKoDesitin/UpdateManager.m; sourceTree = SOURCE_ROOT; };
+		FA20BD272360876D0092CBBE /* UpdateManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UpdateManager.h; path = AmiKoDesitin/UpdateManager.h; sourceTree = SOURCE_ROOT; };
 		FA3B621422E8511F00A80296 /* fulltext_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = fulltext_style.css; path = AmiKoDesitin/fulltext_style.css; sourceTree = SOURCE_ROOT; };
 		FA3B621B22E8527500A80296 /* color-scheme-dark.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-dark.css"; path = "AmiKoDesitin/color-scheme-dark.css"; sourceTree = SOURCE_ROOT; };
 		FA3B621E22E8527F00A80296 /* color-scheme-light.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = "color-scheme-light.css"; path = "AmiKoDesitin/color-scheme-light.css"; sourceTree = SOURCE_ROOT; };
@@ -641,6 +645,8 @@
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
 				439F261B2028B7FF00396C29 /* PatientDBAdapter.h */,
 				439F261C2028B7FF00396C29 /* PatientDBAdapter.m */,
+				FA20BD242360874E0092CBBE /* UpdateManager.m */,
+				FA20BD272360876D0092CBBE /* UpdateManager.h */,
 			);
 			name = DB;
 			sourceTree = "<group>";
@@ -1379,6 +1385,7 @@
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
+				FA20BD252360874E0092CBBE /* UpdateManager.m in Sources */,
 				D5A6F28E17B16C0E00EAB24B /* MLDBAdapter.m in Sources */,
 				43A3851720333355001A5849 /* PatientDbListViewController.m in Sources */,
 				FA3B622522E88E6600A80296 /* FullTextOverviewVC.m in Sources */,
@@ -1432,6 +1439,7 @@
 				930D94BA2077E641007E4629 /* Operator.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
+				FA20BD262360874E0092CBBE /* UpdateManager.m in Sources */,
 				D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */,
 				930D94B02077E56D007E4629 /* AmkListViewController.m in Sources */,
 				FA3B622622E88E6600A80296 /* FullTextOverviewVC.m in Sources */,
@@ -1680,7 +1688,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					AMIKO_DESITIN,
 					"$(inherited)",
-					"DEBUG_ISSUE_102=1",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";

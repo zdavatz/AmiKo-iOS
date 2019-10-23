@@ -214,22 +214,12 @@ static NSString *FULL_TABLE = nil;
 
 - (void) openDatabase
 {
+#ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
+#endif
 
-    NSString *filePath = nil;
-
-    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
-        [APP_NAME isEqualToString:@"AmiKoDesitin"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
-    }
-    else if ([APP_NAME isEqualToString:@"iCoMed"] ||
-             [APP_NAME isEqualToString:@"CoMedDesitin"]) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
-    }
-    else {
-       filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
-    }
-
+    NSString *name = [NSString stringWithFormat:@"amiko_db_full_idx_%@", [MLConstants databaseLanguage]];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:name ofType:@"db"];
     mySqliteDb = [[MLSQLiteDatabase alloc] initWithPath:filePath];
 }
 
