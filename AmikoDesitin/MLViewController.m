@@ -1470,10 +1470,8 @@ static BOOL flagShowReport = false;
     
     // Add search bar as title view to navigation bar
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-#if 1 // @@@
         searchField.backgroundColor = [UIColor clearColor];
         searchField.barTintColor = [UIColor systemGray3Color];
-#endif
         searchField.translucent = YES;
     } // iPad
 

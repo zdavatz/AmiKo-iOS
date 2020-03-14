@@ -307,6 +307,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     NSLog(@"Line %d, orientation %d", __LINE__, orientation);
 #endif
     
+    NSError *error = nil;
+    NSArray *langs = [VNRecognizeTextRequest supportedRecognitionLanguagesForTextRecognitionLevel:VNRequestTextRecognitionLevelAccurate
+                                                                        revision:VNRecognizeTextRequestRevision1
+                                                                                            error:&error];
+    NSLog(@"%@", langs);
+    
     VNRecognizeTextRequest *textRequest = [VNRecognizeTextRequest new];
     textRequest.recognitionLevel = VNRequestTextRecognitionLevelAccurate;
     //textRequest.recognitionLevel = VNRequestTextRecognitionLevelFast;

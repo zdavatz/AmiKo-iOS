@@ -169,6 +169,18 @@ static int HeightInPoints;
     return @"noLanguageDBLastUpdate";
 }
 
++ (NSString *)iCloudContainerIdentifier {
+    if ([APP_NAME isEqualToString:@"iAmiKo"] ||
+        [APP_NAME isEqualToString:@"AmiKoDesitin"])
+        return @"iCloud.com.ywesee.AmikoDesitin";
+    
+    if ([APP_NAME isEqualToString:@"iCoMed"] ||
+        [APP_NAME isEqualToString:@"CoMedDesitin"])
+        return @"iCloud.com.ywesee.ComedDesitin";
+    
+    return nil;
+}
+
 + (NSString *) notSpecified
 {
     if ([APP_NAME isEqualToString:@"iAmiKo"] ||

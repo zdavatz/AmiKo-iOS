@@ -33,6 +33,7 @@
 #import "MLUtility.h"
 #import "PatientDbListViewController.h"
 #import "PatientDBAdapter.h"
+#import "MLPersistenceManager.h"
 
 #pragma mark -
 
@@ -327,6 +328,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Issue #54
     [mainRevealController revealToggle:nil];
     [mainRevealController revealToggle:nil];
+    
+    [MLPersistenceManager shared];
     
     return !launchedFromShortcut;
 }

@@ -16,6 +16,7 @@
 #import "PatientDBAdapter.h"
 #import "PatientViewController.h"
 #import "MLDBAdapter.h"
+#import "MLPersistenceManager.h"
 
 @import Vision;
 
@@ -468,36 +469,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (BOOL) checkDefaultDoctor
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
-    if (doctorDictionary)
-        return TRUE;
-    
-#ifdef DEBUG
-    NSLog(@"Default doctor is not defined");
-#endif
-    return FALSE;
+    return [[MLPersistenceManager shared] doctorDictionary] != nil;
 }
 
 - (void) loadDefaultDoctor
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
-#if 0
-    if ([self checkDefaultDoctor])
-        return;
-#else
     // Init from defaults
     // See also Operator importFromDict
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    NSDictionary *doctorDictionary = [[MLPersistenceManager shared] doctorDictionary];
     if (!doctorDictionary) {
-  #ifdef DEBUG
-        NSLog(@"Default doctor is not yet defined");
-  #endif
-
         // Maybe there was a doctor imported from an AMK,
         // but it's not the default doctor, so clear it.
         if (prescription.doctor)
@@ -505,11 +485,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
         return;
     }
-#endif
-    
-#ifdef DEBUG
-    //NSLog(@"Default doctor %@", doctorDictionary);
-#endif
+
     if (!prescription.doctor)
         self.prescription.doctor = [Operator new];
     
@@ -1082,13 +1058,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [alertController addAction:actionOk];
     }
     
+    __weak typeof(self) weakSelf = self;
     UIAlertAction *actionNo = [UIAlertAction actionWithTitle:NSLocalizedString(@"Save as New Prescription", nil)
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction *action) {
                                                              [alertController dismissViewControllerAnimated:YES completion:nil];
                                                              
                                                              // New hash and new prescription
-                                                             prescription.hash = [self makeNewUniqueHash];
+                                                             weakSelf.prescription.hash = [weakSelf makeNewUniqueHash];
                                                              [self saveNewPrescription];
                                                          }];
     [alertController addAction:actionNo];

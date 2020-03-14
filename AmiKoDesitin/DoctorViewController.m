@@ -10,6 +10,7 @@
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "MLPersistenceManager.h"
 
 @interface DoctorViewController ()
 
@@ -95,8 +96,7 @@
     if ([[self.view gestureRecognizers] count] == 0)
         [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    NSDictionary *doctorDictionary = [[MLPersistenceManager shared] doctorDictionary];
     if (!doctorDictionary) {
         NSLog(@"Default doctor signature not defined");
         [self.signatureView.layer setBorderColor: [[UIColor labelColor] CGColor]];
@@ -335,11 +335,9 @@
 #ifdef DEBUG
     NSLog(@"doctorDict: %@", doctorDict);
 #endif
-
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:doctorDict forKey:@"currentDoctor"];
-    [defaults synchronize];
     
+    [[MLPersistenceManager shared] saveDoctorDictionary:doctorDict];
+
     // Back to main screen
     [[self revealViewController] revealToggle:nil];
 }
