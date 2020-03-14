@@ -50,6 +50,8 @@
 		932F8840206BDA4700B5A77E /* AmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* AmkListViewController.xib */; };
 		CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
+		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
 		D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -322,6 +324,8 @@
 		CF158C3E241B525000F28EDD /* AmiKoDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AmiKoDesitin.entitlements; path = AmiKoDesitin/AmiKoDesitin.entitlements; sourceTree = "<group>"; };
 		CF626254241B7A9E00FBCCD9 /* CoMedDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoMedDesitin.entitlements; sourceTree = "<group>"; };
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
+		CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPersistenceManager.m; path = AmiKoDesitin/Persistence/MLPersistenceManager.m; sourceTree = SOURCE_ROOT; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -749,6 +753,15 @@
 			name = json;
 			sourceTree = "<group>";
 		};
+		CF626259241D0E1200FBCCD9 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */,
+				CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
@@ -898,6 +911,7 @@
 				FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */,
 				43A3850A2032CB3C001A5849 /* GUI */,
 				439F261A2028B1A400396C29 /* DB */,
+				CF626259241D0E1200FBCCD9 /* Persistence */,
 				43334326201B641E006BFC23 /* menu (iPad) */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
@@ -1384,6 +1398,7 @@
 				43D3A0E2201F3CFB00EA77C6 /* Product.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
+				CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */,
 				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				439F261D2028B7FF00396C29 /* PatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
@@ -1438,6 +1453,7 @@
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
 				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
+				CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */,
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* PatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
