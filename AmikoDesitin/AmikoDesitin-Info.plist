@@ -38,11 +38,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.9.68</string>
+	<string>2.9.69</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.9</string>
+	<string>2.9.1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -68,10 +68,22 @@
 	<string>Rezeptsignatur mit Selfie erstellen.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Bestehende Kunden für Rezepterstellung ins $(PRODUCT_NAME) Adressbuch importieren.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>debug cropped card</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.</string>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.com.ywesee.AmikoDesitin</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>Amiko Desitin</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>Any</string>
+		</dict>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ionicons.ttf</string>

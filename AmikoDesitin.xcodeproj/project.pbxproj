@@ -48,6 +48,8 @@
 		932F883E206BDA1600B5A77E /* ContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439EEF44202CBF4900817588 /* ContactsListViewController.xib */; };
 		932F883F206BDA1D00B5A77E /* PatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* PatientViewController.xib */; };
 		932F8840206BDA4700B5A77E /* AmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* AmkListViewController.xib */; };
+		CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
+		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -317,6 +319,9 @@
 		43D3A0E1201F3CFB00EA77C6 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = AmiKoDesitin/Product.m; sourceTree = SOURCE_ROOT; };
 		5B1BEAABB72AF37F805635CC /* Pods-AmiKoDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmiKoDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AmiKoDesitin/Pods-AmiKoDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 		C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoMedDesitin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF158C3E241B525000F28EDD /* AmiKoDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AmiKoDesitin.entitlements; path = AmiKoDesitin/AmiKoDesitin.entitlements; sourceTree = "<group>"; };
+		CF626254241B7A9E00FBCCD9 /* CoMedDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoMedDesitin.entitlements; sourceTree = "<group>"; };
+		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -514,6 +519,7 @@
 				D5A6F26717B16A2300EAB24B /* libsqlite3.0.dylib in Frameworks */,
 				D5A6F23B17B1692F00EAB24B /* UIKit.framework in Frameworks */,
 				D5A6F23D17B1692F00EAB24B /* Foundation.framework in Frameworks */,
+				CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */,
 				D5A6F23F17B1692F00EAB24B /* CoreGraphics.framework in Frameworks */,
 				7E13B965F1DF700679DA5264 /* libPods-AmiKoDesitin.a in Frameworks */,
 			);
@@ -532,6 +538,7 @@
 				D5F6BB5F17E8C87500DCBD16 /* libsqlite3.0.dylib in Frameworks */,
 				D5F6BB6017E8C87500DCBD16 /* UIKit.framework in Frameworks */,
 				D5F6BB6117E8C87500DCBD16 /* Foundation.framework in Frameworks */,
+				CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */,
 				D5F6BB6217E8C87500DCBD16 /* CoreGraphics.framework in Frameworks */,
 				D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */,
 			);
@@ -790,6 +797,8 @@
 		D5A6F22E17B1692F00EAB24B = {
 			isa = PBXGroup;
 			children = (
+				CF626254241B7A9E00FBCCD9 /* CoMedDesitin.entitlements */,
+				CF158C3E241B525000F28EDD /* AmiKoDesitin.entitlements */,
 				FA60635F231548F500E69A93 /* Colors.xcassets */,
 				D551D53617F16DE2000EC52A /* Images.xcassets */,
 				D551D54117F22ACC000EC52A /* AppIcons */,
@@ -812,6 +821,7 @@
 		D5A6F23917B1692F00EAB24B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF626255241BAD3C00FBCCD9 /* CloudKit.framework */,
 				FA98749F22E6FC53008B778F /* WebKit.framework */,
 				FA528CF120D8F1590066CE89 /* tessdata */,
 				FA6A006020D3B26F002D3A33 /* Vision.framework */,
@@ -1678,6 +1688,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-AmiKoDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-AmiKoDesitin";
+				CODE_SIGN_ENTITLEMENTS = AmiKoDesitin/AmiKoDesitin.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4B37356EGR;
@@ -1690,7 +1702,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1705,7 +1717,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-AmiKoDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-AmiKoDesitin";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = AmiKoDesitin/AmiKoDesitin.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4B37356EGR;
@@ -1718,7 +1731,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1733,6 +1746,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-CoMedDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
+				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
@@ -1756,6 +1770,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-CoMedDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
+				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
