@@ -336,7 +336,7 @@
     NSLog(@"doctorDict: %@", doctorDict);
 #endif
     
-    [[MLPersistenceManager shared] saveDoctorDictionary:doctorDict];
+    [[MLPersistenceManager shared] setDoctorDictionary:doctorDict];
 
     // Back to main screen
     [[self revealViewController] revealToggle:nil];
@@ -454,13 +454,8 @@
 #endif
     
     // Save to PNG file
-    NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
-    [UIImagePNGRepresentation(scaledImage) writeToFile:filePath atomically:YES];
-#ifdef DEBUG
-    NSLog(@"Saved to %@", filePath);
-#endif
-    
+    [MLPersistenceManager shared].doctorSignature = scaledImage;
+
     // Resize to signatureView frame for thumbnail
     CGSize sizeTN = self.signatureView.frame.size;
     //NSLog(@"signatureView %@", NSStringFromCGSize(sizeTN));

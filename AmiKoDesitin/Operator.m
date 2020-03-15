@@ -8,6 +8,7 @@
 
 #import "Operator.h"
 #import "MLUtility.h"
+#import "MLPersistenceManager.h"
 
 @implementation Operator
 
@@ -45,12 +46,7 @@
 
 - (BOOL)importSignatureFromFile
 {
-    NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
-    if (!filePath)
-        return FALSE;
-    
-    UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
+    UIImage *signatureImg = [[MLPersistenceManager shared] doctorSignature];
     //NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
     NSData *imgData = UIImagePNGRepresentation(signatureImg);
     signature = [imgData base64EncodedStringWithOptions:0];

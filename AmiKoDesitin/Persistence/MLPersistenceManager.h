@@ -22,8 +22,10 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 + (instancetype) shared;
 + (BOOL)supportICloud;
 
-- (void)saveDoctorDictionary:(NSDictionary *)dict;
+- (void)setDoctorDictionary:(NSDictionary *)dict;
 - (NSDictionary *)doctorDictionary;
+- (void)setDoctorSignature:(UIImage *)image;
+- (UIImage*)doctorSignature;
 
 @end
 

@@ -9,15 +9,23 @@
 #import "MLPersistenceManager.h"
 #import "MLConstants.h"
 #import "MLUtility.h"
+#import "Operator.h"
 
 #define KEY_PERSISTENCE_SOURCE @"KEY_PERSISTENCE_SOURCE"
+
+@interface MLPersistenceManager ()
+
+- (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite;
+- (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL;
+
+@end
 
 @implementation MLPersistenceManager
 
 + (instancetype)shared {
     __strong static id sharedObject = nil;
     
-    static dispatch_once_t onceToken = 0;
+    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedObject = [[MLPersistenceManager alloc] init];
     });
@@ -29,7 +37,8 @@
     if (self = [super init]) {
         // TODO: take care of updated icloud status when app is active
         // https://developer.apple.com/library/archive/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html#//apple_ref/doc/uid/TP40012094-CH6-SW6
-        [self migrateToICloud];
+        [self setCurrentSource:MLPersistenceSourceLocal];
+        [self setCurrentSource:MLPersistenceSourceICloud];
     }
     return self;
 }
@@ -48,8 +57,10 @@
     switch (source) {
         case MLPersistenceSourceLocal:
             [self migrateToLocal];
+            break;
         case MLPersistenceSourceICloud:
             [self migrateToICloud];
+            break;
     }
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setInteger:source forKey:KEY_PERSISTENCE_SOURCE];
@@ -58,49 +69,6 @@
 
 - (MLPersistenceSource)currentSource {
     return [[NSUserDefaults standardUserDefaults] integerForKey:KEY_PERSISTENCE_SOURCE];
-}
-
-- (void)migrateToICloud {
-    if (self.currentSource == MLPersistenceSourceICloud) {
-        return;
-    }
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        [self doctorDictionary]; // Migrate to file based doctor storage
-        NSError *error = nil;
-        NSFileManager *manager = [NSFileManager defaultManager];
-        NSURL *documentDir = [self iCloudDocumentDirectory];
-        
-        NSArray<NSURL *> *localFiles = [manager contentsOfDirectoryAtURL:[NSURL fileURLWithPath:[MLUtility documentsDirectory]]
-                                              includingPropertiesForKeys:nil
-                                                                 options:0
-                                                                   error:&error];
-        if (error != nil) {
-            NSLog(@"%@", error);
-            return;
-        }
-        
-        NSArray<NSURL *> *contents = [manager contentsOfDirectoryAtURL:documentDir
-                                            includingPropertiesForKeys:nil
-                                                               options:0
-                                                                 error:&error];
-        NSLog(@"contents: %@", contents);
-        if (error != nil) {
-            NSLog(@"%@", error);
-            return;
-        }
-        // Merging files and folder instead of overwriting
-        for (NSURL *localFile in localFiles) {
-//            [[NSFileManager defaultManager] moveItemAtURL:localFile
-//                                                    toURL:[documentDir URLByAppendingPathComponent:[localFile lastPathComponent]]
-//                                                    error:&error];
-            [[NSFileManager defaultManager] copyItemAtURL:localFile
-                                                    toURL:[documentDir URLByAppendingPathComponent:[localFile lastPathComponent]]
-                                                    error:&error];
-            if (error != nil) {
-                NSLog(@"%@", error);
-            }
-        }
-    });
 }
 
 - (void)migrateToLocal {
@@ -129,13 +97,35 @@
     return [NSURL fileURLWithPath:[MLUtility documentsDirectory]];
 }
 
-# pragma -- Doctor
+# pragma mark - Migration Local -> iCloud
+
+- (void)migrateToICloud {
+    if (self.currentSource == MLPersistenceSourceICloud) {
+        return;
+    }
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        [self doctorDictionary]; // Migrate to file based doctor storage
+        NSURL *localDocument = [NSURL fileURLWithPath:[MLUtility documentsDirectory]];
+        NSURL *remoteDocument = [self iCloudDocumentDirectory];
+
+        [self moveFile:[localDocument URLByAppendingPathComponent:@"doctor.plist"]
+                 toURL:[remoteDocument URLByAppendingPathComponent:@"doctor.plist"]
+   overwriteIfExisting:NO];
+        [self moveFile:[localDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
+                      toURL:[remoteDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
+        overwriteIfExisting:NO];
+        [self mergeFolderRecursively:[localDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
+                                  to:[remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]];
+    });
+}
+
+# pragma mark - Doctor
 
 - (NSURL *)doctorDictionaryURL {
     return [[self documentDirectory] URLByAppendingPathComponent:@"doctor.plist"];
 }
 
-- (void)saveDoctorDictionary:(NSDictionary *)dict {
+- (void)setDoctorDictionary:(NSDictionary *)dict {
     [dict writeToURL:self.doctorDictionaryURL
           atomically:YES];
 }
@@ -145,13 +135,85 @@
     NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
     if (doctorDictionary != nil) {
         // Migrate to use document file
-        [self saveDoctorDictionary:doctorDictionary];
+        [self setDoctorDictionary:doctorDictionary];
         [defaults removeObjectForKey:@"currentDoctor"];
         [defaults synchronize];
     } else {
         doctorDictionary = [NSDictionary dictionaryWithContentsOfURL:self.doctorDictionaryURL];
     }
     return doctorDictionary;
+}
+
+- (void)setDoctorSignature:(UIImage *)image {
+    NSString *filePath = [[[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME] path];
+    [UIImagePNGRepresentation(image) writeToFile:filePath atomically:YES];
+}
+
+- (UIImage*)doctorSignature {
+    NSString *filePath = [[[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME] path];
+    return [[UIImage alloc] initWithContentsOfFile:filePath];
+}
+
+# pragma mark - Utility
+
+- (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:[url path]]) {
+        return;
+    }
+    BOOL exist = [manager fileExistsAtPath:[targetUrl path]];
+    if (exist && overwrite) {
+        [manager replaceItemAtURL:targetUrl
+                    withItemAtURL:url
+                   backupItemName:[NSString stringWithFormat:@"%@.bak", [url lastPathComponent]]
+                          options:NSFileManagerItemReplacementUsingNewMetadataOnly
+                 resultingItemURL:nil
+                            error:nil];
+        [manager removeItemAtURL:url error:nil];
+    } else if (!exist) {
+        [manager moveItemAtURL:url
+                         toURL:targetUrl
+                         error:nil];
+    }
+
+}
+
+- (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    BOOL isDirectory = NO;
+    BOOL sourceExist = [manager fileExistsAtPath:[fromURL path] isDirectory:&isDirectory];
+    if (!sourceExist || !isDirectory) {
+        return;
+    }
+    isDirectory = NO;
+    BOOL destExist = [manager fileExistsAtPath:[toURL path] isDirectory:&isDirectory];
+    if (destExist && !isDirectory) {
+        // Remote is a file but we need a directory, abort
+        return;
+    }
+    if (!destExist) {
+        [manager createDirectoryAtURL:toURL
+          withIntermediateDirectories:YES
+                           attributes:nil
+                                error:nil];
+    }
+    NSArray<NSURL *> *sourceFiles = [manager contentsOfDirectoryAtURL:fromURL
+                                           includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+                                                              options:0
+                                                                error:nil];
+    for (NSURL *sourceFile in sourceFiles) {
+        NSURL *destFile = [toURL URLByAppendingPathComponent:[sourceFile lastPathComponent]];
+        NSNumber *sourceIsDir = @0;
+        [sourceFile getResourceValue:&sourceIsDir
+                              forKey:NSURLIsDirectoryKey
+                               error:nil];
+        if ([sourceIsDir boolValue]) {
+            [self mergeFolderRecursively:sourceFile
+                                      to:destFile];
+        } else {
+            [self moveFile:sourceFile toURL:destFile overwriteIfExisting:NO];
+        }
+    }
 }
 
 @end
