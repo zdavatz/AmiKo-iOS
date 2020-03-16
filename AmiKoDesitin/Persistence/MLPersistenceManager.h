@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Prescription.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,6 +30,8 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 
 - (NSURL *)amkDirectory;
 - (NSURL *)amkDirectoryForPatient:(NSString*)uid;
+- (NSURL *)savePrescription:(Prescription *)prescription;
+
 @end
 
 NS_ASSUME_NONNULL_END

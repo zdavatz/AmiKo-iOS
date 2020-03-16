@@ -221,6 +221,50 @@
     }
     return amk;
 }
+
+- (NSURL *)savePrescription:(Prescription *)prescription {
+    NSURL *amkDir;
+    NSString *uid = [prescription.patient uniqueId];
+    if (uid)
+        amkDir = [self amkDirectoryForPatient:uid];
+    else
+        amkDir = [self amkDirectory];
+    
+    NSError *error;
+
+    prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
+                              prescription.doctor.city,
+                              [MLUtility prettyTime]];
+
+    NSMutableDictionary *prescriptionDict = [NSMutableDictionary new];
+    [prescriptionDict setObject:prescription.hash forKey:KEY_AMK_HASH];
+    [prescriptionDict setObject:prescription.placeDate forKey:KEY_AMK_PLACE_DATE];
+    [prescriptionDict setObject:[prescription makePatientDictionary] forKey:KEY_AMK_PATIENT];
+    [prescriptionDict setObject:[prescription makeOperatorDictionary] forKey:KEY_AMK_OPERATOR];
+    [prescriptionDict setObject:[prescription makeMedicationsArray] forKey:KEY_AMK_MEDICATIONS];
+    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:prescriptionDict
+                                                         options:NSJSONWritingPrettyPrinted
+                                                           error:&error];
+    
+    NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
+    NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
+
+    // Prescription file name like AmiKo
+    NSString *currentTime = [[MLUtility currentTime] stringByReplacingOccurrencesOfString:@":" withString:@""];
+    currentTime = [currentTime stringByReplacingOccurrencesOfString:@"." withString:@""];
+    NSString *amkFile = [NSString stringWithFormat:@"RZ_%@.amk", currentTime];
+    NSURL *amkFileURL = [amkDir URLByAppendingPathComponent:amkFile];
+    
+    BOOL saved = [base64Str writeToURL:amkFileURL
+                            atomically:YES
+                              encoding:NSUTF8StringEncoding
+                                 error:&error];
+    if (saved) {
+        return amkFileURL;
+    }
+    return nil;
+}
+
 # pragma mark - Utility
 
 - (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite {

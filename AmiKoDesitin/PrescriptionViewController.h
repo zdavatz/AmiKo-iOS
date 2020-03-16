@@ -61,7 +61,6 @@
 - (NSString *)getPlaceDateForPrinting;
 - (void) printMedicineLabel; //:(NSIndexPath *)indexPath;
 
-- (NSURL *) prescriptionUrlWithHash: (NSString *)hash;
 - (BOOL) validatePrescription;
 - (void) overwritePrescription;
 - (void) saveNewPrescription;

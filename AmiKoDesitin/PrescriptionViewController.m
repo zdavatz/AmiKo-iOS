@@ -1523,78 +1523,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self loadDefaultDoctor];
     [infoView reloadData];
     
-    NSString *amkDir;
-    NSString *uid = [self.prescription.patient uniqueId];
-    if (uid)
-        amkDir = [MLUtility amkDirectoryForPatient:uid];
-    else
-        amkDir = [MLUtility amkDirectory];
+    NSURL *savedURL = [[MLPersistenceManager shared] savePrescription:self.prescription];
     
-    NSError *error;
-//    [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
-//                              withIntermediateDirectories:YES
-//                                               attributes:nil
-//                                                    error:&error];
-//    if (error) {
-//        NSLog(@"%@", error.localizedDescription);
-//        return;
-//    }
-
-    prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
-                              prescription.doctor.city,
-                              [MLUtility prettyTime]];
-
-    NSMutableDictionary *prescriptionDict = [NSMutableDictionary new];
-    [prescriptionDict setObject:prescription.hash forKey:KEY_AMK_HASH];
-    [prescriptionDict setObject:prescription.placeDate forKey:KEY_AMK_PLACE_DATE];
-    [prescriptionDict setObject:[prescription makePatientDictionary] forKey:KEY_AMK_PATIENT];
-    [prescriptionDict setObject:[prescription makeOperatorDictionary] forKey:KEY_AMK_OPERATOR];
-    [prescriptionDict setObject:[prescription makeMedicationsArray] forKey:KEY_AMK_MEDICATIONS];
-    
-    //NSLog(@"Line %d, prescriptionDict:%@", __LINE__, prescriptionDict);
-
-#ifdef DEBUG
-    //NSLog(@"%s hash:%@", __FUNCTION__, prescription.hash);
-
-//    if ([NSJSONSerialization isValidJSONObject:prescriptionDict]) {
-//        NSLog(@"Invalid JSON object:%@", prescriptionDict);
-//        //return;
-//    }
-#endif
-    
-    // Map cart array to json
-    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:prescriptionDict
-                                                         options:NSJSONWritingPrettyPrinted
-                                                           error:&error];
-    
-    NSString *jsonStr = [[NSString alloc] initWithData:jsonObject encoding:NSUTF8StringEncoding];
-#ifdef DEBUG
-    //NSLog(@"Line %d, jsonStr:%@", __LINE__, jsonStr);
-#endif
-    NSString *base64Str = [MLUtility encodeStringToBase64:jsonStr];
-    
-#if 1
-    // Prescription file name like AmiKo
-    NSString *currentTime = [[MLUtility currentTime] stringByReplacingOccurrencesOfString:@":" withString:@""];
-    currentTime = [currentTime stringByReplacingOccurrencesOfString:@"." withString:@""];
-    NSString *amkFile = [NSString stringWithFormat:@"RZ_%@.amk", currentTime];
-    NSString *amkFilePath = [amkDir stringByAppendingPathComponent:amkFile];
-#else
-    // Prescription file name like Generika
-    time_t timestamp = (time_t)[[NSDate date] timeIntervalSince1970];
-    NSString *amkFile = [NSString stringWithFormat:@"%@_%d.amk", @"RZ", (int)timestamp];
-    NSString *amkFilePath = [amkDir stringByAppendingPathComponent:amkFile];
-#endif
-
-    BOOL amkSaved = [base64Str writeToFile:amkFilePath
-                                atomically:YES
-                                  encoding:NSUTF8StringEncoding
-                                     error:&error];
-    if (!amkSaved)
-        NSLog(@"Error: %@", [error userInfo]);
-    else {
-        NSLog(@"Saved to file <%@>", amkFilePath);
-        lastUsedURL = [NSURL fileURLWithPath:amkFilePath];
+    if (savedURL) {
+        NSLog(@"Saved to file <%@>", savedURL);
+        lastUsedURL = savedURL;
     }
     
     possibleToOverwrite = true;
