@@ -506,17 +506,16 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         NSLog(@"%s Default prescription not yet defined", __FUNCTION__);
         return FALSE;
     }
-    
-    NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:fileName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
+
+    NSURL *url = [[[MLPersistenceManager shared] amkDirectory] URLByAppendingPathComponent:fileName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
         [defaults removeObjectForKey:@"lastUsedPrescription"];
         [defaults synchronize];
         NSLog(@"%s %d", __FUNCTION__, __LINE__);
         return FALSE;
     }
 
-    NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-    [prescription importFromURL:url];
+    prescription = [[Prescription alloc] initWithURL:url];
     possibleToOverwrite = true;
     NSLog(@"Reopened:%@", fileName);
     return TRUE;
@@ -1701,8 +1700,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)amkListDidChangeSelection:(NSNotification *)aNotification
 {
+    NSURL *url = [aNotification object];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[aNotification object] forKey:@"lastUsedPrescription"];
+    [defaults setObject:url.lastPathComponent forKey:@"lastUsedPrescription"];
     [defaults synchronize];
     
     NSString *amkDir = [MLUtility amkDirectory];

@@ -14,7 +14,7 @@
 #import "PatientViewController.h"
 
 #import "MLAppDelegate.h"
-#import "MLUtility.h"
+#import "MLPersistenceManager.h"
 
 @interface PatientDbListViewController ()
 
@@ -98,12 +98,12 @@
     }
     
     // Remove the amk subdirectory for this patient
-    NSString *amkDir = [MLUtility amkDirectory];
 #ifdef DEBUG
     NSLog(@"remove patient %@", amkDir);
 #endif
+    NSURL *amkDir = [[MLPersistenceManager shared] amkDirectoryForPatient:pat.uniqueId];
     NSError *error;
-    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:amkDir error:&error];
+    BOOL success = [[NSFileManager defaultManager] removeItemAtURL:amkDir error:&error];
     if (!success || error)
         NSLog(@"Error removing file at path: %@", error.localizedDescription);
 

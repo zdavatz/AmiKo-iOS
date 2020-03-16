@@ -13,6 +13,7 @@
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
 #import "MLUtility.h"
+#import "MLPersistenceManager.h"
 
 #define DYNAMIC_BUTTONS
 
@@ -620,8 +621,8 @@ enum {
     NSLog(@"amk subdirectory: %@", amkDir);
 #else
     //[MLUtility amkDirectoryForPatient:mPatientUUID];
-    [MLUtility amkDirectory];
 #endif
+    [[MLPersistenceManager shared] amkDirectoryForPatient:patient.uniqueId];
     
     // Switch view
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];

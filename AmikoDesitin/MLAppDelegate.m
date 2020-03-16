@@ -469,26 +469,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     Prescription *presInbox = [Prescription new];
     [presInbox importFromURL:url];
     
-    // Check if the patient subdirectory exists and possibly create it
-    NSString *amk = [MLUtility amkBaseDirectory];
-    NSString *amkDir = [amk stringByAppendingPathComponent:presInbox.patient.uniqueId];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:amkDir])
-    {
-        [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:&error];
-        if (error) {
-            NSLog(@"Error creating directory: %@", error.localizedDescription);
-            amkDir = nil;
-            // Cannot proceed if there is no target for the import
-            return NO;
-        }
 
-#ifdef DEBUG
-        NSLog(@"Created patient directory: %@", amkDir);
-#endif
-    }
+    // Check if the patient subdirectory exists and possibly create it
+    NSURL *amkDir = [[MLPersistenceManager shared] amkDirectoryForPatient:presInbox.patient.uniqueId];
 
     // Check if the patient is already in the DB and possibly add it.
     PatientDBAdapter *patientDb = [PatientDBAdapter new];
@@ -505,17 +488,20 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [patientDb closeDatabase];
     
     // Check the hash of the existing amk files
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
-    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+    NSArray<NSURL *> *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:amkDir
+                                                      includingPropertiesForKeys:nil
+                                                                         options:0
+                                                                           error:&error];
+    NSArray<NSURL *> *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
 
     BOOL prescriptionNeedsToBeImported = YES;
     Prescription *presAmkDir = [Prescription new];
     NSString *foundFileName;
     NSString *foundUniqueId;
-    for (NSString *f in amkFilesArray) {
+    // TODO: handle case which the storage is iCloud, need time to download files
+    for (NSURL *url in amkFilesArray) {
+        NSString *f = url.lastPathComponent;
         //NSLog(@"Checking existing amkFile:%@", f);
-        NSString *fullFilePath = [amkDir stringByAppendingPathComponent:f];
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
         [presAmkDir importFromURL:url];
         if ([presInbox.hash isEqualToString:presAmkDir.hash]) {
             prescriptionNeedsToBeImported = NO;
@@ -549,14 +535,10 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         return NO;
     }
 
-    // Finally move amk from Inbox to patient subdirectory
-    //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
-    NSString *source = [url path];
-    NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
-    
-    [[NSFileManager defaultManager] moveItemAtPath:source
-                                            toPath:destination
-                                             error:&error];
+    // Finally copy amk from Inbox to patient subdirectory
+    [[NSFileManager defaultManager] copyItemAtURL:url
+                                            toURL:[amkDir URLByAppendingPathComponent:fileName]
+                                            error:&error];
     if (!error)
         [self showPopupWithTitle:@"Success!"
                          message:[NSString stringWithFormat:@"Imported %@", fileName]];
