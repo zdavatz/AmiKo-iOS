@@ -61,10 +61,6 @@ static NSString *DB_SCHEMA = nil;
 // Patients DB
 - (BOOL) openDatabase:(NSString *)dbName
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
-    
     if (myPatientDb) {
 #ifdef DEBUG
         NSLog(@"%s patient DB already opened", __FUNCTION__);
@@ -77,10 +73,6 @@ static NSString *DB_SCHEMA = nil;
 
     NSString *documentsDir = [MLUtility documentsDirectory];
     NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:@"db"];
-
-#ifdef DEBUG
-    //NSLog(@"DB filePath:%@", filePath);
-#endif
 
     if (!filePath)
         return FALSE;
@@ -226,9 +218,6 @@ static NSString *DB_SCHEMA = nil;
         }
     }
 
-#ifdef DEBUG
-    //NSLog(@"%s patient %@ not in DB", __FUNCTION__, uniqueID);
-#endif
     return nil;
 }
 

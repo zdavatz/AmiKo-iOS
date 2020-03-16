@@ -65,10 +65,6 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-#ifdef DEBUG
-    //NSLog(@"%s %@", __FUNCTION__, searchText);
-#endif
-
     if ([self stringIsNilOrEmpty:searchText]) {
         mSearchFiltered = FALSE;
     }
@@ -110,8 +106,6 @@
         //cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.textColor = textColor;
     }
-    
-    //NSLog(@"self: %@", [self class]);
     NSString *cellStr = [self getTextAtRow:indexPath.row];
     cell.textLabel.text = cellStr;
     return cell;

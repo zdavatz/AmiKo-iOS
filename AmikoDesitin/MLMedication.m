@@ -57,9 +57,6 @@ static NSString* SectionTitle_FR[] = {@"Composition", @"Forme galénique", @"Con
 
 - (NSArray *) listOfSectionIds
 {
-#ifdef DEBUG
-    //NSLog(@"%s %d, sectionIds %@", __FUNCTION__, __LINE__, sectionIds);
-#endif
     return [sectionIds componentsSeparatedByString:@","];
 }
 

@@ -101,13 +101,11 @@
 
 - (BOOL)shouldAutorotate
 {
-    //NSLog(@"%s", __FUNCTION__);
     return YES;
 }
 
 - (void)didRotate:(CGSize)size
 {
-    //NSLog(@"%s, size %@, %@", __FUNCTION__, NSStringFromCGSize(size), (size.height > size.width) ? @"Por" : @"Land");
     [self.view layoutIfNeeded];
     
     [self setVidOrientation:nil];    // Update the camera rotation
@@ -136,7 +134,6 @@
 
 - (void) startCameraStream
 {
-    //NSLog(@"%s", __FUNCTION__);
     dispatch_async( self.sessionQueue, ^{
         switch ( self.setupResult )
         {
@@ -258,8 +255,6 @@
 
 - (void)configureSession
 {
-    //NSLog(@"%s setupResult %ld", __FUNCTION__, (long)self.setupResult);
-    
     if ( self.setupResult != AVCamSetupResultSuccess ) {
         NSLog(@"%s line %d, cannot configure session", __FUNCTION__, __LINE__);
         return;
@@ -277,7 +272,6 @@
                                             position:AVCaptureDevicePositionBack];
     if ( !videoDevice ) {
         // TODO: Possibly try another camera
-        //NSLog(@"No videoDevice\n%s:%d", __FILE__, __LINE__);
         [self.session commitConfiguration]; // To prevent crash with the simulator
         return;
     }
@@ -387,9 +381,6 @@
 
 - (void)removeObservers
 {
-#ifdef DEBUG_ISSUE_102_VERBOSE
-    NSLog(@"%s", __FUNCTION__);
-#endif
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 //    [self.session removeObserver:self
@@ -507,9 +498,6 @@ monitorSubjectAreaChange:NO];
 
 - (IBAction)cancelCamera:(id)sender
 {
-#ifdef DEBUG_ISSUE_102_VERBOSE
-    NSLog(@"%s", __FUNCTION__);
-#endif
     //[self stopCameraStream]; // will be called in viewDidDisappear
     [self dismissViewControllerAnimated:NO completion:NULL];
 }
@@ -518,8 +506,6 @@ monitorSubjectAreaChange:NO];
 
 - (IBAction) handleTap:(UITapGestureRecognizer *)gesture
 {
-    //NSLog(@"%s is running: %d", __FUNCTION__, self.session.isRunning);
-
 #ifdef TAP_TO_END_CARD_OCR
     if (self.session.isRunning) {
         [self stopCameraStream];

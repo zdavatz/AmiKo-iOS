@@ -98,34 +98,18 @@
     }
     
     // Remove the amk subdirectory for this patient
-#ifdef DEBUG
-    NSLog(@"remove patient %@", amkDir);
-#endif
     NSURL *amkDir = [[MLPersistenceManager shared] amkDirectoryForPatient:pat.uniqueId];
     NSError *error;
     BOOL success = [[NSFileManager defaultManager] removeItemAtURL:amkDir error:&error];
     if (!success || error)
         NSLog(@"Error removing file at path: %@", error.localizedDescription);
-
-#ifdef DEBUG
-    NSLog(@"patients before deleting: %ld", [mPatientDb getNumPatients]);
-#endif
     
     // Finally remove the entry from the list
     [mPatientDb deleteEntry:pat];
-
-#ifdef DEBUG
-    NSLog(@"patients after deleting: %ld", [mPatientDb getNumPatients]);
-#endif
-
     // Clear the current user
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"currentPatient"];
     [defaults synchronize];
-    
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"%s %d cleared currentPatient", __FUNCTION__, __LINE__);
-#endif
     
     // (Instead of removing one item from a NSMutableArray) reassign the whole NSArray
     self.mArray = [mPatientDb getAllPatients];
@@ -140,9 +124,6 @@
 
 - (NSString *) getTextAtRow:(NSInteger)row
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
     Patient *p = [self getItemAtRow:row];
     NSString *cellStr = [NSString stringWithFormat:@"%@ %@", p.familyName, p.givenName];
     return cellStr;
@@ -161,13 +142,9 @@
     }
 
     if (gesture.state != UIGestureRecognizerStateBegan) {
-#ifdef DEBUG
-        //NSLog(@"gestureRecognizer.state = %ld", gesture.state);
-#endif
         return;
     }
-    
-    //NSLog(@"long press on table view at row %ld", indexPath.row);
+
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
@@ -201,8 +178,6 @@
                                                                  // Update the pointers to our controllers
                                                                  nc_front = self.revealViewController.frontViewController;
                                                                  vc_front = [nc_front.childViewControllers firstObject];
-                                                                 //NSLog(@"nc_front: %@", [nc_front class]); // UINavigationController
-                                                                 //NSLog(@"vc_front: %@", [vc_front class]); // PatientViewController
                                                                  if ([vc_front isKindOfClass:[PatientViewController class]]) {
 
                                                                      // Make sure viewDidLoad has run once before setting the patient

@@ -71,10 +71,6 @@ enum {
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
-#if 0
-    // A single button on the left
-    self.navigationItem.leftBarButtonItem = revealButtonItem;
-#else
     // Two buttons on the left (with spacer between them)
     UIBarButtonItem *cancelItem =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil)
@@ -95,7 +91,6 @@ enum {
     self.navigationItem.leftBarButtonItems =
     [NSArray arrayWithObjects:
                 revealButtonItem, spacer, cancelItem, nil];
-#endif
     
     // Middle button
     {
@@ -117,23 +112,14 @@ enum {
 
     // Right button(s)
     {
-#if 1
     // First ensure the "right" is a ContactsListViewController
     id aTarget = self;
     SEL aSelector = @selector(myRightRevealToggle:);
-#else
-    id aTarget = revealController;
-    SEL aSelector = @selector(rightRevealToggle:);
-#endif
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:NAVIGATION_ICON_RIGHT]
                                      style:UIBarButtonItemStylePlain
                                     target:aTarget
                                     action:aSelector];
-#if 0
-    // A single button on the right
-    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
-#else
     // Two buttons on the right (with spacer between them)
     UIBarButtonItem *saveItem =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", nil)
@@ -146,7 +132,6 @@ enum {
 
     self.navigationItem.rightBarButtonItems =
     [NSArray arrayWithObjects:rightRevealButtonItem, spacer, saveItem, nil];
-#endif
     }
     
 #ifdef DEBUG
@@ -266,10 +251,6 @@ enum {
 
 - (void) resetAllFields
 {
-#ifdef DEBUG
-    //NSLog(@"%s %p", __FUNCTION__, self);
-#endif
-    
     [self resetFieldsColors];
     
     [mFamilyName setText:@""];
@@ -460,9 +441,6 @@ enum {
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-#ifdef DEBUG
-    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
-#endif
     if ((textField.tag == 6) ||     // country
         (textField.tag == 9) ||     // weight
         (textField.tag == 10) ||    // height
@@ -475,19 +453,6 @@ enum {
     BOOL valid = TRUE;
     if ([textField.text isEqualToString:@""])
         valid = FALSE;
-
-//    switch (textField.tag) {
-//        case NameFieldTag: break;
-//        case SurnameFieldTag: break;
-//        case AddressFieldTag: break;
-//        case CityFieldTag: break;
-//        case ZIPFieldTag: break;
-//        case DOBFieldTag: break;
-//        case SexFieldTag: break;
-//
-//        default:
-//            break;
-//    }
 
     if (valid)
         textField.backgroundColor = [UIColor secondarySystemBackgroundColor];
@@ -537,9 +502,6 @@ enum {
 
 - (IBAction) cancelPatient:(id)sender
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
     [self resetAllFields];
 
 #ifdef DYNAMIC_BUTTONS
@@ -553,10 +515,6 @@ enum {
 
 - (IBAction) savePatient:(id)sender
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
-
     if (!mPatientDb) {
         NSLog(@"%s Patient DB is null", __FUNCTION__);
         return;
@@ -567,10 +525,6 @@ enum {
         NSLog(@"Patient field validation failed");
         return;
     }
-    
-#ifdef DEBUG
-    //NSLog(@"before adding %@, count %ld", mPatientUUID, [mPatientDb getNumPatients]);
-#endif
     
     if (mPatientUUID && [mPatientUUID length]>0)
         patient.uniqueId = mPatientUUID;
@@ -601,27 +555,13 @@ enum {
 #ifdef DYNAMIC_BUTTONS
     [self saveCancelOff];
 #endif
-    
-#ifdef DEBUG
-    //NSLog(@"patients after adding: %ld", [mPatientDb getNumPatients]);
-#endif
-    
+
     // Set as default patient for prescriptions
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:mPatientUUID forKey:@"currentPatient"];
     [defaults synchronize];
-    
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, mPatientUUID);
-#endif
-    
+
     // Create patient subdirectory for prescriptions
-#if 0 //def DEBUG
-    NSString *amkDir = [MLUtility amkDirectory];
-    NSLog(@"amk subdirectory: %@", amkDir);
-#else
-    //[MLUtility amkDirectoryForPatient:mPatientUUID];
-#endif
     [[MLPersistenceManager shared] amkDirectoryForPatient:patient.uniqueId];
     
     // Switch view
@@ -666,21 +606,13 @@ enum {
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification
 {
     Patient *p = [aNotification object];
-#ifdef DEBUG
-    //NSLog(@"%s selected familyName:%@", __FUNCTION__, p.familyName);
-#endif
-    
     [self resetAllFields];
     [self setAllFields:p];
     
     // TODO: Add contact to patient DB
     
     SWRevealViewController *revealController = self.revealViewController;
-#if 1
     [revealController rightRevealToggleAnimated:YES];
-#else
-    [revealController setFrontViewPosition:FrontViewPositionLeftSideMost animated:YES];
-#endif
 }
 
 @end

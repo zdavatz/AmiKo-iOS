@@ -76,7 +76,6 @@
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *savedBundleVersion = [defaults stringForKey:BUNDLE_VERSION_KEY];
-    //NSLog(@"BundleVersion: %@, saved: %@", bundleVersion, savedBundleVersion);
     if (savedBundleVersion.length == 0) {
 #ifdef DEBUG
         NSLog(@"=== Fresh installation");
@@ -94,16 +93,12 @@
         NSLog(@"=== App runs again");
 #endif
         newBundle = false;
-#ifdef DEBUG_SIMULATE_NEW_VERSION
-        [defaults removeObjectForKey:BUNDLE_VERSION_KEY];
-#endif
     }
     
     if (newBundle) {
         NSLog(@"=== Store bundle version into defaults");
         [defaults setObject:bundleVersion forKey:BUNDLE_VERSION_KEY];
         [defaults synchronize];  // This seems to cause problems here
-        //NSLog(@"%s %d standardUserDefaults: %@", __FUNCTION__, __LINE__, [defaults dictionaryRepresentation]);
     }
 
 #ifdef DEBUG
@@ -143,22 +138,6 @@
     if (lastUpdated)
         timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
 
-#ifdef DEBUG_ISSUE_106
-    if (lastUpdated) {
-        NSLog(@"DB last updated : %@, %.1f s ago", lastUpdated, timeInterval);
-
-        NSString *title = [NSString stringWithFormat:@"Last DB update %.0fs ago", timeInterval];
-        NSString *message = [NSDateFormatter localizedStringFromDate:lastUpdated
-                                                 dateStyle:NSDateFormatterShortStyle
-                                                 timeStyle:NSDateFormatterFullStyle];
-        NSLog(@"%@ %@", title, message);
-    }
-    else {
-        NSLog(@"timestamp not found");
-        //NSLog(@"%s %d timestamp not found in standardUserDefaults: %@", __FUNCTION__, __LINE__, [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
-    }
-#endif
-
     return timeInterval;
 }
 
@@ -190,8 +169,6 @@
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0
     // if you need to support iOS 7 or earlier
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    //NSLog(@"first:%@", [paths firstObject]);
-    //NSLog(@"last:%@", [paths lastObject]);
     return [paths lastObject];
 #else
     // iOS 8 and newer, this is the recommended method

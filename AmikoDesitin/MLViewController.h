@@ -24,8 +24,6 @@
 @import UIKit;
 #import "MLMedication.h"
 
-//#define FIX_ISSUE_38
-
 enum {
     eAips=0,
     eFavorites=1,

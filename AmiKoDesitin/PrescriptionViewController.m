@@ -20,10 +20,6 @@
 
 @import Vision;
 
-#ifdef DEBUG
-//#define DEBUG_COLOR_BG
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////
 // Label Printing
 
@@ -195,43 +191,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)layoutFrames
 {
     [self updateMainframeRect];
-
-#if 0
-    CGRect infoFrame = self.infoView.frame;
-    infoFrame.origin.y = 0.6;
-    infoFrame.size.width = self.view.bounds.size.width;
-
-    infoFrame.size.height = ((kSectionHeaderHeight * 2) +
-                             (kInfoCellHeight * [prescription.doctor entriesCount]) +
-                             (kInfoCellHeight * [prescription.patient entriesCount]) +
-                             20.8); // margin
-    
-    NSLog(@"%s %d, infoFrame:%@", __FUNCTION__, __LINE__, NSStringFromCGRect(infoFrame));
-    
-
-    CGFloat height = 0.0;
-    for (int i = 0; i < [prescription.medications count]; i++) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i
-                                                    inSection:kSectionMedicines];
-        CGFloat rowHeight = [self tableView:infoView heightForRowAtIndexPath:indexPath];
-        height += rowHeight;
-    }
-
-    CGFloat defaultHeight = kMedCellHeight * [prescription.medications count];
-    if (defaultHeight > height) {
-        height = defaultHeight;
-    }
-
-    CGRect itemFrame = CGRectMake(0,
-                                  CGRectGetMaxY(infoFrame) + 8.0,
-                                  self.view.bounds.size.width,
-                                  (kSectionHeaderHeight + height));
-
-    infoFrame.size.height += itemFrame.size.height;
-
-    [self.infoView setFrame:infoFrame];
-    [self.view layoutIfNeeded];
-#endif
 }
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell
@@ -277,28 +236,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
-#if 1
     // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
-#else
-    // Two buttons on the left (with spacer between them)
-    UIBarButtonItem *patientsItem =
-        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Search Patients", nil)
-                                         style:UIBarButtonItemStylePlain
-                                        target:self
-                                        action:@selector(showPatientDbList:)];
-
-    UIBarButtonItem *spacer =
-        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                      target:nil
-                                                      action:nil];
-    spacer.width = 90.0f;
-
-    self.navigationItem.leftBarButtonItems =
-        [NSArray arrayWithObjects:revealButtonItem, spacer, patientsItem, nil];
-#endif
     
-#if 1
     // Middle button
     CGRect frame = CGRectMake(0, 0, 200, 44);
     UIButton* myButton = [[UIButton alloc] initWithFrame:frame];
@@ -313,17 +253,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [myButton addTarget:self action:@selector(showPatientDbList:) forControlEvents:UIControlEventTouchDown];
     //myButton.backgroundColor = [UIColor grayColor];
     self.navigationItem.titleView = myButton;
-#endif
 
     // Right button
-#if 1
     // First ensure the "right" is a ContactsListViewController
     id aTarget = self;
     SEL aSelector = @selector(myRightRevealToggle:);
-#else
-    id aTarget = revealController;
-    SEL aSelector = @selector(rightRevealToggle:);
-#endif
 
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:NAVIGATION_ICON_RIGHT]
@@ -391,9 +325,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) viewDidAppear:(BOOL)animated
 {
     if (editedMedicines) {
-#ifdef DEBUG_ISSUE_86
-        NSLog(@"%s %d edited", __FUNCTION__, __LINE__);
-#endif
         [self loadDefaultDoctor];
 
         // GitHub issue #86: from now on we allow changing the patient even if the
@@ -404,9 +335,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [self loadDefaultPatient];
     }
     else {
-#ifdef DEBUG_ISSUE_86
-        NSLog(@"%s %d not edited", __FUNCTION__, __LINE__);
-#endif
         // do the following only if we haven't added any medicines yet
         if (![self loadDefaultPrescription]) {
             [self loadDefaultDoctor];
@@ -523,9 +451,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (BOOL)loadDefaultPatient
 {
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"%s", __FUNCTION__);
-#endif
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *patientId = [defaults stringForKey:@"currentPatient"];
     if (!patientId) {
@@ -542,9 +467,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 
     Patient *pat = [patientDb getPatientWithUniqueID:patientId];
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"Restoring patient into prescription %@", pat);
-#endif
     [prescription setPatient:pat];
     [patientDb closeDatabase];
     return TRUE;
@@ -683,28 +605,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (UITableViewCell *) tableView: (UITableView *)tableView
           cellForRowAtIndexPath: (NSIndexPath *)indexPath
 {
-#ifdef DEBUG
-//    NSLog(@"%s section:%ld, row:%ld", __FUNCTION__, indexPath.section, indexPath.row);
-//    NSLog(@"Line %d, tableView size: %@", __LINE__, NSStringFromCGSize(tableView.frame.size));
-//    NSLog(@"Line %d, contentInset: %@", __LINE__, NSStringFromUIEdgeInsets(tableView.contentInset));
-//    //NSLog(@"Line %d, safeAreaInsets TLBR: %@", __LINE__, NSStringFromUIEdgeInsets(self.view.safeAreaInsets));
-//    NSLog(@"Line %d, contentSize: %@", __LINE__, NSStringFromCGSize(tableView.contentSize));
-#endif
-#ifdef DEBUG_COLOR_BG
-    self.view.backgroundColor = [UIColor systemBlueColor];
-#endif
-
     static NSString *tableIdentifier = @"PrescriptionTableItem";
-    UITableViewCell *cell;
-#if 0
-    cell = [tableView dequeueReusableCellWithIdentifier:tableIdentifier];
-    if (cell == nil)
-#endif
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:tableIdentifier];
-        cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
-    }
+    cell.contentView.translatesAutoresizingMaskIntoConstraints = YES;
     
     if (indexPath.section != kSectionMedicines)
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -738,11 +642,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.textColor = [UIColor labelColor];
         label.backgroundColor = [UIColor clearColor];
         label.text = @"";  // Initialize for appending
-#ifdef DEBUG_COLOR_BG
-        cell.backgroundColor = [UIColor systemGreenColor];
-#else
         cell.backgroundColor = [UIColor clearColor];  // Allow the signature to show over multiple cells
-#endif
+
         switch (indexPath.row) {
             case 0:
                 if ([prescription.doctor.title isEqualToString:@""]) {
@@ -772,15 +673,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                    DOCTOR_TN_W,
                                                    DOCTOR_TN_H);
                     [signatureView setFrame:imageFrame];
-//                    NSLog(@"Line: %d, signatureView:%@", __LINE__, NSStringFromCGRect(imageFrame));
-//                    NSLog(@"Line: %d, cell.frame:%@", __LINE__, NSStringFromCGRect(cell.frame));
-//                    NSLog(@"Line: %d, contentView.frame:%@", __LINE__, NSStringFromCGRect(cell.contentView.frame));
                     signatureView.contentMode = UIViewContentModeTopRight;
                     [cell.contentView addSubview:signatureView];
-#ifdef DEBUG_COLOR_BG
-                    [cell.contentView setBackgroundColor:[UIColor systemYellowColor]];
-                    label.backgroundColor = [UIColor systemOrangeColor];
-#endif
                 }
                 break;
             case 1:
@@ -859,11 +753,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         UILabel *eanLabel = [self makeLabel:med.eanCode
                                   textColor:[UIColor secondaryLabelColor]];
 
-#ifdef DEBUG
-        //NSLog(@"cellForRowAtIndexPath Line %d comment before:<%@>", __LINE__, med.comment);
-        //med.comment = [NSString stringWithFormat:@"Test comment for row %ld", indexPath.row];
-#endif
-
         UITextView *commentTextField;
         UILabel *commentLabel;
         if (editingCommentIdx == indexPath.row) {
@@ -898,10 +787,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                      eanLabel.frame.size.height);
         [eanLabel setFrame:eanFrame];
         
-
-#ifdef DEBUG_COLOR_BG
-        [cell.contentView setBackgroundColor:[UIColor systemYellowColor]];
-#endif
         [cell.contentView addSubview:packLabel];
         [cell.contentView insertSubview:eanLabel belowSubview:packLabel];
         if (editingCommentIdx == indexPath.row) {
@@ -956,10 +841,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // Check that the right controller class is AmkListViewController
     UIViewController *vc_right = revealController.rightViewController;
     
-#ifdef DEBUG
-    //NSLog(@"%s vc: %@", __FUNCTION__, [vc_right class]);
-#endif
-    
     if (![vc_right isKindOfClass:[AmkListViewController class]] ) {
         // Replace right controller
         AmkListViewController *amkListViewController =
@@ -982,9 +863,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) showPatientDbList:(id)sender
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDel switchRigthToPatientDbList];
 }
@@ -993,8 +871,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) newPrescription:(id)sender
 {
-    //UIBarButtonItem *btn = (UIBarButtonItem *)sender;
-    //NSLog(@"%s tag:%ld, title:%@", __FUNCTION__, (long)btn.tag, btn.title);
     [self loadDefaultDoctor];
     prescription.patient = nil;
     [prescription.medications removeAllObjects];
@@ -1007,8 +883,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 // See AmiKo OSX onCheckForInteractions
 - (IBAction) checkForInteractions:(id)sender
 {
-    //NSLog(@"%s", __FUNCTION__);
-    
     NSMutableDictionary *medBasket = [NSMutableDictionary new];
     // pushToMedBasket
     for (Product *p in prescription.medications) {
@@ -1018,7 +892,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             title = [title substringToIndex:30];
             title = [title stringByAppendingString:@"..."];
         }
-        //NSLog(@"%d title. <%@>", __LINE__, title);
 
         // Add med to medication basket
         // We must build a dictionary of MLMedication, not of Product
@@ -1029,8 +902,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         m.title = p.title;
         [medBasket setObject:m forKey:title];
     }
-    
-    //NSLog(@"%s %d, count:%ld, %@", __FUNCTION__, __LINE__, [medBasket count], medBasket);
 
     UIViewController *nc_rear = self.revealViewController.rearViewController;
     MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
@@ -1088,10 +959,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (IBAction) sendPrescription:(id)sender
 {
-#if 0
-    // Offer the choice: overwrite or new
-    [self savePrescription:sender];
-#else
     // Handle the choice automatically
     // TODO: (TBC) skip the following if the prescription has not been edited
     if (possibleToOverwrite) {
@@ -1102,7 +969,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         prescription.hash = [self makeNewUniqueHash];
         [self saveNewPrescription];
     }
-#endif
     
     [self sharePrescription:lastUsedURL];
 }
@@ -1113,7 +979,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) printMedicineLabel
 {
     NSInteger row = self->indexPath.row;
-    //NSLog(@"%s row:%ld", __FUNCTION__, (long)row);
     pic = [UIPrintInteractionController sharedPrintController];
     if (!pic) {
         NSLog(@"Couldn't get shared UIPrintInteractionController!");
@@ -1251,7 +1116,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         [self checkPrinterAndPrint:printer];
     }
     else {
-        //NSLog(@"No printer URL in defaults");
         [self selectLabelPrinterAndPrint];
     }
 #else
@@ -1327,7 +1191,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         CGRect r = [infoView rectForRowAtIndexPath:indexPath];
-        //NSLog(@"%s %d, rect: %@", __FUNCTION__, __LINE__, NSStringFromCGRect(r));
         [picker presentFromRect:r
                          inView:infoView
                        animated:YES
@@ -1449,26 +1312,15 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) overwritePrescription
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
-    
     if (![self validatePrescription])
         return;
 
-    //NSLog(@"url:%@", url);
     if (lastUsedURL) {
         NSError *error;
         BOOL success = [[NSFileManager defaultManager] removeItemAtURL:lastUsedURL
                                                                  error:&error];
         if (!success)
             NSLog(@"Error removing file at path: %@", error.localizedDescription);
-
-#ifdef DEBUG
-        // Extra check
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]])
-            NSLog(@"file <%@> not yet deleted", [url path]);
-#endif
         
         // If the right view is a AmkListViewController also delete from array and refresh
         id right = self.revealViewController.rightViewController;
@@ -1519,11 +1371,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     label.textAlignment = NSTextAlignmentLeft;
     label.textColor = color;
     label.text = text;
-#ifdef DEBUG_COLOR_BG
-    label.backgroundColor = [UIColor orangeColor];
-#else
     label.backgroundColor = [UIColor clearColor];
-#endif
     label.highlighted = NO;
     // use multiple lines for wrapped text as required
     label.numberOfLines = 0;
@@ -1592,10 +1440,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         contentInset.bottom = 0;
         self.infoView.contentInset = contentInset;
         self.infoView.scrollIndicatorInsets = contentInset;
-    }
-    else {
-        // Comment it out to leave it at the current offset
-        //[self.infoView setContentOffset:CGPointZero animated:YES];
     }
 }
 
@@ -1704,21 +1548,16 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [vc_rear switchToPatientEditView :NO]; // No animation so it becomes visible faster
     
     // Ideally, wait for patient view to be visible
-    //NSLog(@"Line %d patientVC.isViewLoaded. %d", __LINE__, patientVC.isViewLoaded);
 
     [patientVC handleCameraButton:nil];
 }
 
 - (void) showCameraForBarcodeAcquisition
 {
-    //NSLog(@"%s", __FUNCTION__);
-
     // Make sure front is PrescriptionViewController
     UIViewController *nc_front = self.revealViewController.frontViewController; // UINavigationController
     UIViewController *vc_front = [nc_front.childViewControllers firstObject];   // PrescriptionViewController
-//    NSLog(@"nc_front %@", [nc_front class]);
-//    NSLog(@"vc_front %@", [vc_front class]);
-    
+
     barcodeHandled = false;
 
     if (!self.videoVC)
@@ -1813,7 +1652,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 #endif
     
-#if 1
     UIAlertAction *actionEdit = [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit comment", nil)
                                                          style:UIAlertActionStyleDefault
                                                        handler:^(UIAlertAction *action) {
@@ -1823,9 +1661,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                            [self.infoView reloadData];
                                                        }];
     [alertController addAction:actionEdit];
-#endif
-    
-#if 1
+
     UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete package", nil)
                                                            style:UIAlertActionStyleDestructive
                                                          handler:^(UIAlertAction *action) {
@@ -1836,7 +1672,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                              [self.infoView reloadData];
                                                          }];
     [alertController addAction:actionDelete];
-#endif
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
@@ -1864,9 +1699,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-#if 0
-    [textView setReturnKeyType:UIReturnKeyDone];
-#else
     UIToolbar *toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     toolBar.barStyle = UIBarStyleBlack;
     toolBar.tintColor = MAIN_TINT_COLOR;
@@ -1883,8 +1715,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     [toolBar setItems:[NSArray arrayWithObjects:flex, btnDone, nil]];
     [textView setInputAccessoryView:toolBar];
-#endif
-    
+
     return YES;
 }
 
@@ -1921,9 +1752,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
     // Get current width
     CGRect r = textView.frame;
     CGSize before = r.size;
@@ -1941,9 +1769,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // adjusting the offset for each character
     if (before.height != r.size.height)
     {
-#ifdef DEBUG
-        //NSLog(@"%s Line:%d height has changed", __FUNCTION__, __LINE__);
-#endif
         Product * med = prescription.medications[editingCommentIdx];
         med.comment = textView.text;
         [prescription.medications replaceObjectAtIndex:editingCommentIdx
@@ -1961,11 +1786,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-    //NSLog(@"%s <%@>", __FUNCTION__, textView.text);
-#endif
-
     if (commentEditingActive)
         return NO;
     
@@ -1975,10 +1795,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-#ifdef DEBUG
-    NSLog(@"%s idx:%ld", __FUNCTION__, editingCommentIdx);
-    //NSLog(@"%s idx:%ld, <%@>", __FUNCTION__, editingCommentIdx, textView.text);
-#endif
     if (editingCommentIdx == -1) {
         NSLog(@"%s line:%d unexpected index value", __FUNCTION__, __LINE__);
         // TODO: debug why this happens. It also makes the keyboard disappear ?
@@ -1999,18 +1815,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) recalculateSavedOffset
 {
-#ifdef DEBUG
-    //NSLog(@"%s savedOffset before:%@", __FUNCTION__, NSStringFromCGPoint(savedOffset));
-#endif
     CGRect r = [infoView convertRect:activeTextView.frame fromView:activeTextView];
     CGPoint offset = infoView.contentOffset;
-    
-#ifdef DEBUG
-//    NSLog(@"commentView:%@", NSStringFromCGRect(r));
-//    NSLog(@"infoView frame:%@", NSStringFromCGRect(infoView.frame));
-//    NSLog(@"contentSize:%@", NSStringFromCGSize(infoView.contentSize));
-//    NSLog(@"contentOffset:%@", NSStringFromCGPoint(offset));
-#endif
     
     CGFloat margin;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
@@ -2019,7 +1825,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         margin = 50.0;
     
     CGFloat yAdjustment = savedKeyboardY - (r.origin.y + r.size.height + margin - offset.y);
-    //NSLog(@"yAdjustment:%f, savedKeyboardY:%f", yAdjustment, savedKeyboardY);
     if (yAdjustment < 0.0)
     {
         savedOffset = CGPointMake(0.0f, offset.y - yAdjustment);
@@ -2191,10 +1996,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
             CGSize sizeComment = CGSizeZero;
 
             if (comment.length > 0) {
-#if 0
-                // single line
-                sizeComment = [packInfo sizeWithAttributes:attrMedComment];
-#else
                 // multi-line
                 CGFloat desiredWidth = kSizeA4.width - 2*margin;
                 CGRect neededRect =
@@ -2203,7 +2004,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    attributes:attrMedComment
                                       context:nil];
                 sizeComment = CGSizeMake(desiredWidth, neededRect.size.height);
-#endif
             }
             
             CGFloat currentY = medYOffset + sizePackInfo.height + sizeEan.height + sizeComment.height;
@@ -2215,7 +2015,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
             // Check if the total size fits the page
             if (currentY > (pdfPageBounds.size.height - margin)) {
-#if 1
                 // Add page number to current page
                 [self addPdfPageNumber:pageOriginY pageNumber:pageNumber];
 
@@ -2232,7 +2031,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 [self drawPdfHeader: pageOriginY];
                 medYOffset = medY;
                 pageNumber++;
-#endif
             }
 
             [packInfo drawAtPoint:CGPointMake(margin, pageOriginY + medYOffset) withAttributes:attrMedPackage];
@@ -2243,13 +2041,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
             if (comment.length > 0) {
                 CGPoint commentPoint = CGPointMake(margin, pageOriginY + medYOffset);
-#if 0
-                // drawAtPoint does no line wrapping
-                [comment drawAtPoint:commentPoint withAttributes:attrMedComment];
-#else
                 CGRect commentRect = {commentPoint, sizeComment};
                 [comment drawInRect:commentRect withAttributes:attrMedComment];
-#endif
                 medYOffset += sizeComment.height;
             }
 
@@ -2365,23 +2158,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         NSLog(@"line %d, already handled", __LINE__);
 #endif
-
-//        if (self.videoVC) {
-//            [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
-//            self.videoVC = nil;
-//        }
-        
-//#if 1
-//        NSLog(@"%d", __LINE__);
-//        [self.view setNeedsDisplay];
-//#else
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
-//            [self.infoView reloadData];
-//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
-//        });
-//#endif
-        
         return;
     }
 
@@ -2401,11 +2177,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         return;
     }
     
-    //CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer);
-    //NSLog(@"formatDescription %@", formatDescription);
-
     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)CMSampleBufferGetImageBuffer(sampleBuffer);
-    //NSLog(@"pixelBuffer %@", pixelBuffer);
 
     CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
     
@@ -2451,27 +2223,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         return;
     }
 
-//    if (barcodeHandled) {
-//#ifdef DEBUG
-//        NSLog(@"line %d, already handled", __LINE__);
-//#endif
-//
-//        if (self.videoVC) {
-//            [self.videoVC dismissViewControllerAnimated:NO completion:NULL];
-//            self.videoVC = nil;
-//        }
-//        return;
-//    }
-
-#if 0 //def DEBUG
-    for (VNBarcodeObservation *observation in barcodeRequest.results) {
-        NSLog(@"line %d \n\t rect %@ \n\t string %@ \n\t observation: %@", __LINE__,
-              NSStringFromCGRect(observation.boundingBox),
-              observation.payloadStringValue,
-              observation);
-    }
-#endif
-
     // We know we have at least one barcode, use the first one
     VNBarcodeObservation *firstObservation = barcodeRequest.results[0];
     NSString *s = firstObservation.payloadStringValue;
@@ -2505,7 +2256,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     NSString *packageInfo;  // 1st line in table infoView
     NSString *eancode;      // 2nd line in table infoView
     NSArray *queryResult = [db searchEan :s];
-    //NSLog(@"result %@", queryResult);          // There should be only one result
 
     BOOL found = FALSE;
     for (NSArray *cursor in queryResult) {
@@ -2516,22 +2266,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         dbPackInfo = (NSString *)[cursor objectAtIndex:4];
         dbPackages = (NSString *)[cursor objectAtIndex:5];
 
-//        NSLog(@"Line %d Title <%@>", __LINE__, dbTitle);
-//        NSLog(@"Line %d auth <%@>", __LINE__, dbAuth);
-//        NSLog(@"Line %d atc <%@>", __LINE__, dbAtc);
-//        NSLog(@"Line %d regnrs <%@>", __LINE__, dbRegnrs);
-
         // Some fields have multiple lines: split them into arrays
         NSArray *packInfoArray = [dbPackInfo componentsSeparatedByString:@"\n"];
         NSArray *packArray = [dbPackages componentsSeparatedByString:@"\n"];  // Note: there is also a \n after the last line, so the count is one more (last array element is empty)
-
-#if 0 //def DEBUG
-        NSLog(@"Line %d pack info array %lu <%@>", __LINE__,
-              (unsigned long)[packInfoArray count], packInfoArray);
-        
-        NSLog(@"Line %d, pack array %lu, %@", __LINE__,
-              (unsigned long)[packArray count], packArray);
-#endif
 
         // Each line contains one EAN code (9th component)
         for (int i=0; i < [packArray count]; i++) {
@@ -2542,8 +2279,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             eancode = [p objectAtIndex:INDEX_EAN_CODE_IN_PACK];
             if ([eancode isEqualToString:s]) {
                 found = TRUE;
-                //NSLog(@"Line %d found at index %d", __LINE__, i);
-                
                 if (packInfoArray.count > i)
                     packageInfo = packInfoArray[i];
 
@@ -2563,7 +2298,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [medicationDict setObject:dbRegnrs    forKey:KEY_AMK_MED_REGNRS];
         [medicationDict setObject:dbAtc       forKey:KEY_AMK_MED_ATC];
         Product *product = [[Product alloc] initWithDict:medicationDict]; // See Product initWithMedication
-        //NSLog(@"line %d, product %@", __LINE__, product);
         
         [[PrescriptionViewController sharedInstance] addMedication:product];
     }

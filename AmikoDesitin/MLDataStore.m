@@ -75,23 +75,13 @@
 
         obj = [decoder decodeObjectForKey:KEY_FAV_MED_SET];
         if (obj) {
-            //NSLog(@"%s %d", __FUNCTION__, __LINE__);
             favMedsSet = [NSSet setWithObject:obj];
         }
-//        else {
-//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
-//            favMedsSet = [NSSet new];
-//        }
 
         obj = [decoder decodeObjectForKey:KEY_FAV_FTE_SET];
         if (obj) {
-            //NSLog(@"%s %d", __FUNCTION__, __LINE__);
             favFTEntrySet = [NSSet setWithObject:obj];
         }
-//        else {
-//            NSLog(@"%s %d", __FUNCTION__, __LINE__);
-//            favFTEntrySet = [NSSet new];
-//        }
     }
 
     return self;

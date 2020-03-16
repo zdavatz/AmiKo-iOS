@@ -48,17 +48,14 @@
     self = [super init];
     if (self) {
         NSArray *listOfPacks = [m.packages componentsSeparatedByString:@"\n"];
-        //NSLog(@"listOfPacks:%@", listOfPacks);
         if (packageIndex < [listOfPacks count])
         {
             NSArray *p = [listOfPacks[packageIndex] componentsSeparatedByString:@"|"];
-            //NSLog(@"%@", p);
             if ([p count] > INDEX_EAN_CODE_IN_PACK)
                 self.eanCode = [p objectAtIndex:INDEX_EAN_CODE_IN_PACK];  // 2nd line in prescription view
         }
         
         NSArray *listOfPackInfos = [m.packInfo componentsSeparatedByString:@"\n"];
-        //NSLog(@"listOfPackInfos:%@", listOfPackInfos);
         if (packageIndex < [listOfPackInfos count]) {
             self.packageInfo = listOfPackInfos[packageIndex]; // 1st line in prescription view
         }

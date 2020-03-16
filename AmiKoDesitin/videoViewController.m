@@ -97,7 +97,6 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
     [self startVideoStream];
 }
@@ -125,13 +124,11 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 - (BOOL)shouldAutorotate
 {
-    //NSLog(@"%s", __FUNCTION__);
     return YES;
 }
 
 - (void)didRotate:(NSNotification *)notification
 {
-    //NSLog(@"%s %@", __FUNCTION__, notification);
     [self.view layoutIfNeeded];
     
     UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -141,19 +138,12 @@ static void * SessionRunningContext = &SessionRunningContext;
         self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
     }
     
-//#ifdef DEBUG
-//    NSLog(@"%s line %d, videoPreviewLayer.frame %@, frame %@", __FUNCTION__, __LINE__,
-//          NSStringFromCGRect(self.previewView.videoPreviewLayer.frame),
-//          NSStringFromCGRect(self.previewView.frame));
-//#endif
-    
     [self.previewView setNeedsDisplay];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
-    //NSLog(@"%s", __FUNCTION__);
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     [coordinator animateAlongsideTransition:

@@ -161,9 +161,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
  */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef DEBUG_ISSUE_107
-    NSLog(@"%s, %@", __FUNCTION__, launchOptions);
-#endif
     // Init main window
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:screenBound];
@@ -186,13 +183,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSLog(@"points w = %f, points h = %f, scale = %f",
           [[UIScreen mainScreen] bounds].size.width,
           [[UIScreen mainScreen] bounds].size.height, screenScale);
-
-    NSLog(@"points w = %f, points h = %f, scale = %f",
-          [[UIScreen mainScreen] nativeBounds].size.width,
-          [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
-    NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
-
-    //NSLog(@"current device model %@", [UIDevice currentDevice].model );
 #endif
 
     // Rear
@@ -308,13 +298,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
         [MLUtility updateDBCheckedTimestamp];
     }
-    
-#ifdef DEBUG_ISSUE_106
-    if (appVersionChanged)
-        [self showPopupWithTitle:@"version changed" message:@"version changed"];
-    else
-        [self showPopupWithTitle:@"same version" message:@"same version"];
-#endif
 
     [defaults removeObjectForKey:@"lastUsedPrescription"];
     [defaults synchronize];
@@ -423,10 +406,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [defaults setObject:fileName forKey:@"lastUsedPrescription"];
     [defaults synchronize];
     
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, uniqueId);
-#endif
-    
     PrescriptionViewController *vc = [PrescriptionViewController sharedInstance];
     vc.editedMedicines = false;
     
@@ -445,9 +424,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 {
     NSError *error;
 
-#ifdef DEBUG_ISSUE_107
-    NSLog(@"%s url:%@", __FUNCTION__, url);
-#endif
     if (!url ||
         ![url isFileURL])
     {
@@ -479,7 +455,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
     
     if ([patientDb getPatientWithUniqueID:presInbox.patient.uniqueId]==nil) {
-        //NSLog(@"Add patient to DB");
         [patientDb addEntry:presInbox.patient];
     }
 
@@ -498,13 +473,11 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // TODO: handle case which the storage is iCloud, need time to download files
     for (NSURL *url in amkFilesArray) {
         NSString *f = url.lastPathComponent;
-        //NSLog(@"Checking existing amkFile:%@", f);
         Prescription *presAmkDir = [[Prescription alloc] initWithURL:url];
         if ([presInbox.hash isEqualToString:presAmkDir.hash]) {
             prescriptionNeedsToBeImported = NO;
             foundFileName = f;
             foundUniqueId = presAmkDir.patient.uniqueId;
-            //NSLog(@"Line %d, hash %@ exists", __LINE__, presInbox.hash);
             break;
         }
     }
@@ -550,9 +523,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     if (![right isKindOfClass:[PatientDbListViewController class]] ) {
         UIViewController *listViewController = [PatientDbListViewController sharedInstance];
         [self.revealViewController setRightViewController:listViewController];
-#ifdef DEBUG
-        //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);
-#endif
 
         self.revealViewController.rightViewRevealOverdraw = 0;
 #ifdef PATIENT_DB_LIST_FULL_WIDTH

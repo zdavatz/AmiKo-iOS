@@ -47,7 +47,6 @@
 - (BOOL)importSignatureFromFile
 {
     UIImage *signatureImg = [[MLPersistenceManager shared] doctorSignature];
-    //NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
     NSData *imgData = UIImagePNGRepresentation(signatureImg);
     signature = [imgData base64EncodedStringWithOptions:0];
     return TRUE;
@@ -71,10 +70,7 @@
                     options:NSDataBase64DecodingIgnoreUnknownCharacters];
     // original image
     UIImage* image = [UIImage imageWithData:data];
-#ifdef DEBUG
-    //NSLog(@"signature image size %@", NSStringFromCGSize(image.size));
-#endif
-    
+
     // resize
     CGFloat width = desiredSize.width / image.size.width;
     CGFloat height = desiredSize.height / image.size.height;
@@ -97,10 +93,6 @@
     [image drawInRect:rect];
     UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-#ifdef DEBUG
-    //NSLog(@"rescaled size %@", NSStringFromCGSize(scaledImage.size));
-#endif
     
     return scaledImage;
 }

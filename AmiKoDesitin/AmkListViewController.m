@@ -71,7 +71,6 @@ static const float kAmkLabelFontSize = 12.0;
 - (void) removeFromListByFilename:(NSString *)filename
 {
     for (int i=0; i<[amkFiles count]; i++) {
-        //NSLog(@"%d %@", i, amkFiles[i]);
         if ([[amkFiles[i] lastPathComponent] isEqualToString:filename]) {
             [amkFiles removeObjectAtIndex:i];
             [myTableView reloadData];
@@ -127,13 +126,8 @@ static const float kAmkLabelFontSize = 12.0;
     }
 
     if (gesture.state != UIGestureRecognizerStateBegan) {
-#ifdef DEBUG
-        //NSLog(@"gestureRecognizer.state = %ld", gesture.state);
-#endif
         return;
     }
-
-    //NSLog(@"long press on table view at row %ld", indexPath.row);
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil

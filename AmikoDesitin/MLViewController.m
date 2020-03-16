@@ -610,20 +610,12 @@ static BOOL flagShowReport = false;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:p.uniqueId forKey:@"currentPatient"];
     [defaults synchronize];
-    
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, p.uniqueId);
-#endif
 
     UIViewController *nc_front = self.revealViewController.frontViewController;
     UIViewController *vc_front = [nc_front.childViewControllers firstObject];
 
     // Make sure we have the correct front controller
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
-#ifdef DEBUG
-    //NSLog(@"appDel.editMode %ld", appDel.editMode);
-    //NSLog(@"front: %@ %p", [vc_front class], vc_front);
-#endif
     
     switch (appDel.editMode) {
         case EDIT_MODE_PRESCRIPTION:
@@ -653,20 +645,9 @@ static BOOL flagShowReport = false;
     static int fileCnt = 0;
 
     fileCnt++;
-#ifdef DEBUG_ISSUE_108
-    MLCustomURLConnection *conn = notification.object;
-    NSLog(@"%s === %@ file %d %@", __FUNCTION__, notification.name, fileCnt, [conn mFileName]);
-#endif
-
     UpdateManager *um = [UpdateManager sharedInstance];
 
-//    if (![um updateSucceeded]) {
-//        [um terminateProgressBar];
-//        return;
-//    }
-
     if (fileCnt < [um numConnections]) {
-        //NSLog(@"%s %d < %lu", __FUNCTION__, __LINE__, (unsigned long)[um numConnections]);
         return; // Wait until all files are done
     }
     
@@ -754,14 +735,8 @@ static BOOL flagShowReport = false;
 
 - (void)ftOverviewDidChangeSelection:(NSNotification *)aNotification
 {
-#if 0
-    NSInteger row = [aNotification.object integerValue];
-    //NSString *filter = [aNotification.object stringValue];
-#else
     NSDictionary *d = [aNotification object];
     NSInteger row = [d[KEY_FT_ROW] integerValue];
-    //NSString *filter = d[KEY_FT_TEXT];
-#endif
 
     if (![mFullTextSearch.listOfSectionIds isEqual:[NSNull null]])
         mListOfSectionIds = mFullTextSearch.listOfSectionIds;
@@ -787,20 +762,6 @@ static BOOL flagShowReport = false;
     // Nag user every 30 days
     double days30 = 60*60*24*30;  // 60 seconds x 60 minutes x 24 hours x 30 days
     double lastSync = [MLUtility timeIntervalSinceLastDBSync];
-#if 0 //def DEBUG
-    if (lastSync > 0.0f)
-    {
-        NSString *title = [NSString stringWithFormat:@"Last DB update %.0fs ago", lastSync];
-        NSString *message = [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeInterval:-lastSync sinceDate:[NSDate date]]
-                                                           dateStyle:NSDateFormatterShortStyle
-                                                           timeStyle:NSDateFormatterFullStyle];
-        // TODO: fix problem with iPhone 8s simulator
-        MLAlertView *alert1 = [[MLAlertView alloc] initWithTitle:title
-                                                        message:message
-                                                         button:@"OK"];
-        [alert1 show];
-    }
-#endif
 
     if (lastSync <= days30) {
 #ifdef DEBUG
@@ -823,9 +784,6 @@ static BOOL flagShowReport = false;
 
 - (void) openSQLiteDatabase
 {
-#ifdef DEBUG_ISSUE_107
-    NSLog(@"%s", __FUNCTION__);
-#endif
     mDb = [MLDBAdapter sharedInstance];
 
     if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
@@ -844,9 +802,6 @@ static BOOL flagShowReport = false;
 
 - (void) openFullTextDatabase
 {
-#ifdef DEBUG_ISSUE_107
-    NSLog(@"%s", __FUNCTION__);
-#endif
     mFullTextDb = [FullTextDBAdapter new];
     if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
         if (![mFullTextDb openDatabase:@"amiko_frequency_de"]) {
@@ -1388,10 +1343,6 @@ static BOOL flagShowReport = false;
 
 - (void) viewDidLoad
 {
-#ifdef DEBUG_ISSUE_107
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
     [super viewDidLoad];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -1445,19 +1396,9 @@ static BOOL flagShowReport = false;
     
     // Background color of navigation bar
     {
-#if 0 // @@@
-        self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
-        self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
-#endif
         self.navigationController.navigationBar.translucent = NO;
         
         // Customize tabbar
-
-#if 0   // Already done in IB ?
-        [myTabBar setTintColor:MAIN_TINT_COLOR]; // color of bar item text labels
-        [myTabBar setTranslucent:YES];
-#endif
-        
         UIImageSymbolConfiguration *configuration =
             [UIImageSymbolConfiguration configurationWithPointSize:24.0
                                                             weight:UIImageSymbolWeightLight
@@ -1486,14 +1427,12 @@ static BOOL flagShowReport = false;
         searchField.barStyle = UIBarStyleDefault;
         //searchField.backgroundImage = [UIImage new];    // Necessary for completely transparent search bar...
 
-#if 1 // @@@
         searchField.tintColor = [UIColor systemGray3Color]; // blinking cursor color. It no longer affects the bar's background
   #ifdef DEBUG
         searchField.barTintColor = [UIColor systemGreenColor];  // the bar's background, but it seems to have no effect
   #else
         searchField.barTintColor = [UIColor clearColor];
   #endif
-#endif
 
         searchField.translucent = NO;  // NO for opaque background, YES makes backgroundColor visible
         
@@ -1508,15 +1447,12 @@ static BOOL flagShowReport = false;
 
         // Show keyboard
         [searchField becomeFirstResponder];
-        
-#if 1 // issue #57
+
         UIGestureRecognizer *tapper =
         [[UITapGestureRecognizer alloc] initWithTarget:self
                                                 action:@selector(handleSingleTap:)];
         tapper.cancelsTouchesInView = NO;
         [self.view addGestureRecognizer:tapper];
-#endif
-    
     } // iPhone
     
     mBarButtonItemName = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Preparation", "Full toolbar")];
@@ -2451,21 +2387,6 @@ static BOOL flagShowReport = false;
             // Some tables have the color set in the HTML string (not set with CSS)
             secondViewController.htmlStr = [htmlStr stringByReplacingOccurrencesOfString:@"background-color: #EEEEEE"
                                                                               withString:@"background-color: var(--background-color-gray)"];
-#if 0 //def DEBUG
-            // Create an HTML file of the Fachinfo, so it can be tested with Safari and inspected with an editor
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
-            NSError *error;
-            NSString *path = [documentsDirectory stringByAppendingPathComponent:@"fachinfo.html"];
-            BOOL succeed = [secondViewController.htmlStr writeToFile:path
-                                                          atomically:YES
-                                                            encoding:NSUTF8StringEncoding
-                                                               error:&error];
-            if (succeed)
-                NSLog(@"Created file: %@", path);
-            else
-                NSLog(@"%@", error.localizedDescription);
-#endif
 
             NSString *keyword = [mFullTextEntry keyword];
             if (keyword) {
@@ -2577,7 +2498,6 @@ static BOOL flagShowReport = false;
     flagSearchInteractions = true;
     
     // Right
-#if 1
     // Extract section ids
     NSArray *listofSectionIds = [NSArray array];
     // Extract section titles
@@ -2592,10 +2512,8 @@ static BOOL flagShowReport = false;
                                                           andLanguage:[MLConstants databaseLanguage]];
 
     mainRevealController.rightViewController = titleViewController;
-#endif
     
     // Front
-#if 1
     if (secondViewController!=nil) {
         // [secondViewController removeFromParentViewController];
         secondViewController = nil;
@@ -2622,7 +2540,6 @@ static BOOL flagShowReport = false;
         [[UINavigationController alloc] initWithRootViewController:secondViewController];
 
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
-#endif
     
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
     
@@ -2854,10 +2771,7 @@ static BOOL flagShowReport = false;
     // What to display in row n?
     // static NSString *simpleTableIdentifier = @"SimpleTableItem";
     // UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    
-#ifdef DEBUG
-    //NSLog(@"%s %d", __FUNCTION__, __LINE__);
-#endif
+
     static NSString *simpleTableIdentifier = @"MLSimpleCell";
     MLSimpleTableCell *cell = (MLSimpleTableCell *)[tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
    
@@ -3101,9 +3015,7 @@ static BOOL flagShowReport = false;
 
 - (void) addMedicineToPrescription:(MLMedication *)medication :(NSInteger)packageIndex
 {
-    //NSLog(@"Line %d, %@", __LINE__, mMed); // MLMedication
     Product *product = [[Product alloc] initWithMedication:mMed :packageIndex];
-    //NSLog(@"%@", med);
     
     [[PrescriptionViewController sharedInstance] addMedication:product];
 }
@@ -3112,9 +3024,6 @@ static BOOL flagShowReport = false;
 
 - (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture
 {
-#ifdef DEBUG
-    //NSLog(@"%s mCurrentSearchState:%ld", __FUNCTION__, mCurrentSearchState);
-#endif
     CGPoint p = [gesture locationInView:self.myTableView];
     NSIndexPath *indexPath = [self.myTableView indexPathForRowAtPoint:p];
     
@@ -3124,9 +3033,6 @@ static BOOL flagShowReport = false;
     }
     
     if (gesture.state != UIGestureRecognizerStateBegan) {
-#ifdef DEBUG
-        //NSLog(@"gestureRecognizer.state = %ld", gesture.state);
-#endif
         return;
     }
     
@@ -3137,19 +3043,12 @@ static BOOL flagShowReport = false;
         {
             NSString *subTitle = [medi[indexPath.row] subTitle];
             _pickerData = [subTitle componentsSeparatedByString:@"\n"];
-#ifdef DEBUG
-            DataObject *m = medi[indexPath.row];
-            NSLog(@"%@", m);
-            //NSLog(@"listOfPackages: <%@>", _pickerData);
-            //NSLog(@"%ld packages", [_pickerData count]);
-#endif
 
             //mCurrentIndexPath = indexPath;  // for drug interaction view
             long mId = [medi[indexPath.row] medId];
             mMed = [mDb searchId:mId];  // MLMedication
             NSLog(@"%@", mMed);
 
-#if 1
             if ([_pickerData count] < 1) {
                 NSLog(@"No packages to select from");
             }
@@ -3191,7 +3090,6 @@ static BOOL flagShowReport = false;
                 [self presentViewController:self.pickerSheet animated:YES completion:^{
                 }];
             }
-#endif
         }
             break;
             
@@ -3263,12 +3161,6 @@ static BOOL flagShowReport = false;
       didSelectRow:(NSInteger)pickerRow
        inComponent:(NSInteger)component
 {
-#ifdef DEBUG
-    NSLog(@"%s, picker row:%ld", __FUNCTION__, pickerRow);
-    NSLog(@"Selected package <%@>", _pickerData[pickerRow]);
-    //NSLog(@"%ld medicines in table view", [medi count]);
-#endif
-
     [self.pickerSheet dismissViewControllerAnimated:YES completion:^{
     }];
     

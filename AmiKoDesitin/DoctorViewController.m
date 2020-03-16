@@ -43,12 +43,8 @@
     [super viewDidLoad];
     
     SWRevealViewController *revealController = [self revealViewController];
-    
-#if 1
+
     self.navigationItem.title = NSLocalizedString(@"Doctor", nil);      // grey, in the navigation bar
-#else
-    self.navigationItem.prompt = NSLocalizedString(@"Doctor", nil);     // black, above the navigation bar
-#endif
 
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
@@ -103,10 +99,7 @@
         [self.signatureView.layer setBorderWidth: 2.0];
         return;
     }
-    
-#ifdef DEBUG
-    //NSLog(@"Default doctor %@", doctorDictionary);
-#endif
+
     Operator *doctor = [Operator new];
     [doctor importFromDict:doctorDictionary];
     [self setAllFields:doctor];
@@ -291,10 +284,6 @@
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-#ifdef DEBUG
-    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
-#endif
-
     BOOL valid = TRUE;
     if ([textField.text isEqualToString:@""])
         valid = FALSE;
@@ -416,18 +405,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
-        CGFloat screenScale = [UIScreen mainScreen].scale;
-        NSLog(@"screenScale: %f", screenScale);
-    }
-    //NSLog(@"info: %@", info);
-#endif
-    
     UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-    //NSLog(@"chosenImage size: %@, scale: %f", NSStringFromCGSize(chosenImage.size), chosenImage.scale);
-    
 #if 0
     // If we want to keep the image for future use:
     // check if the image originated from the camera, store it in the photo album
@@ -441,7 +419,6 @@
 
     // Resize to 20% for doctor's profile (PNG file in Documents directory) and for AMK
     CGSize sizeScaled = CGSizeMake(chosenImage.size.width*0.2, chosenImage.size.height*0.2);
-    //NSLog(@"sizeScaled %@", NSStringFromCGSize(sizeScaled));
     // Note that a scale parameter of 0.0 means using [UIScreen mainScreen].scale and
     // ending up with a PNG file with x2 dimensions if the device is a retina display
     CGFloat scale = 1.0;
@@ -449,16 +426,12 @@
     [chosenImage drawInRect:CGRectMake(0, 0, sizeScaled.width, sizeScaled.height)];
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-#ifdef DEBUG
-    NSLog(@"scaledImage %@ points", NSStringFromCGSize(scaledImage.size));
-#endif
     
     // Save to PNG file
     [MLPersistenceManager shared].doctorSignature = scaledImage;
 
     // Resize to signatureView frame for thumbnail
     CGSize sizeTN = self.signatureView.frame.size;
-    //NSLog(@"signatureView %@", NSStringFromCGSize(sizeTN));
     UIGraphicsBeginImageContextWithOptions(sizeTN, NO, 0.0);
     [chosenImage drawInRect:CGRectMake(0, 0, sizeTN.width, sizeTN.height)];
     UIImage *thumbnailImage = UIGraphicsGetImageFromCurrentImageContext();

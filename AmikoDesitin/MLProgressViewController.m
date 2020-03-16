@@ -46,16 +46,7 @@
                                 alertControllerWithTitle:title
                                 message:@""
                                 preferredStyle: UIAlertControllerStyleAlert];
-            // float width = [mAlertController.view bounds].size.width;
-            
-#if 0 // ISSUE_108
-            // Add cancel button
-            UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel"
-                                                             style:UIAlertActionStyleDefault
-                                                           handler:nil];  // TODO: define handler that sets class variable
-            [mAlertController addAction:cancel];
-#endif
-            
+
             // Add progress bar
             mProgressBar = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
             UIViewController *v = [UIViewController new];
@@ -94,24 +85,10 @@
             andWith:(long)expectedBytes;
 {
     float progress = 100.0f * (float)downloadedBytes / (float)expectedBytes;
-    //NSLog(@"%s %d progress: %f", __FUNCTION__, __LINE__, progress);
-    //if (progress < 99)
-    {
-        [self setMessage:[NSString stringWithFormat:@"%ld MiB of %ld MiB\n%d%% ",
-                          (long)(downloadedBytes/(1024*1024)),
-                          (long)(expectedBytes/(1024*1024)),
-                          (int)progress]];
-    }
-#if 0  // This is not accurate
-    else {
-        /*
-         Given the blocking nature of the update mechanism we use a little trick here.
-         We change the message before the unzipping does start.
-        */
-        [self setMessage:@"Unzipping..."];
-    }
-#endif
-
+    [self setMessage:[NSString stringWithFormat:@"%ld MiB of %ld MiB\n%d%% ",
+                      (long)(downloadedBytes/(1024*1024)),
+                      (long)(expectedBytes/(1024*1024)),
+                      (int)progress]];
     if (mProgressBar)
         mProgressBar.progress = progress/100.0f;
     
