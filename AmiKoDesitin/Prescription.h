@@ -25,9 +25,9 @@
 @property (atomic) Patient *patient;
 @property (atomic) NSMutableArray *medications;
 
+- (instancetype)initWithURL:(NSURL *)url;
 - (NSDictionary *) makePatientDictionary;
 - (NSDictionary *) makeOperatorDictionary;
 - (NSArray *) makeMedicationsArray;
-- (void) importFromURL:(NSURL *)url;
 
 @end

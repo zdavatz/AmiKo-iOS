@@ -466,9 +466,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
 
     // Load the prescription from the file in Inbox
-    Prescription *presInbox = [Prescription new];
-    [presInbox importFromURL:url];
-    
+    Prescription *presInbox = [[Prescription alloc] initWithURL:url];
 
     // Check if the patient subdirectory exists and possibly create it
     NSURL *amkDir = [[MLPersistenceManager shared] amkDirectoryForPatient:presInbox.patient.uniqueId];
@@ -495,14 +493,13 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSArray<NSURL *> *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
 
     BOOL prescriptionNeedsToBeImported = YES;
-    Prescription *presAmkDir = [Prescription new];
     NSString *foundFileName;
     NSString *foundUniqueId;
     // TODO: handle case which the storage is iCloud, need time to download files
     for (NSURL *url in amkFilesArray) {
         NSString *f = url.lastPathComponent;
         //NSLog(@"Checking existing amkFile:%@", f);
-        [presAmkDir importFromURL:url];
+        Prescription *presAmkDir = [[Prescription alloc] initWithURL:url];
         if ([presInbox.hash isEqualToString:presAmkDir.hash]) {
             prescriptionNeedsToBeImported = NO;
             foundFileName = f;

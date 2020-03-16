@@ -1705,11 +1705,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:url.lastPathComponent forKey:@"lastUsedPrescription"];
     [defaults synchronize];
-    
-    NSString *amkDir = [MLUtility amkDirectory];
-    NSString *fullFilePath = [amkDir stringByAppendingPathComponent:[aNotification object]];
-    lastUsedURL = [NSURL fileURLWithPath:fullFilePath];
-    [prescription importFromURL:lastUsedURL];
+
+    lastUsedURL = url;
+    prescription = [[Prescription alloc] initWithURL:lastUsedURL];
     [self updateButtons];
     [infoView reloadData];
     possibleToOverwrite = true;
