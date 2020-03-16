@@ -35,9 +35,6 @@
 + (NSString*) encodeStringToBase64:(NSString*)string;
 
 + (NSString *) documentsDirectory;
-+ (NSString *) amkBaseDirectory;
-+ (NSString *) amkDirectory;
-+ (NSString *) amkDirectoryForPatient:(NSString*)uid;
 
 + (BOOL) emailValidator:(NSString *)msg;
 

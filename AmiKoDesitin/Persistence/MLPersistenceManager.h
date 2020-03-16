@@ -27,6 +27,8 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 - (void)setDoctorSignature:(UIImage *)image;
 - (UIImage*)doctorSignature;
 
+- (NSURL *)amkDirectory;
+- (NSURL *)amkDirectoryForPatient:(NSString*)uid;
 @end
 
 NS_ASSUME_NONNULL_END

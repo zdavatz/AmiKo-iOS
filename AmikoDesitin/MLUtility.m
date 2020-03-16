@@ -204,63 +204,6 @@
 #endif
 }
 
-// Create the directory if it doesn't exist
-+ (NSString *) amkBaseDirectory
-{
-    NSString *amk = [[MLUtility documentsDirectory] stringByAppendingPathComponent:@"amk"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:amk])
-    {
-        NSError *error;
-        [[NSFileManager defaultManager] createDirectoryAtPath:amk
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:&error];
-        if (error) {
-            NSLog(@"error creating directory: %@", error.localizedDescription);
-            amk = nil;
-        }
-    }
-    return amk;
-}
-
-+ (NSString *) amkDirectory
-{
-    NSString *amk = [MLUtility amkBaseDirectory];
-
-    // If the current patient is defined in the defaults,
-    // return his/her subdirectory
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *patientId = [defaults stringForKey:@"currentPatient"];
-    if (patientId)
-        return [MLUtility amkDirectoryForPatient:patientId];
-    
-    return amk;
-}
-
-+ (NSString *) amkDirectoryForPatient:(NSString*)uid
-{
-    NSString *amk = [MLUtility amkBaseDirectory];
-    NSString *patientAmk = [amk stringByAppendingPathComponent:uid];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:patientAmk])
-    {
-        NSError *error;
-        [[NSFileManager defaultManager] createDirectoryAtPath:patientAmk
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:&error];
-        if (error) {
-            NSLog(@"error creating directory: %@", error.localizedDescription);
-            patientAmk = nil;
-        }
-#ifdef DEBUG
-        else
-            NSLog(@"Created patient directory: %@", patientAmk);
-#endif
-    }
-    
-    return patientAmk;
-}
-
 + (BOOL) emailValidator:(NSString *)msg
 {
     NSString *regex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";

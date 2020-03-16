@@ -10,6 +10,7 @@
 #import "MLConstants.h"
 #import "MLUtility.h"
 #import "Operator.h"
+#import "Prescription.h"
 
 #define KEY_PERSISTENCE_SOURCE @"KEY_PERSISTENCE_SOURCE"
 
@@ -17,6 +18,8 @@
 
 - (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite;
 - (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL;
+
+- (NSURL *)amkBaseDirectory;
 
 @end
 
@@ -154,6 +157,70 @@
     return [[UIImage alloc] initWithContentsOfFile:filePath];
 }
 
+# pragma mark - Patient
+
+- (NSURL *)amkBaseDirectory {
+    if (self.currentSource == MLPersistenceSourceICloud) {
+        NSURL *url = [[self documentDirectory] URLByAppendingPathComponent:@"amk"];
+        [[NSFileManager defaultManager] createDirectoryAtURL:url
+                                 withIntermediateDirectories:YES
+                                                  attributes:nil
+                                                       error:nil];
+        return url;
+    }
+    return [NSURL fileURLWithPath:[self localAmkBaseDirectory]];
+}
+
+- (NSURL *)amkDirectory {
+    // If the current patient is defined in the defaults,
+    // return his/her subdirectory
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *patientId = [defaults stringForKey:@"currentPatient"];
+    if (patientId)
+        return [self amkDirectoryForPatient:patientId];
+    return [self amkBaseDirectory];
+}
+
+- (NSURL *)amkDirectoryForPatient:(NSString*)uid {
+    NSURL *amk = [self amkBaseDirectory];
+    NSURL *patientAmk = [amk URLByAppendingPathComponent:uid];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[patientAmk path]])
+    {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:[patientAmk path]
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error) {
+            NSLog(@"error creating directory: %@", error.localizedDescription);
+            patientAmk = nil;
+        } else {
+            NSLog(@"Created patient directory: %@", patientAmk);
+        }
+    }
+    
+    return patientAmk;
+}
+
+
+// Create the directory if it doesn't exist
+- (NSString *) localAmkBaseDirectory
+{
+    NSString *amk = [[MLUtility documentsDirectory] stringByAppendingPathComponent:@"amk"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:amk])
+    {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:amk
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error) {
+            NSLog(@"error creating directory: %@", error.localizedDescription);
+            amk = nil;
+        }
+    }
+    return amk;
+}
 # pragma mark - Utility
 
 - (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite {
