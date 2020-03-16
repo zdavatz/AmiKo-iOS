@@ -1433,36 +1433,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 //}
 #pragma mark -
 
-// Check if any of the prescriptions for the current patient has this hash
-- (NSURL *) prescriptionUrlWithHash: (NSString *)hash
-{
-    NSString *amkDir = [MLUtility amkDirectory];
-#ifdef DEBUG
-    //NSLog(@"%s %p %@", __FUNCTION__, self, amkDir);
-#endif
-    NSError *error;
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
-    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
-    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
-    amkFilesArray = [amkFilesArray sortedArrayUsingDescriptors:@[sd]];
-    NSMutableArray *amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
-    
-    //NSLog(@"documentsDir:%@", amkFiles);
-    Prescription *p = [Prescription new];
-    for (NSString* f in amkFiles) {
-        NSString *fullFilePath = [[MLUtility amkDirectory] stringByAppendingPathComponent:f];
-
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [p importFromURL:url];
-        //NSLog(@"Hash:%@", p.hash);
-        if ([p.hash isEqualToString:hash]) {
-            //NSLog(@"Found:%@", p.hash);
-            return url;
-        }
-    }
-    return nil;
-}
-
 - (BOOL) validatePrescription
 {
     if (![self checkDefaultDoctor])
@@ -1485,13 +1455,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     if (![self validatePrescription])
         return;
-    
-    NSURL *url = [self prescriptionUrlWithHash:prescription.hash];
 
     //NSLog(@"url:%@", url);
-    if (url) {
+    if (lastUsedURL) {
         NSError *error;
-        BOOL success = [[NSFileManager defaultManager] removeItemAtURL:url
+        BOOL success = [[NSFileManager defaultManager] removeItemAtURL:lastUsedURL
                                                                  error:&error];
         if (!success)
             NSLog(@"Error removing file at path: %@", error.localizedDescription);
@@ -1506,7 +1474,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         id right = self.revealViewController.rightViewController;
         if ([right isKindOfClass:[AmkListViewController class]] ) {
             AmkListViewController *vc = right;
-            [vc removeFromListByFilename:[url lastPathComponent]];
+            [vc removeFromListByFilename:[lastUsedURL lastPathComponent]];
         }
     }
 
