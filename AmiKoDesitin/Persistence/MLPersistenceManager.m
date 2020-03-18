@@ -6,11 +6,13 @@
 //  Copyright © 2020 Ywesee GmbH. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
 #import "MLPersistenceManager.h"
 #import "MLConstants.h"
 #import "MLUtility.h"
 #import "Operator.h"
 #import "Prescription.h"
+#import "PatientModel+CoreDataClass.h"
 
 #define KEY_PERSISTENCE_SOURCE @"KEY_PERSISTENCE_SOURCE"
 
@@ -20,6 +22,9 @@
 - (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL;
 
 - (NSURL *)amkBaseDirectory;
+- (PatientModel *)getPatientModelWithUniqueID:(NSString *)uniqueID;
+
+@property NSPersistentCloudKitContainer *coreDataContainer;
 
 @end
 
@@ -42,6 +47,19 @@
         // https://developer.apple.com/library/archive/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html#//apple_ref/doc/uid/TP40012094-CH6-SW6
         [self setCurrentSource:MLPersistenceSourceLocal];
         [self setCurrentSource:MLPersistenceSourceICloud];
+        
+        self.coreDataContainer = [[NSPersistentCloudKitContainer alloc] initWithName:@"Model"];
+
+        NSPersistentStoreDescription *description = [[self.coreDataContainer persistentStoreDescriptions] firstObject];
+        NSPersistentCloudKitContainerOptions *options = [[NSPersistentCloudKitContainerOptions alloc] initWithContainerIdentifier:[MLConstants iCloudContainerIdentifier]];
+        description.cloudKitContainerOptions = options;
+        
+        [self.coreDataContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription * _Nonnull desc, NSError * _Nullable error) {
+            if (error != nil) {
+                NSLog(@"Coredata error %@", error);
+                return;
+            }
+        }];
     }
     return self;
 }
@@ -157,7 +175,7 @@
     return [[UIImage alloc] initWithContentsOfFile:filePath];
 }
 
-# pragma mark - Patient
+# pragma mark - Prescription
 
 - (NSURL *)amkBaseDirectory {
     if (self.currentSource == MLPersistenceSourceICloud) {
@@ -263,6 +281,86 @@
         return amkFileURL;
     }
     return nil;
+}
+
+# pragma mark - Patient
+
+- (NSString *)addPatient:(Patient *)patient {
+    NSString *uuidStr = [patient generateUniqueID];
+    patient.uniqueId = uuidStr;
+
+    NSManagedObjectContext *context = [[self coreDataContainer] viewContext];
+    PatientModel *pm = [NSEntityDescription insertNewObjectForEntityForName:@"Patient"
+                                                     inManagedObjectContext:context];
+
+    [pm importFromPatient:patient timestamp: [NSDate new]];
+    
+    NSError *error = nil;
+    [context save:&error];
+    if (error != nil) {
+        NSLog(@"Cannot create patient %@", error);
+    }
+    return uuidStr;
+}
+
+- (NSString *)upsertPatient:(Patient *)patient {
+    NSError *error = nil;
+    if (patient.uniqueId.length) {
+        PatientModel *p = [self getPatientModelWithUniqueID:patient.uniqueId];
+        p.weightKg = patient.weightKg;
+        p.heightCm = patient.heightCm;
+        p.zipCode = patient.zipCode;
+        p.city = patient.city;
+        p.country = patient.country;
+        p.postalAddress = patient.postalAddress;
+        p.phoneNumber = patient.phoneNumber;
+        p.emailAddress = patient.emailAddress;
+        p.gender = patient.gender;
+        [[self.coreDataContainer viewContext] save:&error];
+        if (error != nil) {
+            NSLog(@"Cannot update patient %@", error);
+        }
+        return patient.uniqueId;
+    } else {
+        return [self addPatient:patient];
+    }
+}
+
+- (BOOL)deletePatient:(Patient *)patient {
+    if (!patient.uniqueId.length) {
+        return NO;
+    }
+    PatientModel *pm = [self getPatientModelWithUniqueID:patient.uniqueId];
+    if (!pm) {
+        return NO;
+    }
+    NSManagedObjectContext *context = [self.coreDataContainer viewContext];
+    [context deleteObject:pm];
+    return YES;
+}
+
+- (NSArray<Patient *> *)getAllPatients {
+    NSError *error = nil;
+    NSManagedObjectContext *context = [[self coreDataContainer] viewContext];
+    NSArray<PatientModel*> *pm = [context executeFetchRequest:[PatientModel fetchRequest] error:&error];
+    if (error != nil) {
+        NSLog(@"Cannot get all patients %@", error);
+    }
+    return [pm valueForKey:@"toPatient"];
+}
+
+- (PatientModel *)getPatientModelWithUniqueID:(NSString *)uniqueID {
+    NSError *error = nil;
+    NSManagedObjectContext *context = [[self coreDataContainer] viewContext];
+    NSFetchRequest *req = [PatientModel fetchRequest];
+    req.predicate = [NSPredicate predicateWithFormat:@"uniqueId == %@", uniqueID];
+    req.fetchLimit = 1;
+    NSArray<PatientModel *> *patientModels = [context executeFetchRequest:req error:&error];
+    return [patientModels firstObject];
+}
+
+- (Patient *) getPatientWithUniqueID:(NSString *)uniqueID {
+    return [[self getPatientModelWithUniqueID:uniqueID] toPatient];
 }
 
 # pragma mark - Utility

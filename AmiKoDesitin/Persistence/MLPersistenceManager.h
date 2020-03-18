@@ -23,14 +23,27 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 + (instancetype) shared;
 + (BOOL)supportICloud;
 
+# pragma mark - Doctor
+
 - (void)setDoctorDictionary:(NSDictionary *)dict;
 - (NSDictionary *)doctorDictionary;
 - (void)setDoctorSignature:(UIImage *)image;
 - (UIImage*)doctorSignature;
 
+# pragma mark - Prescription
+
 - (NSURL *)amkDirectory;
 - (NSURL *)amkDirectoryForPatient:(NSString*)uid;
 - (NSURL *)savePrescription:(Prescription *)prescription;
+
+#pragma mark - Patient
+
+- (NSString *)addPatient:(Patient *)patient;
+- (NSString *)upsertPatient:(Patient *)patient;
+- (BOOL)deletePatient:(Patient *)patient;
+
+- (NSArray<Patient *> *) getAllPatients;
+- (Patient *) getPatientWithUniqueID:(NSString *)uniqueID;
 
 @end
 

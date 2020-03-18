@@ -52,6 +52,12 @@
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
 		CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CFA5207224235F8A00834E16 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207024235F8A00834E16 /* Model.xcdatamodeld */; };
+		CFA5207324235F8A00834E16 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207024235F8A00834E16 /* Model.xcdatamodeld */; };
+		CFA5207824235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */; };
+		CFA5207924235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */; };
+		CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */; };
+		CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */; };
 		D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -326,6 +332,11 @@
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
 		CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPersistenceManager.m; path = AmiKoDesitin/Persistence/MLPersistenceManager.m; sourceTree = SOURCE_ROOT; };
+		CFA5207124235F8A00834E16 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		CFA5207424235FD900834E16 /* PatientModel+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientModel+CoreDataProperties.h"; path = "../PatientModel+CoreDataProperties.h"; sourceTree = "<group>"; };
+		CFA5207524235FD900834E16 /* PatientModel+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientModel+CoreDataClass.h"; path = "../PatientModel+CoreDataClass.h"; sourceTree = "<group>"; };
+		CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PatientModel+CoreDataClass.m"; path = "../PatientModel+CoreDataClass.m"; sourceTree = "<group>"; };
+		CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PatientModel+CoreDataProperties.m"; path = "../PatientModel+CoreDataProperties.m"; sourceTree = "<group>"; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -658,6 +669,7 @@
 				439F261C2028B7FF00396C29 /* PatientDBAdapter.m */,
 				FA20BD242360874E0092CBBE /* UpdateManager.m */,
 				FA20BD272360876D0092CBBE /* UpdateManager.h */,
+				CFA5207C24235FE200834E16 /* Patient */,
 			);
 			name = DB;
 			sourceTree = "<group>";
@@ -760,6 +772,18 @@
 				CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */,
 			);
 			path = Persistence;
+			sourceTree = "<group>";
+		};
+		CFA5207C24235FE200834E16 /* Patient */ = {
+			isa = PBXGroup;
+			children = (
+				CFA5207024235F8A00834E16 /* Model.xcdatamodeld */,
+				CFA5207424235FD900834E16 /* PatientModel+CoreDataProperties.h */,
+				CFA5207524235FD900834E16 /* PatientModel+CoreDataClass.h */,
+				CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */,
+				CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */,
+			);
+			name = Patient;
 			sourceTree = "<group>";
 		};
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
@@ -1402,12 +1426,14 @@
 				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				439F261D2028B7FF00396C29 /* PatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
+				CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
 				439B6C6520206D210018F922 /* AmkListViewController.m in Sources */,
 				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
+				CFA5207824235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				FA20BD252360874E0092CBBE /* UpdateManager.m in Sources */,
@@ -1434,6 +1460,7 @@
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
 				FA6A005E20D3B184002D3A33 /* PreviewView.m in Sources */,
+				CFA5207224235F8A00834E16 /* Model.xcdatamodeld in Sources */,
 				4333432A201B6488006BFC23 /* Patient.m in Sources */,
 				FA6A005A20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,
 			);
@@ -1457,12 +1484,14 @@
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* PatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
+				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
 				930D94B22077E5A9007E4629 /* DoctorViewController.m in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
 				930D94BA2077E641007E4629 /* Operator.m in Sources */,
+				CFA5207924235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				FA20BD262360874E0092CBBE /* UpdateManager.m in Sources */,
@@ -1489,6 +1518,7 @@
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */,
 				FA6A005F20D3B184002D3A33 /* PreviewView.m in Sources */,
+				CFA5207324235F8A00834E16 /* Model.xcdatamodeld in Sources */,
 				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
 				FA6A005B20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,
 			);
@@ -1835,6 +1865,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CFA5207024235F8A00834E16 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CFA5207124235F8A00834E16 /* Model.xcdatamodel */,
+			);
+			currentVersion = CFA5207124235F8A00834E16 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D5A6F22F17B1692F00EAB24B /* Project object */;
 }
