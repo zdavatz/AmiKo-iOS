@@ -7,7 +7,7 @@
 //
 
 #import "PatientDbListViewController.h"
-#import "PatientDBAdapter.h"
+#import "LegacyPatientDBAdapter.h"
 #import "SWRevealViewController.h"
 
 #import "MLViewController.h"
@@ -21,9 +21,6 @@
 @end
 
 @implementation PatientDbListViewController
-{
-    PatientDBAdapter *mPatientDb;
-}
 
 + (PatientDbListViewController *)sharedInstance
 {

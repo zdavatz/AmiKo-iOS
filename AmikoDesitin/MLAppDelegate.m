@@ -32,7 +32,7 @@
 #import "MLMenuViewController.h"
 #import "MLUtility.h"
 #import "PatientDbListViewController.h"
-#import "PatientDBAdapter.h"
+#import "LegacyPatientDBAdapter.h"
 #import "MLPersistenceManager.h"
 
 #pragma mark -

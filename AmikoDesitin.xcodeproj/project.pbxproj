@@ -20,7 +20,7 @@
 		439EEF45202CBF4900817588 /* ContactsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439EEF43202CBF4900817588 /* ContactsListViewController.m */; };
 		439EEF46202CBF4900817588 /* ContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439EEF44202CBF4900817588 /* ContactsListViewController.xib */; };
 		439F25EC20286BF200396C29 /* Prescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F25EB20286BF200396C29 /* Prescription.m */; };
-		439F261D2028B7FF00396C29 /* PatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* PatientDBAdapter.m */; };
+		439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */; };
 		439F26222028C8A700396C29 /* PatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F26202028C8A700396C29 /* PatientViewController.m */; };
 		439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
@@ -36,7 +36,7 @@
 		930D94B22077E5A9007E4629 /* DoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* DoctorViewController.m */; };
 		930D94B32077E5BC007E4629 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* Product.m */; };
 		930D94B42077E5D4007E4629 /* Patient.m in Sources */ = {isa = PBXBuildFile; fileRef = 43334329201B6488006BFC23 /* Patient.m */; };
-		930D94B52077E5D9007E4629 /* PatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* PatientDBAdapter.m */; };
+		930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */; };
 		930D94B62077E5DE007E4629 /* PatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F26202028C8A700396C29 /* PatientViewController.m */; };
 		930D94B72077E5E1007E4629 /* PatientDbListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851520333355001A5849 /* PatientDbListViewController.m */; };
 		930D94B82077E610007E4629 /* BaseListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851220333147001A5849 /* BaseListViewController.m */; };
@@ -314,8 +314,8 @@
 		439EEF44202CBF4900817588 /* ContactsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactsListViewController.xib; path = AmiKoDesitin/ContactsListViewController.xib; sourceTree = SOURCE_ROOT; };
 		439F25EA20286BF100396C29 /* Prescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prescription.h; path = AmiKoDesitin/Prescription.h; sourceTree = SOURCE_ROOT; };
 		439F25EB20286BF200396C29 /* Prescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Prescription.m; path = AmiKoDesitin/Prescription.m; sourceTree = SOURCE_ROOT; };
-		439F261B2028B7FF00396C29 /* PatientDBAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PatientDBAdapter.h; path = AmiKoDesitin/PatientDBAdapter.h; sourceTree = SOURCE_ROOT; };
-		439F261C2028B7FF00396C29 /* PatientDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PatientDBAdapter.m; path = AmiKoDesitin/PatientDBAdapter.m; sourceTree = SOURCE_ROOT; };
+		439F261B2028B7FF00396C29 /* LegacyPatientDBAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyPatientDBAdapter.h; path = AmiKoDesitin/LegacyPatientDBAdapter.h; sourceTree = SOURCE_ROOT; };
+		439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegacyPatientDBAdapter.m; path = AmiKoDesitin/LegacyPatientDBAdapter.m; sourceTree = SOURCE_ROOT; };
 		439F261F2028C8A600396C29 /* PatientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PatientViewController.h; path = AmiKoDesitin/PatientViewController.h; sourceTree = SOURCE_ROOT; };
 		439F26202028C8A700396C29 /* PatientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PatientViewController.m; path = AmiKoDesitin/PatientViewController.m; sourceTree = SOURCE_ROOT; };
 		43A3851120333147001A5849 /* BaseListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseListViewController.h; path = AmiKoDesitin/BaseListViewController.h; sourceTree = SOURCE_ROOT; };
@@ -665,8 +665,6 @@
 				D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */,
 				D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */,
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
-				439F261B2028B7FF00396C29 /* PatientDBAdapter.h */,
-				439F261C2028B7FF00396C29 /* PatientDBAdapter.m */,
 				FA20BD242360874E0092CBBE /* UpdateManager.m */,
 				FA20BD272360876D0092CBBE /* UpdateManager.h */,
 				CFA5207C24235FE200834E16 /* Patient */,
@@ -777,6 +775,8 @@
 		CFA5207C24235FE200834E16 /* Patient */ = {
 			isa = PBXGroup;
 			children = (
+				439F261B2028B7FF00396C29 /* LegacyPatientDBAdapter.h */,
+				439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */,
 				CFA5207024235F8A00834E16 /* Model.xcdatamodeld */,
 				CFA5207424235FD900834E16 /* PatientModel+CoreDataProperties.h */,
 				CFA5207524235FD900834E16 /* PatientModel+CoreDataClass.h */,
@@ -1424,7 +1424,7 @@
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
 				CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */,
 				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
-				439F261D2028B7FF00396C29 /* PatientDBAdapter.m in Sources */,
+				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
 				CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
@@ -1482,7 +1482,7 @@
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
 				CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */,
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
-				930D94B52077E5D9007E4629 /* PatientDBAdapter.m in Sources */,
+				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
 				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,

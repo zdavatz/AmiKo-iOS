@@ -13,7 +13,7 @@
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
 #import "AmkListViewController.h"
-#import "PatientDBAdapter.h"
+#import "LegacyPatientDBAdapter.h"
 #import "PatientViewController.h"
 #import "MLDBAdapter.h"
 #import "MLPersistenceManager.h"

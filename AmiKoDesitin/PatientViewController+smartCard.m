@@ -13,6 +13,7 @@
 #import "MLViewController.h"
 #import "SWRevealViewController.h"
 #import "MLAppDelegate.h"
+#import "MLPersistenceManager.h"
 
 #define DISCARD_BAD_BOXES
 

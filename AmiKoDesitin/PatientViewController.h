@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Patient.h"
-#import "PatientDBAdapter.h"
+#import "LegacyPatientDBAdapter.h"
 
 @interface PatientViewController : UIViewController <UITextFieldDelegate>
 {
-    PatientDBAdapter *mPatientDb;
-
 //    IBOutlet NSWindow *mPanel;
 //    IBOutlet NSTableView *mTableView;
 //    IBOutlet NSTextField *mNumPatients;

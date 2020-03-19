@@ -178,14 +178,7 @@ enum {
 {
     if ([[self.view gestureRecognizers] count] == 0)
         [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
-    
-    // Open patient DB
-    mPatientDb = [PatientDBAdapter new];
-    if (![mPatientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        mPatientDb = nil;
-    }
-    
+
     [mNotification setText:@""];
     
     //[self startCameraStream]; // this would work but we don't want it yet
@@ -515,11 +508,6 @@ enum {
 
 - (IBAction) savePatient:(id)sender
 {
-    if (!mPatientDb) {
-        NSLog(@"%s Patient DB is null", __FUNCTION__);
-        return;
-    }
-    
     Patient *patient = [self getAllFields];
     if (![self validateFields:patient]) {
         NSLog(@"Patient field validation failed");
