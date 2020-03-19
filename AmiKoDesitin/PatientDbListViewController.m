@@ -6,6 +6,7 @@
 //  Copyright © 2018 Ywesee GmbH. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
 #import "PatientDbListViewController.h"
 #import "LegacyPatientDBAdapter.h"
 #import "SWRevealViewController.h"
@@ -17,6 +18,8 @@
 #import "MLPersistenceManager.h"
 
 @interface PatientDbListViewController ()
+
+@property (nonatomic, strong) NSFetchedResultsController *resultsController;
 
 @end
 
@@ -40,6 +43,11 @@
     NSLog(@"%s %p", __FUNCTION__, self);
 #endif
     [super viewDidLoad];
+    
+    if (!self.resultsController) {
+        self.resultsController = [[MLPersistenceManager shared] resultsControllerForAllPatients];
+        self.resultsController.delegate = self;
+    }
 
     notificationName = @"PatientSelectedNotification";
     tableIdentifier = @"patientDbListTableItem";
@@ -61,6 +69,8 @@
     
     self.mArray = [[MLPersistenceManager shared] getAllPatients];
     [mTableView reloadData];
+
+    [self.resultsController performFetch:nil];
 
     [self.theSearchBar becomeFirstResponder];
     [super viewDidAppear:animated];
@@ -101,14 +111,13 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"currentPatient"];
     [defaults synchronize];
-    
-    // (Instead of removing one item from a NSMutableArray) reassign the whole NSArray
-    self.mArray = [[MLPersistenceManager shared] getAllPatients];
+    // TODO: the patient edit view needs to go blank.
+}
 
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+            self.mArray = [[MLPersistenceManager shared] getAllPatients];
     mSearchFiltered = FALSE;
     [mTableView reloadData];
-    
-    // TODO: the patient edit view needs to go blank.
 }
 
 #pragma mark - Overloaded

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Ywesee GmbH. All rights reserved.
 //
 
+#import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 #import "Prescription.h"
 
@@ -43,6 +44,7 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 - (BOOL)deletePatient:(Patient *)patient;
 
 - (NSArray<Patient *> *) getAllPatients;
+- (NSFetchedResultsController *)resultsControllerForAllPatients;
 - (Patient *) getPatientWithUniqueID:(NSString *)uniqueID;
 
 @end

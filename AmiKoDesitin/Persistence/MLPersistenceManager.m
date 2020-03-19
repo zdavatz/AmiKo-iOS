@@ -6,7 +6,6 @@
 //  Copyright © 2020 Ywesee GmbH. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
 #import "MLPersistenceManager.h"
 #import "MLConstants.h"
 #import "MLUtility.h"
@@ -60,6 +59,7 @@
                 NSLog(@"Coredata error %@", error);
                 return;
             }
+            [self.coreDataContainer viewContext].automaticallyMergesChangesFromParent = YES;
             [self migratePatientSqliteToCoreData];
         }];
     }
@@ -357,6 +357,20 @@
     return [pm valueForKey:@"toPatient"];
 }
 
+- (NSFetchedResultsController *)resultsControllerForAllPatients {
+    NSManagedObjectContext *context = [self.coreDataContainer viewContext];
+    NSFetchRequest *fetchRequest = [PatientModel fetchRequest];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"familyName" ascending:YES];
+    fetchRequest.sortDescriptors = @[sortDescriptor];
+
+    NSFetchedResultsController *controller = [[NSFetchedResultsController alloc]
+            initWithFetchRequest:fetchRequest
+            managedObjectContext:context
+            sectionNameKeyPath:nil
+            cacheName:nil];
+    return controller;
+}
+
 - (PatientModel *)getPatientModelWithUniqueID:(NSString *)uniqueID {
     NSError *error = nil;
     NSManagedObjectContext *context = [[self coreDataContainer] viewContext];
@@ -370,6 +384,8 @@
 - (Patient *) getPatientWithUniqueID:(NSString *)uniqueID {
     return [[self getPatientModelWithUniqueID:uniqueID] toPatient];
 }
+
+# pragma mark - Migration
 
 - (void)migratePatientSqliteToCoreData {
     NSManagedObjectContext *context = [self.coreDataContainer newBackgroundContext];
