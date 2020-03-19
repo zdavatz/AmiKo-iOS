@@ -61,15 +61,9 @@
     
     // Retrieves contacts from address DB
     // Open patient DB
-    mPatientDb = [PatientDBAdapter new];
-    if (![mPatientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        mPatientDb = nil;
-    }
-    else {
-        self.mArray = [mPatientDb getAllPatients];
-        [mTableView reloadData];
-    }    
+    
+    self.mArray = [[MLPersistenceManager shared] getAllPatients];
+    [mTableView reloadData];
 
     [self.theSearchBar becomeFirstResponder];
     [super viewDidAppear:animated];
@@ -105,14 +99,14 @@
         NSLog(@"Error removing file at path: %@", error.localizedDescription);
     
     // Finally remove the entry from the list
-    [mPatientDb deleteEntry:pat];
+    [[MLPersistenceManager shared] deletePatient:pat];
     // Clear the current user
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObjectForKey:@"currentPatient"];
     [defaults synchronize];
     
     // (Instead of removing one item from a NSMutableArray) reassign the whole NSArray
-    self.mArray = [mPatientDb getAllPatients];
+    self.mArray = [[MLPersistenceManager shared] getAllPatients];
 
     mSearchFiltered = FALSE;
     [mTableView reloadData];

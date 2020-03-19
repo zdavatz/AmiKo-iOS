@@ -342,7 +342,13 @@
 - (NSArray<Patient *> *)getAllPatients {
     NSError *error = nil;
     NSManagedObjectContext *context = [[self coreDataContainer] viewContext];
-    NSArray<PatientModel*> *pm = [context executeFetchRequest:[PatientModel fetchRequest] error:&error];
+    
+    NSFetchRequest *req = [PatientModel fetchRequest];
+    req.sortDescriptors = @[
+        [NSSortDescriptor sortDescriptorWithKey:@"familyName" ascending:YES]
+    ];
+    
+    NSArray<PatientModel*> *pm = [context executeFetchRequest:req error:&error];
     if (error != nil) {
         NSLog(@"Cannot get all patients %@", error);
     }

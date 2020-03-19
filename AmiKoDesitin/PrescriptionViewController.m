@@ -459,16 +459,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #endif
         return FALSE;
     }
-    
-    PatientDBAdapter *patientDb = [PatientDBAdapter new];
-    if (![patientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        return FALSE;
-    }
 
-    Patient *pat = [patientDb getPatientWithUniqueID:patientId];
+    Patient *pat = [[MLPersistenceManager shared] getPatientWithUniqueID:patientId];
     [prescription setPatient:pat];
-    [patientDb closeDatabase];
     return TRUE;
 }
 

@@ -492,7 +492,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
     // Check it the patient is already in the database
     
-    Patient *existingPatient = [mPatientDb getPatientWithUniqueID:incompletePatient.uniqueId];
+    Patient *existingPatient = [[MLPersistenceManager shared] getPatientWithUniqueID:incompletePatient.uniqueId];
     if (existingPatient) {
         // Set as default patient for prescriptions
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

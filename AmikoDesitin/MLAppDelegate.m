@@ -448,17 +448,9 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSURL *amkDir = [[MLPersistenceManager shared] amkDirectoryForPatient:presInbox.patient.uniqueId];
 
     // Check if the patient is already in the DB and possibly add it.
-    PatientDBAdapter *patientDb = [PatientDBAdapter new];
-    if (![patientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        return NO;
+    if ([[MLPersistenceManager shared] getPatientWithUniqueID:presInbox.patient.uniqueId]==nil) {
+        [[MLPersistenceManager shared] addPatient:presInbox.patient];
     }
-    
-    if ([patientDb getPatientWithUniqueID:presInbox.patient.uniqueId]==nil) {
-        [patientDb addEntry:presInbox.patient];
-    }
-
-    [patientDb closeDatabase];
     
     // Check the hash of the existing amk files
     NSArray<NSURL *> *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:amkDir
