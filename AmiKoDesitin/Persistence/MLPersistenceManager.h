@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 
 # pragma mark - Doctor
 
+- (NSURL *)doctorDictionaryURL;
 - (void)setDoctorDictionary:(NSDictionary *)dict;
 - (NSDictionary *)doctorDictionary;
 - (void)setDoctorSignature:(UIImage *)image;

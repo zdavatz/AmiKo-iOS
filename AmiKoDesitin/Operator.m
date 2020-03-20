@@ -39,6 +39,20 @@
     if (!givenName) givenName = @"";
 }
 
+- (NSDictionary *)toDictionary {
+    // Set as default for prescriptions
+    NSMutableDictionary *doctorDict = [NSMutableDictionary new];
+    doctorDict[KEY_AMK_DOC_TITLE] = self.title;
+    doctorDict[KEY_AMK_DOC_NAME] = self.givenName;
+    doctorDict[KEY_AMK_DOC_SURNAME] = self.familyName;
+    doctorDict[KEY_AMK_DOC_ADDRESS] = self.postalAddress;
+    doctorDict[KEY_AMK_DOC_CITY] = self.city;
+    doctorDict[KEY_AMK_DOC_ZIP] = self.zipCode;
+    doctorDict[KEY_AMK_DOC_PHONE] = self.phoneNumber;
+    doctorDict[KEY_AMK_DOC_EMAIL] = self.emailAddress;
+    return doctorDict;
+}
+
 - (void)importSignatureFromDict:(NSDictionary *)dict
 {
     signature = [dict objectForKey:KEY_AMK_DOC_SIGNATURE];

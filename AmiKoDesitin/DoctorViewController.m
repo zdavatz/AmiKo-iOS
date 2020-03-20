@@ -12,11 +12,14 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "MLPersistenceManager.h"
 
-@interface DoctorViewController ()
+@interface DoctorViewController () <NSFilePresenter>
+
+@property (nonatomic, strong) Operator *doctor;
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(Operator *)doctor;
 - (void) resetFieldsColors;
+- (void) saveDoctor;
 
 @end
 
@@ -27,15 +30,14 @@
 @synthesize signatureView;
 @synthesize scrollView;
 
-+ (DoctorViewController *)sharedInstance
-{
-    __strong static id sharedObject = nil;
-    
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
-        sharedObject = [self new];
-    });
-    return sharedObject;
+- (instancetype)init {
+    if (self = [super initWithNibName:@"DoctorViewController" bundle:nil]) {
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [NSFileCoordinator removeFilePresenter:self];
 }
 
 - (void)viewDidLoad
@@ -61,7 +63,7 @@
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", nil)
                                      style:UIBarButtonItemStylePlain
                                     target:self
-                                    action:@selector(saveDoctor:)];
+                                    action:@selector(saveDoctorAndClose:)];
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
 
@@ -100,12 +102,14 @@
         return;
     }
 
-    Operator *doctor = [Operator new];
-    [doctor importFromDict:doctorDictionary];
-    [self setAllFields:doctor];
+    [NSFileCoordinator addFilePresenter:self];
 
-    if ([doctor importSignatureFromFile]) {
-        self.signatureView.image = [doctor thumbnailFromSignature:self.signatureView.frame.size];
+    self.doctor = [Operator new];
+    [self.doctor importFromDict:doctorDictionary];
+    [self setAllFields:self.doctor];
+
+    if ([self.doctor importSignatureFromFile]) {
+        self.signatureView.image = [self.doctor thumbnailFromSignature:self.signatureView.frame.size];
     }
     else {
         NSLog(@"Default doctor signature not yet defined");
@@ -298,37 +302,35 @@
 
 #pragma mark - Actions
 
-- (IBAction) saveDoctor:(id)sender
+- (IBAction) saveDoctorAndClose:(id)sender {
+    [self saveDoctor];
+    // Back to main screen
+    [[self revealViewController] revealToggle:nil];
+}
+- (IBAction) saveDoctor
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    Operator *doctor = [self getAllFields];
-    if (![self validateFields:doctor]) {
+    Operator *newDoctor = [self getAllFields];
+    if (![self validateFields:newDoctor]) {
         NSLog(@"Doctor field validation failed");
         return;
     }
-    
-    // Set as default for prescriptions
-    NSMutableDictionary *doctorDict = [NSMutableDictionary new];
-    [doctorDict setObject:mTitle.text         forKey:KEY_AMK_DOC_TITLE];
-    [doctorDict setObject:mGivenName.text     forKey:KEY_AMK_DOC_NAME];
-    [doctorDict setObject:mFamilyName.text    forKey:KEY_AMK_DOC_SURNAME];
-    [doctorDict setObject:mPostalAddress.text forKey:KEY_AMK_DOC_ADDRESS];
-    [doctorDict setObject:mCity.text          forKey:KEY_AMK_DOC_CITY];
-    [doctorDict setObject:mZipCode.text       forKey:KEY_AMK_DOC_ZIP];
-    [doctorDict setObject:mPhone.text         forKey:KEY_AMK_DOC_PHONE];
-    [doctorDict setObject:mEmail.text         forKey:KEY_AMK_DOC_EMAIL];
 
+    NSDictionary *doctorDict = [self.doctor toDictionary];
+    NSDictionary *newDoctorDict = [newDoctor toDictionary];
+    if ([doctorDict isEqualToDictionary:newDoctorDict]) {
+        return;
+    } else {
+        self.doctor = newDoctor;
+    }
 #ifdef DEBUG
-    NSLog(@"doctorDict: %@", doctorDict);
+    NSLog(@"newDoctorDict: %@", newDoctorDict);
 #endif
-    
-    [[MLPersistenceManager shared] setDoctorDictionary:doctorDict];
 
-    // Back to main screen
-    [[self revealViewController] revealToggle:nil];
+    [[MLPersistenceManager shared] setDoctorDictionary:newDoctorDict];
 }
 
 - (IBAction) signWithSelfie:(id)sender
@@ -377,6 +379,29 @@
     picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum; // camera roll
     
     [self presentViewController:picker animated:YES completion:NULL];
+}
+
+#pragma mark - File system
+
+- (NSURL *)presentedItemURL {
+    return [[MLPersistenceManager shared] doctorDictionaryURL];
+}
+
+- (NSOperationQueue *)presentedItemOperationQueue {
+    return [NSOperationQueue mainQueue];
+}
+
+- (void)savePresentedItemChangesWithCompletionHandler:(void (^)(NSError *errorOrNil))completionHandler {
+    [self saveDoctor];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        completionHandler(nil);
+    });
+}
+
+- (void)presentedItemDidChange {
+    NSDictionary *dict = [[MLPersistenceManager shared] doctorDictionary];
+    [self.doctor importFromDict:dict];
+    [self setAllFields:self.doctor];
 }
 
 #pragma mark - Notifications

@@ -40,6 +40,7 @@
 - (void)importFromDict:(NSDictionary *)dict;
 - (void)importSignatureFromDict:(NSDictionary *)dict;
 - (BOOL)importSignatureFromFile;
+- (NSDictionary *)toDictionary;
 
 - (UIImage *)thumbnailFromSignature:(CGSize) size;
 - (NSInteger)entriesCount;

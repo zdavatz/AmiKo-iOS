@@ -2639,7 +2639,7 @@ static BOOL flagShowReport = false;
     mainRevealController.rightViewController = nil;
 
     // Front
-    DoctorViewController *doctorEditViewController = [DoctorViewController sharedInstance];
+    DoctorViewController *doctorEditViewController = [[DoctorViewController alloc] init];
     otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:doctorEditViewController];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     
