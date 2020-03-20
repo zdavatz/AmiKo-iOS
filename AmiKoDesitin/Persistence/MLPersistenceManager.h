@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 
 + (instancetype) shared;
 + (BOOL)supportICloud;
+- (NSManagedObjectContext *)managedViewContext;
 
 # pragma mark - Doctor
 

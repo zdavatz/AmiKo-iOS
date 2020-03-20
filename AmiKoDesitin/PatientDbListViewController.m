@@ -115,7 +115,7 @@
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-            self.mArray = [[MLPersistenceManager shared] getAllPatients];
+    self.mArray = [[MLPersistenceManager shared] getAllPatients];
     mSearchFiltered = FALSE;
     [mTableView reloadData];
 }

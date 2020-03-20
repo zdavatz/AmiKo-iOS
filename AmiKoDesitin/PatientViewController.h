@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import "Patient.h"
 #import "LegacyPatientDBAdapter.h"
 
-@interface PatientViewController : UIViewController <UITextFieldDelegate>
+@interface PatientViewController : UIViewController <UITextFieldDelegate, NSFetchedResultsControllerDelegate>
 {
 //    IBOutlet NSWindow *mPanel;
 //    IBOutlet NSTableView *mTableView;

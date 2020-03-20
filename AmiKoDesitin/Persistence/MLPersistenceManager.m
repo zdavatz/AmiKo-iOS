@@ -120,6 +120,10 @@
     return [NSURL fileURLWithPath:[MLUtility documentsDirectory]];
 }
 
+- (NSManagedObjectContext *)managedViewContext {
+    return self.coreDataContainer.viewContext;
+}
+
 # pragma mark - Migration Local -> iCloud
 
 - (void)migrateToICloud {

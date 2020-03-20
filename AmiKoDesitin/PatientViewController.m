@@ -14,6 +14,7 @@
 #import "MLAppDelegate.h"
 #import "MLUtility.h"
 #import "MLPersistenceManager.h"
+#import "PatientModel+CoreDataClass.h"
 
 #define DYNAMIC_BUTTONS
 
@@ -28,6 +29,8 @@ enum {
 };
 
 @interface PatientViewController ()
+
+@property (nonatomic, strong) NSFetchedResultsController *resultsController;
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(Patient *)patient;
@@ -264,6 +267,9 @@ enum {
     mPatientUUID = nil;
     
     [mNotification setText:@""];
+    
+    self.resultsController.delegate = nil;
+    self.resultsController = nil;
 }
 
 - (void) setAllFields:(Patient *)p
@@ -309,6 +315,22 @@ enum {
             [mSex setSelectedSegmentIndex:0];
         else if ([p.gender isEqualToString:KEY_AMK_PAT_GENDER_F])
             [mSex setSelectedSegmentIndex:1];
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueId == %@", p.uniqueId];
+    if (!self.resultsController) {
+        NSFetchRequest *req = [PatientModel fetchRequest];
+        req.predicate = predicate;
+        req.fetchLimit = 1;
+        req.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"familyName" ascending:YES]];
+        self.resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:req
+                                                                     managedObjectContext:[[MLPersistenceManager shared] managedViewContext]
+                                                                       sectionNameKeyPath:nil
+                                                                                cacheName:nil];
+        self.resultsController.delegate = self;
+        [self.resultsController performFetch:nil];
+    } else {
+        self.resultsController.fetchRequest.predicate = predicate;
+        [self.resultsController performFetch:nil];
     }
 }
 
@@ -601,6 +623,15 @@ enum {
     
     SWRevealViewController *revealController = self.revealViewController;
     [revealController rightRevealToggleAnimated:YES];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    if (!mPatientUUID) {
+        return;
+    }
+    Patient *p = [[MLPersistenceManager shared] getPatientWithUniqueID:mPatientUUID];
+    [self resetAllFields];
+    [self setAllFields:p];
 }
 
 @end
