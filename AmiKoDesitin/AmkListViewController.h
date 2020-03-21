@@ -20,5 +20,6 @@
 - (void) removeFromListByFilename:(NSString *)path;
 - (void) removeItem:(NSUInteger)rowIndex;
 - (void) refreshList;
+- (void) refreshFileList;
 
 @end

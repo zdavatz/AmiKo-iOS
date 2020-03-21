@@ -1349,7 +1349,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     id right = self.revealViewController.rightViewController;
     if ([right isKindOfClass:[AmkListViewController class]] ) {
         AmkListViewController *vc = right;
-        [vc refreshList];
+        [vc refreshFileList];
     }
 }
 
@@ -1480,6 +1480,11 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // TODO: (TBC) make sure the right view is back to the AMK list, for the sake of the swiping action
     
     [self updateButtons];
+    id right = self.revealViewController.rightViewController;
+    if ([right isKindOfClass:[AmkListViewController class]] ) {
+        AmkListViewController *vc = right;
+        [vc refreshList];
+    }
 }
 
 - (void)addMedication:(Product *)p
