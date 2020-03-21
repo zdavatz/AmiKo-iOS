@@ -18,7 +18,7 @@
 #define mm2pix(x)       inch2pix(x*mm2inch)
 
 @interface PrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIPrintInteractionControllerDelegate>
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIPrintInteractionControllerDelegate, NSFilePresenter>
 {
     AVCaptureSession *captureSession;
     AVCaptureVideoDataOutput *captureOutput;

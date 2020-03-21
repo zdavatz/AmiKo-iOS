@@ -101,8 +101,10 @@
         [self.signatureView.layer setBorderWidth: 2.0];
         return;
     }
-
-    [NSFileCoordinator addFilePresenter:self];
+    
+    if (![[NSFileCoordinator filePresenters] containsObject:self]) {
+        [NSFileCoordinator addFilePresenter:self];
+    }
 
     self.doctor = [Operator new];
     [self.doctor importFromDict:doctorDictionary];

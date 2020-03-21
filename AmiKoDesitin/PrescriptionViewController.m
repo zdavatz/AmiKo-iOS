@@ -211,6 +211,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [NSFileCoordinator removeFilePresenter:self];
 }
 
 - (void)updateMainframeRect
@@ -268,8 +269,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
     [self updateMainframeRect];
     
-    if (!prescription)
+    if (!prescription) {
         prescription = [Prescription new];
+        lastUsedURL = nil;
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(amkListDidChangeSelection:)
@@ -300,6 +303,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                              selector:@selector(newLabelPrinterWasSelected:)
                                                  name:@"labelPrinterSelection"
                                                object:nil];
+    if (![[NSFileCoordinator filePresenters] containsObject:self]) {
+        [NSFileCoordinator addFilePresenter:self];
+    }
     self.editedMedicines = false;
     possibleToOverwrite = false;
     editingCommentIdx = -1;
@@ -444,6 +450,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 
     prescription = [[Prescription alloc] initWithURL:url];
+    lastUsedURL = url;
     possibleToOverwrite = true;
     NSLog(@"Reopened:%@", fileName);
     return TRUE;
@@ -1489,8 +1496,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)addMedication:(Product *)p
 {
-    if (!prescription)
+    if (!prescription) {
         prescription = [Prescription new];
+        lastUsedURL = nil;
+    }
     
     if (!prescription.medications)
         prescription.medications = [NSMutableArray new];
@@ -1567,6 +1576,32 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [vc_front presentViewController:self.videoVC
                            animated:NO
                          completion:NULL];
+}
+
+#pragma mark - File presenter
+
+- (NSURL *)presentedItemURL {
+    return lastUsedURL;
+}
+
+- (NSOperationQueue *)presentedItemOperationQueue {
+    return [NSOperationQueue mainQueue];
+}
+
+- (void)savePresentedItemChangesWithCompletionHandler:(void (^)(NSError *errorOrNil))completionHandler {
+    if (possibleToOverwrite) {
+        [self overwritePrescription];
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        completionHandler(nil);
+    });
+}
+
+- (void)presentedItemDidChange {
+    prescription = [[Prescription alloc] initWithURL:lastUsedURL];
+    [self updateButtons];
+    [infoView reloadData];
+    possibleToOverwrite = true;
 }
 
 #pragma mark - UIGestureRecognizerDelegate
