@@ -207,4 +207,90 @@
     return colorCss;
 }
 
+
++ (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:[url path]]) {
+        return;
+    }
+    BOOL exist = [manager fileExistsAtPath:[targetUrl path]];
+    if (exist && overwrite) {
+        [manager replaceItemAtURL:targetUrl
+                    withItemAtURL:url
+                   backupItemName:[NSString stringWithFormat:@"%@.bak", [url lastPathComponent]]
+                          options:NSFileManagerItemReplacementUsingNewMetadataOnly
+                 resultingItemURL:nil
+                            error:nil];
+        [manager removeItemAtURL:url error:nil];
+    } else if (!exist) {
+        [manager moveItemAtURL:url
+                         toURL:targetUrl
+                         error:nil];
+    }
+}
+
++ (void)copyFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:[url path]]) {
+        return;
+    }
+    BOOL exist = [manager fileExistsAtPath:[targetUrl path]];
+    if (exist && overwrite) {
+        [manager replaceItemAtURL:targetUrl
+                    withItemAtURL:url
+                   backupItemName:[NSString stringWithFormat:@"%@.bak", [url lastPathComponent]]
+                          options:NSFileManagerItemReplacementUsingNewMetadataOnly
+                 resultingItemURL:nil
+                            error:nil];
+    } else if (!exist) {
+        [manager copyItemAtURL:url
+                         toURL:targetUrl
+                         error:nil];
+    }
+
+}
+
++ (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL deleteOriginal:(BOOL)deleteOriginal {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    BOOL isDirectory = NO;
+    BOOL sourceExist = [manager fileExistsAtPath:[fromURL path] isDirectory:&isDirectory];
+    if (!sourceExist || !isDirectory) {
+        return;
+    }
+    isDirectory = NO;
+    BOOL destExist = [manager fileExistsAtPath:[toURL path] isDirectory:&isDirectory];
+    if (destExist && !isDirectory) {
+        // Remote is a file but we need a directory, abort
+        return;
+    }
+    if (!destExist) {
+        [manager createDirectoryAtURL:toURL
+          withIntermediateDirectories:YES
+                           attributes:nil
+                                error:nil];
+    }
+    NSArray<NSURL *> *sourceFiles = [manager contentsOfDirectoryAtURL:fromURL
+                                           includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+                                                              options:0
+                                                                error:nil];
+    for (NSURL *sourceFile in sourceFiles) {
+        NSURL *destFile = [toURL URLByAppendingPathComponent:[sourceFile lastPathComponent]];
+        NSNumber *sourceIsDir = @0;
+        [sourceFile getResourceValue:&sourceIsDir
+                              forKey:NSURLIsDirectoryKey
+                               error:nil];
+        if ([sourceIsDir boolValue]) {
+            [self mergeFolderRecursively:sourceFile
+                                      to:destFile
+                          deleteOriginal:deleteOriginal];
+        } else {
+            if (deleteOriginal) {
+                [MLUtility moveFile:sourceFile toURL:destFile overwriteIfExisting:YES];
+            } else {
+                [MLUtility copyFile:sourceFile toURL:destFile overwriteIfExisting:YES];
+            }
+        }
+    }
+}
+
 @end

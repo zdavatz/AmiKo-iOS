@@ -230,13 +230,14 @@ static const float kAmkLabelFontSize = 12.0;
     UILabel *label = (UILabel *)[cell.contentView viewWithTag:123];
     NSURL *url = amkFiles[indexPath.row];
     label.text = [url.lastPathComponent stringByDeletingPathExtension];
-    NSNumber *isDownloading = nil;
-    NSNumber *isDownloadRequested = nil;
-    NSString *downloadStatus = nil;
     NSString *displayName = nil;
     if ([url getResourceValue:&displayName forKey:NSURLLocalizedNameKey error:nil]) {
         label.text = [displayName stringByDeletingPathExtension];
     }
+
+    NSNumber *isDownloading = nil;
+    NSNumber *isDownloadRequested = nil;
+    NSString *downloadStatus = nil;
     NSError *error = nil;
     if ([url getResourceValue:&isDownloading forKey:NSURLUbiquitousItemIsDownloadingKey error:&error] &&
         error == nil &&

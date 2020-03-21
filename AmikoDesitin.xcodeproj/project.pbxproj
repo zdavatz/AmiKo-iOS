@@ -48,6 +48,8 @@
 		932F883E206BDA1600B5A77E /* ContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439EEF44202CBF4900817588 /* ContactsListViewController.xib */; };
 		932F883F206BDA1D00B5A77E /* PatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* PatientViewController.xib */; };
 		932F8840206BDA4700B5A77E /* AmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* AmkListViewController.xib */; };
+		CF40D7AB2426062100FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
+		CF40D7AC2426089900FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
 		CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
@@ -328,6 +330,8 @@
 		5B1BEAABB72AF37F805635CC /* Pods-AmiKoDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmiKoDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AmiKoDesitin/Pods-AmiKoDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 		C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoMedDesitin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF158C3E241B525000F28EDD /* AmiKoDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AmiKoDesitin.entitlements; path = AmiKoDesitin/AmiKoDesitin.entitlements; sourceTree = "<group>"; };
+		CF40D7A92426062100FDCFCD /* MLiCloudToLocalMigration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLiCloudToLocalMigration.h; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.h"; sourceTree = SOURCE_ROOT; };
+		CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLiCloudToLocalMigration.m; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.m"; sourceTree = SOURCE_ROOT; };
 		CF626254241B7A9E00FBCCD9 /* CoMedDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoMedDesitin.entitlements; sourceTree = "<group>"; };
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
@@ -763,9 +767,19 @@
 			name = json;
 			sourceTree = "<group>";
 		};
+		CF40D7A8242605FE00FDCFCD /* iCloud to local migration */ = {
+			isa = PBXGroup;
+			children = (
+				CF40D7A92426062100FDCFCD /* MLiCloudToLocalMigration.h */,
+				CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */,
+			);
+			path = "iCloud to local migration";
+			sourceTree = "<group>";
+		};
 		CF626259241D0E1200FBCCD9 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				CF40D7A8242605FE00FDCFCD /* iCloud to local migration */,
 				CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */,
 				CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */,
 			);
@@ -1430,6 +1444,7 @@
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
 				439B6C6520206D210018F922 /* AmkListViewController.m in Sources */,
+				CF40D7AB2426062100FDCFCD /* MLiCloudToLocalMigration.m in Sources */,
 				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
@@ -1488,6 +1503,7 @@
 				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
+				CF40D7AC2426089900FDCFCD /* MLiCloudToLocalMigration.m in Sources */,
 				930D94B22077E5A9007E4629 /* DoctorViewController.m in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
 				930D94BA2077E641007E4629 /* Operator.m in Sources */,
