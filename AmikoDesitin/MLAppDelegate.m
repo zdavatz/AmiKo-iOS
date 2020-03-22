@@ -417,10 +417,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 }
 
 // The file is in "Documents/Inbox/" and needs to be moved to "Documents/amk/"
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
 {
     NSError *error;
 
@@ -462,7 +459,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     BOOL prescriptionNeedsToBeImported = YES;
     NSString *foundFileName;
     NSString *foundUniqueId;
-    // TODO: handle case which the storage is iCloud, need time to download files
     for (NSURL *url in amkFilesArray) {
         NSString *f = url.lastPathComponent;
         Prescription *presAmkDir = [[Prescription alloc] initWithURL:url];
@@ -495,6 +491,23 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
         [self showPrescriptionId:foundUniqueId :foundFileName];
         return NO;
+    }
+    
+    for (NSURL *dirFile in dirFiles) {
+        NSString *dirFilename = nil;
+        NSError *error = nil;
+        NSString *downloadStatus = nil;
+        if ([dirFile getResourceValue:&dirFilename forKey:NSURLLocalizedNameKey error:&error] &&
+            error != nil &&
+            [[fileName stringByDeletingPathExtension] isEqualToString:dirFilename] &&
+
+            [dirFile getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:&error] &&
+            error != nil &&
+            [downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusNotDownloaded]) {
+            // There is a file on iCloud with the same filename
+            [[NSFileManager defaultManager] removeItemAtURL:dirFile error:nil];
+            break;
+        }
     }
 
     // Finally copy amk from Inbox to patient subdirectory
