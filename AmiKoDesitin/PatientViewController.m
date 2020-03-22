@@ -13,6 +13,8 @@
 #import "MLViewController.h"
 #import "MLAppDelegate.h"
 #import "MLUtility.h"
+#import "MLPersistenceManager.h"
+#import "PatientModel+CoreDataClass.h"
 
 #define DYNAMIC_BUTTONS
 
@@ -27,6 +29,8 @@ enum {
 };
 
 @interface PatientViewController ()
+
+@property (nonatomic, strong) NSFetchedResultsController *resultsController;
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(Patient *)patient;
@@ -70,10 +74,6 @@ enum {
                                      style:UIBarButtonItemStylePlain
                                     target:revealController
                                     action:@selector(revealToggle:)];
-#if 0
-    // A single button on the left
-    self.navigationItem.leftBarButtonItem = revealButtonItem;
-#else
     // Two buttons on the left (with spacer between them)
     UIBarButtonItem *cancelItem =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil)
@@ -94,7 +94,6 @@ enum {
     self.navigationItem.leftBarButtonItems =
     [NSArray arrayWithObjects:
                 revealButtonItem, spacer, cancelItem, nil];
-#endif
     
     // Middle button
     {
@@ -116,23 +115,14 @@ enum {
 
     // Right button(s)
     {
-#if 1
     // First ensure the "right" is a ContactsListViewController
     id aTarget = self;
     SEL aSelector = @selector(myRightRevealToggle:);
-#else
-    id aTarget = revealController;
-    SEL aSelector = @selector(rightRevealToggle:);
-#endif
     UIBarButtonItem *rightRevealButtonItem =
     [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:NAVIGATION_ICON_RIGHT]
                                      style:UIBarButtonItemStylePlain
                                     target:aTarget
                                     action:aSelector];
-#if 0
-    // A single button on the right
-    self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
-#else
     // Two buttons on the right (with spacer between them)
     UIBarButtonItem *saveItem =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", nil)
@@ -145,7 +135,6 @@ enum {
 
     self.navigationItem.rightBarButtonItems =
     [NSArray arrayWithObjects:rightRevealButtonItem, spacer, saveItem, nil];
-#endif
     }
     
 #ifdef DEBUG
@@ -192,14 +181,7 @@ enum {
 {
     if ([[self.view gestureRecognizers] count] == 0)
         [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
-    
-    // Open patient DB
-    mPatientDb = [PatientDBAdapter new];
-    if (![mPatientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        mPatientDb = nil;
-    }
-    
+
     [mNotification setText:@""];
     
     //[self startCameraStream]; // this would work but we don't want it yet
@@ -265,10 +247,6 @@ enum {
 
 - (void) resetAllFields
 {
-#ifdef DEBUG
-    //NSLog(@"%s %p", __FUNCTION__, self);
-#endif
-    
     [self resetFieldsColors];
     
     [mFamilyName setText:@""];
@@ -289,6 +267,9 @@ enum {
     mPatientUUID = nil;
     
     [mNotification setText:@""];
+    
+    self.resultsController.delegate = nil;
+    self.resultsController = nil;
 }
 
 - (void) setAllFields:(Patient *)p
@@ -334,6 +315,22 @@ enum {
             [mSex setSelectedSegmentIndex:0];
         else if ([p.gender isEqualToString:KEY_AMK_PAT_GENDER_F])
             [mSex setSelectedSegmentIndex:1];
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueId == %@", p.uniqueId];
+    if (!self.resultsController) {
+        NSFetchRequest *req = [PatientModel fetchRequest];
+        req.predicate = predicate;
+        req.fetchLimit = 1;
+        req.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"familyName" ascending:YES]];
+        self.resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:req
+                                                                     managedObjectContext:[[MLPersistenceManager shared] managedViewContext]
+                                                                       sectionNameKeyPath:nil
+                                                                                cacheName:nil];
+        self.resultsController.delegate = self;
+        [self.resultsController performFetch:nil];
+    } else {
+        self.resultsController.fetchRequest.predicate = predicate;
+        [self.resultsController performFetch:nil];
     }
 }
 
@@ -459,9 +456,6 @@ enum {
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-#ifdef DEBUG
-    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
-#endif
     if ((textField.tag == 6) ||     // country
         (textField.tag == 9) ||     // weight
         (textField.tag == 10) ||    // height
@@ -474,19 +468,6 @@ enum {
     BOOL valid = TRUE;
     if ([textField.text isEqualToString:@""])
         valid = FALSE;
-
-//    switch (textField.tag) {
-//        case NameFieldTag: break;
-//        case SurnameFieldTag: break;
-//        case AddressFieldTag: break;
-//        case CityFieldTag: break;
-//        case ZIPFieldTag: break;
-//        case DOBFieldTag: break;
-//        case SexFieldTag: break;
-//
-//        default:
-//            break;
-//    }
 
     if (valid)
         textField.backgroundColor = [UIColor secondarySystemBackgroundColor];
@@ -536,9 +517,6 @@ enum {
 
 - (IBAction) cancelPatient:(id)sender
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
     [self resetAllFields];
 
 #ifdef DYNAMIC_BUTTONS
@@ -552,32 +530,19 @@ enum {
 
 - (IBAction) savePatient:(id)sender
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-#endif
-
-    if (!mPatientDb) {
-        NSLog(@"%s Patient DB is null", __FUNCTION__);
-        return;
-    }
-    
     Patient *patient = [self getAllFields];
     if (![self validateFields:patient]) {
         NSLog(@"Patient field validation failed");
         return;
     }
     
-#ifdef DEBUG
-    //NSLog(@"before adding %@, count %ld", mPatientUUID, [mPatientDb getNumPatients]);
-#endif
-    
     if (mPatientUUID && [mPatientUUID length]>0)
         patient.uniqueId = mPatientUUID;
     
     NSString *note = NSLocalizedString(@"Contact was saved in the AmiKo address book", nil);
     
-    if ([mPatientDb getPatientWithUniqueID:mPatientUUID]==nil)
-        mPatientUUID = [mPatientDb addEntry:patient];       // insert into DB
+    if ([[MLPersistenceManager shared] getPatientWithUniqueID:mPatientUUID]==nil)
+        mPatientUUID = [[MLPersistenceManager shared] addPatient:patient];       // insert into DB
     else {
         if (patient.uniqueId!=nil &&
             [patient.uniqueId length]>0)
@@ -585,7 +550,7 @@ enum {
             note = NSLocalizedString(@"The entry has been updated", nil);
         }
 
-        mPatientUUID = [mPatientDb insertEntry:patient];    // insert into DB or update
+        mPatientUUID = [[MLPersistenceManager shared] upsertPatient:patient];    // insert into DB or update
     }
 
     if (mPatientUUID==nil) {
@@ -600,28 +565,14 @@ enum {
 #ifdef DYNAMIC_BUTTONS
     [self saveCancelOff];
 #endif
-    
-#ifdef DEBUG
-    //NSLog(@"patients after adding: %ld", [mPatientDb getNumPatients]);
-#endif
-    
+
     // Set as default patient for prescriptions
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:mPatientUUID forKey:@"currentPatient"];
     [defaults synchronize];
-    
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, mPatientUUID);
-#endif
-    
+
     // Create patient subdirectory for prescriptions
-#if 0 //def DEBUG
-    NSString *amkDir = [MLUtility amkDirectory];
-    NSLog(@"amk subdirectory: %@", amkDir);
-#else
-    //[MLUtility amkDirectoryForPatient:mPatientUUID];
-    [MLUtility amkDirectory];
-#endif
+    [[MLPersistenceManager shared] amkDirectoryForPatient:patient.uniqueId];
     
     // Switch view
     MLAppDelegate *appDel = (MLAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -665,21 +616,22 @@ enum {
 - (void)contactsListDidChangeSelection:(NSNotification *)aNotification
 {
     Patient *p = [aNotification object];
-#ifdef DEBUG
-    //NSLog(@"%s selected familyName:%@", __FUNCTION__, p.familyName);
-#endif
-    
     [self resetAllFields];
     [self setAllFields:p];
     
     // TODO: Add contact to patient DB
     
     SWRevealViewController *revealController = self.revealViewController;
-#if 1
     [revealController rightRevealToggleAnimated:YES];
-#else
-    [revealController setFrontViewPosition:FrontViewPositionLeftSideMost animated:YES];
-#endif
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    if (!mPatientUUID) {
+        return;
+    }
+    Patient *p = [[MLPersistenceManager shared] getPatientWithUniqueID:mPatientUUID];
+    [self resetAllFields];
+    [self setAllFields:p];
 }
 
 @end

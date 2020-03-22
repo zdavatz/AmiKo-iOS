@@ -60,9 +60,7 @@
     NSString *filePath = [documentsDirectory stringByAppendingPathComponent:fileName];
     [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
     mFile = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
-#ifdef DEBUG_ISSUE_108
-    NSLog(@"%s %d, start download to <%@>", __FUNCTION__, __LINE__, filePath);
-#endif
+
 }
 
 #pragma mark - NSURLConnectionDataDelegate
@@ -102,19 +100,6 @@
 {
     UpdateManager *um = [UpdateManager sharedInstance];
 
-#if 0
-    if (![um.myProgressView mDownloadInProgress])
-    {
-        NSLog(@"Download canceled");
-        [myConnection cancel];
-        myConnection = nil;
-        if (mFile)
-            [mFile closeFile];
-
-        return;
-    }
-#endif
-    
     if (mFile)
         [mFile writeData:data];
 
@@ -124,10 +109,6 @@
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection
 {
-#ifdef DEBUG_ISSUE_108
-    NSLog(@"%s %d\n\n mFileName: %@", __FUNCTION__, __LINE__, self.mFileName);
-#endif
-
     // Release stuff
     myConnection = nil;
     if (mFile)
@@ -151,46 +132,9 @@
 
 - (void) unzipDatabase
 {
-//    // Why are we checking if these files are already in the bundle ?
-//
-//    NSString *filePath;
-//    if ([mFileName isEqualToString:@"amiko_db_full_idx_de.zip"] ||
-//        [mFileName isEqualToString:@"amiko_db_full_idx_zr_de.zip"]) {
-//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_de" ofType:@"db"];
-//    }
-//    else if ([mFileName isEqualToString:@"amiko_db_full_idx_fr.zip"] ||
-//             [mFileName isEqualToString:@"amiko_db_full_idx_zr_fr.zip"]) {
-//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_db_full_idx_fr" ofType:@"db"];
-//    }
-//
-//    if ([mFileName isEqualToString:@"drug_interactions_csv_de.zip"]) {
-//        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_de" ofType:@"csv"];
-//    }
-//    else if ([mFileName isEqualToString:@"drug_interactions_csv_fr.zip"]) {
-//        filePath = [[NSBundle mainBundle] pathForResource:@"drug_interactions_csv_fr" ofType:@"csv"];
-//    }
-//
-//    if ([mFileName isEqualToString:@"amiko_frequency_de.db.zip"]) {
-//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_de" ofType:@"db"];
-//    }
-//    else if ([mFileName isEqualToString:@"amiko_frequency_fr.db.zip"]) {
-//        filePath = [[NSBundle mainBundle] pathForResource:@"amiko_frequency_fr" ofType:@"db"];
-//    }
-//
-//    //NSLog(@"%s %d, bundle filePath: %@", __FUNCTION__, __LINE__, filePath);
-//
-//    if (filePath.length == 0) {
-//        //NSLog(@"%s %d, filePath not in bundle", __FUNCTION__, __LINE__);
-//        return;
-//    }
-
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *zipFilePath = [documentsDirectory stringByAppendingPathComponent:self.mFileName];
     NSString *output = [documentsDirectory stringByAppendingPathComponent:@"."];
-
-#ifdef DEBUG_ISSUE_108
-    NSLog(@"%s %d\n\t mFileName: %@\n\t zipFilePath: %@\n\t output: %@", __FUNCTION__, __LINE__, self.mFileName, zipFilePath, output);
-#endif
 
     BOOL unzipped = [SSZipArchive unzipFileAtPath:zipFilePath toDestination:output delegate:self];
     // Unzip data success, post notification

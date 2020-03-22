@@ -76,7 +76,6 @@
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *savedBundleVersion = [defaults stringForKey:BUNDLE_VERSION_KEY];
-    //NSLog(@"BundleVersion: %@, saved: %@", bundleVersion, savedBundleVersion);
     if (savedBundleVersion.length == 0) {
 #ifdef DEBUG
         NSLog(@"=== Fresh installation");
@@ -94,16 +93,12 @@
         NSLog(@"=== App runs again");
 #endif
         newBundle = false;
-#ifdef DEBUG_SIMULATE_NEW_VERSION
-        [defaults removeObjectForKey:BUNDLE_VERSION_KEY];
-#endif
     }
     
     if (newBundle) {
         NSLog(@"=== Store bundle version into defaults");
         [defaults setObject:bundleVersion forKey:BUNDLE_VERSION_KEY];
         [defaults synchronize];  // This seems to cause problems here
-        //NSLog(@"%s %d standardUserDefaults: %@", __FUNCTION__, __LINE__, [defaults dictionaryRepresentation]);
     }
 
 #ifdef DEBUG
@@ -143,22 +138,6 @@
     if (lastUpdated)
         timeInterval = [[NSDate date] timeIntervalSinceDate:lastUpdated];
 
-#ifdef DEBUG_ISSUE_106
-    if (lastUpdated) {
-        NSLog(@"DB last updated : %@, %.1f s ago", lastUpdated, timeInterval);
-
-        NSString *title = [NSString stringWithFormat:@"Last DB update %.0fs ago", timeInterval];
-        NSString *message = [NSDateFormatter localizedStringFromDate:lastUpdated
-                                                 dateStyle:NSDateFormatterShortStyle
-                                                 timeStyle:NSDateFormatterFullStyle];
-        NSLog(@"%@ %@", title, message);
-    }
-    else {
-        NSLog(@"timestamp not found");
-        //NSLog(@"%s %d timestamp not found in standardUserDefaults: %@", __FUNCTION__, __LINE__, [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
-    }
-#endif
-
     return timeInterval;
 }
 
@@ -190,8 +169,6 @@
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_8_0
     // if you need to support iOS 7 or earlier
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    //NSLog(@"first:%@", [paths firstObject]);
-    //NSLog(@"last:%@", [paths lastObject]);
     return [paths lastObject];
 #else
     // iOS 8 and newer, this is the recommended method
@@ -202,63 +179,6 @@
     //NSLog(@"path: <%@>", url.path);             // "/Users/...  .../Documents"
     return url.path;
 #endif
-}
-
-// Create the directory if it doesn't exist
-+ (NSString *) amkBaseDirectory
-{
-    NSString *amk = [[MLUtility documentsDirectory] stringByAppendingPathComponent:@"amk"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:amk])
-    {
-        NSError *error;
-        [[NSFileManager defaultManager] createDirectoryAtPath:amk
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:&error];
-        if (error) {
-            NSLog(@"error creating directory: %@", error.localizedDescription);
-            amk = nil;
-        }
-    }
-    return amk;
-}
-
-+ (NSString *) amkDirectory
-{
-    NSString *amk = [MLUtility amkBaseDirectory];
-
-    // If the current patient is defined in the defaults,
-    // return his/her subdirectory
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *patientId = [defaults stringForKey:@"currentPatient"];
-    if (patientId)
-        return [MLUtility amkDirectoryForPatient:patientId];
-    
-    return amk;
-}
-
-+ (NSString *) amkDirectoryForPatient:(NSString*)uid
-{
-    NSString *amk = [MLUtility amkBaseDirectory];
-    NSString *patientAmk = [amk stringByAppendingPathComponent:uid];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:patientAmk])
-    {
-        NSError *error;
-        [[NSFileManager defaultManager] createDirectoryAtPath:patientAmk
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:&error];
-        if (error) {
-            NSLog(@"error creating directory: %@", error.localizedDescription);
-            patientAmk = nil;
-        }
-#ifdef DEBUG
-        else
-            NSLog(@"Created patient directory: %@", patientAmk);
-#endif
-    }
-    
-    return patientAmk;
 }
 
 + (BOOL) emailValidator:(NSString *)msg
@@ -285,6 +205,92 @@
     NSString *colorCssPath = [[NSBundle mainBundle] pathForResource:colorSchemeFilename ofType:@"css"];
     NSString *colorCss = [NSString stringWithContentsOfFile:colorCssPath encoding:NSUTF8StringEncoding error:nil];
     return colorCss;
+}
+
+
++ (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:[url path]]) {
+        return;
+    }
+    BOOL exist = [manager fileExistsAtPath:[targetUrl path]];
+    if (exist && overwrite) {
+        [manager replaceItemAtURL:targetUrl
+                    withItemAtURL:url
+                   backupItemName:[NSString stringWithFormat:@"%@.bak", [url lastPathComponent]]
+                          options:NSFileManagerItemReplacementUsingNewMetadataOnly
+                 resultingItemURL:nil
+                            error:nil];
+        [manager removeItemAtURL:url error:nil];
+    } else if (!exist) {
+        [manager moveItemAtURL:url
+                         toURL:targetUrl
+                         error:nil];
+    }
+}
+
++ (void)copyFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:[url path]]) {
+        return;
+    }
+    BOOL exist = [manager fileExistsAtPath:[targetUrl path]];
+    if (exist && overwrite) {
+        [manager replaceItemAtURL:targetUrl
+                    withItemAtURL:url
+                   backupItemName:[NSString stringWithFormat:@"%@.bak", [url lastPathComponent]]
+                          options:NSFileManagerItemReplacementUsingNewMetadataOnly
+                 resultingItemURL:nil
+                            error:nil];
+    } else if (!exist) {
+        [manager copyItemAtURL:url
+                         toURL:targetUrl
+                         error:nil];
+    }
+
+}
+
++ (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL deleteOriginal:(BOOL)deleteOriginal {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    BOOL isDirectory = NO;
+    BOOL sourceExist = [manager fileExistsAtPath:[fromURL path] isDirectory:&isDirectory];
+    if (!sourceExist || !isDirectory) {
+        return;
+    }
+    isDirectory = NO;
+    BOOL destExist = [manager fileExistsAtPath:[toURL path] isDirectory:&isDirectory];
+    if (destExist && !isDirectory) {
+        // Remote is a file but we need a directory, abort
+        return;
+    }
+    if (!destExist) {
+        [manager createDirectoryAtURL:toURL
+          withIntermediateDirectories:YES
+                           attributes:nil
+                                error:nil];
+    }
+    NSArray<NSURL *> *sourceFiles = [manager contentsOfDirectoryAtURL:fromURL
+                                           includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+                                                              options:0
+                                                                error:nil];
+    for (NSURL *sourceFile in sourceFiles) {
+        NSURL *destFile = [toURL URLByAppendingPathComponent:[sourceFile lastPathComponent]];
+        NSNumber *sourceIsDir = @0;
+        [sourceFile getResourceValue:&sourceIsDir
+                              forKey:NSURLIsDirectoryKey
+                               error:nil];
+        if ([sourceIsDir boolValue]) {
+            [self mergeFolderRecursively:sourceFile
+                                      to:destFile
+                          deleteOriginal:deleteOriginal];
+        } else {
+            if (deleteOriginal) {
+                [MLUtility moveFile:sourceFile toURL:destFile overwriteIfExisting:YES];
+            } else {
+                [MLUtility copyFile:sourceFile toURL:destFile overwriteIfExisting:YES];
+            }
+        }
+    }
 }
 
 @end

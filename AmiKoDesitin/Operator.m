@@ -8,6 +8,7 @@
 
 #import "Operator.h"
 #import "MLUtility.h"
+#import "MLPersistenceManager.h"
 
 @implementation Operator
 
@@ -38,6 +39,20 @@
     if (!givenName) givenName = @"";
 }
 
+- (NSDictionary *)toDictionary {
+    // Set as default for prescriptions
+    NSMutableDictionary *doctorDict = [NSMutableDictionary new];
+    doctorDict[KEY_AMK_DOC_TITLE] = self.title;
+    doctorDict[KEY_AMK_DOC_NAME] = self.givenName;
+    doctorDict[KEY_AMK_DOC_SURNAME] = self.familyName;
+    doctorDict[KEY_AMK_DOC_ADDRESS] = self.postalAddress;
+    doctorDict[KEY_AMK_DOC_CITY] = self.city;
+    doctorDict[KEY_AMK_DOC_ZIP] = self.zipCode;
+    doctorDict[KEY_AMK_DOC_PHONE] = self.phoneNumber;
+    doctorDict[KEY_AMK_DOC_EMAIL] = self.emailAddress;
+    return doctorDict;
+}
+
 - (void)importSignatureFromDict:(NSDictionary *)dict
 {
     signature = [dict objectForKey:KEY_AMK_DOC_SIGNATURE];
@@ -45,13 +60,7 @@
 
 - (BOOL)importSignatureFromFile
 {
-    NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
-    if (!filePath)
-        return FALSE;
-    
-    UIImage *signatureImg = [[UIImage alloc] initWithContentsOfFile:filePath];
-    //NSLog(@"signatureImg %@", NSStringFromCGSize(signatureImg.size));
+    UIImage *signatureImg = [[MLPersistenceManager shared] doctorSignature];
     NSData *imgData = UIImagePNGRepresentation(signatureImg);
     signature = [imgData base64EncodedStringWithOptions:0];
     return TRUE;
@@ -75,10 +84,7 @@
                     options:NSDataBase64DecodingIgnoreUnknownCharacters];
     // original image
     UIImage* image = [UIImage imageWithData:data];
-#ifdef DEBUG
-    //NSLog(@"signature image size %@", NSStringFromCGSize(image.size));
-#endif
-    
+
     // resize
     CGFloat width = desiredSize.width / image.size.width;
     CGFloat height = desiredSize.height / image.size.height;
@@ -101,10 +107,6 @@
     [image drawInRect:rect];
     UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-#ifdef DEBUG
-    //NSLog(@"rescaled size %@", NSStringFromCGSize(scaledImage.size));
-#endif
     
     return scaledImage;
 }

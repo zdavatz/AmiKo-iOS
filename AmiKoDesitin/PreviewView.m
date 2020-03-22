@@ -29,8 +29,6 @@
     CGFloat referenceX=0, referenceY=0, referenceW=1, referenceH=1;
     
     UIInterfaceOrientation interfaceOrient = [UIApplication sharedApplication].statusBarOrientation;
-    
-    //NSLog(@"%s %d, interface orientation: %ld", __FUNCTION__, __LINE__, (long)interfaceOrient);
 
     switch (interfaceOrient) {
         case UIInterfaceOrientationPortrait:
@@ -38,7 +36,6 @@
             referenceY = self.zeroZero.y;
             referenceW = self.zeroZero.x - self.oneOne.x;
             referenceH = self.oneOne.y - self.zeroZero.y;
-            //NSLog(@"%s line %d P.", __FUNCTION__, __LINE__);
             break;
             
         case UIInterfaceOrientationLandscapeRight:  // = UIDeviceOrientationLandscapeLeft
@@ -46,7 +43,6 @@
             referenceY = self.zeroZero.y;
             referenceW = fabs(self.oneOne.x - self.zeroZero.x);
             referenceH = fabs(self.oneOne.y - self.zeroZero.y);
-            //NSLog(@"%s line %d LR.", __FUNCTION__, __LINE__);
             break;
             
         case UIInterfaceOrientationLandscapeLeft: // = UIDeviceOrientationLandscapeRight
@@ -54,7 +50,6 @@
             referenceY = self.oneOne.y;
             referenceW = fabs(self.oneOne.x - self.zeroZero.x);
             referenceH = fabs(self.oneOne.y - self.zeroZero.y);
-            //NSLog(@"%s line %d LL.", __FUNCTION__, __LINE__);
             break;
             
         default:
@@ -117,7 +112,6 @@
     }
     
     CGRect cardOutlineForDrawing = CGRectMake(cardX, cardY, cardW, cardH);
-    //NSLog(@"green overlay card frame %@", NSStringFromCGRect(cardOutlineForDrawing));
 
     self.outerCardOutline.frame = cardOutlineForDrawing;
 
@@ -142,13 +136,8 @@
 // Update the points [0,0] and [1,1]
 - (void) updatePoiCornerPosition
 {
-    //NSLog(@"%s videoPreviewLayer: %@, session: %@", __FUNCTION__, self.videoPreviewLayer, self.videoPreviewLayer.session);
-    
     self.zeroZero = [self.videoPreviewLayer pointForCaptureDevicePointOfInterest:CGPointZero];
     self.oneOne = [self.videoPreviewLayer pointForCaptureDevicePointOfInterest:CGPointMake(1,1)];
-
-//    NSLog(@"%s point for POI (0,0): %@", __FUNCTION__, NSStringFromCGPoint(self.zeroZero));
-//    NSLog(@"%s point for POI (1,1): %@", __FUNCTION__, NSStringFromCGPoint(self.oneOne));
 }
 
 // TODO: take into consideration confidence and update only if higher
@@ -223,7 +212,6 @@
     
     // Hide the remaining ones, if any
     for (; i<NUMBER_OF_BOXES_FOR_OCR; i++) {
-        //NSLog(@"Line %d\t box and text [%d] are hidden", __LINE__, i);
         CALayer *layerBox = [self.ocrBoxes objectAtIndex:i];
         CATextLayer *layerText = [self.ocrText objectAtIndex:i];
         layerBox.hidden = layerText.hidden = YES;
@@ -234,7 +222,6 @@
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    //NSLog(@"%s", __FUNCTION__);
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.outerCardOutline = [self getBox:CGRectZero thickness:2.0];
@@ -255,11 +242,7 @@
         self.ocrText = [NSMutableArray array];
         for (int i=0; i<NUMBER_OF_BOXES_FOR_OCR; i++) {
             CALayer *newLayer= [CALayer layer];
-#ifdef DEBUG_ISSUE_102
-            newLayer.backgroundColor = [[UIColor systemGreenColor] colorWithAlphaComponent:0.8].CGColor;
-#else
             newLayer.backgroundColor = [UIColor clearColor].CGColor;
-#endif
             newLayer.borderColor = [UIColor systemOrangeColor].CGColor;
             newLayer.borderWidth = 2;
             //newLayer.frame = CGRectMake(10*i, 16*i, 140, 160);
@@ -285,12 +268,6 @@
 {
     CALayer *layer = [CALayer layer];
     layer.backgroundColor = [UIColor clearColor].CGColor;
-#if 0
-    layer.shadowOffset = CGSizeMake(0, 3);
-    layer.shadowRadius = 5.0;
-    layer.shadowColor = [UIColor labelColor].CGColor;
-    layer.shadowOpacity = 0.8;
-#endif
     layer.frame = rect;
     
     layer.borderColor = [UIColor systemGreenColor].CGColor;
@@ -302,17 +279,13 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    //NSLog(@"%s rect: %@", __FUNCTION__, NSStringFromCGRect(rect));
-
-#if defined( CROP_IMAGE_TO_CARD_ROI ) && !defined( DEBUG_ISSUE_102_ROI )
-    // To see the ROI layer DEBUG_ISSUE_102_ROI must be defined
+#if defined( CROP_IMAGE_TO_CARD_ROI )
     self.cardRoiOutline.hidden = YES;
 #endif
 }
 
 + (Class)layerClass
 {
-    //NSLog(@"%s", __FUNCTION__);
     return [AVCaptureVideoPreviewLayer class];
 }
 

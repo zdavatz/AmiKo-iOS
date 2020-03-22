@@ -10,12 +10,16 @@
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "MLPersistenceManager.h"
 
-@interface DoctorViewController ()
+@interface DoctorViewController () <NSFilePresenter>
+
+@property (nonatomic, strong) Operator *doctor;
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(Operator *)doctor;
 - (void) resetFieldsColors;
+- (void) saveDoctor;
 
 @end
 
@@ -26,15 +30,14 @@
 @synthesize signatureView;
 @synthesize scrollView;
 
-+ (DoctorViewController *)sharedInstance
-{
-    __strong static id sharedObject = nil;
-    
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
-        sharedObject = [self new];
-    });
-    return sharedObject;
+- (instancetype)init {
+    if (self = [super initWithNibName:@"DoctorViewController" bundle:nil]) {
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [NSFileCoordinator removeFilePresenter:self];
 }
 
 - (void)viewDidLoad
@@ -42,12 +45,8 @@
     [super viewDidLoad];
     
     SWRevealViewController *revealController = [self revealViewController];
-    
-#if 1
+
     self.navigationItem.title = NSLocalizedString(@"Doctor", nil);      // grey, in the navigation bar
-#else
-    self.navigationItem.prompt = NSLocalizedString(@"Doctor", nil);     // black, above the navigation bar
-#endif
 
     // Left button(s)
     UIBarButtonItem *revealButtonItem =
@@ -64,7 +63,7 @@
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", nil)
                                      style:UIBarButtonItemStylePlain
                                     target:self
-                                    action:@selector(saveDoctor:)];
+                                    action:@selector(saveDoctorAndClose:)];
     saveItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveItem;
 
@@ -95,8 +94,7 @@
     if ([[self.view gestureRecognizers] count] == 0)
         [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *doctorDictionary = [defaults dictionaryForKey:@"currentDoctor"];
+    NSDictionary *doctorDictionary = [[MLPersistenceManager shared] doctorDictionary];
     if (!doctorDictionary) {
         NSLog(@"Default doctor signature not defined");
         [self.signatureView.layer setBorderColor: [[UIColor labelColor] CGColor]];
@@ -104,15 +102,16 @@
         return;
     }
     
-#ifdef DEBUG
-    //NSLog(@"Default doctor %@", doctorDictionary);
-#endif
-    Operator *doctor = [Operator new];
-    [doctor importFromDict:doctorDictionary];
-    [self setAllFields:doctor];
+    if (![[NSFileCoordinator filePresenters] containsObject:self]) {
+        [NSFileCoordinator addFilePresenter:self];
+    }
 
-    if ([doctor importSignatureFromFile]) {
-        self.signatureView.image = [doctor thumbnailFromSignature:self.signatureView.frame.size];
+    self.doctor = [Operator new];
+    [self.doctor importFromDict:doctorDictionary];
+    [self setAllFields:self.doctor];
+
+    if ([self.doctor importSignatureFromFile]) {
+        self.signatureView.image = [self.doctor thumbnailFromSignature:self.signatureView.frame.size];
     }
     else {
         NSLog(@"Default doctor signature not yet defined");
@@ -291,10 +290,6 @@
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-#ifdef DEBUG
-    //NSLog(@"%s tag:%ld", __FUNCTION__, textField.tag);
-#endif
-
     BOOL valid = TRUE;
     if ([textField.text isEqualToString:@""])
         valid = FALSE;
@@ -309,39 +304,35 @@
 
 #pragma mark - Actions
 
-- (IBAction) saveDoctor:(id)sender
+- (IBAction) saveDoctorAndClose:(id)sender {
+    [self saveDoctor];
+    // Back to main screen
+    [[self revealViewController] revealToggle:nil];
+}
+- (IBAction) saveDoctor
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    Operator *doctor = [self getAllFields];
-    if (![self validateFields:doctor]) {
+    Operator *newDoctor = [self getAllFields];
+    if (![self validateFields:newDoctor]) {
         NSLog(@"Doctor field validation failed");
         return;
     }
-    
-    // Set as default for prescriptions
-    NSMutableDictionary *doctorDict = [NSMutableDictionary new];
-    [doctorDict setObject:mTitle.text         forKey:KEY_AMK_DOC_TITLE];
-    [doctorDict setObject:mGivenName.text     forKey:KEY_AMK_DOC_NAME];
-    [doctorDict setObject:mFamilyName.text    forKey:KEY_AMK_DOC_SURNAME];
-    [doctorDict setObject:mPostalAddress.text forKey:KEY_AMK_DOC_ADDRESS];
-    [doctorDict setObject:mCity.text          forKey:KEY_AMK_DOC_CITY];
-    [doctorDict setObject:mZipCode.text       forKey:KEY_AMK_DOC_ZIP];
-    [doctorDict setObject:mPhone.text         forKey:KEY_AMK_DOC_PHONE];
-    [doctorDict setObject:mEmail.text         forKey:KEY_AMK_DOC_EMAIL];
 
+    NSDictionary *doctorDict = [self.doctor toDictionary];
+    NSDictionary *newDoctorDict = [newDoctor toDictionary];
+    if ([doctorDict isEqualToDictionary:newDoctorDict]) {
+        return;
+    } else {
+        self.doctor = newDoctor;
+    }
 #ifdef DEBUG
-    NSLog(@"doctorDict: %@", doctorDict);
+    NSLog(@"newDoctorDict: %@", newDoctorDict);
 #endif
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:doctorDict forKey:@"currentDoctor"];
-    [defaults synchronize];
-    
-    // Back to main screen
-    [[self revealViewController] revealToggle:nil];
+    [[MLPersistenceManager shared] setDoctorDictionary:newDoctorDict];
 }
 
 - (IBAction) signWithSelfie:(id)sender
@@ -392,6 +383,29 @@
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
+#pragma mark - File system
+
+- (NSURL *)presentedItemURL {
+    return [[MLPersistenceManager shared] doctorDictionaryURL];
+}
+
+- (NSOperationQueue *)presentedItemOperationQueue {
+    return [NSOperationQueue mainQueue];
+}
+
+- (void)savePresentedItemChangesWithCompletionHandler:(void (^)(NSError *errorOrNil))completionHandler {
+    [self saveDoctor];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        completionHandler(nil);
+    });
+}
+
+- (void)presentedItemDidChange {
+    NSDictionary *dict = [[MLPersistenceManager shared] doctorDictionary];
+    [self.doctor importFromDict:dict];
+    [self setAllFields:self.doctor];
+}
+
 #pragma mark - Notifications
 
 - (void)keyboardDidShow:(NSNotification *)notification
@@ -418,18 +432,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-#ifdef DEBUG
-    //NSLog(@"%s", __FUNCTION__);
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
-        CGFloat screenScale = [UIScreen mainScreen].scale;
-        NSLog(@"screenScale: %f", screenScale);
-    }
-    //NSLog(@"info: %@", info);
-#endif
-    
     UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-    //NSLog(@"chosenImage size: %@, scale: %f", NSStringFromCGSize(chosenImage.size), chosenImage.scale);
-    
 #if 0
     // If we want to keep the image for future use:
     // check if the image originated from the camera, store it in the photo album
@@ -443,7 +446,6 @@
 
     // Resize to 20% for doctor's profile (PNG file in Documents directory) and for AMK
     CGSize sizeScaled = CGSizeMake(chosenImage.size.width*0.2, chosenImage.size.height*0.2);
-    //NSLog(@"sizeScaled %@", NSStringFromCGSize(sizeScaled));
     // Note that a scale parameter of 0.0 means using [UIScreen mainScreen].scale and
     // ending up with a PNG file with x2 dimensions if the device is a retina display
     CGFloat scale = 1.0;
@@ -451,21 +453,12 @@
     [chosenImage drawInRect:CGRectMake(0, 0, sizeScaled.width, sizeScaled.height)];
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-#ifdef DEBUG
-    NSLog(@"scaledImage %@ points", NSStringFromCGSize(scaledImage.size));
-#endif
     
     // Save to PNG file
-    NSString *documentsDirectory = [MLUtility documentsDirectory];
-    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
-    [UIImagePNGRepresentation(scaledImage) writeToFile:filePath atomically:YES];
-#ifdef DEBUG
-    NSLog(@"Saved to %@", filePath);
-#endif
-    
+    [MLPersistenceManager shared].doctorSignature = scaledImage;
+
     // Resize to signatureView frame for thumbnail
     CGSize sizeTN = self.signatureView.frame.size;
-    //NSLog(@"signatureView %@", NSStringFromCGSize(sizeTN));
     UIGraphicsBeginImageContextWithOptions(sizeTN, NO, 0.0);
     [chosenImage drawInRect:CGRectMake(0, 0, sizeTN.width, sizeTN.height)];
     UIImage *thumbnailImage = UIGraphicsGetImageFromCurrentImageContext();

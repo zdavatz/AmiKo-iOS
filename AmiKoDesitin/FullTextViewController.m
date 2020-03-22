@@ -43,9 +43,6 @@
 {
     if (self.htmlStr) {
         NSURL *mainBundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-#ifdef DEBUG
-        //NSLog(@"%s, mainBundleURL: %@", __FUNCTION__, mainBundleURL);
-#endif
         // Loads HTML directly into webview
         [self.webView loadHTMLString:self.htmlStr
                              baseURL:mainBundleURL];
@@ -53,10 +50,6 @@
     
     // Create objc - js bridge
     //[self createJSBridge];
-    
-#ifdef DEBUG
-    //NSLog(@"%s %d, gestureRecognizers:%ld %@", __FUNCTION__, __LINE__, [[self.view gestureRecognizers] count], [self.view gestureRecognizers]);
-#endif
 
     // Make sure we have a reveal gesture recognizer (only for "front" controllers)
     // The first time it's found, but if we come here after swiping the Fachinfo there
@@ -88,18 +81,12 @@
 
     WKWebViewConfiguration *config = self.webView.configuration;
     WKUserContentController *wkUController = config.userContentController;
-    //NSLog(@"%lu userScripts: %@", (unsigned long)[wkUController.userScripts count], wkUController.userScripts);
     [wkUController addScriptMessageHandler:self name:@"buttonClicked"];
     
     // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
-    
-#if 0 // @@@
-    self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
-    self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
-#endif
     self.navigationController.navigationBar.translucent = NO;
 
     {
@@ -248,12 +235,7 @@
         return;
 
     id messageDictionary = message.body;
-    //NSLog(@"%s %d, messageBody %@",__func__, __LINE__, messageBody);
     if ([messageDictionary isKindOfClass:[NSDictionary class]]) {
-//#ifdef DEBUG
-//        NSLog(@"%s line %d, EanCode: %@",__func__, __LINE__, messageDictionary[@"EanCode"]);
-//        NSLog(@"%s line  %d, Anchor: %@",__func__, __LINE__, messageDictionary[@"Anchor"]);
-//#endif
 
         // Post message to switchToAips
         UIViewController *nc_rear = self.revealViewController.rearViewController;

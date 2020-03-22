@@ -8,15 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#if 1
 // Landscape signature, generated with AmiKo OSX (also used in Generika)
 #define DOCTOR_TN_H     45.0
 #define DOCTOR_TN_W     90.0
-#else
-// Portrait signature, generated with AmiKo iOS (selfie)
-#define DOCTOR_TN_H     104.0
-#define DOCTOR_TN_W     78.0
-#endif
 
 #define KEY_AMK_DOC_TITLE       @"title"
 #define KEY_AMK_DOC_NAME        @"given_name"
@@ -46,6 +40,7 @@
 - (void)importFromDict:(NSDictionary *)dict;
 - (void)importSignatureFromDict:(NSDictionary *)dict;
 - (BOOL)importSignatureFromFile;
+- (NSDictionary *)toDictionary;
 
 - (UIImage *)thumbnailFromSignature:(CGSize) size;
 - (NSInteger)entriesCount;

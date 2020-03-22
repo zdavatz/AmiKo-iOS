@@ -223,9 +223,7 @@
                 buffer[bytesRead] = 0;
                 [destinationPath appendString:[NSString stringWithUTF8String:(const char*)buffer]];
             }
-            
-            //NSLog(@"Symlinking to: %@", destinationPath);
-            
+
             NSURL* destinationURL = [NSURL fileURLWithPath:destinationPath];
             
             // Create the symbolic link

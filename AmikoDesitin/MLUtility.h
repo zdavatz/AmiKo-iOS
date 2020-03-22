@@ -35,12 +35,14 @@
 + (NSString*) encodeStringToBase64:(NSString*)string;
 
 + (NSString *) documentsDirectory;
-+ (NSString *) amkBaseDirectory;
-+ (NSString *) amkDirectory;
-+ (NSString *) amkDirectoryForPatient:(NSString*)uid;
 
 + (BOOL) emailValidator:(NSString *)msg;
 
 + (NSString *) getColorCss;
+
++ (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite;
++ (void)copyFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite;
++ (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL deleteOriginal:(BOOL)deleteOriginal;
+
 @end
 

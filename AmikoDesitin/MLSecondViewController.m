@@ -199,10 +199,6 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         return;
     }
 
-#ifdef DEBUG
-    //NSLog(@"%s %d, highlight index %d of %d", __FUNCTION__, __LINE__, mCurrentHightlightIndex, mTotalHighlightCount);
-#endif
-
     [self.findCounter setText:[NSString stringWithFormat:@"%d/%d",
                                mCurrentHightlightIndex+1, mTotalHighlightCount]];
 }
@@ -330,11 +326,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     SWRevealViewController *revealController = [self revealViewController];
     
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
-    
-#if 0 // @@@
-    self.navigationController.navigationBar.backgroundColor = VERY_LIGHT_GRAY_COLOR;// MAIN_TINT_COLOR;
-    self.navigationController.navigationBar.barTintColor = VERY_LIGHT_GRAY_COLOR;
-#endif
+
     self.navigationController.navigationBar.translucent = NO;
     
     {
@@ -413,9 +405,6 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 - (void) willRotateToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation
                                  duration: (NSTimeInterval)duration
 {
-#ifdef DEBUG
-    //NSLog(@"%s %d, next orientation: %ld", __FUNCTION__, __LINE__, (long)toInterfaceOrientation);
-#endif
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
@@ -576,22 +565,6 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
             [self footNoteHtml]];
     
     self.htmlStr = [NSString stringWithFormat:@"<!DOCTYPE html><html>\n%@\n%@\n</html>", html_Head, html_Body];
-    
-#if 0 //def DEBUG
-    // Create an HTML file of the Fachinfo, so it can be tested with Safari and inspected with an editor
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
-    NSError *error;
-    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"interactions.html"];
-    BOOL succeed = [self.htmlStr writeToFile:path
-                                  atomically:YES
-                                    encoding:NSUTF8StringEncoding
-                                       error:&error];
-    if (succeed)
-        NSLog(@"Created file: %@", path);
-    else
-        NSLog(@"%@", error.localizedDescription);
-#endif
 
     [self updateWebView];
 }
@@ -601,11 +574,6 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
  */
 - (void) updateWebView
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-    //NSLog(@"%s htmlStr:\n\n%@", __FUNCTION__, [htmlStr substringToIndex:MIN(500,[htmlStr length])]);
-#endif
-    
     if ([htmlStr length] == 0) {
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             // The iPad always shows part of this page on the right of the screen.
@@ -874,13 +842,11 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         return; // Nothing to do
 
 #ifdef WITH_ANIMATION
-    //NSLog(@"wasVisible %ld", (long)wasVisible);
     if (visible == wasVisible)
         return; // Nothing to do
 
     if (wasVisible == FIND_PANEL_UNDEFINED) {
         // Don't show animations to show or hide from undefined state
-        //NSLog(@"%s line %d, hide to/from undefined", __FUNCTION__, __LINE__);
         [self.findPanel setHidden:YES];
     }
     else

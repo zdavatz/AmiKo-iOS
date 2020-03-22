@@ -67,7 +67,6 @@ static NSString *FULL_TABLE = nil;
 
 + (void) initialize
 {
-    //NSLog(@"%s %@", __FUNCTION__, self);  // Called first
     if (self == [MLDBAdapter class]) {
         if (SHORT_TABLE == nil) {
             SHORT_TABLE = [[NSString alloc] initWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@",
@@ -82,7 +81,6 @@ static NSString *FULL_TABLE = nil;
 
 + (MLDBAdapter *)sharedInstance
 {
-    //NSLog(@"%s", __FUNCTION__);
     __strong static id sharedObject = nil;
     
     static dispatch_once_t onceToken = 0;
@@ -100,12 +98,10 @@ static NSString *FULL_TABLE = nil;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDir = [paths lastObject];
     NSString *filePath = [[documentsDir stringByAppendingPathComponent:dbName] stringByAppendingPathExtension:ext];
-    
-    //NSLog(@"%s %d, trying to delete %@", __FUNCTION__, __LINE__, filePath);
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:filePath]) {
-        //NSLog(@"%s %d, file doesn't exist", __FUNCTION__, __LINE__); // DB has never been updated so far.
+        // DB has never been updated so far.
         return;
     }
 
@@ -321,7 +317,6 @@ static NSString *FULL_TABLE = nil;
     NSString *tableName = @"amikodb";
     NSString *query = [NSString stringWithFormat:@"select %@ from %@ where %@ like '%%%@%%'",
                        resultColumns, tableName, searchColumn, ean];
-    //NSLog(@"%s query <%@>", __FUNCTION__, query);
 
     NSArray *results = [mySqliteDb performQuery:query];
     return results;

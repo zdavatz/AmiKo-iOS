@@ -176,10 +176,6 @@
 // See onSearchDatabase in AmiKo-macOS
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-#ifdef DEBUG
-    //NSLog(@"%s %@", __FUNCTION__, searchText);
-#endif
-
     [mFilteredArrayOfPatients removeAllObjects];
     if (![self stringIsNilOrEmpty:searchText]) {
         NSPredicate *p1 = [NSPredicate predicateWithFormat:@"familyName BEGINSWITH[cd] %@", searchText];

@@ -9,16 +9,20 @@
 #import "AmkListViewController.h"
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
+#import "MLPersistenceManager.h"
 
 static const float kAmkLabelFontSize = 12.0;
 
 @interface AmkListViewController ()
 
+- (void) refreshFileList;
+@property (nonatomic, strong) NSMetadataQuery *query;
+
 @end
 
 @implementation AmkListViewController
 {
-    NSMutableArray *amkFiles;
+    NSMutableArray<NSURL *> *amkFiles;
 }
 
 @synthesize myTableView;
@@ -48,33 +52,47 @@ static const float kAmkLabelFontSize = 12.0;
 
 #pragma mark -
 
-- (void) refreshList
-{
-    NSString *amkDir = [MLUtility amkDirectory];
-#ifdef DEBUG
-    NSLog(@"%s %p %@", __FUNCTION__, self, amkDir);
-#endif
-    NSError *error;
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
-    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
-    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:nil ascending:NO];
-    amkFilesArray = [amkFilesArray sortedArrayUsingDescriptors:@[sd]];    
-    amkFiles = [[NSMutableArray alloc] initWithArray:amkFilesArray];
-
-    if (error)
-        NSLog(@"%@", error.localizedDescription);
-    
-    [myTableView reloadData];
+- (void) refreshList {
+    [self refreshFileList];
+    NSURL *amkDir = [[MLPersistenceManager shared] amkDirectory];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K BEGINSWITH %@ AND %K ENDSWITH '.amk'", NSMetadataItemPathKey, amkDir.path, NSMetadataItemFSNameKey];
+    if (!self.query) {
+        self.query = [[NSMetadataQuery alloc] init];
+        self.query.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope];
+        self.query.predicate = predicate;
+        self.query.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"lastPathComponent" ascending:NO]];
+        [self.query startQuery];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refreshFileList) name:NSMetadataQueryDidUpdateNotification object:self.query];
+    } else {
+        self.query.predicate = predicate;
+    }
 }
 
-- (void) removeFromListByFilename:(NSString *)path
+- (void) refreshFileList {
+    NSURL *amkDir = [[MLPersistenceManager shared] amkDirectory];
+    NSError *error;
+    NSArray<NSURL *> *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:amkDir
+                                                      includingPropertiesForKeys:nil
+                                                                         options:0
+                                                                           error:&error];
+    NSMutableArray<NSURL *> *amkFilesArray = [NSMutableArray array];
+    for (NSURL *file in dirFiles) {
+        if ([[NSFileManager defaultManager] isUbiquitousItemAtURL:file] || [[file pathExtension] isEqualToString:@"amk"]) {
+            [amkFilesArray addObject:file];
+        }
+    }
+    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:@"lastPathComponent" ascending:NO];
+    [amkFilesArray sortUsingDescriptors:@[sd]];
+    amkFiles = amkFilesArray;
+    [myTableView reloadData];
+    if (error)
+        NSLog(@"%@", error.localizedDescription);
+}
+
+- (void) removeFromListByFilename:(NSString *)filename
 {
-#ifdef DEBUG
-    //NSLog(@"%s %@", __FUNCTION__, path);
-#endif
     for (int i=0; i<[amkFiles count]; i++) {
-        //NSLog(@"%d %@", i, amkFiles[i]);
-        if ([amkFiles[i] isEqualToString:path]) {
+        if ([[amkFiles[i] lastPathComponent] isEqualToString:filename]) {
             [amkFiles removeObjectAtIndex:i];
             [myTableView reloadData];
             return;
@@ -85,27 +103,24 @@ static const float kAmkLabelFontSize = 12.0;
 // Also delete the file
 - (void) removeItem:(NSUInteger)rowIndex
 {
-    NSString *amkDir = [MLUtility amkDirectory];
-    NSString *destination = [amkDir stringByAppendingPathComponent:amkFiles[rowIndex]];
-
-    if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination]) {
+    NSURL *destination = amkFiles[rowIndex];
+    if (![[NSFileManager defaultManager] isDeletableFileAtPath:destination.path]) {
         NSLog(@"Error removing file at path: %@", amkFiles[rowIndex]);
         return;
     }
 
     // First remove the actual file
     NSError *error;
-    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:destination
-                                                              error:&error];
+    BOOL success = [[NSFileManager defaultManager] removeItemAtURL:destination error:&error];
     if (!success)
         NSLog(@"Error removing file at path: %@", error.localizedDescription);
-    
+
     // If it's the one currently displayed,
     // remove it from the defaults and refresh the prescription view
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *fileName = [defaults stringForKey:@"lastUsedPrescription"];
     NSLog(@"lastUsedPrescription: %@, amkFiles[rowIndex] %@", fileName, amkFiles[rowIndex]);
-    if ([fileName isEqualToString:amkFiles[rowIndex]]) {
+    if ([fileName isEqualToString:amkFiles[rowIndex].lastPathComponent]) {
         [defaults removeObjectForKey:@"lastUsedPrescription"];
         [defaults synchronize];
 
@@ -132,19 +147,21 @@ static const float kAmkLabelFontSize = 12.0;
     }
 
     if (gesture.state != UIGestureRecognizerStateBegan) {
-#ifdef DEBUG
-        //NSLog(@"gestureRecognizer.state = %ld", gesture.state);
-#endif
         return;
     }
-
-    //NSLog(@"long press on table view at row %ld", indexPath.row);
 
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
-
-    NSString *actionTitle = [NSString stringWithFormat:NSLocalizedString(@"Confirm delete %@",nil), amkFiles[indexPath.row]];
+    
+    NSURL *url = amkFiles[indexPath.row];
+    NSString *filename = nil;
+    if ([url getResourceValue:&filename forKey:NSURLLocalizedNameKey error:nil]) {
+        filename = [filename stringByDeletingPathExtension];
+    } else {
+        filename = url.lastPathComponent;
+    }
+    NSString *actionTitle = [NSString stringWithFormat:NSLocalizedString(@"Confirm delete %@",nil), filename];
     
     UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:actionTitle
                                                            style:UIAlertActionStyleDestructive
@@ -193,7 +210,6 @@ static const float kAmkLabelFontSize = 12.0;
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:tableIdentifier];
-        //cell.textLabel.textAlignment = NSTextAlignmentLeft;
         
         /** Use subview */
         UILabel *subLabel = nil;
@@ -206,32 +222,57 @@ static const float kAmkLabelFontSize = 12.0;
             [subLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
         }
         subLabel.textAlignment = NSTextAlignmentLeft;
-        
-        // subLabel.text = [mSectionTitles objectAtIndex:indexPath.row];
+
         subLabel.tag = 123; // Constant which uniquely defines the label
         [cell.contentView addSubview:subLabel];
     }
     
     UILabel *label = (UILabel *)[cell.contentView viewWithTag:123];
-    label.text = [amkFiles[indexPath.row] stringByDeletingPathExtension];
-//    cell.textLabel.text = amkFiles[indexPath.row];
-//    [cell.textLabel setFont:[UIFont systemFontOfSize:kAmkLabelFontSize]];
+    NSURL *url = amkFiles[indexPath.row];
+    label.text = [url.lastPathComponent stringByDeletingPathExtension];
+    NSString *displayName = nil;
+    if ([url getResourceValue:&displayName forKey:NSURLLocalizedNameKey error:nil]) {
+        label.text = [displayName stringByDeletingPathExtension];
+    }
+
+    NSNumber *isDownloading = nil;
+    NSNumber *isDownloadRequested = nil;
+    NSString *downloadStatus = nil;
+    NSError *error = nil;
+    if ([url getResourceValue:&isDownloading forKey:NSURLUbiquitousItemIsDownloadingKey error:&error] &&
+        error == nil &&
+        [url getResourceValue:&isDownloadRequested forKey:NSURLUbiquitousItemDownloadRequestedKey error:&error] &&
+        error == nil &&
+        [url getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:&error] &&
+        error == nil &&
+        ([isDownloadRequested boolValue] || [isDownloading boolValue]) &&
+        [downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusNotDownloaded]) {
+        
+        label.text = @"Downloading"; // TODO: show loading spin
+    }
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return kAmkLabelFontSize;
-//}
-
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    NSString *filename = amkFiles[indexPath.row];
+    NSURL *url = amkFiles[indexPath.row];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSString *downloadStatus = nil;
+    NSError *error = nil;
     
+    if ([url getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:&error] &&
+        ![downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent]) {
+        [manager startDownloadingUbiquitousItemAtURL:url error:&error];
+        if (error != nil) {
+            NSLog(@"Cannot start download %@", error);
+        }
+        [self refreshFileList];
+        return;
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"AmkFilenameSelectedNotification"
-                                                        object:filename];
+                                                        object:url];
 }
 
 @end

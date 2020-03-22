@@ -33,9 +33,6 @@ enum {
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIImageView *signatureView;
 
-+ (DoctorViewController *)sharedInstance;
-
-- (IBAction) saveDoctor:(id)sender;
 - (IBAction) signWithSelfie:(id)sender;
 - (IBAction) signWithPhoto:(id)sender;
 

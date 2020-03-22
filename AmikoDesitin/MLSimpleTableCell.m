@@ -81,9 +81,7 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint firstTouch = [touch locationInView:touch.view];
-    
-    //NSLog(@"firstTouch %@", NSStringFromCGPoint(firstTouch));
-    
+
     if (firstTouch.x>40)
         [super touchesBegan:touches withEvent:event];
 }

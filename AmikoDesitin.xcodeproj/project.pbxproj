@@ -20,7 +20,7 @@
 		439EEF45202CBF4900817588 /* ContactsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439EEF43202CBF4900817588 /* ContactsListViewController.m */; };
 		439EEF46202CBF4900817588 /* ContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439EEF44202CBF4900817588 /* ContactsListViewController.xib */; };
 		439F25EC20286BF200396C29 /* Prescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F25EB20286BF200396C29 /* Prescription.m */; };
-		439F261D2028B7FF00396C29 /* PatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* PatientDBAdapter.m */; };
+		439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */; };
 		439F26222028C8A700396C29 /* PatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F26202028C8A700396C29 /* PatientViewController.m */; };
 		439F50FD20122A4D000E82FC /* amiko_db_full_idx_de.db in Resources */ = {isa = PBXBuildFile; fileRef = D59E895A18B7E7CB00185094 /* amiko_db_full_idx_de.db */; };
 		43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FFE17718A96BA0002D6159 /* MLMenuViewController.m */; };
@@ -36,7 +36,7 @@
 		930D94B22077E5A9007E4629 /* DoctorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA662949204D541B0000904A /* DoctorViewController.m */; };
 		930D94B32077E5BC007E4629 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A0E1201F3CFB00EA77C6 /* Product.m */; };
 		930D94B42077E5D4007E4629 /* Patient.m in Sources */ = {isa = PBXBuildFile; fileRef = 43334329201B6488006BFC23 /* Patient.m */; };
-		930D94B52077E5D9007E4629 /* PatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* PatientDBAdapter.m */; };
+		930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */; };
 		930D94B62077E5DE007E4629 /* PatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 439F26202028C8A700396C29 /* PatientViewController.m */; };
 		930D94B72077E5E1007E4629 /* PatientDbListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851520333355001A5849 /* PatientDbListViewController.m */; };
 		930D94B82077E610007E4629 /* BaseListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A3851220333147001A5849 /* BaseListViewController.m */; };
@@ -48,6 +48,22 @@
 		932F883E206BDA1600B5A77E /* ContactsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439EEF44202CBF4900817588 /* ContactsListViewController.xib */; };
 		932F883F206BDA1D00B5A77E /* PatientViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4511BA204ECBCB00899A77 /* PatientViewController.xib */; };
 		932F8840206BDA4700B5A77E /* AmkListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 439B6C6420206D210018F922 /* AmkListViewController.xib */; };
+		CF3684BF2427BFE700066502 /* MLSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3684BD2427BFE700066502 /* MLSettingViewController.m */; };
+		CF3684C02427BFE700066502 /* MLSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3684BD2427BFE700066502 /* MLSettingViewController.m */; };
+		CF3684C12427BFE700066502 /* MLSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF3684BE2427BFE700066502 /* MLSettingViewController.xib */; };
+		CF3684C22427BFE700066502 /* MLSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF3684BE2427BFE700066502 /* MLSettingViewController.xib */; };
+		CF40D7AB2426062100FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
+		CF40D7AC2426089900FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
+		CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
+		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
+		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CFA5207224235F8A00834E16 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207024235F8A00834E16 /* Model.xcdatamodeld */; };
+		CFA5207324235F8A00834E16 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207024235F8A00834E16 /* Model.xcdatamodeld */; };
+		CFA5207824235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */; };
+		CFA5207924235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */; };
+		CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */; };
+		CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */; };
 		D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -304,8 +320,8 @@
 		439EEF44202CBF4900817588 /* ContactsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactsListViewController.xib; path = AmiKoDesitin/ContactsListViewController.xib; sourceTree = SOURCE_ROOT; };
 		439F25EA20286BF100396C29 /* Prescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prescription.h; path = AmiKoDesitin/Prescription.h; sourceTree = SOURCE_ROOT; };
 		439F25EB20286BF200396C29 /* Prescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Prescription.m; path = AmiKoDesitin/Prescription.m; sourceTree = SOURCE_ROOT; };
-		439F261B2028B7FF00396C29 /* PatientDBAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PatientDBAdapter.h; path = AmiKoDesitin/PatientDBAdapter.h; sourceTree = SOURCE_ROOT; };
-		439F261C2028B7FF00396C29 /* PatientDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PatientDBAdapter.m; path = AmiKoDesitin/PatientDBAdapter.m; sourceTree = SOURCE_ROOT; };
+		439F261B2028B7FF00396C29 /* LegacyPatientDBAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyPatientDBAdapter.h; path = AmiKoDesitin/LegacyPatientDBAdapter.h; sourceTree = SOURCE_ROOT; };
+		439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegacyPatientDBAdapter.m; path = AmiKoDesitin/LegacyPatientDBAdapter.m; sourceTree = SOURCE_ROOT; };
 		439F261F2028C8A600396C29 /* PatientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PatientViewController.h; path = AmiKoDesitin/PatientViewController.h; sourceTree = SOURCE_ROOT; };
 		439F26202028C8A700396C29 /* PatientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PatientViewController.m; path = AmiKoDesitin/PatientViewController.m; sourceTree = SOURCE_ROOT; };
 		43A3851120333147001A5849 /* BaseListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseListViewController.h; path = AmiKoDesitin/BaseListViewController.h; sourceTree = SOURCE_ROOT; };
@@ -317,6 +333,21 @@
 		43D3A0E1201F3CFB00EA77C6 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = AmiKoDesitin/Product.m; sourceTree = SOURCE_ROOT; };
 		5B1BEAABB72AF37F805635CC /* Pods-AmiKoDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmiKoDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AmiKoDesitin/Pods-AmiKoDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 		C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoMedDesitin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF158C3E241B525000F28EDD /* AmiKoDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AmiKoDesitin.entitlements; path = AmiKoDesitin/AmiKoDesitin.entitlements; sourceTree = "<group>"; };
+		CF3684BC2427BFE700066502 /* MLSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLSettingViewController.h; path = AmiKoDesitin/MLSettingViewController.h; sourceTree = SOURCE_ROOT; };
+		CF3684BD2427BFE700066502 /* MLSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLSettingViewController.m; path = AmiKoDesitin/MLSettingViewController.m; sourceTree = SOURCE_ROOT; };
+		CF3684BE2427BFE700066502 /* MLSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MLSettingViewController.xib; path = AmiKoDesitin/MLSettingViewController.xib; sourceTree = SOURCE_ROOT; };
+		CF40D7A92426062100FDCFCD /* MLiCloudToLocalMigration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLiCloudToLocalMigration.h; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.h"; sourceTree = SOURCE_ROOT; };
+		CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLiCloudToLocalMigration.m; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.m"; sourceTree = SOURCE_ROOT; };
+		CF626254241B7A9E00FBCCD9 /* CoMedDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoMedDesitin.entitlements; sourceTree = "<group>"; };
+		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
+		CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPersistenceManager.m; path = AmiKoDesitin/Persistence/MLPersistenceManager.m; sourceTree = SOURCE_ROOT; };
+		CFA5207124235F8A00834E16 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		CFA5207424235FD900834E16 /* PatientModel+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientModel+CoreDataProperties.h"; path = "../PatientModel+CoreDataProperties.h"; sourceTree = "<group>"; };
+		CFA5207524235FD900834E16 /* PatientModel+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientModel+CoreDataClass.h"; path = "../PatientModel+CoreDataClass.h"; sourceTree = "<group>"; };
+		CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PatientModel+CoreDataClass.m"; path = "../PatientModel+CoreDataClass.m"; sourceTree = "<group>"; };
+		CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PatientModel+CoreDataProperties.m"; path = "../PatientModel+CoreDataProperties.m"; sourceTree = "<group>"; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -514,6 +545,7 @@
 				D5A6F26717B16A2300EAB24B /* libsqlite3.0.dylib in Frameworks */,
 				D5A6F23B17B1692F00EAB24B /* UIKit.framework in Frameworks */,
 				D5A6F23D17B1692F00EAB24B /* Foundation.framework in Frameworks */,
+				CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */,
 				D5A6F23F17B1692F00EAB24B /* CoreGraphics.framework in Frameworks */,
 				7E13B965F1DF700679DA5264 /* libPods-AmiKoDesitin.a in Frameworks */,
 			);
@@ -532,6 +564,7 @@
 				D5F6BB5F17E8C87500DCBD16 /* libsqlite3.0.dylib in Frameworks */,
 				D5F6BB6017E8C87500DCBD16 /* UIKit.framework in Frameworks */,
 				D5F6BB6117E8C87500DCBD16 /* Foundation.framework in Frameworks */,
+				CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */,
 				D5F6BB6217E8C87500DCBD16 /* CoreGraphics.framework in Frameworks */,
 				D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */,
 			);
@@ -643,10 +676,9 @@
 				D5A6F29E17B16C4B00EAB24B /* MLSQLiteDatabase.m */,
 				D5A6F28C17B16C0E00EAB24B /* MLDBAdapter.h */,
 				D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */,
-				439F261B2028B7FF00396C29 /* PatientDBAdapter.h */,
-				439F261C2028B7FF00396C29 /* PatientDBAdapter.m */,
 				FA20BD242360874E0092CBBE /* UpdateManager.m */,
 				FA20BD272360876D0092CBBE /* UpdateManager.h */,
+				CFA5207C24235FE200834E16 /* Patient */,
 			);
 			name = DB;
 			sourceTree = "<group>";
@@ -712,6 +744,7 @@
 				430285C32016126F003B2EF3 /* prescription */,
 				4387FC3C20188ECE000A5A0F /* main */,
 				439F261E2028C88900396C29 /* patients */,
+				CF3684B72427BFA100066502 /* settings */,
 			);
 			name = GUI;
 			sourceTree = "<group>";
@@ -740,6 +773,49 @@
 				439F25EB20286BF200396C29 /* Prescription.m */,
 			);
 			name = json;
+			sourceTree = "<group>";
+		};
+		CF3684B72427BFA100066502 /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				CF3684BC2427BFE700066502 /* MLSettingViewController.h */,
+				CF3684BD2427BFE700066502 /* MLSettingViewController.m */,
+				CF3684BE2427BFE700066502 /* MLSettingViewController.xib */,
+			);
+			name = settings;
+			sourceTree = "<group>";
+		};
+		CF40D7A8242605FE00FDCFCD /* iCloud to local migration */ = {
+			isa = PBXGroup;
+			children = (
+				CF40D7A92426062100FDCFCD /* MLiCloudToLocalMigration.h */,
+				CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */,
+			);
+			path = "iCloud to local migration";
+			sourceTree = "<group>";
+		};
+		CF626259241D0E1200FBCCD9 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				CF40D7A8242605FE00FDCFCD /* iCloud to local migration */,
+				CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */,
+				CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		CFA5207C24235FE200834E16 /* Patient */ = {
+			isa = PBXGroup;
+			children = (
+				439F261B2028B7FF00396C29 /* LegacyPatientDBAdapter.h */,
+				439F261C2028B7FF00396C29 /* LegacyPatientDBAdapter.m */,
+				CFA5207024235F8A00834E16 /* Model.xcdatamodeld */,
+				CFA5207424235FD900834E16 /* PatientModel+CoreDataProperties.h */,
+				CFA5207524235FD900834E16 /* PatientModel+CoreDataClass.h */,
+				CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */,
+				CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */,
+			);
+			name = Patient;
 			sourceTree = "<group>";
 		};
 		D551D54117F22ACC000EC52A /* AppIcons */ = {
@@ -790,6 +866,8 @@
 		D5A6F22E17B1692F00EAB24B = {
 			isa = PBXGroup;
 			children = (
+				CF626254241B7A9E00FBCCD9 /* CoMedDesitin.entitlements */,
+				CF158C3E241B525000F28EDD /* AmiKoDesitin.entitlements */,
 				FA60635F231548F500E69A93 /* Colors.xcassets */,
 				D551D53617F16DE2000EC52A /* Images.xcassets */,
 				D551D54117F22ACC000EC52A /* AppIcons */,
@@ -812,6 +890,7 @@
 		D5A6F23917B1692F00EAB24B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF626255241BAD3C00FBCCD9 /* CloudKit.framework */,
 				FA98749F22E6FC53008B778F /* WebKit.framework */,
 				FA528CF120D8F1590066CE89 /* tessdata */,
 				FA6A006020D3B26F002D3A33 /* Vision.framework */,
@@ -888,6 +967,7 @@
 				FA6B630320D7CA8500A54EF9 /* UIImage+Cropping.m */,
 				43A3850A2032CB3C001A5849 /* GUI */,
 				439F261A2028B1A400396C29 /* DB */,
+				CF626259241D0E1200FBCCD9 /* Persistence */,
 				43334326201B641E006BFC23 /* menu (iPad) */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
@@ -1168,6 +1248,7 @@
 				D5A6F27917B16AA400EAB24B /* 10-medical.png in Resources */,
 				D5A225181945FC880078FEFF /* 938-connections.png in Resources */,
 				D5A6F27A17B16AA400EAB24B /* 10-medical@2x.png in Resources */,
+				CF3684C12427BFE700066502 /* MLSettingViewController.xib in Resources */,
 				FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */,
 				D5B75BF017FF5807008ECDBB /* Images.xcassets in Resources */,
 				D551D53B17F22A58000EC52A /* desitin_icon_76x76.png in Resources */,
@@ -1252,6 +1333,7 @@
 				D554574D18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				FA4FB4A120E4BF030084F656 /* CameraViewController.xib in Resources */,
 				932F883B206BD9EC00B5A77E /* DoctorViewController.xib in Resources */,
+				CF3684C22427BFE700066502 /* MLSettingViewController.xib in Resources */,
 				D5A225191945FC880078FEFF /* 938-connections.png in Resources */,
 				932F883E206BDA1600B5A77E /* ContactsListViewController.xib in Resources */,
 				D5F6BB6A17E8C87500DCBD16 /* MLSearchWebView.js in Resources */,
@@ -1374,15 +1456,19 @@
 				43D3A0E2201F3CFB00EA77C6 /* Product.m in Sources */,
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
+				CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */,
 				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
-				439F261D2028B7FF00396C29 /* PatientDBAdapter.m in Sources */,
+				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
+				CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
 				439B6C6520206D210018F922 /* AmkListViewController.m in Sources */,
+				CF40D7AB2426062100FDCFCD /* MLiCloudToLocalMigration.m in Sources */,
 				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
+				CFA5207824235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				FA20BD252360874E0092CBBE /* UpdateManager.m in Sources */,
@@ -1409,8 +1495,10 @@
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
 				FA6A005E20D3B184002D3A33 /* PreviewView.m in Sources */,
+				CFA5207224235F8A00834E16 /* Model.xcdatamodeld in Sources */,
 				4333432A201B6488006BFC23 /* Patient.m in Sources */,
 				FA6A005A20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,
+				CF3684BF2427BFE700066502 /* MLSettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1428,15 +1516,19 @@
 				D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */,
 				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
+				CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */,
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
-				930D94B52077E5D9007E4629 /* PatientDBAdapter.m in Sources */,
+				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
+				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
+				CF40D7AC2426089900FDCFCD /* MLiCloudToLocalMigration.m in Sources */,
 				930D94B22077E5A9007E4629 /* DoctorViewController.m in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
 				930D94BA2077E641007E4629 /* Operator.m in Sources */,
+				CFA5207924235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				FA20BD262360874E0092CBBE /* UpdateManager.m in Sources */,
@@ -1463,8 +1555,10 @@
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */,
 				FA6A005F20D3B184002D3A33 /* PreviewView.m in Sources */,
+				CFA5207324235F8A00834E16 /* Model.xcdatamodeld in Sources */,
 				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
 				FA6A005B20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,
+				CF3684C02427BFE700066502 /* MLSettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1678,6 +1772,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-AmiKoDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-AmiKoDesitin";
+				CODE_SIGN_ENTITLEMENTS = AmiKoDesitin/AmiKoDesitin.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4B37356EGR;
@@ -1690,7 +1786,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1705,7 +1801,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-AmiKoDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-AmiKoDesitin";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = AmiKoDesitin/AmiKoDesitin.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4B37356EGR;
@@ -1718,7 +1815,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.ywesee.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1733,6 +1830,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-CoMedDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
+				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
@@ -1756,6 +1854,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-CoMedDesitin";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
+				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
@@ -1804,6 +1903,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CFA5207024235F8A00834E16 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CFA5207124235F8A00834E16 /* Model.xcdatamodel */,
+			);
+			currentVersion = CFA5207124235F8A00834E16 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D5A6F22F17B1692F00EAB24B /* Project object */;
 }

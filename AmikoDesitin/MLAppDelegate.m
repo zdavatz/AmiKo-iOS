@@ -32,7 +32,8 @@
 #import "MLMenuViewController.h"
 #import "MLUtility.h"
 #import "PatientDbListViewController.h"
-#import "PatientDBAdapter.h"
+#import "LegacyPatientDBAdapter.h"
+#import "MLPersistenceManager.h"
 
 #pragma mark -
 
@@ -160,9 +161,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
  */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef DEBUG_ISSUE_107
-    NSLog(@"%s, %@", __FUNCTION__, launchOptions);
-#endif
     // Init main window
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:screenBound];
@@ -185,13 +183,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     NSLog(@"points w = %f, points h = %f, scale = %f",
           [[UIScreen mainScreen] bounds].size.width,
           [[UIScreen mainScreen] bounds].size.height, screenScale);
-
-    NSLog(@"points w = %f, points h = %f, scale = %f",
-          [[UIScreen mainScreen] nativeBounds].size.width,
-          [[UIScreen mainScreen] nativeBounds].size.height, screenScale);
-    NSLog(@"physical w = %f, physical h = %f", sizeInPixels.width, sizeInPixels.height); // nativeBounds
-
-    //NSLog(@"current device model %@", [UIDevice currentDevice].model );
 #endif
 
     // Rear
@@ -307,13 +298,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
         [MLUtility updateDBCheckedTimestamp];
     }
-    
-#ifdef DEBUG_ISSUE_106
-    if (appVersionChanged)
-        [self showPopupWithTitle:@"version changed" message:@"version changed"];
-    else
-        [self showPopupWithTitle:@"same version" message:@"same version"];
-#endif
 
     [defaults removeObjectForKey:@"lastUsedPrescription"];
     [defaults synchronize];
@@ -327,6 +311,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     // Issue #54
     [mainRevealController revealToggle:nil];
     [mainRevealController revealToggle:nil];
+    
+    [MLPersistenceManager shared];
     
     return !launchedFromShortcut;
 }
@@ -420,10 +406,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     [defaults setObject:fileName forKey:@"lastUsedPrescription"];
     [defaults synchronize];
     
-#ifdef DEBUG_ISSUE_86
-    NSLog(@"%s %d define currentPatient ID %@", __FUNCTION__, __LINE__, uniqueId);
-#endif
-    
     PrescriptionViewController *vc = [PrescriptionViewController sharedInstance];
     vc.editedMedicines = false;
     
@@ -435,16 +417,10 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 }
 
 // The file is in "Documents/Inbox/" and needs to be moved to "Documents/amk/"
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
 {
     NSError *error;
 
-#ifdef DEBUG_ISSUE_107
-    NSLog(@"%s url:%@", __FUNCTION__, url);
-#endif
     if (!url ||
         ![url isFileURL])
     {
@@ -463,62 +439,33 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
 
     // Load the prescription from the file in Inbox
-    Prescription *presInbox = [Prescription new];
-    [presInbox importFromURL:url];
-    
-    // Check if the patient subdirectory exists and possibly create it
-    NSString *amk = [MLUtility amkBaseDirectory];
-    NSString *amkDir = [amk stringByAppendingPathComponent:presInbox.patient.uniqueId];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:amkDir])
-    {
-        [[NSFileManager defaultManager] createDirectoryAtPath:amkDir
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:&error];
-        if (error) {
-            NSLog(@"Error creating directory: %@", error.localizedDescription);
-            amkDir = nil;
-            // Cannot proceed if there is no target for the import
-            return NO;
-        }
+    Prescription *presInbox = [[Prescription alloc] initWithURL:url];
 
-#ifdef DEBUG
-        NSLog(@"Created patient directory: %@", amkDir);
-#endif
-    }
+    // Check if the patient subdirectory exists and possibly create it
+    NSURL *amkDir = [[MLPersistenceManager shared] amkDirectoryForPatient:presInbox.patient.uniqueId];
 
     // Check if the patient is already in the DB and possibly add it.
-    PatientDBAdapter *patientDb = [PatientDBAdapter new];
-    if (![patientDb openDatabase:@"patient_db"]) {
-        NSLog(@"Could not open patient DB!");
-        return NO;
+    if ([[MLPersistenceManager shared] getPatientWithUniqueID:presInbox.patient.uniqueId]==nil) {
+        [[MLPersistenceManager shared] addPatient:presInbox.patient];
     }
-    
-    if ([patientDb getPatientWithUniqueID:presInbox.patient.uniqueId]==nil) {
-        //NSLog(@"Add patient to DB");
-        [patientDb addEntry:presInbox.patient];
-    }
-
-    [patientDb closeDatabase];
     
     // Check the hash of the existing amk files
-    NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:amkDir error:&error];
-    NSArray *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+    NSArray<NSURL *> *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:amkDir
+                                                      includingPropertiesForKeys:nil
+                                                                         options:0
+                                                                           error:&error];
+    NSArray<NSURL *> *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
 
     BOOL prescriptionNeedsToBeImported = YES;
-    Prescription *presAmkDir = [Prescription new];
     NSString *foundFileName;
     NSString *foundUniqueId;
-    for (NSString *f in amkFilesArray) {
-        //NSLog(@"Checking existing amkFile:%@", f);
-        NSString *fullFilePath = [amkDir stringByAppendingPathComponent:f];
-        NSURL *url = [NSURL fileURLWithPath:fullFilePath];
-        [presAmkDir importFromURL:url];
+    for (NSURL *url in amkFilesArray) {
+        NSString *f = url.lastPathComponent;
+        Prescription *presAmkDir = [[Prescription alloc] initWithURL:url];
         if ([presInbox.hash isEqualToString:presAmkDir.hash]) {
             prescriptionNeedsToBeImported = NO;
             foundFileName = f;
             foundUniqueId = presAmkDir.patient.uniqueId;
-            //NSLog(@"Line %d, hash %@ exists", __LINE__, presInbox.hash);
             break;
         }
     }
@@ -545,15 +492,28 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         [self showPrescriptionId:foundUniqueId :foundFileName];
         return NO;
     }
-
-    // Finally move amk from Inbox to patient subdirectory
-    //NSURL *destination = [[NSURL fileURLWithPath:amkDir] URLByAppendingPathComponent:fileName];
-    NSString *source = [url path];
-    NSString *destination = [amkDir stringByAppendingPathComponent:fileName];
     
-    [[NSFileManager defaultManager] moveItemAtPath:source
-                                            toPath:destination
-                                             error:&error];
+    for (NSURL *dirFile in dirFiles) {
+        NSString *dirFilename = nil;
+        NSError *error = nil;
+        NSString *downloadStatus = nil;
+        if ([dirFile getResourceValue:&dirFilename forKey:NSURLLocalizedNameKey error:&error] &&
+            error != nil &&
+            [[fileName stringByDeletingPathExtension] isEqualToString:dirFilename] &&
+
+            [dirFile getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:&error] &&
+            error != nil &&
+            [downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusNotDownloaded]) {
+            // There is a file on iCloud with the same filename
+            [[NSFileManager defaultManager] removeItemAtURL:dirFile error:nil];
+            break;
+        }
+    }
+
+    // Finally copy amk from Inbox to patient subdirectory
+    [[NSFileManager defaultManager] copyItemAtURL:url
+                                            toURL:[amkDir URLByAppendingPathComponent:fileName]
+                                            error:&error];
     if (!error)
         [self showPopupWithTitle:@"Success!"
                          message:[NSString stringWithFormat:@"Imported %@", fileName]];
@@ -568,9 +528,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     if (![right isKindOfClass:[PatientDbListViewController class]] ) {
         UIViewController *listViewController = [PatientDbListViewController sharedInstance];
         [self.revealViewController setRightViewController:listViewController];
-#ifdef DEBUG
-        //NSLog(@"Replacing right from %@ to %@", [right class], [listViewController class]);
-#endif
 
         self.revealViewController.rightViewRevealOverdraw = 0;
 #ifdef PATIENT_DB_LIST_FULL_WIDTH

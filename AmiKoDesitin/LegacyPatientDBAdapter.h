@@ -9,17 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "Patient.h"
 
-@interface PatientDBAdapter : NSObject
+/**
+ * This class exists for backward compatibility (migration).
+ * The real patient database is now depended on CoreData.
+ */
 
-- (BOOL) openDatabase:(NSString *)dbName;
+@interface LegacyPatientDBAdapter : NSObject
+
+- (BOOL) openDatabase;
 - (void) closeDatabase;
-- (NSString *) addEntry:(Patient *)patient;
-- (NSString *) insertEntry:(Patient *)patient;
-- (BOOL) deleteEntry:(Patient *)patient;
-- (NSInteger) getNumPatients;
 
+- (NSString*)dbPath;
 - (NSArray *) getAllPatients;
-- (Patient *) getPatientWithUniqueID:(NSString *)uniqueID;
 - (Patient *) cursorToPatient:(NSArray *)cursor;
 
 @end

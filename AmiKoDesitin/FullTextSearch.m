@@ -40,10 +40,6 @@
         mListOfArticles = [mListOfArticles sortedArrayUsingDescriptors:@[sort]];
     }
 
-#ifdef DEBUG
-    //NSLog(@"%s %d, mListOfArticles count: %lu", __FUNCTION__, __LINE__, (unsigned long)[mListOfArticles count]);
-#endif
-
     if (dict)
         mDict = dict;
     

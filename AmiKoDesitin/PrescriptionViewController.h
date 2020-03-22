@@ -18,7 +18,7 @@
 #define mm2pix(x)       inch2pix(x*mm2inch)
 
 @interface PrescriptionViewController : UIViewController
-    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIPrintInteractionControllerDelegate>
+    <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UITextViewDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UIPrintInteractionControllerDelegate, NSFilePresenter>
 {
     AVCaptureSession *captureSession;
     AVCaptureVideoDataOutput *captureOutput;
@@ -61,7 +61,6 @@
 - (NSString *)getPlaceDateForPrinting;
 - (void) printMedicineLabel; //:(NSIndexPath *)indexPath;
 
-- (NSURL *) prescriptionUrlWithHash: (NSString *)hash;
 - (BOOL) validatePrescription;
 - (void) overwritePrescription;
 - (void) saveNewPrescription;
