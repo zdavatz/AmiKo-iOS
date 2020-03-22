@@ -90,8 +90,10 @@
     }
     if ([self.pendingURLs count] == 0) {
         if (!self.isDone) {
-            [[NSFileManager defaultManager] removeItemAtURL:[remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
-                                                      error:nil];
+            if (self.deleteFilesOnICloud) {
+                [[NSFileManager defaultManager] removeItemAtURL:[remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
+                                                          error:nil];
+            }
             self.isDone = YES;
             [self.delegate didFinishedICloudToLocalMigration:self];
         }
