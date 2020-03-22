@@ -48,14 +48,6 @@
     if (self = [super init]) {
         // TODO: take care of updated icloud status when app is active
         // https://developer.apple.com/library/archive/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html#//apple_ref/doc/uid/TP40012094-CH6-SW6
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//        [defaults setInteger:MLPersistenceSourceLocal forKey:KEY_PERSISTENCE_SOURCE];
-//        [defaults synchronize];
-//        [self setCurrentSource:MLPersistenceSourceICloud];
-
-        [defaults setInteger:MLPersistenceSourceICloud forKey:KEY_PERSISTENCE_SOURCE];
-        [defaults synchronize];
-        [self setCurrentSource:MLPersistenceSourceLocal];
         
         self.coreDataContainer = [[NSPersistentCloudKitContainer alloc] initWithName:@"Model"];
 
@@ -81,23 +73,20 @@
     return [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
 }
 
-- (void)setCurrentSource: (MLPersistenceSource) source {
-    if (source == self.currentSource) {
-        return;
-    }
-    if (source == MLPersistenceSourceICloud && ![MLPersistenceManager supportICloud]) {
-        return;
-    }
-    switch (source) {
-        case MLPersistenceSourceLocal:
-            [self migrateToLocal:NO];
-            break;
-        case MLPersistenceSourceICloud:
-            [self migrateToICloud];
-            break;
-    }
+- (void)setCurrentSourceToLocalWithDeleteICloud:(BOOL)deleteFilesOnICloud {
+    if (self.currentSource == MLPersistenceSourceLocal) return;
+    [self migrateToLocal:deleteFilesOnICloud];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setInteger:source forKey:KEY_PERSISTENCE_SOURCE];
+    [defaults setInteger:MLPersistenceSourceLocal forKey:KEY_PERSISTENCE_SOURCE];
+    [defaults synchronize];
+}
+- (void)setCurrentSourceToICloud {
+    if (self.currentSource == MLPersistenceSourceICloud || ![MLPersistenceManager supportICloud]) {
+        return;
+    }
+    [self migrateToICloud];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setInteger:MLPersistenceSourceICloud forKey:KEY_PERSISTENCE_SOURCE];
     [defaults synchronize];
 }
 
@@ -167,6 +156,7 @@
 
     MLiCloudToLocalMigration *migration = [[MLiCloudToLocalMigration alloc] init];
     migration.delegate = self;
+    migration.deleteFilesOnICloud = deleteFilesOnICloud;
     [migration start];
     self.iCloudToLocalMigration = migration;
 }

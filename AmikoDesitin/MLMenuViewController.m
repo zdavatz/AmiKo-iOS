@@ -170,6 +170,9 @@
         case 6:
             [self showDoctor:nil];
             break;
+        
+        case 7:
+            [self showSettings:nil];
 
         default:
             break;
@@ -191,6 +194,7 @@
                         NSLocalizedString(@"Update",   "Button"),
                         NSLocalizedString(@"Patients", "Button"),
                         NSLocalizedString(@"Doctor Signature",   "Button"),
+                        NSLocalizedString(@"Settings", "Button"),
                         nil];
     mMenuActionSheet.tag = 1;
     
@@ -241,6 +245,11 @@
 }
 
 #pragma mark - Actions
+
+- (IBAction)showSettings:(id)sender {
+    if (mParentViewController)
+    [mParentViewController switchToSettingView];
+}
 
 - (IBAction) sendFeedback:(id)sender
 {

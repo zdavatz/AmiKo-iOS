@@ -74,6 +74,7 @@ enum {
 - (void) switchToPatientEditView :(BOOL)animated;
 - (void) switchToDoctorEditView;
 - (void) switchToFullTextView :(NSString *)hashId;
+- (void) switchToSettingView;
 - (void) showReport:(id)sender;
 - (void) switchToDrugInteractionViewFromPrescription: (NSMutableDictionary *)medBasket;
 - (void) switchToDrugInteractionView;

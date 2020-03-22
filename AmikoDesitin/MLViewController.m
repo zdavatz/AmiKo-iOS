@@ -39,6 +39,7 @@
 #import "DoctorViewController.h"
 #import "PatientViewController.h"
 #import "ContactsListViewController.h"
+#import "MLSettingViewController.h"
 
 #import "MLUtility.h"
 #import "MLAlertView.h"
@@ -2644,6 +2645,23 @@ static BOOL flagShowReport = false;
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
     
     //
+    mainRevealController.rightViewRevealOverdraw = 0;
+    //mainRevealController.bounceBackOnOverdraw = YES;
+    [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center
+}
+
+- (void) switchToSettingView
+{
+    mainRevealController = self.revealViewController;
+    
+    // Right
+    mainRevealController.rightViewController = nil;
+
+    // Front
+    MLSettingViewController *settingViewController = [[MLSettingViewController alloc] init];
+    otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:settingViewController];
+    [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
+
     mainRevealController.rightViewRevealOverdraw = 0;
     //mainRevealController.bounceBackOnOverdraw = YES;
     [mainRevealController setFrontViewPosition:FrontViewPositionLeft animated:YES];  // Center

@@ -19,12 +19,15 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 
 @interface MLPersistenceManager : NSObject
 
-@property (nonatomic) MLPersistenceSource currentSource;
+@property (nonatomic, readonly) MLPersistenceSource currentSource;
 
 + (instancetype) shared;
 + (BOOL)supportICloud;
 - (NSURL *)iCloudDocumentDirectory;
 - (NSManagedObjectContext *)managedViewContext;
+
+- (void)setCurrentSourceToICloud;
+- (void)setCurrentSourceToLocalWithDeleteICloud:(BOOL)deleteFilesOnICloud;
 
 # pragma mark - Doctor
 
