@@ -133,20 +133,31 @@
         description.cloudKitContainerOptions = options;
 
         [self doctorDictionary]; // Migrate to file based doctor storage
+        NSFileManager *manager = [NSFileManager defaultManager];
         NSURL *localDocument = [NSURL fileURLWithPath:[MLUtility documentsDirectory]];
         NSURL *remoteDocument = [self iCloudDocumentDirectory];
 
+        NSURL *remoteDoctorURL = [remoteDocument URLByAppendingPathComponent:@"doctor.plist"];
         [MLUtility moveFile:[localDocument URLByAppendingPathComponent:@"doctor.plist"]
-                      toURL:[remoteDocument URLByAppendingPathComponent:@"doctor.plist"]
+                      toURL:remoteDoctorURL
    overwriteIfExisting:NO];
+        [manager startDownloadingUbiquitousItemAtURL:remoteDoctorURL error:nil];
+        
+        NSURL *signatureURL = [remoteDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
         [MLUtility moveFile:[localDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
-                      toURL:[remoteDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
+                      toURL:signatureURL
         overwriteIfExisting:YES];
+        [manager startDownloadingUbiquitousItemAtURL:signatureURL error:nil];
+        
+        NSURL *favouriteURL = [remoteDocument URLByAppendingPathComponent:@"favourites"];
         [MLUtility moveFile:[localDocument URLByAppendingPathComponent:@"favourites"]
-                      toURL:[remoteDocument URLByAppendingPathComponent:@"favourites"]
+                      toURL:favouriteURL
         overwriteIfExisting:YES];
+        [manager startDownloadingUbiquitousItemAtURL:favouriteURL error:nil];
+        
+        NSURL *amkDirectoryURL = [remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES];
         [MLUtility mergeFolderRecursively:[localDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
-                                       to:[remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
+                                       to:amkDirectoryURL
                            deleteOriginal:YES];
     });
 }
