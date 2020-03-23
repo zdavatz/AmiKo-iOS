@@ -13,6 +13,8 @@
 @interface MLSettingViewController ()
 @property (weak, nonatomic) IBOutlet UISwitch *iCloudSwitch;
 
+- (void)reloadICloudSwitch;
+
 @end
 
 @implementation MLSettingViewController
@@ -33,12 +35,14 @@
     // A single button on the left
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
-    if (![MLPersistenceManager supportICloud]) {
-        self.iCloudSwitch.enabled = NO;
-        self.iCloudSwitch.on = NO;
-    } else {
-        self.iCloudSwitch.on = [[MLPersistenceManager shared] currentSource] == MLPersistenceSourceICloud;
-    }
+    [self reloadICloudSwitch];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquityIdentityDidChangeNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+        [self reloadICloudSwitch];
+    }];
 }
 
 - (IBAction)iCloudSwitched:(id)sender {
@@ -58,7 +62,17 @@
                                                 handler:^(UIAlertAction * _Nonnull action) {
             [[MLPersistenceManager shared] setCurrentSourceToLocalWithDeleteICloud:NO];
         }]];
+        [[alert popoverPresentationController] setSourceView:self.iCloudSwitch];
         [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+- (void)reloadICloudSwitch {
+    if (![MLPersistenceManager supportICloud]) {
+        self.iCloudSwitch.enabled = NO;
+        self.iCloudSwitch.on = NO;
+    } else {
+        self.iCloudSwitch.on = [[MLPersistenceManager shared] currentSource] == MLPersistenceSourceICloud;
     }
 }
 
