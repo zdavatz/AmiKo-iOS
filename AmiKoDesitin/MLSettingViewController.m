@@ -62,6 +62,7 @@
                                                 handler:^(UIAlertAction * _Nonnull action) {
             [[MLPersistenceManager shared] setCurrentSourceToLocalWithDeleteICloud:NO];
         }]];
+        [[alert popoverPresentationController] setSourceView:self.iCloudSwitch];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
