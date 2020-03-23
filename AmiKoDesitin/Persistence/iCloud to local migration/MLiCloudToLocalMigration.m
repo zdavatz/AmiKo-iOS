@@ -70,9 +70,12 @@
     if (self.deleteFilesOnICloud) {
         [self moveFile:[remoteDocument URLByAppendingPathComponent:@"doctor.plist"]
                  toURL:[localDocument URLByAppendingPathComponent:@"doctor.plist"]
-        overwriteIfExisting:YES];
+   overwriteIfExisting:YES];
         [self moveFile:[remoteDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
                  toURL:[localDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
+   overwriteIfExisting:YES];
+        [self moveFile:[remoteDocument URLByAppendingPathComponent:@"favourites"]
+                 toURL:[localDocument URLByAppendingPathComponent:@"favourites"]
    overwriteIfExisting:YES];
         [self mergeFolderRecursively:[remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
                                   to:[localDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
@@ -83,6 +86,9 @@
    overwriteIfExisting:YES];
         [self copyFile:[remoteDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
                  toURL:[localDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
+   overwriteIfExisting:YES];
+        [self copyFile:[remoteDocument URLByAppendingPathComponent:@"favourites"]
+                 toURL:[localDocument URLByAppendingPathComponent:@"favourites"]
    overwriteIfExisting:YES];
         [self mergeFolderRecursively:[remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
                                   to:[localDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
