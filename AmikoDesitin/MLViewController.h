@@ -40,7 +40,6 @@ enum {
 @interface MLViewController : UIViewController <UISearchBarDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UITabBarDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 {
     NSArray *_pickerData;
-    NSString *favoritesFile;
 
     IBOutlet UISearchBar *searchField;
     IBOutlet UITextField *myTextField;

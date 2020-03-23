@@ -62,6 +62,7 @@
 
 #import "MLCustomURLConnection.h"
 #import "UpdateManager.h"
+#import "MLPersistenceManager.h"
 
 // Requirement to show at least up to the first comma, no line wrapping
 #define CUSTOM_FONT_SIZE_PICKER
@@ -420,13 +421,7 @@ static BOOL flagShowReport = false;
     
     // Initialize constants
     [MLConstants start];
-    
-    NSString *favoritesDir = @"~/Library/Preferences/data";
-    favoritesFile = [favoritesDir stringByExpandingTildeInPath];
-#ifdef DEBUG
-    NSLog(@"=== Favorites file:\n\t%@", favoritesFile);
-#endif
-    
+
     medi = [NSMutableArray array];
     titleData = [NSMutableArray array];
     subTitleData = [NSMutableArray array];
@@ -964,35 +959,12 @@ static BOOL flagShowReport = false;
         [rootObject setValue:favoriteFTEntrySet forKey:KEY_FAV_FTE_SET];
     
     // Save contents of rootObject by key, value must conform to NSCoding protocol
-    [NSKeyedArchiver archiveRootObject:rootObject toFile:favoritesFile];
+    [NSKeyedArchiver archiveRootObject:rootObject toFile:[[[MLPersistenceManager shared] favouritesFile] path]];
 }
 
 // See 'loadFavorites' in AmiKo-macOS
 - (void) loadFavorites
 {
-    NSFileManager *fileManager = [NSFileManager new];
-    NSArray *urls = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
-    if ([urls count] > 0) {
-        NSURL *libraryFolder = urls[0];
-        // NSLog(@"%@ %@", libraryFolder, [libraryFolder absoluteString]);
-        NSError *error = nil;
-        NSArray *libraryFolderContent = [fileManager contentsOfDirectoryAtPath:[libraryFolder relativePath] error:&error];
-        
-        if (error)
-            NSLog(@"%s: %@", __FUNCTION__, error.localizedDescription);
-        else if ([libraryFolderContent count] == 0)
-            NSLog(@"Library folder is empty!");
-#ifdef DEBUG
-        else
-            NSLog(@"=== Library folder:\n\t%@\nContents:\n%@",
-                  libraryFolder.absoluteString,
-                  libraryFolderContent);
-#endif
-    }
-    else {
-        NSLog(@"Could not find the Library folder.");
-    }
-    
     MLDataStore *favorites = [MLDataStore new];
     [self loadFavorites:favorites];
     
@@ -1014,11 +986,12 @@ static BOOL flagShowReport = false;
 // TODO: make it a member of class MLDataStore
 - (void) loadFavorites:(MLDataStore *)favorites
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:favoritesFile])
+    NSString *favouritesFile = [[[MLPersistenceManager shared] favouritesFile] path];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:favouritesFile])
         return;  // no favorites yet
 
     // Retrieves unarchived dictionary into rootObject
-    NSMutableDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:favoritesFile];
+    NSMutableDictionary *rootObject = [NSKeyedUnarchiver unarchiveObjectWithFile:favouritesFile];
     if (!rootObject)
         return;  // no favorites yet
     

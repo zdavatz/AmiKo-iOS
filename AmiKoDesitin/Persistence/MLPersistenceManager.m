@@ -65,6 +65,8 @@
             [self.coreDataContainer viewContext].automaticallyMergesChangesFromParent = YES;
             [self migratePatientSqliteToCoreData];
         }];
+        
+        [self migrateFromOldFile];
     }
     return self;
 }
@@ -138,6 +140,9 @@
    overwriteIfExisting:NO];
         [MLUtility moveFile:[localDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
                       toURL:[remoteDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME]
+        overwriteIfExisting:YES];
+        [MLUtility moveFile:[localDocument URLByAppendingPathComponent:@"favourites"]
+                      toURL:[remoteDocument URLByAppendingPathComponent:@"favourites"]
         overwriteIfExisting:YES];
         [MLUtility mergeFolderRecursively:[localDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
                                        to:[remoteDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
@@ -407,6 +412,21 @@
 
 - (Patient *) getPatientWithUniqueID:(NSString *)uniqueID {
     return [[self getPatientModelWithUniqueID:uniqueID] toPatient];
+}
+
+# pragma mark - Favourites
+
+- (NSURL *)favouritesFile {
+    return [[self documentDirectory] URLByAppendingPathComponent:@"favourites"];
+}
+
+- (void)migrateFromOldFile {
+    NSString *oldFile = [@"~/Library/Preferences/data" stringByExpandingTildeInPath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:oldFile]) {
+        [[NSFileManager defaultManager] moveItemAtPath:oldFile
+                                                toPath:[[self favouritesFile] path]
+                                                 error:nil];
+    }
 }
 
 # pragma mark - Migration
