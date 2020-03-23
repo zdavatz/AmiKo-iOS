@@ -46,9 +46,6 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        // TODO: take care of updated icloud status when app is active
-        // https://developer.apple.com/library/archive/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html#//apple_ref/doc/uid/TP40012094-CH6-SW6
-        
         self.coreDataContainer = [[NSPersistentCloudKitContainer alloc] initWithName:@"Model"];
 
         if (self.currentSource == MLPersistenceSourceICloud) {
@@ -93,7 +90,11 @@
 }
 
 - (MLPersistenceSource)currentSource {
-    return [[NSUserDefaults standardUserDefaults] integerForKey:KEY_PERSISTENCE_SOURCE];
+    MLPersistenceSource source = [[NSUserDefaults standardUserDefaults] integerForKey:KEY_PERSISTENCE_SOURCE];
+    if (source == MLPersistenceSourceICloud && [MLPersistenceManager supportICloud]) {
+        return MLPersistenceSourceICloud;
+    }
+    return MLPersistenceSourceLocal;
 }
 
 - (NSURL *)iCloudDocumentDirectory {
