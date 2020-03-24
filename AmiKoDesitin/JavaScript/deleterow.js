@@ -3,11 +3,7 @@ function deleteRow(msg,tableID,currentRow) {
     // var myfunc = window.RemoveMeds;
     try {
         if (msg=="Notify_interaction") {
-            WebViewJavascriptBridge.callHandler("JSToObjC_",
-                                                "notify_interaction",
-                                                function responseCallback(responseData) {
-                                                    console.log("JS received response:", responseData);
-                                                });
+            window.webkit.messageHandlers.JSToObjC_.postMessage("notify_interaction");
         }
         else if (msg=="Delete_all") {
             //
@@ -20,11 +16,7 @@ function deleteRow(msg,tableID,currentRow) {
                 table.deleteRow(i-1);
             }
             // Notify objc
-            WebViewJavascriptBridge.callHandler("JSToObjC_",
-                                                "delete_all",
-                                                function responseCallback(responseData) {
-                                                    console.log("JS received response:", responseData);
-                                                });
+            window.webkit.messageHandlers.JSToObjC_.postMessage("delete_all");
 		}
         else {
             //
@@ -36,12 +28,7 @@ function deleteRow(msg,tableID,currentRow) {
 				var row = table.rows[i];
 				if (row==currentRow.parentNode.parentNode) {
                     // Notify objc
-                    WebViewJavascriptBridge.callHandler("JSToObjC_",
-                                                        row.cells[1].innerText,
-                                                        function responseCallback(responseData) {
-                                                            console.log("JS received response:", responseData);
-                                                        });
-
+                    window.webkit.messageHandlers.JSToObjC_.postMessage(row.cells[1].innerText);
 					// Delete row
 					table.deleteRow(i);		
 					// Update counters

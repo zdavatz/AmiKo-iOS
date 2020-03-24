@@ -34,7 +34,6 @@
 
 #import "MLAlertView.h"
 
-#import "WebViewJavascriptBridge.h"
 #import "MLUtility.h"
 
 typedef NS_ENUM(NSInteger, FindPanelVisibility) {
@@ -45,8 +44,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 
 #pragma mark - Class extension
 
-@interface MLSecondViewController ()
-@property WebViewJavascriptBridge *jsBridge;
+@interface MLSecondViewController ()<WKScriptMessageHandler>
+
 @end
 
 #pragma mark -
@@ -288,18 +287,10 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     
     // Update webview which is either "Fachinfo" or "medication basket"
     [self updateWebView];
-
-    [self createJSBridge];
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-//    for (id gr in self.view.gestureRecognizers)
-//        NSLog(@"gestureRecognizer: %@", [gr class]);
-#endif
-    
     [super viewDidAppear:animated];
     
     [self.webView reload];
@@ -310,12 +301,6 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 
 - (void) viewDidLoad
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-//    for (id gr in self.view.gestureRecognizers)
-//        NSLog(@"gestureRecognizer: %@", [gr class]);
-#endif
-    
     [super viewDidLoad];
     
     // Do any additional setup after loading the view from its nib.
@@ -366,6 +351,8 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         tapper.cancelsTouchesInView = NO;
         [self.view addGestureRecognizer:tapper];
     }
+
+    [self.webView.configuration.userContentController addScriptMessageHandler:self name:@"JSToObjC_"];
 }
 
 - (void) didReceiveMemoryWarning
@@ -443,43 +430,26 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
  The following function intercepts messages sent from javascript to objective C and acts
  acts as a bridge between JS and ObjC
  */
-- (void) createJSBridge
-{
-    if (_jsBridge)
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message {
+    NSString *msg = [message body];
+    if (![msg isKindOfClass:[NSString class]]) {
         return;
-    
-#ifdef DEBUG
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-#endif
-    [WebViewJavascriptBridge enableLogging];
-
-    _jsBridge = [WebViewJavascriptBridge bridgeForWebView: webView];
-    [_jsBridge setWebViewDelegate:self];
-    [_jsBridge registerHandler:@"JSToObjC_"
-                       handler:^(id msg, WVJBResponseCallback responseCallback) {
-        if ([msg isEqualToString:@"notify_interaction"]) {
-#ifdef DEBUG
-            NSLog(@"%s line %d, Notify interaction", __FUNCTION__, __LINE__);
-#endif
-            [self sendEmailTo:@"zdavatz@ywesee.com"
-                  withSubject:[NSString stringWithFormat:@"%@: Unbekannte Interaktionen", APP_NAME]];
-        }
-        else if ([msg isEqualToString:@"delete_all"]) {
-#ifdef DEBUG
-            NSLog(@"%s line %d, Delete all", __FUNCTION__, __LINE__);
-#endif
-            [self.medBasket removeAllObjects];
-            [self updateInteractionBasketView];
-        }
-        else {
-#ifdef DEBUG
-            NSLog(@"%s line %d, Delete number %@", __FUNCTION__, __LINE__, msg);
-#endif
-            [self.medBasket removeObjectForKey:msg];
-            [self updateInteractionBasketView];
-        }
-    }];
+    }
+    if ([msg isEqualToString:@"notify_interaction"]) {
+        [self sendEmailTo:@"zdavatz@ywesee.com"
+              withSubject:[NSString stringWithFormat:@"%@: Unbekannte Interaktionen", APP_NAME]];
+    }
+    else if ([msg isEqualToString:@"delete_all"]) {
+        [self.medBasket removeAllObjects];
+        [self updateInteractionBasketView];
+    }
+    else {
+        [self.medBasket removeObjectForKey:msg];
+        [self updateInteractionBasketView];
+    }
 }
+
 
 - (void) sendEmailTo:(NSString *)recipient withSubject:(NSString *)subject
 {
