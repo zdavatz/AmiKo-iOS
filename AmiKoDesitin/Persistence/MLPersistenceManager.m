@@ -79,6 +79,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setInteger:MLPersistenceSourceLocal forKey:KEY_PERSISTENCE_SOURCE];
     [defaults synchronize];
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"PERSISTENCE_SOURCE_CHANGED_NOTIFICATION"
+                                                                                         object:nil]];
 }
 - (void)setCurrentSourceToICloud {
     if (self.currentSource == MLPersistenceSourceICloud || ![MLPersistenceManager supportICloud]) {
@@ -88,6 +90,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setInteger:MLPersistenceSourceICloud forKey:KEY_PERSISTENCE_SOURCE];
     [defaults synchronize];
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"PERSISTENCE_SOURCE_CHANGED_NOTIFICATION"
+                                                                                         object:nil]];
 }
 
 - (MLPersistenceSource)currentSource {

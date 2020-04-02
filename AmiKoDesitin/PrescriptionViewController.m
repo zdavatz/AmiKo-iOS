@@ -194,16 +194,28 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (self = [super initWithNibName:@"PrescriptionViewController" bundle:nil]) {
         self.query = [[NSMetadataQuery alloc] init];
         self.query.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope];
-        self.query.predicate = [NSPredicate predicateWithFormat:@"%K == %@ OR %K == %@",
-                                NSMetadataItemPathKey,
-                                [[[MLPersistenceManager shared] doctorDictionaryURL] path],
-                                NSMetadataItemPathKey,
-                                [[[MLPersistenceManager shared] doctorSignatureURL] path]];
+        [self reloadQueryPredicate];
         self.query.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"lastPathComponent" ascending:NO]];
         [self.query startQuery];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadDoctor) name:NSMetadataQueryDidUpdateNotification object:self.query];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reloadDoctor)
+                                                     name:NSMetadataQueryDidUpdateNotification
+                                                   object:self.query];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reloadQueryPredicate)
+                                                     name:PERSISTENCE_SOURCE_CHANGED_NOTIFICATION
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)reloadQueryPredicate {
+    self.query.predicate = [NSPredicate predicateWithFormat:@"%K == %@ OR %K == %@",
+                            NSMetadataItemURLKey,
+                            [[MLPersistenceManager shared] doctorDictionaryURL],
+                            NSMetadataItemURLKey,
+                            [[MLPersistenceManager shared] doctorSignatureURL]];
+    [self reloadDoctor];
 }
 
 - (void)layoutFrames

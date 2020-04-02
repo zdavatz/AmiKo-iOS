@@ -12,6 +12,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define PERSISTENCE_SOURCE_CHANGED_NOTIFICATION @"PERSISTENCE_SOURCE_CHANGED_NOTIFICATION"
+
 typedef NS_ENUM(NSInteger, MLPersistenceSource) {
     MLPersistenceSourceLocal = 0,
     MLPersistenceSourceICloud = 1,
