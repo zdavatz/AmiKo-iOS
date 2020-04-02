@@ -140,6 +140,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSIndexPath *indexPath; // for iPad
 }
 
+@property (nonatomic, strong) NSMetadataQuery *query;
+
 - (IBAction)btnClickedDone:(id)sender;
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
@@ -182,10 +184,38 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [self new];
+        sharedObject = [[PrescriptionViewController alloc] init];
     });
     
     return sharedObject;
+}
+
+- (instancetype)init {
+    if (self = [super initWithNibName:@"PrescriptionViewController" bundle:nil]) {
+        self.query = [[NSMetadataQuery alloc] init];
+        self.query.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope];
+        [self reloadQueryPredicate];
+        self.query.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"lastPathComponent" ascending:NO]];
+        [self.query startQuery];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reloadDoctor)
+                                                     name:NSMetadataQueryDidUpdateNotification
+                                                   object:self.query];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reloadQueryPredicate)
+                                                     name:PERSISTENCE_SOURCE_CHANGED_NOTIFICATION
+                                                   object:nil];
+    }
+    return self;
+}
+
+- (void)reloadQueryPredicate {
+    self.query.predicate = [NSPredicate predicateWithFormat:@"%K == %@ OR %K == %@",
+                            NSMetadataItemURLKey,
+                            [[MLPersistenceManager shared] doctorDictionaryURL],
+                            NSMetadataItemURLKey,
+                            [[MLPersistenceManager shared] doctorSignatureURL]];
+    [self reloadDoctor];
 }
 
 - (void)layoutFrames
@@ -406,6 +436,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     return [[MLPersistenceManager shared] doctorDictionary] != nil;
 }
 
+- (void) reloadDoctor {
+    [self loadDefaultDoctor];
+    [self updateButtons];
+    [infoView reloadData];
+}
+
 - (void) loadDefaultDoctor
 {
     // Init from defaults
@@ -624,7 +660,19 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.text = prescription.placeDate;
     }
     else if (indexPath.section == kSectionOperator) {
-        if (!prescription.doctor) {
+        MLPersistenceFileState doctorFileState = [[MLPersistenceManager shared] doctorFileState];
+        if (doctorFileState == MLPersistenceFileStateDownloading) {
+            label.font = [UIFont systemFontOfSize:13.0];
+            label.textAlignment = NSTextAlignmentLeft;
+            label.textColor = MAIN_TINT_COLOR;
+            label.backgroundColor = [UIColor clearColor];
+            label.text = NSLocalizedString(@"Syncing doctor's info from iCloud", nil);
+            
+            label.preferredMaxLayoutWidth = frame.size.width;
+            [label sizeToFit];
+            [cell.contentView addSubview:label];
+            return cell;
+        } else if (doctorFileState == MLPersistenceFileStateNotFound) {
             label.font = [UIFont systemFontOfSize:13.0];
             label.textAlignment = NSTextAlignmentLeft;
             label.textColor = MAIN_TINT_COLOR;

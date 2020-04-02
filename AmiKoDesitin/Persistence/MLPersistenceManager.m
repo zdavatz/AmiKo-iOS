@@ -64,6 +64,7 @@
         }];
         
         [self migrateFromOldFile];
+        [self initialICloudDownload];
     }
     return self;
 }
@@ -78,6 +79,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setInteger:MLPersistenceSourceLocal forKey:KEY_PERSISTENCE_SOURCE];
     [defaults synchronize];
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"PERSISTENCE_SOURCE_CHANGED_NOTIFICATION"
+                                                                                         object:nil]];
 }
 - (void)setCurrentSourceToICloud {
     if (self.currentSource == MLPersistenceSourceICloud || ![MLPersistenceManager supportICloud]) {
@@ -87,6 +90,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setInteger:MLPersistenceSourceICloud forKey:KEY_PERSISTENCE_SOURCE];
     [defaults synchronize];
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"PERSISTENCE_SOURCE_CHANGED_NOTIFICATION"
+                                                                                         object:nil]];
 }
 
 - (MLPersistenceSource)currentSource {
@@ -122,6 +127,33 @@
 }
 
 # pragma mark - Migration Local -> iCloud
+
+- (void)initialICloudDownload {
+    // Trigger download when the app starts
+    if (self.currentSource != MLPersistenceSourceICloud) {
+        return;
+    }
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSError *error = nil;
+
+    NSURL *remoteDoctorURL = [self doctorDictionaryURL];
+    [manager startDownloadingUbiquitousItemAtURL:remoteDoctorURL error:&error];
+    if (error != nil) {
+        NSLog(@"Cannot start downloading doctor %@", error);
+    }
+    
+    NSURL *signatureURL = [[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
+    [manager startDownloadingUbiquitousItemAtURL:signatureURL error:&error];
+    if (error != nil) {
+        NSLog(@"Cannot start downloading doctor signature %@", error);
+    }
+    
+    NSURL *favouriteURL = [[self documentDirectory] URLByAppendingPathComponent:@"favourites"];
+    [manager startDownloadingUbiquitousItemAtURL:favouriteURL error:&error];
+    if (error != nil) {
+        NSLog(@"Cannot start downloading favourite %@", error);
+    }
+}
 
 - (void)migrateToICloud {
     if (self.currentSource == MLPersistenceSourceICloud) {
@@ -185,6 +217,40 @@
 
 # pragma mark - Doctor
 
+- (MLPersistenceFileState)doctorFileState {
+    NSURL *doctorURL = [self doctorDictionaryURL];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (self.currentSource == MLPersistenceSourceLocal) {
+        if ([manager fileExistsAtPath:doctorURL.path]) {
+            return MLPersistenceFileStateAvailable;
+        } else {
+            return MLPersistenceFileStateNotFound;
+        }
+    }
+    NSNumber *isRequested = @0;
+    [doctorURL getResourceValue:&isRequested forKey:NSURLUbiquitousItemDownloadRequestedKey error:nil];
+    
+    NSNumber *error = nil;
+    [doctorURL getResourceValue:&error forKey:NSURLUbiquitousItemDownloadingErrorKey error:nil];
+    
+    NSString *downloadStatus = nil;
+    [doctorURL getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:nil];
+    
+    if ([downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent] ||
+        [downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusDownloaded]
+        ){
+        return MLPersistenceFileStateAvailable;
+    }
+    if ([isRequested boolValue]) {
+        return MLPersistenceFileStateDownloading;
+    }
+    [manager startDownloadingUbiquitousItemAtURL:doctorURL error:nil];
+    if (error != nil) {
+        return MLPersistenceFileStateErrored;
+    }
+    return MLPersistenceFileStateAvailable;
+}
+
 - (NSURL *)doctorDictionaryURL {
     return [[self documentDirectory] URLByAppendingPathComponent:@"doctor.plist"];
 }
@@ -214,8 +280,12 @@
 }
 
 - (UIImage*)doctorSignature {
-    NSString *filePath = [[[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME] path];
+    NSString *filePath = [[self doctorSignatureURL] path];
     return [[UIImage alloc] initWithContentsOfFile:filePath];
+}
+
+- (NSURL *)doctorSignatureURL {
+    return [[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
 }
 
 # pragma mark - Prescription

@@ -142,6 +142,8 @@ static BOOL flagShowReport = false;
 ////////////////////////////////////////////////////////////////////////////////
 @interface MLViewController ()
 
+@property (nonatomic, strong) NSMetadataQuery *query;
+
 - (void) loadFavorites;
 - (void) loadFavorites:(MLDataStore *)favorites;
 
@@ -409,14 +411,11 @@ static BOOL flagShowReport = false;
 
 - (void) dealloc
 {
-    NSLog(@"Goodbye MLViewController");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (id) init
 {
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
     self = [super init];
     
     // Initialize constants
@@ -439,12 +438,23 @@ static BOOL flagShowReport = false;
     
     mSearchQueue = dispatch_queue_create("com.ywesee.searchdb", nil);
     
+    self.query = [[NSMetadataQuery alloc] init];
+    self.query.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope];
+    [self reloadQueryPredicate];
+    self.query.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"lastPathComponent" ascending:NO]];
+    [self.query startQuery];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loadFavorites) name:NSMetadataQueryDidUpdateNotification object:self.query];
+    
     // Register observer to notify successful download of new database
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(finishedDownloading:)
                                                  name:NOTIFY_DB_UPDATE_DOWNLOAD_SUCCESS
                                                object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadQueryPredicate)
+                                                 name:PERSISTENCE_SOURCE_CHANGED_NOTIFICATION
+                                               object:nil];
+
 //    // Register observer to notify absence of file on pillbox server
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(finishedDownloading:)
@@ -564,6 +574,11 @@ static BOOL flagShowReport = false;
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+- (void)reloadQueryPredicate {
+    self.query.predicate = [NSPredicate predicateWithFormat:@"%K == %@", NSMetadataItemURLKey, [[MLPersistenceManager shared] favouritesFile]];
+    [self loadFavorites];
 }
 
 - (void) doNotBackupDocumentsDir

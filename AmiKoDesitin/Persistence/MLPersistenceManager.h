@@ -12,9 +12,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define PERSISTENCE_SOURCE_CHANGED_NOTIFICATION @"PERSISTENCE_SOURCE_CHANGED_NOTIFICATION"
+
 typedef NS_ENUM(NSInteger, MLPersistenceSource) {
     MLPersistenceSourceLocal = 0,
     MLPersistenceSourceICloud = 1,
+};
+
+typedef NS_ENUM(NSInteger, MLPersistenceFileState) {
+    MLPersistenceFileStateNotFound = 0,
+    MLPersistenceFileStateAvailable = 1,
+    MLPersistenceFileStateDownloading = 2,
+    MLPersistenceFileStateErrored = 3,
 };
 
 @interface MLPersistenceManager : NSObject
@@ -31,7 +40,9 @@ typedef NS_ENUM(NSInteger, MLPersistenceSource) {
 
 # pragma mark - Doctor
 
+- (MLPersistenceFileState)doctorFileState;
 - (NSURL *)doctorDictionaryURL;
+- (NSURL *)doctorSignatureURL;
 - (void)setDoctorDictionary:(NSDictionary *)dict;
 - (NSDictionary *)doctorDictionary;
 - (void)setDoctorSignature:(UIImage *)image;

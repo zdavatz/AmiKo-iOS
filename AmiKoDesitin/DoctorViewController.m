@@ -11,10 +11,13 @@
 #import "MLUtility.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "MLPersistenceManager.h"
+#import "MLUbiquitousStateAlertController.h"
 
 @interface DoctorViewController () <NSFilePresenter>
 
 @property (nonatomic, strong) Operator *doctor;
+@property (nonatomic, strong) NSMetadataQuery *query;
+@property (nonatomic, strong) MLUbiquitousStateAlertController *ubiquitousController;
 
 - (BOOL) stringIsNilOrEmpty:(NSString*)str;
 - (BOOL) validateFields:(Operator *)doctor;
@@ -32,12 +35,23 @@
 
 - (instancetype)init {
     if (self = [super initWithNibName:@"DoctorViewController" bundle:nil]) {
+        self.query = [[NSMetadataQuery alloc] init];
+        self.query.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope];
+        self.query.predicate = [NSPredicate predicateWithFormat:@"%K == %@ OR %K == %@",
+                                NSMetadataItemURLKey,
+                                [[MLPersistenceManager shared] doctorDictionaryURL],
+                                NSMetadataItemURLKey,
+                                [[MLPersistenceManager shared] doctorSignatureURL]];
+        self.query.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"lastPathComponent" ascending:NO]];
+        [self.query startQuery];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadUIForDoctor) name:NSMetadataQueryDidUpdateNotification object:self.query];
     }
     return self;
 }
 
 - (void)dealloc {
     [NSFileCoordinator removeFilePresenter:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidLoad
@@ -79,6 +93,26 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+    MLUbiquitousStateAlertController *controller = [[MLUbiquitousStateAlertController alloc] initWithUbiquitousItem:[[MLPersistenceManager shared] doctorDictionaryURL]];
+    if (controller != nil) {
+        controller.onDone = ^{
+            [self reloadUIForDoctor];
+            self.ubiquitousController = nil;
+        };
+        controller.onError = ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil)
+                                                                           message:NSLocalizedString(@"Cannot get file from iCloud", nil)
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+            self.ubiquitousController = nil;
+        };
+        [controller presentAt:self];
+        self.ubiquitousController = controller;
+    }
 }
 
 #ifdef DEBUG
@@ -93,17 +127,20 @@
 {
     if ([[self.view gestureRecognizers] count] == 0)
         [self.view addGestureRecognizer:[self revealViewController].panGestureRecognizer];
+    
+    if (![[NSFileCoordinator filePresenters] containsObject:self]) {
+        [NSFileCoordinator addFilePresenter:self];
+    }
+    [self reloadUIForDoctor];
+}
 
+- (void)reloadUIForDoctor {
     NSDictionary *doctorDictionary = [[MLPersistenceManager shared] doctorDictionary];
     if (!doctorDictionary) {
         NSLog(@"Default doctor signature not defined");
         [self.signatureView.layer setBorderColor: [[UIColor labelColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
         return;
-    }
-    
-    if (![[NSFileCoordinator filePresenters] containsObject:self]) {
-        [NSFileCoordinator addFilePresenter:self];
     }
 
     self.doctor = [Operator new];
@@ -119,6 +156,7 @@
         [self.signatureView.layer setBorderColor: [[UIColor labelColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
     }
+    [self checkFields];
 }
 
 - (void)didReceiveMemoryWarning {
