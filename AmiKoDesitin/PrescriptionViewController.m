@@ -184,10 +184,26 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedObject = [self new];
+        sharedObject = [[PrescriptionViewController alloc] init];
     });
     
     return sharedObject;
+}
+
+- (instancetype)init {
+    if (self = [super initWithNibName:@"PrescriptionViewController" bundle:nil]) {
+        self.query = [[NSMetadataQuery alloc] init];
+        self.query.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope];
+        self.query.predicate = [NSPredicate predicateWithFormat:@"%K == %@ OR %K == %@",
+                                NSMetadataItemPathKey,
+                                [[[MLPersistenceManager shared] doctorDictionaryURL] path],
+                                NSMetadataItemPathKey,
+                                [[[MLPersistenceManager shared] doctorSignatureURL] path]];
+        self.query.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"lastPathComponent" ascending:NO]];
+        [self.query startQuery];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadDoctor) name:NSMetadataQueryDidUpdateNotification object:self.query];
+    }
+    return self;
 }
 
 - (void)layoutFrames
@@ -406,6 +422,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (BOOL) checkDefaultDoctor
 {
     return [[MLPersistenceManager shared] doctorDictionary] != nil;
+}
+
+- (void) reloadDoctor {
+    [self loadDefaultDoctor];
+    [self updateButtons];
+    [infoView reloadData];
 }
 
 - (void) loadDefaultDoctor
