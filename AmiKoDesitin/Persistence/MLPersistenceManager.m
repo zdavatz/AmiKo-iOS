@@ -213,6 +213,40 @@
 
 # pragma mark - Doctor
 
+- (MLPersistenceFileState)doctorFileState {
+    NSURL *doctorURL = [self doctorDictionaryURL];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if (self.currentSource == MLPersistenceSourceLocal) {
+        if ([manager fileExistsAtPath:doctorURL.path]) {
+            return MLPersistenceFileStateAvailable;
+        } else {
+            return MLPersistenceFileStateNotFound;
+        }
+    }
+    NSNumber *isRequested = @0;
+    [doctorURL getResourceValue:&isRequested forKey:NSURLUbiquitousItemDownloadRequestedKey error:nil];
+    
+    NSNumber *error = nil;
+    [doctorURL getResourceValue:&error forKey:NSURLUbiquitousItemDownloadingErrorKey error:nil];
+    
+    NSString *downloadStatus = nil;
+    [doctorURL getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:nil];
+    
+    if ([downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent] ||
+        [downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusDownloaded]
+        ){
+        return MLPersistenceFileStateAvailable;
+    }
+    if ([isRequested boolValue]) {
+        return MLPersistenceFileStateDownloading;
+    }
+    [manager startDownloadingUbiquitousItemAtURL:doctorURL error:nil];
+    if (error != nil) {
+        return MLPersistenceFileStateErrored;
+    }
+    return MLPersistenceFileStateAvailable;
+}
+
 - (NSURL *)doctorDictionaryURL {
     return [[self documentDirectory] URLByAppendingPathComponent:@"doctor.plist"];
 }
@@ -242,8 +276,12 @@
 }
 
 - (UIImage*)doctorSignature {
-    NSString *filePath = [[[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME] path];
+    NSString *filePath = [[self doctorSignatureURL] path];
     return [[UIImage alloc] initWithContentsOfFile:filePath];
+}
+
+- (NSURL *)doctorSignatureURL {
+    return [[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
 }
 
 # pragma mark - Prescription

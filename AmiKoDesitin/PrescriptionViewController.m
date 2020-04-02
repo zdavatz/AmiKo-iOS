@@ -140,6 +140,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     NSIndexPath *indexPath; // for iPad
 }
 
+@property (nonatomic, strong) NSMetadataQuery *query;
+
 - (IBAction)btnClickedDone:(id)sender;
 
 - (void)layoutCellSeparator:(UITableViewCell *)cell;
@@ -624,7 +626,19 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         label.text = prescription.placeDate;
     }
     else if (indexPath.section == kSectionOperator) {
-        if (!prescription.doctor) {
+        MLPersistenceFileState doctorFileState = [[MLPersistenceManager shared] doctorFileState];
+        if (doctorFileState == MLPersistenceFileStateDownloading) {
+            label.font = [UIFont systemFontOfSize:13.0];
+            label.textAlignment = NSTextAlignmentLeft;
+            label.textColor = MAIN_TINT_COLOR;
+            label.backgroundColor = [UIColor clearColor];
+            label.text = NSLocalizedString(@"Syncing doctor's info from iCloud", nil);
+            
+            label.preferredMaxLayoutWidth = frame.size.width;
+            [label sizeToFit];
+            [cell.contentView addSubview:label];
+            return cell;
+        } else if (doctorFileState == MLPersistenceFileStateNotFound) {
             label.font = [UIFont systemFontOfSize:13.0];
             label.textAlignment = NSTextAlignmentLeft;
             label.textColor = MAIN_TINT_COLOR;
