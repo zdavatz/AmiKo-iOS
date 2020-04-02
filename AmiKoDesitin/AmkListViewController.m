@@ -74,12 +74,18 @@ static const float kAmkLabelFontSize = 12.0;
     NSURL *amkDir = [[MLPersistenceManager shared] amkDirectory];
     NSError *error;
     NSArray<NSURL *> *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:amkDir
-                                                      includingPropertiesForKeys:nil
-                                                                         options:0
-                                                                           error:&error];
+                                                               includingPropertiesForKeys:nil
+                                                                                  options:0
+                                                                                    error:&error];
     NSMutableArray<NSURL *> *amkFilesArray = [NSMutableArray array];
     for (NSURL *file in dirFiles) {
-        if ([[NSFileManager defaultManager] isUbiquitousItemAtURL:file] || [[file pathExtension] isEqualToString:@"amk"]) {
+        NSURL *fileURL = file;
+        if ([[NSFileManager defaultManager] isUbiquitousItemAtURL:file]) {
+            NSString *filename = nil;
+            [file getResourceValue:&filename forKey:NSURLLocalizedNameKey error:nil];
+            fileURL = [[file URLByDeletingLastPathComponent] URLByAppendingPathComponent:filename];
+        }
+        if ([[fileURL pathExtension] isEqualToString:@"amk"]) {
             [amkFilesArray addObject:file];
         }
     }
