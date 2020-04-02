@@ -10,6 +10,7 @@
 #import "SWRevealViewController.h"
 #import "MLUtility.h"
 #import "MLPersistenceManager.h"
+#import "MLUbiquitousStateAlertController.h"
 
 static const float kAmkLabelFontSize = 12.0;
 
@@ -17,6 +18,7 @@ static const float kAmkLabelFontSize = 12.0;
 
 - (void) refreshFileList;
 @property (nonatomic, strong) NSMetadataQuery *query;
+@property (nonatomic, strong) MLUbiquitousStateAlertController *ubiquitousController;
 
 @end
 
@@ -258,17 +260,32 @@ static const float kAmkLabelFontSize = 12.0;
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     NSURL *url = amkFiles[indexPath.row];
-    NSFileManager *manager = [NSFileManager defaultManager];
-    NSString *downloadStatus = nil;
-    NSError *error = nil;
     
-    if ([url getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:&error] &&
-        ![downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusCurrent]) {
-        [manager startDownloadingUbiquitousItemAtURL:url error:&error];
-        if (error != nil) {
-            NSLog(@"Cannot start download %@", error);
-        }
-        [self refreshFileList];
+    if ([[NSFileManager defaultManager] isUbiquitousItemAtURL:url]) {
+        NSString *downloadedFilename = nil;
+        [url getResourceValue:&downloadedFilename forKey:NSURLLocalizedNameKey error:nil];
+        url = [[url URLByDeletingLastPathComponent] URLByAppendingPathComponent:downloadedFilename];
+    }
+
+    MLUbiquitousStateAlertController *controller = [[MLUbiquitousStateAlertController alloc] initWithUbiquitousItem:url];
+    if (controller != nil) {
+        controller.onDone = ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"AmkFilenameSelectedNotification"
+                                                                object:url];
+            self.ubiquitousController = nil;
+        };
+        controller.onError = ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil)
+                                                                           message:NSLocalizedString(@"Cannot get file from iCloud", nil)
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+            self.ubiquitousController = nil;
+        };
+        [controller presentAt:self];
+        self.ubiquitousController = controller;
         return;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"AmkFilenameSelectedNotification"
