@@ -306,6 +306,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     // Do any additional setup after loading the view from its nib.
     self.title = mTitle;
     self.webView.UIDelegate = self;
+    self.webView.navigationDelegate = self;
 
     // SWRevealViewController extends UIViewController!
     SWRevealViewController *revealController = [self revealViewController];
