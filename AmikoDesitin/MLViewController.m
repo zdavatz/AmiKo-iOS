@@ -1794,7 +1794,6 @@ static BOOL flagShowReport = false;
             mUsedDatabase = DB_TYPE_AIPS;
             flagSearchInteractions = true;
             [self stopActivityIndicator];
-            [self setBarButtonItemsWith:SEARCH_TITLE];
             // Switch view
             [self switchToDrugInteractionView];
             break;
@@ -2546,7 +2545,7 @@ static BOOL flagShowReport = false;
 - (void) switchToDrugInteractionView
 {
     // if (mCurrentIndexPath)
-    [self tableView:myTableView didSelectRowAtIndexPath:mCurrentIndexPath];
+    [self switchToAipsView:-1];
 }
 
 - (void) switchToPrescriptionView
