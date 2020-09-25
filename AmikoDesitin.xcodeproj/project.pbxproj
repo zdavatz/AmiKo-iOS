@@ -60,6 +60,8 @@
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
 		CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CF8F50FB25176706007D62B5 /* MLPatientSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8F50FA25176706007D62B5 /* MLPatientSync.m */; };
+		CF8F50FC25176706007D62B5 /* MLPatientSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8F50FA25176706007D62B5 /* MLPatientSync.m */; };
 		CFA5207224235F8A00834E16 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207024235F8A00834E16 /* Model.xcdatamodeld */; };
 		CFA5207324235F8A00834E16 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207024235F8A00834E16 /* Model.xcdatamodeld */; };
 		CFA5207824235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */; };
@@ -347,6 +349,8 @@
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
 		CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPersistenceManager.m; path = AmiKoDesitin/Persistence/MLPersistenceManager.m; sourceTree = SOURCE_ROOT; };
+		CF8F50F925176706007D62B5 /* MLPatientSync.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPatientSync.h; path = "AmiKoDesitin/Persistence/iCloud patient sync/MLPatientSync.h"; sourceTree = SOURCE_ROOT; };
+		CF8F50FA25176706007D62B5 /* MLPatientSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPatientSync.m; path = "AmiKoDesitin/Persistence/iCloud patient sync/MLPatientSync.m"; sourceTree = SOURCE_ROOT; };
 		CFA5207124235F8A00834E16 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		CFA5207424235FD900834E16 /* PatientModel+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientModel+CoreDataProperties.h"; path = "../PatientModel+CoreDataProperties.h"; sourceTree = "<group>"; };
 		CFA5207524235FD900834E16 /* PatientModel+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientModel+CoreDataClass.h"; path = "../PatientModel+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -801,6 +805,7 @@
 		CF626259241D0E1200FBCCD9 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				CF8F50F8251766D1007D62B5 /* iCloud patient sync */,
 				CF40D7A8242605FE00FDCFCD /* iCloud to local migration */,
 				CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */,
 				CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */,
@@ -808,6 +813,15 @@
 				CF426A6424362DF200A107AB /* MLUbiquitousStateAlertController.m */,
 			);
 			path = Persistence;
+			sourceTree = "<group>";
+		};
+		CF8F50F8251766D1007D62B5 /* iCloud patient sync */ = {
+			isa = PBXGroup;
+			children = (
+				CF8F50F925176706007D62B5 /* MLPatientSync.h */,
+				CF8F50FA25176706007D62B5 /* MLPatientSync.m */,
+			);
+			path = "iCloud patient sync";
 			sourceTree = "<group>";
 		};
 		CFA5207C24235FE200834E16 /* Patient */ = {
@@ -1456,6 +1470,7 @@
 				439F25EC20286BF200396C29 /* Prescription.m in Sources */,
 				FA5E5E4920F5F71B00CDB6C6 /* videoViewController.m in Sources */,
 				43A385062032B930001A5849 /* MLMenuViewController.m in Sources */,
+				CF8F50FB25176706007D62B5 /* MLPatientSync.m in Sources */,
 				FAD0664A22DF29DC0078E28B /* FullTextEntry.m in Sources */,
 				FAD0665222DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
 				D5A6F24717B1692F00EAB24B /* main.m in Sources */,
@@ -1517,6 +1532,7 @@
 				930D94B32077E5BC007E4629 /* Product.m in Sources */,
 				930D94B72077E5E1007E4629 /* PatientDbListViewController.m in Sources */,
 				FA5E5E4A20F5F71B00CDB6C6 /* videoViewController.m in Sources */,
+				CF8F50FC25176706007D62B5 /* MLPatientSync.m in Sources */,
 				930D94B42077E5D4007E4629 /* Patient.m in Sources */,
 				FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */,
 				D5F6BB5017E8C87500DCBD16 /* main.m in Sources */,
