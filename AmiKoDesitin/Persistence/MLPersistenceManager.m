@@ -14,6 +14,7 @@
 #import "PatientModel+CoreDataClass.h"
 #import "LegacyPatientDBAdapter.h"
 #import "MLiCloudToLocalMigration.h"
+#import "MLPatientSync.h"
 
 #define KEY_PERSISTENCE_SOURCE @"KEY_PERSISTENCE_SOURCE"
 
@@ -27,7 +28,8 @@
 - (NSURL *)amkBaseDirectory;
 - (PatientModel *)getPatientModelWithUniqueID:(NSString *)uniqueID;
 
-@property NSPersistentCloudKitContainer *coreDataContainer;
+@property NSPersistentContainer *coreDataContainer;
+@property MLPatientSync *patientSync;
 
 @end
 
@@ -46,13 +48,10 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.coreDataContainer = [[NSPersistentCloudKitContainer alloc] initWithName:@"Model"];
-
-        if (self.currentSource == MLPersistenceSourceICloud) {
-            NSPersistentStoreDescription *description = [[self.coreDataContainer persistentStoreDescriptions] firstObject];
-            NSPersistentCloudKitContainerOptions *options = [[NSPersistentCloudKitContainerOptions alloc] initWithContainerIdentifier:[MLConstants iCloudContainerIdentifier]];
-            description.cloudKitContainerOptions = options;
-        }
+        self.coreDataContainer = [[NSPersistentContainer alloc] initWithName:@"Model"];
+        
+        NSPersistentStoreDescription *description = [[self.coreDataContainer persistentStoreDescriptions] firstObject];
+        [description setOption:@1 forKey:NSPersistentHistoryTrackingKey];
 
         [self.coreDataContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription * _Nonnull desc, NSError * _Nullable error) {
             if (error != nil) {
@@ -65,6 +64,7 @@
         
         [self migrateFromOldFile];
         [self initialICloudDownload];
+        self.patientSync = [[MLPatientSync alloc] initWithPersistenceManager:self];
     }
     return self;
 }
@@ -160,10 +160,6 @@
         return;
     }
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        NSPersistentStoreDescription *description = [[self.coreDataContainer persistentStoreDescriptions] firstObject];
-        NSPersistentCloudKitContainerOptions *options = [[NSPersistentCloudKitContainerOptions alloc] initWithContainerIdentifier:[MLConstants iCloudContainerIdentifier]];
-        description.cloudKitContainerOptions = options;
-
         [self doctorDictionary]; // Migrate to file based doctor storage
         NSFileManager *manager = [NSFileManager defaultManager];
         NSURL *localDocument = [NSURL fileURLWithPath:[MLUtility documentsDirectory]];
@@ -191,6 +187,7 @@
         [MLUtility mergeFolderRecursively:[localDocument URLByAppendingPathComponent:@"amk" isDirectory:YES]
                                        to:amkDirectoryURL
                            deleteOriginal:YES];
+        [self.patientSync generatePatientFilesForICloud:nil];
     });
 }
 
@@ -399,6 +396,9 @@
 # pragma mark - Patient
 
 - (NSString *)addPatient:(Patient *)patient {
+    return [self addPatient:patient updateICloud:YES];
+}
+- (NSString *)addPatient:(Patient *)patient updateICloud:(BOOL)updateICloud {
     NSString *uuidStr = [patient generateUniqueID];
     patient.uniqueId = uuidStr;
 
@@ -410,6 +410,9 @@
     
     NSError *error = nil;
     [context save:&error];
+    if (updateICloud) {
+        [self.patientSync generatePatientFile:patient forICloud:nil];
+    }
     if (error != nil) {
         NSLog(@"Cannot create patient %@", error);
     }
@@ -417,29 +420,44 @@
 }
 
 - (NSString *)upsertPatient:(Patient *)patient {
+    return [self upsertPatient:patient updateICloud:YES];
+}
+- (NSString *)upsertPatient:(Patient *)patient updateICloud:(BOOL)updateICloud {
+    return [self upsertPatient:patient withTimestamp:[NSDate date] updateICloud:updateICloud];
+}
+
+- (NSString *)upsertPatient:(Patient *)patient withTimestamp:(NSDate*)date updateICloud:(BOOL)updateICloud {
     NSError *error = nil;
     if (patient.uniqueId.length) {
         PatientModel *p = [self getPatientModelWithUniqueID:patient.uniqueId];
-        p.weightKg = patient.weightKg;
-        p.heightCm = patient.heightCm;
-        p.zipCode = patient.zipCode;
-        p.city = patient.city;
-        p.country = patient.country;
-        p.postalAddress = patient.postalAddress;
-        p.phoneNumber = patient.phoneNumber;
-        p.emailAddress = patient.emailAddress;
-        p.gender = patient.gender;
-        [[self.coreDataContainer viewContext] save:&error];
-        if (error != nil) {
-            NSLog(@"Cannot update patient %@", error);
+        if (p != nil) {
+            p.weightKg = patient.weightKg;
+            p.heightCm = patient.heightCm;
+            p.zipCode = patient.zipCode;
+            p.city = patient.city;
+            p.country = patient.country;
+            p.postalAddress = patient.postalAddress;
+            p.phoneNumber = patient.phoneNumber;
+            p.emailAddress = patient.emailAddress;
+            p.gender = patient.gender;
+            p.timestamp = date;
+            [[self.coreDataContainer viewContext] save:&error];
+            if (error != nil) {
+                NSLog(@"Cannot update patient %@", error);
+            }
+            if (updateICloud) {
+                [self.patientSync generatePatientFile:patient forICloud:nil];
+            }
+            return patient.uniqueId;
         }
-        return patient.uniqueId;
-    } else {
-        return [self addPatient:patient];
     }
+    return [self addPatient:patient updateICloud:updateICloud];
 }
 
 - (BOOL)deletePatient:(Patient *)patient {
+    return [self deletePatient:patient updateICloud:YES];
+}
+- (BOOL)deletePatient:(Patient *)patient updateICloud:(BOOL)updateICloud {
     if (!patient.uniqueId.length) {
         return NO;
     }
@@ -449,6 +467,9 @@
     }
     NSManagedObjectContext *context = [self.coreDataContainer viewContext];
     [context deleteObject:pm];
+    if (updateICloud) {
+        [self.patientSync deletePatientFileForICloud:patient];
+    }
     return YES;
 }
 

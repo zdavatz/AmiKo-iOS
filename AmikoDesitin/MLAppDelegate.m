@@ -498,11 +498,11 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         NSError *error = nil;
         NSString *downloadStatus = nil;
         if ([dirFile getResourceValue:&dirFilename forKey:NSURLLocalizedNameKey error:&error] &&
-            error != nil &&
+            error == nil &&
             [[fileName stringByDeletingPathExtension] isEqualToString:dirFilename] &&
 
             [dirFile getResourceValue:&downloadStatus forKey:NSURLUbiquitousItemDownloadingStatusKey error:&error] &&
-            error != nil &&
+            error == nil &&
             [downloadStatus isEqualToString:NSURLUbiquitousItemDownloadingStatusNotDownloaded]) {
             // There is a file on iCloud with the same filename
             [[NSFileManager defaultManager] removeItemAtURL:dirFile error:nil];

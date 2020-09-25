@@ -83,22 +83,7 @@
 
 - (NSDictionary *) makePatientDictionary
 {
-    NSMutableDictionary *patientDict = [NSMutableDictionary new];
-    
-    [patientDict setObject:[self.patient uniqueId] forKey:KEY_AMK_PAT_ID];
-    [patientDict setObject:[self.patient givenName] forKey:KEY_AMK_PAT_NAME];
-    [patientDict setObject:[self.patient familyName] forKey:KEY_AMK_PAT_SURNAME];
-    [patientDict setObject:[self.patient birthDate] forKey:KEY_AMK_PAT_BIRTHDATE];
-    [patientDict setObject:[NSString stringWithFormat:@"%d", patient.weightKg] forKey:KEY_AMK_PAT_WEIGHT];
-    [patientDict setObject:[NSString stringWithFormat:@"%d", patient.heightCm] forKey:KEY_AMK_PAT_HEIGHT];
-    [patientDict setObject:[self.patient gender] forKey:KEY_AMK_PAT_GENDER];
-    [patientDict setObject:[self.patient postalAddress] forKey:KEY_AMK_PAT_ADDRESS];
-    [patientDict setObject:[self.patient zipCode] forKey:KEY_AMK_PAT_ZIP];
-    [patientDict setObject:[self.patient city] forKey:KEY_AMK_PAT_CITY];
-    [patientDict setObject:[self.patient country] forKey:KEY_AMK_PAT_COUNTRY];
-    [patientDict setObject:[self.patient phoneNumber] forKey:KEY_AMK_PAT_PHONE];
-    [patientDict setObject:[self.patient emailAddress] forKey:KEY_AMK_PAT_EMAIL];
-    return patientDict;
+    return [self.patient dictionaryRepresentation];
 }
 
 - (NSDictionary *) makeOperatorDictionary
