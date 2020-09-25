@@ -40,7 +40,11 @@
 @property (atomic, copy) NSString *phoneNumber;
 @property (atomic, copy) NSString *emailAddress;
 
+// Only available when patient is read from database
+@property (nonatomic, strong, nullable) NSDate *timestamp;
+
 - (void)importFromDict:(NSDictionary *)dict;
+- (NSDictionary <NSString *, NSString *> *)dictionaryRepresentation;
 - (NSInteger)entriesCount;
 - (NSString *) generateUniqueID;
 
