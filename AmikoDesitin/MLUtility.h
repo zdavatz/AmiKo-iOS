@@ -43,6 +43,6 @@
 + (void)moveFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite;
 + (void)copyFile:(NSURL *)url toURL:(NSURL *)targetUrl overwriteIfExisting:(BOOL)overwrite;
 + (void)mergeFolderRecursively:(NSURL *)fromURL to:(NSURL *)toURL deleteOriginal:(BOOL)deleteOriginal;
++ (NSString *)sha256:(NSString *)input;
 
 @end
-
