@@ -1810,6 +1810,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
+				MARKETING_VERSION = 2.9.76;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1839,6 +1840,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
+				MARKETING_VERSION = 2.9.76;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1865,6 +1867,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
+				MARKETING_VERSION = 2.9.76;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				SKIP_INSTALL = NO;
@@ -1889,6 +1892,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
+				MARKETING_VERSION = 2.9.76;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				SKIP_INSTALL = NO;
