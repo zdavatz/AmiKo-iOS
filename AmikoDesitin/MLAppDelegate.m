@@ -454,7 +454,8 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
                                                       includingPropertiesForKeys:nil
                                                                          options:0
                                                                            error:&error];
-    NSArray<NSURL *> *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.amk'"]];
+
+    NSArray<NSURL *> *amkFilesArray = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self.pathExtension == 'amk'"]];
 
     BOOL prescriptionNeedsToBeImported = YES;
     NSString *foundFileName;
