@@ -22,9 +22,13 @@
         return nil;
     }
     NSError *error;
-    NSData *encryptedData = [NSData dataWithContentsOfURL:url];
+    bool secureFile = [url startAccessingSecurityScopedResource];
+    NSData *encryptedData = [NSData dataWithContentsOfURL:url options:0 error:&error];
+    if (secureFile) {
+        [url stopAccessingSecurityScopedResource];
+    }
     if (encryptedData == nil) {
-        NSLog(@"Cannot get data from <%@>", url);
+        NSLog(@"Cannot get data from <%@>, %@", url, [error debugDescription]);
         return nil;
     }
     NSData *decryptedData = [encryptedData initWithBase64EncodedData:encryptedData
