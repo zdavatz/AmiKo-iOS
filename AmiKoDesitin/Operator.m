@@ -20,6 +20,10 @@
 @synthesize city;
 @synthesize phoneNumber;
 @synthesize emailAddress;
+@synthesize gln;
+@synthesize IBAN;
+@synthesize vatNumber;
+@synthesize zsrNumber;
 
 @synthesize signature;
 
@@ -33,6 +37,10 @@
     zipCode =       [dict objectForKey:KEY_AMK_DOC_ZIP];
     phoneNumber =   [dict objectForKey:KEY_AMK_DOC_PHONE];
     emailAddress =  [dict objectForKey:KEY_AMK_DOC_EMAIL];
+    gln =           [dict objectForKey:KEY_AMK_DOC_GLN];
+    IBAN =          [dict objectForKey:KEY_AMK_DOC_IBAN];
+    vatNumber =     [dict objectForKey:KEY_AMK_DOC_VAT];
+    zsrNumber =     [dict objectForKey:KEY_AMK_DOC_ZSR_NUMBER];
 
     if (!title) title = @"";
     if (!familyName) familyName = @"";
@@ -50,6 +58,10 @@
     doctorDict[KEY_AMK_DOC_ZIP] = self.zipCode;
     doctorDict[KEY_AMK_DOC_PHONE] = self.phoneNumber;
     doctorDict[KEY_AMK_DOC_EMAIL] = self.emailAddress;
+    doctorDict[KEY_AMK_DOC_GLN] = self.gln;
+    doctorDict[KEY_AMK_DOC_IBAN] = self.IBAN;
+    doctorDict[KEY_AMK_DOC_VAT] = self.vatNumber;
+    doctorDict[KEY_AMK_DOC_ZSR_NUMBER] = self.zsrNumber;
     return doctorDict;
 }
 
