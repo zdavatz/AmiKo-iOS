@@ -156,7 +156,8 @@
         [self.signatureView.layer setBorderColor: [[UIColor labelColor] CGColor]];
         [self.signatureView.layer setBorderWidth: 2.0];
     }
-    [self checkFields];
+    Operator *newDoctor = [self getAllFields];
+    [self validateFields:newDoctor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -189,35 +190,9 @@
     mCity.backgroundColor =
     mZipCode.backgroundColor =
     mPhone.backgroundColor =
-    mEmail.backgroundColor = [UIColor secondarySystemBackgroundColor];
-}
-
-- (void) checkFields
-{
-    UIColor *lightRed = [self getInvalidFieldColor];
-
-    [self resetFieldsColors];
-    
-    if ([self stringIsNilOrEmpty:[mGivenName text]])
-        mGivenName.backgroundColor = lightRed;
-    
-    if ([self stringIsNilOrEmpty:[mFamilyName text]])
-        mFamilyName.backgroundColor = lightRed;
-    
-    if ([self stringIsNilOrEmpty:[mPostalAddress text]])
-        mPostalAddress.backgroundColor = lightRed;
-    
-    if ([self stringIsNilOrEmpty:[mCity text]])
-        mCity.backgroundColor = lightRed;
-    
-    if ([self stringIsNilOrEmpty:[mZipCode text]])
-        mZipCode.backgroundColor = lightRed;
-    
-    if ([self stringIsNilOrEmpty:[mPhone text]])
-        mPhone.backgroundColor = lightRed;
-    
-    if ([self stringIsNilOrEmpty:[mEmail text]])
-        mEmail.backgroundColor = lightRed;
+    mEmail.backgroundColor =
+    mZsrNumber.backgroundColor =
+    mGln.backgroundColor = [UIColor secondarySystemBackgroundColor];
 }
 
 - (void) setAllFields:(Operator *)p
@@ -230,6 +205,14 @@
     
     if (p.familyName)
         [mFamilyName setText:p.familyName];
+    
+    if (p.gln) {
+        [mGln setText:p.gln];
+    }
+    
+    if (p.zsrNumber) {
+        [mZsrNumber setText:p.zsrNumber];
+    }
     
     if (p.city)
         [mCity setText:p.city];
@@ -255,6 +238,8 @@
     doctor.title = [mTitle text];
     doctor.givenName = [mGivenName text];
     doctor.familyName = [mFamilyName text];
+    doctor.gln = [mGln text];
+    doctor.zsrNumber = [mZsrNumber text];
     doctor.city = [mCity text];
     doctor.zipCode = [mZipCode text];
     doctor.postalAddress = [mPostalAddress text];
@@ -280,6 +265,23 @@
     if ([self stringIsNilOrEmpty:doctor.familyName]) {
         mFamilyName.backgroundColor = lightRed;
         valid = FALSE;
+    }
+    
+    if ([self stringIsNilOrEmpty: doctor.gln] ||
+        [doctor.gln length] != 13 ||
+        ![[@([doctor.gln integerValue]) stringValue] isEqual:doctor.gln]) {
+        mGln.backgroundColor = lightRed;
+        valid = FALSE;
+    }
+    
+    if (![self stringIsNilOrEmpty:doctor.zsrNumber]) {
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[a-zA-Z][0-9]{6}$" options:0
+                                                                                 error:nil];
+        NSTextCheckingResult *result = [regex firstMatchInString:doctor.zsrNumber options:0 range:NSMakeRange(0, doctor.zsrNumber.length)];
+        if (!result) {
+            mZsrNumber.backgroundColor = lightRed;
+            valid = FALSE;
+        }
     }
     
     if ([self stringIsNilOrEmpty:doctor.postalAddress]) {
@@ -343,6 +345,10 @@
 #pragma mark - Actions
 
 - (IBAction) saveDoctorAndClose:(id)sender {
+    Operator *newDoctor = [self getAllFields];
+    if (![self validateFields:newDoctor]) {
+        return;
+    }
     [self saveDoctor];
     // Back to main screen
     [[self revealViewController] revealToggle:nil];

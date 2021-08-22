@@ -28,6 +28,8 @@ enum {
     IBOutlet UITextField *mZipCode;
     IBOutlet UITextField *mPhone;
     IBOutlet UITextField *mEmail;
+    __weak IBOutlet UITextField *mZsrNumber;
+    __weak IBOutlet UITextField *mGln;
 }
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
