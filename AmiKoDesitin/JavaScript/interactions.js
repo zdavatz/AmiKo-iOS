@@ -40,3 +40,7 @@ function deleteRow(msg,tableID,currentRow) {
         window.alert(e);
     }
 }
+
+function callEPhaAPI() {
+    window.webkit.messageHandlers.JSToObjC_.postMessage("call_epha");
+}
