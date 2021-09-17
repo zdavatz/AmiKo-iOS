@@ -293,8 +293,8 @@
 		FAD0664F22DF2A140078E28B /* FullTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0664922DF29DC0078E28B /* FullTextEntry.m */; };
 		FAD0665222DF2A350078E28B /* FullTextDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */; };
 		FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */; };
-		FAF85BF322F44BF800730690 /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF222F44BF800730690 /* deleterow.js */; };
-		FAF85BF422F44BF800730690 /* deleterow.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF222F44BF800730690 /* deleterow.js */; };
+		FAF85BF322F44BF800730690 /* interactions.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF222F44BF800730690 /* interactions.js */; };
+		FAF85BF422F44BF800730690 /* interactions.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF222F44BF800730690 /* interactions.js */; };
 		FAF85BF622F44C1C00730690 /* main_callbacks.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF522F44C1C00730690 /* main_callbacks.js */; };
 		FAF85BF722F44C1C00730690 /* main_callbacks.js in Resources */ = {isa = PBXBuildFile; fileRef = FAF85BF522F44C1C00730690 /* main_callbacks.js */; };
 /* End PBXBuildFile section */
@@ -534,7 +534,7 @@
 		FAD0664C22DF2A080078E28B /* FullTextSearch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextSearch.m; path = AmiKoDesitin/FullTextSearch.m; sourceTree = SOURCE_ROOT; };
 		FAD0665022DF2A350078E28B /* FullTextDBAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FullTextDBAdapter.h; path = AmiKoDesitin/FullTextDBAdapter.h; sourceTree = SOURCE_ROOT; };
 		FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FullTextDBAdapter.m; path = AmiKoDesitin/FullTextDBAdapter.m; sourceTree = SOURCE_ROOT; };
-		FAF85BF222F44BF800730690 /* deleterow.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = deleterow.js; path = AmiKoDesitin/JavaScript/deleterow.js; sourceTree = SOURCE_ROOT; };
+		FAF85BF222F44BF800730690 /* interactions.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = interactions.js; path = AmiKoDesitin/JavaScript/interactions.js; sourceTree = SOURCE_ROOT; };
 		FAF85BF522F44C1C00730690 /* main_callbacks.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = main_callbacks.js; path = AmiKoDesitin/JavaScript/main_callbacks.js; sourceTree = SOURCE_ROOT; };
 		FB4AE407B2573357E5DBB181 /* Pods-CoMedDesitin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoMedDesitin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoMedDesitin/Pods-CoMedDesitin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1039,7 +1039,7 @@
 			isa = PBXGroup;
 			children = (
 				FAF85BF522F44C1C00730690 /* main_callbacks.js */,
-				FAF85BF222F44BF800730690 /* deleterow.js */,
+				FAF85BF222F44BF800730690 /* interactions.js */,
 				FA3B621322E850DB00A80296 /* CSS */,
 				D5990A6C1BDEC2A10040C4C2 /* desitin_quick.png */,
 				D5990A6D1BDEC2A10040C4C2 /* desitin_quick@2x.png */,
@@ -1305,7 +1305,7 @@
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
 				FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
-				FAF85BF322F44BF800730690 /* deleterow.js in Resources */,
+				FAF85BF322F44BF800730690 /* interactions.js in Resources */,
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
 				430285C820162C72003B2EF3 /* Localizable.strings in Resources */,
@@ -1390,7 +1390,7 @@
 				FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */,
 				FA98749E22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
-				FAF85BF422F44BF800730690 /* deleterow.js in Resources */,
+				FAF85BF422F44BF800730690 /* interactions.js in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
 				D5A2251F19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,

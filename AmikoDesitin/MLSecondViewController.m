@@ -445,6 +445,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         [self.medBasket removeAllObjects];
         [self updateInteractionBasketView];
     }
+    else if ([msg isEqualToString:@"call_epha"]) {
+        [self callEPha];
+    }
     else {
         [self.medBasket removeObjectForKey:msg];
         [self updateInteractionBasketView];
@@ -512,7 +515,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     // Load JavaScript from file
     NSString *js_Script;
     {
-        NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"deleterow" ofType:@"js"];
+        NSString *jscriptPath = [[NSBundle mainBundle] pathForResource:@"interactions" ofType:@"js"];
         NSString *jscriptStr = [NSString stringWithContentsOfFile:jscriptPath encoding:NSUTF8StringEncoding error:nil];
         js_Script = [NSString stringWithFormat:@"<script type=\"text/javascript\">%@</script>", jscriptStr];
     }
@@ -610,9 +613,13 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 
         // Add delete all button
         medBasketStr = [medBasketStr stringByAppendingFormat:@"</table>"
-                        @"<div id=\"Delete_all\"><input type=\"button\" "
-                        @"value=\"%@\" "
-                        @"onclick=\"deleteRow('Delete_all','InterTable',this)\" /></div>",
+                        @"<div id=\"Delete_all\">"
+                        @"<input type=\"button\" "
+                            @"value=\"%@\" "
+                            @"onclick=\"deleteRow('Delete_all','InterTable',this)\" "
+                        @"/>"
+                        @"<input type=\"button\" value=\"EPha API\" style=\"cursor: pointer; float:right;\" onclick=\"callEPhaAPI()\" />"
+                        @"</div>",
                         NSLocalizedString(@"Delete everything", nil)];
     }
     else {
@@ -760,6 +767,66 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                          fieldset, footnote1_par, table, footnote2_par, footnote3_par];
 
     return legend;
+}
+
+- (void)callEPha {
+    if ([medBasket count] == 0) return;
+    __weak typeof(self) _self = self;
+    NSString *lang = [MLConstants databaseLanguage];
+    NSMutableArray<NSDictionary *> *dicts = [NSMutableArray array];
+    for (NSString *name in [medBasket allKeys]) {
+        MLMedication *med = [medBasket valueForKey:name];
+//        MLMedication *med = [medCart.cart valueForKey:name];
+        NSArray *p = [med.packages componentsSeparatedByString:@"|"];
+        NSString *eanCode = [p objectAtIndex:9];
+        [dicts addObject:@{
+            @"type": @"drug",
+            @"gtin": [eanCode stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]
+        }];
+    }
+    NSData *postBody = [NSJSONSerialization dataWithJSONObject:dicts options:0 error:0];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.epha.health/clinic/advice/%@/", lang]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:postBody];
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
+                                                                               message:error.localizedDescription
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"")
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action) {}]];
+                [_self presentViewController:alert animated:YES completion:nil];
+            });
+            return;
+        }
+        NSError *decodeError = nil;
+        NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:data
+                                                                     options:0
+                                                                       error:&decodeError];
+        if (decodeError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
+                                                                               message:error.localizedDescription
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"")
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * _Nonnull action) {}]];
+                [_self presentViewController:alert animated:YES completion:nil];
+            });
+            return;
+        }
+        NSURL *url = [NSURL URLWithString:responseDict[@"data"][@"link"]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] openURL:url
+                                               options:@{}
+                                     completionHandler:^(BOOL success) {}];
+        });
+    }];
+    [task resume];
 }
 
 #pragma mark - UISearchBarDelegate methods
