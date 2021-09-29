@@ -1386,16 +1386,6 @@ static BOOL flagShowReport = false;
     // Background color of navigation bar
     {
         self.navigationController.navigationBar.translucent = NO;
-        
-        // Customize tabbar
-        UIImageSymbolConfiguration *configuration =
-            [UIImageSymbolConfiguration configurationWithPointSize:24.0
-                                                            weight:UIImageSymbolWeightLight
-                                                             scale:UIImageSymbolScaleLarge];
-        for (UITabBarItem *item in myTabBar.items) {
-            item.image = [item.image imageByApplyingSymbolConfiguration:configuration];
-            item.selectedImage = [item.selectedImage imageByApplyingSymbolConfiguration:configuration];
-        }
     }
     
     // Add search bar as title view to navigation bar
