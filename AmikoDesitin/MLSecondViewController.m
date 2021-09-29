@@ -314,6 +314,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
 
     self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.view.backgroundColor = [UIColor secondarySystemBackgroundColor];
     
     {
         UIBarButtonItem *revealButtonItem =
