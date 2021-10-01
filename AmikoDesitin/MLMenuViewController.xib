@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,11 +18,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9rv-5Y-czT">
-                    <rect key="frame" x="80" y="70" width="86" height="36"/>
+                    <rect key="frame" x="80" y="70" width="89" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Feedback">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="sendFeedback:" destination="-1" eventType="touchUpInside" id="ezv-G6-QFE"/>
@@ -32,7 +33,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Share">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="shareApp:" destination="-1" eventType="touchUpInside" id="Rkr-e0-iTq"/>
@@ -43,18 +44,18 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Rate">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="rateApp:" destination="-1" eventType="touchUpInside" id="2tf-kV-Xoa"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lsO-qt-aIx">
-                    <rect key="frame" x="80" y="202" width="59" height="36"/>
+                    <rect key="frame" x="80" y="202" width="86" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Report">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="showReport:" destination="-1" eventType="touchUpInside" id="hOk-P3-UlG"/>
@@ -65,29 +66,29 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Update">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="startUpdate:" destination="-1" eventType="touchUpInside" id="539-Yf-XbY"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j0a-FG-To1">
-                    <rect key="frame" x="80" y="290" width="70" height="36"/>
+                    <rect key="frame" x="80" y="290" width="89" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Patients">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="showPatients:" destination="-1" eventType="touchUpInside" id="qzq-UA-Qwi"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="fill" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ch3-kH-DLX">
-                    <rect key="frame" x="80" y="334" width="59" height="36"/>
+                    <rect key="frame" x="80" y="334" width="86" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Doctor">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="showDoctor:" destination="-1" eventType="touchUpInside" id="tVF-5X-LYe"/>
@@ -98,7 +99,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Settings...">
-                        <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="titleColor" systemColor="labelColor"/>
                     </state>
                     <connections>
                         <action selector="showSettings:" destination="-1" eventType="touchUpInside" id="qYc-NI-H86"/>
@@ -137,18 +138,24 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
             <point key="canvasLocation" x="131.25" y="93.75"/>
         </view>
     </objects>
     <resources>
-        <image name="captions.bubble" catalog="system" width="64" height="54"/>
-        <image name="exclamationmark.bubble" catalog="system" width="64" height="54"/>
-        <image name="folder.badge.person.crop" catalog="system" width="64" height="42"/>
-        <image name="gear" catalog="system" width="64" height="58"/>
-        <image name="hand.thumbsup" catalog="system" width="64" height="64"/>
-        <image name="person" catalog="system" width="64" height="58"/>
-        <image name="square.and.arrow.down" catalog="system" width="60" height="64"/>
-        <image name="square.and.arrow.up" catalog="system" width="56" height="64"/>
+        <image name="captions.bubble" catalog="system" width="128" height="110"/>
+        <image name="exclamationmark.bubble" catalog="system" width="128" height="110"/>
+        <image name="folder.badge.person.crop" catalog="system" width="128" height="91"/>
+        <image name="gear" catalog="system" width="128" height="119"/>
+        <image name="hand.thumbsup" catalog="system" width="128" height="128"/>
+        <image name="person" catalog="system" width="128" height="117"/>
+        <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
+        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>
