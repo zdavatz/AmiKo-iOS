@@ -446,8 +446,14 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         [self.medBasket removeAllObjects];
         [self updateInteractionBasketView];
     }
-    else if ([msg isEqualToString:@"call_epha"]) {
-        [self callEPha];
+    else if ([msg hasPrefix:@"open_link:"]) {
+        NSString *urlString = [msg stringByReplacingOccurrencesOfString:@"open_link:" withString:@""];
+        if ([urlString length]) {
+            NSURL *url = [NSURL URLWithString:urlString];
+            [[UIApplication sharedApplication] openURL:url
+                                               options:@{}
+                                     completionHandler:^(BOOL success) {}];
+        }
     }
     else {
         [self.medBasket removeObjectForKey:msg];
@@ -533,15 +539,20 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
             js_Script,
             color_Style,
             interactions_Style];
-    
-    NSString *html_Body = [NSString stringWithFormat:@"<body><div id=\"interactions\">%@<br><br>%@<br>%@</div></body>",
-            [self medBasketHtml],
-            [self interactionsHtml],
-            [self footNoteHtml]];
-    
-    self.htmlStr = [NSString stringWithFormat:@"<!DOCTYPE html><html>\n%@\n%@\n</html>", html_Head, html_Body];
 
-    [self updateWebView];
+    __weak typeof(self) _self = self;
+    [self medBasketHtmlWithCompletion:^(NSString *html) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *html_Body = [NSString stringWithFormat:@"<body><div id=\"interactions\">%@<br><br>%@<br>%@</div></body>",
+                    html,
+                    [_self interactionsHtml],
+                    [_self footNoteHtml]];
+            
+            _self.htmlStr = [NSString stringWithFormat:@"<!DOCTYPE html><html>\n%@\n%@\n</html>", html_Head, html_Body];
+
+            [_self updateWebView];
+        });
+    }];
 }
 
 /** 
@@ -577,58 +588,68 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
 /** 
  Creates interaction basket HTML string
  */
-- (NSString *) medBasketHtml
+- (void) medBasketHtmlWithCompletion:(void (^) (NSString *html))callback
 {
-    // basket_html_str + delete_all_button_str + "<br><br>" + top_note_html_str
-    int medCnt = 0;
-    NSString *medBasketStr = [NSString stringWithFormat:
-                              @"<div id=\"Medikamentenkorb\"><fieldset><legend>%@</legend></fieldset></div>"
-                              @"<table id=\"InterTable\" width=\"100%%25\">",
-                              NSLocalizedString(@"Drugs Basket", nil)];
-    
-    // Check if there are meds in the "Medikamentenkorb"
-    if ([medBasket count]>0) {
-        // First sort them alphabetically
-        NSArray *sortedNames = [[medBasket allKeys] sortedArrayUsingSelector: @selector(compare:)];
-        // Loop through all meds
-        for (NSString *name in sortedNames) {
-            MLMedication *med = [medBasket valueForKey:name];
-            NSArray *m_code = [[med atccode] componentsSeparatedByString:@";"];
-            NSString *atc_code = @"k.A.";
-            NSString *active_ingredient = @"k.A";
-            if ([m_code count]>1) {
-                atc_code = [m_code objectAtIndex:0];
-                active_ingredient = [m_code objectAtIndex:1];
+    __weak typeof(self) _self = self;
+    [self callEPhaWithCompletion:^(NSError * _Nullable error, NSDictionary * _Nullable ephaDict) {
+        // basket_html_str + delete_all_button_str + "<br><br>" + top_note_html_str
+        int medCnt = 0;
+        NSString *medBasketStr = [NSString stringWithFormat:
+                                  @"<div id=\"Medikamentenkorb\"><fieldset><legend>%@</legend></fieldset></div>"
+                                  @"<table id=\"InterTable\" width=\"100%%25\">",
+                                  NSLocalizedString(@"Drugs Basket", nil)];
+        
+        // Check if there are meds in the "Medikamentenkorb"
+        if ([_self.medBasket count]>0) {
+            // First sort them alphabetically
+            NSArray *sortedNames = [[_self.medBasket allKeys] sortedArrayUsingSelector: @selector(compare:)];
+            // Loop through all meds
+            for (NSString *name in sortedNames) {
+                MLMedication *med = [_self.medBasket valueForKey:name];
+                NSArray *m_code = [[med atccode] componentsSeparatedByString:@";"];
+                NSString *atc_code = @"k.A.";
+                NSString *active_ingredient = @"k.A";
+                if ([m_code count]>1) {
+                    atc_code = [m_code objectAtIndex:0];
+                    active_ingredient = [m_code objectAtIndex:1];
+                }
+                // Increment med counter
+                medCnt++;
+                // Update medication basket
+                medBasketStr = [medBasketStr stringByAppendingFormat:@"<tr>"
+                                @"<td>%d</td>"
+                                @"<td>%@</td>"
+                                @"<td>%@</td>"
+                                @"<td>%@</td>"
+                                @"<td align=\"right\"><input type=\"image\" src=\"217-trash.png\" onclick=\"deleteRow('Single','InterTable',this)\" />"
+                                @"</tr>", medCnt, name, atc_code, active_ingredient];
             }
-            // Increment med counter
-            medCnt++;
-            // Update medication basket
-            medBasketStr = [medBasketStr stringByAppendingFormat:@"<tr>"
-                            @"<td>%d</td>"
-                            @"<td>%@</td>"
-                            @"<td>%@</td>"
-                            @"<td>%@</td>"
-                            @"<td align=\"right\"><input type=\"image\" src=\"217-trash.png\" onclick=\"deleteRow('Single','InterTable',this)\" />"
-                            @"</tr>", medCnt, name, atc_code, active_ingredient];
-        }
+            
+            medBasketStr = [medBasketStr stringByAppendingString:@"</table>"];
 
-        // Add delete all button
-        medBasketStr = [medBasketStr stringByAppendingFormat:@"</table>"
-                        @"<div id=\"Delete_all\">"
-                        @"<input type=\"button\" "
-                            @"value=\"%@\" "
-                            @"onclick=\"deleteRow('Delete_all','InterTable',this)\" "
-                        @"/>"
-                        @"<input type=\"button\" value=\"EPha API\" style=\"cursor: pointer; float:right;\" onclick=\"callEPhaAPI()\" />"
-                        @"</div>",
-                        NSLocalizedString(@"Delete everything", nil)];
-    }
-    else {
-        medBasketStr = [NSString stringWithFormat:@"<div>%@<br><br></div>",
-                        NSLocalizedString(@"Your medicine basket is empty", nil)];
-    }
-    
-    return medBasketStr;
+            NSString *ephaLink = @"";
+            if (ephaDict) {
+                medBasketStr = [medBasketStr stringByAppendingString:[_self htmlForEPhaResponse:ephaDict]];
+                ephaLink = ephaDict[@"link"];
+            }
+
+            // Add delete all button
+            medBasketStr = [medBasketStr stringByAppendingFormat:
+                            @"<div id=\"Delete_all\">"
+                            @"<input type=\"button\" "
+                                @"value=\"%@\" "
+                                @"onclick=\"deleteRow('Delete_all','InterTable',this)\" "
+                            @"/>"
+                            @"<input type=\"button\" value=\"EPha API\" style=\"cursor: pointer; float:right;\" onclick=\"openLinkNative('%@')\" />"
+                            @"</div>",
+                            NSLocalizedString(@"Delete everything", nil), ephaLink];
+        }
+        else {
+            medBasketStr = [NSString stringWithFormat:@"<div>%@<br><br></div>",
+                            NSLocalizedString(@"Your medicine basket is empty", nil)];
+        }
+        callback(medBasketStr);
+    }];
 }
 
 - (NSString *) topNoteHtml
@@ -770,14 +791,17 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     return legend;
 }
 
-- (void)callEPha {
-    if ([medBasket count] == 0) return;
-    __weak typeof(self) _self = self;
-    NSString *lang = [MLConstants databaseLanguage];
+- (void)callEPhaWithCompletion:(void (^)(NSError * _Nullable error, NSDictionary * _Nullable dict))callback {
+    if ([medBasket count] == 0) {
+        callback(nil, nil);
+        return;
+    }
+    // Call once first so it shows page before response is available
+    callback(nil, nil);
+    NSString *lang = [MLConstants databaseLanguage] ? @"fr" : @"de";
     NSMutableArray<NSDictionary *> *dicts = [NSMutableArray array];
     for (NSString *name in [medBasket allKeys]) {
         MLMedication *med = [medBasket valueForKey:name];
-//        MLMedication *med = [medCart.cart valueForKey:name];
         NSArray *p = [med.packages componentsSeparatedByString:@"|"];
         NSString *eanCode = [p objectAtIndex:9];
         [dicts addObject:@{
@@ -793,15 +817,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [request setHTTPBody:postBody];
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
-                                                                               message:error.localizedDescription
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"")
-                                                          style:UIAlertActionStyleDefault
-                                                        handler:^(UIAlertAction * _Nonnull action) {}]];
-                [_self presentViewController:alert animated:YES completion:nil];
-            });
+            callback(error, nil);
             return;
         }
         NSError *decodeError = nil;
@@ -809,25 +825,108 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                                                                      options:0
                                                                        error:&decodeError];
         if (decodeError) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
-                                                                               message:error.localizedDescription
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"")
-                                                          style:UIAlertActionStyleDefault
-                                                        handler:^(UIAlertAction * _Nonnull action) {}]];
-                [_self presentViewController:alert animated:YES completion:nil];
-            });
+            callback(error, nil);
             return;
         }
-        NSURL *url = [NSURL URLWithString:responseDict[@"data"][@"link"]];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication] openURL:url
-                                               options:@{}
-                                     completionHandler:^(BOOL success) {}];
-        });
+        int code = [responseDict[@"meta"][@"code"] intValue];
+        if (code >= 200 && code < 300) {
+            callback(nil, responseDict[@"data"]);
+            return;
+        }
+        callback([NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{
+            NSLocalizedDescriptionKey: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
+        }], nil);
     }];
     [task resume];
+}
+
+- (NSString *)htmlForEPhaResponse:(NSDictionary *)dictionary {
+    int safety = [dictionary[@"safety"] intValue];
+    int kinetic = [dictionary[@"risk"][@"kinetic"] intValue];
+    int qtc = [dictionary[@"risk"][@"qtc"] intValue];
+    int warning = [dictionary[@"risk"][@"warning"] intValue];
+    int serotonerg = [dictionary[@"risk"][@"serotonerg"] intValue];
+    int anticholinergic = [dictionary[@"risk"][@"anticholinergic"] intValue];
+    int adverse = [dictionary[@"risk"][@"adverse"] intValue];
+
+    NSMutableString *htmlStr = [NSMutableString string];
+    NSString *language = [MLConstants databaseLanguage];
+    BOOL isGermanApp = [language isEqual:@"de"];
+    
+    if (isGermanApp) {
+        [htmlStr appendString: @"Sicherheit<BR>"];
+        [htmlStr appendString: @"<p class='risk-description'>Je höher die Sicherheit, desto sicherer die Kombination.</p>"];
+    } else {
+        [htmlStr appendString: @"Sécurité<BR>"];
+        [htmlStr appendString: @"<p class='risk-description'>Plus la sécurité est élevée, plus la combinaison est sûre.</p>"];
+    }
+
+    [htmlStr appendString: @"<div class='risk'>100"];
+    [htmlStr appendFormat: @"<div class='gradient'>"
+        @"<div class='pin' style='left: %d%%'>%d</div>"
+        @"</div>", (100-safety), safety];
+    [htmlStr appendString: @"0</div><BR><BR>"];
+
+    if (isGermanApp) {
+        [htmlStr appendString: @"Risikofaktoren<BR>"];
+        [htmlStr appendString: @"<p class='risk-description'>Je tiefer das Risiko, desto sicherer die Kombination.</p>"];
+    } else {
+        [htmlStr appendString: @"Facteurs de risque<BR>"];
+        [htmlStr appendString: @"<p class='risk-description'>Plus le risque est faible, plus la combinaison est sûre.</p>"];
+    }
+
+    [htmlStr appendString: @"<table class='risk-table'>"];
+    [htmlStr appendString: @"<tr><td class='risk-name'>"];
+    [htmlStr appendString: isGermanApp ? @"Pharmakokinetik" : @"Pharmacocinétique"];
+    [htmlStr appendString: @"</td>"];
+    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<div class='risk'>0"];
+    [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", kinetic, kinetic];
+    [htmlStr appendString: @"100</div>"];
+    [htmlStr appendString: @"</td></tr>"];
+    [htmlStr appendString: @"<tr><td class='risk-name'>"];
+    [htmlStr appendString: isGermanApp ? @"Verlängerung der QT-Zeit" : @"Allongement du temps QT"];
+    [htmlStr appendString: @"</td>"];
+    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<div class='risk'>0"];
+    [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", qtc, qtc];
+    [htmlStr appendString: @"100</div>"];
+    [htmlStr appendString: @"</td></tr>"];
+    [htmlStr appendString: @"<tr><td class='risk-name'>"];
+    [htmlStr appendString: isGermanApp ? @"Warnhinweise" : @"Avertissements"];
+    [htmlStr appendString: @"</td>"];
+    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<div class='risk'>0"];
+    [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", warning, warning];
+    [htmlStr appendString: @"100</div>"];
+    [htmlStr appendString: @"</td></tr>"];
+    [htmlStr appendString: @"<tr><td class='risk-name'>"];
+    [htmlStr appendFormat: isGermanApp ? @"Serotonerge Effekte" : @"Effets sérotoninergiques"];
+    [htmlStr appendString: @"</td>"];
+    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<div class='risk'>0"];
+    [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", serotonerg, serotonerg];
+    [htmlStr appendString: @"100</div>"];
+    [htmlStr appendString: @"</td></tr>"];
+    [htmlStr appendString: @"<tr><td class='risk-name'>"];
+    [htmlStr appendString: isGermanApp ? @"Anticholinerge Effekte" : @"Effets anticholinergiques"];
+    [htmlStr appendString: @"</td>"];
+    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<div class='risk'>0"];
+    [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", anticholinergic, anticholinergic];
+    [htmlStr appendString: @"100</div>"];
+    [htmlStr appendString: @"</td></tr>"];
+    [htmlStr appendString: @"<tr><td class='risk-name'>"];
+    [htmlStr appendString: isGermanApp ? @"Allgemeine Nebenwirkungen" : @"Effets secondaires généraux"];
+    [htmlStr appendString: @"</td>"];
+    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<div class='risk'>0"];
+    [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", adverse, adverse];
+    [htmlStr appendString: @"100</div>"];
+    [htmlStr appendString: @"</td></tr>"];
+    [htmlStr appendString: @"</table>"];
+    
+    return htmlStr;
 }
 
 #pragma mark - UISearchBarDelegate methods
