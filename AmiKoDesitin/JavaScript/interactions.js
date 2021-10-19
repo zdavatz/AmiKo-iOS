@@ -41,6 +41,6 @@ function deleteRow(msg,tableID,currentRow) {
     }
 }
 
-function callEPhaAPI() {
-    window.webkit.messageHandlers.JSToObjC_.postMessage("call_epha");
+function openLinkNative(url) {
+    window.webkit.messageHandlers.JSToObjC_.postMessage("open_link:" + url);
 }
