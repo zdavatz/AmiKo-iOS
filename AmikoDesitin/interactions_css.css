@@ -68,3 +68,7 @@ div.gradient .pin::after {
 .risk-name {
     width: 300px;
 }
+
+.risk-value {
+    min-width: 250px;
+}

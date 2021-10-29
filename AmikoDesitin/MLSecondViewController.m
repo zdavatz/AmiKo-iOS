@@ -632,7 +632,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                 medBasketStr = [medBasketStr stringByAppendingString:[_self htmlForEPhaResponse:ephaDict]];
                 ephaLink = ephaDict[@"link"];
             }
-
+            NSString *ephaButtonStr = [[MLConstants databaseLanguage] isEqual:@"de"] ? @"EPha API Details anzeigen" : @"Afficher les détails de l'API EPha";
             // Add delete all button
             medBasketStr = [medBasketStr stringByAppendingFormat:
                             @"<div id=\"Delete_all\">"
@@ -640,9 +640,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                                 @"value=\"%@\" "
                                 @"onclick=\"deleteRow('Delete_all','InterTable',this)\" "
                             @"/>"
-                            @"<input type=\"button\" value=\"EPha API\" style=\"cursor: pointer; float:right;\" onclick=\"openLinkNative('%@')\" />"
+                            @"<input type=\"button\" value=\"%@\" style=\"cursor: pointer; float:right;\" onclick=\"openLinkNative('%@')\" />"
                             @"</div>",
-                            NSLocalizedString(@"Delete everything", nil), ephaLink];
+                            NSLocalizedString(@"Delete everything", nil), ephaButtonStr, ephaLink];
         }
         else {
             medBasketStr = [NSString stringWithFormat:@"<div>%@<br><br></div>",
@@ -879,7 +879,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [htmlStr appendString: @"<tr><td class='risk-name'>"];
     [htmlStr appendString: isGermanApp ? @"Pharmakokinetik" : @"Pharmacocinétique"];
     [htmlStr appendString: @"</td>"];
-    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<td class='risk-value'>"];
     [htmlStr appendString: @"<div class='risk'>0"];
     [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", kinetic, kinetic];
     [htmlStr appendString: @"100</div>"];
@@ -887,7 +887,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [htmlStr appendString: @"<tr><td class='risk-name'>"];
     [htmlStr appendString: isGermanApp ? @"Verlängerung der QT-Zeit" : @"Allongement du temps QT"];
     [htmlStr appendString: @"</td>"];
-    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<td class='risk-value'>"];
     [htmlStr appendString: @"<div class='risk'>0"];
     [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", qtc, qtc];
     [htmlStr appendString: @"100</div>"];
@@ -895,7 +895,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [htmlStr appendString: @"<tr><td class='risk-name'>"];
     [htmlStr appendString: isGermanApp ? @"Warnhinweise" : @"Avertissements"];
     [htmlStr appendString: @"</td>"];
-    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<td class='risk-value'>"];
     [htmlStr appendString: @"<div class='risk'>0"];
     [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", warning, warning];
     [htmlStr appendString: @"100</div>"];
@@ -903,7 +903,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [htmlStr appendString: @"<tr><td class='risk-name'>"];
     [htmlStr appendFormat: isGermanApp ? @"Serotonerge Effekte" : @"Effets sérotoninergiques"];
     [htmlStr appendString: @"</td>"];
-    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<td class='risk-value'>"];
     [htmlStr appendString: @"<div class='risk'>0"];
     [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", serotonerg, serotonerg];
     [htmlStr appendString: @"100</div>"];
@@ -911,7 +911,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [htmlStr appendString: @"<tr><td class='risk-name'>"];
     [htmlStr appendString: isGermanApp ? @"Anticholinerge Effekte" : @"Effets anticholinergiques"];
     [htmlStr appendString: @"</td>"];
-    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<td class='risk-value'>"];
     [htmlStr appendString: @"<div class='risk'>0"];
     [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", anticholinergic, anticholinergic];
     [htmlStr appendString: @"100</div>"];
@@ -919,7 +919,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     [htmlStr appendString: @"<tr><td class='risk-name'>"];
     [htmlStr appendString: isGermanApp ? @"Allgemeine Nebenwirkungen" : @"Effets secondaires généraux"];
     [htmlStr appendString: @"</td>"];
-    [htmlStr appendString: @"<td>"];
+    [htmlStr appendString: @"<td class='risk-value'>"];
     [htmlStr appendString: @"<div class='risk'>0"];
     [htmlStr appendFormat: @"<div class='gradient'><div class='pin' style='left: %d%%'>%d</div></div>", adverse, adverse];
     [htmlStr appendString: @"100</div>"];
