@@ -632,7 +632,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                 medBasketStr = [medBasketStr stringByAppendingString:[_self htmlForEPhaResponse:ephaDict]];
                 ephaLink = ephaDict[@"link"];
             }
-
+            NSString *ephaButtonStr = [[MLConstants databaseLanguage] isEqual:@"de"] ? @"EPha API Details anzeigen" : @"Afficher les détails de l'API EPha";
             // Add delete all button
             medBasketStr = [medBasketStr stringByAppendingFormat:
                             @"<div id=\"Delete_all\">"
@@ -640,9 +640,9 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                                 @"value=\"%@\" "
                                 @"onclick=\"deleteRow('Delete_all','InterTable',this)\" "
                             @"/>"
-                            @"<input type=\"button\" value=\"EPha API\" style=\"cursor: pointer; float:right;\" onclick=\"openLinkNative('%@')\" />"
+                            @"<input type=\"button\" value=\"%@\" style=\"cursor: pointer; float:right;\" onclick=\"openLinkNative('%@')\" />"
                             @"</div>",
-                            NSLocalizedString(@"Delete everything", nil), ephaLink];
+                            NSLocalizedString(@"Delete everything", nil), ephaButtonStr, ephaLink];
         }
         else {
             medBasketStr = [NSString stringWithFormat:@"<div>%@<br><br></div>",
