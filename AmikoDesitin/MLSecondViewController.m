@@ -798,7 +798,7 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
     }
     // Call once first so it shows page before response is available
     callback(nil, nil);
-    NSString *lang = [MLConstants databaseLanguage] ? @"fr" : @"de";
+    NSString *lang = [MLConstants databaseLanguage];
     NSMutableArray<NSDictionary *> *dicts = [NSMutableArray array];
     for (NSString *name in [medBasket allKeys]) {
         MLMedication *med = [medBasket valueForKey:name];
