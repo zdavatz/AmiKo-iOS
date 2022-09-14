@@ -2689,6 +2689,7 @@ static BOOL flagShowReport = false;
             otherViewNavigationController = nil;
         }
         otherViewNavigationController = [[UINavigationController alloc] initWithRootViewController:fullTextVC];
+        otherViewNavigationController.view.backgroundColor = [UIColor secondarySystemBackgroundColor];
 
         // Show FullTextViewController (WKWebView)
         [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
