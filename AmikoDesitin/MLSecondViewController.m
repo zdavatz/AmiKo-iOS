@@ -269,7 +269,17 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         }
 
         [self updateFindCounterLabel];
-        self.navigationItem.titleView = searchBarView;
+        
+        // Workaround navigation bar title view bug
+        // For some reason if we add the searchBarView directly, the size would be 0
+        // https://github.com/zdavatz/AmiKo-iOS/issues/141
+        if (searchBarView.superview) {
+            [searchBarView removeFromSuperview];
+        }
+        self.navigationItem.titleView = [[UIView alloc] init];
+        self.navigationItem.titleView.frame = CGRectMake(0, 0, 270, 44);
+        [self.navigationItem.titleView addSubview:searchBarView];
+        searchBarView.frame = self.navigationItem.titleView.frame;
         self.edgesForExtendedLayout = UIRectEdgeNone;
     } // iPhone
     
