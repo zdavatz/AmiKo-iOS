@@ -189,6 +189,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     mainViewController = [MLViewController new];
     UINavigationController *mainViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    mainViewNavigationController.view.backgroundColor = [UIColor secondarySystemBackgroundColor];
 
     // Front
     MLSecondViewController *secondViewController = [MLSecondViewController new];
