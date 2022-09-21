@@ -88,11 +88,12 @@ if [ $STEP_CREATE_IPA ] ; then
 #PRODUCT_BUNDLE_IDENTIFIER=org.oddb.generika
 #PROVISIONING_PROFILE_SPECIFIER="Zeno Davatz"
 pushd ../
-for f in $ARCHIVE_PATH/*.xcarchive ; do
-  echo "Export the .ipa from $f"
+for SCHEME in AmiKoDesitin CoMedDesitin ; do
+  XC_ARCHIVE_PATH="$ARCHIVE_PATH/$SCHEME $TIMESTAMP2.xcarchive"
+  echo "Export the .ipa from $XC_ARCHIVE_PATH"
   xcodebuild -exportArchive \
    -verbose \
-   -archivePath "$f" \
+   -archivePath "$XC_ARCHIVE_PATH" \
    -exportOptionsPlist $WD/store.plist \
    -exportPath "$PKG_PATH"
 done

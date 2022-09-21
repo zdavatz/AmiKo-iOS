@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>compileBitcode</key>
-	<true/>
+	<false/>
 	<key>method</key>
 	<string>app-store</string>
 	<key>teamID</key>
 	<string>4B37356EGR</string>
 	<key>uploadBitcode</key>
-	<true/>
+	<false/>
 	<key>uploadSymbols</key>
 	<true/>
 </dict>
