@@ -67,6 +67,8 @@
         self.auth = m.auth;
         self.atccode = m.atccode;
         self.regnrs = m.regnrs;
+        
+        self.medication = m;
     }
 
     return self;

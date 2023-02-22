@@ -943,12 +943,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
         // Add med to medication basket
         // We must build a dictionary of MLMedication, not of Product
-        MLMedication *m = [MLMedication new];
-        m.regnrs = p.regnrs;
-        m.auth = p.auth;        // owner
-        m.atccode = p.atccode;  // We only need this one for interactions
-        m.title = p.title;
-        [medBasket setObject:m forKey:title];
+        if (p.medication) {
+            [medBasket setObject:p.medication forKey:title];
+        } else {
+            MLDBAdapter *db = [MLDBAdapter sharedInstance];
+            MLMedication *m = [db getMediWithRegnr:p.regnrs];
+            [medBasket setObject:m forKey:title];
+        }
     }
 
     UIViewController *nc_rear = self.revealViewController.rearViewController;

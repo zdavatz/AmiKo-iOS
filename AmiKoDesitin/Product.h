@@ -34,6 +34,8 @@
 @property (atomic, copy) NSString *regnrs;                  // regnrs
 @property (atomic, copy) NSString *atccode;                 // atccode
 
+@property (nonatomic, strong) MLMedication *medication;          // For Product -> Medication restoration
+
 - (instancetype) initWithMedication:(MLMedication *)m  :(NSInteger)packageIndex;
 - (instancetype) initWithDict:(NSDictionary *)dict;
 
