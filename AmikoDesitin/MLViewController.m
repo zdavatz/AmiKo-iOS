@@ -2561,6 +2561,7 @@ static BOOL flagShowReport = false;
     }
     otherViewNavigationController =
         [[UINavigationController alloc] initWithRootViewController:prescriptionViewController];
+    otherViewNavigationController.view.backgroundColor = [UIColor secondarySystemBackgroundColor];
     [mainRevealController setFrontViewController:otherViewNavigationController animated:YES];
 
     //
