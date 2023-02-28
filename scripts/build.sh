@@ -78,7 +78,8 @@ for SCHEME in AmiKoDesitin CoMedDesitin ; do
     -scheme $SCHEME \
     -configuration Release \
     -derivedDataPath "build/DerivedData" \
-    -archivePath "$ARCHIVE_PATH/$SCHEME $TIMESTAMP2.xcarchive"
+    -archivePath "$ARCHIVE_PATH/$SCHEME $TIMESTAMP2.xcarchive" \
+    -allowProvisioningUpdates
 done
 popd > /dev/null
 fi
@@ -95,7 +96,8 @@ for SCHEME in AmiKoDesitin CoMedDesitin ; do
    -verbose \
    -archivePath "$XC_ARCHIVE_PATH" \
    -exportOptionsPlist $WD/store.plist \
-   -exportPath "$PKG_PATH"
+   -exportPath "$PKG_PATH" \
+   -allowProvisioningUpdates
 done
 popd > /dev/null
 fi
