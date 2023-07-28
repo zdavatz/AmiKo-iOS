@@ -60,6 +60,14 @@
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
 		CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CF8664E82A6FF71700D1D81E /* MLHINTokens.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */; };
+		CF8664E92A6FF71700D1D81E /* MLHINTokens.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */; };
+		CF8664EA2A6FF71700D1D81E /* MLHINADSwissSaml.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DF2A6FF71700D1D81E /* MLHINADSwissSaml.m */; };
+		CF8664EB2A6FF71700D1D81E /* MLHINADSwissSaml.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DF2A6FF71700D1D81E /* MLHINADSwissSaml.m */; };
+		CF8664EC2A6FF71700D1D81E /* MLHINProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664E12A6FF71700D1D81E /* MLHINProfile.m */; };
+		CF8664ED2A6FF71700D1D81E /* MLHINProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664E12A6FF71700D1D81E /* MLHINProfile.m */; };
+		CF8664EE2A6FF71700D1D81E /* MLHINClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664E22A6FF71700D1D81E /* MLHINClient.m */; };
+		CF8664EF2A6FF71700D1D81E /* MLHINClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664E22A6FF71700D1D81E /* MLHINClient.m */; };
 		CF8F50FB25176706007D62B5 /* MLPatientSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8F50FA25176706007D62B5 /* MLPatientSync.m */; };
 		CF8F50FC25176706007D62B5 /* MLPatientSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8F50FA25176706007D62B5 /* MLPatientSync.m */; };
 		CFA5207224235F8A00834E16 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207024235F8A00834E16 /* Model.xcdatamodeld */; };
@@ -349,6 +357,15 @@
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
 		CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPersistenceManager.m; path = AmiKoDesitin/Persistence/MLPersistenceManager.m; sourceTree = SOURCE_ROOT; };
+		CF8664DD2A6FF71700D1D81E /* MLHINClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLHINClient.h; sourceTree = "<group>"; };
+		CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLHINTokens.m; sourceTree = "<group>"; };
+		CF8664DF2A6FF71700D1D81E /* MLHINADSwissSaml.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLHINADSwissSaml.m; sourceTree = "<group>"; };
+		CF8664E02A6FF71700D1D81E /* MLHINClientCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLHINClientCredential.h; sourceTree = "<group>"; };
+		CF8664E12A6FF71700D1D81E /* MLHINProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLHINProfile.m; sourceTree = "<group>"; };
+		CF8664E22A6FF71700D1D81E /* MLHINClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLHINClient.m; sourceTree = "<group>"; };
+		CF8664E42A6FF71700D1D81E /* MLHINADSwissSaml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLHINADSwissSaml.h; sourceTree = "<group>"; };
+		CF8664E62A6FF71700D1D81E /* MLHINProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLHINProfile.h; sourceTree = "<group>"; };
+		CF8664E72A6FF71700D1D81E /* MLHINTokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLHINTokens.h; sourceTree = "<group>"; };
 		CF8F50F925176706007D62B5 /* MLPatientSync.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPatientSync.h; path = "AmiKoDesitin/Persistence/iCloud patient sync/MLPatientSync.h"; sourceTree = SOURCE_ROOT; };
 		CF8F50FA25176706007D62B5 /* MLPatientSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPatientSync.m; path = "AmiKoDesitin/Persistence/iCloud patient sync/MLPatientSync.m"; sourceTree = SOURCE_ROOT; };
 		CFA5207124235F8A00834E16 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -815,6 +832,22 @@
 			path = Persistence;
 			sourceTree = "<group>";
 		};
+		CF8664DC2A6FF6EF00D1D81E /* HINClient */ = {
+			isa = PBXGroup;
+			children = (
+				CF8664E42A6FF71700D1D81E /* MLHINADSwissSaml.h */,
+				CF8664DF2A6FF71700D1D81E /* MLHINADSwissSaml.m */,
+				CF8664DD2A6FF71700D1D81E /* MLHINClient.h */,
+				CF8664E22A6FF71700D1D81E /* MLHINClient.m */,
+				CF8664E02A6FF71700D1D81E /* MLHINClientCredential.h */,
+				CF8664E62A6FF71700D1D81E /* MLHINProfile.h */,
+				CF8664E12A6FF71700D1D81E /* MLHINProfile.m */,
+				CF8664E72A6FF71700D1D81E /* MLHINTokens.h */,
+				CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */,
+			);
+			path = HINClient;
+			sourceTree = "<group>";
+		};
 		CF8F50F8251766D1007D62B5 /* iCloud patient sync */ = {
 			isa = PBXGroup;
 			children = (
@@ -1008,6 +1041,7 @@
 				FAD0665122DF2A350078E28B /* FullTextDBAdapter.m */,
 				FAD0664B22DF2A080078E28B /* FullTextSearch.h */,
 				FAD0664C22DF2A080078E28B /* FullTextSearch.m */,
+				CF8664DC2A6FF6EF00D1D81E /* HINClient */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1478,6 +1512,7 @@
 				D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */,
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
 				CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */,
+				CF8664E82A6FF71700D1D81E /* MLHINTokens.m in Sources */,
 				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
@@ -1489,7 +1524,9 @@
 				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4521A990E8600C4F589 /* MLAlertView.m in Sources */,
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
+				CF8664EC2A6FF71700D1D81E /* MLHINProfile.m in Sources */,
 				CFA5207824235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
+				CF8664EE2A6FF71700D1D81E /* MLHINClient.m in Sources */,
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				FA20BD252360874E0092CBBE /* UpdateManager.m in Sources */,
@@ -1509,6 +1546,7 @@
 				D5A6F2A117B16C4B00EAB24B /* MLSimpleTableCell.m in Sources */,
 				D5A6F2A217B16C4B00EAB24B /* MLSQLiteDatabase.m in Sources */,
 				FA4263712058117B00C2269E /* MLViewController.m in Sources */,
+				CF8664EA2A6FF71700D1D81E /* MLHINADSwissSaml.m in Sources */,
 				D5A31F5C18B5207200F56BC5 /* zip.c in Sources */,
 				D5A31F4918B51F2A00F56BC5 /* MLCustomURLConnection.m in Sources */,
 				43A3851320333147001A5849 /* BaseListViewController.m in Sources */,
@@ -1540,6 +1578,7 @@
 				D5A31F5918B5207200F56BC5 /* mztools.c in Sources */,
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
 				CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */,
+				CF8664E92A6FF71700D1D81E /* MLHINTokens.m in Sources */,
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
@@ -1551,7 +1590,9 @@
 				930D94B22077E5A9007E4629 /* DoctorViewController.m in Sources */,
 				D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */,
 				930D94BA2077E641007E4629 /* Operator.m in Sources */,
+				CF8664ED2A6FF71700D1D81E /* MLHINProfile.m in Sources */,
 				CFA5207924235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
+				CF8664EF2A6FF71700D1D81E /* MLHINClient.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,
 				FA20BD262360874E0092CBBE /* UpdateManager.m in Sources */,
@@ -1571,6 +1612,7 @@
 				930D94B82077E610007E4629 /* BaseListViewController.m in Sources */,
 				930D94AF2077E50C007E4629 /* ContactsListViewController.m in Sources */,
 				D5F6BB5B17E8C87500DCBD16 /* MLSQLiteDatabase.m in Sources */,
+				CF8664EB2A6FF71700D1D81E /* MLHINADSwissSaml.m in Sources */,
 				43A385052032B92F001A5849 /* MLMenuViewController.m in Sources */,
 				D5A31F5D18B5207200F56BC5 /* zip.c in Sources */,
 				930D94B92077E62C007E4629 /* PrescriptionViewController.m in Sources */,
