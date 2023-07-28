@@ -19,3 +19,4 @@ build_comed.sh
 Podfile.lock
 Pods/
 tessdata/
+AmiKoDesitin/HINClient/MLHINClientCredential.h

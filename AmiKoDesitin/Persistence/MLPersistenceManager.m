@@ -17,6 +17,10 @@
 #import "MLPatientSync.h"
 
 #define KEY_PERSISTENCE_SOURCE @"KEY_PERSISTENCE_SOURCE"
+#define KEY_PERSISTENCE_HIN_SDS_TOKENS @"KEY_PERSISTENCE_HIN_SDS_TOKENS"
+#define KEY_PERSISTENCE_HIN_ADSWISS_TOKENS @"KEY_PERSISTENCE_HIN_ADSWISS_TOKENS"
+#define KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE @"KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE"
+#define KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE_EXPIRE @"KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE_EXPIRE"
 
 @interface MLPersistenceManager () <MLiCloudToLocalMigrationDelegate>
 
@@ -168,7 +172,7 @@
         NSURL *remoteDoctorURL = [remoteDocument URLByAppendingPathComponent:@"doctor.plist"];
         [MLUtility moveFile:[localDocument URLByAppendingPathComponent:@"doctor.plist"]
                       toURL:remoteDoctorURL
-   overwriteIfExisting:NO];
+        overwriteIfExisting:NO];
         [manager startDownloadingUbiquitousItemAtURL:remoteDoctorURL error:nil];
         
         NSURL *signatureURL = [remoteDocument URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
@@ -283,6 +287,68 @@
 
 - (NSURL *)doctorSignatureURL {
     return [[self documentDirectory] URLByAppendingPathComponent:DOC_SIGNATURE_FILENAME];
+}
+
+- (void)setHINSDSTokens:(MLHINTokens * _Nullable)tokens {
+    tokens.application = MLHINTokensApplicationSDS;
+    if (!tokens) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_PERSISTENCE_HIN_SDS_TOKENS];
+    } else {
+        NSDictionary *dict = [tokens dictionaryRepresentation];
+        [[NSUserDefaults standardUserDefaults] setObject:dict forKey:KEY_PERSISTENCE_HIN_SDS_TOKENS];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (MLHINTokens * _Nullable)HINSDSTokens {
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:KEY_PERSISTENCE_HIN_SDS_TOKENS];
+    if (![dict isKindOfClass:[NSDictionary class]]) {
+        return nil;
+    }
+    return [[MLHINTokens alloc] initWithDictionary:dict];
+}
+
+- (void)setHINADSwissTokens:(MLHINTokens * _Nullable)tokens {
+    tokens.application = MLHINTokensApplicationADSwiss;
+    if (!tokens) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_PERSISTENCE_HIN_ADSWISS_TOKENS];
+    } else {
+        NSDictionary *dict = [tokens dictionaryRepresentation];
+        [[NSUserDefaults standardUserDefaults] setObject:dict forKey:KEY_PERSISTENCE_HIN_ADSWISS_TOKENS];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (MLHINTokens * _Nullable)HINADSwissTokens {
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:KEY_PERSISTENCE_HIN_ADSWISS_TOKENS];
+    if (![dict isKindOfClass:[NSDictionary class]]) {
+        return nil;
+    }
+    return [[MLHINTokens alloc] initWithDictionary:dict];
+}
+
+- (void)setHINADSwissAuthHandle:(NSString * _Nullable)authHandle {
+    if (!authHandle) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE_EXPIRE];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setObject:authHandle forKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE];
+        NSDate *expire = [[NSDate date] dateByAddingTimeInterval:12*60*60]; // 12 hours of validity
+        [[NSUserDefaults standardUserDefaults] setObject:expire forKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE_EXPIRE];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+- (NSString * _Nullable)HINADSwissAuthHandle {
+    NSString *authHandle = [[NSUserDefaults standardUserDefaults] objectForKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE];
+    NSDate *expire = [[NSUserDefaults standardUserDefaults] objectForKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE_EXPIRE];
+    if (![authHandle isKindOfClass:[NSString class]] || ![expire isKindOfClass:[NSDate class]]) return nil;
+    if ([expire timeIntervalSinceNow] <= 0) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE_EXPIRE];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        return nil;
+    }
+    return authHandle;
 }
 
 # pragma mark - Prescription

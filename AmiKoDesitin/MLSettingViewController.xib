@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MLSettingViewController">
             <connections>
-                <outlet property="iCloudSwitch" destination="0Ob-EN-bqG" id="bXL-Zz-Zwq"/>
+                <outlet property="tableView" destination="9XV-FV-f4I" id="eKz-Ft-wOt"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -18,28 +20,28 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sync with iCloud" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NSp-el-8Z3">
-                    <rect key="frame" x="20" y="20" width="128" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Ob-EN-bqG">
-                    <rect key="frame" x="345" y="15" width="51" height="31"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="9XV-FV-f4I">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                     <connections>
-                        <action selector="iCloudSwitched:" destination="-1" eventType="valueChanged" id="9Us-AR-hsU"/>
+                        <outlet property="dataSource" destination="-1" id="wCK-wU-gdO"/>
+                        <outlet property="delegate" destination="-1" id="6Hm-XR-47O"/>
                     </connections>
-                </switch>
+                </tableView>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-            <constraints>
-                <constraint firstItem="NSp-el-8Z3" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" constant="20" id="696-dv-qel"/>
-                <constraint firstItem="0Ob-EN-bqG" firstAttribute="centerY" secondItem="NSp-el-8Z3" secondAttribute="centerY" id="Iuo-0M-Ca4"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="0Ob-EN-bqG" secondAttribute="trailing" constant="20" id="e3z-bq-idA"/>
-                <constraint firstItem="NSp-el-8Z3" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="20" id="wJG-YQ-bqb"/>
-            </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
-            <point key="canvasLocation" x="139" y="111"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="9XV-FV-f4I" firstAttribute="bottom" secondItem="Q5M-cg-NOt" secondAttribute="bottom" id="HQM-Eu-OrL"/>
+                <constraint firstItem="9XV-FV-f4I" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="Oux-Fb-Ycj"/>
+                <constraint firstItem="9XV-FV-f4I" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="OxU-aT-DF2"/>
+                <constraint firstItem="9XV-FV-f4I" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="Z1f-fZ-EpH"/>
+            </constraints>
+            <point key="canvasLocation" x="137.68115942028987" y="110.86956521739131"/>
         </view>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

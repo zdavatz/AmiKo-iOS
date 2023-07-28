@@ -9,9 +9,11 @@
 #import "MLSettingViewController.h"
 #import "SWRevealViewController.h"
 #import "MLPersistenceManager.h"
+#import "MLSDSOAuthViewController.h"
 
-@interface MLSettingViewController ()
-@property (weak, nonatomic) IBOutlet UISwitch *iCloudSwitch;
+@interface MLSettingViewController () <MLSDSOAuthViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@property (strong, nonatomic) UISwitch *iCloudSwitch;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (void)reloadICloudSwitch;
 
@@ -21,6 +23,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.iCloudSwitch = [[UISwitch alloc] init];
+    [self.iCloudSwitch addTarget:self
+                          action:@selector(iCloudSwitched:)
+                forControlEvents:UIControlEventValueChanged];
     
     SWRevealViewController *revealController = [self revealViewController];
     self.navigationItem.title = NSLocalizedString(@"Settings", nil);      // grey, in the navigation bar
@@ -43,6 +49,106 @@
                                                   usingBlock:^(NSNotification * _Nonnull note) {
         [self reloadICloudSwitch];
     }];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    switch (section) {
+        case 0: return 1;
+        case 1: return 2;
+        case 2: return 2;
+    }
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = nil;
+    if (indexPath.section == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"iCloud"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:@"iCloud"];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryView = self.iCloudSwitch;
+            cell.textLabel.text = NSLocalizedString(@"Sync with iCloud", @"");
+        }
+        return cell;
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"SDSLabel"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                              reuseIdentifier:@"SDSLabel"];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.textLabel.text = NSLocalizedString(@"HIN (SDS) Login:", @"");
+            }
+            MLHINTokens *tokens = [[MLPersistenceManager shared] HINSDSTokens];
+            if (tokens) {
+                cell.detailTextLabel.text = tokens.hinId;
+            } else {
+                cell.detailTextLabel.text = NSLocalizedString(@"[Not logged in]",@"");
+            }
+            return cell;
+        } else if (indexPath.row == 1) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"SDSButton"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                              reuseIdentifier:@"SDSButton"];
+                cell.textLabel.textColor = [UIColor systemBlueColor];
+            }
+            MLHINTokens *tokens = [[MLPersistenceManager shared] HINSDSTokens];
+            if (tokens) {
+                cell.textLabel.text = NSLocalizedString(@"Logout from HIN (SDS)", @"");
+            } else {
+                cell.textLabel.text = NSLocalizedString(@"Login with HIN (SDS)", @"");
+            }
+            return cell;
+        }
+    } else if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"ADSwissLabel"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                              reuseIdentifier:@"ADSwissLabel"];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.textLabel.text = NSLocalizedString(@"HIN (ADSwiss) Login:", @"");
+            }
+            MLHINTokens *tokens = [[MLPersistenceManager shared] HINADSwissTokens];
+            if (tokens) {
+                cell.detailTextLabel.text = tokens.hinId;
+            } else {
+                cell.detailTextLabel.text = NSLocalizedString(@"[Not logged in]",@"");
+            }
+            return cell;
+        } else if (indexPath.row == 1) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"ADSwissButton"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                              reuseIdentifier:@"ADSwissButton"];
+                cell.textLabel.textColor = [UIColor systemBlueColor];
+            }
+            MLHINTokens *tokens = [[MLPersistenceManager shared] HINADSwissTokens];
+            if (tokens) {
+                cell.textLabel.text = NSLocalizedString(@"Logout from HIN (ADSwiss)", @"");
+            } else {
+                cell.textLabel.text = NSLocalizedString(@"Login with HIN (ADSwiss)", @"");
+            }
+            return cell;
+        }
+    }
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1 && indexPath.row == 1) {
+        [self loginWithHINSDSClicked:tableView];
+    } else if (indexPath.section == 2 && indexPath.row == 1) {
+        [self loginwithHINADSwissClicked:tableView];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (IBAction)iCloudSwitched:(id)sender {
@@ -74,6 +180,30 @@
     } else {
         self.iCloudSwitch.on = [[MLPersistenceManager shared] currentSource] == MLPersistenceSourceICloud;
     }
+}
+
+- (IBAction)loginWithHINSDSClicked:(id)sender {
+    MLHINTokens *tokens = [[MLPersistenceManager shared] HINSDSTokens];
+    if (!tokens) {
+        MLSDSOAuthViewController *controller = [[MLSDSOAuthViewController alloc] init];
+        controller.delegate = self;
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self presentViewController:navController animated:YES completion:nil];
+    } else {
+        [[MLPersistenceManager shared] setHINSDSTokens:nil];
+    }
+}
+
+- (IBAction)loginwithHINADSwissClicked:(id)sender {
+    MLSDSOAuthViewController *controller = [[MLSDSOAuthViewController alloc] init];
+    controller.delegate = self;
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)sdsOAuthViewControllerDidFinishedOAuth:(id)sender {
+    [sender dismissViewControllerAnimated:YES completion:nil];
+    [self.tableView reloadData];
 }
 
 @end
