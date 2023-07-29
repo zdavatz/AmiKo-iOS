@@ -175,7 +175,6 @@
 		D5A6F24B17B1692F00EAB24B /* MLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */; };
 		D5A6F26717B16A2300EAB24B /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A6F26617B16A2300EAB24B /* libsqlite3.0.dylib */; };
 		D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */; };
-		D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */; };
 		D5A6F27017B16A7700EAB24B /* amiko_stylesheet.css in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F26D17B16A7700EAB24B /* amiko_stylesheet.css */; };
 		D5A6F27617B16AA400EAB24B /* 28-star-gy.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27117B16AA400EAB24B /* 28-star-gy.png */; };
 		D5A6F27717B16AA400EAB24B /* 28-star-ye.png in Resources */ = {isa = PBXBuildFile; fileRef = D5A6F27217B16AA400EAB24B /* 28-star-ye.png */; };
@@ -208,7 +207,6 @@
 		D5F6BB5017E8C87500DCBD16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24617B1692F00EAB24B /* main.m */; };
 		D5F6BB5117E8C87500DCBD16 /* MLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */; };
 		D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26917B16A5900EAB24B /* SWRevealViewController.m */; };
-		D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F26B17B16A7700EAB24B /* MLSearchWebView.js */; };
 		D5F6BB5417E8C87500DCBD16 /* MLDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28A17B16C0200EAB24B /* MLDataStore.m */; };
 		D5F6BB5517E8C87500DCBD16 /* MLDBAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F28D17B16C0E00EAB24B /* MLDBAdapter.m */; };
 		D5F6BB5617E8C87500DCBD16 /* MLMedication.m in Sources */ = {isa = PBXBuildFile; fileRef = D5A6F29017B16C1D00EAB24B /* MLMedication.m */; };
@@ -1537,7 +1535,6 @@
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
 				CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
-				D5A6F26E17B16A7700EAB24B /* MLSearchWebView.js in Sources */,
 				439B6C6520206D210018F922 /* AmkListViewController.m in Sources */,
 				CF40D7AB2426062100FDCFCD /* MLiCloudToLocalMigration.m in Sources */,
 				D5A31F5A18B5207200F56BC5 /* unzip.c in Sources */,
@@ -1602,7 +1599,6 @@
 				CFC156902A72A1370014D7C5 /* MLHINOAuthViewController.m in Sources */,
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
-				D5F6BB5317E8C87500DCBD16 /* MLSearchWebView.js in Sources */,
 				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,

@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    name: Archive
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup credentails
+        env: # Or as an environment variable
+          HIN_CLIENT_ID: ${{ secrets.HIN_CLIENT_ID }}
+          HIN_CLIENT_SECRET: ${{ secrets.HIN_CLIENT_SECRET }}
+        run: |
+          sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
+      - name: Download databases
+        run: |
+          cd AmiKoDesitin
+          curl -o amiko_report_de.html http://pillbox.oddb.org/amiko_report_de.html
+          curl -o amiko_db_full_idx_de.zip http://pillbox.oddb.org/amiko_db_full_idx_de.zip
+          curl -o amiko_frequency_de.db.zip http://pillbox.oddb.org/amiko_frequency_de.db.zip
+          curl -o drug_interactions_csv_de.zip http://pillbox.oddb.org/drug_interactions_csv_de.zip
+          curl -o amiko_report_fr.html http://pillbox.oddb.org/amiko_report_fr.html
+          curl -o amiko_db_full_idx_fr.zip http://pillbox.oddb.org/amiko_db_full_idx_fr.zip
+          curl -o amiko_frequency_fr.db.zip http://pillbox.oddb.org/amiko_frequency_fr.db.zip
+          curl -o drug_interactions_csv_fr.zip http://pillbox.oddb.org/drug_interactions_csv_fr.zip
+          unzip amiko_db_full_idx_de.zip
+          unzip amiko_frequency_de.db.zip
+          unzip drug_interactions_csv_de.zip
+          unzip amiko_db_full_idx_fr.zip
+          unzip amiko_frequency_fr.db.zip
+          unzip drug_interactions_csv_fr.zip
+          rm amiko_db_full_idx_de.zip amiko_frequency_de.db.zip drug_interactions_csv_de.zip amiko_db_full_idx_fr.zip amiko_frequency_fr.db.zip drug_interactions_csv_fr.zip
+      # - name: Sign
+      #   run: |
+      #     cd HINClient/
+      #     IDENTITY="amikoosx.certifaction"
+      #     echo "Signing certifaction"
+      #     codesign -s - -i "$IDENTITY" --entitlements Certifaction.entitlements -f ./certifaction-arm64
+      #     codesign -s - -i "$IDENTITY" --entitlements Certifaction.entitlements -f ./certifaction-x86
+      - name: Build
+        run: |
+          pod --version
+          pod install
+          xcodebuild clean build archive -allowProvisioningUpdates -workspace AmikoDesitin.xcworkspace -scheme AmiKoDesitin CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+          xcodebuild clean build archive -allowProvisioningUpdates -workspace AmikoDesitin.xcworkspace -scheme CoMedDesitin CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
