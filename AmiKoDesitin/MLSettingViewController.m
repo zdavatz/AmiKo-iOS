@@ -9,9 +9,11 @@
 #import "MLSettingViewController.h"
 #import "SWRevealViewController.h"
 #import "MLPersistenceManager.h"
-#import "MLSDSOAuthViewController.h"
+#import <SafariServices/SafariServices.h>
+#import <AuthenticationServices/AuthenticationServices.h>
+#import "HINClient/MLHINClient.h"
 
-@interface MLSettingViewController () <MLSDSOAuthViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface MLSettingViewController () <UITableViewDelegate, UITableViewDataSource, ASWebAuthenticationPresentationContextProviding>
 @property (strong, nonatomic) UISwitch *iCloudSwitch;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -185,25 +187,81 @@
 - (IBAction)loginWithHINSDSClicked:(id)sender {
     MLHINTokens *tokens = [[MLPersistenceManager shared] HINSDSTokens];
     if (!tokens) {
-        MLSDSOAuthViewController *controller = [[MLSDSOAuthViewController alloc] init];
-        controller.delegate = self;
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
-        [self presentViewController:navController animated:YES completion:nil];
+        typeof(self) __weak _self = self;
+        NSURL *url = [[MLHINClient shared] authURLForSDS];
+        ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc] initWithURL:url
+                                                                            callbackURLScheme:[[MLHINClient shared] oauthCallbackScheme]
+                                                                            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+            if (callbackURL) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Loading",@"")
+                                                                               message:nil
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [_self presentViewController:alert animated:YES completion:nil];
+                [[MLHINClient shared] handleSDSOAuthCallback:callbackURL callback:^(NSError * _Nonnull error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [alert dismissViewControllerAnimated:YES completion:nil];
+                        if (error) {
+                            UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error",@"")
+                                                                                                message:error.localizedDescription
+                                                                                         preferredStyle:UIAlertControllerStyleAlert];
+                            [errorAlert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK",@"")
+                                                                           style:UIAlertActionStyleDefault
+                                                                         handler:nil]];
+                            [_self presentViewController:errorAlert animated:YES completion:nil];
+                        }
+                        [_self.tableView reloadData];
+                    });
+                }];
+            }
+        }];
+        session.presentationContextProvider = self;
+        [session start];
     } else {
         [[MLPersistenceManager shared] setHINSDSTokens:nil];
+        [self.tableView reloadData];
     }
 }
 
 - (IBAction)loginwithHINADSwissClicked:(id)sender {
-    MLSDSOAuthViewController *controller = [[MLSDSOAuthViewController alloc] init];
-    controller.delegate = self;
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
-    [self presentViewController:navController animated:YES completion:nil];
+    MLHINTokens *tokens = [[MLPersistenceManager shared] HINADSwissTokens];
+    if (!tokens) {
+        typeof(self) __weak _self = self;
+        NSURL *url = [[MLHINClient shared] authURLForADSwiss];
+        ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc] initWithURL:url
+                                                                            callbackURLScheme:[[MLHINClient shared] oauthCallbackScheme]
+                                                                            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+            if (callbackURL) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Loading",@"")
+                                                                               message:nil
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [_self presentViewController:alert animated:YES completion:nil];
+                [[MLHINClient shared] handleADSwissOAuthCallback:callbackURL callback:^(NSError * _Nonnull error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [alert dismissViewControllerAnimated:YES completion:nil];
+                        if (error) {
+                            UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error",@"")
+                                                                                                message:error.localizedDescription
+                                                                                         preferredStyle:UIAlertControllerStyleAlert];
+                            [errorAlert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK",@"")
+                                                                           style:UIAlertActionStyleDefault
+                                                                         handler:nil]];
+                            [_self presentViewController:errorAlert animated:YES completion:nil];
+                        }
+                        [_self.tableView reloadData];
+                    });
+                }];
+            }
+        }];
+        session.presentationContextProvider = self;
+        [session start];
+    } else {
+        [[MLPersistenceManager shared] setHINADSwissTokens:nil];
+        [self.tableView reloadData];
+    }
 }
 
-- (void)sdsOAuthViewControllerDidFinishedOAuth:(id)sender {
-    [sender dismissViewControllerAnimated:YES completion:nil];
-    [self.tableView reloadData];
+- (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session {
+    return self.view.window;
 }
 
 @end

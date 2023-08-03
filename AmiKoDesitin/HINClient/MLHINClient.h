@@ -16,12 +16,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MLHINClient : NSObject
 
 + (instancetype)shared;
+- (NSString *)oauthCallbackScheme;
 
 - (NSURL *)authURLForSDS;
 - (NSURL *)authURLForADSwiss;
 
 - (void)fetchAccessTokenWithAuthCode:(NSString *)authCode
                           completion:(void (^_Nonnull)(NSError * _Nullable error, MLHINTokens * _Nullable tokens))callback;
+
+- (void)handleSDSOAuthCallback:(NSURL *)url callback:(void (^)(NSError *error))callback;
+- (void)handleADSwissOAuthCallback:(NSURL *)url callback:(void (^)(NSError *error))callback;
 
 - (void)renewTokenIfNeededWithToken:(MLHINTokens *)token
                          completion:(void (^_Nonnull)(NSError * _Nullable error, MLHINTokens * _Nullable tokens))callback;
