@@ -173,7 +173,6 @@
     //    http://localhost:8080/callback?state=teststate&code=xxxxxx
     NSURLComponents *components = [NSURLComponents componentsWithURL:url
                                              resolvingAgainstBaseURL:NO];
-    typeof(self) __weak _self = self;
     for (NSURLQueryItem *query in [components queryItems]) {
         if ([query.name isEqual:@"code"]) {
             [self fetchAccessTokenWithAuthCode:query.value
