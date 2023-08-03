@@ -76,12 +76,10 @@
 		CFA5207924235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */; };
 		CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */; };
 		CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */; };
-		CFC1568F2A72A1370014D7C5 /* MLHINOAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC1568D2A72A1370014D7C5 /* MLHINOAuthViewController.m */; };
-		CFC156902A72A1370014D7C5 /* MLHINOAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC1568D2A72A1370014D7C5 /* MLHINOAuthViewController.m */; };
-		CFC156912A72A1370014D7C5 /* MLHINOAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFC1568E2A72A1370014D7C5 /* MLHINOAuthViewController.xib */; };
-		CFC156922A72A1370014D7C5 /* MLHINOAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFC1568E2A72A1370014D7C5 /* MLHINOAuthViewController.xib */; };
-		CFC156952A7364A20014D7C5 /* MLSDSOAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC156942A7364A20014D7C5 /* MLSDSOAuthViewController.m */; };
-		CFC156962A7364A20014D7C5 /* MLSDSOAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFC156942A7364A20014D7C5 /* MLSDSOAuthViewController.m */; };
+		CFB1ACF42A7A9D1900DB8FE6 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF32A7A9D1900DB8FE6 /* SafariServices.framework */; };
+		CFB1ACF52A7A9D1F00DB8FE6 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF32A7A9D1900DB8FE6 /* SafariServices.framework */; };
+		CFB1ACF72A7AA5E200DB8FE6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */; };
+		CFB1ACF82A7AA5E800DB8FE6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */; };
 		D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -377,11 +375,8 @@
 		CFA5207524235FD900834E16 /* PatientModel+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PatientModel+CoreDataClass.h"; path = "../PatientModel+CoreDataClass.h"; sourceTree = "<group>"; };
 		CFA5207624235FD900834E16 /* PatientModel+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PatientModel+CoreDataClass.m"; path = "../PatientModel+CoreDataClass.m"; sourceTree = "<group>"; };
 		CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PatientModel+CoreDataProperties.m"; path = "../PatientModel+CoreDataProperties.m"; sourceTree = "<group>"; };
-		CFC1568C2A72A1370014D7C5 /* MLHINOAuthViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLHINOAuthViewController.h; path = AmiKoDesitin/MLHINOAuthViewController.h; sourceTree = SOURCE_ROOT; };
-		CFC1568D2A72A1370014D7C5 /* MLHINOAuthViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLHINOAuthViewController.m; path = AmiKoDesitin/MLHINOAuthViewController.m; sourceTree = SOURCE_ROOT; };
-		CFC1568E2A72A1370014D7C5 /* MLHINOAuthViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MLHINOAuthViewController.xib; path = AmiKoDesitin/MLHINOAuthViewController.xib; sourceTree = SOURCE_ROOT; };
-		CFC156932A7364A20014D7C5 /* MLSDSOAuthViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLSDSOAuthViewController.h; path = AmiKoDesitin/MLSDSOAuthViewController.h; sourceTree = SOURCE_ROOT; };
-		CFC156942A7364A20014D7C5 /* MLSDSOAuthViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLSDSOAuthViewController.m; path = AmiKoDesitin/MLSDSOAuthViewController.m; sourceTree = SOURCE_ROOT; };
+		CFB1ACF32A7A9D1900DB8FE6 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -576,7 +571,9 @@
 				D59E895618B7C0C100185094 /* MessageUI.framework in Frameworks */,
 				D5A31F6318B5263500F56BC5 /* libz.1.2.5.dylib in Frameworks */,
 				D5FFE1BD18B1158A002D6159 /* QuartzCore.framework in Frameworks */,
+				CFB1ACF42A7A9D1900DB8FE6 /* SafariServices.framework in Frameworks */,
 				D5A6F26717B16A2300EAB24B /* libsqlite3.0.dylib in Frameworks */,
+				CFB1ACF72A7AA5E200DB8FE6 /* AuthenticationServices.framework in Frameworks */,
 				D5A6F23B17B1692F00EAB24B /* UIKit.framework in Frameworks */,
 				D5A6F23D17B1692F00EAB24B /* Foundation.framework in Frameworks */,
 				CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */,
@@ -595,7 +592,9 @@
 				D59E895918B7C0E100185094 /* libz.1.2.5.dylib in Frameworks */,
 				D59E895818B7C0DB00185094 /* QuartzCore.framework in Frameworks */,
 				D59E895718B7C0D600185094 /* MessageUI.framework in Frameworks */,
+				CFB1ACF52A7A9D1F00DB8FE6 /* SafariServices.framework in Frameworks */,
 				D5F6BB5F17E8C87500DCBD16 /* libsqlite3.0.dylib in Frameworks */,
+				CFB1ACF82A7AA5E800DB8FE6 /* AuthenticationServices.framework in Frameworks */,
 				D5F6BB6017E8C87500DCBD16 /* UIKit.framework in Frameworks */,
 				D5F6BB6117E8C87500DCBD16 /* Foundation.framework in Frameworks */,
 				CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */,
@@ -815,11 +814,6 @@
 				CF3684BC2427BFE700066502 /* MLSettingViewController.h */,
 				CF3684BD2427BFE700066502 /* MLSettingViewController.m */,
 				CF3684BE2427BFE700066502 /* MLSettingViewController.xib */,
-				CFC1568C2A72A1370014D7C5 /* MLHINOAuthViewController.h */,
-				CFC1568D2A72A1370014D7C5 /* MLHINOAuthViewController.m */,
-				CFC1568E2A72A1370014D7C5 /* MLHINOAuthViewController.xib */,
-				CFC156932A7364A20014D7C5 /* MLSDSOAuthViewController.h */,
-				CFC156942A7364A20014D7C5 /* MLSDSOAuthViewController.m */,
 			);
 			name = settings;
 			sourceTree = "<group>";
@@ -957,6 +951,8 @@
 		D5A6F23917B1692F00EAB24B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */,
+				CFB1ACF32A7A9D1900DB8FE6 /* SafariServices.framework */,
 				CF626255241BAD3C00FBCCD9 /* CloudKit.framework */,
 				FA98749F22E6FC53008B778F /* WebKit.framework */,
 				FA528CF120D8F1590066CE89 /* tessdata */,
@@ -1353,7 +1349,6 @@
 				D5A2251E19461C420078FEFF /* 907-plus-rounded-square@2x.png in Resources */,
 				D5990A6F1BDEC2A10040C4C2 /* desitin_quick@2x.png in Resources */,
 				FA98749D22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
-				CFC156912A72A1370014D7C5 /* MLHINOAuthViewController.xib in Resources */,
 				FAF85BF322F44BF800730690 /* interactions.js in Resources */,
 				D5990A6E1BDEC2A10040C4C2 /* desitin_quick.png in Resources */,
 				D554574A18B3E85D003299E0 /* 939-download-rectangle.png in Resources */,
@@ -1439,7 +1434,6 @@
 				FA7B54E6207BC1E8003D300A /* Localizable.strings in Resources */,
 				FA98749E22E6F7AC008B778F /* FullTextViewController.xib in Resources */,
 				D5FFE17518A96B0D002D6159 /* MLMenuViewController.xib in Resources */,
-				CFC156922A72A1370014D7C5 /* MLHINOAuthViewController.xib in Resources */,
 				FAF85BF422F44BF800730690 /* interactions.js in Resources */,
 				D5F6BB7B17E8C87500DCBD16 /* desitin_icon_114x114.png in Resources */,
 				D551D53E17F22A58000EC52A /* desitin_icon_152x152.png in Resources */,
@@ -1529,7 +1523,6 @@
 				D5A31F5818B5207200F56BC5 /* mztools.c in Sources */,
 				CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */,
 				CF8664E82A6FF71700D1D81E /* MLHINTokens.m in Sources */,
-				CFC1568F2A72A1370014D7C5 /* MLHINOAuthViewController.m in Sources */,
 				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
@@ -1575,7 +1568,6 @@
 				4333432A201B6488006BFC23 /* Patient.m in Sources */,
 				FA6A005A20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,
 				CF3684BF2427BFE700066502 /* MLSettingViewController.m in Sources */,
-				CFC156952A7364A20014D7C5 /* MLSDSOAuthViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1596,7 +1588,6 @@
 				D5F6BB5217E8C87500DCBD16 /* SWRevealViewController.m in Sources */,
 				CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */,
 				CF8664E92A6FF71700D1D81E /* MLHINTokens.m in Sources */,
-				CFC156902A72A1370014D7C5 /* MLHINOAuthViewController.m in Sources */,
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
@@ -1642,7 +1633,6 @@
 				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
 				FA6A005B20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,
 				CF3684C02427BFE700066502 /* MLSettingViewController.m in Sources */,
-				CFC156962A7364A20014D7C5 /* MLSDSOAuthViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

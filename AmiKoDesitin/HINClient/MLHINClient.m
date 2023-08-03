@@ -9,6 +9,8 @@
 #import "MLHINClient.h"
 #import "MLHINClientCredential.h"
 #import "MLPersistenceManager.h"
+#import "MLConstants.h"
+#import "Operator.h"
 
 @implementation MLHINClient
 
@@ -21,8 +23,19 @@
     return shared;
 }
 
+- (NSString *)oauthCallbackScheme {
+    if ([[MLConstants databaseLanguage] isEqualToString:@"de"]) {
+        return @"amiko";
+    }
+    return @"comed";
+}
+
+- (NSString *)oauthCallback {
+    return [NSString stringWithFormat:@"%@://oauth", [self oauthCallbackScheme]];
+}
+
 - (NSURL*)authURLWithApplication:(NSString *)applicationName {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"https://apps.hin.ch/REST/v1/OAuth/GetAuthCode/%@?response_type=code&client_id=%@&redirect_uri=http://localhost:8080/callback&state=teststate", applicationName, HIN_CLIENT_ID]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"https://apps.hin.ch/REST/v1/OAuth/GetAuthCode/%@?response_type=code&client_id=%@&redirect_uri=%@&state=teststate", applicationName, HIN_CLIENT_ID, [self oauthCallback]]];
 }
 
 - (NSURL*)authURLForSDS {
@@ -51,7 +64,7 @@
     NSURLComponents *components = [[NSURLComponents alloc] init];
     components.queryItems = @[
         [NSURLQueryItem queryItemWithName:@"grant_type" value:@"authorization_code"],
-        [NSURLQueryItem queryItemWithName:@"redirect_uri" value:@"http://localhost:8080/callback"],
+        [NSURLQueryItem queryItemWithName:@"redirect_uri" value:[self oauthCallback]],
         [NSURLQueryItem queryItemWithName:@"code" value:authCode],
         [NSURLQueryItem queryItemWithName:@"client_id" value:HIN_CLIENT_ID],
         [NSURLQueryItem queryItemWithName:@"client_secret" value:HIN_CLIENT_SECRET],
@@ -78,6 +91,112 @@
     //curl -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept:application/json' --data 'grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback&code=xxxxxx&client_id=xxxxx&client_secret=xxxxx' https://oauth2.hin.ch/REST/v1/OAuth/GetAccessToken
 }
 
+- (void)handleSDSOAuthCallback:(NSURL *)url callback:(void (^)(NSError *error))callback {
+    NSLog(@"url: %@", url);
+    //    http://localhost:8080/callback?state=teststate&code=xxxxxx
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url
+                                             resolvingAgainstBaseURL:NO];
+    typeof(self) __weak _self = self;
+    for (NSURLQueryItem *query in [components queryItems]) {
+        if ([query.name isEqual:@"code"]) {
+            [self fetchAccessTokenWithAuthCode:query.value
+                                    completion:^(NSError * _Nullable error, MLHINTokens * _Nullable tokens) {
+                if (error) {
+                    callback(error);
+                    return;
+                }
+                if (!tokens) {
+                    callback([NSError errorWithDomain:@"com.ywesee.AmikoDesitin"
+                                                 code:0
+                                             userInfo:@{
+                        NSLocalizedDescriptionKey: @"Invalid token response"
+                    }]);
+                    return;
+                }
+                [[MLPersistenceManager shared] setHINSDSTokens:tokens];
+                [_self fetchSDSSelfWithToken:tokens
+                                  completion:^(NSError * _Nonnull error, MLHINProfile * _Nonnull profile) {
+                    if (error) {
+                        callback(error);
+                        return;
+                    }
+                    if (!profile) {
+                        callback([NSError errorWithDomain:@"com.ywesee.AmikoDesitin"
+                                                     code:0
+                                                 userInfo:@{
+                            NSLocalizedDescriptionKey: @"Invalid profile response"
+                        }]);
+                        return;
+                    }
+                    Operator *doctor = [Operator new];
+                    NSDictionary *doctorDictionary = [[MLPersistenceManager shared] doctorDictionary];
+                    [doctor importFromDict:doctorDictionary];
+                    [_self mergeHINProfile:profile withDoctor:doctor];
+                    [[MLPersistenceManager shared] setDoctorDictionary:[doctor toDictionary]];
+                    callback(nil);
+                }];
+            }];
+            break;
+        }
+    }
+}
+
+- (void)mergeHINProfile:(MLHINProfile *)profile withDoctor:(Operator *)doctor {
+    if (!doctor.emailAddress.length) {
+        doctor.emailAddress = profile.email;
+    }
+    if (!doctor.familyName.length) {
+        doctor.familyName = profile.lastName;
+    }
+    if (!doctor.givenName.length) {
+        doctor.givenName = profile.firstName;
+    }
+    if (!doctor.postalAddress.length) {
+        doctor.postalAddress = profile.address;
+    }
+    if (!doctor.zipCode.length) {
+        doctor.zipCode = profile.postalCode;
+    }
+    if (!doctor.city.length) {
+        doctor.city = profile.city;
+    }
+    if (!doctor.phoneNumber.length) {
+        doctor.phoneNumber = profile.phoneNr;
+    }
+    if (!doctor.gln.length) {
+        doctor.gln = profile.gln;
+    }
+}
+
+- (void)handleADSwissOAuthCallback:(NSURL *)url callback:(void (^)(NSError *error))callback {
+    NSLog(@"url: %@", url);
+    //    http://localhost:8080/callback?state=teststate&code=xxxxxx
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url
+                                             resolvingAgainstBaseURL:NO];
+    for (NSURLQueryItem *query in [components queryItems]) {
+        if ([query.name isEqual:@"code"]) {
+            [self fetchAccessTokenWithAuthCode:query.value
+                                    completion:^(NSError * _Nullable error, MLHINTokens * _Nullable tokens) {
+                if (error) {
+                    callback(error);
+                    return;
+                }
+                if (!tokens) {
+                    callback([NSError errorWithDomain:@"com.ywesee.AmikoDesitin"
+                                                 code:0
+                                             userInfo:@{
+                        NSLocalizedDescriptionKey: @"Invalid token response"
+                    }]);
+                    return;
+                }
+                [[MLPersistenceManager shared] setHINADSwissTokens:tokens];
+                callback(nil);
+            }];
+            break;
+        }
+    }
+}
+
 - (void)renewTokenIfNeededWithToken:(MLHINTokens *)token
                          completion:(void (^_Nonnull)(NSError * _Nullable error, MLHINTokens * _Nullable tokens))callback {
     if (!token.expired) {
@@ -93,7 +212,7 @@
     NSURLComponents *components = [[NSURLComponents alloc] init];
     components.queryItems = @[
         [NSURLQueryItem queryItemWithName:@"grant_type" value:@"refresh_token"],
-        [NSURLQueryItem queryItemWithName:@"redirect_uri" value:@"http://localhost:8080/callback"],
+        [NSURLQueryItem queryItemWithName:@"redirect_uri" value:[self oauthCallback]],
         [NSURLQueryItem queryItemWithName:@"refresh_token" value:token.refreshToken],
         [NSURLQueryItem queryItemWithName:@"client_id" value:HIN_CLIENT_ID],
         [NSURLQueryItem queryItemWithName:@"client_secret" value:HIN_CLIENT_SECRET],
@@ -171,7 +290,7 @@
             callback(error, nil);
             return;
         }
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://oauth2.ci-prep.adswiss.hin.ch/authService/EPDAuth?targetUrl=http%3A%2F%2Flocalhost%3A8080%2Fcallback&style=redirect"]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://oauth2.ci-prep.adswiss.hin.ch/authService/EPDAuth?targetUrl=%@&style=redirect", [self oauthCallback]]]];
         [request setAllHTTPHeaderFields:@{
             @"Accept": @"application/json",
             @"Authorization": [NSString stringWithFormat:@"Bearer %@", token.accessToken],
