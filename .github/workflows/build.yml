@@ -17,8 +17,9 @@ jobs:
         env: # Or as an environment variable
           HIN_CLIENT_ID: ${{ secrets.HIN_CLIENT_ID }}
           HIN_CLIENT_SECRET: ${{ secrets.HIN_CLIENT_SECRET }}
+          CERTIFACTION_SERVER: ${{ secrets.CERTIFACTION_SERVER }}
         run: |
-          sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
+          sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/;s/YOUR_CERTIFACTION_SERVER/$CERTIFACTION_SERVER/" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
       - name: Download databases
         run: |
           cd AmiKoDesitin
@@ -37,13 +38,6 @@ jobs:
           unzip amiko_frequency_fr.db.zip
           unzip drug_interactions_csv_fr.zip
           rm amiko_db_full_idx_de.zip amiko_frequency_de.db.zip drug_interactions_csv_de.zip amiko_db_full_idx_fr.zip amiko_frequency_fr.db.zip drug_interactions_csv_fr.zip
-      # - name: Sign
-      #   run: |
-      #     cd HINClient/
-      #     IDENTITY="amikoosx.certifaction"
-      #     echo "Signing certifaction"
-      #     codesign -s - -i "$IDENTITY" --entitlements Certifaction.entitlements -f ./certifaction-arm64
-      #     codesign -s - -i "$IDENTITY" --entitlements Certifaction.entitlements -f ./certifaction-x86
       - name: Build
         run: |
           pod --version

@@ -35,7 +35,7 @@
 }
 
 - (NSURL*)authURLWithApplication:(NSString *)applicationName {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"https://apps.hin.ch/REST/v1/OAuth/GetAuthCode/%@?response_type=code&client_id=%@&redirect_uri=%@&state=teststate", applicationName, HIN_CLIENT_ID, [self oauthCallback]]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"https://apps.hin.ch/REST/v1/OAuth/GetAuthCode/%@?response_type=code&client_id=%@&redirect_uri=%@&state=teststate", applicationName, HIN_CLIENT_ID, [[self oauthCallback] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]];
 }
 
 - (NSURL*)authURLForSDS {
@@ -362,6 +362,35 @@
         }] resume];
         // curl --request POST --url "https://oauth2.ci-prep.adswiss.hin.ch/authService/EPDAuth/auth_handle" -d "{\"authCode\":\"vzut..Q2E6\"}" --header "accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer b#G7XRWMzX...nxAj#GpN7V"
     }];
+}
+
+- (void)makeQRCodeWithAuthHandler:(NSString *)authHandle
+                    ePrescription:(Prescription *)prescription
+                         callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/ePrescription/create?output-format=qrcode", CERTIFACTION_SERVER]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setAllHTTPHeaderFields:@{
+        @"Content-Type": @"text/plain",
+        @"Authorization": [NSString stringWithFormat:@"Bearer %@", authHandle],
+    }];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[prescription ePrescription]];
+
+    NSURLSessionDownloadTask *task = [[NSURLSession sharedSession] downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            callback(error, nil);
+            return;
+        }
+        NSHTTPURLResponse *res = (NSHTTPURLResponse*)response;
+        if ([res statusCode] >= 400) {
+            NSLog(@"data %@", [[NSString alloc] initWithContentsOfURL:location
+                                                             encoding:NSUTF8StringEncoding
+                                                                error:nil]);
+        }
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[location path]];
+        callback(nil, image);
+    }];
+    [task resume];
 }
 
 @end

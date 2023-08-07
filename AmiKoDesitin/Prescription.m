@@ -7,6 +7,7 @@
 //
 
 #import "Prescription.h"
+#import "LFCGzipUtility.h"
 
 @implementation Prescription
 
@@ -134,6 +135,51 @@
     }
     
     return prescription;
+}
+
+- (NSData *)ePrescription {
+    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+    NSMutableArray *items = [NSMutableArray array];
+    for (Product *item in self.medications) {
+        [items addObject:@{
+            @"Id": item.eanCode,
+            @"IdType": @2, // GTIN
+        }];
+    }
+    NSDictionary *jsonBody = @{
+        @"Patient": @{
+            @"FName": self.patient.givenName ?: @"",
+            @"LName": self.patient.familyName ?: @"",
+            @"BDt": [self formatBirthdayForEPrescription:self.patient.birthDate] ?: @"",
+        },
+        @"Medicaments": items,
+        @"MedType": @3, // Prescription
+        @"Id": [[NSUUID UUID] UUIDString],
+        @"Auth": self.doctor.gln ?: @"", // GLN of doctor
+        @"Dt": [formatter stringFromDate:[NSDate date]],
+    };
+    NSError *error = nil;
+    NSData *json = [NSJSONSerialization dataWithJSONObject:jsonBody
+                                                   options:0
+                                                     error:&error];
+    NSLog(@"prescription json data %@", [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding]);
+    if (error != nil) {
+        NSLog(@"json error %@", error);
+        return nil;
+    }
+    NSData *gzipped = [LFCGzipUtility gzipData:json];
+    NSData *base64 = [gzipped base64EncodedDataWithOptions:0];
+    NSMutableData *prefixed = [NSMutableData dataWithCapacity:base64.length + 9];
+    [prefixed appendData:[@"CHMED16A1" dataUsingEncoding:NSUTF8StringEncoding]];
+    [prefixed appendData:base64];
+    return prefixed;
+}
+
+- (NSString *)formatBirthdayForEPrescription:(NSString *)birthday {
+    // dd.mm.yyyy -> yyyy-mm-dd
+    NSArray *parts = [birthday componentsSeparatedByString:@"."];
+    if (parts.count != 3) return nil;
+    return [NSString stringWithFormat:@"%@-%@-%@", parts[2], parts[1], parts[0]];
 }
 
 @end

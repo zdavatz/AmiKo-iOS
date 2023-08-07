@@ -23,11 +23,13 @@
 @property (atomic) NSString *placeDate;
 @property (atomic) Operator *doctor;
 @property (atomic) Patient *patient;
-@property (atomic) NSMutableArray *medications;
+@property (atomic) NSMutableArray<Product *> *medications;
 
 - (instancetype)initWithURL:(NSURL *)url;
 - (NSDictionary *) makePatientDictionary;
 - (NSDictionary *) makeOperatorDictionary;
 - (NSArray *) makeMedicationsArray;
+
+- (NSData *)ePrescription;
 
 @end

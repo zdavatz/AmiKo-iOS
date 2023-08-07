@@ -17,6 +17,8 @@
 #import "PatientViewController.h"
 #import "MLDBAdapter.h"
 #import "MLPersistenceManager.h"
+#import "MLHINClient.h"
+#import <AuthenticationServices/AuthenticationServices.h>
 
 @import Vision;
 
@@ -127,7 +129,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 
-@interface PrescriptionViewController ()
+@interface PrescriptionViewController ()<ASWebAuthenticationPresentationContextProviding>
 {
     UITextView *activeTextView;
     CGPoint savedOffset;
@@ -161,7 +163,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void) selectLabelPrinterAndPrint;
 - (void) checkPrinterAndPrint:(UIPrinter *)printer;
-- (NSMutableData *)renderPdfForPrinting;
+- (NSMutableData *)renderPdfForPrintingWithEPrescriptionQRCode:(UIImage * _Nullable)image;
 @end
 
 #pragma mark -
@@ -1949,7 +1951,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
           withAttributes:attrPN];
 }
 
-- (void)drawPdfHeader:(CGFloat)pageOriginY
+- (void)drawPdfHeader:(CGFloat)pageOriginY withEPrescriptionQRCode:(UIImage *)qrCode
 {
     const CGFloat margin = 50.0;
     const CGFloat fontSize = 11.0;
@@ -1989,21 +1991,30 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
          withAttributes:attrPat];
     
     // Signature
-    UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
-    //CGFloat signatureX = kSizeA4.width - img.size.width - margin; // right aligned with margin
-    CGFloat signatureX = doctorX; // left aligned with doctor
-    CGRect signatureRect = CGRectMake(signatureX,
-                                      pageOriginY+docY+sizeDoc.height,
-                                      img.size.width,
-                                      img.size.height);
-    [img drawInRect:signatureRect];
+    if (qrCode) {
+        CGFloat shorterSide = MIN(DOCTOR_TN_W, DOCTOR_TN_H);
+        CGFloat signatureX = doctorX; // left aligned with doctor
+        CGRect signatureRect = CGRectMake(signatureX,
+                                          pageOriginY+docY+sizeDoc.height,
+                                          shorterSide,
+                                          shorterSide);
+        [qrCode drawInRect:signatureRect];
+    } else {
+        UIImage *img = [prescription.doctor thumbnailFromSignature:CGSizeMake(DOCTOR_TN_W, DOCTOR_TN_H)];
+        CGFloat signatureX = doctorX; // left aligned with doctor
+        CGRect signatureRect = CGRectMake(signatureX,
+                                          pageOriginY+docY+sizeDoc.height,
+                                          img.size.width,
+                                          img.size.height);
+        [img drawInRect:signatureRect];
 #ifdef DEBUG
-    // Show a border to verify the alignment
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, 1);
-    CGContextSetStrokeColorWithColor(context, [UIColor labelColor].CGColor);
-    CGContextStrokeRect(context, signatureRect);
+        // Show a border to verify the alignment
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetLineWidth(context, 1);
+        CGContextSetStrokeColorWithColor(context, [UIColor labelColor].CGColor);
+        CGContextStrokeRect(context, signatureRect);
 #endif
+    }
     
     // Place and date
     [prescription.placeDate drawAtPoint:CGPointMake(margin, pageOriginY + placeDateY)
@@ -2018,7 +2029,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
            withAttributes:attrPat];
 }
 
-- (NSMutableData *)renderPdfForPrinting
+- (NSMutableData *)renderPdfForPrintingWithEPrescriptionQRCode:(UIImage * _Nullable)qrCode
 {
     const CGFloat margin = mm2pix(18);
     const CGFloat fontSize = 11.0;
@@ -2041,7 +2052,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         CGContextSaveGState(UIGraphicsGetCurrentContext());
         CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
 
-        [self drawPdfHeader: pageOriginY];
+        [self drawPdfHeader:pageOriginY withEPrescriptionQRCode:qrCode];
 
         // Medicines
         CGFloat medYOffset = medY;
@@ -2110,7 +2121,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                 CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -pageOriginY);
                 
                 // TODO: draw header
-                [self drawPdfHeader: pageOriginY];
+                [self drawPdfHeader:pageOriginY withEPrescriptionQRCode:qrCode];
                 medYOffset = medY;
                 pageNumber++;
             }
@@ -2151,7 +2162,142 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s sharing <%@>", __FUNCTION__, urlAttachment);
 #endif
+    if (![[MLPersistenceManager shared] HINADSwissTokens]) {
+        [self sharePrescription:urlAttachment withEPrescription:NO];
+        return;
+    }
+    if ([[MLPersistenceManager shared] HINADSwissAuthHandle]) {
+        [self sharePrescription:urlAttachment withEPrescription:YES];
+        return;
+    }
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:NSLocalizedString(@"Do you want to sign your prescription?", @"")
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", @"")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self sharePrescription:urlAttachment withEPrescription:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"No", @"")
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self sharePrescription:urlAttachment withEPrescription:NO];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
+- (void)getADSwissAuthHandleWithCallback:(void(^)(NSError *_Nullable error, NSString *_Nullable authHandle))callback {
+    NSString *handle = [[MLPersistenceManager shared] HINADSwissAuthHandle];
+    if (handle) {
+        callback(nil, handle);
+        return;
+    }
+    typeof(self) __weak _self = self;
+    MLHINTokens *tokens = [[MLPersistenceManager shared] HINADSwissTokens];
+    [[MLHINClient shared] fetchADSwissSAMLWithToken:tokens completion:^(NSError * _Nullable error, MLHINADSwissSaml * _Nonnull result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                callback(error, nil);
+                return;
+            }
+            ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc] initWithURL:[NSURL URLWithString:result.epdAuthUrl]
+                                                                                callbackURLScheme:[[MLHINClient shared] oauthCallbackScheme]
+                                                                                completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+                if (error) {
+                    callback(error, nil);
+                    return;
+                }
+                if (callbackURL) {
+                    NSURLComponents *components = [NSURLComponents componentsWithURL:callbackURL
+                                                             resolvingAgainstBaseURL:NO];
+                    for (NSURLQueryItem *query in [components queryItems]) {
+                        if ([query.name isEqual:@"auth_code"]) {
+                            [[MLHINClient shared] fetchADSwissAuthHandleWithToken:[[MLPersistenceManager shared] HINADSwissTokens]
+                                                                         authCode:query.value
+                                                                       completion:^(NSError * _Nullable error, NSString * _Nullable authHandle) {
+                                NSLog(@"received Auth Handle1 %@ %@", error, authHandle);
+                                if (error) {
+                                    callback(error, nil);
+                                    return;
+                                }
+                                if (!authHandle) {
+                                    callback([NSError errorWithDomain:@"com.ywesee.AmikoDesitin"
+                                                                            code:0
+                                                                        userInfo:@{
+                                        NSLocalizedDescriptionKey: @"Invalid authHandle"
+                                    }], nil);
+                                    return;
+                                }
+                                [[MLPersistenceManager shared] setHINADSwissAuthHandle:authHandle];
+                                callback(nil, authHandle);
+                            }];
+                            break;
+                        }
+                    }
+                }
+            }];
+            session.presentationContextProvider = _self;
+            [session start];
+        });
+    }];
+}
+
+- (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session {
+    return self.view.window;
+}
+
+- (void)getEPrescriptionQRCodeWithCallback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
+    typeof(self) __weak _self = self;
+    [self getADSwissAuthHandleWithCallback:^(NSError * _Nullable error, NSString * _Nullable authHandle) {
+        if (error) {
+            callback(error, nil);
+            return;
+        }
+        [[MLHINClient shared] makeQRCodeWithAuthHandler:authHandle
+                                          ePrescription:_self.prescription
+                                               callback:callback];
+    }];
+}
+
+- (void)displayError:(NSError *)error {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
+                                                                   message:error.localizedDescription
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"")
+                                              style:UIAlertActionStyleDefault
+                                            handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)sharePrescription:(NSURL *)urlAttachment withEPrescription:(BOOL)useEPrescription {
+    typeof(self) __weak _self = self;
+    if (useEPrescription) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Generating E-Prescription", @"")
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [self presentViewController:alert animated:YES completion:nil];
+        [self getEPrescriptionQRCodeWithCallback:^(NSError * _Nullable error, UIImage * _Nullable qrCode) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [alert dismissViewControllerAnimated:YES completion:nil];
+                if (error) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
+                                                                                   message:error.localizedDescription
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleDefault handler:nil]];
+                    [_self presentViewController:alert animated:YES completion:nil];
+                    return;
+                }
+                NSMutableData *pdfData = [self renderPdfForPrintingWithEPrescriptionQRCode:qrCode];
+                [_self sharePrescription:urlAttachment withPdfData:pdfData];
+            });
+        }];
+    } else {
+        NSMutableData *pdfData = [self renderPdfForPrintingWithEPrescriptionQRCode:nil];
+        [self sharePrescription:urlAttachment withPdfData:pdfData];
+    }
+}
+
+- (void)sharePrescription:(NSURL *)urlAttachment withPdfData:(NSData *)pdfData {
     NSString *mailBody = [NSString stringWithFormat:@"%@\n\niOS: %@\nAndroid: %@\n",
                           NSLocalizedString(@"Open with", nil),
                           @"https://itunes.apple.com/ch/app/generika/id520038123?mt=8",
@@ -2166,8 +2312,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
      prescription.doctor.title,
      prescription.doctor.givenName,
      prescription.doctor.familyName];
-
-    NSMutableData *pdfData = [self renderPdfForPrinting];
     
     // Prepare the objects to be shared
 

@@ -80,6 +80,8 @@
 		CFB1ACF52A7A9D1F00DB8FE6 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF32A7A9D1900DB8FE6 /* SafariServices.framework */; };
 		CFB1ACF72A7AA5E200DB8FE6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */; };
 		CFB1ACF82A7AA5E800DB8FE6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */; };
+		CFB672922A7FA7D5004A0063 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CFB672912A7FA7D5004A0063 /* LFCGzipUtility.m */; };
+		CFB672942A7FA7E3004A0063 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CFB672912A7FA7D5004A0063 /* LFCGzipUtility.m */; };
 		D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -377,6 +379,8 @@
 		CFA5207724235FD900834E16 /* PatientModel+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "PatientModel+CoreDataProperties.m"; path = "../PatientModel+CoreDataProperties.m"; sourceTree = "<group>"; };
 		CFB1ACF32A7A9D1900DB8FE6 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		CFB672912A7FA7D5004A0063 /* LFCGzipUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LFCGzipUtility.m; path = AmiKoDesitin/LFCGzipUtility.m; sourceTree = SOURCE_ROOT; };
+		CFB672932A7FA7DE004A0063 /* LFCGzipUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LFCGzipUtility.h; path = AmiKoDesitin/LFCGzipUtility.h; sourceTree = SOURCE_ROOT; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -1034,6 +1038,8 @@
 				43334326201B641E006BFC23 /* menu (iPad) */,
 				D5EA5C501BE09B0B00D753C5 /* MLUtility.h */,
 				D5EA5C511BE09B0B00D753C5 /* MLUtility.m */,
+				CFB672912A7FA7D5004A0063 /* LFCGzipUtility.m */,
+				CFB672932A7FA7DE004A0063 /* LFCGzipUtility.h */,
 				43D3A0DF201F2D1700EA77C6 /* json */,
 				D565DA8117B7B48D0002E2CF /* MLConstants.h */,
 				D565DA8217B7B48D0002E2CF /* MLConstants.m */,
@@ -1526,6 +1532,7 @@
 				FA6B630420D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
+				CFB672922A7FA7D5004A0063 /* LFCGzipUtility.m in Sources */,
 				CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				439B6C6520206D210018F922 /* AmkListViewController.m in Sources */,
@@ -1591,6 +1598,7 @@
 				FA6B630520D7CA8500A54EF9 /* UIImage+Cropping.m in Sources */,
 				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
+				CFB672942A7FA7E3004A0063 /* LFCGzipUtility.m in Sources */,
 				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
