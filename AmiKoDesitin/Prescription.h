@@ -30,6 +30,6 @@
 - (NSDictionary *) makeOperatorDictionary;
 - (NSArray *) makeMedicationsArray;
 
-- (NSString *)ePrescription;
+- (NSData *)ePrescription;
 
 @end

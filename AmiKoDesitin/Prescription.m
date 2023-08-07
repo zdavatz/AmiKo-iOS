@@ -137,7 +137,7 @@
     return prescription;
 }
 
-- (NSString *)ePrescription {
+- (NSData *)ePrescription {
     NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
     NSMutableArray *items = [NSMutableArray array];
     for (Product *item in self.medications) {
@@ -172,12 +172,7 @@
     NSMutableData *prefixed = [NSMutableData dataWithCapacity:base64.length + 9];
     [prefixed appendData:[@"CHMED16A1" dataUsingEncoding:NSUTF8StringEncoding]];
     [prefixed appendData:base64];
-    NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSUUID UUID] UUIDString]];
-    if (![prefixed writeToFile:tempFilePath options:0 error:&error]) {
-        NSLog(@"Cannot write file %@", error);
-        return nil;
-    }
-    return tempFilePath;
+    return prefixed;
 }
 
 - (NSString *)formatBirthdayForEPrescription:(NSString *)birthday {

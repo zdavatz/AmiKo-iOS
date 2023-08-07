@@ -371,14 +371,21 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setAllHTTPHeaderFields:@{
         @"Content-Type": @"text/plain",
+        @"Authorization": [NSString stringWithFormat:@"Bearer %@", authHandle],
     }];
     [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:[[prescription ePrescription] dataUsingEncoding:NSUTF8StringEncoding]];
+    [request setHTTPBody:[prescription ePrescription]];
 
     NSURLSessionDownloadTask *task = [[NSURLSession sharedSession] downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error) {
             callback(error, nil);
             return;
+        }
+        NSHTTPURLResponse *res = (NSHTTPURLResponse*)response;
+        if ([res statusCode] >= 400) {
+            NSLog(@"data %@", [[NSString alloc] initWithContentsOfURL:location
+                                                             encoding:NSUTF8StringEncoding
+                                                                error:nil]);
         }
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[location path]];
         callback(nil, image);
