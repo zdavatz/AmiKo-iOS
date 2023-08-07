@@ -2272,8 +2272,21 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 - (void)sharePrescription:(NSURL *)urlAttachment withEPrescription:(BOOL)useEPrescription {
     typeof(self) __weak _self = self;
     if (useEPrescription) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Generating E-Prescription", @"")
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [self presentViewController:alert animated:YES completion:nil];
         [self getEPrescriptionQRCodeWithCallback:^(NSError * _Nullable error, UIImage * _Nullable qrCode) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                [alert dismissViewControllerAnimated:YES completion:nil];
+                if (error) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
+                                                                                   message:error.localizedDescription
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleDefault handler:nil]];
+                    [_self presentViewController:alert animated:YES completion:nil];
+                    return;
+                }
                 NSMutableData *pdfData = [self renderPdfForPrintingWithEPrescriptionQRCode:qrCode];
                 [_self sharePrescription:urlAttachment withPdfData:pdfData];
             });
