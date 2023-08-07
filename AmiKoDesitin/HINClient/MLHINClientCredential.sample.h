@@ -12,4 +12,7 @@
 #define HIN_CLIENT_ID @"YOUR_HIN_CLIENT_ID"
 #define HIN_CLIENT_SECRET @"YOUR_HIN_CLIENT_SECRET"
 
+// No trailing slash please
+#define CERTIFACTION_SERVER @"YOUR_CERTIFACTION_SERVER"
+
 #endif /* MLHINClientCredential_h */
