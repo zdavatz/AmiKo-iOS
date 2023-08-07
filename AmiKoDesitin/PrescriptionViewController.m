@@ -2273,8 +2273,10 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     typeof(self) __weak _self = self;
     if (useEPrescription) {
         [self getEPrescriptionQRCodeWithCallback:^(NSError * _Nullable error, UIImage * _Nullable qrCode) {
-            NSMutableData *pdfData = [self renderPdfForPrintingWithEPrescriptionQRCode:qrCode];
-            [_self sharePrescription:urlAttachment withPdfData:pdfData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableData *pdfData = [self renderPdfForPrintingWithEPrescriptionQRCode:qrCode];
+                [_self sharePrescription:urlAttachment withPdfData:pdfData];
+            });
         }];
     } else {
         NSMutableData *pdfData = [self renderPdfForPrintingWithEPrescriptionQRCode:nil];
