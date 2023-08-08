@@ -1,7 +1,9 @@
-/* No Localized Strings */
+/* Localized versions of Info.plist keys */
+"NSCameraUsageDescription" = "Rezeptsignatur mit Selfie erstellen.";
 
-NSCameraUsageDescription = "Rezeptsignatur mit Selfie erstellen.";
+/* Privacy - Contacts Usage Description */
+"NSContactsUsageDescription" = "Bestehende Kunden für Rezepterstellung ins AmiKo/CoMed Adressbuch importieren.";
 
-NSContactsUsageDescription = "Bestehende Kunden für Rezepterstellung ins AmiKo/CoMed Adressbuch importieren.";
+/* Privacy - Photo Library Usage Description */
+"NSPhotoLibraryUsageDescription" = "Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.";
 
-NSPhotoLibraryUsageDescription = "Rezeptsignatur mit Foto (z.B. Unterschrift) erstellen.";

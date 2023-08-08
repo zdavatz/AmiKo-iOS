@@ -4,29 +4,26 @@
 /* Class = "UITextField"; placeholder = "DD.MM.YYYY"; ObjectID = "11x-yn-ywg"; */
 "11x-yn-ywg.placeholder" = "DD.MM.JJJJ";
 
-/* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
-"BEZ-6Y-wKL.text" = "Gewicht (kg)";
-
-/* Class = "UILabel"; text = "Height (cm)"; ObjectID = "G5L-ae-7Kn"; */
-"G5L-ae-7Kn.text" = "Grösse (cm)";
-
-/* Class = "UILabel"; text = "Street*"; ObjectID = "Nqq-S6-oX3"; */
-"Nqq-S6-oX3.text" = "Strasse*";
-
-/* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
-"U99-ak-doX.text" = "Geburtstag*";
-
 /* Class = "UILabel"; text = "City*"; ObjectID = "b1W-Hi-EVX"; */
 "b1W-Hi-EVX.text" = "Stadt*";
+
+/* Class = "UILabel"; text = "Weight (kg)"; ObjectID = "BEZ-6Y-wKL"; */
+"BEZ-6Y-wKL.text" = "Gewicht (kg)";
 
 /* Class = "UILabel"; text = "Country"; ObjectID = "cFQ-vB-rrd"; */
 "cFQ-vB-rrd.text" = "Land";
 
+/* Class = "UILabel"; text = "Height (cm)"; ObjectID = "G5L-ae-7Kn"; */
+"G5L-ae-7Kn.text" = "Grösse (cm)";
+
 /* Class = "UILabel"; text = "Sex*"; ObjectID = "ipa-Lx-J6I"; */
 "ipa-Lx-J6I.text" = "Geschlecht*";
 
-/* Class = "UITextField"; text = "Save"; ObjectID = "lyg-cM-u3T"; */
+/* Class = "UITextField"; text = "Save..."; ObjectID = "lyg-cM-u3T"; */
 "lyg-cM-u3T.text" = "Save";
+
+/* Class = "UILabel"; text = "Street*"; ObjectID = "Nqq-S6-oX3"; */
+"Nqq-S6-oX3.text" = "Strasse*";
 
 /* Class = "UILabel"; text = "Email"; ObjectID = "o7U-gv-YHK"; */
 "o7U-gv-YHK.text" = "Email";
@@ -34,15 +31,18 @@
 /* Class = "UILabel"; text = "Surname*"; ObjectID = "qxH-aW-xMw"; */
 "qxH-aW-xMw.text" = "Name*";
 
+/* Class = "UILabel"; text = "Birthday*"; ObjectID = "U99-ak-doX"; */
+"U99-ak-doX.text" = "Geburtstag*";
+
 /* Class = "UILabel"; text = "Name*"; ObjectID = "uhp-vp-JVu"; */
 "uhp-vp-JVu.text" = "Vorname*";
 
 /* Class = "UILabel"; text = "ZIP*"; ObjectID = "vEs-iS-Qh7"; */
 "vEs-iS-Qh7.text" = "PLZ*";
 
-/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[0] = "M"; ObjectID = "wpI-ZL-spi"; */
+/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[0] = "m"; ObjectID = "wpI-ZL-spi"; */
 "wpI-ZL-spi.segmentTitles[0]" = "m";
 
-/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[1] = "F"; ObjectID = "wpI-ZL-spi"; */
+/* Class = "UISegmentedControl"; wpI-ZL-spi.segmentTitles[1] = "f"; ObjectID = "wpI-ZL-spi"; */
 "wpI-ZL-spi.segmentTitles[1]" = "w";
 

@@ -1,4 +1,3 @@
-
 /* Class = "UIBarButtonItem"; title = "Prä"; ObjectID = "405"; */
 "405.title" = "Prä";
 
@@ -25,3 +24,4 @@
 
 /* Class = "UITabBarItem"; title = "Prescriptions"; ObjectID = "Yye-ET-TME"; */
 "Yye-ET-TME.title" = "Rezept";
+

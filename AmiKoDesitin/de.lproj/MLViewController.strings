@@ -1,3 +1,5 @@
+/* Class = "UITabBarItem"; title = "Prescriptions"; ObjectID = "3ok-wB-fCZ"; */
+"3ok-wB-fCZ.title" = "Rezept";
 
 /* Class = "UIBarButtonItem"; title = "Präparat"; ObjectID = "27"; */
 "27.title" = "Präparat";
@@ -20,8 +22,6 @@
 /* Class = "UITabBarItem"; title = "AIPS"; ObjectID = "72"; */
 "72.title" = "Kompendium";
 
-/* Class = "UITabBarItem"; title = "Prescriptions"; ObjectID = "3ok-wB-fCZ"; */
-"3ok-wB-fCZ.title" = "Rezept";
-
 /* Class = "UITabBarItem"; title = "Interactions"; ObjectID = "IFm-jM-mZk"; */
 "IFm-jM-mZk.title" = "Interaktionen";
+
