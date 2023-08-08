@@ -1,7 +1,9 @@
-/* No Localized Strings */
+/* Localized versions of Info.plist keys */
+"NSCameraUsageDescription" = "Valider la signature d'une ordonnance par un selfie.";
 
-NSCameraUsageDescription = "Valider la signature d'une ordonnance par un selfie.";
+/* Privacy - Contacts Usage Description */
+"NSContactsUsageDescription" = "Importer des clients actuels dans le carnet d‘adresses AmiKo/CoMed en vue de délivrer une ordonnance.";
 
-NSContactsUsageDescription = "Importer des clients actuels dans le carnet d‘adresses AmiKo/CoMed en vue de délivrer une ordonnance.";
+/* Privacy - Photo Library Usage Description */
+"NSPhotoLibraryUsageDescription" = "Valider la signature d'une ordonnance par une foto (p.e. par la signature).";
 
-NSPhotoLibraryUsageDescription = "Valider la signature d'une ordonnance par une foto (p.e. par la signature).";

@@ -1,3 +1,12 @@
+/* No comment provided by engineer. */
+"[Not logged in]" = "nicht eingeloggt";
+
+/* No comment provided by engineer. */
+"%@ Database Updated!" = "%@ Datenbank aktualisiert!";
+
+/* No comment provided by engineer. */
+"%@ has already been imported" = "%@ wurde bereits importiert.";
+
 /* Short toolbar */
 "ATC" = "Wirk/Atc";
 
@@ -31,17 +40,14 @@
 /* No comment provided by engineer. */
 "Currently, there are no interactions between these drugs in the EPha.ch database. For more information, please refer to the technical information." = "Zur Zeit sind keine Interaktionen zwischen diesen Medikamenten in der EPha.ch-Datenbank vorhanden. Weitere Informationen finden Sie in der Fachinformation.";
 
+/* Interactions */
+"Data source: Public domain data from EPha.ch" = "Datenquelle: Public Domain Daten von EPha.ch";
+
 /* No comment provided by engineer. */
 "Database cannot be updated!" = "Datenbank kann nicht aktualisiert werden!";
 
 /* No comment provided by engineer. */
 "Database Update" = "Datenbank Aktualisierung";
-
-/* No comment provided by engineer. */
-"%@ Database Updated!" = "%@ Datenbank aktualisiert!";
-
-/* Interactions */
-"Data source: Public domain data from EPha.ch" = "Datenquelle: Public Domain Daten von EPha.ch";
 
 /* No comment provided by engineer. */
 "Delete" = "Alle Rezepte von/und PatientIn löschen?";
@@ -60,6 +66,9 @@
 
 /* Button */
 "Doctor Signature" = "Arzt";
+
+/* No comment provided by engineer. */
+"Downloaded from iCloud" = "";
 
 /* No comment provided by engineer. */
 "Drugs Basket" = "Medikamentenkorb";
@@ -89,9 +98,6 @@
 "Full Text Search" = "Volltext Suche";
 
 /* No comment provided by engineer. */
-"%@ has already been imported" = "%@ wurde bereits importiert.";
-
-/* No comment provided by engineer. */
 "Hits" = "Treffer";
 
 /* No comment provided by engineer. */
@@ -106,6 +112,21 @@
 /* No comment provided by engineer. */
 "Known interactions" = "Bekannte Interaktionen";
 
+/* No comment provided by engineer. */
+"Loading" = "Laden …";
+
+/* No comment provided by engineer. */
+"Login with HIN (ADSwiss)" = "Einloggen mit HIN (ADSwiss)";
+
+/* No comment provided by engineer. */
+"Login with HIN (SDS)" = "Einloggen mit HIN (SDS)";
+
+/* No comment provided by engineer. */
+"Logout from HIN (ADSwiss)" = "Ausloggen von HIN (ADSwiss)";
+
+/* No comment provided by engineer. */
+"Logout from HIN (SDS)" = "Ausloggen von HIN (SDS)";
+
 /* Gender */
 "man" = "m";
 
@@ -114,6 +135,12 @@
 
 /* No comment provided by engineer. */
 "Medicines" = "Medikamente";
+
+/* No comment provided by engineer. */
+"Migrate from iCloud" = "";
+
+/* No comment provided by engineer. */
+"No" = "Nein";
 
 /* Interactions */
 "No measures necessary" = "Keine Massnahmen notwendig";
@@ -214,16 +241,21 @@
 /* No comment provided by engineer. */
 "Server unreachable..." = "Server nicht erreichbar...";
 
-"Settings" = "Settings";
+/* Alert button to open Settings
+   Button */
+"Settings" = "Einstellungen";
 
 /* Button */
-"Share" = "Share";
+"Share" = "Teilen";
 
 /* Interactions */
 "Supported by: IBSA Institut Biochimique SA" = "Supported by: IBSA Institut Biochimique SA";
 
 /* No comment provided by engineer. */
-"The database contains:\n- %ld Products\n- %ld Specialist information\n- %ld Keywords\n- %d Interactions" = "Die Datenbank enthält:\n- %ld Produkte\n- %ld Fachinfos\n- %ld Suchbegriffe\n- %d Interaktionen";
+"Sync with iCloud" = "Mit iCloud synchronisieren";
+
+/* No comment provided by engineer. */
+"Syncing..." = "";
 
 /* No comment provided by engineer. */
 "The entry has been updated" = "Der Eintrag wurde aktualisiert.";
@@ -243,11 +275,15 @@
 /* No comment provided by engineer. */
 "Updating %@ database" = "Aktualisieren der %@ Datenbank";
 
+/* Gender */
+"woman" = "w";
+
+/* No comment provided by engineer. */
+"Yes" = "Ja";
+
 /* No comment provided by engineer. */
 "Your database is older than 30 days. We recommend an update. The update can also be done manually at any time by clicking on the pill in the upper left corner." = "Ihre Datenbank ist älter als 30 Tage. Wir empfehlen eine Aktualisierung auf die tagesaktuellen Daten. Das Update kann jederzeit auch manuell durch das Klicken auf die Pille oben links ausgeführt werden.";
 
 /* No comment provided by engineer. */
 "Your medicine basket is empty" = "Ihr Medikamentenkorb ist leer.";
 
-/* Gender */
-"woman" = "w";

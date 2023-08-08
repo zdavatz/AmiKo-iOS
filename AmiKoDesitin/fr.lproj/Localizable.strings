@@ -1,3 +1,12 @@
+/* No comment provided by engineer. */
+"[Not logged in]" = "[non connecté]";
+
+/* No comment provided by engineer. */
+"%@ Database Updated!" = "Banque des donnees %@ mises à jour!";
+
+/* No comment provided by engineer. */
+"%@ has already been imported" = "%@ déjà était importé";
+
 /* Short toolbar */
 "ATC" = "Prin/Atc";
 
@@ -31,17 +40,14 @@
 /* No comment provided by engineer. */
 "Currently, there are no interactions between these drugs in the EPha.ch database. For more information, please refer to the technical information." = "Il n’y a aucune information dans la banque de données EPha.ch à propos d’une interaction entre les médicaments sélectionnés. Veuillez consulter les informations professionelles.";
 
+/* Interactions */
+"Data source: Public domain data from EPha.ch" = "Source des données : données du domaine publique de EPha.ch";
+
 /* No comment provided by engineer. */
 "Database cannot be updated!" = "La base de données ne peut pas être mise à jour!";
 
 /* No comment provided by engineer. */
 "Database Update" = "Mise à jour de la banque des données";
-
-/* No comment provided by engineer. */
-"%@ Database Updated!" = "Banque des donnees %@ mises à jour!";
-
-/* Interactions */
-"Data source: Public domain data from EPha.ch" = "Source des données : données du domaine publique de EPha.ch";
 
 /* No comment provided by engineer. */
 "Delete" = "Supprimer patient/compris ordonnances";
@@ -71,6 +77,9 @@
 "Edit comment" = "Traiter votre annotation";
 
 /* No comment provided by engineer. */
+"Error" = "Erreur";
+
+/* No comment provided by engineer. */
 "Favorites" = "Favoris";
 
 /* Button */
@@ -89,9 +98,6 @@
 "Full Text Search" = "Recherche plein-texte";
 
 /* No comment provided by engineer. */
-"%@ has already been imported" = "%@ déjà était importé";
-
-/* No comment provided by engineer. */
 "Hits" = "Réponse(s)";
 
 /* No comment provided by engineer. */
@@ -106,6 +112,21 @@
 /* No comment provided by engineer. */
 "Known interactions" = "Interactions Connues";
 
+/* No comment provided by engineer. */
+"Loading" = "Chargement en cours";
+
+/* No comment provided by engineer. */
+"Login with HIN (ADSwiss)" = "Se connecter avec HIN (ADSwiss)";
+
+/* No comment provided by engineer. */
+"Login with HIN (SDS)" = "Se connecter avec HIN (SDS)";
+
+/* No comment provided by engineer. */
+"Logout from HIN (ADSwiss)" = "Déconnexion de HIN (ADSwiss)";
+
+/* No comment provided by engineer. */
+"Logout from HIN (SDS)" = "Déconnexion de HIN (SDS)";
+
 /* Gender */
 "man" = "m";
 
@@ -114,6 +135,9 @@
 
 /* No comment provided by engineer. */
 "Medicines" = "Préparation";
+
+/* No comment provided by engineer. */
+"No" = "Non";
 
 /* Interactions */
 "No measures necessary" = "Aucune mesure nécessaire";
@@ -214,16 +238,18 @@
 /* No comment provided by engineer. */
 "Server unreachable..." = "Serveur inaccessible...";
 
-"Settings" = "Settings";
+/* Alert button to open Settings
+   Button */
+"Settings" = "Préférences";
 
 /* Button */
-"Share" = "Share";
+"Share" = "Partager";
 
 /* Interactions */
 "Supported by: IBSA Institut Biochimique SA" = "Soutenu par : IBSA Institut Biochimique SA";
 
 /* No comment provided by engineer. */
-"The database contains:\n- %ld Products\n- %ld Specialist information\n- %ld Keywords\n- %d Interactions" = "La banque des données contien:\n- %ld produits\n- %ld notices infopro\n- %ld mot-clés\n- %d interactions";
+"Sync with iCloud" = "Synchronisation avec iCloud";
 
 /* No comment provided by engineer. */
 "The entry has been updated" = "La saisie disponible est mise à jour.";
@@ -243,11 +269,15 @@
 /* No comment provided by engineer. */
 "Updating %@ database" = "Mise à jour de la base de données %@";
 
+/* Gender */
+"woman" = "f";
+
+/* No comment provided by engineer. */
+"Yes" = "Oui";
+
 /* No comment provided by engineer. */
 "Your database is older than 30 days. We recommend an update. The update can also be done manually at any time by clicking on the pill in the upper left corner." = "Votre banque des données est âgé de plus de 30 jours. Nous vous recommandons une mise à jour. La mise à jour peut également être effectuée manuellement à tout moment en cliquant sur la pilule en haut à gauche.";
 
 /* No comment provided by engineer. */
 "Your medicine basket is empty" = "Votre panier des médicaments est vide.";
 
-/* Gender */
-"woman" = "f";
