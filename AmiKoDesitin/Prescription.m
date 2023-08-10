@@ -94,20 +94,15 @@
 - (NSDictionary *) makeOperatorDictionary
 {
     NSMutableDictionary *operatorDict = [NSMutableDictionary new];
-
-    if ([doctor title])  // optional field
-        [operatorDict setObject:[doctor title] forKey:KEY_AMK_DOC_TITLE];
-    else
-        [operatorDict setObject:@"" forKey:KEY_AMK_DOC_TITLE];
-    
-    [operatorDict setObject:[doctor givenName]      forKey:KEY_AMK_DOC_NAME];
-    [operatorDict setObject:[doctor familyName]     forKey:KEY_AMK_DOC_SURNAME];
-    [operatorDict setObject:[doctor postalAddress]  forKey:KEY_AMK_DOC_ADDRESS];
-    [operatorDict setObject:[doctor city]           forKey:KEY_AMK_DOC_CITY];
-    [operatorDict setObject:[doctor zipCode]        forKey:KEY_AMK_DOC_ZIP];
-    [operatorDict setObject:[doctor phoneNumber]    forKey:KEY_AMK_DOC_PHONE];
-    [operatorDict setObject:[doctor emailAddress]   forKey:KEY_AMK_DOC_EMAIL];
-    [operatorDict setObject:[doctor signature]      forKey:KEY_AMK_DOC_SIGNATURE];
+    [operatorDict setObject:[doctor title] ?: @""         forKey:KEY_AMK_DOC_TITLE];
+    [operatorDict setObject:[doctor givenName] ?: @""     forKey:KEY_AMK_DOC_NAME];
+    [operatorDict setObject:[doctor familyName] ?: @""    forKey:KEY_AMK_DOC_SURNAME];
+    [operatorDict setObject:[doctor postalAddress] ?: @"" forKey:KEY_AMK_DOC_ADDRESS];
+    [operatorDict setObject:[doctor city] ?: @""          forKey:KEY_AMK_DOC_CITY];
+    [operatorDict setObject:[doctor zipCode] ?: @""       forKey:KEY_AMK_DOC_ZIP];
+    [operatorDict setObject:[doctor phoneNumber] ?: @""   forKey:KEY_AMK_DOC_PHONE];
+    [operatorDict setObject:[doctor emailAddress] ?: @""  forKey:KEY_AMK_DOC_EMAIL];
+    [operatorDict setObject:[doctor signature] ?: @""     forKey:KEY_AMK_DOC_SIGNATURE];
     return operatorDict;
 }
 
