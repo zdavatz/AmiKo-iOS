@@ -17,7 +17,7 @@ jobs:
           HIN_CLIENT_ID: ${{ secrets.HIN_CLIENT_ID }}
           HIN_CLIENT_SECRET: ${{ secrets.HIN_CLIENT_SECRET }}
         run: |
-          sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
+          sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/;s#YOUR_CERTIFACTION_SERVER#$CERTIFACTION_SERVER#" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
       - name: Download databases
         run: |
           cd AmiKoDesitin
