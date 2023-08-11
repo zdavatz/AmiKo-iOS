@@ -382,12 +382,16 @@
             return;
         }
         NSHTTPURLResponse *res = (NSHTTPURLResponse*)response;
-        if ([res statusCode] >= 400) {
-            NSLog(@"data %@", [[NSString alloc] initWithContentsOfURL:location
-                                                             encoding:NSUTF8StringEncoding
-                                                                error:nil]);
-        }
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[location path]];
+        if ([res statusCode] >= 400 || !image) {
+            NSString *responseStr =[[NSString alloc] initWithContentsOfURL:location
+                                                                  encoding:NSUTF8StringEncoding
+                                                                     error:nil];
+            callback([[NSError alloc] initWithDomain:@"com.ywesee.amiko" code: 0 userInfo:@{
+                NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Error response: %@", responseStr],
+            }], nil);
+            return;
+        }
         callback(nil, image);
     }];
     [task resume];
