@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "Prescription.h"
 #import "MLHINTokens.h"
+#import "MLHINADSwissAuthHandle.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -54,8 +55,8 @@ typedef NS_ENUM(NSInteger, MLPersistenceFileState) {
 
 - (void)setHINADSwissTokens:(MLHINTokens * _Nullable)tokens;
 - (MLHINTokens * _Nullable)HINADSwissTokens;
-- (void)setHINADSwissAuthHandle:(NSString * _Nullable)authHandle;
-- (NSString * _Nullable)HINADSwissAuthHandle;
+- (void)setHINADSwissAuthHandle:(MLHINADSwissAuthHandle * _Nullable)authHandle;
+- (MLHINADSwissAuthHandle * _Nullable)HINADSwissAuthHandle;
 
 # pragma mark - Prescription
 
