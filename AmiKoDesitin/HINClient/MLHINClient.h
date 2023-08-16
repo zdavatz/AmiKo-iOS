@@ -11,6 +11,7 @@
 #import "MLHINProfile.h"
 #import "MLHINADSwissSaml.h"
 #import "Prescription.h"
+#import "MLHINADSwissAuthHandle.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,9 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
                                authCode:(NSString *)authCode
                              completion:(void (^_Nonnull)(NSError *_Nullable error, NSString *_Nullable authHandle))callback;
 
-- (void)makeQRCodeWithAuthHandler:(NSString *)authHandle
-                    ePrescription:(Prescription *)prescription
-                         callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback;
+- (void)makeQRCodeWithAuthHandle:(MLHINADSwissAuthHandle *)authHandle
+                   ePrescription:(Prescription *)prescription
+                        callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback;
 
 @end
 

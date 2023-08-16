@@ -19,6 +19,7 @@
 #import "MLPersistenceManager.h"
 #import "MLHINClient.h"
 #import <AuthenticationServices/AuthenticationServices.h>
+#import "MLHINADSwissAuthHandle.h"
 
 @import Vision;
 
@@ -2186,8 +2187,8 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)getADSwissAuthHandleWithCallback:(void(^)(NSError *_Nullable error, NSString *_Nullable authHandle))callback {
-    NSString *handle = [[MLPersistenceManager shared] HINADSwissAuthHandle];
+- (void)getADSwissAuthHandleWithCallback:(void(^)(NSError *_Nullable error, MLHINADSwissAuthHandle *_Nullable authHandle))callback {
+    MLHINADSwissAuthHandle *handle = [[MLPersistenceManager shared] HINADSwissAuthHandle];
     if (handle) {
         callback(nil, handle);
         return;
@@ -2228,8 +2229,9 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                     }], nil);
                                     return;
                                 }
-                                [[MLPersistenceManager shared] setHINADSwissAuthHandle:authHandle];
-                                callback(nil, authHandle);
+                                MLHINADSwissAuthHandle *handle = [[MLHINADSwissAuthHandle alloc] initWithToken:authHandle];
+                                [[MLPersistenceManager shared] setHINADSwissAuthHandle:handle];
+                                callback(nil, handle);
                             }];
                             break;
                         }
@@ -2248,14 +2250,14 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)getEPrescriptionQRCodeWithCallback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
     typeof(self) __weak _self = self;
-    [self getADSwissAuthHandleWithCallback:^(NSError * _Nullable error, NSString * _Nullable authHandle) {
+    [self getADSwissAuthHandleWithCallback:^(NSError * _Nullable error, MLHINADSwissAuthHandle * _Nullable authHandle) {
         if (error) {
             callback(error, nil);
             return;
         }
-        [[MLHINClient shared] makeQRCodeWithAuthHandler:authHandle
-                                          ePrescription:_self.prescription
-                                               callback:callback];
+        [[MLHINClient shared] makeQRCodeWithAuthHandle:authHandle
+                                         ePrescription:_self.prescription
+                                              callback:callback];
     }];
 }
 

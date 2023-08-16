@@ -60,6 +60,8 @@
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
 		CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CF7E3F222A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7E3F212A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m */; };
+		CF7E3F232A8C6E7700E65BF1 /* MLHINADSwissAuthHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7E3F212A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m */; };
 		CF8664E82A6FF71700D1D81E /* MLHINTokens.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */; };
 		CF8664E92A6FF71700D1D81E /* MLHINTokens.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */; };
 		CF8664EA2A6FF71700D1D81E /* MLHINADSwissSaml.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DF2A6FF71700D1D81E /* MLHINADSwissSaml.m */; };
@@ -361,6 +363,8 @@
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
 		CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPersistenceManager.m; path = AmiKoDesitin/Persistence/MLPersistenceManager.m; sourceTree = SOURCE_ROOT; };
+		CF7E3F202A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLHINADSwissAuthHandle.h; path = AmiKoDesitin/HINClient/MLHINADSwissAuthHandle.h; sourceTree = SOURCE_ROOT; };
+		CF7E3F212A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLHINADSwissAuthHandle.m; path = AmiKoDesitin/HINClient/MLHINADSwissAuthHandle.m; sourceTree = SOURCE_ROOT; };
 		CF8664DD2A6FF71700D1D81E /* MLHINClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLHINClient.h; sourceTree = "<group>"; };
 		CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLHINTokens.m; sourceTree = "<group>"; };
 		CF8664DF2A6FF71700D1D81E /* MLHINADSwissSaml.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLHINADSwissSaml.m; sourceTree = "<group>"; };
@@ -856,6 +860,8 @@
 				CF8664E12A6FF71700D1D81E /* MLHINProfile.m */,
 				CF8664E72A6FF71700D1D81E /* MLHINTokens.h */,
 				CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */,
+				CF7E3F202A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.h */,
+				CF7E3F212A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m */,
 			);
 			path = HINClient;
 			sourceTree = "<group>";
@@ -1571,6 +1577,7 @@
 				D5EA5C521BE09B0B00D753C5 /* MLUtility.m in Sources */,
 				D565DA8317B7B48D0002E2CF /* MLConstants.m in Sources */,
 				FA6A005E20D3B184002D3A33 /* PreviewView.m in Sources */,
+				CF7E3F222A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m in Sources */,
 				CFA5207224235F8A00834E16 /* Model.xcdatamodeld in Sources */,
 				4333432A201B6488006BFC23 /* Patient.m in Sources */,
 				FA6A005A20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,
@@ -1637,6 +1644,7 @@
 				D5A31F7218B52D3E00F56BC5 /* MLProgressViewController.m in Sources */,
 				D5EA5C531BE15AFA00D753C5 /* MLUtility.m in Sources */,
 				FA6A005F20D3B184002D3A33 /* PreviewView.m in Sources */,
+				CF7E3F232A8C6E7700E65BF1 /* MLHINADSwissAuthHandle.m in Sources */,
 				CFA5207324235F8A00834E16 /* Model.xcdatamodeld in Sources */,
 				D5F6BB5D17E8C87500DCBD16 /* MLConstants.m in Sources */,
 				FA6A005B20D39B90002D3A33 /* PatientViewController+smartCard.m in Sources */,

@@ -372,17 +372,19 @@
     }];
 }
 
-- (void)makeQRCodeWithAuthHandler:(NSString *)authHandle
-                    ePrescription:(Prescription *)prescription
-                         callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
+- (void)makeQRCodeWithAuthHandle:(MLHINADSwissAuthHandle *)authHandle
+                   ePrescription:(Prescription *)prescription
+                        callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/ePrescription/create?output-format=qrcode", CERTIFACTION_SERVER]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setAllHTTPHeaderFields:@{
         @"Content-Type": @"text/plain",
-        @"Authorization": [NSString stringWithFormat:@"Bearer %@", authHandle],
+        @"Authorization": [NSString stringWithFormat:@"Bearer %@", authHandle.token],
     }];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[prescription ePrescription]];
+    [authHandle updateLastUsedAt];
+    [[MLPersistenceManager shared] setHINADSwissAuthHandle:authHandle];
 
     NSURLSessionDownloadTask *task = [[NSURLSession sharedSession] downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error) {
