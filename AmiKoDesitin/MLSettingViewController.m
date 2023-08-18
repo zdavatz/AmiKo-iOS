@@ -227,6 +227,7 @@
     if (!tokens) {
         typeof(self) __weak _self = self;
         NSURL *url = [[MLHINClient shared] authURLForADSwiss];
+        NSLog(@"Authenticating with URL: %@", url);
         ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc] initWithURL:url
                                                                             callbackURLScheme:[[MLHINClient shared] oauthCallbackScheme]
                                                                             completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {

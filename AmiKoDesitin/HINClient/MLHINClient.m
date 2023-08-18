@@ -304,6 +304,7 @@
             @"Authorization": [NSString stringWithFormat:@"Bearer %@", token.accessToken],
         }];
         [request setHTTPMethod:@"POST"];
+        NSLog(@"Fetching SAML from: %@", request.URL);
         [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (error != nil) {
                 callback(error, nil);
@@ -350,6 +351,7 @@
             return;
         }
         [request setHTTPMethod:@"POST"];
+        NSLog(@"Fetching Auth Handle from: %@", request.URL);
         [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (error != nil) {
                 callback(error, nil);
