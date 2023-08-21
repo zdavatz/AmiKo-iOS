@@ -62,6 +62,9 @@
 "Desitin Products" = "Desitin Produkte";
 
 /* No comment provided by engineer. */
+"Do you want to sign your prescription?" = "Möchten Sie Ihr ERezept unterschreiben?";
+
+/* No comment provided by engineer. */
 "Doctor" = "Arzt";
 
 /* Button */
@@ -96,6 +99,15 @@
 
 /* Search placeholder */
 "Full Text Search" = "Volltext Suche";
+
+/* No comment provided by engineer. */
+"Generating E-Prescription" = "ERezept wird erstellt";
+
+/* No comment provided by engineer. */
+"HIN (ADSwiss) Login:" = "HIN (ADSwiss):";
+
+/* No comment provided by engineer. */
+"HIN (SDS) Login:" = "HIN (SDS):";
 
 /* No comment provided by engineer. */
 "Hits" = "Treffer";
