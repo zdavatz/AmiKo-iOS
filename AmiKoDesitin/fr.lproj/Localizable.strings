@@ -62,6 +62,9 @@
 "Desitin Products" = "Produits Desitin";
 
 /* No comment provided by engineer. */
+"Do you want to delete the files on iCloud?" = "Vous souhaitez signer votre ordonnance électronique?";
+
+/* No comment provided by engineer. */
 "Doctor" = "Médecin";
 
 /* Button */
@@ -96,6 +99,15 @@
 
 /* Search placeholder */
 "Full Text Search" = "Recherche plein-texte";
+
+/* No comment provided by engineer. */
+"Generating E-Prescription" = "La prescription électronique est créée.";
+
+/* No comment provided by engineer. */
+"HIN (ADSwiss) Login:" = "HIN (ADSwiss):";
+
+/* No comment provided by engineer. */
+"HIN (SDS) Login:" = "HIN (SDS):";
 
 /* No comment provided by engineer. */
 "Hits" = "Réponse(s)";
