@@ -1933,7 +1933,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.90;
+				MARKETING_VERSION = 2.9.93;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				SKIP_INSTALL = NO;
@@ -1958,7 +1958,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.90;
+				MARKETING_VERSION = 2.9.93;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				SKIP_INSTALL = NO;
