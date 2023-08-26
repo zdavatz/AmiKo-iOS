@@ -60,6 +60,14 @@
 #endif
 }
 
+- (NSString*)certifactionDomain {
+#ifdef DEBUG
+    return CERTIFACTION_TEST_SERVER;
+#else
+    return CERTIFACTION_SERVER;
+#endif
+}
+
 - (void)fetchAccessTokenWithAuthCode:(NSString *)authCode
                           completion:(void (^_Nonnull)(NSError * _Nullable error, MLHINTokens * _Nullable tokens))callback
 {
@@ -377,7 +385,7 @@
 - (void)makeQRCodeWithAuthHandle:(MLHINADSwissAuthHandle *)authHandle
                    ePrescription:(Prescription *)prescription
                         callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/ePrescription/create?output-format=qrcode", CERTIFACTION_SERVER]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/ePrescription/create?output-format=qrcode", [self certifactionDomain]]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setAllHTTPHeaderFields:@{
         @"Content-Type": @"text/plain",
