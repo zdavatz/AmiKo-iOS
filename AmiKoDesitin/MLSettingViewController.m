@@ -9,7 +9,6 @@
 #import "MLSettingViewController.h"
 #import "SWRevealViewController.h"
 #import "MLPersistenceManager.h"
-#import <SafariServices/SafariServices.h>
 #import <AuthenticationServices/AuthenticationServices.h>
 #import "HINClient/MLHINClient.h"
 
@@ -200,7 +199,7 @@
                 [[MLHINClient shared] handleSDSOAuthCallback:callbackURL callback:^(NSError * _Nonnull error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [alert dismissViewControllerAnimated:YES completion:nil];
-                        if (error) {
+                        if (error && !([error.domain isEqual:@"com.apple.AuthenticationServices.WebAuthenticationSession"] && error.code == ASWebAuthenticationSessionErrorCodeCanceledLogin)) {
                             UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error",@"")
                                                                                                 message:error.localizedDescription
                                                                                          preferredStyle:UIAlertControllerStyleAlert];
@@ -226,35 +225,19 @@
     MLHINTokens *tokens = [[MLPersistenceManager shared] HINADSwissTokens];
     if (!tokens) {
         typeof(self) __weak _self = self;
-        NSURL *url = [[MLHINClient shared] authURLForADSwiss];
-        NSLog(@"Authenticating with URL: %@", url);
-        ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc] initWithURL:url
-                                                                            callbackURLScheme:[[MLHINClient shared] oauthCallbackScheme]
-                                                                            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-            if (callbackURL) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Loading",@"")
-                                                                               message:nil
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                [_self presentViewController:alert animated:YES completion:nil];
-                [[MLHINClient shared] handleADSwissOAuthCallback:callbackURL callback:^(NSError * _Nonnull error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [alert dismissViewControllerAnimated:YES completion:nil];
-                        if (error) {
-                            UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error",@"")
-                                                                                                message:error.localizedDescription
-                                                                                         preferredStyle:UIAlertControllerStyleAlert];
-                            [errorAlert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK",@"")
-                                                                           style:UIAlertActionStyleDefault
-                                                                         handler:nil]];
-                            [_self presentViewController:errorAlert animated:YES completion:nil];
-                        }
-                        [_self.tableView reloadData];
-                    });
-                }];
+        [[MLHINClient shared] performADSwissOAuthWithViewController:self
+                                                           callback:^(NSError * _Nullable error) {
+            if (error) {
+                UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error",@"")
+                                                                                    message:error.localizedDescription
+                                                                             preferredStyle:UIAlertControllerStyleAlert];
+                [errorAlert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK",@"")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:nil]];
+                [_self presentViewController:errorAlert animated:YES completion:nil];
             }
+            [_self.tableView reloadData];
         }];
-        session.presentationContextProvider = self;
-        [session start];
     } else {
         [[MLPersistenceManager shared] setHINADSwissTokens:nil];
         [self.tableView reloadData];

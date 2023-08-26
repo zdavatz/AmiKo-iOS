@@ -14,5 +14,6 @@
 
 // No trailing slash please
 #define CERTIFACTION_SERVER @"YOUR_CERTIFACTION_SERVER"
+#define CERTIFACTION_TEST_SERVER @"YOUR_CERTIFACTION_TEST_SERVER"
 
 #endif /* MLHINClientCredential_h */
