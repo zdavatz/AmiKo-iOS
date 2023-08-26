@@ -60,6 +60,14 @@
 #endif
 }
 
+- (NSString*)certifactionDomain {
+#ifdef DEBUG
+    return CERTIFACTION_TEST_SERVER;
+#else
+    return CERTIFACTION_SERVER;
+#endif
+}
+
 - (void)fetchAccessTokenWithAuthCode:(NSString *)authCode
                           completion:(void (^_Nonnull)(NSError * _Nullable error, MLHINTokens * _Nullable tokens))callback
 {
@@ -291,7 +299,7 @@
 
 # pragma mark: ADSwiss
 
-- (void)fetchADSwissSAMLWithToken:(MLHINTokens *)token completion:(void (^_Nonnull)(NSError *_Nullable error, MLHINADSwissSaml *result))callback {
+- (void)fetchADSwissSAMLWithToken:(MLHINTokens *)token completion:(void (^_Nonnull)(NSError *_Nullable error, MLHINADSwissSaml * _Nullable result))callback {
     [self renewTokenIfNeededWithToken:token
                            completion:^(NSError * _Nullable error, MLHINTokens * _Nullable newTokens) {
         if (error != nil) {
@@ -377,7 +385,7 @@
 - (void)makeQRCodeWithAuthHandle:(MLHINADSwissAuthHandle *)authHandle
                    ePrescription:(Prescription *)prescription
                         callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/ePrescription/create?output-format=qrcode", CERTIFACTION_SERVER]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/ePrescription/create?output-format=qrcode", [self certifactionDomain]]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setAllHTTPHeaderFields:@{
         @"Content-Type": @"text/plain",
@@ -407,6 +415,46 @@
         callback(nil, image);
     }];
     [task resume];
+}
+
+#pragma mark: - OAuth UI flow
+
+- (void)performADSwissOAuthWithViewController:(UIViewController<ASWebAuthenticationPresentationContextProviding> *)controller
+                                     callback:(void(^)(NSError * _Nullable error))callback {
+    if ([[MLPersistenceManager shared] HINADSwissTokens]) {
+        callback(nil);
+        return;
+    }
+    NSURL *url = [self authURLForADSwiss];
+    NSLog(@"Authenticating with URL: %@", url);
+    ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc] initWithURL:url
+                                                                        callbackURLScheme:[[MLHINClient shared] oauthCallbackScheme]
+                                                                        completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+        if (error) {
+            if ([[error domain] isEqual:@"com.apple.AuthenticationServices.WebAuthenticationSession"] && error.code == ASWebAuthenticationSessionErrorCodeCanceledLogin) {
+                // User cancelled is not an error
+                callback(nil);
+            } else {
+                callback(error);
+            }
+            return;
+        }
+        if (callbackURL) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Loading",@"")
+                                                                           message:nil
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [controller presentViewController:alert animated:YES completion:nil];
+            [[MLHINClient shared] handleADSwissOAuthCallback:callbackURL callback:^(NSError * _Nonnull error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [alert dismissViewControllerAnimated:YES completion:^{
+                        callback(error);
+                    }];
+                });
+            }];
+        }
+    }];
+    session.presentationContextProvider = controller;
+    [session start];
 }
 
 @end

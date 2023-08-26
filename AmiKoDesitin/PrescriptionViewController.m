@@ -2163,10 +2163,6 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s sharing <%@>", __FUNCTION__, urlAttachment);
 #endif
-    if (![[MLPersistenceManager shared] HINADSwissTokens]) {
-        [self sharePrescription:urlAttachment withEPrescription:NO];
-        return;
-    }
     if ([[MLPersistenceManager shared] HINADSwissAuthHandle]) {
         [self sharePrescription:urlAttachment withEPrescription:YES];
         return;
@@ -2195,7 +2191,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
     typeof(self) __weak _self = self;
     MLHINTokens *tokens = [[MLPersistenceManager shared] HINADSwissTokens];
-    [[MLHINClient shared] fetchADSwissSAMLWithToken:tokens completion:^(NSError * _Nullable error, MLHINADSwissSaml * _Nonnull result) {
+    [[MLHINClient shared] fetchADSwissSAMLWithToken:tokens completion:^(NSError * _Nullable error, MLHINADSwissSaml * _Nullable result) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 callback(error, nil);
@@ -2205,7 +2201,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                                                                 callbackURLScheme:[[MLHINClient shared] oauthCallbackScheme]
                                                                                 completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
                 if (error) {
-                    callback(error, nil);
+                    if ([[error domain] isEqual:@"com.apple.AuthenticationServices.WebAuthenticationSession"] && error.code == ASWebAuthenticationSessionErrorCodeCanceledLogin) {
+                        // User cancelled is not an error
+                        callback(nil, nil);
+                    } else {
+                        callback(error, nil);
+                    }
                     return;
                 }
                 if (callbackURL) {
@@ -2250,14 +2251,29 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 
 - (void)getEPrescriptionQRCodeWithCallback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback {
     typeof(self) __weak _self = self;
-    [self getADSwissAuthHandleWithCallback:^(NSError * _Nullable error, MLHINADSwissAuthHandle * _Nullable authHandle) {
+    [[MLHINClient shared] performADSwissOAuthWithViewController:self
+                                                       callback:^(NSError * _Nullable error) {
         if (error) {
             callback(error, nil);
             return;
         }
-        [[MLHINClient shared] makeQRCodeWithAuthHandle:authHandle
-                                         ePrescription:_self.prescription
-                                              callback:callback];
+        if ([[MLPersistenceManager shared] HINADSwissTokens]) {
+            [self getADSwissAuthHandleWithCallback:^(NSError * _Nullable error, MLHINADSwissAuthHandle * _Nullable authHandle) {
+                if (error) {
+                    callback(error, nil);
+                    return;
+                }
+                if (authHandle) {
+                    [[MLHINClient shared] makeQRCodeWithAuthHandle:authHandle
+                                                     ePrescription:_self.prescription
+                                                          callback:callback];
+                } else {
+                    callback(nil, nil);
+                }
+            }];
+        } else {
+            callback(nil, nil);
+        }
     }];
 }
 

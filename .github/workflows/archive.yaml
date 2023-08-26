@@ -16,8 +16,10 @@ jobs:
         env: # Or as an environment variable
           HIN_CLIENT_ID: ${{ secrets.HIN_CLIENT_ID }}
           HIN_CLIENT_SECRET: ${{ secrets.HIN_CLIENT_SECRET }}
+          CERTIFACTION_SERVER: ${{ secrets.CERTIFACTION_SERVER }}
+          CERTIFACTION_TEST_SERVER: ${{ secrets.CERTIFACTION_TEST_SERVER }}
         run: |
-          sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/;s#YOUR_CERTIFACTION_SERVER#$CERTIFACTION_SERVER#" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
+          sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/;s#YOUR_CERTIFACTION_SERVER#$CERTIFACTION_SERVER#;s#YOUR_CERTIFACTION_TEST_SERVER#$CERTIFACTION_TEST_SERVER#" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
       - name: Download databases
         run: |
           cd AmiKoDesitin
