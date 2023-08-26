@@ -1876,7 +1876,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.93;
+				MARKETING_VERSION = 2.9.94;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1906,7 +1906,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.93;
+				MARKETING_VERSION = 2.9.94;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1924,6 +1924,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
 				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 20230826;
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1949,6 +1950,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
 				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 20230826;
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
