@@ -12,6 +12,7 @@
 #import "MLHINADSwissSaml.h"
 #import "Prescription.h"
 #import "MLHINADSwissAuthHandle.h"
+#import <AuthenticationServices/AuthenticationServices.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)fetchSDSSelfWithToken:(MLHINTokens *)token completion:(void (^_Nonnull)(NSError *error, MLHINProfile *profile))callback;
 
-- (void)fetchADSwissSAMLWithToken:(MLHINTokens *)token completion:(void (^_Nonnull)(NSError *_Nullable error, MLHINADSwissSaml *result))callback;
+- (void)fetchADSwissSAMLWithToken:(MLHINTokens *)token completion:(void (^_Nonnull)(NSError *_Nullable error, MLHINADSwissSaml * _Nullable result))callback;
 
 - (void)fetchADSwissAuthHandleWithToken:(MLHINTokens *)token
                                authCode:(NSString *)authCode
@@ -43,6 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)makeQRCodeWithAuthHandle:(MLHINADSwissAuthHandle *)authHandle
                    ePrescription:(Prescription *)prescription
                         callback:(void(^)(NSError *_Nullable error, UIImage *_Nullable qrCode))callback;
+
+#pragma mark: - OAuth UI flow
+
+- (void)performADSwissOAuthWithViewController:(UIViewController<ASWebAuthenticationPresentationContextProviding> *)controller
+                                     callback:(void(^)(NSError * _Nullable error))callback;
 
 @end
 
