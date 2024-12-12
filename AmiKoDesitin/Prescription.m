@@ -146,6 +146,13 @@
             @"FName": self.patient.givenName ?: @"",
             @"LName": self.patient.familyName ?: @"",
             @"BDt": [self formatBirthdayForEPrescription:self.patient.birthDate] ?: @"",
+            @"Gender": [self.patient.gender isEqual:@"man"] ? @1 : [self.patient.gender isEqual:@"woman"] ? @2 : [NSNull null],
+            @"Street": self.patient.postalAddress ?: @"",
+            @"Zip": self.patient.zipCode ?: @"",
+            @"City": self.patient.city ?: @"",
+            @"Lng": [NSLocale systemLocale].localeIdentifier ?: @"",
+            @"Phone": self.patient.phoneNumber ?: @"",
+            @"Email": self.patient.emailAddress ?: @"",
         },
         @"Medicaments": items,
         @"MedType": @3, // Prescription
