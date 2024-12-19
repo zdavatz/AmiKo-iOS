@@ -423,7 +423,7 @@
     NSError *error;
 
     prescription.placeDate = [NSString stringWithFormat:@"%@, %@",
-                              prescription.doctor.city,
+                              prescription.doctor.city ?: prescription.doctor.zsrNumber,
                               [MLUtility prettyTime]];
 
     NSMutableDictionary *prescriptionDict = [NSMutableDictionary new];
