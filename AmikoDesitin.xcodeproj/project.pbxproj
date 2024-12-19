@@ -60,6 +60,24 @@
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
 		CF62625D241D13DD00FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
+		CF7118E92D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118DB2D12C0AF00C1FA82 /* ZurRoseAddress.m */; };
+		CF7118EA2D12C0AF00C1FA82 /* EPrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118D92D12C0AF00C1FA82 /* EPrescription.m */; };
+		CF7118EB2D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118DD2D12C0AF00C1FA82 /* ZurRosePatientAddress.m */; };
+		CF7118EC2D12C0AF00C1FA82 /* ZurRosePrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118E12D12C0AF00C1FA82 /* ZurRosePrescription.m */; };
+		CF7118ED2D12C0AF00C1FA82 /* ZurRoseProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118E52D12C0AF00C1FA82 /* ZurRoseProduct.m */; };
+		CF7118EE2D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118E32D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m */; };
+		CF7118EF2D12C0AF00C1FA82 /* ZurRosePosology.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118DF2D12C0AF00C1FA82 /* ZurRosePosology.m */; };
+		CF7118F02D12C0AF00C1FA82 /* client.p12 in Resources */ = {isa = PBXBuildFile; fileRef = CF7118E72D12C0AF00C1FA82 /* client.p12 */; };
+		CF7118F12D12C0AF00C1FA82 /* client.p12 in Resources */ = {isa = PBXBuildFile; fileRef = CF7118E72D12C0AF00C1FA82 /* client.p12 */; };
+		CF7118F22D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118DB2D12C0AF00C1FA82 /* ZurRoseAddress.m */; };
+		CF7118F32D12C0AF00C1FA82 /* EPrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118D92D12C0AF00C1FA82 /* EPrescription.m */; };
+		CF7118F42D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118DD2D12C0AF00C1FA82 /* ZurRosePatientAddress.m */; };
+		CF7118F52D12C0AF00C1FA82 /* ZurRosePrescription.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118E12D12C0AF00C1FA82 /* ZurRosePrescription.m */; };
+		CF7118F62D12C0AF00C1FA82 /* ZurRoseProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118E52D12C0AF00C1FA82 /* ZurRoseProduct.m */; };
+		CF7118F72D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118E32D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m */; };
+		CF7118F82D12C0AF00C1FA82 /* ZurRosePosology.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7118DF2D12C0AF00C1FA82 /* ZurRosePosology.m */; };
+		CF7118FA2D12E34C00C1FA82 /* swiss-zip-to-kanton.json in Resources */ = {isa = PBXBuildFile; fileRef = CF7118F92D12E34C00C1FA82 /* swiss-zip-to-kanton.json */; };
+		CF7118FB2D12E34C00C1FA82 /* swiss-zip-to-kanton.json in Resources */ = {isa = PBXBuildFile; fileRef = CF7118F92D12E34C00C1FA82 /* swiss-zip-to-kanton.json */; };
 		CF7E3F222A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7E3F212A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m */; };
 		CF7E3F232A8C6E7700E65BF1 /* MLHINADSwissAuthHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7E3F212A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m */; };
 		CF8664E82A6FF71700D1D81E /* MLHINTokens.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8664DE2A6FF71700D1D81E /* MLHINTokens.m */; };
@@ -363,6 +381,23 @@
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
 		CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLPersistenceManager.m; path = AmiKoDesitin/Persistence/MLPersistenceManager.m; sourceTree = SOURCE_ROOT; };
+		CF7118D82D12C0AF00C1FA82 /* EPrescription.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EPrescription.h; sourceTree = "<group>"; };
+		CF7118D92D12C0AF00C1FA82 /* EPrescription.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EPrescription.m; sourceTree = "<group>"; };
+		CF7118DA2D12C0AF00C1FA82 /* ZurRoseAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZurRoseAddress.h; sourceTree = "<group>"; };
+		CF7118DB2D12C0AF00C1FA82 /* ZurRoseAddress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZurRoseAddress.m; sourceTree = "<group>"; };
+		CF7118DC2D12C0AF00C1FA82 /* ZurRosePatientAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZurRosePatientAddress.h; sourceTree = "<group>"; };
+		CF7118DD2D12C0AF00C1FA82 /* ZurRosePatientAddress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZurRosePatientAddress.m; sourceTree = "<group>"; };
+		CF7118DE2D12C0AF00C1FA82 /* ZurRosePosology.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZurRosePosology.h; sourceTree = "<group>"; };
+		CF7118DF2D12C0AF00C1FA82 /* ZurRosePosology.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZurRosePosology.m; sourceTree = "<group>"; };
+		CF7118E02D12C0AF00C1FA82 /* ZurRosePrescription.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZurRosePrescription.h; sourceTree = "<group>"; };
+		CF7118E12D12C0AF00C1FA82 /* ZurRosePrescription.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZurRosePrescription.m; sourceTree = "<group>"; };
+		CF7118E22D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZurRosePrescriptorAddress.h; sourceTree = "<group>"; };
+		CF7118E32D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZurRosePrescriptorAddress.m; sourceTree = "<group>"; };
+		CF7118E42D12C0AF00C1FA82 /* ZurRoseProduct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZurRoseProduct.h; sourceTree = "<group>"; };
+		CF7118E52D12C0AF00C1FA82 /* ZurRoseProduct.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZurRoseProduct.m; sourceTree = "<group>"; };
+		CF7118E62D12C0AF00C1FA82 /* ZurRoseCredential.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZurRoseCredential.h; sourceTree = "<group>"; };
+		CF7118E72D12C0AF00C1FA82 /* client.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = client.p12; sourceTree = "<group>"; };
+		CF7118F92D12E34C00C1FA82 /* swiss-zip-to-kanton.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "swiss-zip-to-kanton.json"; sourceTree = "<group>"; };
 		CF7E3F202A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLHINADSwissAuthHandle.h; path = AmiKoDesitin/HINClient/MLHINADSwissAuthHandle.h; sourceTree = SOURCE_ROOT; };
 		CF7E3F212A8C6E7200E65BF1 /* MLHINADSwissAuthHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLHINADSwissAuthHandle.m; path = AmiKoDesitin/HINClient/MLHINADSwissAuthHandle.m; sourceTree = SOURCE_ROOT; };
 		CF8664DD2A6FF71700D1D81E /* MLHINClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLHINClient.h; sourceTree = "<group>"; };
@@ -848,6 +883,30 @@
 			path = Persistence;
 			sourceTree = "<group>";
 		};
+		CF7118E82D12C0AF00C1FA82 /* EPrescription */ = {
+			isa = PBXGroup;
+			children = (
+				CF7118DA2D12C0AF00C1FA82 /* ZurRoseAddress.h */,
+				CF7118DB2D12C0AF00C1FA82 /* ZurRoseAddress.m */,
+				CF7118DC2D12C0AF00C1FA82 /* ZurRosePatientAddress.h */,
+				CF7118DD2D12C0AF00C1FA82 /* ZurRosePatientAddress.m */,
+				CF7118DE2D12C0AF00C1FA82 /* ZurRosePosology.h */,
+				CF7118DF2D12C0AF00C1FA82 /* ZurRosePosology.m */,
+				CF7118E02D12C0AF00C1FA82 /* ZurRosePrescription.h */,
+				CF7118E12D12C0AF00C1FA82 /* ZurRosePrescription.m */,
+				CF7118E22D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.h */,
+				CF7118E32D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m */,
+				CF7118E42D12C0AF00C1FA82 /* ZurRoseProduct.h */,
+				CF7118E52D12C0AF00C1FA82 /* ZurRoseProduct.m */,
+				CF7118E62D12C0AF00C1FA82 /* ZurRoseCredential.h */,
+				CF7118E72D12C0AF00C1FA82 /* client.p12 */,
+				CF7118D82D12C0AF00C1FA82 /* EPrescription.h */,
+				CF7118D92D12C0AF00C1FA82 /* EPrescription.m */,
+				CF7118F92D12E34C00C1FA82 /* swiss-zip-to-kanton.json */,
+			);
+			path = EPrescription;
+			sourceTree = "<group>";
+		};
 		CF8664DC2A6FF6EF00D1D81E /* HINClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -1064,6 +1123,7 @@
 				FAD0664B22DF2A080078E28B /* FullTextSearch.h */,
 				FAD0664C22DF2A080078E28B /* FullTextSearch.m */,
 				CF8664DC2A6FF6EF00D1D81E /* HINClient */,
+				CF7118E82D12C0AF00C1FA82 /* EPrescription */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1374,6 +1434,8 @@
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				D533DAAE17B435E300199C38 /* desitin_icon_72x72.png in Resources */,
+				CF7118F02D12C0AF00C1FA82 /* client.p12 in Resources */,
+				CF7118FA2D12E34C00C1FA82 /* swiss-zip-to-kanton.json in Resources */,
 				D5A2251B19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				D533DAB017B4362600199C38 /* desitin_icon_144x144.png in Resources */,
 				D565DA8517B7D81B0002E2CF /* Default-568h@2x.png in Resources */,
@@ -1459,6 +1521,8 @@
 				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
 				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
+				CF7118F12D12C0AF00C1FA82 /* client.p12 in Resources */,
+				CF7118FB2D12E34C00C1FA82 /* swiss-zip-to-kanton.json in Resources */,
 				D5A2251C19461C390078FEFF /* 907-plus-rounded-square.png in Resources */,
 				FA3B622822E88E6600A80296 /* FullTextOverviewVC.xib in Resources */,
 				D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */,
@@ -1539,6 +1603,13 @@
 				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
 				CFB672922A7FA7D5004A0063 /* LFCGzipUtility.m in Sources */,
+				CF7118E92D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */,
+				CF7118EA2D12C0AF00C1FA82 /* EPrescription.m in Sources */,
+				CF7118EB2D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */,
+				CF7118EC2D12C0AF00C1FA82 /* ZurRosePrescription.m in Sources */,
+				CF7118ED2D12C0AF00C1FA82 /* ZurRoseProduct.m in Sources */,
+				CF7118EE2D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m in Sources */,
+				CF7118EF2D12C0AF00C1FA82 /* ZurRosePosology.m in Sources */,
 				CFA5207A24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				D5A6F26A17B16A5900EAB24B /* SWRevealViewController.m in Sources */,
 				439B6C6520206D210018F922 /* AmkListViewController.m in Sources */,
@@ -1606,6 +1677,13 @@
 				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				CFB672942A7FA7E3004A0063 /* LFCGzipUtility.m in Sources */,
+				CF7118F22D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */,
+				CF7118F32D12C0AF00C1FA82 /* EPrescription.m in Sources */,
+				CF7118F42D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */,
+				CF7118F52D12C0AF00C1FA82 /* ZurRosePrescription.m in Sources */,
+				CF7118F62D12C0AF00C1FA82 /* ZurRoseProduct.m in Sources */,
+				CF7118F72D12C0AF00C1FA82 /* ZurRosePrescriptorAddress.m in Sources */,
+				CF7118F82D12C0AF00C1FA82 /* ZurRosePosology.m in Sources */,
 				FAD0664E22DF2A080078E28B /* FullTextSearch.m in Sources */,
 				D5A31F5B18B5207200F56BC5 /* unzip.c in Sources */,
 				D573F4531A990E8600C4F589 /* MLAlertView.m in Sources */,
