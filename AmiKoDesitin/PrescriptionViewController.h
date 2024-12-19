@@ -10,7 +10,7 @@
 
 #import "Prescription.h"
 @import AVFoundation;
-#import "videoViewController.h"
+#import "VideoViewController.h"
 
 #define ppi             72.0
 #define mm2inch         (1/25.4)
@@ -35,7 +35,7 @@
 @property (atomic) Prescription *prescription;
 @property (nonatomic) bool editedMedicines; // "dirty" flag
 
-@property (nonatomic) videoViewController *videoVC;
+@property (nonatomic) VideoViewController *videoVC;
 @property (nonatomic, retain) UIPrinter *SavedPrinter;
 
 

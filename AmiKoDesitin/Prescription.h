@@ -26,6 +26,7 @@
 @property (atomic) NSMutableArray<Product *> *medications;
 
 - (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithAMKDictionary:(NSDictionary*)receiptData;
 - (NSDictionary *) makePatientDictionary;
 - (NSDictionary *) makeOperatorDictionary;
 - (NSArray *) makeMedicationsArray;
