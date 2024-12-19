@@ -288,10 +288,10 @@
 		FA4827EF22DF861D005135BE /* amiko_frequency_de.db in Resources */ = {isa = PBXBuildFile; fileRef = FA4827EC22DF8613005135BE /* amiko_frequency_de.db */; };
 		FA4FB4A020E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
 		FA4FB4A120E4BF030084F656 /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4FB4A320E4BF030084F656 /* CameraViewController.xib */; };
-		FA5E5E4920F5F71B00CDB6C6 /* videoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5E5E4720F5F71B00CDB6C6 /* videoViewController.m */; };
-		FA5E5E4A20F5F71B00CDB6C6 /* videoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5E5E4720F5F71B00CDB6C6 /* videoViewController.m */; };
-		FA5E5E4B20F5F71B00CDB6C6 /* videoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5E5E4820F5F71B00CDB6C6 /* videoViewController.xib */; };
-		FA5E5E4C20F5F71B00CDB6C6 /* videoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5E5E4820F5F71B00CDB6C6 /* videoViewController.xib */; };
+		FA5E5E4920F5F71B00CDB6C6 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5E5E4720F5F71B00CDB6C6 /* VideoViewController.m */; };
+		FA5E5E4A20F5F71B00CDB6C6 /* VideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5E5E4720F5F71B00CDB6C6 /* VideoViewController.m */; };
+		FA5E5E4B20F5F71B00CDB6C6 /* VideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5E5E4820F5F71B00CDB6C6 /* VideoViewController.xib */; };
+		FA5E5E4C20F5F71B00CDB6C6 /* VideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5E5E4820F5F71B00CDB6C6 /* VideoViewController.xib */; };
 		FA5FA7EF205A743200E0C042 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7F2205A743200E0C042 /* MLViewController.xib */; };
 		FA5FA7F0205A743200E0C042 /* MLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7F2205A743200E0C042 /* MLViewController.xib */; };
 		FA5FA7F7205A745B00E0C042 /* MLViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5FA7FA205A745B00E0C042 /* MLViewController~iphone.xib */; };
@@ -567,9 +567,9 @@
 		FA528CF120D8F1590066CE89 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tessdata; path = AmiKoDesitin/tessdata; sourceTree = "<group>"; };
 		FA577A4E2109CC1E00BE3732 /* avcamtypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = avcamtypes.h; sourceTree = "<group>"; };
 		FA5CAC06207CF53B003B32C3 /* MLConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLConstants.h; path = AmiKoDesitin/MLConstants.h; sourceTree = SOURCE_ROOT; };
-		FA5E5E4620F5F71B00CDB6C6 /* videoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = videoViewController.h; path = AmiKoDesitin/videoViewController.h; sourceTree = SOURCE_ROOT; };
-		FA5E5E4720F5F71B00CDB6C6 /* videoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = videoViewController.m; path = AmiKoDesitin/videoViewController.m; sourceTree = SOURCE_ROOT; };
-		FA5E5E4820F5F71B00CDB6C6 /* videoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = videoViewController.xib; path = AmiKoDesitin/videoViewController.xib; sourceTree = SOURCE_ROOT; };
+		FA5E5E4620F5F71B00CDB6C6 /* VideoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VideoViewController.h; path = AmiKoDesitin/VideoViewController.h; sourceTree = SOURCE_ROOT; };
+		FA5E5E4720F5F71B00CDB6C6 /* VideoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = VideoViewController.m; path = AmiKoDesitin/VideoViewController.m; sourceTree = SOURCE_ROOT; };
+		FA5E5E4820F5F71B00CDB6C6 /* VideoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = VideoViewController.xib; path = AmiKoDesitin/VideoViewController.xib; sourceTree = SOURCE_ROOT; };
 		FA5FA7F1205A743200E0C042 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MLViewController.xib; sourceTree = "<group>"; };
 		FA5FA7F4205A744D00E0C042 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = ../AmiKoDesitin/de.lproj/MLViewController.strings; sourceTree = "<group>"; };
 		FA5FA7F6205A744E00E0C042 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = ../AmiKoDesitin/fr.lproj/MLViewController.strings; sourceTree = "<group>"; };
@@ -1221,9 +1221,9 @@
 		FA5E5E4520F5F55C00CDB6C6 /* video */ = {
 			isa = PBXGroup;
 			children = (
-				FA5E5E4620F5F71B00CDB6C6 /* videoViewController.h */,
-				FA5E5E4720F5F71B00CDB6C6 /* videoViewController.m */,
-				FA5E5E4820F5F71B00CDB6C6 /* videoViewController.xib */,
+				FA5E5E4620F5F71B00CDB6C6 /* VideoViewController.h */,
+				FA5E5E4720F5F71B00CDB6C6 /* VideoViewController.m */,
+				FA5E5E4820F5F71B00CDB6C6 /* VideoViewController.xib */,
 			);
 			name = video;
 			sourceTree = "<group>";
@@ -1397,7 +1397,7 @@
 				D5A225151945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				D5A2252219461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
 				D5A2250B1945EA830078FEFF /* drug_interactions_csv_de.csv in Resources */,
-				FA5E5E4B20F5F71B00CDB6C6 /* videoViewController.xib in Resources */,
+				FA5E5E4B20F5F71B00CDB6C6 /* VideoViewController.xib in Resources */,
 				D5A2252D19461D750078FEFF /* interactions_css.css in Resources */,
 				D5A6F28617B16B6000EAB24B /* MLTitleViewController~iphone.xib in Resources */,
 				D5A6F2A617B16E4400EAB24B /* 28-star.png in Resources */,
@@ -1482,7 +1482,7 @@
 				D59E895D18B7E7D500185094 /* amiko_db_full_idx_fr.db in Resources */,
 				D5F6BB6D17E8C87500DCBD16 /* MLSecondViewController.xib in Resources */,
 				D5F6BB6E17E8C87500DCBD16 /* MLSecondViewController~iphone.xib in Resources */,
-				FA5E5E4C20F5F71B00CDB6C6 /* videoViewController.xib in Resources */,
+				FA5E5E4C20F5F71B00CDB6C6 /* VideoViewController.xib in Resources */,
 				D5A225161945FC7D0078FEFF /* 938-connections@2x.png in Resources */,
 				FA5FA7F0205A743200E0C042 /* MLViewController.xib in Resources */,
 				D5A2252319461CF60078FEFF /* 907-plus-rounded-square-selected.png in Resources */,
@@ -1588,7 +1588,7 @@
 			files = (
 				4333432D201B64A2006BFC23 /* Operator.m in Sources */,
 				439F25EC20286BF200396C29 /* Prescription.m in Sources */,
-				FA5E5E4920F5F71B00CDB6C6 /* videoViewController.m in Sources */,
+				FA5E5E4920F5F71B00CDB6C6 /* VideoViewController.m in Sources */,
 				43A385062032B930001A5849 /* MLMenuViewController.m in Sources */,
 				CF8F50FB25176706007D62B5 /* MLPatientSync.m in Sources */,
 				FAD0664A22DF29DC0078E28B /* FullTextEntry.m in Sources */,
@@ -1663,7 +1663,7 @@
 				FAD0664F22DF2A140078E28B /* FullTextEntry.m in Sources */,
 				930D94B32077E5BC007E4629 /* Product.m in Sources */,
 				930D94B72077E5E1007E4629 /* PatientDbListViewController.m in Sources */,
-				FA5E5E4A20F5F71B00CDB6C6 /* videoViewController.m in Sources */,
+				FA5E5E4A20F5F71B00CDB6C6 /* VideoViewController.m in Sources */,
 				CF8F50FC25176706007D62B5 /* MLPatientSync.m in Sources */,
 				930D94B42077E5D4007E4629 /* Patient.m in Sources */,
 				FAD0665322DF2A350078E28B /* FullTextDBAdapter.m in Sources */,

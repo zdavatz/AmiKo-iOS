@@ -20,7 +20,7 @@
 
 #pragma mark -
 
-@interface videoViewController : UIViewController
+@interface VideoViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet VideoPreviewView *previewView;
 @property (nonatomic, weak) id<AVCaptureVideoDataOutputSampleBufferDelegate> delegate;

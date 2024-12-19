@@ -6,7 +6,7 @@
 //  Copyright © 2018 Ywesee GmbH. All rights reserved.
 //
 
-#import "videoViewController.h"
+#import "VideoViewController.h"
 #import "avcamtypes.h"
 
 static void * SessionRunningContext = &SessionRunningContext;
@@ -39,7 +39,7 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 #pragma mark -
 
-@interface videoViewController ()
+@interface VideoViewController ()
 
 @property (nonatomic) AVCamSetupResult setupResult;
 @property (nonatomic, strong) dispatch_queue_t sessionQueue;
@@ -51,7 +51,7 @@ static void * SessionRunningContext = &SessionRunningContext;
 
 #pragma mark -
 
-@implementation videoViewController
+@implementation VideoViewController
 
 - (void)viewDidLoad
 {
@@ -221,7 +221,7 @@ static void * SessionRunningContext = &SessionRunningContext;
             initialVideoOrientation = (AVCaptureVideoOrientation)statusBarOrientation;
         }
         self.previewView.videoPreviewLayer.connection.videoOrientation = initialVideoOrientation;
-#if 1
+#if 0
         // The image is stretched, but at least we get the toolbar.
         // Luckily, barcode recognition still works with a distorted image.
         self.previewView.videoPreviewLayer.videoGravity = AVLayerVideoGravityResize;

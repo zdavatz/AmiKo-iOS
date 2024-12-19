@@ -1622,7 +1622,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (!self.videoVC)
         self.videoVC = nil; // So that it will be reinitialized with the current orientation
     
-    self.videoVC = [[videoViewController alloc] initWithNibName:@"videoViewController"
+    self.videoVC = [[VideoViewController alloc] initWithNibName:@"VideoViewController"
                                                          bundle:nil];
     self.videoVC.delegate = self;
     [vc_front presentViewController:self.videoVC
