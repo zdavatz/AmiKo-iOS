@@ -2,6 +2,7 @@
 *.DS_Store
 __MACOSX/
 *.xcscheme
+*.p12
 xcuserdata
 AmiKoDesitin/amiko_report_de.html
 AmiKoDesitin/amiko_report_fr.html
@@ -20,3 +21,4 @@ Podfile.lock
 Pods/
 tessdata/
 AmiKoDesitin/HINClient/MLHINClientCredential.h
+AmiKoDesitin/EPrescription/ZurRoseCredential.h

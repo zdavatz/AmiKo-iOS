@@ -8,7 +8,9 @@ AmiKo for iPhone and iPad.
 
 ## Set credentials
 
-Copy `AmiKoDesitin/HINClient/MLHINClientCredential.sample.h` to `AmiKoDesitin/HINClient/MLHINClientCredential.h` and then fill the secrets.
+- Copy `AmiKoDesitin/HINClient/MLHINClientCredential.sample.h` to `AmiKoDesitin/HINClient/MLHINClientCredential.h` and then fill the secrets.
+- Copy `AmiKoDesitin/EPrescription/ZurRoseCredential.h.sample` to `AmiKoDesitin/EPrescription/ZurRoseCredential.h` and then fill the secrets.
+- Copy ZurRose certificate to `AmiKoDesitin/EPrescription/client.p12`
 
 ## Build the App with
 ```
@@ -30,7 +32,7 @@ rm ~/.itmstransporter/UploadTokens/*.token
 ./testflight
 ```
 
-## .bash_profile 
+## .bash_profile
 for testflight script
 ```
 export ITC_USER="your@email.com"
