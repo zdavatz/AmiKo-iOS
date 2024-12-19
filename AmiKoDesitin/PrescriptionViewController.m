@@ -20,6 +20,7 @@
 #import "MLHINClient.h"
 #import <AuthenticationServices/AuthenticationServices.h>
 #import "MLHINADSwissAuthHandle.h"
+#import "EPrescription.h"
 
 @import Vision;
 
@@ -2444,6 +2445,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     // Detection of barcode with Vision framework
     
     VNDetectBarcodesRequest *barcodeRequest = [VNDetectBarcodesRequest new];
+    barcodeRequest.symbologies = @[VNBarcodeSymbologyEAN13, VNBarcodeSymbologyQR];
     
     CIImage *ciimage = [[CIImage alloc] initWithCGImage:image.CGImage];
     
@@ -2488,6 +2490,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     NSLog(@"%s line %d, set already handled", __FUNCTION__, __LINE__);
 #endif
     barcodeHandled = true;
+    
+    if (firstObservation.symbology == VNBarcodeSymbologyQR) {
+        EPrescription *prescription = [[EPrescription alloc] initWithCHMED16A1String:firstObservation.payloadStringValue];
+        [self didScanEPrescription:prescription];
+        return;
+    }
 
     if (firstObservation.symbology != VNBarcodeSymbologyEAN13) {
         NSLog(@"%s line %d, barcode type is not EAN13", __FUNCTION__, __LINE__);
@@ -2573,4 +2581,47 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [self presentViewController:alertController animated:YES completion:nil];
     } );
 }
+
+- (void)didScanEPrescription:(EPrescription *)ePrescription {
+    Prescription *prescription = [[Prescription alloc] initWithAMKDictionary:ePrescription.amkDict];
+    [[MLPersistenceManager shared] upsertPatient:prescription.patient];
+    NSURL *savedURL = [[MLPersistenceManager shared] savePrescription:prescription];
+    NSLog(@"saved to: %@", savedURL);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Send to ZurRose", @"")
+                                                                            message:nil
+                                                                     preferredStyle:UIAlertControllerStyleAlert];
+        [controller addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Send", @"")
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            [ePrescription.toZurRosePrescription sendToZurRoseWithCompletion:^(NSHTTPURLResponse * _Nonnull res, NSError * _Nonnull error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (error || res.statusCode != 200) {
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"")
+                                                                                       message:[error localizedDescription] ?: [NSString stringWithFormat:NSLocalizedString(@"Error Code: %ld", @""), res.statusCode]
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"")
+                                                                  style:UIAlertActionStyleDefault
+                                                                handler:nil]];
+                        [self presentViewController:alert animated:YES completion:nil];
+                    } else {
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                                       message:NSLocalizedString(@"Prescription is sent to ZurRose", @"")
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+                        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"")
+                                                                  style:UIAlertActionStyleDefault
+                                                                handler:nil]];
+                        [self presentViewController:alert animated:YES completion:nil];
+                    }
+                });
+            }];
+        }]];
+        [controller addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"")
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:nil]];
+        [self presentViewController:controller animated:YES completion:nil];
+    });
+}
+
 @end

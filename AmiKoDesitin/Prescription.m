@@ -34,7 +34,6 @@
     }
     NSData *decryptedData = [encryptedData initWithBase64EncodedData:encryptedData
                                                              options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    
     // jsonDict
     NSDictionary *receiptData = [NSJSONSerialization JSONObjectWithData:decryptedData
                                                                 options:NSJSONReadingAllowFragments
@@ -43,7 +42,10 @@
         NSLog(@"%@", error.localizedDescription);
         return nil;
     }
+    return [self initWithAMKDictionary:receiptData];
+}
 
+- (instancetype)initWithAMKDictionary:(NSDictionary*)receiptData {
     // hashedKey (prescription_hash) is required
     hash = [receiptData objectForKey:KEY_AMK_HASH];
     if (hash == nil ||
@@ -112,8 +114,8 @@
     for (Product *item in medications) {
         NSMutableDictionary *dict = [NSMutableDictionary new];
         
-        [dict setObject:item.title       forKey:KEY_AMK_MED_PROD_NAME];
-        [dict setObject:item.packageInfo forKey:KEY_AMK_MED_PACKAGE];
+        [dict setObject:item.title ?: @""       forKey:KEY_AMK_MED_PROD_NAME];
+        [dict setObject:item.packageInfo ?: @"" forKey:KEY_AMK_MED_PACKAGE];
         if (item.comment)
             [dict setObject:item.comment forKey:KEY_AMK_MED_COMMENT];
 
@@ -121,10 +123,10 @@
             [dict setObject:item.eanCode forKey:KEY_AMK_MED_EAN];
         
         
-        [dict setObject:item.title       forKey:KEY_AMK_MED_TITLE];
-        [dict setObject:item.auth        forKey:KEY_AMK_MED_OWNER];
-        [dict setObject:item.regnrs      forKey:KEY_AMK_MED_REGNRS];
-        [dict setObject:item.atccode     forKey:KEY_AMK_MED_ATC];
+        [dict setObject:item.title ?: @""       forKey:KEY_AMK_MED_TITLE];
+        [dict setObject:item.auth ?: @""        forKey:KEY_AMK_MED_OWNER];
+        [dict setObject:item.regnrs ?: @""      forKey:KEY_AMK_MED_REGNRS];
+        [dict setObject:item.atccode ?: @""     forKey:KEY_AMK_MED_ATC];
         
         [prescription addObject:dict];
     }
