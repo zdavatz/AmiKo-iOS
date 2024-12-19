@@ -293,3 +293,12 @@
 /* No comment provided by engineer. */
 "Your medicine basket is empty" = "Votre panier des médicaments est vide.";
 
+"Send to ZurRose" = "Envoyer à ZurRose?";
+
+"Send" = "Envoyer";
+
+"Error" = "Erreur";
+
+"Error Code: %ld" = "Erreur Code: %ld";
+
+"Prescription is sent to ZurRose" = "La recette a été envoyée à ZurRose.";

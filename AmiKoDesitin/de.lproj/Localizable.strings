@@ -299,3 +299,12 @@
 /* No comment provided by engineer. */
 "Your medicine basket is empty" = "Ihr Medikamentenkorb ist leer.";
 
+"Send to ZurRose" = "Senden an ZurRose?";
+
+"Send" = "Senden";
+
+"Error" = "Fehler";
+
+"Error Code: %ld" = "Fehler Code: %ld";
+
+"Prescription is sent to ZurRose" = "Rezept wurde an ZurRose übermittelt.";
