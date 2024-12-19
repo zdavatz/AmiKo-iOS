@@ -7,6 +7,8 @@ def common_pods
   #pod 'TesseractOCRiOS', '4.0.0'
   #pod 'TesseractOCRiOS', :git => 'git://github.com/parallaxe/Tesseract-OCR-iOS.git', :branch => 'macos-support'
   #pod 'SWRevealViewController'
+  pod 'GZIP', '~> 1.3.0'
+  pod 'KissXML', '~> 5.3.1'
 end
 
 target 'AmiKoDesitin' do
