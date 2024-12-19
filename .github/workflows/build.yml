@@ -19,8 +19,12 @@ jobs:
           HIN_CLIENT_SECRET: ${{ secrets.HIN_CLIENT_SECRET }}
           CERTIFACTION_SERVER: ${{ secrets.CERTIFACTION_SERVER }}
           CERTIFACTION_TEST_SERVER: ${{ secrets.CERTIFACTION_TEST_SERVER }}
+          ZURROSE_CERTIFICATE_PASSWORD: ${{ secrets.ZURROSE_CERTIFICATE_PASSWORD }}
+          ZURROSE_CERTIFICATE: ${{ secrets.ZURROSE_CERTIFICATE }}
         run: |
           sed "s/YOUR_HIN_CLIENT_ID/$HIN_CLIENT_ID/;s/YOUR_HIN_CLIENT_SECRET/$HIN_CLIENT_SECRET/;s#YOUR_CERTIFACTION_SERVER#$CERTIFACTION_SERVER#;s#YOUR_CERTIFACTION_TEST_SERVER#$CERTIFACTION_TEST_SERVER#" ./AmiKoDesitin/HINClient/MLHINClientCredential.sample.h > ./AmiKoDesitin/HINClient/MLHINClientCredential.h
+          sed "s/XXXXXXX/$ZURROSE_CERTIFICATE_PASSWORD/" AmiKoDesitin/EPrescription/ZurRoseCredential.h.sample > ./AmiKoDesitin/EPrescription/ZurRoseCredential.h
+          echo $ZURROSE_CERTIFICATE | base64 --decode > AmiKoDesitin/EPrescription/client.p12
       - name: Download databases
         run: |
           cd AmiKoDesitin
