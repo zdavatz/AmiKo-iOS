@@ -23,6 +23,7 @@
 #define KEY_AMK_PAT_COUNTRY     @"country"
 #define KEY_AMK_PAT_PHONE       @"phone_number"
 #define KEY_AMK_PAT_EMAIL       @"email_address"
+#define KEY_AMK_PAT_HEALTH_CARD_NUMBER @"health_card_number"
 
 @interface Patient : NSObject
 
@@ -39,6 +40,7 @@
 @property (atomic, copy) NSString *postalAddress;
 @property (atomic, copy) NSString *phoneNumber;
 @property (atomic, copy) NSString *emailAddress;
+@property (atomic, copy) NSString *healthCardNumber;
 
 // Only available when patient is read from database
 @property (nonatomic, strong, nullable) NSDate *timestamp;

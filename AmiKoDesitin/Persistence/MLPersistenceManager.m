@@ -502,6 +502,7 @@
             p.phoneNumber = patient.phoneNumber;
             p.emailAddress = patient.emailAddress;
             p.gender = patient.gender;
+            p.healthCardNumber = patient.healthCardNumber;
             p.timestamp = date;
             [[self.coreDataContainer viewContext] save:&error];
             if (error != nil) {

@@ -24,6 +24,7 @@
 @synthesize postalAddress;
 @synthesize phoneNumber;
 @synthesize emailAddress;
+@synthesize healthCardNumber;
 
 - (void)importFromDict:(NSDictionary *)dict
 {
@@ -40,6 +41,7 @@
     country =       [self getString:KEY_AMK_PAT_COUNTRY orNilFromDict:dict];
     phoneNumber =   [self getString:KEY_AMK_PAT_PHONE orNilFromDict:dict];
     emailAddress =  [self getString:KEY_AMK_PAT_EMAIL orNilFromDict:dict];
+    healthCardNumber = [self getString:KEY_AMK_PAT_HEALTH_CARD_NUMBER orNilFromDict:dict];
 }
 
 - (NSDictionary <NSString *, NSString *> *)dictionaryRepresentation {
@@ -57,6 +59,7 @@
     [patientDict setObject:self.country       ?: @"" forKey:KEY_AMK_PAT_COUNTRY];
     [patientDict setObject:self.phoneNumber   ?: @"" forKey:KEY_AMK_PAT_PHONE];
     [patientDict setObject:self.emailAddress  ?: @"" forKey:KEY_AMK_PAT_EMAIL];
+    [patientDict setObject:self.healthCardNumber ?: @"" forKey:KEY_AMK_PAT_HEALTH_CARD_NUMBER];
     return patientDict;
 }
 
