@@ -29,5 +29,7 @@
 @dynamic uniqueId;
 @dynamic weightKg;
 @dynamic zipCode;
+@dynamic healthCardNumber;
+@dynamic insuranceGLN;
 
 @end

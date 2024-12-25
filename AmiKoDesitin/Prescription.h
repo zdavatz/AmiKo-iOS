@@ -10,6 +10,7 @@
 #import "Patient.h"
 #import "Operator.h"
 #import "Product.h"
+#import "ZurRosePrescription.h"
 
 #define KEY_AMK_HASH                @"prescription_hash"
 #define KEY_AMK_PLACE_DATE          @"place_date"
@@ -32,5 +33,6 @@
 - (NSArray *) makeMedicationsArray;
 
 - (NSData *)ePrescription;
+- (ZurRosePrescription *)toZurRosePrescription;
 
 @end

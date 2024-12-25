@@ -21,6 +21,7 @@
 #import <AuthenticationServices/AuthenticationServices.h>
 #import "MLHINADSwissAuthHandle.h"
 #import "EPrescription.h"
+#import "MLSendToZurRoseActivity.h"
 
 @import Vision;
 
@@ -1612,6 +1613,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     [patientVC handleCameraButton:nil];
 }
 
+
 - (void) showCameraForBarcodeAcquisition
 {
     // Make sure front is PrescriptionViewController
@@ -2340,10 +2342,13 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     PrintItemProvider *source3 = [[PrintItemProvider alloc] initWithPlaceholderItem:pdfData];
 
     NSArray *objectsToShare = @[mailBody, urlAttachment, source3];
+    
+    MLSendToZurRoseActivity *zurRoseActivity = [[MLSendToZurRoseActivity alloc] init];
+    zurRoseActivity.zurRosePrescription = self.prescription.toZurRosePrescription;
 
     UIActivityViewController *activityVC =
     [[UIActivityViewController alloc] initWithActivityItems:objectsToShare
-                                      applicationActivities:nil];
+                                      applicationActivities:@[zurRoseActivity]];
 
     NSArray *excludeActivities = @[UIActivityTypeCopyToPasteboard,
                                    UIActivityTypeAssignToContact,
@@ -2589,7 +2594,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     NSLog(@"saved to: %@", savedURL);
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertController *controller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Send to ZurRose", @"")
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Send to ZurRose?", @"")
                                                                             message:nil
                                                                      preferredStyle:UIAlertControllerStyleAlert];
         [controller addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Send", @"")

@@ -29,7 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *uniqueId;
 @property (nonatomic) int64_t weightKg;
 @property (nullable, nonatomic, copy) NSString *zipCode;
-
+@property (nullable, nonatomic, copy) NSString *healthCardNumber;
+@property (nullable, nonatomic, copy) NSString *insuranceGLN;
 @end
 
 NS_ASSUME_NONNULL_END

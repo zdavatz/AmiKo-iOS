@@ -213,7 +213,9 @@ enum {
     mCity.backgroundColor =
     mZipCode.backgroundColor =
     mSex.backgroundColor =
-    mEmail.backgroundColor = [UIColor secondarySystemBackgroundColor];
+    mEmail.backgroundColor =
+    mHealthCardNumber.backgroundColor =
+    mInsuranceGLN.backgroundColor = [UIColor secondarySystemBackgroundColor];
 }
 
 - (UIColor *)getInvalidFieldColor
@@ -262,6 +264,8 @@ enum {
     [mCountry setText:@""];
     [mPhone setText:@""];
     [mEmail setText:@""];
+    [mHealthCardNumber setText:@""];
+    [mInsuranceGLN setText:@""];
     [mSex setSelectedSegmentIndex:UISegmentedControlNoSegment];
     
     mPatientUUID = nil;
@@ -306,6 +310,14 @@ enum {
 
     if (p.phoneNumber)
         [mPhone setText:p.phoneNumber];
+    
+    if (p.healthCardNumber) {
+        [mHealthCardNumber setText:p.healthCardNumber];
+    }
+    
+    if (p.insuranceGLN) {
+        [mInsuranceGLN setText:p.insuranceGLN];
+    }
 
     if (p.uniqueId)
         mPatientUUID = p.uniqueId;
@@ -349,6 +361,8 @@ enum {
     patient.country = [mCountry text];
     patient.phoneNumber = [mPhone text];
     patient.emailAddress = [mEmail text];
+    patient.healthCardNumber = [mHealthCardNumber text];
+    patient.insuranceGLN = [mInsuranceGLN text];
     
     switch ([mSex selectedSegmentIndex]) {
         case UISegmentedControlNoSegment:
@@ -462,18 +476,27 @@ enum {
         (textField.tag == 11) ||    // phone
         (textField.tag == 12))      // email
     {
-        return TRUE;  // Allow non mandatory fields to be empty
+        return YES;  // Allow non mandatory fields to be empty
     }
 
     BOOL valid = TRUE;
-    if ([textField.text isEqualToString:@""])
-        valid = FALSE;
-
-    if (valid)
-        textField.backgroundColor = [UIColor secondarySystemBackgroundColor];
-    else
-        textField.backgroundColor = [self getInvalidFieldColor];
     
+    if (textField == mHealthCardNumber) {
+        NSUInteger length = mHealthCardNumber.text.length;
+        valid = length == 0 || length == 20;
+    } else if (textField == mInsuranceGLN) {
+        NSUInteger length = mInsuranceGLN.text.length;
+        valid = length == 0 || length == 13;
+    } else if ([textField.text isEqualToString:@""]) {
+        valid = NO;
+    }
+
+    if (valid) {
+        textField.backgroundColor = [UIColor secondarySystemBackgroundColor];
+    } else {
+        textField.backgroundColor = [self getInvalidFieldColor];
+    }
+
     return valid;
 }
 

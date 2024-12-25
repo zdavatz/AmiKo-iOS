@@ -84,6 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (ZurRosePrescription *)toZurRosePrescription;
 - (NSDictionary *)amkDict;
++ (NSString *)swissKantonFromZip:(NSString *)zip;
 
 @end
 

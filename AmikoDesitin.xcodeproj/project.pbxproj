@@ -52,10 +52,14 @@
 		CF3684C02427BFE700066502 /* MLSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3684BD2427BFE700066502 /* MLSettingViewController.m */; };
 		CF3684C12427BFE700066502 /* MLSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF3684BE2427BFE700066502 /* MLSettingViewController.xib */; };
 		CF3684C22427BFE700066502 /* MLSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF3684BE2427BFE700066502 /* MLSettingViewController.xib */; };
+		CF3BBEDA2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */; };
+		CF3BBEDB2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */; };
 		CF40D7AB2426062100FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
 		CF40D7AC2426089900FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
 		CF426A6524362DF200A107AB /* MLUbiquitousStateAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF426A6424362DF200A107AB /* MLUbiquitousStateAlertController.m */; };
 		CF426A6624362DF200A107AB /* MLUbiquitousStateAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF426A6424362DF200A107AB /* MLUbiquitousStateAlertController.m */; };
+		CF44671A2D1C217A00549546 /* bag-to-insurance-gln.json in Resources */ = {isa = PBXBuildFile; fileRef = CF4467192D1C217A00549546 /* bag-to-insurance-gln.json */; };
+		CF44671B2D1C217A00549546 /* bag-to-insurance-gln.json in Resources */ = {isa = PBXBuildFile; fileRef = CF4467192D1C217A00549546 /* bag-to-insurance-gln.json */; };
 		CF626256241BAD3C00FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF626257241BAD4400FBCCD9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF626255241BAD3C00FBCCD9 /* CloudKit.framework */; };
 		CF62625C241D0E6600FBCCD9 /* MLPersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CF62625B241D0E6600FBCCD9 /* MLPersistenceManager.m */; };
@@ -373,10 +377,13 @@
 		CF3684BC2427BFE700066502 /* MLSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLSettingViewController.h; path = AmiKoDesitin/MLSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		CF3684BD2427BFE700066502 /* MLSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLSettingViewController.m; path = AmiKoDesitin/MLSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		CF3684BE2427BFE700066502 /* MLSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MLSettingViewController.xib; path = AmiKoDesitin/MLSettingViewController.xib; sourceTree = SOURCE_ROOT; };
+		CF3BBED82D19428B00EDC3F7 /* MLSendToZurRoseActivity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLSendToZurRoseActivity.h; path = AmiKoDesitin/MLSendToZurRoseActivity.h; sourceTree = SOURCE_ROOT; };
+		CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLSendToZurRoseActivity.m; path = AmiKoDesitin/MLSendToZurRoseActivity.m; sourceTree = SOURCE_ROOT; };
 		CF40D7A92426062100FDCFCD /* MLiCloudToLocalMigration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLiCloudToLocalMigration.h; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.h"; sourceTree = SOURCE_ROOT; };
 		CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLiCloudToLocalMigration.m; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.m"; sourceTree = SOURCE_ROOT; };
 		CF426A6324362DF200A107AB /* MLUbiquitousStateAlertController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLUbiquitousStateAlertController.h; path = AmiKoDesitin/Persistence/MLUbiquitousStateAlertController.h; sourceTree = SOURCE_ROOT; };
 		CF426A6424362DF200A107AB /* MLUbiquitousStateAlertController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLUbiquitousStateAlertController.m; path = AmiKoDesitin/Persistence/MLUbiquitousStateAlertController.m; sourceTree = SOURCE_ROOT; };
+		CF4467192D1C217A00549546 /* bag-to-insurance-gln.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "bag-to-insurance-gln.json"; sourceTree = "<group>"; };
 		CF626254241B7A9E00FBCCD9 /* CoMedDesitin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoMedDesitin.entitlements; sourceTree = "<group>"; };
 		CF626255241BAD3C00FBCCD9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CF62625A241D0E6600FBCCD9 /* MLPersistenceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLPersistenceManager.h; path = AmiKoDesitin/Persistence/MLPersistenceManager.h; sourceTree = SOURCE_ROOT; };
@@ -778,6 +785,8 @@
 				430285BC20160FB1003B2EF3 /* PrescriptionViewController.h */,
 				430285BD20160FB1003B2EF3 /* PrescriptionViewController.m */,
 				4387FC3F20189DB4000A5A0F /* PrescriptionViewController.xib */,
+				CF3BBED82D19428B00EDC3F7 /* MLSendToZurRoseActivity.h */,
+				CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */,
 			);
 			name = front;
 			sourceTree = "<group>";
@@ -806,6 +815,7 @@
 				439F261F2028C8A600396C29 /* PatientViewController.h */,
 				439F26202028C8A700396C29 /* PatientViewController.m */,
 				FA4511BA204ECBCB00899A77 /* PatientViewController.xib */,
+				CF4467192D1C217A00549546 /* bag-to-insurance-gln.json */,
 			);
 			name = front;
 			sourceTree = "<group>";
@@ -1431,6 +1441,7 @@
 				D5A22539194A3A400078FEFF /* 218-trash2.png in Resources */,
 				D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */,
 				D533DAAC17B4351700199C38 /* Default@2x.png in Resources */,
+				CF44671B2D1C217A00549546 /* bag-to-insurance-gln.json in Resources */,
 				D551D53F17F22A58000EC52A /* desitin_icon_120x120.png in Resources */,
 				D554574C18B3E85D003299E0 /* 939-download-rectangle@2x.png in Resources */,
 				D533DAAE17B435E300199C38 /* desitin_icon_72x72.png in Resources */,
@@ -1518,6 +1529,7 @@
 				D5F6BB8117E8C87500DCBD16 /* desitin_icon_72x72.png in Resources */,
 				FA4827EE22DF8618005135BE /* amiko_frequency_fr.db in Resources */,
 				D5A2253A194A3A400078FEFF /* 218-trash2.png in Resources */,
+				CF44671A2D1C217A00549546 /* bag-to-insurance-gln.json in Resources */,
 				D5F6BB8217E8C87500DCBD16 /* desitin_icon_144x144.png in Resources */,
 				D5F6BB8E17E8C87500DCBD16 /* amiko_report_de.html in Resources */,
 				D5F6BB8F17E8C87500DCBD16 /* amiko_report_fr.html in Resources */,
@@ -1603,6 +1615,7 @@
 				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
 				CFB672922A7FA7D5004A0063 /* LFCGzipUtility.m in Sources */,
+				CF3BBEDA2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */,
 				CF7118E92D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */,
 				CF7118EA2D12C0AF00C1FA82 /* EPrescription.m in Sources */,
 				CF7118EB2D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */,
@@ -1677,6 +1690,7 @@
 				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				CFB672942A7FA7E3004A0063 /* LFCGzipUtility.m in Sources */,
+				CF3BBEDB2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */,
 				CF7118F22D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */,
 				CF7118F32D12C0AF00C1FA82 /* EPrescription.m in Sources */,
 				CF7118F42D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */,

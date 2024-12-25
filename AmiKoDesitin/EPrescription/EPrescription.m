@@ -9,6 +9,7 @@
 #import "EPrescription.h"
 #import "NSData+GZIP.h"
 #import "MLUtility.h"
+#import "Patient.h"
 
 @implementation EPrescriptionPatientId
 @end
@@ -214,7 +215,7 @@
     patient.firstName = self.patientFirstName;
     patient.street = self.patientStreet;
     patient.city = self.patientCity;
-    patient.kanton = [self swissKantonFromZip:self.patientZip];
+    patient.kanton = [EPrescription swissKantonFromZip:self.patientZip];
     patient.zipCode = self.patientZip;
     patient.birthday = self.patientBirthdate;
     patient.sex = [self.patientGender intValue]; // same, 1 = m, 2 = f
@@ -275,7 +276,7 @@
     return prescription;
 }
 
-- (NSString *)swissKantonFromZip:(NSString *)zip {
++ (NSString *)swissKantonFromZip:(NSString *)zip {
     if (!zip.length) return nil;
     NSURL *url = [[NSBundle mainBundle] URLForResource:@"swiss-zip-to-kanton" withExtension:@"json"];
     NSData *data = [NSData dataWithContentsOfURL:url];
@@ -315,6 +316,8 @@
         }];
     }
     
+    EPrescriptionPatientId *firstPatientId = self.patientIds.firstObject;
+
     NSDictionary *amkDict = @{
         @"prescription_hash": [[NSUUID UUID] UUIDString],
         // Normally place_date is composed with doctor's name or city,
@@ -329,13 +332,13 @@
             @"given_name": self.patientLastName ?: @"",
             @"family_name": self.patientFirstName ?: @"",
             @"birth_date": self.patientBirthdate ? [birthDateDateFormatter stringFromDate:self.patientBirthdate] : @"",
-            @"gender": self.patientGender.intValue == 1 ? @"M" : @"F",
+            @"gender": self.patientGender.intValue == 1 ? KEY_AMK_PAT_GENDER_M : KEY_AMK_PAT_GENDER_F,
             @"email_address": self.patientEmail ?: @"",
             @"phone_number": self.patientPhone ?: @"",
             @"postal_address": self.patientStreet ?: @"",
             @"city": self.patientCity ?: @"",
             @"zip_code": self.patientZip ?: @"",
-            @"insurance_gln": self.patientReceiverGLN ?: @"",
+            @"insurance_gln": [firstPatientId.type isEqual:@1] ? firstPatientId.value : (self.patientReceiverGLN ?: @""),
         },
         @"medications": mediDicts,
     };

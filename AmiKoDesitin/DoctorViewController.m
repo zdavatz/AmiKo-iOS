@@ -312,8 +312,9 @@
         valid = FALSE;
     }
 
+    BOOL hinLoggedIn = [[MLPersistenceManager shared] HINSDSTokens] != nil || [[MLPersistenceManager shared] HINADSwissTokens] != nil;
     // Validate photo
-    if (!self.signatureView.image) {
+    if (!self.signatureView.image && !hinLoggedIn) {
         self.signatureView.backgroundColor = lightRed;
         valid = FALSE;
     }
