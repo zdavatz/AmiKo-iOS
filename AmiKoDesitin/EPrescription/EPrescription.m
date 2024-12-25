@@ -338,7 +338,7 @@
             @"postal_address": self.patientStreet ?: @"",
             @"city": self.patientCity ?: @"",
             @"zip_code": self.patientZip ?: @"",
-            @"insurance_gln": self.patientReceiverGLN ?: @"",
+            @"insurance_gln": [firstPatientId.type isEqual:@1] ? firstPatientId.value : (self.patientReceiverGLN ?: @""),
         },
         @"medications": mediDicts,
     };

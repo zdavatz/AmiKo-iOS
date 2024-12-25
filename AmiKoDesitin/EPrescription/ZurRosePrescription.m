@@ -25,7 +25,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd";
     [e addAttribute:[DDXMLNode attributeWithName:@"issueDate" stringValue:[formatter stringFromDate:self.issueDate]]];
-    [e addAttribute:[DDXMLNode attributeWithName:@"validity" stringValue:[formatter stringFromDate:self.validity]]];
+    [e addAttribute:[DDXMLNode attributeWithName:@"validity" stringValue:self.validity ? [formatter stringFromDate:self.validity] : @""]];
     [e addAttribute:[DDXMLNode attributeWithName:@"user" stringValue:self.user]];
     [e addAttribute:[DDXMLNode attributeWithName:@"password" stringValue:self.password]];
     if (self.prescriptionNr) {
@@ -58,7 +58,9 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://estudio.zur-rose.ch/estudio/prescriptioncert"]];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:[[self toXML] XMLData]];
+    NSData *xmlData = [[self toXML] XMLData];
+    [request setHTTPBody:xmlData];
+    NSLog(@"xml: %@", [[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding]);
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (![response isKindOfClass:[NSHTTPURLResponse class]]) return;
         callback((NSHTTPURLResponse*)response, error);
