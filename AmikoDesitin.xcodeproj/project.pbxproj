@@ -52,6 +52,8 @@
 		CF3684C02427BFE700066502 /* MLSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3684BD2427BFE700066502 /* MLSettingViewController.m */; };
 		CF3684C12427BFE700066502 /* MLSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF3684BE2427BFE700066502 /* MLSettingViewController.xib */; };
 		CF3684C22427BFE700066502 /* MLSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF3684BE2427BFE700066502 /* MLSettingViewController.xib */; };
+		CF3BBEDA2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */; };
+		CF3BBEDB2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */; };
 		CF40D7AB2426062100FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
 		CF40D7AC2426089900FDCFCD /* MLiCloudToLocalMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */; };
 		CF426A6524362DF200A107AB /* MLUbiquitousStateAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF426A6424362DF200A107AB /* MLUbiquitousStateAlertController.m */; };
@@ -373,6 +375,8 @@
 		CF3684BC2427BFE700066502 /* MLSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLSettingViewController.h; path = AmiKoDesitin/MLSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		CF3684BD2427BFE700066502 /* MLSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLSettingViewController.m; path = AmiKoDesitin/MLSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		CF3684BE2427BFE700066502 /* MLSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MLSettingViewController.xib; path = AmiKoDesitin/MLSettingViewController.xib; sourceTree = SOURCE_ROOT; };
+		CF3BBED82D19428B00EDC3F7 /* MLSendToZurRoseActivity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLSendToZurRoseActivity.h; path = AmiKoDesitin/MLSendToZurRoseActivity.h; sourceTree = SOURCE_ROOT; };
+		CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLSendToZurRoseActivity.m; path = AmiKoDesitin/MLSendToZurRoseActivity.m; sourceTree = SOURCE_ROOT; };
 		CF40D7A92426062100FDCFCD /* MLiCloudToLocalMigration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLiCloudToLocalMigration.h; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.h"; sourceTree = SOURCE_ROOT; };
 		CF40D7AA2426062100FDCFCD /* MLiCloudToLocalMigration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MLiCloudToLocalMigration.m; path = "AmiKoDesitin/Persistence/iCloud to local migration/MLiCloudToLocalMigration.m"; sourceTree = SOURCE_ROOT; };
 		CF426A6324362DF200A107AB /* MLUbiquitousStateAlertController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLUbiquitousStateAlertController.h; path = AmiKoDesitin/Persistence/MLUbiquitousStateAlertController.h; sourceTree = SOURCE_ROOT; };
@@ -778,6 +782,8 @@
 				430285BC20160FB1003B2EF3 /* PrescriptionViewController.h */,
 				430285BD20160FB1003B2EF3 /* PrescriptionViewController.m */,
 				4387FC3F20189DB4000A5A0F /* PrescriptionViewController.xib */,
+				CF3BBED82D19428B00EDC3F7 /* MLSendToZurRoseActivity.h */,
+				CF3BBED92D19428B00EDC3F7 /* MLSendToZurRoseActivity.m */,
 			);
 			name = front;
 			sourceTree = "<group>";
@@ -1603,6 +1609,7 @@
 				439F261D2028B7FF00396C29 /* LegacyPatientDBAdapter.m in Sources */,
 				FA66294B204D541B0000904A /* DoctorViewController.m in Sources */,
 				CFB672922A7FA7D5004A0063 /* LFCGzipUtility.m in Sources */,
+				CF3BBEDA2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */,
 				CF7118E92D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */,
 				CF7118EA2D12C0AF00C1FA82 /* EPrescription.m in Sources */,
 				CF7118EB2D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */,
@@ -1677,6 +1684,7 @@
 				930D94B52077E5D9007E4629 /* LegacyPatientDBAdapter.m in Sources */,
 				CFA5207B24235FD900834E16 /* PatientModel+CoreDataProperties.m in Sources */,
 				CFB672942A7FA7E3004A0063 /* LFCGzipUtility.m in Sources */,
+				CF3BBEDB2D19428B00EDC3F7 /* MLSendToZurRoseActivity.m in Sources */,
 				CF7118F22D12C0AF00C1FA82 /* ZurRoseAddress.m in Sources */,
 				CF7118F32D12C0AF00C1FA82 /* EPrescription.m in Sources */,
 				CF7118F42D12C0AF00C1FA82 /* ZurRosePatientAddress.m in Sources */,

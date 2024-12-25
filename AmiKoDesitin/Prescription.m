@@ -8,6 +8,8 @@
 
 #import "Prescription.h"
 #import "LFCGzipUtility.h"
+#import "EPrescription/EPrescription.h"
+#import "MLConstants.h"
 
 @implementation Prescription
 
@@ -178,6 +180,83 @@
     [prefixed appendData:base64];
     return prefixed;
 }
+
+- (ZurRosePrescription *)toZurRosePrescription {
+    ZurRosePrescription *prescription = [[ZurRosePrescription alloc] init];
+
+    NSRange placeDateCommaRange = [self.placeDate rangeOfString:@","];
+    if (placeDateCommaRange.location != NSNotFound) {
+        NSString *dateString = [[self.placeDate substringFromIndex:NSMaxRange(placeDateCommaRange)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateFormat = @"dd.MM.yyyy (HH:mm:ss)";
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        NSDate *date = [dateFormatter dateFromString:self.placeDate];
+        prescription.issueDate = date;
+    } else {
+        prescription.issueDate = [NSDate date];
+    }
+    
+    prescription.prescriptionNr = [NSString stringWithFormat:@"%09d", arc4random_uniform(1000000000)];
+    prescription.remark = @"";
+    prescription.validity = nil;
+
+    prescription.user = @"";
+    prescription.password = @"";
+    prescription.deliveryType = ZurRosePrescriptionDeliveryTypePatient;
+    prescription.ignoreInteractions = NO;
+    prescription.interactionsWithOldPres = NO;
+    
+    ZurRosePrescriptorAddress *prescriptor = [[ZurRosePrescriptorAddress alloc] init];
+    prescription.prescriptorAddress = prescriptor;
+    prescriptor.zsrId = self.doctor.zsrNumber;
+    prescriptor.firstName = self.doctor.givenName;
+    prescriptor.lastName = self.doctor.familyName;
+    
+    prescriptor.kanton = [EPrescription swissKantonFromZip:self.doctor.zipCode];
+    prescriptor.email = self.doctor.emailAddress;
+    prescriptor.phoneNrBusiness = self.doctor.phoneNumber;
+    prescriptor.langCode = [[MLConstants databaseLanguage] isEqual:@"de"] ? 1 : 2;
+    prescriptor.clientNrClustertec = @"888870";
+    prescriptor.street = self.doctor.postalAddress;
+    prescriptor.zipCode = self.doctor.zipCode;
+    prescriptor.city = self.doctor.city;
+    
+    ZurRosePatientAddress *patient = [[ZurRosePatientAddress alloc] init];
+    prescription.patientAddress = patient;
+    patient.lastName = self.patient.familyName;
+    patient.firstName = self.patient.givenName;
+    patient.street = self.patient.postalAddress;
+    patient.city = self.patient.city;
+    patient.kanton = [EPrescription swissKantonFromZip:self.patient.zipCode];
+    patient.zipCode = self.patient.zipCode;
+    {
+        NSDateFormatter *birthDateDateFormatter = [[NSDateFormatter alloc] init];
+        birthDateDateFormatter.dateFormat = @"yyyy.MM.dd";
+        patient.birthday = [birthDateDateFormatter dateFromString:self.patient.birthDate];
+    }
+    patient.sex = [self.patient.gender isEqual:KEY_AMK_PAT_GENDER_M] ? 1 : 2; // same, 1 = m, 2 = f
+    patient.phoneNrHome = self.patient.phoneNumber;
+    patient.email = self.patient.emailAddress;
+    patient.langCode = [[MLConstants databaseLanguage] isEqual:@"de"] ? 1 : 2;
+    patient.coverCardId = self.patient.healthCardNumber ?: @"";
+    patient.patientNr = self.patient.insuranceGLN;
+
+    NSMutableArray<ZurRoseProduct*> *products = [NSMutableArray array];
+    for (Product *m in self.medications) {
+        ZurRoseProduct *product = [[ZurRoseProduct alloc] init];
+        [products addObject:product];
+        
+        product.eanId = m.eanCode;
+        product.quantity = 1;
+        product.insuranceBillingType = 1;
+        product.repetition = NO;
+        product.posology = @[];
+    }
+    prescription.products = products;
+    
+    return prescription;
+}
+
 
 - (NSString *)formatBirthdayForEPrescription:(NSString *)birthday {
     // dd.mm.yyyy -> yyyy-mm-dd
