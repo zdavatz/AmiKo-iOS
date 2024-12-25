@@ -511,6 +511,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     incompletePatient.givenName = savedOcr.givenName;
     incompletePatient.birthDate = savedOcr.dateString;
     incompletePatient.uniqueId = [incompletePatient generateUniqueID];
+    incompletePatient.healthCardNumber = savedOcr.cardNumberString;
+    incompletePatient.insuranceGLN = [self bagNumberToInsuranceGLN:savedOcr.bagNumber];
     
     if ([savedOcr.sexString isEqualToString:@"M"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_M;
@@ -553,5 +555,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         });
 #endif
     }
+}
+
+- (NSString *)bagNumberToInsuranceGLN:(NSString *)bagNumber {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"bag-to-insurance-gln" ofType:@"json"];
+    NSData *data = [[NSData alloc] initWithContentsOfFile:path];
+    NSDictionary *mapping = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSString *key = [NSString stringWithFormat:@"%d", bagNumber.intValue];
+    return mapping[key];
 }
 @end
