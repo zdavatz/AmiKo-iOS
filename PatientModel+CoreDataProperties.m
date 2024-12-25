@@ -30,5 +30,6 @@
 @dynamic weightKg;
 @dynamic zipCode;
 @dynamic healthCardNumber;
+@dynamic insuranceGLN;
 
 @end

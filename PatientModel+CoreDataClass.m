@@ -27,6 +27,7 @@
     self.phoneNumber = p.phoneNumber;
     self.emailAddress = p.emailAddress;
     self.healthCardNumber = p.healthCardNumber;
+    self.insuranceGLN = p.insuranceGLN;
 }
 
 - (Patient *)toPatient {
@@ -46,6 +47,7 @@
     p.emailAddress = self.emailAddress;
     p.timestamp = self.timestamp;
     p.healthCardNumber = self.healthCardNumber;
+    p.insuranceGLN = self.insuranceGLN;
     return p;
 }
 

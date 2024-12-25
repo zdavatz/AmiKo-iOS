@@ -504,6 +504,7 @@
             p.gender = patient.gender;
             p.healthCardNumber = patient.healthCardNumber;
             p.timestamp = date;
+            p.insuranceGLN = patient.insuranceGLN;
             [[self.coreDataContainer viewContext] save:&error];
             if (error != nil) {
                 NSLog(@"Cannot update patient %@", error);
