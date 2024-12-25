@@ -243,27 +243,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             continue;
         }
 #endif
-        // Discard text in the right area of the card
-        // Keep only boxes with corner within 14mm strip on the left
-  #ifdef CROP_IMAGE_TO_CARD_ROI
-        CGFloat thresholdX = cardKeepLeft_mm / (cardROI_W*cardWidth_mm);
-  #else
-        CGFloat thresholdX = cardKeepLeft_mm / cardWidth_mm;
-  #endif
-
-  #ifdef VN_BOXES_NEED_XY_SWAP
-        if (box.origin.y > thresholdX)
-  #else
-        if (box.origin.x > thresholdX)
-  #endif
-        {
-            continue;
-        }
-
-        // Discard text smaller than expected
-        if (box.size.width < rejectBoxWidthFraction) {
-            continue;
-        }
 
 #endif // DISCARD_BAD_BOXES
 
@@ -283,6 +262,36 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         boundBox = [bbox boundingBox];  // observed that it's >= obs.boundingBox
         //VNRecognizedText *t = topCandidates[0];
 
+        // Discard text in the right area of the card
+        // Keep only boxes with corner within 14mm strip on the left
+  #ifdef CROP_IMAGE_TO_CARD_ROI
+        CGFloat thresholdX = cardKeepLeft_mm / (cardROI_W*cardWidth_mm);
+  #else
+        CGFloat thresholdX = cardKeepLeft_mm / cardWidth_mm;
+  #endif
+
+  #ifdef VN_BOXES_NEED_XY_SWAP
+        if (box.origin.y > thresholdX)
+  #else
+        if (box.origin.x > thresholdX)
+  #endif
+        {
+            // Handle BAG number, which is not at the right side of the card
+            // 5 digit and all number
+            if (s.length == 5 && [[NSString stringWithFormat:@"%05d",[s intValue]] isEqual:s]) {
+                if (box.origin.x > 0.9) {
+                    continue;
+                }
+            } else {
+                continue;
+            }
+        }
+
+        // Discard text smaller than expected
+        if (box.size.width < rejectBoxWidthFraction) {
+            continue;
+        }
+        
 #ifdef DISCARD_BAD_BOXES
         VNConfidence confidenceThreshold = 0.4f;
         if (c < confidenceThreshold) {
@@ -324,6 +333,22 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (NSArray *)analyzeVisionBoxedWords:(NSArray *)allBoxes
 {
+    // Always put BAG number at last
+    NSInteger bagNumberIndex = -1;
+    for (NSInteger i = 0; i < allBoxes.count; i++) {
+        if ([allBoxes[i][@"text"] length] == 5) {
+            bagNumberIndex = i;
+            break;
+        }
+    }
+    if (bagNumberIndex >= 0) {
+        NSMutableArray *mAllBoxes = [allBoxes mutableCopy];
+        NSDictionary *bagNumber = mAllBoxes[bagNumberIndex];
+        [mAllBoxes removeObjectAtIndex:bagNumberIndex];
+        [mAllBoxes addObject:bagNumber];
+        allBoxes = mAllBoxes;
+    }
+    
     NSUInteger n = [allBoxes count];
     if (n < NUMBER_OF_BOXES_FOR_OCR) {
         return allBoxes;
@@ -372,6 +397,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
         return p1.origin.x >= p2.origin.x;
 #else
+        if ([obj1[@"text"] length] == 5) {
+            return NSOrderedDescending;
+        }
+        if ([obj2[@"text"] length] == 5) {
+            return NSOrderedAscending;
+        }
         if (p1.origin.y == p2.origin.y)
             return NSOrderedSame;
 
@@ -455,12 +486,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     {
         return NO;
     }
+    
+    NSString *bagNumber = ocrResults[3][@"text"];
 
     savedOcr.familyName = familyName;
     savedOcr.givenName = givenName;
     savedOcr.cardNumberString = cardNumberString;
     savedOcr.dateString = dateString;
     savedOcr.sexString = sexString;
+    savedOcr.bagNumber = bagNumber;
     
     return YES;
 }

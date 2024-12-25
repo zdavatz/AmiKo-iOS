@@ -8,7 +8,7 @@
 
 #import "PatientViewController.h"
 
-#define NUMBER_OF_BOXES_FOR_OCR   3
+#define NUMBER_OF_BOXES_FOR_OCR   4
 
 #import "CameraViewController.h"
 
@@ -18,6 +18,7 @@ struct scannedResults {
     NSString *cardNumberString;
     NSString *dateString;
     NSString *sexString;
+    NSString *bagNumber;
 };
 
 #pragma mark - class extension
