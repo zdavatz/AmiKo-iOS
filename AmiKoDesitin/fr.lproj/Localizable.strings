@@ -293,7 +293,9 @@
 /* No comment provided by engineer. */
 "Your medicine basket is empty" = "Votre panier des médicaments est vide.";
 
-"Send to ZurRose" = "Envoyer à ZurRose?";
+"Send to ZurRose" = "Envoyer à ZurRose";
+
+"Send to ZurRose?" = "Envoyer à ZurRose?";
 
 "Send" = "Envoyer";
 
