@@ -31,5 +31,6 @@
 @dynamic zipCode;
 @dynamic healthCardNumber;
 @dynamic insuranceGLN;
+@dynamic ahvNumber;
 
 @end

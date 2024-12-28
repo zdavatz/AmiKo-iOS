@@ -215,7 +215,8 @@ enum {
     mSex.backgroundColor =
     mEmail.backgroundColor =
     mHealthCardNumber.backgroundColor =
-    mInsuranceGLN.backgroundColor = [UIColor secondarySystemBackgroundColor];
+    mInsuranceGLN.backgroundColor =
+    mAHVNumber.backgroundColor = [UIColor secondarySystemBackgroundColor];
 }
 
 - (UIColor *)getInvalidFieldColor
@@ -266,6 +267,7 @@ enum {
     [mEmail setText:@""];
     [mHealthCardNumber setText:@""];
     [mInsuranceGLN setText:@""];
+    [mAHVNumber setText:@""];
     [mSex setSelectedSegmentIndex:UISegmentedControlNoSegment];
     
     mPatientUUID = nil;
@@ -318,6 +320,10 @@ enum {
     if (p.insuranceGLN) {
         [mInsuranceGLN setText:p.insuranceGLN];
     }
+    
+    if (p.ahvNumber) {
+        [mAHVNumber setText:p.ahvNumber];
+    }
 
     if (p.uniqueId)
         mPatientUUID = p.uniqueId;
@@ -363,6 +369,7 @@ enum {
     patient.emailAddress = [mEmail text];
     patient.healthCardNumber = [mHealthCardNumber text];
     patient.insuranceGLN = [mInsuranceGLN text];
+    patient.ahvNumber = [mAHVNumber text];
     
     switch ([mSex selectedSegmentIndex]) {
         case UISegmentedControlNoSegment:

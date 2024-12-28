@@ -200,7 +200,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     NSArray *langs = [VNRecognizeTextRequest supportedRecognitionLanguagesForTextRecognitionLevel:VNRequestTextRecognitionLevelAccurate
                                                                         revision:VNRecognizeTextRequestRevision1
                                                                                             error:&error];
-    NSLog(@"%@", langs);
+//    NSLog(@"%@", langs);
     
     VNRecognizeTextRequest *textRequest = [VNRecognizeTextRequest new];
     textRequest.recognitionLevel = VNRequestTextRecognitionLevelAccurate;
@@ -276,13 +276,22 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         if (box.origin.x > thresholdX)
   #endif
         {
+            BOOL shouldSkip = YES;
             // Handle BAG number, which is not at the right side of the card
             // 5 digit and all number
             if (s.length == 5 && [[NSString stringWithFormat:@"%05d",[s intValue]] isEqual:s]) {
-                if (box.origin.x > 0.9) {
-                    continue;
+                if (box.origin.x < 0.9) {
+                    shouldSkip = NO;
                 }
-            } else {
+            } else if (s.length == 16) {
+                NSError *error = nil;
+                NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9]{3}\\.[0-9]{4}\\.[0-9]{4}\\.[0-9]{2}$" options:0 error:&error];
+                NSTextCheckingResult *match = [regex firstMatchInString:s options:0 range:NSMakeRange(0, s.length)];
+                if (match) {
+                    shouldSkip = NO;
+                }
+            }
+            if (shouldSkip) {
                 continue;
             }
         }
@@ -333,22 +342,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (NSArray *)analyzeVisionBoxedWords:(NSArray *)allBoxes
 {
-    // Always put BAG number at last
-    NSInteger bagNumberIndex = -1;
-    for (NSInteger i = 0; i < allBoxes.count; i++) {
-        if ([allBoxes[i][@"text"] length] == 5) {
-            bagNumberIndex = i;
-            break;
-        }
-    }
-    if (bagNumberIndex >= 0) {
-        NSMutableArray *mAllBoxes = [allBoxes mutableCopy];
-        NSDictionary *bagNumber = mAllBoxes[bagNumberIndex];
-        [mAllBoxes removeObjectAtIndex:bagNumberIndex];
-        [mAllBoxes addObject:bagNumber];
-        allBoxes = mAllBoxes;
-    }
-    
     NSUInteger n = [allBoxes count];
     if (n < NUMBER_OF_BOXES_FOR_OCR) {
         return allBoxes;
@@ -397,18 +390,35 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
         return p1.origin.x >= p2.origin.x;
 #else
-        if ([obj1[@"text"] length] == 5) {
-            return NSOrderedDescending;
-        }
-        if ([obj2[@"text"] length] == 5) {
-            return NSOrderedAscending;
-        }
         if (p1.origin.y == p2.origin.y)
             return NSOrderedSame;
 
         return p1.origin.y < p2.origin.y;
 #endif
     }];
+    
+    // At this point, the first one should be name, last one should be date string,
+    // but we are not sure about the middle ones, at they are layed out horizontally
+    NSDictionary *name = [boxedWords firstObject];
+    NSDictionary *dateString = [boxedWords lastObject];
+    
+    boxedWords = [boxedWords subarrayWithRange:NSMakeRange(1, NUMBER_OF_BOXES_FOR_OCR - 2)];
+    boxedWords = [boxedWords sortedArrayUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+        CGRect p1 = [obj1[@"box"] CGRectValue];
+        CGRect p2 = [obj2[@"box"] CGRectValue];
+#ifdef VN_BOXES_NEED_XY_SWAP
+        if (p1.origin.y == p2.origin.y)
+            return NSOrderedSame;
+
+        return p1.origin.y >= p2.origin.y;
+#else
+        if (p1.origin.x == p2.origin.x)
+            return NSOrderedSame;
+
+        return p1.origin.x >= p2.origin.x;
+#endif
+    }];
+    boxedWords = [@[name] arrayByAddingObjectsFromArray:[boxedWords arrayByAddingObject:dateString]];
 
     return boxedWords;
 }
@@ -463,9 +473,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (![_NumericOnly isSupersetOfSet: myStringSet]) {
         return NO;
     }
+    
+    NSString *bagNumber = ocrResults[2][@"text"];
+    NSString *ahvNumber = ocrResults[3][@"text"];
 
     // Validate third line /////////////////////////////////////////////////////
-    d = ocrResults[2];
+    d = ocrResults[4];
     s = d[@"text"];
     NSArray *line2Array = [s componentsSeparatedByString:@" "];
     if ([line2Array count] < 2) {
@@ -486,8 +499,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     {
         return NO;
     }
-    
-    NSString *bagNumber = ocrResults[3][@"text"];
 
     savedOcr.familyName = familyName;
     savedOcr.givenName = givenName;
@@ -495,6 +506,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     savedOcr.dateString = dateString;
     savedOcr.sexString = sexString;
     savedOcr.bagNumber = bagNumber;
+    savedOcr.ahvNumber = ahvNumber;
     
     return YES;
 }
@@ -513,11 +525,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     incompletePatient.uniqueId = [incompletePatient generateUniqueID];
     incompletePatient.healthCardNumber = savedOcr.cardNumberString;
     incompletePatient.insuranceGLN = [self bagNumberToInsuranceGLN:savedOcr.bagNumber];
+    incompletePatient.ahvNumber = savedOcr.ahvNumber;
     
     if ([savedOcr.sexString isEqualToString:@"M"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_M;
     else if ([savedOcr.sexString isEqualToString:@"F"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_F;
+    
+    NSLog(@"ahv %@", savedOcr.ahvNumber);
 
 #ifdef TAP_TO_END_CARD_OCR
     [self resetAllFields];

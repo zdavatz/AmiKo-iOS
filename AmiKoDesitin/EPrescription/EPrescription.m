@@ -188,7 +188,7 @@
     ZurRosePrescription *prescription = [[ZurRosePrescription alloc] init];
 
     prescription.issueDate = self.date;
-    prescription.prescriptionNr = self.prescriptionId;
+    prescription.prescriptionNr = [NSString stringWithFormat:@"%09d", arc4random_uniform(1000000000)];
     prescription.remark = self.rmk;
     prescription.validity = self.valDt; // ???
 
@@ -226,11 +226,13 @@
         : [self.patientLang.lowercaseString hasPrefix:@"fr"] ? 2
         : [self.patientLang.lowercaseString hasPrefix:@"it"] ? 3
         : 1;
+    patient.coverCardId = @"";
+    patient.patientNr = @"";
     
+    NSString *insuranceEan = nil;
     for (EPrescriptionPatientId *pid in self.patientIds) {
         if ([pid.type isEqual:@(1)]) {
-            patient.coverCardId = pid.value;
-            patient.patientNr = pid.value; // ???
+            insuranceEan = pid.value;
         }
     }
     
@@ -252,6 +254,7 @@
         product.quantity = medi.nbPack.intValue; // ???
         product.remark = medi.appInstr;
         product.insuranceBillingType = 1;
+        product.insuranceEanId = insuranceEan;
         
         BOOL repetition = NO;
         NSMutableArray<ZurRosePosology *> *poses = [NSMutableArray array];

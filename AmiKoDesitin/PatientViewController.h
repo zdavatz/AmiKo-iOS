@@ -32,6 +32,7 @@
     IBOutlet UITextField *mEmail;
     IBOutlet UITextField *mHealthCardNumber;
     IBOutlet UITextField *mInsuranceGLN;
+    IBOutlet UITextField *mAHVNumber;
     IBOutlet UISegmentedControl *mSex;
 }
 
