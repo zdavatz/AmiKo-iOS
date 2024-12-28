@@ -525,6 +525,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     incompletePatient.uniqueId = [incompletePatient generateUniqueID];
     incompletePatient.healthCardNumber = savedOcr.cardNumberString;
     incompletePatient.insuranceGLN = [self bagNumberToInsuranceGLN:savedOcr.bagNumber];
+    incompletePatient.ahvNumber = savedOcr.ahvNumber;
     
     if ([savedOcr.sexString isEqualToString:@"M"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_M;
