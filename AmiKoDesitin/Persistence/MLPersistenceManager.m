@@ -492,6 +492,9 @@
     NSError *error = nil;
     if (patient.uniqueId.length) {
         PatientModel *p = [self getPatientModelWithUniqueID:patient.uniqueId];
+        if (p == nil) {
+            p = [self findSimilarPatientModelByNameAndDOB:patient];
+        }
         if (p != nil) {
             p.weightKg = patient.weightKg;
             p.heightCm = patient.heightCm;
@@ -579,6 +582,16 @@
 
 - (Patient *) getPatientWithUniqueID:(NSString *)uniqueID {
     return [[self getPatientModelWithUniqueID:uniqueID] toPatient];
+}
+
+- (PatientModel *)findSimilarPatientModelByNameAndDOB:(Patient *)patient {
+    NSError *error = nil;
+    NSManagedObjectContext *context = [[self coreDataContainer] viewContext];
+    NSFetchRequest *req = [PatientModel fetchRequest];
+    req.predicate = [NSPredicate predicateWithFormat:@"familyName == %@ AND givenName == %@ AND birthDate == %@", patient.familyName, patient.givenName, patient.birthDate];
+    req.fetchLimit = 1;
+    NSArray<PatientModel *> *patientModels = [context executeFetchRequest:req error:&error];
+    return [patientModels firstObject];
 }
 
 # pragma mark - Favourites
