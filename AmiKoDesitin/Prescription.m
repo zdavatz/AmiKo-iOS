@@ -252,6 +252,7 @@
         product.insuranceBillingType = 1;
         product.insuranceEanId = self.patient.insuranceGLN;
         product.repetition = NO;
+        product.description_ = m.packageInfo;
         
         ZurRosePosology *pos = [[ZurRosePosology alloc] init];
         pos.posologyText = m.comment;
