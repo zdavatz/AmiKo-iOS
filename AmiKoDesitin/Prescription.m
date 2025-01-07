@@ -232,7 +232,7 @@
     patient.zipCode = self.patient.zipCode;
     {
         NSDateFormatter *birthDateDateFormatter = [[NSDateFormatter alloc] init];
-        birthDateDateFormatter.dateFormat = @"yyyy.MM.dd";
+        birthDateDateFormatter.dateFormat = @"dd.MM.yyyy";
         patient.birthday = [birthDateDateFormatter dateFromString:self.patient.birthDate];
     }
     patient.sex = [self.patient.gender isEqual:KEY_AMK_PAT_GENDER_M] ? 1 : 2; // same, 1 = m, 2 = f
