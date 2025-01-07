@@ -252,7 +252,11 @@
         product.insuranceBillingType = 1;
         product.insuranceEanId = self.patient.insuranceGLN;
         product.repetition = NO;
-        product.posology = @[];
+        
+        ZurRosePosology *pos = [[ZurRosePosology alloc] init];
+        pos.posologyText = m.comment;
+        pos.label = 1;
+        product.posology = @[pos];
     }
     prescription.products = products;
     
