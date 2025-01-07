@@ -10,6 +10,15 @@
 
 @implementation ZurRosePosology
 
+- (instancetype)init {
+    self = [super init];
+    self.qtyMorning = -1;
+    self.qtyMidday = -1;
+    self.qtyEvening = -1;
+    self.qtyNight = -1;
+    return self;
+}
+
 - (DDXMLElement *)toXML {
     DDXMLElement *e = [DDXMLElement elementWithName:@"posology"];
     

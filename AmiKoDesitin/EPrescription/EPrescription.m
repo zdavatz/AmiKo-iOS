@@ -294,7 +294,7 @@
     
     if (self.patientBirthdate) {
         NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:self.patientBirthdate];
-        birthDateString = [NSString stringWithFormat:@"%d.%d.%d", components.day, components.month, components.year];
+        birthDateString = [NSString stringWithFormat:@"%ld.%ld.%ld", (long)components.day, (long)components.month, (long)components.year];
     }
 
     // The UUID should be unique and should be based on familyname, givenname, and birthday
@@ -305,7 +305,7 @@
 
 - (NSDictionary *)amkDict {
     NSDateFormatter *birthDateDateFormatter = [[NSDateFormatter alloc] init];
-    birthDateDateFormatter.dateFormat = @"yyyy.MM.dd";
+    birthDateDateFormatter.dateFormat = @"dd.MM.yyyy";
     
     NSDateFormatter *placeDateFormatter = [[NSDateFormatter alloc] init];
     placeDateFormatter.dateFormat = @"dd.MM.yyyy (HH:mm:ss)";
