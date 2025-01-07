@@ -211,6 +211,7 @@
     prescriptor.zsrId = self.doctor.zsrNumber;
     prescriptor.firstName = self.doctor.givenName;
     prescriptor.lastName = self.doctor.familyName;
+    prescriptor.eanId = self.doctor.gln;
     
     prescriptor.kanton = [EPrescription swissKantonFromZip:self.doctor.zipCode];
     prescriptor.email = self.doctor.emailAddress;
@@ -249,6 +250,7 @@
         product.eanId = m.eanCode;
         product.quantity = 1;
         product.insuranceBillingType = 1;
+        product.insuranceEanId = self.patient.insuranceGLN;
         product.repetition = NO;
         product.posology = @[];
     }
