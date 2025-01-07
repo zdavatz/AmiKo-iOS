@@ -240,7 +240,7 @@
     patient.email = self.patient.emailAddress;
     patient.langCode = [[MLConstants databaseLanguage] isEqual:@"de"] ? 1 : 2;
     patient.coverCardId = self.patient.healthCardNumber ?: @"";
-    patient.patientNr = self.patient.ahvNumber;
+    patient.patientNr = [self.patient.ahvNumber stringByReplacingOccurrencesOfString:@"." withString:@""];
 
     NSMutableArray<ZurRoseProduct*> *products = [NSMutableArray array];
     for (Product *m in self.medications) {
