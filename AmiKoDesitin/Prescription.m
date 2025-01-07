@@ -211,6 +211,7 @@
     prescriptor.zsrId = self.doctor.zsrNumber;
     prescriptor.firstName = self.doctor.givenName;
     prescriptor.lastName = self.doctor.familyName;
+    prescriptor.eanId = self.doctor.gln;
     
     prescriptor.kanton = [EPrescription swissKantonFromZip:self.doctor.zipCode];
     prescriptor.email = self.doctor.emailAddress;
@@ -239,7 +240,7 @@
     patient.email = self.patient.emailAddress;
     patient.langCode = [[MLConstants databaseLanguage] isEqual:@"de"] ? 1 : 2;
     patient.coverCardId = self.patient.healthCardNumber ?: @"";
-    patient.patientNr = self.patient.ahvNumber;
+    patient.patientNr = [self.patient.ahvNumber stringByReplacingOccurrencesOfString:@"." withString:@""];
 
     NSMutableArray<ZurRoseProduct*> *products = [NSMutableArray array];
     for (Product *m in self.medications) {
@@ -249,6 +250,7 @@
         product.eanId = m.eanCode;
         product.quantity = 1;
         product.insuranceBillingType = 1;
+        product.insuranceEanId = self.patient.insuranceGLN;
         product.repetition = NO;
         product.posology = @[];
     }

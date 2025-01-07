@@ -531,8 +531,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         incompletePatient.gender = KEY_AMK_PAT_GENDER_M;
     else if ([savedOcr.sexString isEqualToString:@"F"])
         incompletePatient.gender = KEY_AMK_PAT_GENDER_F;
-    
-    NSLog(@"ahv %@", savedOcr.ahvNumber);
 
 #ifdef TAP_TO_END_CARD_OCR
     [self resetAllFields];
