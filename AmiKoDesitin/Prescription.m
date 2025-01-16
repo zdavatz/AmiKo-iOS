@@ -190,9 +190,10 @@
         NSDateFormatter *dateFormatter = [NSDateFormatter new];
         dateFormatter.dateFormat = @"dd.MM.yyyy (HH:mm:ss)";
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-        NSDate *date = [dateFormatter dateFromString:self.placeDate];
+        NSDate *date = [dateFormatter dateFromString:dateString];
         prescription.issueDate = date;
-    } else {
+    }
+    if (!prescription.issueDate) {
         prescription.issueDate = [NSDate date];
     }
     
