@@ -165,10 +165,9 @@
     
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\+|\\-])([0-9]{1,2}):?([0-9]{1,2})$"
-                                                                           options:nil
+                                                                           options:0
                                                                              error:&error];
-    NSTextCheckingResult *result = [regex firstMatchInString:str options:nil range:NSMakeRange(0, str.length)];
-    NSString *overall = [str substringWithRange:[result range]];
+    NSTextCheckingResult *result = [regex firstMatchInString:str options:0 range:NSMakeRange(0, str.length)];
     NSString *timeZoneOffsetMark = [str substringWithRange:[result rangeAtIndex:1]];
     NSString *timeZoneOffsetHour = [str substringWithRange:[result rangeAtIndex:2]];
     NSString *timeZoneOffsetMinutes = [str substringWithRange:[result rangeAtIndex:3]];
@@ -185,6 +184,8 @@
 }
 
 - (ZurRosePrescription *)toZurRosePrescription {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd";
     ZurRosePrescription *prescription = [[ZurRosePrescription alloc] init];
 
     prescription.issueDate = self.date;
@@ -257,20 +258,24 @@
         product.insuranceEanId = insuranceEan;
         
         BOOL repetition = NO;
+        NSDate *validityRepetition = nil;
         NSMutableArray<ZurRosePosology *> *poses = [NSMutableArray array];
+        ZurRosePosology *pos = [[ZurRosePosology alloc] init];
+        [poses addObject:pos];
         for (EPrescriptionPosology *mediPos in medi.pos) {
-            ZurRosePosology *pos = [[ZurRosePosology alloc] init];
-            [poses addObject:pos];
             if (mediPos.d.count) {
                 pos.qtyMorning = mediPos.d[0].intValue;
                 pos.qtyMidday = mediPos.d[1].intValue;
                 pos.qtyEvening = mediPos.d[2].intValue;
                 pos.qtyNight = mediPos.d[3].intValue;
+                pos.posologyText = medi.appInstr;
             }
             if (mediPos.dtTo) {
                 repetition = YES;
+                validityRepetition = mediPos.dtTo;
             }
         }
+        product.validityRepetition = [dateFormatter stringFromDate:validityRepetition];
         product.repetition = repetition;
         product.posology = poses;
     }
@@ -332,8 +337,8 @@
         },
         @"patient": @{
             @"patient_id": [self generatePatientUniqueID],
-            @"given_name": self.patientLastName ?: @"",
-            @"family_name": self.patientFirstName ?: @"",
+            @"given_name": self.patientFirstName ?: @"",
+            @"family_name": self.patientLastName ?: @"",
             @"birth_date": self.patientBirthdate ? [birthDateDateFormatter stringFromDate:self.patientBirthdate] : @"",
             @"gender": self.patientGender.intValue == 1 ? KEY_AMK_PAT_GENDER_M : KEY_AMK_PAT_GENDER_F,
             @"email_address": self.patientEmail ?: @"",
