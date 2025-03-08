@@ -2498,7 +2498,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     if (firstObservation.symbology == VNBarcodeSymbologyQR) {
         EPrescription *prescription = [[EPrescription alloc] initWithCHMED16A1String:firstObservation.payloadStringValue];
-        [self didScanEPrescription:prescription];
+        if (prescription) {
+            [self didScanEPrescription:prescription];
+        }
         return;
     }
 

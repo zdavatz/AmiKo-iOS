@@ -10,6 +10,8 @@
 #import "NSData+GZIP.h"
 #import "MLUtility.h"
 #import "Patient.h"
+#import "Prescription.h"
+#import "Operator.h"
 
 @implementation EPrescriptionPatientId
 @end
@@ -33,16 +35,24 @@
         if (range.location == NSNotFound) return nil;
         str = [str substringToIndex:range.location];
     }
+    NSData *jsonData = nil;
     NSString *prefix = @"CHMED16A1";
-    if (![str hasPrefix:prefix]) {
+    if ([str hasPrefix:prefix]) {
+        str = [str substringFromIndex:[prefix length]];
+        NSData *compressed = [[NSData alloc] initWithBase64EncodedString:str options:0];
+        jsonData = [compressed gunzippedData];
+    }
+    prefix = @"CHMED16A0";
+    if ([str hasPrefix:prefix]) {
+        str = [str substringFromIndex:[prefix length]];
+        jsonData = [str dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    if (!jsonData) {
         return nil;
     }
     if (self = [super init]) {
-        str = [str substringFromIndex:[prefix length]];
-        NSData *compressed = [[NSData alloc] initWithBase64EncodedString:str options:0];
         NSError *error = nil;
-        NSData *decompressed1 = [compressed gunzippedData];
-        NSDictionary *jsonObj = [NSJSONSerialization JSONObjectWithData:decompressed1 options:0 error:&error];
+        NSDictionary *jsonObj = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
         if (![jsonObj isKindOfClass:[NSDictionary class]]) {
             return nil;
         }
@@ -52,7 +62,7 @@
         self.prescriptionId = jsonObj[@"Id"];
         self.medType = jsonObj[@"MedType"];
         self.zsr = jsonObj[@"Zsr"];
-        self.rmk = jsonObj[@"rmk"];
+        self.rmk = jsonObj[@"Rmk"];
 
         NSMutableArray<EPrescriptionPField *> *pfields = [NSMutableArray array];
         for (NSDictionary *pfield in jsonObj[@"PFields"]) {
@@ -209,6 +219,18 @@
     prescriptor.street = @"";
     prescriptor.zipCode = @"";
     prescriptor.city = @"";
+
+    NSString *insuranceEan = nil;
+    NSString *coverCardId = nil;
+    for (EPrescriptionPatientId *pid in self.patientIds) {
+        if ([pid.type isEqual:@(1)]) {
+            if (pid.value.length == 13) {
+                insuranceEan = pid.value;
+            } else if (pid.value.length == 20 || [pid.value containsString:@"."]) {
+                coverCardId = pid.value;
+            }
+        }
+    }
     
     ZurRosePatientAddress *patient = [[ZurRosePatientAddress alloc] init];
     prescription.patientAddress = patient;
@@ -222,20 +244,12 @@
     patient.sex = [self.patientGender intValue]; // same, 1 = m, 2 = f
     patient.phoneNrHome = self.patientPhone;
     patient.email = self.patientEmail;
-    patient.email = self.patientEmail;
     patient.langCode = [self.patientLang.lowercaseString hasPrefix:@"de"] ? 1
         : [self.patientLang.lowercaseString hasPrefix:@"fr"] ? 2
         : [self.patientLang.lowercaseString hasPrefix:@"it"] ? 3
         : 1;
-    patient.coverCardId = @"";
+    patient.coverCardId = coverCardId ?: @"";
     patient.patientNr = @"";
-    
-    NSString *insuranceEan = nil;
-    for (EPrescriptionPatientId *pid in self.patientIds) {
-        if ([pid.type isEqual:@(1)]) {
-            insuranceEan = pid.value;
-        }
-    }
     
     NSMutableArray<ZurRoseProduct*> *products = [NSMutableArray array];
     for (EPrescriptionMedicament *medi in self.medicaments) {
@@ -324,31 +338,39 @@
         }];
     }
     
-    EPrescriptionPatientId *firstPatientId = self.patientIds.firstObject;
-
+    NSString *firstPatientId = self.patientIds.firstObject.value ?: self.patientReceiverGLN;
+    NSString *coverCardId = nil;
+    NSString *insuranceGLN = nil;
+    if (firstPatientId.length == 13) {
+        insuranceGLN = firstPatientId;
+    } else if (firstPatientId.length == 20 || [firstPatientId containsString:@"."]) {
+        coverCardId = firstPatientId;
+    }
+    
     NSDictionary *amkDict = @{
-        @"prescription_hash": [[NSUUID UUID] UUIDString],
+        KEY_AMK_HASH: [[NSUUID UUID] UUIDString],
         // Normally place_date is composed with doctor's name or city,
         // however it's not available in ePrescription, instead we put the ZSR nummber here
-        @"place_date": [NSString stringWithFormat:@"%@,%@", self.zsr ?: @"", [placeDateFormatter stringFromDate:self.date ?: [NSDate date]]],
-        @"operator": @{
-            @"gln": self.auth ?: @"",
-            @"zsr_number": self.zsr ?: @"",
+        KEY_AMK_PLACE_DATE: [NSString stringWithFormat:@"%@,%@", self.zsr ?: @"", [placeDateFormatter stringFromDate:self.date ?: [NSDate date]]],
+        KEY_AMK_OPERATOR: @{
+            KEY_AMK_DOC_GLN: self.auth ?: @"",
+            KEY_AMK_DOC_ZSR_NUMBER: self.zsr ?: @"",
         },
-        @"patient": @{
-            @"patient_id": [self generatePatientUniqueID],
-            @"given_name": self.patientFirstName ?: @"",
-            @"family_name": self.patientLastName ?: @"",
-            @"birth_date": self.patientBirthdate ? [birthDateDateFormatter stringFromDate:self.patientBirthdate] : @"",
-            @"gender": self.patientGender.intValue == 1 ? KEY_AMK_PAT_GENDER_M : KEY_AMK_PAT_GENDER_F,
-            @"email_address": self.patientEmail ?: @"",
-            @"phone_number": self.patientPhone ?: @"",
-            @"postal_address": self.patientStreet ?: @"",
-            @"city": self.patientCity ?: @"",
-            @"zip_code": self.patientZip ?: @"",
-            @"insurance_gln": [firstPatientId.type isEqual:@1] ? firstPatientId.value : (self.patientReceiverGLN ?: @""),
+        KEY_AMK_PATIENT: @{
+            KEY_AMK_PAT_ID: [self generatePatientUniqueID],
+            KEY_AMK_PAT_NAME: self.patientFirstName ?: @"",
+            KEY_AMK_PAT_SURNAME: self.patientLastName ?: @"",
+            KEY_AMK_PAT_BIRTHDATE: self.patientBirthdate ? [birthDateDateFormatter stringFromDate:self.patientBirthdate] : @"",
+            KEY_AMK_PAT_GENDER: self.patientGender.intValue == 1 ? KEY_AMK_PAT_GENDER_M : KEY_AMK_PAT_GENDER_F,
+            KEY_AMK_PAT_EMAIL: self.patientEmail ?: @"",
+            KEY_AMK_PAT_PHONE: self.patientPhone ?: @"",
+            KEY_AMK_PAT_ADDRESS: self.patientStreet ?: @"",
+            KEY_AMK_PAT_CITY: self.patientCity ?: @"",
+            KEY_AMK_PAT_ZIP: self.patientZip ?: @"",
+            KEY_AMK_PAT_INSURANCE_GLN: insuranceGLN ?: @"",
+            KEY_AMK_PAT_HEALTH_CARD_NUMBER: coverCardId ?: @"",
         },
-        @"medications": mediDicts,
+        KEY_AMK_MEDICATIONS: mediDicts,
     };
     return amkDict;
 }
