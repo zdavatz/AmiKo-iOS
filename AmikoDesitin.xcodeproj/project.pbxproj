@@ -1958,7 +1958,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20250107;
+				CURRENT_PROJECT_VERSION = 20250308;
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1969,7 +1969,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.98;
+				MARKETING_VERSION = 2.10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1989,7 +1989,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20250107;
+				CURRENT_PROJECT_VERSION = 20250308;
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -2000,7 +2000,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/AmikoDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.98;
+				MARKETING_VERSION = 2.10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.AmiKoDesitin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2018,7 +2018,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
 				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 20250107;
+				CURRENT_PROJECT_VERSION = 20250308;
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2028,7 +2028,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.98;
+				MARKETING_VERSION = 2.10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				SKIP_INSTALL = NO;
@@ -2044,7 +2044,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-CoMedDesitin";
 				CODE_SIGN_ENTITLEMENTS = CoMedDesitin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 20250107;
+				CURRENT_PROJECT_VERSION = 20250308;
 				DEVELOPMENT_TEAM = 4B37356EGR;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2054,7 +2054,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "AmikoDesitin/CoMedDesitin-Info.plist";
-				MARKETING_VERSION = 2.9.98;
+				MARKETING_VERSION = 2.10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ywesee.comeddesitin;
 				PRODUCT_NAME = CoMedDesitin;
 				SKIP_INSTALL = NO;
