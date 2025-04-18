@@ -249,7 +249,7 @@
         : [self.patientLang.lowercaseString hasPrefix:@"it"] ? 3
         : 1;
     patient.coverCardId = coverCardId ?: @"";
-    patient.patientNr = @"";
+    patient.patientNr = @"0";
     
     NSMutableArray<ZurRoseProduct*> *products = [NSMutableArray array];
     for (EPrescriptionMedicament *medi in self.medicaments) {
