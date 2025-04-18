@@ -41,7 +41,7 @@
     if (self.nrOfRepetitions >= 0) {
         [e addAttribute:[DDXMLNode attributeWithName:@"nrOfRepetitions" stringValue:[@(self.nrOfRepetitions) stringValue]]];
     }
-    [e addAttribute:[DDXMLNode attributeWithName:@"quantity" stringValue:[@(self.quantity) stringValue]]];
+    [e addAttribute:[DDXMLNode attributeWithName:@"quantity" stringValue:[@(self.quantity ?: 1) stringValue]]];
     if (self.validityRepetition) {
         [e addAttribute:[DDXMLNode attributeWithName:@"validityRepetition" stringValue:self.validityRepetition]];
     }
@@ -79,9 +79,7 @@
     DDXMLElement *insurance = [DDXMLElement elementWithName:@"insurance"];
     [e addChild:insurance];
     
-    if (self.insuranceEanId) {
-        [insurance addAttribute:[DDXMLNode attributeWithName:@"eanId" stringValue:self.insuranceEanId]];
-    }
+    [insurance addAttribute:[DDXMLNode attributeWithName:@"eanId" stringValue:self.insuranceEanId.length ? self.insuranceEanId : @"1"]];
     if (self.insuranceBsvNr) {
         [insurance addAttribute:[DDXMLNode attributeWithName:@"bsvNr" stringValue:self.insuranceBsvNr]];
     }

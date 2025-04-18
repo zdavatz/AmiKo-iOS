@@ -16,6 +16,7 @@
     self.qtyMidday = -1;
     self.qtyEvening = -1;
     self.qtyNight = -1;
+    self.label = -1;
     return self;
 }
 
