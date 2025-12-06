@@ -54,9 +54,9 @@
 
 - (NSString*)HINDomainForADSwiss {
 #ifdef DEBUG
-    return @"oauth2.ci-prep.adswiss.hin.ch";
+    return @"oauth2.authservice-int.hin.ch";
 #else
-    return @"oauth2.ci.adswiss.hin.ch";
+    return @"oauth2.authservice.hin.ch";
 #endif
 }
 
@@ -306,7 +306,7 @@
             callback(error, nil);
             return;
         }
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://%@/authService/EPDAuth?targetUrl=%@&style=redirect", [self HINDomainForADSwiss], [self oauthCallback]]]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://%@/v1/oauth?targetUrl=%@&style=redirect", [self HINDomainForADSwiss], [self oauthCallback]]]];
         [request setAllHTTPHeaderFields:@{
             @"Accept": @"application/json",
             @"Authorization": [NSString stringWithFormat:@"Bearer %@", token.accessToken],
@@ -331,7 +331,7 @@
             }
             callback(nil, saml);
         }] resume];
-        // curl --request POST --url 'https://oauth2.ci-prep.adswiss.hin.ch/authService/EPDAuth?targetUrl=http%3A%2F%2Flocalhost:8080%2Fcallback&style=redirect' --header 'accept: application/json' --header 'Authorization: Bearer b#G7XRWMzXd...aMALnxAj#GpN7V'
+        // curl --request POST --url 'https://oauth2.authservice-int.hin.ch/v1/oauth?targetUrl=http%3A%2F%2Flocalhost:8080%2Fcallback&style=redirect' --header 'accept: application/json' --header 'Authorization: Bearer b#G7XRWMzXd...aMALnxAj#GpN7V'
     }];
 }
 
@@ -344,7 +344,7 @@
             callback(error, nil);
             return;
         }
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://%@/authService/EPDAuth/auth_handle", [self HINDomainForADSwiss]]]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://%@/v1/oauth/auth_handle", [self HINDomainForADSwiss]]]];
         [request setAllHTTPHeaderFields:@{
             @"Accept": @"application/json",
             @"Content-Type": @"application/json",
@@ -378,7 +378,7 @@
             }
             callback(nil, authHandle);
         }] resume];
-        // curl --request POST --url "https://oauth2.ci-prep.adswiss.hin.ch/authService/EPDAuth/auth_handle" -d "{\"authCode\":\"vzut..Q2E6\"}" --header "accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer b#G7XRWMzX...nxAj#GpN7V"
+        // curl --request POST --url "https://oauth2.authservice-int.hin.ch/v1/oauth/auth_handle" -d "{\"authCode\":\"vzut..Q2E6\"}" --header "accept: application/json" --header "Content-Type: application/json" --header "Authorization: Bearer b#G7XRWMzX...nxAj#GpN7V"
     }];
 }
 
