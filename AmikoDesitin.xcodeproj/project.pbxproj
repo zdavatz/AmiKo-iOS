@@ -106,6 +106,8 @@
 		CFB1ACF82A7AA5E800DB8FE6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */; };
 		CFB672922A7FA7D5004A0063 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CFB672912A7FA7D5004A0063 /* LFCGzipUtility.m */; };
 		CFB672942A7FA7E3004A0063 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CFB672912A7FA7D5004A0063 /* LFCGzipUtility.m */; };
+		CFFBBBA52EE9AE5E00B789BF /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFBBBA42EE9AE5E00B789BF /* SceneDelegate.m */; };
+		CFFBBBA62EE9AE5E00B789BF /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFBBBA42EE9AE5E00B789BF /* SceneDelegate.m */; };
 		D23588913CE874458BC2D7D0 /* libPods-CoMedDesitin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229DCB695FA0C3A8E277BEC /* libPods-CoMedDesitin.a */; };
 		D50BC99A1BDCFDBC008A2150 /* MLLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */; };
 		D52A0D6617ECC1A7003BF272 /* ComedDesitin.png in Resources */ = {isa = PBXBuildFile; fileRef = D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */; };
@@ -427,6 +429,8 @@
 		CFB1ACF62A7AA5E200DB8FE6 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		CFB672912A7FA7D5004A0063 /* LFCGzipUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LFCGzipUtility.m; path = AmiKoDesitin/LFCGzipUtility.m; sourceTree = SOURCE_ROOT; };
 		CFB672932A7FA7DE004A0063 /* LFCGzipUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LFCGzipUtility.h; path = AmiKoDesitin/LFCGzipUtility.h; sourceTree = SOURCE_ROOT; };
+		CFFBBBA32EE9AE5E00B789BF /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		CFFBBBA42EE9AE5E00B789BF /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		D50BC9991BDCFDBC008A2150 /* MLLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MLLaunchScreen.storyboard; sourceTree = "<group>"; };
 		D52A0D6517ECC1A7003BF272 /* ComedDesitin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ComedDesitin.png; path = ../ComedDesitin.png; sourceTree = "<group>"; };
 		D52A0D6717ECC1D1003BF272 /* ComedDesitin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ComedDesitin@2x.png"; path = "../ComedDesitin@2x.png"; sourceTree = "<group>"; };
@@ -1056,6 +1060,8 @@
 				D5A6F26417B169F000EAB24B /* Resources */,
 				D5A6F24917B1692F00EAB24B /* MLAppDelegate.h */,
 				D5A6F24A17B1692F00EAB24B /* MLAppDelegate.m */,
+				CFFBBBA32EE9AE5E00B789BF /* SceneDelegate.h */,
+				CFFBBBA42EE9AE5E00B789BF /* SceneDelegate.m */,
 				D5A6F26317B169E300EAB24B /* Database */,
 				D5A6F26017B169B000EAB24B /* Assets */,
 				D5A6F26117B169B900EAB24B /* Classes */,
@@ -1632,6 +1638,7 @@
 				D5A6F28B17B16C0200EAB24B /* MLDataStore.m in Sources */,
 				CF8664EC2A6FF71700D1D81E /* MLHINProfile.m in Sources */,
 				CFA5207824235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
+				CFFBBBA62EE9AE5E00B789BF /* SceneDelegate.m in Sources */,
 				CF8664EE2A6FF71700D1D81E /* MLHINClient.m in Sources */,
 				D5A31F5618B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6018B5207A00F56BC5 /* SSZipArchive.m in Sources */,
@@ -1707,6 +1714,7 @@
 				930D94BA2077E641007E4629 /* Operator.m in Sources */,
 				CF8664ED2A6FF71700D1D81E /* MLHINProfile.m in Sources */,
 				CFA5207924235FD900834E16 /* PatientModel+CoreDataClass.m in Sources */,
+				CFFBBBA52EE9AE5E00B789BF /* SceneDelegate.m in Sources */,
 				CF8664EF2A6FF71700D1D81E /* MLHINClient.m in Sources */,
 				D5A31F5718B5207200F56BC5 /* ioapi.c in Sources */,
 				D5A31F6118B5207A00F56BC5 /* SSZipArchive.m in Sources */,

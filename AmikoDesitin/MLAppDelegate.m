@@ -34,6 +34,7 @@
 #import "PatientDbListViewController.h"
 #import "LegacyPatientDBAdapter.h"
 #import "MLPersistenceManager.h"
+#import "SceneDelegate.h"
 
 #pragma mark -
 
@@ -45,10 +46,6 @@
 
 @implementation MLAppDelegate
 
-@synthesize window = _window;
-@synthesize navController = _navController;
-@synthesize revealViewController = _revealViewController;
-
 MLViewController *mainViewController;
 
 int launchState = eAips;
@@ -57,20 +54,6 @@ bool launchedFromShortcut = NO;
 void onUncaughtException(NSException *exception)
 {
     NSLog(@"uncaught exception: %@", exception.description);
-}
-
-/** Utility functions
- */
-CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
-{
-    CGSize result = s.bounds.size;
-    
-    if ([s respondsToSelector: @selector(scale)]) {
-        CGFloat scale = s.scale;
-        result = CGSizeMake(result.width * scale, result.height * scale);
-    }
-    
-    return result;
 }
 
 #pragma mark -
@@ -161,41 +144,6 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
  */
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Init main window
-    CGRect screenBound = [[UIScreen mainScreen] bounds];
-    self.window = [[UIWindow alloc] initWithFrame:screenBound];
-    
-#ifdef DEBUG
-    // Print out some useful info
-    CGFloat screenScale = [[UIScreen mainScreen] scale];
-    CGSize sizeInPixels = PhysicalPixelSizeOfScreen([UIScreen mainScreen]);
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_9_0  // Deprecated in iOS 9.0
-    // Screen size minus the size of the status bar (if visible)
-    // This is the size of the app window
-    NSLog(@"points w = %f, points h = %f, scale = %f",
-          [[UIScreen mainScreen] applicationFrame].size.width,
-          [[UIScreen mainScreen] applicationFrame].size.height, screenScale);
-#endif
-    
-    // Screen size regardless of status bar.
-    // This is the size of the device
-    NSLog(@"points w = %f, points h = %f, scale = %f",
-          [[UIScreen mainScreen] bounds].size.width,
-          [[UIScreen mainScreen] bounds].size.height, screenScale);
-#endif
-
-    // Rear
-    mainViewController = [MLViewController new];
-    UINavigationController *mainViewNavigationController =
-        [[UINavigationController alloc] initWithRootViewController:mainViewController];
-    mainViewNavigationController.view.backgroundColor = [UIColor secondarySystemBackgroundColor];
-
-    // Front
-    MLSecondViewController *secondViewController = [MLSecondViewController new];
-    UINavigationController *secondViewNavigationController =
-        [[UINavigationController alloc] initWithRootViewController:secondViewController];
-    
     // Setup Quick Action menu
     [self configDynamicShortcutItems];
 
@@ -207,79 +155,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
         // and prevents performActionForShortcutItem to be called...
         launchedFromShortcut = YES;
     }
-    
-    // Init swipe (reveal) view controller
-    SWRevealViewController *mainRevealController = [[SWRevealViewController alloc]
-                                                initWithRearViewController:mainViewNavigationController
-                                                frontViewController:secondViewNavigationController];
-    
-    MLTitleViewController *titleViewController = [MLTitleViewController new];
-    mainRevealController.rightViewController = titleViewController;
-    
-    mainRevealController.delegate = self;
 
-    // Make sure the orientation is correct
-
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-        if (orientation == UIInterfaceOrientationLandscapeLeft ||
-            orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        }
-        else {
-            mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
-        }
-
-        mainRevealController.rearViewRevealOverdraw = RearViewRevealOverdraw_Portrait_iPad;
-        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPad;
-
-        self.revealViewController = mainRevealController;
-        [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
-
-        self.window.rootViewController = self.revealViewController;
-    }
-    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        mainRevealController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPhone;
-        mainRevealController.rightViewRevealWidth = RightViewRevealWidth_Portrait_iPhone;    // Check also MLMenuViewController.m
-
-        self.revealViewController = mainRevealController;
-        [mainRevealController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
-
-        self.window.rootViewController = self.revealViewController;
-    }
-    mainRevealController.bounceBackOnOverdraw = YES;
-    
-    // Note: iOS7 - sets the global TINT color!!
-    {
-        //[application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-        
-        // Changes background color of navigation bar
-        [[UINavigationBar appearance] setBarTintColor:[UIColor systemGray5Color]];
-                
-        self.window.clipsToBounds =YES;
-        // self.window.frame = CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height-20);
-        
-        // Text and TabBar button colors (also images on navigationBar ?)
-        [self.window setTintColor:MAIN_TINT_COLOR];
-        [self.window setTintColor:[UIColor labelColor]];
-        
-        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [UIFont systemFontOfSize:14], NSFontAttributeName,
-                                    [UIColor labelColor], NSForegroundColorAttributeName,
-                                    nil];
-        [[UINavigationBar appearance] setTitleTextAttributes:attributes];
-     
-        // Remove shadow?
-        /*
-        [[UINavigationBar appearance] setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-        [[UINavigationBar appearance] setShadowImage:[UIImage new]];
-        */
-        
-//        [[UIApplication sharedApplication] setStatusBarHidden:NO
-//                                                withAnimation:UIStatusBarAnimationSlide];
-    }
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     // Register the values that should be returned if an object is not found in the defaults
@@ -302,20 +178,18 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
     [defaults removeObjectForKey:@"lastUsedPrescription"];
     [defaults synchronize];
-    
-    self.window.rootViewController = self.revealViewController;
-    [self.window makeKeyAndVisible];
-    
+
     NSSetUncaughtExceptionHandler(&onUncaughtException);
     self.editMode = EDIT_MODE_UNDEFINED;
-    
-    // Issue #54
-    [mainRevealController revealToggle:nil];
-    [mainRevealController revealToggle:nil];
-    
+
     [MLPersistenceManager shared];
-    
     return !launchedFromShortcut;
+}
+
+- (UISceneConfiguration *)application:(UIApplication *)application
+configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
+                              options:(UISceneConnectionOptions *)options {
+    return [UISceneConfiguration configurationWithName:@"Default Configuration" sessionRole:[connectingSceneSession role]];
 }
 
 - (void) applicationWillResignActive: (UIApplication *)application
@@ -526,12 +400,13 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
 
 - (void) switchRigthToPatientDbList
 {
-    id right = self.revealViewController.rightViewController;
+    SceneDelegate *sceneDelegate = (SceneDelegate*)[UIApplication sharedApplication].windows.firstObject.windowScene.delegate;
+    id right = sceneDelegate.revealViewController.rightViewController;
     if (![right isKindOfClass:[PatientDbListViewController class]] ) {
         UIViewController *listViewController = [PatientDbListViewController sharedInstance];
-        [self.revealViewController setRightViewController:listViewController];
+        [sceneDelegate.revealViewController setRightViewController:listViewController];
 
-        self.revealViewController.rightViewRevealOverdraw = 0;
+        sceneDelegate.revealViewController.rightViewRevealOverdraw = 0;
 #ifdef PATIENT_DB_LIST_FULL_WIDTH
         float frameWidth = self.view.frame.size.width;
         self.revealViewController.rightViewRevealWidth = frameWidth;
@@ -539,7 +414,7 @@ CGSize PhysicalPixelSizeOfScreen(UIScreen *s)
     }
 
     // Finally make it visible
-    [self.revealViewController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
+    [sceneDelegate.revealViewController setFrontViewPosition:FrontViewPositionLeftSide animated:NO];
 }
 
 @end
