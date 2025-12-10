@@ -1193,14 +1193,14 @@ static BOOL flagShowReport = false;
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
-        CGFloat searchFieldWidth = [[UIScreen mainScreen] bounds].size.width - logoButton.frame.size.width - 40.0f;
-        
-        // Before iOS 26, we need to specify the size, otherwise it wouldn't be shown
+        CGFloat osMargin = 40;
         if (@available(iOS 26, *)) {
-            searchFieldWidth = 0;
+            osMargin = 80;
         }
+        CGFloat searchFieldWidth = [[UIScreen mainScreen] bounds].size.width - logoButton.frame.size.width - osMargin;
         searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 40.0f)];
         searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
         searchField.delegate = self;
 
         searchField.barStyle = UIBarStyleDefault;
@@ -1218,8 +1218,10 @@ static BOOL flagShowReport = false;
 #ifdef TWO_ITEMS_ON_LEFT_NAV_BAR
         // Left
         UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchField];
-        self.navigationItem.leftBarButtonItems = @[appIconItem];
-        self.navigationItem.rightBarButtonItems = @[searchItem];
+        if (@available(iOS 26.0, *)) {
+            searchItem.sharesBackground = NO;
+        }
+        self.navigationItem.leftBarButtonItems = @[appIconItem, searchItem];
 #else
         // Middle
         self.navigationItem.titleView = searchField;
