@@ -211,7 +211,6 @@ static BOOL flagShowReport = false;
 @synthesize searchField;
 @synthesize myTextField;
 @synthesize myTableView;
-@synthesize myToolBar;
 @synthesize myTabBar;
 @synthesize pickerSheet, pickerView;
 
@@ -223,104 +222,12 @@ static BOOL flagShowReport = false;
 }
 
 // See 'onButtonPressed' in AmiKo-macOS
-- (IBAction) onToolBarButtonPressed:(id)sender
-{
-#ifdef DEBUG
-    NSLog(@"%s %d, Button tag: %ld, title: %@", __FUNCTION__, __LINE__, (long)[sender tag], [sender title]);
-#endif
-    
+- (IBAction) onSearchStateSegmentChanged:(id)sender
+{    
     // First update the GUI elements, depending on device and orientation
-
-    UIBarButtonItem *btn = (UIBarButtonItem *)sender;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     [searchField setText:@""];
-
-    if (([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ||
-        (orientation == UIInterfaceOrientationLandscapeLeft) ||
-        (orientation == UIInterfaceOrientationLandscapeRight) )
-    {
-        if ([btn.title isEqualToString:NSLocalizedString(@"Preparation", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"Preparation", "Full toolbar")];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Preparation", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Preparation", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Owner", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"Owner", "Full toolbar")];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Owner", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Owner", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"ATC Code", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"ATC Code", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg. No", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"Reg. No", "Full toolbar")];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Therapy", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"Therapy", "Full toolbar")];
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Therapy", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Full Text", "Full toolbar")]) {
-            [myTextField setText:NSLocalizedString(@"Full Text", "Full toolbar")];
-            [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
-            [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
-        }
-    }
-    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-    {
-        if ([btn.title isEqualToString:NSLocalizedString(@"Prep", "Short toolbar")]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Preparation", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Preparation", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Own", "Short toolbar")]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Owner", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Owner", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"ATC", "Short toolbar")]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"ATC Code", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Reg", "Short toolbar")]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Reg. No", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"Ther", "Short toolbar")]) {
-            [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
-                                         NSLocalizedString(@"Search",nil),
-                                         NSLocalizedString(@"Therapy", "Full toolbar")]];
-            [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
-        }
-        else if ([btn.title isEqualToString:NSLocalizedString(@"FTS", "Short toolbar")]) {
-            [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
-            [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
-        }
-    }
-
-    [self updateBarButtonColor:btn];
-
-    // Then update the app internal status
+    
     // We shouldn't modify 'mUsedDatabase' here, it gets defined when the tab is switched,
     // but we need a compromise solution because full-text is a special case
 
@@ -330,38 +237,53 @@ static BOOL flagShowReport = false;
 
     NSInteger prevState = mCurrentSearchState;
 
-    switch (btn.tag) {
-        case TB_TAG_TITLE:
-            mCurrentSearchState = SEARCH_TITLE;
-            break;
-            
-        case TB_TAG_AUTHOR:
-            mCurrentSearchState = SEARCH_AUTHOR;
-            break;
-            
-        case TB_TAG_ATC_CODE:
-            mCurrentSearchState = SEARCH_ATC_CODE;
-            break;
-            
-        case TB_TAG_REG_NR:
-            mCurrentSearchState = SEARCH_REG_NR;
-            break;
-            
-        case TB_TAG_THERAPY:
-            mCurrentSearchState = SEARCH_THERAPY;
-            break;
-            
-        case TB_TAG_FULL_TEXT:
-            mCurrentSearchState = SEARCH_FULL_TEXT;
-            if (mUsedDatabase == DB_TYPE_AIPS)
-                mUsedDatabase = DB_TYPE_FULL_TEXT;
-            break;
-            
-#ifdef DEBUG
-        default:
-            NSLog(@"%s %d, unexpected tag: %ld", __FUNCTION__, __LINE__, btn.tag);
-            break;
-#endif
+    if (self.searchStateSegement.selectedSegmentIndex == 0) {
+        mCurrentSearchState = SEARCH_TITLE;
+        [myTextField setText:NSLocalizedString(@"Preparation", "Full toolbar")];
+        [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                     NSLocalizedString(@"Search",nil),
+                                     NSLocalizedString(@"Preparation", "Full toolbar")]];
+        [mBarButtonItemName setString:NSLocalizedString(@"Preparation", "Full toolbar")];
+    }
+    else if (self.searchStateSegement.selectedSegmentIndex == 1) {
+        mCurrentSearchState = SEARCH_AUTHOR;
+        [myTextField setText:NSLocalizedString(@"Owner", "Full toolbar")];
+        [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                     NSLocalizedString(@"Search",nil),
+                                     NSLocalizedString(@"Owner", "Full toolbar")]];
+        [mBarButtonItemName setString:NSLocalizedString(@"Owner", "Full toolbar")];
+    }
+    else if (self.searchStateSegement.selectedSegmentIndex == 2) {
+        mCurrentSearchState = SEARCH_ATC_CODE;
+        [myTextField setText:NSLocalizedString(@"ATC Code", "Full toolbar")];
+        [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                     NSLocalizedString(@"Search",nil),
+                                     NSLocalizedString(@"ATC Code", "Full toolbar")]];
+        [mBarButtonItemName setString:NSLocalizedString(@"ATC Code", "Full toolbar")];
+    }
+    else if (self.searchStateSegement.selectedSegmentIndex == 3) {
+        mCurrentSearchState = SEARCH_REG_NR;
+        [myTextField setText:NSLocalizedString(@"Reg. No", "Full toolbar")];
+        [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                     NSLocalizedString(@"Search",nil),
+                                     NSLocalizedString(@"Reg. No", "Full toolbar")]];
+        [mBarButtonItemName setString:NSLocalizedString(@"Reg. No", "Full toolbar")];
+    }
+    else if (self.searchStateSegement.selectedSegmentIndex == 4) {
+        mCurrentSearchState = SEARCH_THERAPY;
+        [myTextField setText:NSLocalizedString(@"Therapy", "Full toolbar")];
+        [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
+                                     NSLocalizedString(@"Search",nil),
+                                     NSLocalizedString(@"Therapy", "Full toolbar")]];
+        [mBarButtonItemName setString:NSLocalizedString(@"Therapy", "Full toolbar")];
+    }
+    else if (self.searchStateSegement.selectedSegmentIndex == 5) {
+        mCurrentSearchState = SEARCH_FULL_TEXT;
+        if (mUsedDatabase == DB_TYPE_AIPS)
+            mUsedDatabase = DB_TYPE_FULL_TEXT;
+        [myTextField setText:NSLocalizedString(@"Full Text", "Full toolbar")];
+        [searchField setPlaceholder:NSLocalizedString(@"Full Text Search", "Search placeholder")];
+        [mBarButtonItemName setString:NSLocalizedString(@"Full Text", "Full toolbar")];
     }
     
 #ifdef DEBUG
@@ -508,7 +430,7 @@ static BOOL flagShowReport = false;
             mCurrentSearchState = SEARCH_TITLE;
             flagSearchInteractions = false;
             mCurrentIndexPath = nil;
-            [self resetBarButtonItems];
+            [self resetSearchStateUI];
             [self clearDataInTableView];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:0]];
@@ -530,7 +452,7 @@ static BOOL flagShowReport = false;
             mUsedDatabase = DB_TYPE_AIPS;
             mCurrentSearchState = SEARCH_TITLE;
             flagSearchInteractions = true;
-            [self resetBarButtonItems];
+            [self resetSearchStateUI];
             //
             [myTabBar setSelectedItem:[myTabBar.items objectAtIndex:2]];
             break;
@@ -694,7 +616,7 @@ static BOOL flagShowReport = false;
             // Reload table
             NSInteger _mySearchState = mCurrentSearchState;
             NSString *_mySearchKey = mCurrentSearchKey;
-            [self resetBarButtonItems];
+            [self resetSearchStateUI];
             //mCurrentSearchState = SEARCH_TITLE;
             [self resetDataInTableView];
             mCurrentSearchState = _mySearchState;
@@ -874,33 +796,13 @@ static BOOL flagShowReport = false;
    }
 }
 
-- (void) resetBarButtonsColor
-{
-    for (UIBarButtonItem *b in [myToolBar items])
-       [b setTintColor:[UIColor secondaryLabelColor]];
-}
-
-- (void) updateBarButtonColor: (UIBarButtonItem *)btn
-{
-    [self resetBarButtonsColor];
-
-    for (UIBarButtonItem *b in [myToolBar items])
-        if (b==btn) {
-            [b setTintColor:MAIN_TINT_COLOR];
-            break;
-        }
-}
-
-- (void) resetBarButtonItems
+- (void) resetSearchStateUI
 {
 #ifdef DEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
     // Reset search state
-
-    [self resetBarButtonsColor];
-    [[[myToolBar items] objectAtIndex:SEARCH_TITLE] setTintColor:MAIN_TINT_COLOR]; // Highlight first button
 
     [searchField setText:@""];
     [searchField setPlaceholder:[NSString stringWithFormat:@"%@ %@",
@@ -917,9 +819,8 @@ static BOOL flagShowReport = false;
     NSUInteger indexOfObjectToBeHighlighted = searchState;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         indexOfObjectToBeHighlighted /= 2;
-    
-    [self resetBarButtonsColor];
-    [[[myToolBar items] objectAtIndex:indexOfObjectToBeHighlighted] setTintColor:MAIN_TINT_COLOR];
+
+    self.searchStateSegement.selectedSegmentIndex = indexOfObjectToBeHighlighted;
 
     [searchField setText:@""];
     switch (searchState)
@@ -1065,17 +966,6 @@ static BOOL flagShowReport = false;
         [b setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
 }
 
-- (void) setToolbarItemsFontSize
-{
-    NSDictionary *titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [UIFont systemFontOfSize:14], NSFontAttributeName,
-                                         nil];
-    
-    for (UIBarButtonItem *b in [myToolBar items])
-        if (b.tag != 0)   // Skip UIBarButtonSystemItemFlexibleSpace
-            [b setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
-}
-
 - (void) startActivityIndicator
 {
     if (runningActivityIndicator==NO) {
@@ -1110,14 +1000,6 @@ static BOOL flagShowReport = false;
 }
 */
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-#ifdef DEBUG
-    NSLog(@"%s to orientation: %ld", __FUNCTION__, interfaceOrientation);
-#endif
-    return YES;
-}
-
 // TODO: use "viewWillTransitionToSize:withTransitionCoordinator:" instead
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                  duration:(NSTimeInterval)duration
@@ -1125,67 +1007,9 @@ static BOOL flagShowReport = false;
 #ifdef DEBUG
     NSLog(@"%s to orientation: %ld", __FUNCTION__, toInterfaceOrientation);
 #endif
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-            toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        }
-        else {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
-        }
-    } // iPad
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-    {
-        [self setToolbarItemsFontSize];
-        
-        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-            toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        {
-            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
-            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
-            
-            // Items at index 1,3,5,7 are flexible space
-            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"Full Text", "Full toolbar")];
-
-            // Hide status bar and navigation bar (top)
-            [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-
-            [[UIApplication sharedApplication] setStatusBarHidden:YES
-                                                    withAnimation:UIStatusBarAnimationSlide];
-            
-            self.myTableViewHeightConstraint.constant = 5;
-        }
-        else {
-            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
-            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
-            
-            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Prep", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Own", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Ther", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"FTS", "Short toolbar")];
-
-            // Display status and navigation bar (top)
-            [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-
-            [[UIApplication sharedApplication] setStatusBarHidden:NO
-                                                    withAnimation:UIStatusBarAnimationSlide];
-
-            self.myTableViewHeightConstraint.constant = 49;
-        }
-
-        [self showTabBarWithAnimation:YES]; // the tab bar is at the bottom of the view
-        [myTableView layoutIfNeeded];
-    } // iPhone
+    [self updateRearViewRevealWidth];
+    [self updateSearchStateSegmentTitles];
 }
 
 #pragma mark -
@@ -1197,60 +1021,9 @@ static BOOL flagShowReport = false;
 #endif
     
     [super viewWillAppear:animated];
-    
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft ||
-            orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        }
-        else {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
-        }
-        
-        [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
-        [[[myToolBar items] objectAtIndex:1] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
-        [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-        [[[myToolBar items] objectAtIndex:3] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
-        [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
-        [[[myToolBar items] objectAtIndex:5] setTitle:NSLocalizedString(@"Full Text", "Full toolbar")];
-    }
-    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-    {
-        [self setToolbarItemsFontSize];
-        
-        if (orientation == UIInterfaceOrientationLandscapeLeft ||
-            orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
-            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
-            
-            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Preparation", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Owner", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC Code", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg. No", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Therapy", "Full toolbar")];
-            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"Full Text", "Full toolbar")];
 
-            // [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-        }
-        else {
-            //
-            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
-            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
-            
-            [[[myToolBar items] objectAtIndex:0] setTitle:NSLocalizedString(@"Prep", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:2] setTitle:NSLocalizedString(@"Own", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:4] setTitle:NSLocalizedString(@"ATC", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:6] setTitle:NSLocalizedString(@"Reg", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:8] setTitle:NSLocalizedString(@"Ther", "Short toolbar")];
-            [[[myToolBar items] objectAtIndex:10] setTitle:NSLocalizedString(@"FTS", "Short toolbar")];
-
-            // [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-        }
-    }
+    [self updateRearViewRevealWidth];
+    [self updateSearchStateSegmentTitles];
     
     if (!flagSearchInteractions) {
         if (mUsedDatabase == DB_TYPE_AIPS)
@@ -1267,6 +1040,60 @@ static BOOL flagShowReport = false;
     }
 }
 
+- (void)updateRearViewRevealWidth {
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if (UIInterfaceOrientationIsLandscape(orientation))
+        {
+            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
+        }
+        else {
+            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
+        }
+    }
+    else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        if (UIInterfaceOrientationIsLandscape(orientation))
+        {
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
+            
+            [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                                    withAnimation:UIStatusBarAnimationSlide];
+        }
+        else {
+            self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
+            self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
+            [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
+
+            [[UIApplication sharedApplication] setStatusBarHidden:NO
+                                                    withAnimation:UIStatusBarAnimationSlide];
+        }
+    }
+}
+
+- (void)updateSearchStateSegmentTitles {
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Preparation", "Full toolbar") forSegmentAtIndex:0];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Owner", "Full toolbar") forSegmentAtIndex:1];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"ATC Code", "Full toolbar") forSegmentAtIndex:2];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Reg. No", "Full toolbar") forSegmentAtIndex:3];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Therapy", "Full toolbar") forSegmentAtIndex:4];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Full Text", "Full toolbar") forSegmentAtIndex:5];
+    } else {
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Prep", "Short toolbar") forSegmentAtIndex:0];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Own", "Short toolbar") forSegmentAtIndex:1];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"ATC", "Short toolbar") forSegmentAtIndex:2];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Reg", "Short toolbar") forSegmentAtIndex:3];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"Ther", "Short toolbar") forSegmentAtIndex:4];
+        [self.searchStateSegement setTitle:NSLocalizedString(@"FTS", "Short toolbar") forSegmentAtIndex:5];
+    }
+}
+
 - (void) viewDidAppear:(BOOL)animated
 {
 #ifdef DEBUG
@@ -1277,52 +1104,23 @@ static BOOL flagShowReport = false;
     
     [super viewDidAppear:animated];
     
+    [self updateRearViewRevealWidth];
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft ||
-            orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Landscape_iPad;
-        }
-        else {
-            self.revealViewController.rearViewRevealWidth = RearViewRevealWidth_Portrait_iPad;
-        }
-    }
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        if (orientation == UIInterfaceOrientationLandscapeLeft ||
-            orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            // Hide status bar and navigation bar (top)
-            [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
-
-            [[UIApplication sharedApplication] setStatusBarHidden:YES
-                                                    withAnimation:UIStatusBarAnimationSlide];
- 
-            self.myTableViewHeightConstraint.constant = 5;
-        }
-        else {
-            // Display status and navigation bar (top)
-            [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
-
-            [[UIApplication sharedApplication] setStatusBarHidden:NO
-                                                    withAnimation:UIStatusBarAnimationSlide];
-            
-            self.myTableViewHeightConstraint.constant = 49;
-        }
-        
         [self showTabBarWithAnimation:YES];
         [myTableView layoutIfNeeded];
-
     } // iPhone
     
-    [super viewDidLayoutSubviews];
-    [self.myTabBar invalidateIntrinsicContentSize];
     [self setBarButtonItemsWith:mCurrentSearchState];
     
     // Initialize full text search
     mFullTextSearch = [FullTextSearch new];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.myTableView.contentInset = UIEdgeInsetsMake(0, 0, self.myTabBar.frame.size.height, 0);
 }
 
 //- (void) viewDidUnload
@@ -1333,8 +1131,6 @@ static BOOL flagShowReport = false;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Do any additional setup after loading the view, typically from a nib.
 
     // For the iPhone the title is shown on its own bar
     // For iPhone it's hidden by the search bar, and if truncated it shows ugly ellipsis "..."
@@ -1708,7 +1504,7 @@ static BOOL flagShowReport = false;
                 // Reset search field
                 //mUsedDatabase = DB_TYPE_AIPS;
                 mCurrentSearchState = SEARCH_TITLE;
-                [self resetBarButtonItems];
+                [self resetSearchStateUI];
             }
             else {
                 // Empty search field
@@ -1756,7 +1552,7 @@ static BOOL flagShowReport = false;
             // Reset searchfield
             //mUsedDatabase = DB_TYPE_AIPS;
             mCurrentSearchState = SEARCH_TITLE;
-            [self resetBarButtonItems];
+            [self resetSearchStateUI];
             //
             MLViewController* __weak weakSelf = self;
             //

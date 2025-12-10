@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="landscape" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="landscape" appearance="dark"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,7 +14,7 @@
             <connections>
                 <outlet property="myTabBar" destination="465" id="474"/>
                 <outlet property="myTableView" destination="41" id="59"/>
-                <outlet property="myToolBar" destination="404" id="424"/>
+                <outlet property="searchStateSegement" destination="YMj-hD-L7c" id="Bmx-1f-k7s"/>
                 <outlet property="view" destination="1" id="58"/>
             </connections>
         </placeholder>
@@ -21,50 +23,24 @@
             <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <toolbar clipsSubviews="YES" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="404">
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="YMj-hD-L7c">
                     <rect key="frame" x="0.0" y="0.0" width="667" height="32"/>
-                    <items>
-                        <barButtonItem tag="1" title="Prä" id="405">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="418"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="411"/>
-                        <barButtonItem tag="2" title="Inh" id="406">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="419"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="412"/>
-                        <barButtonItem tag="3" title="Wirk/Atc" id="407">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="420"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="413"/>
-                        <barButtonItem tag="4" title="Reg" id="408">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="421"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="414"/>
-                        <barButtonItem tag="5" title="Ther" id="410">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="423"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="bOC-ve-aTf"/>
-                        <barButtonItem tag="6" title="FTS" id="eHg-n5-j8K">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="Epn-0x-oxs"/>
-                            </connections>
-                        </barButtonItem>
-                    </items>
-                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </toolbar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="41">
-                    <rect key="frame" x="0.0" y="32" width="667" height="293"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <segments>
+                        <segment title="Prä"/>
+                        <segment title="Inh"/>
+                        <segment title="Wirk/Atc"/>
+                        <segment title="Reg"/>
+                        <segment title="Ther"/>
+                        <segment title="FTS"/>
+                    </segments>
+                    <connections>
+                        <action selector="onSearchStateSegmentChanged:" destination="-1" eventType="valueChanged" id="J8x-Qw-WfQ"/>
+                    </connections>
+                </segmentedControl>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="41">
+                    <rect key="frame" x="0.0" y="31" width="667" height="344"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="55"/>
                         <outlet property="delegate" destination="-1" id="56"/>
@@ -86,7 +62,7 @@
                         <tabBarItem tag="2" title="Interactions" image="exclamationmark.triangle" catalog="system" id="JxN-5u-on8"/>
                         <tabBarItem tag="3" title="Prescriptions" image="square.and.pencil" catalog="system" id="Yye-ET-TME" userLabel="Presc"/>
                     </items>
-                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor"/>
                     <color key="selectedImageTintColor" name="mainTintColor"/>
                     <variation key="heightClass=regular">
                         <mask key="constraints">
@@ -98,79 +74,37 @@
                     </connections>
                 </tabBar>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <viewLayoutGuide key="safeArea" id="gn4-z2-AlU"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="41" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="450"/>
-                <constraint firstItem="404" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="451"/>
-                <constraint firstItem="404" firstAttribute="top" secondItem="1" secondAttribute="top" id="452"/>
-                <constraint firstItem="41" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="453"/>
-                <constraint firstItem="404" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="457"/>
-                <constraint firstItem="465" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="469"/>
-                <constraint firstItem="465" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="470"/>
-                <constraint firstItem="41" firstAttribute="bottom" secondItem="465" secondAttribute="top" id="480"/>
-                <constraint firstItem="465" firstAttribute="bottom" secondItem="1" secondAttribute="bottom" id="486"/>
-                <constraint firstItem="41" firstAttribute="top" secondItem="404" secondAttribute="bottom" id="491"/>
-                <constraint firstItem="404" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="3OI-ni-S0g"/>
-                <constraint firstAttribute="trailing" secondItem="404" secondAttribute="trailing" id="6Hp-XK-M4e"/>
-                <constraint firstItem="41" firstAttribute="leading" secondItem="465" secondAttribute="leading" id="QkY-Cs-auo"/>
-                <constraint firstItem="404" firstAttribute="leading" secondItem="41" secondAttribute="leading" id="Vlo-au-L9k"/>
+                <constraint firstItem="465" firstAttribute="trailing" secondItem="gn4-z2-AlU" secondAttribute="trailing" id="3W2-0H-gGD"/>
+                <constraint firstItem="41" firstAttribute="trailing" secondItem="gn4-z2-AlU" secondAttribute="trailing" id="5iy-GR-Y4Z"/>
+                <constraint firstItem="41" firstAttribute="top" secondItem="YMj-hD-L7c" secondAttribute="bottom" id="KRm-cn-3ar"/>
+                <constraint firstItem="gn4-z2-AlU" firstAttribute="trailing" secondItem="YMj-hD-L7c" secondAttribute="trailing" id="Lc7-4A-GKN"/>
                 <constraint firstAttribute="bottom" secondItem="465" secondAttribute="bottom" id="Xta-uQ-htP"/>
-                <constraint firstItem="404" firstAttribute="trailing" secondItem="41" secondAttribute="trailing" id="hBc-7b-yZH"/>
-                <constraint firstItem="41" firstAttribute="top" secondItem="1" secondAttribute="top" constant="44" id="jqM-xY-EWd"/>
-                <constraint firstItem="41" firstAttribute="top" secondItem="404" secondAttribute="bottom" id="l9S-np-T90"/>
-                <constraint firstItem="465" firstAttribute="top" secondItem="41" secondAttribute="bottom" id="mjk-xq-C8C"/>
-                <constraint firstItem="41" firstAttribute="trailing" secondItem="465" secondAttribute="trailing" id="vJl-ak-4o3"/>
+                <constraint firstItem="YMj-hD-L7c" firstAttribute="leading" secondItem="gn4-z2-AlU" secondAttribute="leading" id="aBq-qm-ndX"/>
+                <constraint firstItem="YMj-hD-L7c" firstAttribute="top" secondItem="1" secondAttribute="top" id="gdX-FS-F6W"/>
+                <constraint firstAttribute="bottom" secondItem="41" secondAttribute="bottom" id="mjk-xq-C8C"/>
+                <constraint firstItem="465" firstAttribute="leading" secondItem="gn4-z2-AlU" secondAttribute="leading" id="ufm-Mp-B2m"/>
+                <constraint firstItem="41" firstAttribute="leading" secondItem="gn4-z2-AlU" secondAttribute="leading" id="yG1-5g-1gu"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="gn4-z2-AlU"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="3OI-ni-S0g"/>
-                    <exclude reference="6Hp-XK-M4e"/>
-                    <exclude reference="Vlo-au-L9k"/>
-                    <exclude reference="hBc-7b-yZH"/>
-                    <exclude reference="QkY-Cs-auo"/>
-                    <exclude reference="jqM-xY-EWd"/>
-                    <exclude reference="l9S-np-T90"/>
-                    <exclude reference="vJl-ak-4o3"/>
-                    <exclude reference="Xta-uQ-htP"/>
-                    <exclude reference="mjk-xq-C8C"/>
-                </mask>
-            </variation>
-            <variation key="heightClass=regular">
-                <mask key="constraints">
-                    <exclude reference="451"/>
-                    <exclude reference="452"/>
-                    <exclude reference="457"/>
-                    <include reference="3OI-ni-S0g"/>
-                    <include reference="6Hp-XK-M4e"/>
-                    <include reference="Vlo-au-L9k"/>
-                    <include reference="hBc-7b-yZH"/>
-                    <exclude reference="450"/>
-                    <exclude reference="453"/>
-                    <exclude reference="480"/>
-                    <exclude reference="491"/>
-                    <include reference="QkY-Cs-auo"/>
-                    <include reference="jqM-xY-EWd"/>
-                    <include reference="l9S-np-T90"/>
-                    <include reference="vJl-ak-4o3"/>
-                    <exclude reference="469"/>
-                    <exclude reference="470"/>
-                    <exclude reference="486"/>
-                    <include reference="Xta-uQ-htP"/>
-                    <include reference="mjk-xq-C8C"/>
-                </mask>
-            </variation>
             <point key="canvasLocation" x="74" y="68"/>
         </view>
     </objects>
     <resources>
-        <image name="doc.richtext" catalog="system" width="56" height="64"/>
-        <image name="exclamationmark.triangle" catalog="system" width="64" height="56"/>
-        <image name="square.and.pencil" catalog="system" width="64" height="58"/>
-        <image name="star" catalog="system" width="64" height="58"/>
+        <image name="doc.richtext" catalog="system" width="115" height="128"/>
+        <image name="exclamationmark.triangle" catalog="system" width="128" height="109"/>
+        <image name="square.and.pencil" catalog="system" width="128" height="121"/>
+        <image name="star" catalog="system" width="128" height="116"/>
         <namedColor name="mainTintColor">
             <color red="0.94901960784313721" green="0.77647058823529413" blue="0.23137254901960785" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

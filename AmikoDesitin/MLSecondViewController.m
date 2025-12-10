@@ -1167,8 +1167,6 @@ decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     // Post message to switchToAips
     UIViewController *nc_rear = self.revealViewController.rearViewController;
     MLViewController *vc_rear = [nc_rear.childViewControllers firstObject];
-    NSArray *toolbarItems = [vc_rear.myToolBar items];
-    NSLog(@"%@", toolbarItems);
     //[vc_rear switchToAipsViewFromFulltext: messageDictionary];
 }
 
