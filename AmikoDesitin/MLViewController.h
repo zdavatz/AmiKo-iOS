@@ -47,15 +47,13 @@ enum {
     IBOutlet UIButton *myButton;
     IBOutlet UITableView *myTableView;
     IBOutlet UITabBar *myTabBar;    // bottom of the screen
-    IBOutlet UIToolbar *myToolBar;  // top of the screen
 }
 
 @property (nonatomic, retain) IBOutlet UISearchBar *searchField;
 @property (nonatomic, retain) IBOutlet UITextField *myTextField;
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
 @property (nonatomic, retain) IBOutlet UITabBar *myTabBar;
-@property (nonatomic, retain) IBOutlet UIToolbar *myToolBar;
-@property (nonatomic, weak) IBOutlet NSLayoutConstraint *myTableViewHeightConstraint;  // Unused ?
+@property (nonatomic, strong) IBOutlet UISegmentedControl *searchStateSegement;
 
 @property (nonatomic, retain) UIAlertController *pickerSheet;
 @property (nonatomic, retain) UIPickerView *pickerView;
@@ -65,7 +63,7 @@ enum {
 - (void) setLaunchState:(int)state;
 
 - (IBAction) searchAction: (id)sender;
-- (IBAction) onToolBarButtonPressed: (id)sender;
+- (IBAction) onSearchStateSegmentChanged:(id)sender;
 - (void) myLongPressMethod:(UILongPressGestureRecognizer *)gesture;
 
 - (void) switchToAipsView :(long int)mId;

@@ -36,9 +36,6 @@ typedef NS_ENUM(NSInteger, EditMode) {
 
 @interface MLAppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) IBOutlet UIWindow *window;
-@property (retain, nonatomic) UINavigationController *navController;
-@property (strong, nonatomic) SWRevealViewController *revealViewController;
 @property EditMode editMode;
 
 - (void) showPrescriptionId:(NSString *)uniqueId :(NSString *)fileName;

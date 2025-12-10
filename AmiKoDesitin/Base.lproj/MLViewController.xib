@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
-    <device id="ipad10_5" orientation="portrait" layout="fullscreen" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="ipad10_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,91 +12,55 @@
             <connections>
                 <outlet property="myTabBar" destination="70" id="82"/>
                 <outlet property="myTableView" destination="44" id="65"/>
-                <outlet property="myTextField" destination="36" id="66"/>
-                <outlet property="myToolBar" destination="26" id="64"/>
                 <outlet property="searchField" destination="19" id="67"/>
+                <outlet property="searchStateSegement" destination="L8r-t5-Ool" id="Zwr-vA-Q1l"/>
                 <outlet property="view" destination="2" id="3"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="2">
-            <rect key="frame" x="0.0" y="0.0" width="834" height="1112"/>
+            <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <searchBar contentMode="scaleToFill" text="" translatesAutoresizingMaskIntoConstraints="NO" id="19">
-                    <rect key="frame" x="0.0" y="0.0" width="834" height="56"/>
-                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <rect key="frame" x="0.0" y="0.0" width="820" height="64"/>
+                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                     <textInputTraits key="textInputTraits"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="55"/>
                     </connections>
                 </searchBar>
-                <toolbar clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="26">
-                    <rect key="frame" x="0.0" y="56" width="834" height="50"/>
-                    <items>
-                        <barButtonItem tag="1" title="Präparat" id="27">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="56"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem tag="2" title="Inhaber" id="31">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="57"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem tag="3" title="Wirkstoff/ATC Code" id="32">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="58"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem tag="4" title="Reg. Nr." id="33">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="59"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem tag="5" title="Therapie" id="35">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="61"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem tag="6" title="Full Text" id="pNM-GM-K4Y">
-                            <connections>
-                                <action selector="onToolBarButtonPressed:" destination="-1" id="3f9-kh-swy"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="68"/>
-                        <barButtonItem style="plain" id="37">
-                            <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" id="36">
-                                <rect key="frame" x="626" y="8" width="188" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="-1" id="121"/>
-                                </connections>
-                            </textField>
-                        </barButtonItem>
-                    </items>
-                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </toolbar>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="L8r-t5-Ool">
+                    <rect key="frame" x="0.0" y="64" width="820" height="32"/>
+                    <segments>
+                        <segment title="Präparat"/>
+                        <segment title="Inhaber"/>
+                        <segment title="Wirkstoff/ATC Code"/>
+                        <segment title="Reg. Nr."/>
+                        <segment title="Therapie"/>
+                        <segment title="Full Text"/>
+                    </segments>
+                    <connections>
+                        <action selector="onSearchStateSegmentChanged:" destination="-1" eventType="valueChanged" id="CPT-tP-HPf"/>
+                    </connections>
+                </segmentedControl>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="44">
-                    <rect key="frame" x="0.0" y="106" width="834" height="956"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <rect key="frame" x="0.0" y="95" width="820" height="1085"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="62"/>
                         <outlet property="delegate" destination="-1" id="63"/>
                     </connections>
                 </tableView>
                 <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="70">
-                    <rect key="frame" x="0.0" y="1062" width="834" height="50"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <rect key="frame" x="0.0" y="1091" width="820" height="89"/>
                     <items>
                         <tabBarItem title="AIPS" image="doc.richtext" catalog="system" id="72"/>
                         <tabBarItem tag="1" title="Favorites" image="star" catalog="system" id="71"/>
                         <tabBarItem tag="2" title="Interactions" image="exclamationmark.triangle" catalog="system" id="IFm-jM-mZk"/>
                         <tabBarItem tag="3" title="Prescriptions" image="square.and.pencil" catalog="system" id="3ok-wB-fCZ" userLabel="Prescriptions"/>
                     </items>
-                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="barTintColor" systemColor="secondarySystemBackgroundColor"/>
                     <color key="selectedImageTintColor" name="mainTintColor"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="81"/>
@@ -105,29 +70,35 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="19" firstAttribute="top" secondItem="2" secondAttribute="top" id="25"/>
-                <constraint firstItem="26" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="29"/>
-                <constraint firstItem="26" firstAttribute="top" secondItem="19" secondAttribute="bottom" id="30"/>
-                <constraint firstItem="44" firstAttribute="top" secondItem="26" secondAttribute="bottom" id="49"/>
                 <constraint firstItem="44" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="54"/>
                 <constraint firstItem="70" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="75"/>
                 <constraint firstItem="70" firstAttribute="bottom" secondItem="2" secondAttribute="bottom" id="79"/>
-                <constraint firstItem="70" firstAttribute="top" secondItem="44" secondAttribute="bottom" id="80"/>
-                <constraint firstItem="26" firstAttribute="trailing" secondItem="2" secondAttribute="trailing" id="113"/>
+                <constraint firstAttribute="bottom" secondItem="44" secondAttribute="bottom" id="80"/>
                 <constraint firstItem="44" firstAttribute="trailing" secondItem="2" secondAttribute="trailing" id="115"/>
                 <constraint firstItem="70" firstAttribute="trailing" secondItem="2" secondAttribute="trailing" id="116"/>
                 <constraint firstItem="19" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="119"/>
                 <constraint firstItem="19" firstAttribute="trailing" secondItem="2" secondAttribute="trailing" id="120"/>
+                <constraint firstItem="44" firstAttribute="top" secondItem="L8r-t5-Ool" secondAttribute="bottom" id="2GK-2u-byO"/>
+                <constraint firstItem="L8r-t5-Ool" firstAttribute="top" secondItem="19" secondAttribute="bottom" id="a08-Pl-PHJ"/>
+                <constraint firstAttribute="trailing" secondItem="L8r-t5-Ool" secondAttribute="trailing" id="ius-KE-cIT"/>
+                <constraint firstItem="L8r-t5-Ool" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="uVB-KW-DqO"/>
             </constraints>
             <point key="canvasLocation" x="91" y="88"/>
         </view>
     </objects>
     <resources>
-        <image name="doc.richtext" catalog="system" width="56" height="64"/>
-        <image name="exclamationmark.triangle" catalog="system" width="64" height="56"/>
-        <image name="square.and.pencil" catalog="system" width="64" height="58"/>
-        <image name="star" catalog="system" width="64" height="58"/>
+        <image name="doc.richtext" catalog="system" width="115" height="128"/>
+        <image name="exclamationmark.triangle" catalog="system" width="128" height="109"/>
+        <image name="square.and.pencil" catalog="system" width="128" height="121"/>
+        <image name="star" catalog="system" width="128" height="116"/>
         <namedColor name="mainTintColor">
             <color red="0.94901960784313721" green="0.77647058823529413" blue="0.23137254901960785" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
