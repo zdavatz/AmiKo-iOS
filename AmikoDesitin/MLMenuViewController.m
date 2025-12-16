@@ -40,7 +40,7 @@
 {
     NSArray *options;
     MLViewController *mParentViewController;
-    UIActionSheet *mMenuActionSheet;
+    UIAlertController *alertController;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil
@@ -67,17 +67,6 @@
 //{
 //    return UIStatusBarStyleDefault;
 //}
-
-// TODO: Implement "viewWillTransitionToSize:withTransitionCoordinator:" instead
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-                                 duration:(NSTimeInterval)duration
-{
-#ifdef DEBUG
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
-    [mMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-}
 
 - (void) viewDidLoad
 {
@@ -128,80 +117,59 @@
     return YES;
 }
 
-#pragma mark - UIActionSheetDelegate
-
-// TODO: Use UIAlertController with a preferredStyle of UIAlertControllerStyleActionSheet instead
-- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void) showMenuFrom:(UIViewController *)controller
 {
-#ifdef DEBUG
-    NSLog(@"%s %d, sheet: %@ sheet.tag: %ld, buttonIndex: %ld", __FUNCTION__, __LINE__,
-          sheet,
-          sheet.tag,
-          (long)buttonIndex);
-#endif
-    if (sheet.tag != 1)
-        return;
-    
-    switch (buttonIndex) {
-        case 0:
-            [self sendFeedback:NSLocalizedString(@"Feedback", "Button")];
-            break;
-
-        case 1:
-            [self shareApp:NSLocalizedString(@"Share", "Button")];
-            break;
-
-        case 2:
-            [self rateApp:NSLocalizedString(@"Rate", "Button")];
-            break;
-
-        case 3:
-            [self showReport:NSLocalizedString(@"Report", "Button")];
-            break;
-
-        case 4:
-            [self startUpdate:NSLocalizedString(@"Update", "Button")];
-            break;
-
-        case 5:
-            [self showPatients:nil];
-            break;
-
-        case 6:
-            [self showDoctor:nil];
-            break;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Select menu option", @"")
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Feedback", "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self sendFeedback:NSLocalizedString(@"Feedback", "Button")];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Share",    "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self shareApp:NSLocalizedString(@"Share", "Button")];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rate",     "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self rateApp:NSLocalizedString(@"Rate", "Button")];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Report",   "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self showReport:NSLocalizedString(@"Report", "Button")];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Update",   "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self startUpdate:NSLocalizedString(@"Update", "Button")];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Patients", "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self showPatients:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Doctor Signature",   "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self showDoctor:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+        [self showSettings:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", "Button")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+    }]];
+    alertController = alert;
+    [controller presentViewController:alert animated:YES completion:^{
         
-        case 7:
-            [self showSettings:nil];
-
-        default:
-            break;
-    }
-}
-
-- (void) showMenu
-{
-    // TODO: replace deprecated UIActionSheet with UIAlertController
-    mMenuActionSheet = [[UIActionSheet alloc] initWithTitle:@"Select menu option"
-                                                   delegate:self
-                                          cancelButtonTitle:@"Cancel"
-                                     destructiveButtonTitle:nil
-                                          otherButtonTitles:
-                        NSLocalizedString(@"Feedback", "Button"),
-                        NSLocalizedString(@"Share",    "Button"),
-                        NSLocalizedString(@"Rate",     "Button"),
-                        NSLocalizedString(@"Report",   "Button"),
-                        NSLocalizedString(@"Update",   "Button"),
-                        NSLocalizedString(@"Patients", "Button"),
-                        NSLocalizedString(@"Doctor Signature",   "Button"),
-                        NSLocalizedString(@"Settings", "Button"),
-                        nil];
-    mMenuActionSheet.tag = 1;
-    
-    [mMenuActionSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
-    
-    if (mParentViewController)
-        [mMenuActionSheet showInView:[mParentViewController view]];
+    }];
 }
 
 - (void) sendEmailTo:(NSString *)recipient withSubject:(NSString *)subject andBody:(NSString *)body

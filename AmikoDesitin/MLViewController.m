@@ -1294,7 +1294,7 @@ static BOOL flagShowReport = false;
         [mainRevealController setFrontViewPosition:FrontViewPositionRight animated:YES];
     }
     else {
-        [menuViewController showMenu];
+        [menuViewController showMenuFrom:self];
     }
 }
 
