@@ -40,6 +40,6 @@
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil
                           bundle:(NSBundle *)nibBundleOrNil
                           parent:(MLViewController*)parentViewController;
-- (void) showMenu;
+- (void) showMenuFrom:(UIViewController *)controller;
 
 @end

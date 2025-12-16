@@ -341,6 +341,12 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     if (![[NSFileCoordinator filePresenters] containsObject:self]) {
         [NSFileCoordinator addFilePresenter:self];
     }
+    if (@available(iOS 26, *)) {
+        for (UIBarButtonItem *item in self.toolbar.items) {
+            item.sharesBackground = NO;
+            item.hidesSharedBackground = YES;
+        }
+    }
     self.editedMedicines = false;
     possibleToOverwrite = false;
     editingCommentIdx = -1;

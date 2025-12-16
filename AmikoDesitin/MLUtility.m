@@ -307,4 +307,14 @@
     return ret;
 }
 
++ (UIColor *)searchFieldBackgroundColor {
+    UIUserInterfaceStyle osMode = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+    if (@available(iOS 13, *)) {
+        if (osMode == UIUserInterfaceStyleDark) {
+            return [UIColor blackColor];
+        }
+    }
+    return [UIColor whiteColor];
+}
+
 @end

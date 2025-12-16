@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,6 +22,7 @@
                 <outlet property="medicineLabelView" destination="vaG-k4-YrX" id="78Y-Ci-pwk"/>
                 <outlet property="saveButton" destination="BG5-Nh-8va" id="9AO-qA-g60"/>
                 <outlet property="sendButton" destination="Idx-b9-089" id="deX-Ix-z3c"/>
+                <outlet property="toolbar" destination="SEC-AO-gUj" id="Ll2-gc-Ofz"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -31,7 +32,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" sectionIndexMinimumDisplayRowCount="1" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="f9a-IN-dWa">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="692"/>
+                    <rect key="frame" x="0.0" y="20" width="414" height="668"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <inset key="scrollIndicatorInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <color key="sectionIndexBackgroundColor" systemColor="systemBackgroundColor"/>
@@ -41,7 +42,7 @@
                     </connections>
                 </tableView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEC-AO-gUj">
-                    <rect key="frame" x="0.0" y="692" width="414" height="44"/>
+                    <rect key="frame" x="0.0" y="688" width="414" height="48"/>
                     <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="Lgx-l7-dbQ">
@@ -57,25 +58,23 @@
                                 <action selector="newPrescription:" destination="-1" id="XBA-Pc-oYQ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Fku-2J-woe"/>
                         <barButtonItem tag="1" title="Interaction" id="uB5-ix-Kqj">
                             <connections>
                                 <action selector="checkForInteractions:" destination="-1" id="9TF-Tk-4oT"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="7NW-JX-z5F"/>
                         <barButtonItem tag="2" title="Save" id="BG5-Nh-8va">
                             <connections>
                                 <action selector="savePrescription:" destination="-1" id="94O-3w-lQa"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="g9g-bS-anR"/>
                         <barButtonItem tag="3" title="Send" id="Idx-b9-089">
                             <connections>
                                 <action selector="sendPrescription:" destination="-1" id="wKd-e1-1Nx"/>
                             </connections>
                         </barButtonItem>
                     </items>
+                    <toolbarAppearance key="compactAppearance"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="Lgx-l7-dbQ"/>
@@ -110,27 +109,27 @@
             </constraints>
             <variation key="default">
                 <mask key="constraints">
-                    <exclude reference="CBK-0m-RWd"/>
                     <exclude reference="gme-KU-ijD"/>
+                    <exclude reference="CBK-0m-RWd"/>
                     <exclude reference="Dt5-y1-ceE"/>
+                    <exclude reference="pcB-re-iU6"/>
                     <exclude reference="W8e-2D-bWu"/>
                     <exclude reference="kEZ-AC-V5b"/>
-                    <exclude reference="pcB-re-iU6"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="constraints">
-                    <include reference="CBK-0m-RWd"/>
+                    <include reference="gme-KU-ijD"/>
                     <exclude reference="Hcn-n2-CoD"/>
                     <exclude reference="UjD-Hk-9O2"/>
+                    <include reference="CBK-0m-RWd"/>
                     <exclude reference="Zi8-Hl-N9t"/>
-                    <include reference="gme-KU-ijD"/>
                     <include reference="Dt5-y1-ceE"/>
-                    <exclude reference="T7M-4a-Pz6"/>
+                    <include reference="pcB-re-iU6"/>
                     <include reference="W8e-2D-bWu"/>
                     <exclude reference="aI4-Kp-wCb"/>
+                    <exclude reference="T7M-4a-Pz6"/>
                     <include reference="kEZ-AC-V5b"/>
-                    <include reference="pcB-re-iU6"/>
                 </mask>
             </variation>
             <connections>
@@ -203,7 +202,7 @@
     </objects>
     <resources>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
