@@ -276,10 +276,18 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
         if (searchBarView.superview) {
             [searchBarView removeFromSuperview];
         }
+        // Since iOS 26, search bar, toolbar, and navigation bar doesn't work very well
+        // Putting a search bar inside the title view of navigation bar results in weird padding,
+        // inconsistent spacing and size, shadow that cannot be disabled, etc. Here we use a
+        // search bar without border, and draw the round rect with our own container view to workaround.
+        searchField.searchTextField.borderStyle = UITextBorderStyleNone;
         self.navigationItem.titleView = [[UIView alloc] init];
-        self.navigationItem.titleView.frame = CGRectMake(0, 0, 270, 44);
+        self.navigationItem.titleView.frame = CGRectMake(0, 0, 270, 54);
+        self.navigationItem.titleView.backgroundColor = [MLUtility searchFieldBackgroundColor];
+        self.navigationItem.titleView.layer.cornerRadius = 27;
         [self.navigationItem.titleView addSubview:searchBarView];
         searchBarView.frame = self.navigationItem.titleView.frame;
+
         self.edgesForExtendedLayout = UIRectEdgeNone;
     } // iPhone
     
@@ -332,6 +340,11 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                                          style:UIBarButtonItemStylePlain
                                         target:revealController
                                         action:@selector(revealToggle:)];
+        if (@available(iOS 26.0, *)) {
+            revealButtonItem.hidesSharedBackground = YES;
+        } else {
+            // Fallback on earlier versions
+        }
         self.navigationItem.leftBarButtonItem = revealButtonItem;
     }
     
@@ -342,6 +355,11 @@ typedef NS_ENUM(NSInteger, FindPanelVisibility) {
                                          style:UIBarButtonItemStylePlain
                                         target:revealController
                                         action:@selector(rightRevealToggle:)];
+        if (@available(iOS 26.0, *)) {
+            rightRevealButtonItem.hidesSharedBackground = YES;
+        } else {
+            // Fallback on earlier versions
+        }
         self.navigationItem.rightBarButtonItem = rightRevealButtonItem;
     }
     
