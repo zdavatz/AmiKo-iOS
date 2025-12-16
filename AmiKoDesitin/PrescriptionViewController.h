@@ -30,7 +30,8 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *interactionButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sendButton;
-    
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+
 @property (nonatomic, retain) IBOutlet UITableView *infoView;
 @property (atomic) Prescription *prescription;
 @property (nonatomic) bool editedMedicines; // "dirty" flag
