@@ -21,7 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SceneDelegate: UIResponder <UIWindowSceneDelegate>
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;
-@property (retain, nonatomic) UINavigationController *navController;
 @property (strong, nonatomic) SWRevealViewController *revealViewController;
 @property (strong, nonatomic) MLViewController *mainViewController;
 //@property EditMode editMode;

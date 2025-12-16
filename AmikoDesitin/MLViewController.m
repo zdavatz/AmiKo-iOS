@@ -147,6 +147,8 @@ static BOOL flagShowReport = false;
 - (void) loadFavorites;
 - (void) loadFavorites:(MLDataStore *)favorites;
 
+@property (nonatomic, strong) UIBarButtonItem *searchItem;
+
 @end
 
 #pragma mark -
@@ -1000,16 +1002,18 @@ static BOOL flagShowReport = false;
 }
 */
 
-// TODO: use "viewWillTransitionToSize:withTransitionCoordinator:" instead
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-                                 duration:(NSTimeInterval)duration
-{
-#ifdef DEBUG
-    NSLog(@"%s to orientation: %ld", __FUNCTION__, toInterfaceOrientation);
-#endif
-
-    [self updateRearViewRevealWidth];
-    [self updateSearchStateSegmentTitles];
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    BOOL isRotatingToPortrait = size.height > size.width;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self updateRearViewRevealWidth];
+        [self updateSearchStateSegmentTitles];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (isRotatingToPortrait) {
+            self.navigationItem.rightBarButtonItems = nil;
+            self.navigationItem.rightBarButtonItems = @[self.searchItem];
+            [self.navigationController setNavigationBarHidden:NO animated:NO];
+        }
+    }];
 }
 
 #pragma mark -
@@ -1059,7 +1063,7 @@ static BOOL flagShowReport = false;
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthLandscape];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawLandscape];
             
-            [self.navigationController setNavigationBarHidden:TRUE animated:TRUE];
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
 
             [[UIApplication sharedApplication] setStatusBarHidden:YES
                                                     withAnimation:UIStatusBarAnimationSlide];
@@ -1067,7 +1071,6 @@ static BOOL flagShowReport = false;
         else {
             self.revealViewController.rearViewRevealWidth = [MLConstants rearViewRevealWidthPortrait];
             self.revealViewController.rearViewRevealOverdraw = [MLConstants rearViewRevealOverdrawPortrait];
-            [self.navigationController setNavigationBarHidden:FALSE animated:TRUE];
 
             [[UIApplication sharedApplication] setStatusBarHidden:NO
                                                     withAnimation:UIStatusBarAnimationSlide];
@@ -1195,7 +1198,7 @@ static BOOL flagShowReport = false;
     {
         CGFloat osMargin = 40;
         if (@available(iOS 26, *)) {
-            osMargin = 80;
+            osMargin = 100;
         }
         CGFloat searchFieldWidth = [[UIScreen mainScreen] bounds].size.width - logoButton.frame.size.width - osMargin;
         searchField = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, searchFieldWidth, 40.0f)];
@@ -1219,9 +1222,11 @@ static BOOL flagShowReport = false;
         // Left
         UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchField];
         if (@available(iOS 26.0, *)) {
-            searchItem.sharesBackground = NO;
+            searchItem.hidesSharedBackground = YES;
         }
-        self.navigationItem.leftBarButtonItems = @[appIconItem, searchItem];
+        self.searchItem = searchItem;
+        self.navigationItem.leftBarButtonItems = @[appIconItem];
+        self.navigationItem.rightBarButtonItems = @[searchItem];
 #else
         // Middle
         self.navigationItem.titleView = searchField;

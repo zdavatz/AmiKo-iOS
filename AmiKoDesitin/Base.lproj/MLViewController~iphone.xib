@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="landscape" appearance="dark"/>
+    <device id="retina4_7" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
@@ -20,11 +20,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="1">
-            <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="YMj-hD-L7c">
-                    <rect key="frame" x="0.0" y="0.0" width="667" height="32"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <segments>
                         <segment title="Prä"/>
@@ -39,7 +39,7 @@
                     </connections>
                 </segmentedControl>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="41">
-                    <rect key="frame" x="0.0" y="31" width="667" height="344"/>
+                    <rect key="frame" x="0.0" y="31" width="375" height="636"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="55"/>
@@ -47,7 +47,7 @@
                     </connections>
                 </tableView>
                 <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="465" colorLabel="IBBuiltInLabel-Purple">
-                    <rect key="frame" x="0.0" y="325" width="667" height="50"/>
+                    <rect key="frame" x="0.0" y="587" width="375" height="80"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="Udo-66-NqE">
                             <variation key="heightClass=compact-widthClass=compact" constant="50"/>
