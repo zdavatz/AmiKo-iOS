@@ -219,6 +219,11 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (UIWindow *)window {
+    // This application only supports single window
+    return [UIApplication sharedApplication].windows.firstObject;
+}
+
 #pragma mark -
 
 /**
