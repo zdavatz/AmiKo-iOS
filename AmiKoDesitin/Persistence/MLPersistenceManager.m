@@ -20,6 +20,7 @@
 #define KEY_PERSISTENCE_HIN_SDS_TOKENS @"KEY_PERSISTENCE_HIN_SDS_TOKENS"
 #define KEY_PERSISTENCE_HIN_ADSWISS_TOKENS @"KEY_PERSISTENCE_HIN_ADSWISS_TOKENS"
 #define KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE @"KEY_PERSISTENCE_HIN_ADSWISS_AUTH_HANDLE"
+#define KEY_PERSISTENCE_SEND_PRESCRIPTION_VIA_EMAIL @"KEY_PERSISTENCE_SEND_PRESCRIPTION_VIA_EMAIL"
 
 @interface MLPersistenceManager () <MLiCloudToLocalMigrationDelegate>
 
@@ -453,6 +454,15 @@
         return amkFileURL;
     }
     return nil;
+}
+
+- (BOOL) sendPrescriptionWithEmail {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:KEY_PERSISTENCE_SEND_PRESCRIPTION_VIA_EMAIL];
+}
+
+- (void) setSendPrescriptionWithEmail:(BOOL)enabled {
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:KEY_PERSISTENCE_SEND_PRESCRIPTION_VIA_EMAIL];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 # pragma mark - Patient
