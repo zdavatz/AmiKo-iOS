@@ -22,6 +22,8 @@
 #import "MLHINADSwissAuthHandle.h"
 #import "EPrescription.h"
 #import "MLSendToZurRoseActivity.h"
+#import <MessageUI/MFMailComposeViewController.h>
+#import "MLAlertView.h"
 
 @import Vision;
 
@@ -132,7 +134,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 
-@interface PrescriptionViewController ()<ASWebAuthenticationPresentationContextProviding>
+@interface PrescriptionViewController ()<ASWebAuthenticationPresentationContextProviding, MFMailComposeViewControllerDelegate>
 {
     UITextView *activeTextView;
     CGPoint savedOffset;
@@ -2172,6 +2174,18 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
 #ifdef DEBUG
     NSLog(@"%s sharing <%@>", __FUNCTION__, urlAttachment);
 #endif
+    if ([[MLPersistenceManager shared] sendPrescriptionWithEmail]) {
+        if (![MFMailComposeViewController canSendMail]) {
+            MLAlertView *alert = [[MLAlertView alloc] initWithTitle:@"Failure"
+                                                            message:@"Your device is not configured to send emails."
+                                                             button:@"OK"];
+            [alert show];
+            return;
+        }
+        NSMutableData *pdfData = [self renderPdfForPrintingWithEPrescriptionQRCode:nil];
+        [self sendEmailToZurRoseWithAMKFile:urlAttachment pdfData:pdfData];
+        return;
+    }
     if ([[MLPersistenceManager shared] HINADSwissAuthHandle]) {
         [self sharePrescription:urlAttachment withEPrescription:YES];
         return;
@@ -2325,21 +2339,26 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     }
 }
 
+- (NSString *)mailBody {
+    return [NSString stringWithFormat:@"%@\n\niOS: %@\nAndroid: %@\n",
+            NSLocalizedString(@"Open with", nil),
+            @"https://itunes.apple.com/ch/app/generika/id520038123?mt=8",
+            @"https://play.google.com/store/apps/details?id=org.oddb.generika"];
+}
+
+- (NSString *)mailSubject {
+    return [NSString stringWithFormat:NSLocalizedString(@"Prescription to patient from doctor",nil),
+            prescription.patient.givenName,
+            prescription.patient.familyName,
+            prescription.patient.birthDate,
+            prescription.doctor.title,
+            prescription.doctor.givenName,
+            prescription.doctor.familyName];
+}
+
 - (void)sharePrescription:(NSURL *)urlAttachment withPdfData:(NSData *)pdfData {
-    NSString *mailBody = [NSString stringWithFormat:@"%@\n\niOS: %@\nAndroid: %@\n",
-                          NSLocalizedString(@"Open with", nil),
-                          @"https://itunes.apple.com/ch/app/generika/id520038123?mt=8",
-                          @"https://play.google.com/store/apps/details?id=org.oddb.generika"];
-    //NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
     
-    NSString * subjectLine =
-    [NSString stringWithFormat:NSLocalizedString(@"Prescription to patient from doctor",nil),
-     prescription.patient.givenName,
-     prescription.patient.familyName,
-     prescription.patient.birthDate,
-     prescription.doctor.title,
-     prescription.doctor.givenName,
-     prescription.doctor.familyName];
+    //NSString *mailBody2 = [NSString stringWithFormat:@"Your prescription from Dr.:%@", prescription.doctor.familyName];
     
     // Prepare the objects to be shared
 
@@ -2347,7 +2366,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
     // Instead, we use it through an item provider so that we can make it return nil for email activity.
     PrintItemProvider *source3 = [[PrintItemProvider alloc] initWithPlaceholderItem:pdfData];
 
-    NSArray *objectsToShare = @[mailBody, urlAttachment, source3];
+    NSArray *objectsToShare = @[self.mailBody, urlAttachment, source3];
     
     MLSendToZurRoseActivity *zurRoseActivity = [[MLSendToZurRoseActivity alloc] init];
     zurRoseActivity.zurRosePrescription = self.prescription.toZurRosePrescription;
@@ -2364,7 +2383,7 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
                                    UIActivityTypePostToVimeo];
     activityVC.excludedActivityTypes = excludeActivities;
 
-    [activityVC setValue:subjectLine forKey:@"subject"];
+    [activityVC setValue:self.mailSubject forKey:@"subject"];
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         activityVC.modalPresentationStyle = UIModalPresentationPopover;
@@ -2398,6 +2417,37 @@ CGSize getSizeOfLabel(UILabel *label, CGFloat width)
         if (error)
             NSLog(@"An Error occured: %@, %@", error.localizedDescription, error.localizedFailureReason);
     };
+}
+
+- (void)sendEmailToZurRoseWithAMKFile:(NSURL *)amkUrl pdfData:(NSData *)pdfData {
+    MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+    mailer.mailComposeDelegate = self;
+    
+    // Subject
+    [mailer setSubject:self.mailSubject];
+    // Recipient
+    [mailer setToRecipients:@[@"servicecare@zurrose.ch"]];
+    [mailer setMessageBody:self.mailBody isHTML:NO];
+    
+    if (pdfData) {
+        [mailer addAttachmentData:pdfData mimeType:@"application/pdf" fileName:@"prescription.pdf"];
+    }
+    if (amkUrl) {
+        [mailer addAttachmentData:[[NSData alloc] initWithContentsOfURL:amkUrl] mimeType:@"application/octet-stream" fileName:[amkUrl lastPathComponent]];
+    }
+
+    [self presentViewController:mailer animated:YES completion:nil];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(nullable NSError *)error {
+    [controller dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+    if (error) {
+        NSLog(@"%@", error);
+    }
 }
 
 #pragma mark - SampleBufferDelegate methods

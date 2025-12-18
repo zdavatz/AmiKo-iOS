@@ -63,6 +63,8 @@ typedef NS_ENUM(NSInteger, MLPersistenceFileState) {
 - (NSURL *)amkDirectory;
 - (NSURL *)amkDirectoryForPatient:(NSString*)uid;
 - (NSURL *)savePrescription:(Prescription *)prescription;
+- (BOOL) sendPrescriptionWithEmail;
+- (void) setSendPrescriptionWithEmail:(BOOL)enabled;
 
 #pragma mark - Patient
 

@@ -304,3 +304,5 @@
 "Error Code: %ld" = "Erreur Code: %ld";
 
 "Prescription is sent to ZurRose" = "La recette a été envoyée à ZurRose.";
+
+"Send Prescription with Email" = "Envoyer l'ordonnance par e-mail";

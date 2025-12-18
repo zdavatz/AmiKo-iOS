@@ -14,6 +14,7 @@
 
 @interface MLSettingViewController () <UITableViewDelegate, UITableViewDataSource, ASWebAuthenticationPresentationContextProviding>
 @property (strong, nonatomic) UISwitch *iCloudSwitch;
+@property (strong, nonatomic) UISwitch *sendPrescriptionWithEmailSwitch;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (void)reloadICloudSwitch;
@@ -28,6 +29,10 @@
     [self.iCloudSwitch addTarget:self
                           action:@selector(iCloudSwitched:)
                 forControlEvents:UIControlEventValueChanged];
+    self.sendPrescriptionWithEmailSwitch = [[UISwitch alloc] init];
+    [self.sendPrescriptionWithEmailSwitch addTarget:self
+                                             action:@selector(sendPrescriptionWithEmailSwitched:)
+                                   forControlEvents:UIControlEventValueChanged];
     
     SWRevealViewController *revealController = [self revealViewController];
     self.navigationItem.title = NSLocalizedString(@"Settings", nil);      // grey, in the navigation bar
@@ -43,6 +48,7 @@
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
     [self reloadICloudSwitch];
+    [self reloadSendPrescriptionWithEmailSwitch];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:NSUbiquityIdentityDidChangeNotification
                                                       object:nil
@@ -58,7 +64,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case 0: return 1;
+        case 0: return 2;
         case 1: return 2;
         case 2: return 2;
     }
@@ -67,7 +73,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0 && indexPath.row == 0) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"iCloud"];
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
@@ -75,6 +81,16 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.accessoryView = self.iCloudSwitch;
             cell.textLabel.text = NSLocalizedString(@"Sync with iCloud", @"");
+        }
+        return cell;
+    } else if (indexPath.section == 0 && indexPath.row == 1) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"sendPrescriptionEmail"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:@"sendPrescriptionEmail"];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryView = self.sendPrescriptionWithEmailSwitch;
+            cell.textLabel.text = NSLocalizedString(@"Send Prescription with Email", @"");
         }
         return cell;
     } else if (indexPath.section == 1) {
@@ -181,6 +197,14 @@
     } else {
         self.iCloudSwitch.on = [[MLPersistenceManager shared] currentSource] == MLPersistenceSourceICloud;
     }
+}
+
+- (void)reloadSendPrescriptionWithEmailSwitch {
+    self.sendPrescriptionWithEmailSwitch.on = [MLPersistenceManager shared].sendPrescriptionWithEmail;
+}
+
+- (void)sendPrescriptionWithEmailSwitched:(id)sender {
+    [MLPersistenceManager shared].sendPrescriptionWithEmail = self.sendPrescriptionWithEmailSwitch.on;
 }
 
 - (IBAction)loginWithHINSDSClicked:(id)sender {
