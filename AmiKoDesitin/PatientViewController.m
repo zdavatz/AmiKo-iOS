@@ -91,27 +91,20 @@ enum {
                                                   action:nil];
     spacer.width = -15.0f;
     
+    if (@available(iOS 26.0, *)) {
+        revealButtonItem.sharesBackground = YES;
+        revealButtonItem.hidesSharedBackground = YES;
+        cancelItem.sharesBackground = YES;
+        cancelItem.sharesBackground = YES;
+    }
+    
+    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"camera.viewfinder"]
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(handleCameraButton:)];
     self.navigationItem.leftBarButtonItems =
     [NSArray arrayWithObjects:
-                revealButtonItem, spacer, cancelItem, nil];
-    
-    // Middle button
-    {
-        UIButton* cameraButton = [UIButton new];
-        UIImageSymbolConfiguration *configuration =
-        [UIImageSymbolConfiguration configurationWithPointSize:24.0
-                                                        weight:UIImageSymbolWeightLight
-                                                         scale:UIImageSymbolScaleLarge];
-        UIImage *image = [UIImage systemImageNamed:@"camera.viewfinder"
-                                 withConfiguration:configuration];
-        [cameraButton setBackgroundImage:image
-                                forState:UIControlStateNormal];
-        [cameraButton addTarget:self
-                          action:@selector(handleCameraButton:)
-                forControlEvents:UIControlEventTouchDown];
-
-        self.navigationItem.titleView = cameraButton;
-    }
+                revealButtonItem, spacer, cancelItem, cameraButton, nil];
 
     // Right button(s)
     {
