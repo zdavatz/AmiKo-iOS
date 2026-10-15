@@ -3,6 +3,16 @@ AmiKo-iPhone
 
 AmiKo for iPhone and iPad.
 
+## Video
+All features of AmiKo Desitin in 5 minutes: https://www.youtube.com/watch?v=WevCmGrq7a8
+
+## Download
+* iPhone / iPad (App Store): https://apps.apple.com/ch/app/amiko-desitin/id687642725
+* Mac (Mac App Store): https://apps.apple.com/ch/app/amiko-desitin/id708142753
+* Windows (Microsoft Store): https://apps.microsoft.com/detail/9wzdncrdffxc
+* Android (Google Play): https://play.google.com/store/apps/details?id=com.ywesee.amiko.de
+* Web: https://amiko.oddb.org
+
 ## Latest Release News
 * https://medium.com/@zdavatz/rezeptfunktion-inkl-patienten-verwaltung-f%C3%BCr-amiko-comed-auf-iphone-ipad-c871723ec4b1
 

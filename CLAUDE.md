@@ -36,6 +36,25 @@ xcodebuild clean build archive -allowProvisioningUpdates -workspace AmikoDesitin
 
 There are no automated tests (no XCTest targets).
 
+### Simulator build with Xcode 27+
+
+Xcode 27 no longer accepts iOS deployment targets below 15.0, but the project and Pods still specify 8.0–13.0. Override on the command line instead of editing the project:
+
+```bash
+xcodebuild -workspace AmikoDesitin.xcworkspace -scheme AmiKoDesitin -configuration Release \
+  -sdk iphonesimulator -destination "id=<SIM_UDID>" \
+  CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=15.0 build
+```
+
+- Use `Release`: the `Debug` configuration needs `CERTIFACTION_TEST_SERVER` in `MLHINClientCredential.h` (see the `.sample.h`), which older local credential files lack.
+- Xcode 27 ships no standalone Simulator.app; drive the app with an XCUITest that targets `XCUIApplication(bundleIdentifier: "com.ywesee.AmiKoDesitin")` and record with `xcrun simctl io <UDID> recordVideo`.
+- The UI has no `accessibilityIdentifier`s; query by visible German labels. Nav buttons are labelled "Zurück" / "Weiter", the menu is the logo button "desitin icon 32x32".
+- Saving the doctor profile (Arzt) requires a valid 13-digit GLN and a signature image (or a HIN login).
+
+## Demo videos / YouTube
+
+Promo videos must only show fictitious personal data (doctor, patient, contacts). A previous video was removed by YouTube for showing a real address and real address-book contacts. Clear the simulator's sample contacts (e.g. "John Appleseed") before recording.
+
 ## Credential Setup
 
 Before building, copy and fill these credential files:
